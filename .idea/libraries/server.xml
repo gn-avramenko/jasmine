@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="libraryTable">
+   <library name="server">
+      <CLASSES>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-classic/1.2.3/7c4f3c474fb2c041d8028740440937705ebb473a/logback-classic-1.2.3.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.3.61/e91d61b7cfd9a45566b580fef18bbd5c32d505b5/kotlin-stdlib-jdk8-1.3.61.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-reflect/1.3.61/2e07c9a84c9e118efb70eede7e579fd663932122/kotlin-reflect-1.3.61.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.6/9180733b7df8542621dc12e21e87557e8c99b8cb/gson-2.8.6.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/com.mchange/c3p0/0.9.5.5/37dfc3021e5589d65ff2ae0becf811510b87ab01/c3p0-0.9.5.5.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-core/9.0.30/ad32909314fe2ba02cec036434c0addd19bcc580/tomcat-embed-core-9.0.30.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/com.h2database/h2/1.4.200/f7533fe7cb8e99c87a43d325a77b4b678ad9031a/h2-1.4.200.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-core/1.2.3/864344400c3d4d92dfeb0a305dc87d953677c03c/logback-core-1.2.3.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.25/da76ca59f6a57ee3102f8f9bd9cee742973efa8a/slf4j-api-1.7.25.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.3.61/70dffc5f8ac5ea7c34f30deac5b9d8b1d48af066/kotlin-stdlib-jdk7-1.3.61.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.3.61/4702105e97f7396ae41b113fdbdc180ec1eb1e36/kotlin-stdlib-1.3.61.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/com.mchange/mchange-commons-java/0.2.19/7a4bee38ea02bd7dee776869b19fb3f6861d6acf/mchange-commons-java-0.2.19.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-annotations-api/9.0.30/69e405494339f1a06097fbddbd93164dbf8bddaf/tomcat-annotations-api-9.0.30.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.3.61/65abb71d5afb850b68be03987b08e2c864ca3110/kotlin-stdlib-common-1.3.61.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar!/"/>
+      </CLASSES>
+      <JAVADOC/>
+      <SOURCES>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.6/1b9adea7bbe0b251818f42fde0bd2988d7e5f20a/gson-2.8.6-sources.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.3.61/fe3b9d48f4c3947639b6b1760213c1b79281383e/kotlin-stdlib-common-1.3.61-sources.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.3.61/72876c4e34feff9bf8d93d0b100e71ce6f5f8244/kotlin-stdlib-1.3.61-sources.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-core/9.0.30/73fc8b54346500884e0af113a26b7e5501bf3121/tomcat-embed-core-9.0.30-sources.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/com.mchange/mchange-commons-java/0.2.19/91a05a2e27efc8e8b95638926d6e0bf41d1cdd2c/mchange-commons-java-0.2.19-sources.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/5991ca87ef1fb5544943d9abc5a9a37583fabe03/annotations-13.0-sources.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-reflect/1.3.61/713188cab0fff2335e9bf3cec57244a1a8aa50be/kotlin-reflect-1.3.61-sources.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-core/1.2.3/3ebabe69eba0196af9ad3a814f723fb720b9101e/logback-core-1.2.3-sources.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.3.61/db4cb8c7a1535b2e9edf2b6cdc3e2df2110395c7/kotlin-stdlib-jdk8-1.3.61-sources.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-annotations-api/9.0.30/300f53e8dd1c7d2419126e877702c0108f20f73c/tomcat-annotations-api-9.0.30-sources.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.3.61/11f041d9f4cd26b35ef24d36600dc4817223eea3/kotlin-stdlib-jdk7-1.3.61-sources.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/com.mchange/c3p0/0.9.5.5/7a86790c4f73d20112e0bbfb9718384950569169/c3p0-0.9.5.5-sources.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.25/962153db4a9ea71b79d047dfd1b2a0d80d8f4739/slf4j-api-1.7.25-sources.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/com.h2database/h2/1.4.200/3b5883b7a5a05b932c699760f0854ca565785a84/h2-1.4.200-sources.jar!/"/>
+         <root url="jar:///home/avramenko/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-classic/1.2.3/cfd5385e0c5ed1c8a5dce57d86e79cf357153a64/logback-classic-1.2.3-sources.jar!/"/>
+      </SOURCES>
+   </library>
+</component>

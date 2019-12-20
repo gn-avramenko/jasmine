@@ -1,0 +1,7 @@
+<plugin xmlns="http://xtrip.gridnine.com/spf" id="com.gridnine.jasmine.server.db.h2">
+    <parameter id="type" value="SERVER"/>
+    <dependencies>
+        <plugin-dependency plugin-id="com.gridnine.jasmine.server.core"/>
+        <lib-dependency group="com.h2database" name="h2" version="1.4.200"/>
+    </dependencies>
+</plugin>

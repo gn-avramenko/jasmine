@@ -1,0 +1,16 @@
+<plugin xmlns="http://xtrip.gridnine.com/spf" id="com.gridnine.jasmine.server.sandbox">
+    <parameter id="type" value="SERVER"/>
+    <dependencies>
+        <plugin-dependency plugin-id="com.gridnine.jasmine.server.core"/>
+    </dependencies>
+    <extension point-id="domain-metadata">
+        <parameter id="file" value="plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/model/sandbox-model-domain.xml"/>
+        <parameter id="url" value="com/gridnine/jasmine/server/sandbox/model/sandbox-model-domain.xml"/>
+        <parameter id="dest-server-plugin-id" value="com.gridnine.jasmine.server.sandbox"/>
+    </extension>
+    <extension point-id="ui-metadata">
+        <parameter id="file" value="plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/model/sandbox-model-ui.xml"/>
+        <parameter id="url" value="com/gridnine/jasmine/server/sandbox/model/sandbox-model-ui.xml"/>
+        <parameter id="dest-server-plugin-id" value="com.gridnine.jasmine.server.sandbox"/>
+    </extension>
+</plugin>

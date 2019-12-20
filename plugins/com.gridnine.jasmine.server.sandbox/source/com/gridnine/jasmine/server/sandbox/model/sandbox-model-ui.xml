@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui xmlns="http://xtrip.gridnine.com/jasmine/ui" >
+    <shared-editor-tool-button id="sharedSaveEditorButton" handler="stub" weight="1"/>
+    <shared-editor-tool-button id="sharedDeleteEditorButton" handler="stub" weight="2"/>
+    <editor id="com.gridnine.jasmine.server.sandbox.model.ui.SandboxComplexDocumentEditor" entity-id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxComplexDocument">
+        <toolbar>
+            <tool-button id="customDialog" handler="stub" weight="3"/>
+        </toolbar>
+        <view>
+            <table-layout>
+                <column width="150"/>
+                <column width="200"/>
+                <column width="remaining"/>
+                <label id="stringPropertyLabel" caption="stringPropertyLabel.caption"/>
+                <text-box id="stringProperty"/>
+                <next-row/>
+                <label id="floatPropertyLabel" caption="floatPropertyLabel.caption"/>
+                <float-box id="floatProperty"/>
+                <next-row/>
+                <label id="integerPropertyLabel" caption="integerPropertyLabel.caption"/>
+                <integer-box id="integerProperty"/>
+                <next-row/>
+                <label id="booleanPropertyLabel" caption="booleanPropertyLabel.caption"/>
+                <boolean-box id="booleanProperty"/>
+                <next-row/>
+                <label id="entityPropertyLabel" caption="entityPropertyLabel.caption"/>
+                <entity-autocomplete id="entityProperty" entity-class-name="com.gridnine.jasmine.server.sandbox.model.domain.SandboxSimpleDocument"/>
+                <next-row/>
+                <label id="enumPropertyLabel" caption="enumPropertyLabel.caption"/>
+                <enum-select id="enumProperty" enum-id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxEnum"/>
+                <next-row/>
+                <label id="datePropertyLabel" caption="datePropertyLabel.caption"/>
+                <date-box id="dateProperty"/>
+                <next-row/>
+                <label id="dateTimePropertyLabel" caption="dateTimePropertyLabel.caption"/>
+                <date-box id="dateTimeProperty"/>
+                <next-row/>
+                <label id="entityCollectionLabel" caption="entityCollectionLabel.caption"/>
+                <next-row/>
+                <table id="entityCollection" h_span="3" class-name="com.gridnine.jasmine.server.sandbox.model.ui.SandboxTable">
+                    <columns>
+                        <text-column id="textColumn" caption="textColumn.caption"/>
+                        <entity-autocomplete-column id="entityColumn" entity-class-name="com.gridnine.jasmine.server.sandbox.model.domain.SandboxSimpleDocument" caption="entityColumn.caption"/>
+                        <enum-select-column id="enumColumn" enum-id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxEnum" caption="enumColumn.caption"/>
+                        <float-column id="floatColumn" caption="floatColumn.caption"/>
+                        <integer-column id="integerColumn" caption="integerColumn.caption"/>
+                    </columns>
+                </table>
+            </table-layout>
+        </view>
+    </editor>
+    <editor id="com.gridnine.jasmine.server.sandbox.model.ui.SandboxSimpleDocumentEditor" entity-id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxSimpleDocument">
+        <view>
+            <table-layout>
+                <column width="150"/>
+                <column width="200"/>
+                <column width="remaining"/>
+                <label id="nameLabel" caption="stringPropertyLabel.caption"/>
+                <text-box id="name"/>
+            </table-layout>
+        </view>
+    </editor>
+</ui>

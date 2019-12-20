@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain xmlns="http://xtrip.gridnine.com/jasmine/domain" >
+    <enum id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxEnum">
+        <enum-item id="ELEMENT_1"/>
+        <enum-item id="ELEMENT_2"/>
+    </enum>
+    <document id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxSimpleDocument">
+        <property id="name" type="STRING"/>
+    </document>
+    <document id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxNestedDocument">
+        <property id="textColumn" type="STRING"/>
+        <property id="enumColumn" type="ENUM" className="com.gridnine.jasmine.server.sandbox.model.domain.SandboxEnum"/>
+        <property id="entityRefColumn" type="ENTITY_REFERENCE" className="com.gridnine.jasmine.server.sandbox.model.domain.SandboxSimpleDocument"/>
+        <property id="integetColumn" type="INT"/>
+        <property id="floatColumn" type="BIG_DECIMAL"/>
+    </document>
+    <document id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxComplexDocument">
+        <property id="stringProperty" type="STRING"/>
+        <property id="floatProperty" type="BIG_DECIMAL"/>
+        <property id="integerProperty" type="INT" notNullable="true"/>
+        <property id="booleanProperty" type="BOOLEAN" notNullable="true"/>
+        <property id="entityRefProperty" type="ENTITY_REFERENCE" className="com.gridnine.jasmine.server.sandbox.model.domain.SandboxSimpleDocument"/>
+        <property id="enumProperty" type="ENUM" className="com.gridnine.jasmine.server.sandbox.model.domain.SandboxEnum"/>
+        <property id="dateProperty" type="LOCAL_DATE"/>
+        <property id="dateTimeProperty" type="LOCAL_DATE_TIME"/>
+        <collection id="entityCollection" element-type="NESTED_DOCUMENT" elementClassName="com.gridnine.jasmine.server.sandbox.model.domain.SandboxNestedDocument"/>
+    </document>
+    <index id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxComplexDocumentIndex" document="com.gridnine.jasmine.server.sandbox.model.domain.SandboxComplexDocument">
+        <property id="stringProperty" type="STRING"/>
+        <property id="floatProperty" type="BIG_DECIMAL"/>
+        <property id="integerProperty" type="INT" />
+        <property id="booleanProperty" type="BOOLEAN"/>
+        <property id="entityRefProperty" type="ENTITY_REFERENCE" className="com.gridnine.jasmine.server.sandbox.model.domain.SandboxSimpleDocument"/>
+        <property id="enumProperty" type="ENUM" className="com.gridnine.jasmine.server.sandbox.model.domain.SandboxEnum"/>
+        <property id="dateProperty" type="LOCAL_DATE"/>
+        <property id="dateTimeProperty" type="LOCAL_DATE_TIME"/>
+    </index>
+    <index id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxSimpleDocumentIndex" document="com.gridnine.jasmine.server.sandbox.model.domain.SandboxSimpleDocument">
+        <property id="name" type="STRING"/>
+    </index>
+</domain>

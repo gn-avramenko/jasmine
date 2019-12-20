@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rest xmlns="http://xtrip.gridnine.com/jasmine/rest" id="standard">
+    <!-- metadataa -->
+    <enum id="com.flinty.jasmine.server.standard.model.rest.RestPropertyTypeDT">
+        <enum-item id="STRING"/>
+        <enum-item id="ENUM"/>
+        <enum-item id="ENTITY"/>
+        <enum-item id="LONG"/>
+        <enum-item id="INT"/>
+        <enum-item id="BIG_DECIMAL"/>
+        <enum-item id="ENTITY_REFERENCE"/>
+        <enum-item id="LOCAL_DATE_TIME"/>
+        <enum-item id="LOCAL_DATE"/>
+        <enum-item id="BOOLEAN"/>
+        <enum-item id="BYTE_ARRAY"/>
+    </enum>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.RestPropertyDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="type" type="ENUM" className="com.flinty.jasmine.server.standard.model.rest.RestPropertyTypeDT"/>
+        <property id="className" type="STRING"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.RestCollectionDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="elementType" type="ENUM" className="com.flinty.jasmine.server.standard.model.rest.RestPropertyTypeDT"/>
+        <property id="elementClassName" type="STRING"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.RestEntityDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="abstract" type="BOOLEAN"/>
+        <property id="extends" type="STRING"/>
+        <collection id="properties" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.RestPropertyDescriptionDT"/>
+        <collection id="collections" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.RestCollectionDescriptionDT"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.EnumDescriptionDT">
+        <property id="id" type="STRING"/>
+        <collection id="items" element-type="STRING"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.DomainEnumItemDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="displayName" type="STRING"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.DomainEnumDescriptionDT">
+        <property id="id" type="STRING"/>
+        <collection id="items" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.DomainEnumItemDescriptionDT"/>
+    </entity>
+    <enum id="com.flinty.jasmine.server.standard.model.rest.IndexPropertyTypeDT">
+        <enum-item id="STRING"/>
+        <enum-item id="TEXT"/>
+        <enum-item id="ENUM"/>
+        <enum-item id="LONG"/>
+        <enum-item id="INT"/>
+        <enum-item id="BIG_DECIMAL"/>
+        <enum-item id="ENTITY_REFERENCE"/>
+        <enum-item id="LOCAL_DATE_TIME"/>
+        <enum-item id="LOCAL_DATE"/>
+        <enum-item id="BOOLEAN"/>
+        <enum-item id="BYTE_ARRAY"/>
+    </enum>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.IndexPropertyDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="type" type="ENUM" className="com.flinty.jasmine.server.standard.model.rest.IndexPropertyTypeDT"/>
+        <property id="displayName" type="STRING"/>
+        <property id="className" type="STRING"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.IndexCollectionDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="elementType" type="ENUM" className="com.flinty.jasmine.server.standard.model.rest.IndexPropertyTypeDT"/>
+        <property id="displayName" type="STRING"/>
+        <property id="elementClassName" type="STRING"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.IndexDescriptionDT">
+        <property id="document" type="STRING"/>
+        <property id="id" type="STRING"/>
+        <collection id="properties" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.IndexPropertyDescriptionDT"/>
+        <collection id="collections" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.IndexCollectionDescriptionDT"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.AssetDescriptionDT">
+        <property id="id" type="STRING"/>
+        <collection id="properties" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.IndexPropertyDescriptionDT"/>
+        <collection id="collections" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.IndexCollectionDescriptionDT"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.RestOperationDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="request" type="STRING"/>
+        <property id="response" type="STRING"/>
+    </entity>
+
+    <entity id="com.flinty.jasmine.server.standard.model.rest.ToolButtonDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="handler" type="STRING"/>
+        <property id="displayName" type="STRING"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.ListDescriptionDT">
+        <property id="id" type="STRING"/>
+        <collection id="toolButtons" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.ToolButtonDescriptionDT"/>
+    </entity>
+
+    <enum id="com.flinty.jasmine.server.standard.model.rest.VMPropertyTypeDT">
+        <enum-item id="STRING"/>
+        <enum-item id="ENUM"/>
+        <enum-item id="ENTITY"/>
+        <enum-item id="LONG"/>
+        <enum-item id="INT"/>
+        <enum-item id="BIG_DECIMAL"/>
+        <enum-item id="ENTITY_REFERENCE"/>
+        <enum-item id="LOCAL_DATE_TIME"/>
+        <enum-item id="LOCAL_DATE"/>
+        <enum-item id="BOOLEAN"/>
+    </enum>
+
+    <entity id="com.flinty.jasmine.server.standard.model.rest.VMPropertyDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="type" type="ENUM" className="com.flinty.jasmine.server.standard.model.rest.VMPropertyTypeDT"/>
+        <property id="className" type="STRING"/>
+    </entity>
+
+    <entity id="com.flinty.jasmine.server.standard.model.rest.VMCollectionDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="elementType" type="ENUM" className="com.flinty.jasmine.server.standard.model.rest.VMPropertyTypeDT"/>
+        <property id="elementClassName" type="STRING"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.VMEntityDescriptionDT">
+        <property id="id" type="STRING"/>
+        <collection id="properties" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.VMPropertyDescriptionDT"/>
+        <collection id="collections" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.VMCollectionDescriptionDT"/>
+    </entity>
+
+    <enum id="com.flinty.jasmine.server.standard.model.rest.VSPropertyTypeDT">
+        <enum-item id="ENUM_SELECT"/>
+        <enum-item id="ENTITY_AUTOCOMPLETE"/>
+        <enum-item id="ENTITY"/>
+        <enum-item id="COLUMN_TEXT"/>
+        <enum-item id="COLUMN_INT"/>
+        <enum-item id="COLUMN_FLOAT"/>
+        <enum-item id="COLUMN_ENUM_SELECT"/>
+        <enum-item id="COLUMN_ENTITY"/>
+    </enum>
+
+    <entity id="com.flinty.jasmine.server.standard.model.rest.VSPropertyDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="type" type="ENUM" className="com.flinty.jasmine.server.standard.model.rest.VSPropertyTypeDT"/>
+        <property id="className" type="STRING"/>
+    </entity>
+
+    <entity id="com.flinty.jasmine.server.standard.model.rest.VSCollectionDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="elementType" type="ENUM" className="com.flinty.jasmine.server.standard.model.rest.VSPropertyTypeDT"/>
+        <property id="elementClassName" type="STRING"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.VSEntityDescriptionDT">
+        <property id="id" type="STRING"/>
+        <collection id="properties" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.VSPropertyDescriptionDT"/>
+        <collection id="collections" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.VSCollectionDescriptionDT"/>
+    </entity>
+
+    <enum id="com.flinty.jasmine.server.standard.model.rest.VVPropertyTypeDT">
+        <enum-item id="STRING"/>
+        <enum-item id="ENTITY"/>
+    </enum>
+
+    <entity id="com.flinty.jasmine.server.standard.model.rest.VVPropertyDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="type" type="ENUM" className="com.flinty.jasmine.server.standard.model.rest.VVPropertyTypeDT"/>
+        <property id="className" type="STRING"/>
+    </entity>
+
+    <entity id="com.flinty.jasmine.server.standard.model.rest.VVCollectionDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="elementType" type="ENUM" className="com.flinty.jasmine.server.standard.model.rest.VVPropertyTypeDT"/>
+        <property id="elementClassName" type="STRING"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.VVEntityDescriptionDT">
+        <property id="id" type="STRING"/>
+        <collection id="properties" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.VVPropertyDescriptionDT"/>
+        <collection id="collections" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.VVCollectionDescriptionDT"/>
+    </entity>
+
+    <enum id="com.flinty.jasmine.server.standard.model.rest.WidgetTypeDT">
+        <enum-item id="TEXTBOX"/>
+        <enum-item id="TEXTAREA"/>
+        <enum-item id="INTBOX"/>
+        <enum-item id="FLOATBOX"/>
+        <enum-item id="ENUM_SELECT"/>
+        <enum-item id="ENTITY_AUTOCOMPLETE"/>
+        <enum-item id="LABEL"/>
+        <enum-item id="TABLE"/>
+        <enum-item id="NEXT_ROW"/>
+        <enum-item id="NEXT_COLUMN"/>
+    </enum>
+
+
+    <enum id="com.flinty.jasmine.server.standard.model.rest.ViewTypeDT">
+        <enum-item id="STANDARD"/>
+        <enum-item id="EXTERNAL"/>
+    </enum>
+
+    <enum id="com.flinty.jasmine.server.standard.model.rest.LayoutTypeDT">
+        <enum-item id="TABLE"/>
+    </enum>
+
+    <entity id="com.flinty.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT" abstract="true">
+        <property id="id" type="STRING"/>
+        <property id="type" type="ENUM" className="com.flinty.jasmine.server.standard.model.rest.WidgetTypeDT"/>
+        <property id="hSpan" type="INT"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.TableNextColumnDescriptionDT"  extends="com.flinty.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT"/>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.TableNextRowDescriptionDT"  extends="com.flinty.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT"/>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.TextAreaDescriptionDT"  extends="com.flinty.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT"/>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.IntegerBoxDescriptionDT"  extends="com.flinty.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT"/>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.FloatBoxDescriptionDT"  extends="com.flinty.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT"/>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.TextboxDescriptionDT"  extends="com.flinty.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT"/>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.EnumSelectDescriptionDT"  extends="com.flinty.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT">
+        <property id="enumId" type="STRING"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.EntityAutocompleteDescriptionDT"  extends="com.flinty.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT">
+        <property id="entityClassName" type="STRING"/>
+    </entity>
+    <enum id="com.flinty.jasmine.server.standard.model.rest.TableColumnTypeDT">
+        <enum-item id="TEXT"/>
+        <enum-item id="INTEGER"/>
+        <enum-item id="FLOAT"/>
+        <enum-item id="ENUM"/>
+        <enum-item id="ENTITY"/>
+    </enum>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.BaseTableColumnDescriptionDT" abstract="true">
+        <property id="id" type="STRING"/>
+        <property id="width" type="INT"/>
+        <property id="caption" type="STRING"/>
+        <property id="columnType" type="ENUM" className="com.flinty.jasmine.server.standard.model.rest.TableColumnTypeDT"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.TextTableColumnDescriptionDT"  extends="com.flinty.jasmine.server.standard.model.rest.BaseTableColumnDescriptionDT"/>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.IntegerTableColumnDescriptionDT"  extends="com.flinty.jasmine.server.standard.model.rest.BaseTableColumnDescriptionDT"/>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.FloatTableColumnDescriptionDT"  extends="com.flinty.jasmine.server.standard.model.rest.BaseTableColumnDescriptionDT"/>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.EnumTableColumnDescriptionDT"  extends="com.flinty.jasmine.server.standard.model.rest.BaseTableColumnDescriptionDT">
+        <property id="enumId" type="STRING"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.EntityTableColumnDescriptionDT"  extends="com.flinty.jasmine.server.standard.model.rest.BaseTableColumnDescriptionDT">
+        <property id="entityClassName" type="STRING"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.TableDescriptionDT"  extends="com.flinty.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT">
+        <property id="baseClassesName" type="STRING"/>
+        <collection id="columns" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.BaseTableColumnDescriptionDT"/>
+    </entity>
+
+    <enum id="com.flinty.jasmine.server.standard.model.rest.VerticalAlignmentDT">
+        <enum-item id="TOP"/>
+        <enum-item id="BOTTOM"/>
+        <enum-item id="CENTER"/>
+    </enum>
+    <enum id="com.flinty.jasmine.server.standard.model.rest.HorizontalAlignmentDT">
+        <enum-item id="LEFT"/>
+        <enum-item id="RIGHT"/>
+        <enum-item id="CENTER"/>
+    </enum>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.LabelDescriptionDT"  extends="com.flinty.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT">
+        <property id="displayName" type="STRING"/>
+        <property id="verticalAlignment" type="ENUM" className="com.flinty.jasmine.server.standard.model.rest.VerticalAlignmentDT"/>
+        <property id="horizontalAlignment" type="ENUM" className="com.flinty.jasmine.server.standard.model.rest.HorizontalAlignmentDT"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.BaseViewDescriptionDT" abstract="true">
+        <property id="id" type="STRING"/>
+        <property id="type" type="ENUM" className="com.flinty.jasmine.server.standard.model.rest.ViewTypeDT"/>
+        <property id="viewModel" type="STRING"/>
+        <property id="viewSettings" type="STRING"/>
+        <property id="viewValidation" type="STRING"/>
+        <property id="viewHandler" type="STRING"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.BaseLayoutDescriptionDT" abstract="true">
+        <property id="type" type="ENUM" className="com.flinty.jasmine.server.standard.model.rest.LayoutTypeDT"/>
+       <collection id="widgets" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.TableColumnDescriptionDT">
+        <property id="width" type="STRING"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.TableLayoutDescriptionDT"  extends="com.flinty.jasmine.server.standard.model.rest.BaseLayoutDescriptionDT">
+        <collection id="columns" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.TableColumnDescriptionDT"/>
+        <property id="expandLastRow" type="BOOLEAN"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.StandardViewDescriptionDT"  extends="com.flinty.jasmine.server.standard.model.rest.BaseViewDescriptionDT">
+        <property id="layout" type="ENTITY" className="com.flinty.jasmine.server.standard.model.rest.BaseLayoutDescriptionDT"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.EditorDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="objectId" type="STRING"/>
+        <property id="viewId" type="STRING"/>
+    </entity>
+
+
+    <!--workspace -->
+    <enum id="com.flinty.jasmine.server.standard.model.rest.WorkspaceElementTypeDT">
+        <enum-item id="LIST"/>
+    </enum>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.BaseWorkspaceItemDT" abstract="true">
+        <property id="displayName" type="STRING"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.ListWorkspaceItemDT" extends="com.flinty.jasmine.server.standard.model.rest.BaseWorkspaceItemDT">
+        <property id="listId" type="STRING"/>
+        <property id="encodedCriterions" type="STRING"/>
+        <collection id="columns" element-type="STRING"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.WorkspaceGroupDT">
+        <property id="displayName" type="STRING"/>
+        <collection id="items" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.BaseWorkspaceItemDT"/>
+    </entity>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.WorkspaceDT">
+        <collection id="groups" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.WorkspaceGroupDT"/>
+    </entity>
+
+    <entity id="com.flinty.jasmine.server.standard.model.rest.EntityAutocompleteDatasourceDT">
+        <property id="autocompleteId" type="STRING"/>
+        <property id="indexClassName" type="STRING"/>
+        <collection id="columnNames" element-type="STRING"/>
+    </entity>
+
+    <group id="standard">
+        <operation id="meta" handler="com.flinty.jasmine.standard.rest.StandardMetaRestHandler">
+            <request id="com.flinty.jasmine.server.standard.model.rest.GetMetadataRequest"/>
+            <response id="com.flinty.jasmine.server.standard.model.rest.GetMetadataResponse">
+                <collection id="restEnums" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.EnumDescriptionDT"/>
+                <collection id="restEntities" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.RestEntityDescriptionDT"/>
+                <collection id="domainEnums" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.DomainEnumDescriptionDT"/>
+                <collection id="domainIndexes" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.IndexDescriptionDT"/>
+                <collection id="domainAssets" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.AssetDescriptionDT"/>
+                <collection id="operations" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.RestOperationDescriptionDT"/>
+                <collection id="uiLists" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.ListDescriptionDT"/>
+                <collection id="vmEntities" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.VMEntityDescriptionDT"/>
+                <collection id="vsEntities" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.VSEntityDescriptionDT"/>
+                <collection id="vvEntities" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.VVEntityDescriptionDT"/>
+                <collection id="views" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.BaseViewDescriptionDT"/>
+                <collection id="editors" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.EditorDescriptionDT"/>
+            </response>
+        </operation>
+        <operation id="workspace" handler="com.flinty.jasmine.standard.rest.StandardWorkspaceRestHandler">
+            <request id="com.flinty.jasmine.server.standard.model.rest.GetWorkspaceRequest"/>
+            <response id="com.flinty.jasmine.server.standard.model.rest.GetWorkspaceResponse">
+                <property id="workspace" type="ENTITY" className="com.flinty.jasmine.server.standard.model.rest.WorkspaceDT"/>
+            </response>
+        </operation>
+        <operation id="list" handler="com.flinty.jasmine.standard.rest.StandardListRestHandler">
+            <request id="com.flinty.jasmine.server.standard.model.rest.GetListRequest">
+                <property id="encodedCriterions" type="STRING"/>
+                <property id="listId" type="STRING"/>
+                <collection id="columns" element-type="STRING"/>
+                <property id="sortColumn" type="STRING"/>
+                <property id="desc" type="BOOLEAN"/>
+                <property id="rows" type="INT"/>
+                <property id="page" type="INT"/>
+                <property id="freeText" type="STRING"/>
+            </request>
+            <response id="com.flinty.jasmine.server.standard.model.rest.GetListResponse">
+                <collection id="items" element-type="ENTITY" elementClassName="com.gridnine.jasmine.server.core.model.common.BaseEntity"/>
+                <property id="totalCount" type="LONG"/>
+            </response>
+        </operation>
+        <operation id="getEditorData" handler="com.flinty.jasmine.standard.rest.StandardGetEditorDataRestHandler">
+            <request id="com.flinty.jasmine.server.standard.model.rest.GetEditorDataRequest">
+                <property id="objectId" type="STRING"/>
+                <property id="objectUid" type="STRING"/>
+            </request>
+            <response id="com.flinty.jasmine.server.standard.model.rest.GetEditorDataResponse">
+                <property id="viewModel" type="ENTITY" className="com.gridnine.jasmine.server.core.model.ui.BaseVMEntity"/>
+                <property id="viewSettings" type="ENTITY" className="com.gridnine.jasmine.server.core.model.ui.BaseVSEntity"/>
+                <property id="title" type="STRING"/>
+            </response>
+        </operation>
+        <operation id="saveEditorData" handler="com.flinty.jasmine.standard.rest.StandardSaveEditorDataRestHandler">
+            <request id="com.flinty.jasmine.server.standard.model.rest.SaveEditorDataRequest">
+                <property id="objectId" type="STRING"/>
+                <property id="viewModel" type="ENTITY" className="com.gridnine.jasmine.server.core.model.ui.BaseVMEntity"/>
+            </request>
+            <response id="com.flinty.jasmine.server.standard.model.rest.SaveEditorDataResponse">
+                <property id="viewModel" type="ENTITY" className="com.gridnine.jasmine.server.core.model.ui.BaseVMEntity"/>
+                <property id="viewSettings" type="ENTITY" className="com.gridnine.jasmine.server.core.model.ui.BaseVSEntity"/>
+                <property id="viewValidation" type="ENTITY" className="com.gridnine.jasmine.server.core.model.ui.BaseVVEntity"/>
+                <property id="title" type="STRING"/>
+            </response>
+        </operation>
+        <operation id="deleteObject" handler="com.flinty.jasmine.standard.rest.StandardDeleteObjectRestHandler">
+            <request id="com.flinty.jasmine.server.standard.model.rest.DeleteObjectRequest">
+                <property id="objectId" type="STRING"/>
+                <property id="objectUid" type="STRING"/>
+            </request>
+            <response id="com.flinty.jasmine.server.standard.model.rest.DeleteObjectResponse"/>
+        </operation>
+        <operation id="entityAutocomplete" handler="com.flinty.jasmine.standard.rest.StandardEntityAutocompleteRestHandler">
+            <request id="com.flinty.jasmine.server.standard.model.rest.EntityAutocompleteRequest">
+                <property id="searchText" type="STRING"/>
+                <property id="limit" type="INT"/>
+                <collection id="datasources" element-type="ENTITY" elementClassName="com.flinty.jasmine.server.standard.model.rest.EntityAutocompleteDatasourceDT"/>
+            </request>
+            <response id="com.flinty.jasmine.server.standard.model.rest.EntityAutocompleteResponse">
+                <collection id="items" element-type="ENTITY" elementClassName="com.gridnine.jasmine.server.core.model.domain.EntityReference&lt;com.gridnine.jasmine.server.core.model.domain.BaseDocument&gt;"/>
+            </response>
+        </operation>
+    </group>
+    <entity id="com.flinty.jasmine.server.standard.model.rest.RestFile">
+        <property id="name" type="STRING"/>
+        <property id="type" type="STRING"/>
+        <property id="content" type="STRING"/>
+    </entity>
+
+</rest>
+
+
