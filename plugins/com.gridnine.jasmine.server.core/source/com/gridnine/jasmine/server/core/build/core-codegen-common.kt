@@ -9,9 +9,9 @@ package com.gridnine.jasmine.server.core.build
 import com.gridnine.jasmine.server.core.model.domain.EntityReference
 import com.gridnine.jasmine.server.core.storage.search.*
 import java.io.File
-import java.lang.IllegalArgumentException
 import java.math.BigDecimal
 import java.time.LocalDateTime
+import kotlin.IllegalArgumentException
 
 
 internal class GenClassData(val id: String, val extends: String?, val abstract: Boolean, val enum: Boolean, val noEnumProperties: Boolean) {
@@ -54,9 +54,9 @@ internal object GenUtils {
             """.trimIndent())
         val packageName = getPackageName(className)
         if(supressUnchecked) {
-            sb.append("\n\n@file:Suppress(\"unused\",\"UNCHECKED_CAST\")")
+            sb.append("\n\n@file:Suppress(\"unused\",\"RemoveRedundantQualifierName\",\"UNCHECKED_CAST\",\"MemberVisibilityCanBePrivate\",\"RemoveEmptyPrimaryConstructor\", \"FunctionName\")")
         } else {
-            sb.append("\n\n@file:Suppress(\"unused\")")
+            sb.append("\n\n@file:Suppress(\"unused\",\"RemoveRedundantQualifierName\",\"MemberVisibilityCanBePrivate\",\"RemoveEmptyPrimaryConstructor\", \"FunctionName\")")
         }
         sb.append("\n\npackage $packageName\n")
     }

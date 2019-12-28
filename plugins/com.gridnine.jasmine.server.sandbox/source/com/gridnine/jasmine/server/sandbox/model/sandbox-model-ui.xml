@@ -24,7 +24,7 @@
                 <boolean-box id="booleanProperty"/>
                 <next-row/>
                 <label id="entityPropertyLabel" caption="entityPropertyLabel.caption"/>
-                <entity-autocomplete id="entityProperty" entity-class-name="com.gridnine.jasmine.server.sandbox.model.domain.SandboxSimpleDocument"/>
+                <entity-autocomplete id="entityProperty" entity-class-name="com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccount"/>
                 <next-row/>
                 <label id="enumPropertyLabel" caption="enumPropertyLabel.caption"/>
                 <enum-select id="enumProperty" enum-id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxEnum"/>
@@ -41,7 +41,7 @@
                     <columns>
                         <text-column id="textColumn" caption="textColumn.caption"/>
                         <entity-autocomplete-column id="entityColumn" entity-class-name="com.gridnine.jasmine.server.sandbox.model.domain.SandboxSimpleDocument" caption="entityColumn.caption"/>
-                        <enum-select-column id="enumColumn" enum-id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxEnum" caption="enumColumn.caption"/>
+                        <enum-select-column id="enumColumn" enum-id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxEnum" caption="SandboxUserAccount.caption"/>
                         <float-column id="floatColumn" caption="floatColumn.caption"/>
                         <integer-column id="integerColumn" caption="integerColumn.caption"/>
                     </columns>
@@ -49,15 +49,46 @@
             </table-layout>
         </view>
     </editor>
-    <editor id="com.gridnine.jasmine.server.sandbox.model.ui.SandboxSimpleDocumentEditor" entity-id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxSimpleDocument">
+    <editor id="com.gridnine.jasmine.server.sandbox.model.ui.SandboxUserAccountEditor" entity-id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccount">
         <view>
             <table-layout>
                 <column width="150"/>
                 <column width="200"/>
                 <column width="remaining"/>
-                <label id="nameLabel" caption="stringPropertyLabel.caption"/>
+                <label id="nameLabel" caption="nameLabel.caption"/>
                 <text-box id="name"/>
+                <next-row/>
+                <label id="loginLabel" caption="loginLabel.caption"/>
+                <text-box id="login"/>
+                <next-row/>
+                <label id="passwordLabel" caption="passwordLabel.caption"/>
+                <password-box id="password"/>
+                <next-row/>
+                <label id="passwordRepeatLabel" caption="passwordRepeatLabel.caption"/>
+                <password-box id="passwordRepeat"/>
             </table-layout>
         </view>
     </editor>
+    <dialog id="com.gridnine.jasmine.server.sandbox.model.ui.SandboxLoginDialog" width="400" height="200">
+        <view>
+            <table-layout>
+                <column width="100"/>
+                <column width="remaining"/>
+                <label id="loginLabel" caption="loginLabel.caption"/>
+                <text-box id="login"/>
+                <next-row/>
+                <label id="passwordLabel" caption="passwordLabel.caption"/>
+                <password-box id="password"/>
+            </table-layout>
+        </view>
+        <buttons>
+            <button id="okButton" handler="stub" caption="ok"/>
+            <button id="cancelButton" handler="stub" caption="cancel"/>
+        </buttons>
+    </dialog>
+    <list id="com.gridnine.jasmine.server.sandbox.model.ui.SandboxUserAccountList" object-id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccountIndex">
+    </list>
+    <list id="com.gridnine.jasmine.server.sandbox.model.ui.SandboxComplexDocumentList" object-id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxComplexDocumentIndex">
+
+    </list>
 </ui>

@@ -8,6 +8,11 @@ package com.gridnine.jasmine.server.core.utils
 import java.lang.reflect.InvocationTargetException
 import java.sql.SQLException
 
+
+fun String?.isBlankOrNull():Boolean{
+    return this == null||this.isEmpty()
+}
+
 object TextUtils {
     fun isBlank(str: String?): Boolean {
         return str == null || str.isBlank()

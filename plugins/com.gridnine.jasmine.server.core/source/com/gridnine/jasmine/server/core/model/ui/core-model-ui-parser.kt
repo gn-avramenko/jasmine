@@ -38,7 +38,7 @@ object UiMetadataParser {
         }
         node.children("shared-editor-tool-button").forEach { child ->
             val id = ParserUtils.getIdAttribute(child)
-            registry.sharedToolButtons.add(SharedToolButtonDescription(id, child.attributes["handler"]?:
+            registry.sharedEditorToolButtons.add(SharedEditorToolButtonDescription(id, child.attributes["handler"]?:
                 throw IllegalArgumentException("${child.name} has no handler attribute"),
                     child.attributes["weight"]?.toDouble()?:
                     throw IllegalArgumentException("${child.name} has no weight attribute")))
@@ -46,6 +46,7 @@ object UiMetadataParser {
         node.children("list").forEach { listElm ->
             val listId = ParserUtils.getIdAttribute(listElm)
             val descr = ListDescription(listId, listElm.attributes["object-id"]?:throw IllegalArgumentException("${listElm.name} has no object-id attribute"))
+            registry.lists[listId] = descr
             listElm.children("toolbar").firstOrNull()?.children("tool-button")?.forEach {toolButtonElm ->
                 val buttonId = ParserUtils.getIdAttribute(toolButtonElm)
                 descr.toolButtons.add(ListToolButtonDescription(listId, buttonId, toolButtonElm.attributes["handler"]?:
@@ -57,11 +58,10 @@ object UiMetadataParser {
         }
         node.children("editor").forEach { child ->
             val editorId = child.attributes["id"]?:throw IllegalArgumentException("element ${child.name} has no id attribute")
-            child.children("entity-handler").forEach { entityHandler ->
-                val handlersList = registry.entityHandlers.getOrPut(editorId){ arrayListOf()}
-                handlersList.add(entityHandler.value?:throw IllegalArgumentException("element ${entityHandler.name} has value"))
+            val editor = EditorDescription(editorId, child.attributes["entity-id"]?:throw IllegalArgumentException("element ${child.name} has no id entity-id"),"${editorId}View")
+            child.children("editor-handler").forEach { entityHandler ->
+                editor.handlers.add(entityHandler.value?:throw IllegalArgumentException("element ${entityHandler.name} has value"))
             }
-            val editor = EditorDescription(editorId, "${editorId}View")
             registry.editors[editorId] = editor
             child.children("toolbar").firstOrNull()?.children("tool-button")?.forEach {toolButtonElm ->
                 val id = ParserUtils.getIdAttribute(toolButtonElm)
@@ -76,6 +76,28 @@ object UiMetadataParser {
             val vsEntityDescr = VSEntityDescription("${editorId}VS")
             val vvEntityDescr = VVEntityDescription("${editorId}VV")
             updateViews(registry, vmEntityDescr, vsEntityDescr, vvEntityDescr,  viewElm, editorId, localizations)
+            registry.viewModels[vmEntityDescr.id] = vmEntityDescr
+            registry.viewSettings[vsEntityDescr.id] = vsEntityDescr
+            registry.viewValidations[vvEntityDescr.id] = vvEntityDescr
+        }
+        node.children("dialog").forEach { child ->
+            val dialogId = child.attributes["id"]?:throw IllegalArgumentException("element ${child.name} has no id attribute")
+            val dialog = DialogDescription(dialogId, "${dialogId}View", child.attributes["width"]?.toInt()?:throw IllegalArgumentException("element ${child.name} has no width attribute"),
+            child.attributes["height"]?.toInt()?:throw IllegalArgumentException("element ${child.name} has no height attribute"))
+            registry.dialogs[dialogId] = dialog
+            child.children("buttons").firstOrNull()?.children("button")?.forEach {dialogButton ->
+                val id = ParserUtils.getIdAttribute(dialogButton)
+                dialog.buttons.add(DialogToolButtonDescription(dialogId, id, dialogButton.attributes["handler"]?:
+                throw IllegalArgumentException("${dialogButton.name} has no handler attribute"),
+                        dialogButton.attributes["caption"]?:
+                        throw IllegalArgumentException("${dialogButton.name} has no caption attribute")))
+
+            }
+            val viewElm = child.children("view")[0]
+            val vmEntityDescr = VMEntityDescription("${dialogId}VM")
+            val vsEntityDescr = VSEntityDescription("${dialogId}VS")
+            val vvEntityDescr = VVEntityDescription("${dialogId}VV")
+            updateViews(registry, vmEntityDescr, vsEntityDescr, vvEntityDescr,  viewElm, dialogId, localizations)
             registry.viewModels[vmEntityDescr.id] = vmEntityDescr
             registry.viewSettings[vsEntityDescr.id] = vsEntityDescr
             registry.viewValidations[vvEntityDescr.id] = vvEntityDescr
@@ -102,6 +124,13 @@ object UiMetadataParser {
                 when(it.name){
                     "text-box" ->{
                         val tb = TextboxDescription(editorId, ParserUtils.getIdAttribute(it))
+                        updateHspan(tb, it)
+                        layout.widgets[tb.id] = tb
+                        vmEntityDescr.properties[tb.id] = VMPropertyDescription(editorId, tb.id, VMPropertyType.STRING, null, false)
+                        vvEntityDescr.properties[tb.id] = VVPropertyDescription(editorId, tb.id, VVPropertyType.STRING, null)
+                    }
+                    "password-box" ->{
+                        val tb = PasswordBoxDescription(editorId, ParserUtils.getIdAttribute(it))
                         updateHspan(tb, it)
                         layout.widgets[tb.id] = tb
                         vmEntityDescr.properties[tb.id] = VMPropertyDescription(editorId, tb.id, VMPropertyType.STRING, null, false)
@@ -165,7 +194,7 @@ object UiMetadataParser {
                         val ta = BooleanBoxDescription(editorId, ParserUtils.getIdAttribute(it), "true" == it.attributes["notNullable"])
                         updateHspan(ta, it)
                         layout.widgets[ta.id] = ta
-                        vmEntityDescr.properties[ta.id] = VMPropertyDescription(editorId, ta.id, VMPropertyType.LOCAL_DATE, null,viewPropertyNotNullable)
+                        vmEntityDescr.properties[ta.id] = VMPropertyDescription(editorId, ta.id, VMPropertyType.BOOLEAN, null,viewPropertyNotNullable)
                         vvEntityDescr.properties[ta.id] = VVPropertyDescription(editorId, ta.id, VVPropertyType.STRING, null)
                     }
                     "next-column" ->{
@@ -215,7 +244,7 @@ object UiMetadataParser {
                                     tableVS.properties[id] = VSPropertyDescription(tableDescription.fullId,id,VSPropertyType.COLUMN_TEXT, null)
                                 }
                                 "integer-column" -> {
-                                    val columnDescription = IntegerTableColumnDescription(tableDescription.fullId, id)
+                                    val columnDescription = IntegerTableColumnDescription(tableDescription.fullId, id, columnPropertyNotNullable)
                                     columnDescription.width = width
                                     ParserUtils.updateLocalizations(columnDescription, localizations)
                                     tableDescription.columns[id] = columnDescription
@@ -224,7 +253,7 @@ object UiMetadataParser {
                                     tableVS.properties[id] = VSPropertyDescription(tableDescription.fullId,id,VSPropertyType.COLUMN_INT, null)
                                 }
                                 "float-column" -> {
-                                    val columnDescription = FloatTableColumnDescription(tableDescription.fullId, id)
+                                    val columnDescription = FloatTableColumnDescription(tableDescription.fullId, id, columnPropertyNotNullable)
                                     columnDescription.width = width
                                     ParserUtils.updateLocalizations(columnDescription, localizations)
                                     tableDescription.columns[id] = columnDescription

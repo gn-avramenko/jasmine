@@ -136,6 +136,7 @@ internal object SerializationUtils {
         jsonWriter.isLenient = true
         jsonWriter.setIndent("  ")
         Streams.write(json, jsonWriter)
+        jsonWriter.flush()
         return stringWriter.toString()
     }
 
@@ -147,6 +148,7 @@ internal object SerializationUtils {
         jsonWriter.isLenient = true
         jsonWriter.setIndent("  ")
         Streams.write(json, jsonWriter)
+        jsonWriter.flush()
         return baos.toByteArray()
     }
 

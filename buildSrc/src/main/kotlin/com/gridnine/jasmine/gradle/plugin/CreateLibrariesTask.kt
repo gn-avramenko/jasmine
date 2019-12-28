@@ -20,8 +20,15 @@ open class CreateLibrariesTask: DefaultTask(){
         createLibrary("server")
         createLibrary("server_test")
         createSpfLibrary()
+        createKotlinLibrary()
     }
 
+    private fun createKotlinLibrary() {
+        LibraryUtils.createLibrary(LibraryUtils.LibraryData("web_js"){
+            classes.add("jar://\$KOTLIN_BUNDLED\$/lib/kotlin-stdlib-js.jar!/")
+            sources.add("jar://\$KOTLIN_BUNDLED$\$/lib/kotlin-stdlib-js-sources.jar!/")
+        }, project.projectDir)
+    }
 
     private fun createSpfLibrary() {
         LibraryUtils.createLibrary(LibraryUtils.LibraryData("spf"){
@@ -54,6 +61,8 @@ open class CreateLibrariesTask: DefaultTask(){
                 }
             }
         }
+        libraryData.sources.sort()
+        libraryData.classes.sort()
         LibraryUtils.createLibrary(libraryData, project.projectDir)
     }
 }
@@ -80,7 +89,7 @@ object LibraryUtils{
                 }
             }
         }
-        File(libraryDir, "${library.name}.xml").writeText(content, charset("utf-8"))
+        File(libraryDir, "${library.name}.xml").writeIfDiffers(content)
     }
 
     data class LibraryData(val name: String) {

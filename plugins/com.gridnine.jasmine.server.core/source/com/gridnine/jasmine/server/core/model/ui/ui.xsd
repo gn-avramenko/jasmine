@@ -24,10 +24,32 @@
                                 <extension base="tns:baseMetaElement">
                                     <sequence>
                                         <element name="toolbar" type="tns:toolbar" minOccurs="0"/>
-                                        <element type="string" name = "entity-handler" minOccurs="0"/>
+                                        <element type="string" name = "editor-handler" minOccurs="0"/>
                                         <group ref="tns:view-group"/>
                                     </sequence>
                                     <attribute name="entity-id" type="string" use="required"/>
+                                </extension>
+                            </complexContent>
+                        </complexType>
+                    </element>
+                    <element name="dialog">
+                        <complexType>
+                            <complexContent>
+                                <extension base="tns:baseMetaElement">
+                                    <sequence>
+                                        <element type="string" name = "dialog-handler" minOccurs="0"/>
+                                        <group ref="tns:view-group"/>
+                                        <element name="buttons">
+                                            <complexType>
+                                               <sequence>
+                                                   <element name="button" type="tns:dialogButton" maxOccurs="unbounded"/>
+                                               </sequence>
+                                            </complexType>
+                                        </element>
+                                    </sequence>
+                                    <attribute name="width" type="int" use="required"/>
+                                    <attribute name="height" type="int" use="required"/>
+                                    <attribute name="closeable" type="boolean" default="true"/>
                                 </extension>
                             </complexContent>
                         </complexType>
@@ -88,6 +110,7 @@
         <sequence>
             <choice maxOccurs="unbounded" minOccurs="0">
                 <element name="text-box" type="tns:textBox"/>
+                <element name="password-box" type="tns:passwordBox"/>
                 <element name="enum-select" type="tns:enumSelect"/>
                 <element name="entity-autocomplete" type="tns:entityAutocomplete"/>
                 <element name="text-area" type="tns:textArea"/>
@@ -104,6 +127,12 @@
     <complexType name="baseWidget">
         <attribute name="id" type="string" use="required"/>
         <attribute name="h_span" type="integer"/>
+    </complexType>
+    <complexType name="passwordBox">
+        <complexContent>
+            <extension base="tns:baseWidget">
+            </extension>
+        </complexContent>
     </complexType>
     <complexType name="textBox">
         <complexContent>
@@ -268,6 +297,14 @@
             <extension base="tns:baseMetaElement">
                 <attribute use="required" name="handler" type="string"/>
                 <attribute use="required" name="weight" type="double"/>
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType name="dialogButton">
+        <complexContent>
+            <extension base="tns:baseMetaElement">
+                <attribute use="required" name="handler" type="string"/>
+                <attribute use="required" name="caption" type="string"/>
             </extension>
         </complexContent>
     </complexType>

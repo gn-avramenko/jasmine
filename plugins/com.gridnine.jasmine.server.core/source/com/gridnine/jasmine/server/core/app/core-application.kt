@@ -13,7 +13,7 @@ interface IExtension {
     fun getParameters(paramName: String): List<String>
 }
 
-@SuppressWarnings("unused")
+
 interface IPluginActivator {
 
     fun configure(config: Properties){
@@ -45,4 +45,3 @@ interface IApplicationMetadataProvider {
     }
 }
 
-interface IApplication

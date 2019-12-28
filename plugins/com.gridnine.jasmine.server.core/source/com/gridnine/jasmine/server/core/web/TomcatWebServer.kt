@@ -49,6 +49,7 @@ constructor(port: Int) : WebServer {
                 context.tldValidation = false
                 context.xmlValidation = false
             }
+
             if (context.state !=  LifecycleState.STARTED) {
                 (context as Lifecycle).start()
             }

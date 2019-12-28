@@ -4,13 +4,15 @@
         <enum-item id="ELEMENT_1"/>
         <enum-item id="ELEMENT_2"/>
     </enum>
-    <document id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxSimpleDocument">
+    <document id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccount">
         <property id="name" type="STRING"/>
+        <property id="login" type="STRING"/>
+        <property id="password" type="STRING"/>
     </document>
     <document id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxNestedDocument">
         <property id="textColumn" type="STRING"/>
         <property id="enumColumn" type="ENUM" className="com.gridnine.jasmine.server.sandbox.model.domain.SandboxEnum"/>
-        <property id="entityRefColumn" type="ENTITY_REFERENCE" className="com.gridnine.jasmine.server.sandbox.model.domain.SandboxSimpleDocument"/>
+        <property id="entityRefColumn" type="ENTITY_REFERENCE" className="com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccount"/>
         <property id="integetColumn" type="INT"/>
         <property id="floatColumn" type="BIG_DECIMAL"/>
     </document>
@@ -19,7 +21,7 @@
         <property id="floatProperty" type="BIG_DECIMAL"/>
         <property id="integerProperty" type="INT" notNullable="true"/>
         <property id="booleanProperty" type="BOOLEAN" notNullable="true"/>
-        <property id="entityRefProperty" type="ENTITY_REFERENCE" className="com.gridnine.jasmine.server.sandbox.model.domain.SandboxSimpleDocument"/>
+        <property id="entityRefProperty" type="ENTITY_REFERENCE" className="com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccount"/>
         <property id="enumProperty" type="ENUM" className="com.gridnine.jasmine.server.sandbox.model.domain.SandboxEnum"/>
         <property id="dateProperty" type="LOCAL_DATE"/>
         <property id="dateTimeProperty" type="LOCAL_DATE_TIME"/>
@@ -30,12 +32,13 @@
         <property id="floatProperty" type="BIG_DECIMAL"/>
         <property id="integerProperty" type="INT" />
         <property id="booleanProperty" type="BOOLEAN"/>
-        <property id="entityRefProperty" type="ENTITY_REFERENCE" className="com.gridnine.jasmine.server.sandbox.model.domain.SandboxSimpleDocument"/>
+        <property id="entityRefProperty" type="ENTITY_REFERENCE" className="com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccount"/>
         <property id="enumProperty" type="ENUM" className="com.gridnine.jasmine.server.sandbox.model.domain.SandboxEnum"/>
         <property id="dateProperty" type="LOCAL_DATE"/>
         <property id="dateTimeProperty" type="LOCAL_DATE_TIME"/>
     </index>
-    <index id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxSimpleDocumentIndex" document="com.gridnine.jasmine.server.sandbox.model.domain.SandboxSimpleDocument">
+    <index id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccountIndex" document="com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccount">
         <property id="name" type="STRING"/>
+        <property id="login" type="STRING"/>
     </index>
 </domain>

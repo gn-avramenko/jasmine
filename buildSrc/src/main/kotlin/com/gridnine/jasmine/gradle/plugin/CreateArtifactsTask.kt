@@ -26,13 +26,15 @@ open class CreateArtifactsTask: DefaultTask() {
         createVcs()
     }
 
+
+
     private fun createVcs() {
         val content = xml("project", "version" to "4"){
             "component"("name" to "VcsDirectoryMappings"){
                 emptyTag("mapping", "directory" to "", "vcs" to "Git")
             }
         }
-        File(project.projectDir, ".idea/vcs.xml").writeText(content, charset("utf-8"))
+        File(project.projectDir, ".idea/vcs.xml").writeIfDiffers(content)
     }
 
     private fun createMisc() {
@@ -43,7 +45,7 @@ open class CreateArtifactsTask: DefaultTask() {
             emptyTag("component", "name" to "ProjectRootManager", "version" to "2",
                     "languageLevel" to "JDK_12",  "default" to "false", "project-jdk-name" to "12",  "project-jdk-type" to "JavaSDK" )
         }
-        File(project.projectDir, ".idea/misc.xml").writeText(content, charset("utf-8"))
+        File(project.projectDir, ".idea/misc.xml").writeIfDiffers(content)
     }
 
     private fun createKotlinc() {
@@ -56,7 +58,7 @@ open class CreateArtifactsTask: DefaultTask() {
                 emptyTag("option", "name" to "jvmTarget", "value" to "12")
             }
         }
-        File(project.projectDir, ".idea/kotlinc.xml").writeText(content, charset("utf-8"))
+        File(project.projectDir, ".idea/kotlinc.xml").writeIfDiffers(content)
     }
 
     private fun createGradle() {
@@ -76,7 +78,7 @@ open class CreateArtifactsTask: DefaultTask() {
                 }
             }
         }
-        File(project.projectDir, ".idea/gradle.xml").writeText(content, charset("utf-8"))
+        File(project.projectDir, ".idea/gradle.xml").writeIfDiffers(content)
     }
 
     private fun createCompilerSettings(projectName:String) {
@@ -88,15 +90,28 @@ open class CreateArtifactsTask: DefaultTask() {
                 }
             }
         }
-        File(project.projectDir, ".idea/compiler.xml").writeText(content, charset("utf-8"))
+        File(project.projectDir, ".idea/compiler.xml").writeIfDiffers(content)
 
     }
 
     private fun createWorkspace() {
-        val content = xml("project", "version" to "4"){
-            //TODO
+        val file = File(project.projectDir, ".idea/workspace.xml")
+        if(file.exists()){
+            return
         }
-        File(project.projectDir, ".idea/workspace.xml").writeText(content, charset("utf-8"))
+        val content = xml("project", "version" to "4"){
+            "component"("name" to "RunManager", "selected"  to "Application.${project.name}"){
+                "configuration"("name" to project.name , "type" to "Application", "factoryName" to "Application"){
+                   emptyTag("option", "name" to "MAIN_CLASS_NAME",  "value" to "com.gridnine.spf.app.SpfBoot")
+                   emptyTag("module", "name" to project.name)
+                   emptyTag("option","name" to "VM_PARAMETERS", "value" to "-Dspf.mode=start -Dspf.applicationClass=com.gridnine.jasmine.server.spf.SpfApplicationImpl -Xshare:off")
+                    "method"("v" to "2"){
+                        emptyTag("option","name" to "Make", "enabled" to "true")
+                    }
+                }
+            }
+        }
+        file.writeIfDiffers(content)
 
     }
 }

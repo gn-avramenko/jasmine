@@ -7,6 +7,7 @@
 package com.gridnine.jasmine.gradle.plugin
 
 import com.gridnine.spf.meta.SpfPlugin
+import java.io.File
 
 object KotlinUtils{
     internal const val COMPILER_CLASSPATH_CONFIGURATION_NAME = "kotlinCompilerClasspath"
@@ -21,6 +22,27 @@ object KotlinUtils{
     }
 }
 
+fun File.writeIfDiffers(content:ByteArray){
+    if(this.exists() && this.readBytes().contentEquals(content)){
+        return
+    }
+    this.writeBytes(content)
+    println("content of $this was changed")
+}
+
+fun File.writeIfDiffers(content:String){
+    if(this.exists() && this.readText() == content){
+        return
+    }
+    val originalContent =   if(this.exists()) this.readText() else null
+    if(originalContent != content) {
+        this.writeText(content, Charsets.UTF_8)
+        println("content of $this was changed")
+        println ("old content\n$originalContent")
+        println ("new content\n$content")
+    }
+}
+
 enum class ExitCode(val code: Int) {
     OK(0), COMPILATION_ERROR(1), INTERNAL_ERROR(2), SCRIPT_EXECUTION_ERROR(3);
 
@@ -30,5 +52,6 @@ enum class SpfPluginType{
     CORE,
     SERVER,
     SERVER_TEST,
-    SPF
+    SPF,
+    WEB
 }

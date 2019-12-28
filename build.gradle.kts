@@ -18,12 +18,3 @@ repositories {
 apply{
     plugin("kotlin")
 }
-
-task("printDependencies"){
-    group = "idea"
-    doLast{
-        project.configurations.getByName("kotlinCompilerClasspath").forEach{
-            println(it)
-        }        
-    }
-}

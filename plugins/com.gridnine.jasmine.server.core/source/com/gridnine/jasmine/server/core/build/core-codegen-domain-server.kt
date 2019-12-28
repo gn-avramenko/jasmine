@@ -88,36 +88,30 @@ internal object DomainServerGenerator {
             val registry = DomainMetaRegistry()
             value.forEach { metaFile -> DomainMetadataParser.updateDomainMetaRegistry(registry, metaFile) }
             val classesData = arrayListOf<GenClassData>()
-            val classes = arrayListOf<String>()
             registry.enums.values.forEach {
                 val enumClassData = GenClassData(it.id, null, abstract = false, enum = true, noEnumProperties = true)
                 it.items.values.forEach { ei ->
                     enumClassData.enumItems.add(ei.id)
                 }
                 classesData.add(enumClassData)
-                classes.add(it.id)
             }
             registry.documents.values.forEach {
                 val docClassData = toGenData(it)
                 classesData.add(docClassData)
-                classes.add(it.id)
             }
             registry.nestedDocuments.values.forEach {
                 val docClassData = toGenData(it)
                 classesData.add(docClassData)
-                classes.add(it.id)
             }
             registry.indexes.values.forEach {
                 val data = GenClassData(it.id, "${BaseIndex::class.qualifiedName}<${it.document}>", abstract = false, enum = false, noEnumProperties = false)
                 fillGenData(it, data)
                 classesData.add(data)
-                classes.add(it.id)
             }
             registry.assets.values.forEach {
                 val data = GenClassData(it.id, BaseAsset::class.qualifiedName, abstract = false, enum = false, noEnumProperties = false)
                 fillGenData(it, data)
                 classesData.add(data)
-                classes.add(it.id)
             }
             GenUtils.generateClasses(classesData, File(projectDir, "plugins/$key"), projectName,  generatedFiles.getOrPut(key, { arrayListOf()}))
         }

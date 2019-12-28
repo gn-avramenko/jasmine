@@ -37,7 +37,7 @@ open class CreateTemplatesTask: DefaultTask() {
             class             $name             {
             }
         """.trimIndent()
-        File(rootDir, "Kotlin File.kt").writeText(content, charset("utf-8"))
+        File(rootDir, "Kotlin File.kt").writeIfDiffers(content)
     }
 
     private fun createKotlinScriptTemplate(rootDir: File) {
@@ -48,6 +48,6 @@ open class CreateTemplatesTask: DefaultTask() {
              * Project:             $projectName
              *****************************************************************/
         """.trimIndent()
-        File(rootDir, "Kotlin Script.kt").writeText(content, charset("utf-8"))
+        File(rootDir, "Kotlin Script.kt").writeIfDiffers(content)
     }
 }

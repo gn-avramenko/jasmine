@@ -7,6 +7,8 @@
         <lib-dependency group="com.google.code.gson" name="gson" version="2.8.6"/>
         <lib-dependency group="com.mchange" name="c3p0" version="0.9.5.5"/>
         <lib-dependency group="org.apache.tomcat.embed" name="tomcat-embed-core" version="9.0.30"/>
+        <lib-dependency group="org.apache.tomcat.embed" name="tomcat-embed-jasper" version="9.0.30"/>
+        <lib-dependency group="org.slf4j" name="jul-to-slf4j" version="1.7.30"/>
     </dependencies>
     <extension-point id="domain-metadata">
         <parameter-def id="file"/>
@@ -26,4 +28,10 @@
         <parameter-def id="dest-server-plugin-id"/>
         <parameter-def id="dest-client-plugin-id"/>
     </extension-point>
+    <extension-point id="activator">
+        <parameter-def id="class"/>
+    </extension-point>
+    <extension point-id="activator">
+        <parameter id="class" value="com.gridnine.jasmine.server.core.activator.CoreActivator"/>
+    </extension>
 </plugin>

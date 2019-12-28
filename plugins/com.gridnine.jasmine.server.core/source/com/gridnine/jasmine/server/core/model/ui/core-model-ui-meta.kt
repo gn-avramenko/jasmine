@@ -136,6 +136,8 @@ class TextAreaDescription(owner: String, id: String) : BaseWidgetDescription(own
 
 
 class TextboxDescription(owner: String, id: String)  : BaseWidgetDescription(owner, id)
+class PasswordBoxDescription(owner: String, id: String)  : BaseWidgetDescription(owner, id)
+
 
 class IntegerBoxDescription(owner: String, id: String, val notNullable:Boolean)  : BaseWidgetDescription(owner, id)
 
@@ -157,8 +159,8 @@ abstract class BaseTableColumnDescription(owner:String, id:String):BaseOwnedIden
 }
 
 class TextTableColumnDescription(owner:String, id:String) :BaseTableColumnDescription(owner, id)
-class IntegerTableColumnDescription(owner:String, id:String) :BaseTableColumnDescription(owner, id)
-class FloatTableColumnDescription(owner:String, id:String) :BaseTableColumnDescription(owner, id)
+class IntegerTableColumnDescription(owner:String, id:String,val notNullable:Boolean) :BaseTableColumnDescription(owner, id)
+class FloatTableColumnDescription(owner:String, id:String,val notNullable:Boolean) :BaseTableColumnDescription(owner, id)
 class EnumTableColumnDescription(owner:String, id:String, val enumId:String) :BaseTableColumnDescription(owner, id)
 class EntityTableColumnDescription(owner:String, id:String, val entityClassName:String) :BaseTableColumnDescription(owner, id)
 class DateTableColumnDescription(owner:String, id:String) :BaseTableColumnDescription(owner, id)
@@ -176,17 +178,25 @@ class ListToolButtonDescription( owner:String, id:String, val handler:String, va
 
 
 class EditorToolButtonDescription( owner:String, id:String, val handler:String, val weight:Double) : BaseOwnedIdentityDescription(owner, id)
-class SharedToolButtonDescription( id:String, val handler:String, val weight:Double) : BaseIdentityDescription(id)
+class SharedEditorToolButtonDescription(id:String, val handler:String, val weight:Double) : BaseIdentityDescription(id)
+class DialogToolButtonDescription( owner:String, id:String, val handler:String,val caption:String) : BaseOwnedIdentityDescription(owner, id)
 
-
-class EditorDescription(id:String, val viewId:String) : BaseIdentityDescription(id){
-    val toolButtons = arrayListOf<EditorToolButtonDescription>()
+class DialogDescription(id:String, val viewId:String, val width:Int, val height:Int) : BaseIdentityDescription(id){
+    var closeable = true
+    val buttons = arrayListOf<DialogToolButtonDescription>()
 }
+
+class EditorDescription(id:String, val entityId: String, val viewId:String) : BaseIdentityDescription(id){
+    val toolButtons = arrayListOf<EditorToolButtonDescription>()
+    val handlers  = arrayListOf<String>()
+}
+
+
 
 
 class UiMetaRegistry{
 
-    val sharedToolButtons = arrayListOf<SharedToolButtonDescription>()
+    val sharedEditorToolButtons = arrayListOf<SharedEditorToolButtonDescription>()
 
     val validationMessages = linkedMapOf<String, ValidationMessagesEnumDescription>()
 
@@ -202,7 +212,7 @@ class UiMetaRegistry{
 
     val lists = linkedMapOf<String, ListDescription>()
 
-    val entityHandlers =linkedMapOf<String, MutableList<String>>()
+    val dialogs = linkedMapOf<String, DialogDescription>()
 
     companion object{
         fun get() = Environment.getPublished(UiMetaRegistry::class)

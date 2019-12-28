@@ -13,6 +13,9 @@ object JasmineCodeGen{
         DomainServerGenerator.generateDomainClasses(projectDir, metadataProvider, generatedFiles, projectName)
         UiServerGenerator.generateUiClasses(projectDir, metadataProvider, generatedFiles, projectName)
         RestServerGenerator.generateServerRest(projectDir, metadataProvider, generatedFiles, projectName)
+        RestWebGenerator.generateWebRest(projectDir, metadataProvider, generatedFiles, projectName)
+        DomainWebGenerator.generateDomainClasses(projectDir, metadataProvider, generatedFiles, projectName)
+        UiWebGenerator.generateUiClasses(projectDir, metadataProvider, generatedFiles, projectName)
         generatedFiles.forEach { (t, u) ->
             GenUtils.deleteFiles(File(projectDir, "plugins/$t/source-gen"), u)
         }

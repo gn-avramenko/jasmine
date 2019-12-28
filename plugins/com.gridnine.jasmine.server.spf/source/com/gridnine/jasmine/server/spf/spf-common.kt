@@ -5,10 +5,11 @@
 @file:Suppress("unused")
 package com.gridnine.jasmine.server.spf
 
-import com.gridnine.jasmine.server.core.app.IApplicationMetadataProvider
-import com.gridnine.jasmine.server.core.app.IExtension
-import com.gridnine.jasmine.server.core.app.IPlugin
+import com.gridnine.jasmine.server.core.app.*
+import com.gridnine.spf.app.SpfApplication
 import com.gridnine.spf.meta.SpfPluginsRegistry
+import java.io.File
+import java.util.*
 
 
 class SpfApplicationMetadataProvider(private val registry: SpfPluginsRegistry) : IApplicationMetadataProvider {
@@ -43,4 +44,28 @@ class SpfApplicationMetadataProvider(private val registry: SpfPluginsRegistry) :
             }
         }.toList()
     }
+}
+
+class SpfApplicationImpl: SpfApplication {
+    override fun start(config: Properties) {
+        Environment.configure(File("."))
+        Environment.publish(ConfigurationProvider::class, object:ConfigurationProvider{
+            override fun getProperty(propertyName: String): String? {
+                return config.getProperty(propertyName)
+            }
+        })
+        val urls = this::javaClass.javaClass.classLoader.getResources("plugin.xml").toList()
+        val registry = SpfPluginsRegistry()
+        registry.initRegistry(urls)
+        Environment.publish(IApplicationMetadataProvider::class, SpfApplicationMetadataProvider(registry))
+        val activators =IApplicationMetadataProvider.get().getExtensions("activator").map { ep ->ep.classLoader.loadClass(ep.getParameters("class").first()).constructors.first().newInstance() as IPluginActivator }.toList()
+        activators.forEach { a ->a.configure(config) }
+        activators.forEach { a ->a.activate() }
+
+    }
+
+    override fun stop() {
+        Environment.dispose()
+    }
+
 }

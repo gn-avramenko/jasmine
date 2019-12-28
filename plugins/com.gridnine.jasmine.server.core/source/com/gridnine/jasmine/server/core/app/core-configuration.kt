@@ -28,12 +28,12 @@ object Environment {
 
     fun configure(rootFolder:File) {
         this.rootFolder = rootFolder
-        log.debug("root folder is $rootFolder")
+        log.debug("root folder is ${rootFolder.absolutePath}")
         this.tempFolder = File(rootFolder,"temp")
         if(!this.tempFolder.exists()){
             this.tempFolder.mkdirs()
         }
-        log.debug("temp folder is $tempFolder")
+        log.debug("temp folder is ${tempFolder.absolutePath}")
         log.info("configured")
     }
 
