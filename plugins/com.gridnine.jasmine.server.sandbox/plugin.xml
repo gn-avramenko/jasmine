@@ -15,6 +15,12 @@
         <parameter id="dest-server-plugin-id" value="com.gridnine.jasmine.server.sandbox"/>
         <parameter id="dest-client-plugin-id" value="com.gridnine.jasmine.web.sandbox"/>
     </extension>
+    <extension point-id="rest-metadata">
+        <parameter id="file" value="plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/model/sandbox-rest.xml"/>
+        <parameter id="url" value="com/gridnine/jasmine/server/sandbox/model/sandbox-rest.xml"/>
+        <parameter id="dest-server-plugin-id" value="com.gridnine.jasmine.server.sandbox"/>
+        <parameter id="dest-client-plugin-id" value="com.gridnine.jasmine.web.sandbox"/>
+    </extension>
     <extension point-id="activator">
         <parameter id="class" value="com.gridnine.jasmine.server.sandbox.activator.SandboxActivator"/>
     </extension>

@@ -38,10 +38,12 @@ object UiMetadataParser {
         }
         node.children("shared-editor-tool-button").forEach { child ->
             val id = ParserUtils.getIdAttribute(child)
-            registry.sharedEditorToolButtons.add(SharedEditorToolButtonDescription(id, child.attributes["handler"]?:
-                throw IllegalArgumentException("${child.name} has no handler attribute"),
+            val button = SharedEditorToolButtonDescription(id, child.attributes["handler"]?:
+            throw IllegalArgumentException("${child.name} has no handler attribute"),
                     child.attributes["weight"]?.toDouble()?:
-                    throw IllegalArgumentException("${child.name} has no weight attribute")))
+                    throw IllegalArgumentException("${child.name} has no weight attribute"))
+            ParserUtils.updateLocalizations(button, localizations, ParserUtils.getCaptionAttribute(child))
+            registry.sharedEditorToolButtons.add(button)
         }
         node.children("list").forEach { listElm ->
             val listId = ParserUtils.getIdAttribute(listElm)
@@ -49,10 +51,12 @@ object UiMetadataParser {
             registry.lists[listId] = descr
             listElm.children("toolbar").firstOrNull()?.children("tool-button")?.forEach {toolButtonElm ->
                 val buttonId = ParserUtils.getIdAttribute(toolButtonElm)
-                descr.toolButtons.add(ListToolButtonDescription(listId, buttonId, toolButtonElm.attributes["handler"]?:
+                val button = ListToolButtonDescription(listId, buttonId, toolButtonElm.attributes["handler"]?:
                 throw IllegalArgumentException("${toolButtonElm.name} has no handler attribute"),
                         toolButtonElm.attributes["weight"]?.toDouble()?:
-                        throw IllegalArgumentException("${toolButtonElm.name} has no weight attribute")))
+                        throw IllegalArgumentException("${toolButtonElm.name} has no weight attribute"))
+                ParserUtils.updateLocalizations(button, localizations, ParserUtils.getCaptionAttribute(toolButtonElm))
+                descr.toolButtons.add(button)
 
             }
         }
@@ -65,10 +69,12 @@ object UiMetadataParser {
             registry.editors[editorId] = editor
             child.children("toolbar").firstOrNull()?.children("tool-button")?.forEach {toolButtonElm ->
                 val id = ParserUtils.getIdAttribute(toolButtonElm)
-                editor.toolButtons.add(EditorToolButtonDescription(editorId, id, toolButtonElm.attributes["handler"]?:
+                val button = EditorToolButtonDescription(editorId, id, toolButtonElm.attributes["handler"]?:
                 throw IllegalArgumentException("${toolButtonElm.name} has no handler attribute"),
                         toolButtonElm.attributes["weight"]?.toDouble()?:
-                        throw IllegalArgumentException("${toolButtonElm.name} has no weight attribute")))
+                        throw IllegalArgumentException("${toolButtonElm.name} has no weight attribute"))
+                ParserUtils.updateLocalizations(button, localizations, ParserUtils.getCaptionAttribute(toolButtonElm))
+                editor.toolButtons.add(button)
 
             }
             val viewElm = child.children("view")[0]
@@ -82,15 +88,18 @@ object UiMetadataParser {
         }
         node.children("dialog").forEach { child ->
             val dialogId = child.attributes["id"]?:throw IllegalArgumentException("element ${child.name} has no id attribute")
-            val dialog = DialogDescription(dialogId, "${dialogId}View", child.attributes["width"]?.toInt()?:throw IllegalArgumentException("element ${child.name} has no width attribute"),
-            child.attributes["height"]?.toInt()?:throw IllegalArgumentException("element ${child.name} has no height attribute"))
+            val dialog = DialogDescription(dialogId, "${dialogId}View")
+            dialog.closable = "true" == child.attributes["closable"]
+            ParserUtils.updateLocalizations(dialog, localizations)
             registry.dialogs[dialogId] = dialog
             child.children("buttons").firstOrNull()?.children("button")?.forEach {dialogButton ->
                 val id = ParserUtils.getIdAttribute(dialogButton)
-                dialog.buttons.add(DialogToolButtonDescription(dialogId, id, dialogButton.attributes["handler"]?:
+                val button = DialogToolButtonDescription(dialogId, id, dialogButton.attributes["handler"]?:
                 throw IllegalArgumentException("${dialogButton.name} has no handler attribute"),
                         dialogButton.attributes["caption"]?:
-                        throw IllegalArgumentException("${dialogButton.name} has no caption attribute")))
+                        throw IllegalArgumentException("${dialogButton.name} has no caption attribute"))
+                ParserUtils.updateLocalizations(button, localizations, ParserUtils.getCaptionAttribute(dialogButton))
+                dialog.buttons.add(button)
 
             }
             val viewElm = child.children("view")[0]
@@ -210,7 +219,7 @@ object UiMetadataParser {
                         val hAlign = it.attributes["h_align"]?.let {attr -> HorizontalAlignment.valueOf(attr)}
                         val ta = LabelDescription(editorId, ParserUtils.getIdAttribute(it), vAlign, hAlign)
                         updateHspan(ta, it)
-                        ParserUtils.updateLocalizations(ta, localizations)
+                        ParserUtils.updateLocalizations(ta, localizations, ParserUtils.getCaptionAttribute(it))
                         layout.widgets[ta.id] = ta
                     }
                     "table" ->{

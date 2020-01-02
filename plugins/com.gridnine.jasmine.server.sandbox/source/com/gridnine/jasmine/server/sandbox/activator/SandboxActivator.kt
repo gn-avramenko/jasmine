@@ -26,5 +26,14 @@ class SandboxActivator:IPluginActivator{
                 ?:throw IllegalArgumentException("unable to load resource web-sandbox"),
                 javaClass.classLoader)
         WebServerConfig.get().addApplication(sandboxApp)
+        val easyuiWebapp = WebApplication("/web-easyui-libs", javaClass.classLoader.getResource("easyui-libs")
+                ?:throw IllegalArgumentException("unable to load resource easyui-libs"),
+                javaClass.classLoader)
+        WebServerConfig.get().addApplication(easyuiWebapp)
+
+        val easyuiScriptWebapp = WebApplication("/web-easyui-script", javaClass.classLoader.getResource("easyui-script")
+                ?:throw IllegalArgumentException("unable to load resource easyui-script"),
+                javaClass.classLoader)
+        WebServerConfig.get().addApplication(easyuiScriptWebapp)
     }
 }

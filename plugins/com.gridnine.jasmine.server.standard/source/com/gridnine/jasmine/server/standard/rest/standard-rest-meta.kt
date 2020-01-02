@@ -13,15 +13,16 @@ import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistry
 import com.gridnine.jasmine.server.core.model.rest.RestPropertyType
 import com.gridnine.jasmine.server.core.model.ui.*
 import com.gridnine.jasmine.server.core.rest.RestHandler
+import com.gridnine.jasmine.server.core.rest.RestOperationContext
 import com.gridnine.jasmine.server.standard.model.rest.*
 
 
 class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataResponse> {
-    override fun service(request: GetMetadataRequest): GetMetadataResponse {
+    override fun service(request: GetMetadataRequest, ctx:RestOperationContext): GetMetadataResponse {
         val result = GetMetadataResponse()
         RestMetaRegistry.get().enums.values.forEach {
             val enumDescr = EnumDescriptionDT()
-            enumDescr.id = it.id
+            enumDescr.id = it.id+"JS"
             it.items.values.forEach { enumItemDescription ->
                 enumDescr.items.add(enumItemDescription.id)
             }
@@ -29,20 +30,20 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
         }
         RestMetaRegistry.get().entities.values.forEach {
             val entityDescr = RestEntityDescriptionDT()
-            entityDescr.id = it.id
+            entityDescr.id = it.id+"JS"
             entityDescr.abstract = it.abstract
             entityDescr.extends = it.extends
 
             it.properties.values.forEach { propertyDescrition ->
                 val property = RestPropertyDescriptionDT()
-                property.className = propertyDescrition.className
+                property.className = getClassName(propertyDescrition.className)
                 property.id = propertyDescrition.id
                 property.type = toRestCollectionType(propertyDescrition.type)
                 entityDescr.properties.add(property)
             }
             it.collections.values.forEach { collectionDescription ->
                 val coll = RestCollectionDescriptionDT()
-                coll.elementClassName = collectionDescription.elementClassName
+                coll.elementClassName = getClassName(collectionDescription.elementClassName)
                 coll.id = collectionDescription.id
                 coll.elementType = toRestCollectionType(collectionDescription.elementType)
                 entityDescr.collections.add(coll)
@@ -53,8 +54,8 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
         RestMetaRegistry.get().operations.values.forEach {
             val opDescr = RestOperationDescriptionDT()
             opDescr.id = it.id
-            opDescr.request = it.requestEntity
-            opDescr.response = it.responseEntity
+            opDescr.request = it.requestEntity+"JS"
+            opDescr.response = it.responseEntity+"JS"
             result.operations.add(opDescr)
         }
         DomainMetaRegistry.get().enums.values.forEach {
@@ -70,11 +71,11 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
         }
         DomainMetaRegistry.get().indexes.values.forEach {
             val indexDescr = IndexDescriptionDT()
-            indexDescr.id = it.id
+            indexDescr.id = it.id+"JS"
             indexDescr.document = it.document
             it.properties.values.forEach { propertyDescription ->
                 val property = IndexPropertyDescriptionDT()
-                property.className = propertyDescription.className
+                property.className = getClassName(propertyDescription.className)
                 property.id = propertyDescription.id
                 property.type = toRestCollectionType(propertyDescription.type)
                 property.displayName = propertyDescription.getDisplayName()
@@ -82,7 +83,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
             }
             it.collections.values.forEach { collectionDescription ->
                 val coll = IndexCollectionDescriptionDT()
-                coll.elementClassName = collectionDescription.elementClassName
+                coll.elementClassName = getClassName(collectionDescription.elementClassName)
                 coll.id = collectionDescription.id
                 coll.elementType = toRestCollectionType(collectionDescription.elementType)
                 coll.displayName = collectionDescription.getDisplayName()
@@ -92,10 +93,10 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
         }
         DomainMetaRegistry.get().assets.values.forEach {
             val assetDescription = AssetDescriptionDT()
-            assetDescription.id = it.id
+            assetDescription.id = it.id+"JS"
             it.properties.values.forEach { propertyDescription ->
                 val property = IndexPropertyDescriptionDT()
-                property.className = propertyDescription.className
+                property.className = getClassName(propertyDescription.className)
                 property.id = propertyDescription.id
                 property.type = toRestCollectionType(propertyDescription.type)
                 property.displayName = propertyDescription.getDisplayName()
@@ -103,7 +104,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
             }
             it.collections.values.forEach { collectionDescription ->
                 val coll = IndexCollectionDescriptionDT()
-                coll.elementClassName = collectionDescription.elementClassName
+                coll.elementClassName = getClassName(collectionDescription.elementClassName)
                 coll.id = collectionDescription.id
                 coll.elementType = toRestCollectionType(collectionDescription.elementType)
                 coll.displayName = collectionDescription.getDisplayName()
@@ -113,12 +114,12 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
         }
         UiMetaRegistry.get().viewModels.values.forEach {
             val entityDescription = VMEntityDescriptionDT()
-            entityDescription.id = it.id
+            entityDescription.id = it.id+"JS"
             result.vmEntities.add(entityDescription)
             it.properties.values.forEach { propertyDescription ->
                 val propertyDescriptionDT = VMPropertyDescriptionDT()
                 propertyDescriptionDT.id = propertyDescription.id
-                propertyDescriptionDT.className = propertyDescription.className
+                propertyDescriptionDT.className = getClassName(propertyDescription.className)
                 propertyDescriptionDT.type = VMPropertyTypeDT.valueOf(propertyDescription.type.name)
                 propertyDescriptionDT.notNullable = propertyDescription.notNullable
                 entityDescription.properties.add(propertyDescriptionDT)
@@ -126,26 +127,26 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
             it.collections.values.forEach { collectionDescription ->
                 val collectionDescriptionDT = VMCollectionDescriptionDT()
                 collectionDescriptionDT.id = collectionDescription.id
-                collectionDescriptionDT.elementClassName = collectionDescription.elementClassName
+                collectionDescriptionDT.elementClassName = getClassName(collectionDescription.elementClassName)
                 collectionDescriptionDT.elementType = VMPropertyTypeDT.valueOf(collectionDescription.elementType.name)
                 entityDescription.collections.add(collectionDescriptionDT)
             }
         }
         UiMetaRegistry.get().viewSettings.values.forEach {
             val entityDescription = VSEntityDescriptionDT()
-            entityDescription.id = it.id
+            entityDescription.id = it.id+"JS"
             result.vsEntities.add(entityDescription)
             it.properties.values.forEach { propertyDescription ->
                 val propertyDescriptionDT = VSPropertyDescriptionDT()
                 propertyDescriptionDT.id = propertyDescription.id
-                propertyDescriptionDT.className = propertyDescription.className
+                propertyDescriptionDT.className = getClassName(propertyDescription.className)
                 propertyDescriptionDT.type = VSPropertyTypeDT.valueOf(propertyDescription.type.name)
                 entityDescription.properties.add(propertyDescriptionDT)
             }
             it.collections.values.forEach { collectionDescription ->
                 val collectionDescriptionDT = VSCollectionDescriptionDT()
                 collectionDescriptionDT.id = collectionDescription.id
-                collectionDescriptionDT.elementClassName = collectionDescription.elementClassName
+                collectionDescriptionDT.elementClassName = getClassName(collectionDescription.elementClassName)
                 collectionDescriptionDT.elementType = VSPropertyTypeDT.valueOf(collectionDescription.elementType.name)
                 entityDescription.collections.add(collectionDescriptionDT)
             }
@@ -157,14 +158,14 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
             it.properties.values.forEach { propertyDescription ->
                 val propertyDescriptionDT = VVPropertyDescriptionDT()
                 propertyDescriptionDT.id = propertyDescription.id
-                propertyDescriptionDT.className = propertyDescription.className
+                propertyDescriptionDT.className = getClassName(propertyDescription.className)
                 propertyDescriptionDT.type = VVPropertyTypeDT.valueOf(propertyDescription.type.name)
                 entityDescription.properties.add(propertyDescriptionDT)
             }
             it.collections.values.forEach { collectionDescription ->
                 val collectionDescriptionDT = VVCollectionDescriptionDT()
                 collectionDescriptionDT.id = collectionDescription.id
-                collectionDescriptionDT.elementClassName = collectionDescription.elementClassName
+                collectionDescriptionDT.elementClassName = getClassName(collectionDescription.elementClassName)
                 collectionDescriptionDT.elementType = VVPropertyTypeDT.valueOf(collectionDescription.elementType.name)
                 entityDescription.collections.add(collectionDescriptionDT)
             }
@@ -345,11 +346,9 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                                             }
                                         }
                                     }
-                                    else -> throw IllegalArgumentException("unsupported widget type ${it::class.qualifiedName}")
                                 }
                             }
                         }
-                        else -> throw IllegalArgumentException("unsupported layout type ${layout::class.qualifiedName}")
                     }
                 }
                 else -> throw IllegalArgumentException("unsupported view type ${viewDescription::class.qualifiedName}")
@@ -397,8 +396,8 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
             dialogDescription.id = it.id
             result.dialogs.add(dialogDescription)
             dialogDescription.viewId = it.viewId
-            dialogDescription.width = it.width
-            dialogDescription.height = it.height
+            dialogDescription.title = it.getDisplayName()
+            dialogDescription.closable = it.closable
             it.buttons.forEach { buttonDescr ->
                 val button = StandardButtonDescriptionDT()
                 button.id = buttonDescr.id
@@ -408,6 +407,13 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
             }
         }
         return result
+    }
+
+    private fun getClassName(className: String?): String? {
+        if(className == null){
+            return null
+        }
+        return className+"JS"
     }
 
     private fun toRestCollectionType(elementType: DatabaseCollectionType): DatabaseCollectionTypeDT {

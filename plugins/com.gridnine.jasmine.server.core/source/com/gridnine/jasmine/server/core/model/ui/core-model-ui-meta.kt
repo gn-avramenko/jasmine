@@ -181,8 +181,8 @@ class EditorToolButtonDescription( owner:String, id:String, val handler:String, 
 class SharedEditorToolButtonDescription(id:String, val handler:String, val weight:Double) : BaseIdentityDescription(id)
 class DialogToolButtonDescription( owner:String, id:String, val handler:String,val caption:String) : BaseOwnedIdentityDescription(owner, id)
 
-class DialogDescription(id:String, val viewId:String, val width:Int, val height:Int) : BaseIdentityDescription(id){
-    var closeable = true
+class DialogDescription(id:String, val viewId:String) : BaseIdentityDescription(id){
+    var closable = true
     val buttons = arrayListOf<DialogToolButtonDescription>()
 }
 

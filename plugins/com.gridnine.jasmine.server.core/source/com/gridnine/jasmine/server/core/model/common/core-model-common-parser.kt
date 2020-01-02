@@ -23,6 +23,10 @@ object ParserUtils {
 
     fun <T : BaseIdentityDescription> updateLocalizations(description: T, localizations: Map<String, Map<Locale, String>>) {
         val id = if (description is BaseOwnedIdentityDescription) "${description.fullId}.name" else "${description.id}.name"
+        return updateLocalizations(description, localizations, id)
+    }
+
+    fun <T : BaseIdentityDescription> updateLocalizations(description: T, localizations: Map<String, Map<Locale, String>>, id:String) {
         localizations[id]?.entries?.forEach {
             description.displayNames[it.key] = it.value
         }
@@ -91,4 +95,7 @@ object ParserUtils {
         return it.attributes["id"]?:throw IllegalArgumentException("node ${it.name} has no id attribute")
     }
 
+    fun getCaptionAttribute(it: XmlNode): String {
+        return it.attributes["caption"]?:throw IllegalArgumentException("node ${it.name} has no caption attribute")
+    }
 }

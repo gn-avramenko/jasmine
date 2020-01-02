@@ -314,9 +314,8 @@
     <entity id="com.gridnine.jasmine.server.standard.model.rest.DialogDescriptionDT">
         <property id="id" type="STRING"/>
         <property id="viewId" type="STRING"/>
-        <property id="width" type="INT"/>
-        <property id="height" type="INT"/>
-        <property id="closeable" type="BOOLEAN"/>
+        <property id="closable" type="BOOLEAN"/>
+        <property id="title" type="STRING"/>
         <collection id="buttons" element-type="ENTITY" elementClassName="com.gridnine.jasmine.server.standard.model.rest.StandardButtonDescriptionDT"/>
     </entity>
 

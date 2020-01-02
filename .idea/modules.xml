@@ -9,6 +9,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.spf.iml" filepath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.spf.iml" group="jasmine" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.standard.iml" filepath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.standard.iml" group="jasmine" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.core.iml" filepath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.core.iml" group="jasmine" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.easyui.iml" filepath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.easyui.iml" group="jasmine" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.sandbox.iml" filepath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.sandbox.iml" group="jasmine" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/jasmine.iml" filepath="$PROJECT_DIR$/.idea/modules/jasmine.iml" group="jasmine" />
     </modules>

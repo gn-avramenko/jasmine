@@ -4,7 +4,7 @@
         <enum-item id="ELEMENT_1"/>
         <enum-item id="ELEMENT_2"/>
     </enum>
-    <document id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccount">
+    <document id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccount" x-cache-resolve="true">
         <property id="name" type="STRING"/>
         <property id="login" type="STRING"/>
         <property id="password" type="STRING"/>
@@ -39,6 +39,6 @@
     </index>
     <index id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccountIndex" document="com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccount">
         <property id="name" type="STRING"/>
-        <property id="login" type="STRING"/>
+        <property id="login" type="STRING" x-cache-find="true"/>
     </index>
 </domain>

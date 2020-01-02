@@ -174,7 +174,8 @@ class EditorToolButtonDescriptionJS( id:String, val handler:String, val weight:D
 class SharedEditorToolButtonDescriptionJS(id:String, val handler:String, val weight:Double, val displayName:String) : BaseIdentityDescriptionJS(id)
 class DialogToolButtonDescriptionJS( id:String, val handler:String, val displayName:String) : BaseIdentityDescriptionJS(id)
 
-class DialogDescriptionJS(id:String, val viewId:String, val width:Int, val height:Int) : BaseIdentityDescriptionJS(id){
+class DialogDescriptionJS(id:String, val viewId:String, val title:String) : BaseIdentityDescriptionJS(id){
+    var closable = true
     val buttons = arrayListOf<DialogToolButtonDescriptionJS>()
 }
 

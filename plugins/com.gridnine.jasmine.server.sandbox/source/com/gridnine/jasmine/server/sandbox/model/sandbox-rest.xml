@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rest xmlns="http://xtrip.gridnine.com/jasmine/rest" id="sandbox">
+    <group id="auth">
+        <operation id="checkAuth" handler="com.gridnine.jasmine.server.sandbox.rest.SandboxCheckAuthHandler">
+            <request id="com.gridnine.jasmine.server.sandbox.model.rest.CheckAuthRequest"/>
+            <response id="com.gridnine.jasmine.server.sandbox.model.rest.CheckAuthResponse">
+                <property id="authorized" type="BOOLEAN"/>
+            </response>
+        </operation>
+    </group>
+</rest>
+
+

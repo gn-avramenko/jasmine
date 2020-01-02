@@ -2,7 +2,7 @@
     <parameter id="type" value="WEB"/>
     <parameter id="kotlin-output-dir" value="resources/web-sandbox"/>
     <dependencies>
-        <plugin-dependency plugin-id="com.gridnine.jasmine.server.core"/>
         <plugin-dependency plugin-id="com.gridnine.jasmine.web.core"/>
+        <plugin-dependency plugin-id="com.gridnine.jasmine.web.easyui"/>
     </dependencies>
 </plugin>

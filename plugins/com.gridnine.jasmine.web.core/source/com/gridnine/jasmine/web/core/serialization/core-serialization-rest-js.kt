@@ -191,7 +191,7 @@ object RestSerializationUtilsJS {
 
 
 
-    fun <T : Any> deserialize(qualifiedClasName:String, json: dynamic): T {
+    fun <T : Any> deserializeFromJSON(qualifiedClasName:String, json: dynamic): T {
         return CommonSerializationUtilsJS.deserialize(qualifiedClasName, json, restProviderFactory)
     }
 

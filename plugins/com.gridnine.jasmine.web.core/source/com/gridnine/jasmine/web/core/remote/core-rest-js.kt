@@ -85,7 +85,7 @@ class StandardRpcManager(private val baseRestUrl:String) : RpcManager {
         val op = RestMetaRegistryJS.get().operations[restId]?:throw IllegalArgumentException("no description found for $restId")
         val requestStr = RestSerializationUtilsJS.serializeToString(request)
         return postDynamic(restId, requestStr).then { json: dynamic ->
-            val response: RP = RestSerializationUtilsJS.deserialize(op.responseEntity, json)
+            val response: RP = RestSerializationUtilsJS.deserializeFromJSON(op.responseEntity, json)
             response
         }
 

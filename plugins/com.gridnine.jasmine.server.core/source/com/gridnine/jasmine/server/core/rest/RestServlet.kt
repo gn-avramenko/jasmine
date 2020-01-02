@@ -26,8 +26,7 @@ class RestServlet: HttpServlet() {
         val request = req.inputStream.use {
             RestSerializationUtils.deserialize(ReflectionUtils.getClass<BaseRestEntity>(op.requestEntity), it.readAllBytes())
         }
-        val result = handler.service(request)
-
+        val result = handler.service(request, RestOperationContext(req, resp))
         resp.contentType = "application/json"
         resp.characterEncoding = "UTF-8"
         resp.status = 200

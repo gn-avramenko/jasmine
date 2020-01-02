@@ -95,7 +95,7 @@ object DomainWebGenerator {
             }
             GenUtils.generateClasses(classesData, File(projectDir, "plugins/$key"), projectName, generatedFiles.getOrPut(key, { arrayListOf() }))
             val sb = StringBuilder()
-            GenUtils.generateHeader(sb, "${key}Reflection", projectName, false)
+            GenUtils.generateHeader(sb, "${key}.Reflection", projectName, false)
 
             GenUtils.classBuilder(sb, "object DomainReflectionUtils") {
                 blankLine()

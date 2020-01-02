@@ -53,7 +53,6 @@ class CoreActivatorJS:ActivatorJS{
                 initDomainRegistry(it)
                 initRestRegistry(it)
                 initUiRegistry(it)
-                console.log(UiMetaRegistryJS.get())
                 resolve(Unit)
             }
         }
@@ -86,7 +85,8 @@ class CoreActivatorJS:ActivatorJS{
         }
         it.dialogs?.forEach { itJs ->
             val dialogId = itJs.id
-            val dialog = DialogDescriptionJS(dialogId,  itJs.viewId, itJs.width, itJs.height)
+            val dialog = DialogDescriptionJS(dialogId,  itJs.viewId,  itJs.title)
+            dialog.closable = itJs.closable
             uiRegistry.dialogs[dialogId] = dialog
             itJs.buttons.forEach { button ->
                 dialog.buttons.add(DialogToolButtonDescriptionJS(button.id, button.handler,  button.displayName))

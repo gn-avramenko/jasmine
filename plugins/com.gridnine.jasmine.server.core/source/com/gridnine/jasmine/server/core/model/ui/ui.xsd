@@ -47,9 +47,7 @@
                                             </complexType>
                                         </element>
                                     </sequence>
-                                    <attribute name="width" type="int" use="required"/>
-                                    <attribute name="height" type="int" use="required"/>
-                                    <attribute name="closeable" type="boolean" default="true"/>
+                                    <attribute name="closable" type="boolean" default="true"/>
                                 </extension>
                             </complexContent>
                         </complexType>
@@ -297,6 +295,7 @@
             <extension base="tns:baseMetaElement">
                 <attribute use="required" name="handler" type="string"/>
                 <attribute use="required" name="weight" type="double"/>
+                <attribute name = "caption" type="string" use="required"/>
             </extension>
         </complexContent>
     </complexType>
@@ -305,6 +304,7 @@
             <extension base="tns:baseMetaElement">
                 <attribute use="required" name="handler" type="string"/>
                 <attribute use="required" name="caption" type="string"/>
+                <attribute name = "caption" type="string" use="required"/>
             </extension>
         </complexContent>
     </complexType>

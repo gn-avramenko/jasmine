@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui xmlns="http://xtrip.gridnine.com/jasmine/ui" >
-    <shared-editor-tool-button id="sharedSaveEditorButton" handler="stub" weight="1"/>
-    <shared-editor-tool-button id="sharedDeleteEditorButton" handler="stub" weight="2"/>
+    <shared-editor-tool-button id="sharedSaveEditorButton" handler="stub" weight="1" caption="buttonSave"/>
+    <shared-editor-tool-button id="sharedDeleteEditorButton" handler="stub" weight="2" caption="buttonDelete"/>
     <editor id="com.gridnine.jasmine.server.sandbox.model.ui.SandboxComplexDocumentEditor" entity-id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxComplexDocument">
         <toolbar>
-            <tool-button id="customDialog" handler="stub" weight="3"/>
+            <tool-button id="customDialog" handler="stub" weight="3" caption="customDialog"/>
         </toolbar>
         <view>
             <table-layout>
@@ -69,11 +69,11 @@
             </table-layout>
         </view>
     </editor>
-    <dialog id="com.gridnine.jasmine.server.sandbox.model.ui.SandboxLoginDialog" width="400" height="200">
+    <dialog id="com.gridnine.jasmine.server.sandbox.model.ui.SandboxLoginDialog" closable="false">
         <view>
             <table-layout>
                 <column width="100"/>
-                <column width="remaining"/>
+                <column width="200"/>
                 <label id="loginLabel" caption="loginLabel.caption"/>
                 <text-box id="login"/>
                 <next-row/>
@@ -82,8 +82,7 @@
             </table-layout>
         </view>
         <buttons>
-            <button id="okButton" handler="stub" caption="ok"/>
-            <button id="cancelButton" handler="stub" caption="cancel"/>
+            <button id="loginButton" handler="stub" caption="loginButton"/>
         </buttons>
     </dialog>
     <list id="com.gridnine.jasmine.server.sandbox.model.ui.SandboxUserAccountList" object-id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccountIndex">
