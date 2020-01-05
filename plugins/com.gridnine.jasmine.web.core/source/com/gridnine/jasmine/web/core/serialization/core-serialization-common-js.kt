@@ -119,7 +119,7 @@ internal object CommonSerializationUtilsJS {
         return className
     }
 
-    private fun getProvider(qualifiedName: String, factory: ProviderFactoryJS): ObjectMetadataProviderJS<*> {
+    internal fun getProvider(qualifiedName: String, factory: ProviderFactoryJS): ObjectMetadataProviderJS<*> {
         if (providersCache.containsKey(qualifiedName)) {
             return providersCache[qualifiedName]!!
         }

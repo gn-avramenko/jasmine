@@ -17,6 +17,7 @@ import javax.servlet.Filter
 import javax.servlet.FilterChain
 import javax.servlet.ServletRequest
 import javax.servlet.ServletResponse
+import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -32,7 +33,7 @@ class SandboxAuthFilter : Filter {
         val restId = httpRequest.pathInfo.substring(1)
         val cookie = httpRequest.cookies?.find { it.name == AUTH_COOKIE }
         if (cookie == null || cookie.value == null) {
-            if (restId == "sandbox_auth_checkAuth" || restId == "standard_standard_meta" || restId == "login") {
+            if (restId == "sandbox_auth_checkAuth" || restId == "standard_standard_meta" || restId == "sandbox_auth_login") {
                 chain.doFilter(request, response)
                 return
             }
@@ -74,6 +75,16 @@ class SandboxAuthFilter : Filter {
         const val AUTH_COOKIE = "AUTH_COOKIE"
         fun getAuthInfo(): AuthInfo? {
             return authInfo.get()
+        }
+        fun setCookie(login:String, password:String, response:HttpServletResponse){
+            val cookie = Cookie(AUTH_COOKIE,DesUtil.encode("$login|$password"))
+            cookie.maxAge = 2147483647
+            response.addCookie(cookie)
+        }
+        fun removeCookie(response:HttpServletResponse){
+            val cookie = Cookie(AUTH_COOKIE, null)
+            cookie.maxAge = 0
+            response.addCookie(cookie)
         }
     }
 

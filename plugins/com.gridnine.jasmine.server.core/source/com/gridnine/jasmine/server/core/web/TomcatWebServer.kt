@@ -11,6 +11,8 @@ import org.apache.catalina.LifecycleException
 import org.apache.catalina.LifecycleState
 import org.apache.catalina.core.StandardContext
 import org.apache.catalina.startup.Tomcat
+import org.apache.tomcat.util.descriptor.web.FilterDef
+import org.apache.tomcat.util.descriptor.web.FilterMap
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.InputStream
@@ -44,6 +46,16 @@ constructor(port: Int) : WebServer {
             classLoader.addDelegate(app.classLoader)
             val context = tomcat.addWebapp(app.path,
                     file.absolutePath)
+            WebServerConfig.get().globalFilters.forEach{
+                val filterDef = FilterDef()
+                filterDef.filterClass =it.cls.qualifiedName
+                filterDef.filterName = it.name
+                val filterMap = FilterMap()
+                filterMap.addURLPattern("/*")
+                filterMap.filterName = it.name
+                context.addFilterDef(filterDef)
+                context.addFilterMap(filterMap)
+            }
             if (context is StandardContext) {
                 context.delegate = true
                 context.tldValidation = false

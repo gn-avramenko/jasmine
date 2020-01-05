@@ -6,13 +6,20 @@
 
 package com.gridnine.jasmine.web.easyui
 
+import com.gridnine.jasmine.web.core.application.EnvironmentJS
 import com.gridnine.jasmine.web.core.model.ui.*
 import com.gridnine.jasmine.web.core.ui.Dialog
+import com.gridnine.jasmine.web.core.ui.DialogButtonHandler
+import com.gridnine.jasmine.web.core.ui.MainFrame
 import com.gridnine.jasmine.web.core.ui.UiFactory
 import com.gridnine.jasmine.web.core.utils.HtmlUtilsJS
+import com.gridnine.jasmine.web.core.utils.ReflectionFactoryJS
+import com.gridnine.jasmine.web.easyui.mainframe.EasyUiMainFrameImpl
+import com.gridnine.jasmine.web.easyui.utils.EasyUiViewBuilder
 
 class EasyUiFactory:UiFactory{
-    override fun <VM : BaseVMEntityJS, VS : BaseVSEntityJS, VV : BaseVVEntityJS, V : BaseView<VM, VS, VV>> showDialog(dialogId: String, model: VM, settings: VS): Dialog<VM, VS, VV, V> {
+    override fun <VM : BaseVMEntityJS, VS : BaseVSEntityJS, VV : BaseVVEntityJS, V : BaseView<VM, VS, VV>,D:Dialog<VM,VS,VV,V>> showDialog(dialog:D, model: VM, settings: VS): D{
+        val dialogId = ReflectionFactoryJS.get().getQualifiedClassName(dialog::class)
         val dialogDescription = UiMetaRegistryJS.get().dialogs[dialogId]?:throw IllegalArgumentException("unable to find dialog description for $dialogId")
         val dialogDiv = jQuery("#dialog")
         if(dialogDiv.length > 0){
@@ -24,13 +31,13 @@ class EasyUiFactory:UiFactory{
             }
         }.toString()
         jQuery("body").append(dialogContent)
-
         val buttonsArr = arrayOfNulls<Any>(dialogDescription.buttons.size)
         dialogDescription.buttons.withIndex().forEach { (idx, elm) ->
             buttonsArr[idx] = object {
+                val buttonHandler =ReflectionFactoryJS.get().getFactory(elm.handler).invoke() as DialogButtonHandler<VM, VS, VV, V>
                 val text = elm.displayName
                 val handler = {
-                    console.log("pressed $text")
+                    buttonHandler.handle(dialog)
                 }
             }
         }
@@ -43,10 +50,22 @@ class EasyUiFactory:UiFactory{
             val buttons = buttonsArr
         })
         val view = EasyUiViewBuilder.createView<VM,VS,VV,V>(dialogDescription.viewId, "")
-        view.readData(model, settings)
-        val dialog = Dialog<VM, VS, VV, V>();
+        view.configure(settings)
+        view.readData(model)
+
         dialog.view = view
+        dialog.close = {jQuery("#dialog").dialog("close")}
         return dialog
     }
 
+    override fun publishMainFrame() {
+        if(EnvironmentJS.isPublished(MainFrame::class)){
+            return
+        }
+        EnvironmentJS.publish(MainFrame::class, EasyUiMainFrameImpl())
+    }
+
+    override fun showConfirmDialog(question: String, handler: () -> Unit) {
+        confirm(question, handler)
+    }
 }

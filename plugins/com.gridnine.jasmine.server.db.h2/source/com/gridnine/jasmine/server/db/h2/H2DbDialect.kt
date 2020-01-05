@@ -45,7 +45,7 @@ class H2dbDialect : JdbcDialect {
         if ("-5".equals(dataType, ignoreCase = true)) {
             return SqlType.LONG
         }
-        if ("-5".equals(dataType, ignoreCase = true)) {
+        if ("16".equals(dataType, ignoreCase = true)) {
             return SqlType.BOOLEAN
         }
         if ("8".equals(dataType, ignoreCase = true)) {

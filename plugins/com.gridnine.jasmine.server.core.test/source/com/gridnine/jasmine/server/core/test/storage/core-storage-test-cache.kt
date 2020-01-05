@@ -25,7 +25,7 @@ class CacheTest:StorageTestBase(){
     override fun setUp() {
         super.setUp()
         advice = OperationCountAdvice(2.0)
-        StorageRegistry.register(advice)
+        StorageRegistry.get().register(advice)
     }
 
     @Test

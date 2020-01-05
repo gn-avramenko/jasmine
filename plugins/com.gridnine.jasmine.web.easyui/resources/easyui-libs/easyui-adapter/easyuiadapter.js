@@ -25,14 +25,6 @@ function createTable(id, columns, loader, onClickRow) {
 }
 
 
-function createDatalist(id, onClickRow) {
-    var div = $("#"+id);
-    div.datalist({
-        onClickRow:onClickRow,
-    });
-    return div
-
-}
 
 function createSearchBox(id, prompt, searcher) {
    var div = $("#"+id);
@@ -46,11 +38,17 @@ function createSearchBox(id, prompt, searcher) {
 
 
 function confirm(question, clb){
-    $.messager.confirm('Вопрос',question,function(r){
-        if (r){
-            clb()
-        }
-    });
+    $.messager.confirm( {
+        ok:'Да',
+        cancel:'Нет',
+        title: 'Вопрос',
+	    msg: question,
+	    fn: function(r){
+		    if (r){
+                clb()
+            }
+	    }
+    })
 }
 
 function showMessage(title, message ,timeout){
@@ -64,7 +62,11 @@ function showMessage(title, message ,timeout){
 
 function showError(title, message, stacktrace){
     if(stacktrace == null){
-        $.messager.alert(title, message, 'error', function(){});
+        $.messager.alert({
+                title :title,
+                msg:message,
+                icon:'error'
+            });
         return
     }
     var dialogDiv = $("#error-dialog")

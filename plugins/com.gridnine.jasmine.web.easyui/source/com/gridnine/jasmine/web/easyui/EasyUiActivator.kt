@@ -8,8 +8,9 @@ package com.gridnine.jasmine.web.easyui
 
 import com.gridnine.jasmine.web.core.application.ActivatorJS
 import com.gridnine.jasmine.web.core.application.EnvironmentJS
-import com.gridnine.jasmine.web.core.ui.ErrorHandler
-import com.gridnine.jasmine.web.core.ui.UiFactory
+import com.gridnine.jasmine.web.core.ui.*
+import com.gridnine.jasmine.web.easyui.mainframe.EasyUiMainFrameImpl
+import com.gridnine.jasmine.web.easyui.mainframe.EasyUiWorkspaceEditor
 
 class EasyUiActivator : ActivatorJS{
 
@@ -20,5 +21,17 @@ class EasyUiActivator : ActivatorJS{
             }
         })
         EnvironmentJS.publish(UiFactory::class, EasyUiFactory())
+        if(MainFrameConfiguration.get().showWorkspaceEditor){
+            MainFrameConfiguration.get().addTool(object:MainFrameTool{
+                override val displayName: String
+                    get() = "Редактор рабочей области"
+                override val weight: Double
+                    get() = 10.toDouble()
+
+                override fun handle(mainFrame: MainFrame) {
+                    (mainFrame as EasyUiMainFrameImpl).openTab(EasyUiWorkspaceEditor())
+                }
+            })
+        }
     }
 }

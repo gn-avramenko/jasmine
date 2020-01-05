@@ -129,6 +129,9 @@ class TextAreaDescriptionJS(id: String) : BaseWidgetDescriptionJS(id)
 
 
 class TextboxDescriptionJS(id: String)  : BaseWidgetDescriptionJS(id)
+
+class SelectDescriptionJS(id: String)  : BaseWidgetDescriptionJS(id)
+
 class PasswordBoxDescriptionJS(id: String)  : BaseWidgetDescriptionJS(id)
 
 

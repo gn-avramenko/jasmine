@@ -74,12 +74,14 @@
         <property id="elementClassName" type="STRING"/>
     </entity>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.IndexDescriptionDT">
+        <property id="displaName" type="STRING"/>
         <property id="document" type="STRING"/>
         <property id="id" type="STRING"/>
         <collection id="properties" element-type="ENTITY" elementClassName="com.gridnine.jasmine.server.standard.model.rest.IndexPropertyDescriptionDT"/>
         <collection id="collections" element-type="ENTITY" elementClassName="com.gridnine.jasmine.server.standard.model.rest.IndexCollectionDescriptionDT"/>
     </entity>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.AssetDescriptionDT">
+        <property id="displaName" type="STRING"/>
         <property id="id" type="STRING"/>
         <collection id="properties" element-type="ENTITY" elementClassName="com.gridnine.jasmine.server.standard.model.rest.IndexPropertyDescriptionDT"/>
         <collection id="collections" element-type="ENTITY" elementClassName="com.gridnine.jasmine.server.standard.model.rest.IndexCollectionDescriptionDT"/>
@@ -365,10 +367,10 @@
                 <collection id="sharedEditorButtons" element-type="ENTITY" elementClassName="com.gridnine.jasmine.server.standard.model.rest.StandardButtonDescriptionDT"/>
             </response>
         </operation>
-        <operation id="workspace" handler="com.gridnine.jasmine.server.standard.rest.StandardWorkspaceRestHandler">
+        <operation id="getWorkspace" handler="com.gridnine.jasmine.server.standard.rest.StandardWorkspaceRestHandler">
             <request id="com.gridnine.jasmine.server.standard.model.rest.GetWorkspaceRequest"/>
             <response id="com.gridnine.jasmine.server.standard.model.rest.GetWorkspaceResponse">
-                <property id="workspace" type="ENTITY" className="com.gridnine.jasmine.server.standard.model.rest.WorkspaceDT"/>
+                <property id="workspace" type="ENTITY" className="com.gridnine.jasmine.server.standard.model.rest.WorkspaceDT" lateinit="true"/>
             </response>
         </operation>
         <operation id="list" handler="com.gridnine.jasmine.server.standard.rest.StandardListRestHandler">

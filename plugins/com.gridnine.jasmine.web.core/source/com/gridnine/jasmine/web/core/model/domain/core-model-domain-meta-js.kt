@@ -46,17 +46,17 @@ class DatabaseCollectionDescriptionJS(id:String, val elementType: DatabaseCollec
     var elementClassName: String? = null
 
 }
-abstract class BaseIndexDescriptionJS(id:String) : BaseIdentityDescriptionJS(id) {
+abstract class BaseIndexDescriptionJS(id:String, val displayName: String) : BaseIdentityDescriptionJS(id) {
     val properties = linkedMapOf<String, DatabasePropertyDescriptionJS>()
     val collections = linkedMapOf<String, DatabaseCollectionDescriptionJS>()
     val codeInjections = arrayListOf<String>()
 
 }
 
-class AssetDescriptionJS(id:String) : BaseIndexDescriptionJS(id)
+class AssetDescriptionJS(id:String, displayName: String) : BaseIndexDescriptionJS(id,displayName)
 
 
-class IndexDescriptionJS(id:String) : BaseIndexDescriptionJS(id) {
+class IndexDescriptionJS(id:String, displayName: String) : BaseIndexDescriptionJS(id,displayName) {
 
     lateinit var document: String
 

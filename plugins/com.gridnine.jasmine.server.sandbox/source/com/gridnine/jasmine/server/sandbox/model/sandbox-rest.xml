@@ -7,6 +7,19 @@
                 <property id="authorized" type="BOOLEAN"/>
             </response>
         </operation>
+        <operation id="login" handler="com.gridnine.jasmine.server.sandbox.rest.SandboxLoginHandler">
+            <request id="com.gridnine.jasmine.server.sandbox.model.rest.LoginRequest">
+                <property id="data" type="ENTITY" className="com.gridnine.jasmine.server.sandbox.model.ui.SandboxLoginDialogVM"/>
+            </request>
+            <response id="com.gridnine.jasmine.server.sandbox.model.rest.LoginResponse">
+                <property id="validation" type="ENTITY" className="com.gridnine.jasmine.server.sandbox.model.ui.SandboxLoginDialogVV"/>
+                <property id="successfull" type="BOOLEAN"/>
+            </response>
+        </operation>
+        <operation id="logout" handler="com.gridnine.jasmine.server.sandbox.rest.SandboxLogoutHandler">
+            <request id="com.gridnine.jasmine.server.sandbox.model.rest.LogoutRequest"/>
+            <response id="com.gridnine.jasmine.server.sandbox.model.rest.LogoutResponse"/>
+        </operation>
     </group>
 </rest>
 

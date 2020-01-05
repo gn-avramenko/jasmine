@@ -169,16 +169,20 @@ internal object SerializationUtils {
         val className = jsonObj.get("_className")?.asString?:cls.java.name
         val provider = getProvider<T>(className, factory)
         if (provider.hasUid()) {
-            val uid = jsonObj.get("uid").asString
-            val existing = context[uid]
-            if (existing != null) {
-                return existing as T
+            val uid = if(jsonObj.has("uid")) jsonObj.get("uid").asString else null
+            if(uid != null) {
+                val existing = context[uid]
+                if (existing != null) {
+                    return existing as T
+                }
             }
         }
         val result = ReflectionUtils.newInstance<T>(className)
         if (provider.hasUid()) {
-            val uid = jsonObj.get("uid").asString
-            context[uid] = result
+            val uid = if(jsonObj.has("uid")) jsonObj.get("uid").asString else null
+            if(uid != null) {
+                context[uid] = result
+            }
         }
         provider.properties.forEach { prop ->
             if (jsonObj.has(prop.id)) {

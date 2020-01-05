@@ -2,6 +2,8 @@
     <parameter id="type" value="SERVER"/>
     <dependencies>
         <plugin-dependency plugin-id="com.gridnine.jasmine.server.core"/>
+        <plugin-dependency plugin-id="com.gridnine.jasmine.server.standard"/>
+        <plugin-dependency plugin-id="com.gridnine.jasmine.server.db.h2"/>
     </dependencies>
     <extension point-id="domain-metadata">
         <parameter id="file" value="plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/model/sandbox-model-domain.xml"/>

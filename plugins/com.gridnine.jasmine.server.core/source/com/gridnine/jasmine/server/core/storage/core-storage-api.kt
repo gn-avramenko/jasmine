@@ -255,7 +255,7 @@ interface Database {
         }
     }
 }
-object StorageRegistry {
+class StorageRegistry {
 
     private val storageInterceptors =  arrayListOf<StorageInterceptor>()
 
@@ -285,6 +285,10 @@ object StorageRegistry {
             cls: KClass<D>): List<IndexHandler<BaseDocument, BaseIndex<BaseDocument>>> {
         return indexHandlers[cls] as List<IndexHandler<BaseDocument, BaseIndex<BaseDocument>>>??:
         throw IllegalStateException("no handlers registered for document ${cls.qualifiedName}")
+    }
+
+    companion object{
+        fun get()  = Environment.getPublished(StorageRegistry::class)
     }
 
 }

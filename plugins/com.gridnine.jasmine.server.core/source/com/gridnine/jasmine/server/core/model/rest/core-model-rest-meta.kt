@@ -26,7 +26,7 @@ enum class RestPropertyType {
 
 abstract class BaseRestElementDescription(val id:String)
 
-class RestPropertyDescription(id: String, val type:RestPropertyType):BaseRestElementDescription(id){
+class RestPropertyDescription(id: String, val type:RestPropertyType,val lateinit:Boolean):BaseRestElementDescription(id){
     var className: String? = null
 }
 

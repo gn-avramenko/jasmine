@@ -36,7 +36,7 @@ class ReflectionFactoryJS{
 
 
     fun getQualifiedClassName(cls:KClass<*>): String{
-        return qualifiedNames[cls]?:throw IllegalArgumentException("class ${cls::simpleName} is not registered")
+        return qualifiedNames[cls]?:throw IllegalArgumentException("$cls is not registered")
     }
 
     fun <E:Enum<E>> getEnum(enumClassName:String, itemName:String):E{

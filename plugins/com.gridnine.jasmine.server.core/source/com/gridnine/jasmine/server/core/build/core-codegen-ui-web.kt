@@ -55,6 +55,7 @@ object UiWebGenerator {
             VMPropertyType.BIG_DECIMAL -> GenPropertyType.DOUBLE
             VMPropertyType.BOOLEAN -> GenPropertyType.BOOLEAN
             VMPropertyType.ENTITY -> GenPropertyType.ENTITY
+            VMPropertyType.SELECT -> GenPropertyType.ENTITY
             VMPropertyType.ENTITY_REFERENCE -> GenPropertyType.ENTITY
             VMPropertyType.ENUM -> GenPropertyType.ENUM
             VMPropertyType.INT -> GenPropertyType.INT
@@ -93,6 +94,7 @@ object UiWebGenerator {
             VSPropertyType.ENUM_SELECT ->GenPropertyType.ENTITY
             VSPropertyType.ENTITY_AUTOCOMPLETE ->GenPropertyType.ENTITY
             VSPropertyType.ENTITY ->GenPropertyType.ENTITY
+            VSPropertyType.SELECT ->GenPropertyType.ENTITY
             VSPropertyType.COLUMN_ENTITY ->GenPropertyType.ENTITY
             VSPropertyType.COLUMN_ENUM_SELECT ->GenPropertyType.ENTITY
             VSPropertyType.COLUMN_TEXT ->GenPropertyType.ENTITY
@@ -120,6 +122,7 @@ object UiWebGenerator {
             VSPropertyType.COLUMN_INT -> "com.gridnine.jasmine.web.core.model.ui.IntegerColumnConfigurationJS"
             VSPropertyType.COLUMN_FLOAT-> "com.gridnine.jasmine.web.core.model.ui.FloatColumnConfigurationJS"
             VSPropertyType.COLUMN_TEXT -> "com.gridnine.jasmine.web.core.model.ui.TextColumnConfigurationJS"
+            VSPropertyType.SELECT -> "com.gridnine.jasmine.web.core.model.ui.SelectItemJS"
         }
     }
 
@@ -167,6 +170,11 @@ object UiWebGenerator {
             }
         }
         return result
+    }
+
+    private fun  toGenData(dialogDescription: DialogDescription, viewDescription: BaseViewDescription): GenClassData {
+
+        return GenClassData(dialogDescription.id,"com.gridnine.jasmine.web.core.ui.Dialog<${viewDescription.viewModel}JS,${viewDescription.viewSettings}JS,${viewDescription.viewValidation}JS,${viewDescription.id}>", abstract = false, enum = false, noEnumProperties = true)
     }
 
 
@@ -224,6 +232,12 @@ object UiWebGenerator {
                     classes.add(it.id)
                 }
             }
+            registry.dialogs.values.forEach {dialogDescription ->
+               dialogDescription.buttons.forEach { if(it.handler  != "stub") classes.add(it.handler) }
+               val viewDescription = registry.views[dialogDescription.viewId]?:throw IllegalArgumentException("unable to find view for dialog ${dialogDescription.id}")
+               classesData.add(toGenData(dialogDescription,viewDescription))
+                classes.add(dialogDescription.id)
+            }
             GenUtils.generateClasses(classesData, File(projectDir, "plugins/$key"), projectName, generatedFiles.getOrPut(key, { arrayListOf() }))
             val sb = StringBuilder()
             GenUtils.generateHeader(sb, "${key}.UiReflectionUtilsJS", projectName, false)
@@ -232,7 +246,7 @@ object UiWebGenerator {
                 blankLine()
                 "fun registerWebUiClasses()"{
                     classes.forEach {
-                        "com.gridnine.jasmine.web.core.utils.ReflectionFactoryJS.get().registerClass(\"$it\", {$it()})"()
+                        "com.gridnine.jasmine.web.core.utils.ReflectionFactoryJS.get().registerClass(\"$it\") {$it()}"()
                     }
                     classes.forEach {
                         "com.gridnine.jasmine.web.core.utils.ReflectionFactoryJS.get().registerQualifiedName($it::class, \"$it\")"()

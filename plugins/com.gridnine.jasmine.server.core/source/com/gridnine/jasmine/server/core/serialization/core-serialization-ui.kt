@@ -524,6 +524,7 @@ object UiSerializationUtils {
             VMPropertyType.BOOLEAN -> null
             VMPropertyType.BIG_DECIMAL -> null
             VMPropertyType.STRING -> null
+            VMPropertyType.SELECT -> SelectItem::class.qualifiedName
         }
     }
 
@@ -550,6 +551,7 @@ object UiSerializationUtils {
             VSPropertyType.ENTITY -> elementClassName
             VSPropertyType.COLUMN_DATE -> DateColumnConfiguration::class.qualifiedName
             VSPropertyType.ENTITY_AUTOCOMPLETE ->"${EntityAutocompleteConfiguration::class.qualifiedName}<$elementClassName>"
+            VSPropertyType.SELECT ->SelectConfiguration::class.qualifiedName
         }
     }
 
@@ -565,6 +567,7 @@ object UiSerializationUtils {
             VSPropertyType.COLUMN_ENUM_SELECT -> SerializablePropertyType.ENTITY
             VSPropertyType.COLUMN_ENTITY -> SerializablePropertyType.ENTITY
             VSPropertyType.COLUMN_DATE -> SerializablePropertyType.ENTITY
+            VSPropertyType.SELECT -> SerializablePropertyType.ENTITY
         }
     }
 
@@ -601,6 +604,7 @@ object UiSerializationUtils {
             VMPropertyType.BOOLEAN -> SerializablePropertyType.BOOLEAN
             VMPropertyType.BIG_DECIMAL -> SerializablePropertyType.BIG_DECIMAL
             VMPropertyType.STRING -> SerializablePropertyType.STRING
+            VMPropertyType.SELECT -> SerializablePropertyType.ENTITY
         }
     }
 

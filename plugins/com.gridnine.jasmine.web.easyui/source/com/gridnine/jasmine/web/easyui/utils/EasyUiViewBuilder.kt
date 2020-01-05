@@ -2,9 +2,9 @@
  * Gridnine AB http://www.gridnine.com
  * Project: Jasmine
  *****************************************************************/
-@file:Suppress("unused", "UNCHECKED_CAST")
+@file:Suppress("unused", "UNCHECKED_CAST", "UnsafeCastFromDynamic")
 
-package com.gridnine.jasmine.web.easyui
+package com.gridnine.jasmine.web.easyui.utils
 
 import com.gridnine.jasmine.web.core.model.ui.*
 import com.gridnine.jasmine.web.core.utils.HtmlUtilsJS
@@ -45,7 +45,8 @@ object EasyUiViewBuilder {
                             for ((index, row) in rows.withIndex()) {
                                 tr {
                                     val styleAttr = if (index == size - 1 && layout.expandLastRow) "height:100%;padding:5px;vertical-align: top" else "padding:5px"
-                                    row.tds.withIndex().forEach { (idx, td) ->
+                                    var currentIdx = 0
+                                    row.tds.forEach { td ->
                                         var tdStyleAttr = styleAttr
                                         when (val widget = td.widget) {
                                             is LabelDescriptionJS -> {
@@ -61,7 +62,18 @@ object EasyUiViewBuilder {
                                                 }
                                             }
                                         }
-                                        val widthValue = layout.columns[idx].width
+                                        var hasRemaining = false
+                                        var width = 0
+                                        for(n in 0 until (td.widget.hSpan?:1)){
+                                            val columnWidth = layout.columns[currentIdx+n].width
+                                            if(columnWidth == "remaining"){
+                                                hasRemaining = true
+                                            } else {
+                                                width+=columnWidth?.toInt()?:0
+                                            }
+                                        }
+                                        val widthValue = if(hasRemaining) "100%" else "$width"
+
                                         td(style = tdStyleAttr, hSpan = td.widget.hSpan ?: 1) {
                                             when (val widget = td.widget) {
                                                 is TableNextColumnDescriptionJS -> ""()
@@ -71,10 +83,10 @@ object EasyUiViewBuilder {
                                                         HorizontalAlignmentJS.CENTER -> "center"
                                                         HorizontalAlignmentJS.RIGHT -> "right"
                                                     }
-                                                    "<div class = \"jasmine-label\" style=\"text-align: ${textAlight};width:$widthValue%;\">${widget.displayName}<div>"()
+                                                    "<div class = \"jasmine-label\" style=\"text-align: ${textAlight};width:$widthValue;\">${widget.displayName}<div>"()
                                                 }
                                                 is TextAreaDescriptionJS ->{
-                                                    "<input id=\"${td.widget.id}${uid}\" style=\"width:$widthValue%;height:200px\">"()
+                                                    "<input id=\"${td.widget.id}${uid}\" style=\"width:$widthValue;height:200px\">"()
                                                 }
                                                 is TableDescriptionJS ->{
                                                     "<table id=\"${td.widget.id}${uid}\"/>"()
@@ -82,6 +94,7 @@ object EasyUiViewBuilder {
                                                 else -> "<input id=\"${td.widget.id}${uid}\" style=\"width:$widthValue\">"()
                                             }
                                         }
+                                        currentIdx+=td.widget.hSpan?:1
                                     }
                                 }
                             }
@@ -122,40 +135,122 @@ object EasyUiViewBuilder {
                 else -> {}
             }
         }
-        view.readData = {model,settings ->
+        view.readData = {model ->
+            widgetsDescriptions.forEach {
+                when (it) {
+                    is TextboxDescriptionJS -> {
+                        (view.getValue(it.id) as TextBoxWidget).setData(model.getValue(it.id) as String?)
+                    }
+                    is PasswordBoxDescriptionJS -> {
+                        (view.getValue(it.id) as PasswordBoxWidget).setData(model.getValue(it.id) as String?)
+                    }
+                    is TextAreaDescriptionJS -> {
+                        (view.getValue(it.id) as TextAreaWidget).setData(model.getValue(it.id) as String?)
+                    }
+                    is EnumSelectDescriptionJS -> {
+                        (view.getValue(it.id) as EnumSelectWidget<*>).setData(model.getValue(it.id)?.asDynamic())
+                    }
+                    is EntityAutocompleteDescriptionJS -> {
+                        (view.getValue(it.id) as EntityAutocompletetWidget).setData(model.getValue(it.id)?.asDynamic())
+                    }
+                    is FloatBoxDescriptionJS -> {
+                        (view.getValue(it.id) as FloatBoxWidget).setData(model.getValue(it.id) as Double?)
+                    }
+                    is IntegerBoxDescriptionJS -> {
+                        (view.getValue(it.id) as IntegerBoxWidget).setData(model.getValue(it.id) as Int?)
+                    }
+                    is TableDescriptionJS -> {
+                        (view.getValue(it.id) as TableWidget<BaseVMEntityJS,BaseVSEntityJS,BaseVVEntityJS>).readData(model.getCollection(it.id).asDynamic())
+                    }
+                }
+            }
+        }
+        view.configure = {settings ->
             widgetsDescriptions.forEach {
                 when (it) {
                     is TextboxDescriptionJS -> {
                         (view.getValue(it.id) as TextBoxWidget).configure(Unit)
-                        (view.getValue(it.id) as TextBoxWidget).setData(model.getValue(it.id) as String?)
                     }
                     is PasswordBoxDescriptionJS -> {
                         (view.getValue(it.id) as PasswordBoxWidget).configure(Unit)
-                        (view.getValue(it.id) as PasswordBoxWidget).setData(model.getValue(it.id) as String?)
                     }
                     is TextAreaDescriptionJS -> {
                         (view.getValue(it.id) as TextAreaWidget).configure(Unit)
-                        (view.getValue(it.id) as TextAreaWidget).setData(model.getValue(it.id) as String?)
                     }
                     is EnumSelectDescriptionJS -> {
                         (view.getValue(it.id) as EnumSelectWidget<*>).configure(settings.getValue(it.id).asDynamic())
-                        (view.getValue(it.id) as EnumSelectWidget<*>).setData(model.getValue(it.id)?.asDynamic())
                     }
                     is EntityAutocompleteDescriptionJS -> {
                         (view.getValue(it.id) as EntityAutocompletetWidget).configure(settings.getValue(it.id).asDynamic())
-                        (view.getValue(it.id) as EntityAutocompletetWidget).setData(model.getValue(it.id)?.asDynamic())
                     }
                     is FloatBoxDescriptionJS -> {
                         (view.getValue(it.id) as FloatBoxWidget).configure(Unit)
-                        (view.getValue(it.id) as FloatBoxWidget).setData(model.getValue(it.id) as Double?)
                     }
                     is IntegerBoxDescriptionJS -> {
                         (view.getValue(it.id) as IntegerBoxWidget).configure(Unit)
-                        (view.getValue(it.id) as IntegerBoxWidget).setData(model.getValue(it.id) as Int?)
                     }
                     is TableDescriptionJS -> {
                         (view.getValue(it.id) as TableWidget<BaseVMEntityJS,BaseVSEntityJS,BaseVVEntityJS>).configure(settings.getValue(it.id).asDynamic())
-                        (view.getValue(it.id) as TableWidget<BaseVMEntityJS,BaseVSEntityJS,BaseVVEntityJS>).readData(model.getCollection(it.id).asDynamic())
+                    }
+                }
+            }
+        }
+        view.showValidation = {validation ->
+            widgetsDescriptions.forEach {
+                when (it) {
+                    is TextboxDescriptionJS -> {
+                        (view.getValue(it.id) as TextBoxWidget).showValidation(validation.getValue(it.id) as String?)
+                    }
+                    is PasswordBoxDescriptionJS -> {
+                        (view.getValue(it.id) as PasswordBoxWidget).showValidation(validation.getValue(it.id) as String?)
+                    }
+                    is TextAreaDescriptionJS -> {
+                        (view.getValue(it.id) as TextAreaWidget).showValidation(validation.getValue(it.id) as String?)
+                    }
+                    is EnumSelectDescriptionJS -> {
+                        (view.getValue(it.id) as EnumSelectWidget<*>).showValidation(validation.getValue(it.id) as String?)
+                    }
+                    is EntityAutocompleteDescriptionJS -> {
+                        (view.getValue(it.id) as EntityAutocompletetWidget).showValidation(validation.getValue(it.id) as String?)
+                    }
+                    is FloatBoxDescriptionJS -> {
+                        (view.getValue(it.id) as FloatBoxWidget).showValidation(validation.getValue(it.id) as String?)
+                    }
+                    is IntegerBoxDescriptionJS -> {
+                        (view.getValue(it.id) as IntegerBoxWidget).showValidation(validation.getValue(it.id) as String?)
+                    }
+                    is TableDescriptionJS -> {
+                        (view.getValue(it.id) as TableWidget<BaseVMEntityJS,BaseVSEntityJS,BaseVVEntityJS>).showValidation(validation.getValue(it.id)?.asDynamic())
+                    }
+                }
+            }
+        }
+        view.writeData = {model ->
+            widgetsDescriptions.forEach {
+                when (it) {
+                    is TextboxDescriptionJS -> {
+                        model.setValue(it.id, (view.getValue(it.id) as TextBoxWidget).getData())
+                    }
+                    is PasswordBoxDescriptionJS -> {
+                        model.setValue(it.id, (view.getValue(it.id) as PasswordBoxWidget).getData())
+                    }
+                    is TextAreaDescriptionJS -> {
+                        model.setValue(it.id, (view.getValue(it.id) as TextAreaWidget).getData())
+                    }
+                    is EnumSelectDescriptionJS -> {
+                        model.setValue(it.id, (view.getValue(it.id) as EnumSelectWidget<*>).getData())
+                    }
+                    is EntityAutocompleteDescriptionJS -> {
+                        model.setValue(it.id, (view.getValue(it.id) as EntityAutocompletetWidget).getData())
+                    }
+                    is FloatBoxDescriptionJS -> {
+                        model.setValue(it.id, (view.getValue(it.id) as FloatBoxWidget).getData())
+                    }
+                    is IntegerBoxDescriptionJS -> {
+                        model.setValue(it.id, (view.getValue(it.id) as IntegerBoxWidget).getData())
+                    }
+                    is TableDescriptionJS -> {
+                        (view.getValue(it.id) as TableWidget<BaseVMEntityJS,BaseVSEntityJS,BaseVVEntityJS>).writeData(model.getCollection(it.id).asDynamic())
                     }
                 }
             }

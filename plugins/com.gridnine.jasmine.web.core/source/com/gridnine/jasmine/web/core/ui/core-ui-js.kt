@@ -19,16 +19,52 @@ interface ErrorHandler{
     }
 }
 
-class Dialog<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS,V:BaseView<VM,VS,VV>>{
+open class Dialog<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS,V:BaseView<VM,VS,VV>>{
     lateinit var view:V
     var editorView:BaseView<*,*,*>? = null
     lateinit var close:()->Unit
 }
 
+interface DialogButtonHandler<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS,V:BaseView<VM,VS,VV>>{
+    fun handle(dialog:Dialog<VM,VS,VV,V>)
+}
+
 interface UiFactory{
-    fun<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS,V:BaseView<VM,VS,VV>> showDialog(dialogId:String,model:VM, settings:VS):Dialog<VM,VS,VV,V>
+    fun<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS,V:BaseView<VM,VS,VV>,D:Dialog<VM,VS,VV,V>> showDialog(dialog:D, model:VM, settings:VS):D
+    fun publishMainFrame()
+    fun showConfirmDialog(question:String, handler:()->Unit)
     companion object{
         fun get() = EnvironmentJS.getPublished(UiFactory::class)
     }
 
+}
+
+
+interface MainFrame{
+    companion object{
+        fun get()=EnvironmentJS.getPublished(MainFrame::class)
+    }
+}
+
+interface MainFrameTool{
+    val displayName:String
+    val weight:Double
+    fun handle(mainFrame: MainFrame)
+}
+
+class MainFrameConfiguration{
+    var logoIconUrl:String? = null
+    var logoText:String? = null
+    var title:String? = null
+    var showWorkspaceEditor:Boolean = true
+    private val tools = arrayListOf<MainFrameTool>()
+    fun addTool(tool:MainFrameTool){
+        tools.add(tool)
+        tools.sortBy { it.weight }
+    }
+    fun getTools() = tools
+
+    companion object{
+        fun get() = EnvironmentJS.getPublished(MainFrameConfiguration::class)
+    }
 }

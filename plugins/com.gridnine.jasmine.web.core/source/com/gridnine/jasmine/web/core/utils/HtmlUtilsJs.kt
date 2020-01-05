@@ -80,6 +80,12 @@ object HtmlUtilsJS {
             result.style = style
         }
 
+        fun img(src:String) {
+            val result = IMG()
+            result.src = src
+            children.add(result)
+        }
+
         fun input(`class`: String? = null, id: String? = null, style: String? = null) {
             val result = INPUT()
             children.add(result)
@@ -135,6 +141,11 @@ object HtmlUtilsJS {
             get() = attributes["data-options"]
             set(value) {
                 if (value != null) attributes["data-options"] = value else attributes.remove("data-options")
+            }
+        var split: Boolean?
+            get() = attributes["split"]?.toBoolean()?:false
+            set(value) {
+                attributes["split"] = value?.toString()?:"false"
             }
     }
 
@@ -306,6 +317,14 @@ object HtmlUtilsJS {
             }
     }
 
+    class IMG : TagWithText("img") {
+        var src: String?
+            get() = attributes["src"]
+            set(value) {
+                if (value != null) attributes["src"] = value else attributes.remove("src")
+            }
+    }
+
     class INPUT : Tag("input") {
         var `class`: String?
             get() = attributes["class"]
@@ -338,7 +357,7 @@ object HtmlUtilsJS {
             result.style = style
         }
 
-        fun div(`class`: String? = null, id: String? = null, region: String? = null, border: Boolean? = null, style: String? = null, data_options: String? = null, init: Div.() -> Unit) {
+        fun div(`class`: String? = null, id: String? = null, region: String? = null, border: Boolean? = null, style: String? = null, data_options: String? = null, split:Boolean = false, init: Div.() -> Unit) {
             val result = initTag(Div(), init)
             result.`class` = `class`
             result.id = id
@@ -346,6 +365,7 @@ object HtmlUtilsJS {
             result.border = border
             result.style = style
             result.dataOptions = data_options
+            result.split = split
         }
 
 

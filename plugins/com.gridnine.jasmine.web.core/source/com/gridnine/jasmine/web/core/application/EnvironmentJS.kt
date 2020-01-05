@@ -13,7 +13,7 @@ object EnvironmentJS{
     fun<T:Any> publish(obj:T){
         val cls = obj::class
         if (publishedObjects.containsKey(cls)) {
-            throw IllegalArgumentException("object of class ${obj::class.simpleName} already published")
+            throw IllegalArgumentException("object of ${obj::class} already published")
         }
         publishedObjects[obj::class] = obj
         console.info("published ${obj::class.simpleName}") //$NON-NLS-1$
@@ -21,7 +21,7 @@ object EnvironmentJS{
 
     fun<T:Any> publish(cls:KClass<in T>, obj:T){
         if (publishedObjects.containsKey(cls)) {
-            throw IllegalArgumentException("object of class ${obj::class.simpleName} already published")
+            throw IllegalArgumentException("object of  $cls already published")
         }
         publishedObjects[cls] = obj
         console.info("published ${obj::class.simpleName} of class $cls")
@@ -37,7 +37,7 @@ object EnvironmentJS{
     }
 
     fun <T : Any> getPublished(cls: KClass<T>): T {
-        return publishedObjects[cls] as T? ?: throw IllegalArgumentException("object of class $cls not published") //$NON-NLS-1$
+        return publishedObjects[cls] as T? ?: throw IllegalArgumentException("object of  $cls not published") //$NON-NLS-1$
     }
 
     fun dispose(){

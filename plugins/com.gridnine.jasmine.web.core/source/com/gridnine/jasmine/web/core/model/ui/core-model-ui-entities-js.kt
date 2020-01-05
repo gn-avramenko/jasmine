@@ -29,9 +29,9 @@ abstract class BaseVVEntityJS:BaseIntrospectableObjectJS(){
 }
 
 abstract class BaseView<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS> {
-    lateinit  var model:VM
     var parent:Any? = null
-    lateinit var readData:(model:VM, settings:VS) ->Unit
+    lateinit var configure:(settings:VS) ->Unit
+    lateinit var readData:(model:VM) ->Unit
     lateinit var writeData:(model:VM) ->Unit
     lateinit var showValidation:(validation:VV) ->Unit
 
@@ -76,6 +76,8 @@ open class BooleanBoxWidget:ValueWidget<Boolean,Unit>()
 open class DateBoxWidget:ValueWidget<Date,Unit>()
 open class DateTimeBoxWidget:ValueWidget<Date,Unit>()
 open class EnumSelectWidget<E:Enum<E>>:ValueWidget<E,EnumSelectConfigurationJS<E>>()
+open class SelectWidget:ValueWidget<SelectItemJS,SelectConfigurationJS>()
+
 
 open class EntityAutocompletetWidget:ValueWidget<EntityReferenceJS, EntityAutocompleteConfigurationJS>()
 
@@ -90,6 +92,18 @@ class EnumSelectConfigurationJS<E:Enum<E>> {
         const val nullAllowed = "nullAllowed"
     }
 }
+
+
+class SelectConfigurationJS {
+    val possibleValues = arrayListOf<SelectItemJS>()
+    var nullAllowed = true
+    companion object{
+        const val qualifiedClassName = "com.gridnine.jasmine.web.core.model.ui.SelectConfigurationJS"
+        const val possibleValues = "possibleValues"
+        const val nullAllowed = "nullAllowed"
+    }
+}
+
 
 class EntityAutocompleteDataSourceJS {
     var name:String? = null

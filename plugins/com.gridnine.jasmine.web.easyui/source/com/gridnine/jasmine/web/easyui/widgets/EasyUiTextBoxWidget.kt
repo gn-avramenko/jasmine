@@ -46,7 +46,7 @@ class EasyUiTextBoxWidget(uid:String, description:TextboxDescriptionJS):TextBoxW
             Unit
         }
         getData ={
-            val value = div.textbox("getValue") as String?
+            val value = div.textbox("getText") as String?
             if (value.isNullOrBlank()) null else value
         }
     }

@@ -21,7 +21,7 @@ object RestWebGenerator {
 
         val result = GenClassData("${descr.id}JS", if(descr.extends != null) "${descr.extends}JS" else "com.gridnine.jasmine.web.core.model.rest.BaseRestEntityJS", descr.abstract, enum = false, noEnumProperties = true)
         descr.properties.values.forEach { prop ->
-            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.type, prop.className)))
+            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.type, prop.className),lateinit = prop.lateinit, nonNullable = false))
         }
         descr.collections.values.forEach { coll ->
             result.collections.add(GenCollectionDescription(coll.id, getPropertyType(coll.elementType), getClassName(coll.elementType, coll.elementClassName)))

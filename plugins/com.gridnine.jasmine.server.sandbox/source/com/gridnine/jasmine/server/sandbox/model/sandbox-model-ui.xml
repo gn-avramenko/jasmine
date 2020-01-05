@@ -82,7 +82,7 @@
             </table-layout>
         </view>
         <buttons>
-            <button id="loginButton" handler="stub" caption="loginButton"/>
+            <button id="loginButton" handler="com.gridnine.jasmine.web.sandbox.login.SandboxLoginButtonHandler" caption="loginButton"/>
         </buttons>
     </dialog>
     <list id="com.gridnine.jasmine.server.sandbox.model.ui.SandboxUserAccountList" object-id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccountIndex">
@@ -90,4 +90,8 @@
     <list id="com.gridnine.jasmine.server.sandbox.model.ui.SandboxComplexDocumentList" object-id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxComplexDocumentIndex">
 
     </list>
+    <validation-messages id="com.gridnine.jasmine.server.sandbox.model.ui.SandboxValidationMessages">
+        <message id="WRONG_LOGIN"/>
+        <message id="WRONG_PASSWORD"/>
+    </validation-messages>
 </ui>

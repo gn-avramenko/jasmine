@@ -20,7 +20,7 @@ import com.gridnine.jasmine.web.core.model.ui.*
 object RestSerializationUtilsJS {
 
 
-    private val restProviderFactory = object : ProviderFactoryJS {
+    internal val restProviderFactory = object : ProviderFactoryJS {
 
         private fun createEntityDescription(descr: RestEntityDescriptionJS): ObjectMetadataProviderJS<BaseRestEntityJS> {
             return object : ObjectMetadataProviderJS<BaseRestEntityJS>() {

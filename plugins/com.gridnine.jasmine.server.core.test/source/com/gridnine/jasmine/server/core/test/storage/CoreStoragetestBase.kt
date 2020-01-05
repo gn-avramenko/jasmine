@@ -14,7 +14,7 @@ import com.gridnine.jasmine.server.core.storage.cache.CacheAdvice
 import com.gridnine.jasmine.server.core.storage.cache.CacheConfiguration
 import com.gridnine.jasmine.server.core.storage.cache.ModelCacheConfigurator
 import com.gridnine.jasmine.server.core.storage.cache.SimpleMapCacheStorage
-import com.gridnine.jasmine.server.core.storage.impl.StandardStorageImp
+import com.gridnine.jasmine.server.core.storage.impl.StandardStorageImpl
 import com.gridnine.jasmine.server.core.storage.impl.jdbc.JdbcAdapter
 import com.gridnine.jasmine.server.core.storage.impl.jdbc.JdbcDialect
 import com.gridnine.jasmine.server.core.test.CoreTestBase
@@ -37,7 +37,7 @@ abstract class StorageTestBase:CoreTestBase(){
 
 
     protected fun configureStorageRegisty() {
-        StorageRegistry.register(TestDocumentIndexHandler())
+        StorageRegistry.get().register(TestDocumentIndexHandler())
         registerCache()
     }
 
@@ -45,10 +45,11 @@ abstract class StorageTestBase:CoreTestBase(){
         val config = CacheConfiguration()
         Environment.publish(config)
         ModelCacheConfigurator.configure(config)
-        StorageRegistry.register(CacheAdvice(1.0, SimpleMapCacheStorage()) )
+        StorageRegistry.get().register(CacheAdvice(1.0, SimpleMapCacheStorage()) )
     }
     protected fun publishStorage() {
-        Environment.publish(Storage::class, StandardStorageImp())
+        Environment.publish(StorageRegistry())
+        Environment.publish(Storage::class, StandardStorageImpl())
     }
 
     protected fun publishDatabase(){

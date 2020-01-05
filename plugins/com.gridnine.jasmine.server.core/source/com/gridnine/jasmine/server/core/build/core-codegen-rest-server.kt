@@ -17,7 +17,7 @@ object RestServerGenerator {
 
         val result = GenClassData(descr.id, if(descr.extends != null) descr.extends else BaseRestEntity::class.qualifiedName, descr.abstract, false, true)
         descr.properties.values.forEach { prop ->
-            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.className)))
+            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.className),lateinit = prop.lateinit, nonNullable = false))
         }
         descr.collections.values.forEach { coll ->
             result.collections.add(GenCollectionDescription(coll.id, getPropertyType(coll.elementType), getClassName(coll.elementClassName)))

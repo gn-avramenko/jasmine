@@ -103,6 +103,7 @@
 					</element>
 				</sequence>
 				<attribute name="type" type="tns:valueType" use="required" />
+				<attribute name="lateinit" type="boolean"/>
 				<attribute name="className" type="string" />
 			</extension>
 		</complexContent>

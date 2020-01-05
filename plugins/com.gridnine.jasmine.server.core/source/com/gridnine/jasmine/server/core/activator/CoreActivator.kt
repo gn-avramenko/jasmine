@@ -39,6 +39,7 @@ class CoreActivator:IPluginActivator{
         val uiRegistry = UiMetaRegistry()
         registerUiMetadata(uiRegistry)
         Environment.publish(uiRegistry)
+        Environment.publish(StorageRegistry())
         publishCache()
         Environment.publish(WebServerConfig())
     }
@@ -47,7 +48,7 @@ class CoreActivator:IPluginActivator{
         val config = CacheConfiguration()
         Environment.publish(CacheConfiguration())
         ModelCacheConfigurator.configure(config)
-        StorageRegistry.register(CacheAdvice(1.0, SimpleMapCacheStorage()))
+        StorageRegistry.get().register(CacheAdvice(1.0, SimpleMapCacheStorage()))
     }
 
     private fun registerRestMetadata(restRegistry: RestMetaRegistry) {

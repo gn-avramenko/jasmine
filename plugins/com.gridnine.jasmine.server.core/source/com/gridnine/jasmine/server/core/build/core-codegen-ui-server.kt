@@ -39,6 +39,7 @@ object UiServerGenerator {
             VMPropertyType.BIG_DECIMAL -> GenPropertyType.BIG_DECIMAL
             VMPropertyType.BOOLEAN -> GenPropertyType.BOOLEAN
             VMPropertyType.ENTITY -> GenPropertyType.ENTITY
+            VMPropertyType.SELECT -> GenPropertyType.ENTITY
             VMPropertyType.ENTITY_REFERENCE -> GenPropertyType.ENTITY_REFERENCE
             VMPropertyType.ENUM -> GenPropertyType.ENUM
             VMPropertyType.INT -> GenPropertyType.INT
@@ -53,6 +54,7 @@ object UiServerGenerator {
             VSPropertyType.ENUM_SELECT -> "${EnumSelectConfiguration::class.java.name}<${elementClassName}>"
             VSPropertyType.ENTITY_AUTOCOMPLETE -> "${EntityAutocompleteConfiguration::class.java.name}<${elementClassName}>"
             VSPropertyType.ENTITY -> elementClassName
+            VSPropertyType.SELECT -> SelectItem::javaClass.name
             VSPropertyType.COLUMN_ENTITY -> "${EntityColumnConfiguration::class.java.name}<${elementClassName}>"
             VSPropertyType.COLUMN_ENUM_SELECT -> "${EnumColumnConfiguration::class.java.name}<${elementClassName}>"
             VSPropertyType.COLUMN_TEXT -> TextColumnConfiguration::class.java.name

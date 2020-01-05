@@ -20,6 +20,7 @@ enum class VMPropertyType {
 
     STRING,
     ENUM,
+    SELECT,
     LONG,
     INT,
     BIG_DECIMAL,
@@ -55,6 +56,7 @@ class VMEntityDescription(id: String) : BaseIdentityDescription(id) {
 
 enum class VSPropertyType {
     ENUM_SELECT,
+    SELECT,
     ENTITY_AUTOCOMPLETE,
     ENTITY,
     COLUMN_TEXT,
@@ -144,6 +146,8 @@ class IntegerBoxDescription(owner: String, id: String, val notNullable:Boolean) 
 class FloatBoxDescription(owner: String, id: String, val notNullable:Boolean)  : BaseWidgetDescription(owner, id)
 
 class EnumSelectDescription(owner: String, id: String, val enumId:String) : BaseWidgetDescription(owner, id)
+
+class SelectDescription(owner: String, id: String) : BaseWidgetDescription(owner, id)
 
 class EntityAutocompleteDescription(owner: String, id: String, val entityClassName:String) : BaseWidgetDescription(owner, id)
 

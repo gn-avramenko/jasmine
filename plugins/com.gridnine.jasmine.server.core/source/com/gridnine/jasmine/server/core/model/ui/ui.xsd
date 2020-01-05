@@ -110,6 +110,7 @@
                 <element name="text-box" type="tns:textBox"/>
                 <element name="password-box" type="tns:passwordBox"/>
                 <element name="enum-select" type="tns:enumSelect"/>
+                <element name="select" type="tns:select"/>
                 <element name="entity-autocomplete" type="tns:entityAutocomplete"/>
                 <element name="text-area" type="tns:textArea"/>
                 <element name="integer-box" type="tns:integerBox"/>
@@ -142,6 +143,12 @@
         <complexContent>
             <extension base="tns:baseWidget">
                 <attribute name="enum-id" type="string" use="required"/>
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType name="select">
+        <complexContent>
+            <extension base="tns:baseWidget">
             </extension>
         </complexContent>
     </complexType>

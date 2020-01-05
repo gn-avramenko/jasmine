@@ -10,12 +10,15 @@ import com.gridnine.jasmine.server.standard.model.rest.LayoutTypeDTJS
 import com.gridnine.jasmine.server.standard.model.rest.TableColumnTypeDTJS
 import com.gridnine.jasmine.server.standard.model.rest.ViewTypeDTJS
 import com.gridnine.jasmine.server.standard.model.rest.WidgetTypeDTJS
+import com.gridnine.jasmine.web.core.RestReflectionUtilsJS
+import com.gridnine.jasmine.web.core.UiReflectionUtilsJS
 import com.gridnine.jasmine.web.core.model.common.FakeEnumJS
 import com.gridnine.jasmine.web.core.model.domain.*
 import com.gridnine.jasmine.web.core.model.rest.*
 import com.gridnine.jasmine.web.core.model.ui.*
 import com.gridnine.jasmine.web.core.remote.RpcManager
 import com.gridnine.jasmine.web.core.remote.StandardRpcManager
+import com.gridnine.jasmine.web.core.ui.MainFrameConfiguration
 import com.gridnine.jasmine.web.core.utils.ReflectionFactoryJS
 import kotlin.js.Promise
 
@@ -25,7 +28,8 @@ class CoreActivatorJS:ActivatorJS{
     override fun configure(config:Map<String,Any?>) {
         val reflectionFactory = ReflectionFactoryJS()
         EnvironmentJS.publish(reflectionFactory)
-
+        RestReflectionUtilsJS.registerRestWebClasses()
+        UiReflectionUtilsJS.registerWebUiClasses()
         ReflectionFactoryJS.get().registerClass(EntityReferenceJS.qualifiedClassName){EntityReferenceJS()}
         ReflectionFactoryJS.get().registerQualifiedName(EntityReferenceJS::class, EntityReferenceJS.qualifiedClassName)
         ReflectionFactoryJS.get().registerClass(EnumSelectConfigurationJS.qualifiedClassName) {EnumSelectConfigurationJS<FakeEnumJS>()}
@@ -46,6 +50,7 @@ class CoreActivatorJS:ActivatorJS{
         EnvironmentJS.publish(uiRegistry)
         val rpcManager = StandardRpcManager(config[StandardRpcManager.BASE_REST_URL_KEY] as String)
         EnvironmentJS.publish(RpcManager::class, rpcManager)
+        EnvironmentJS.publish(MainFrameConfiguration())
     }
     override fun activate(): Promise<Unit> {
         return Promise{resolve, _ ->
@@ -295,14 +300,14 @@ class CoreActivatorJS:ActivatorJS{
             domainRegistry.enums.put(enum.id, enum)
         }
         it.domainIndexes?.forEach{itJs ->
-            val entity = IndexDescriptionJS(itJs.id)
+            val entity = IndexDescriptionJS(itJs.id, itJs.displaName)
             entity.document = itJs.document
             fillBaseIndexDescription(entity, itJs)
             domainRegistry.indexes[entity.id] = entity
             Unit
         }
         it.domainAssets?.forEach{itJs ->
-            val entity = AssetDescriptionJS(itJs.id)
+            val entity = AssetDescriptionJS(itJs.id, itJs.displaName)
             fillBaseIndexDescription(entity, itJs)
             domainRegistry.assets[entity.id] = entity
             Unit

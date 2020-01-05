@@ -40,7 +40,7 @@ class DocumentData : BaseEntity() {
 }
 
 @Suppress("UNCHECKED_CAST")
-class StandardStorageImp: Storage {
+class StandardStorageImpl: Storage {
 
     companion object {
         internal val contexts = ThreadLocal<BaseOperationContext>()
@@ -51,7 +51,7 @@ class StandardStorageImp: Storage {
     }
 
     override fun <D : BaseDocument> loadDocument(cls: KClass<D>, uid: String): D? {
-        return loadDocument(cls, uid, StorageRegistry.getAdvices(), 0)
+        return loadDocument(cls, uid, StorageRegistry.get().getAdvices(), 0)
     }
 
     private fun<D : BaseDocument> loadDocument(cls: KClass<D>, uid: String, advices: List<StorageAdvice>, idx:Int): D?{
@@ -64,7 +64,7 @@ class StandardStorageImp: Storage {
     }
 
     override fun <D : BaseDocument, I : BaseIndex<D>, E > findUniqueDocumentReference(index: KClass<I>, property: E, propertyValue: Any?): EntityReference<D>? where E:PropertyNameSupport, E: EqualitySupport {
-        return findUniqueDocumentReference(index, property, propertyValue, StorageRegistry.getAdvices(), 0)
+        return findUniqueDocumentReference(index, property, propertyValue, StorageRegistry.get().getAdvices(), 0)
     }
 
     override  fun <D : BaseDocument, I : BaseIndex<D>, E >  findUniqueDocument(index: KClass<I>, property: E, propertyValue: Any?): D? where E: PropertyNameSupport, E: EqualitySupport {
@@ -97,7 +97,7 @@ class StandardStorageImp: Storage {
 
     override fun <D : BaseDocument> saveDocument(doc: D) {
         wrapWithContext{
-          saveDocument(doc, StorageRegistry.getAdvices(), 0)
+          saveDocument(doc, StorageRegistry.get().getAdvices(), 0)
         }
     }
 
@@ -125,12 +125,12 @@ class StandardStorageImp: Storage {
             val globalContext = contexts.get()
             val context = if(globalContext == null) SaveDocumentOperationContext(null, oldDoc)
             else SaveDocumentOperationContext(globalContext, oldDoc)
-            StorageRegistry.getInterceptors().forEach {
+            StorageRegistry.get().getInterceptors().forEach {
                 it.onSave(doc, context)
             }
             Database.get().saveDocument(doc, oldDoc != null)
 
-                StorageRegistry.getIndexHandlers(doc::class).forEach { indexHandler ->
+                StorageRegistry.get().getIndexHandlers(doc::class).forEach { indexHandler ->
                     if(oldDoc != null) {
                         Database.get().deleteIndexes(indexHandler.indexClass, doc.uid)
                     }
@@ -166,7 +166,7 @@ class StandardStorageImp: Storage {
 
     override fun <D : BaseDocument> deleteDocument(doc: D) {
         wrapWithContext{
-            deleteDocument(doc, StorageRegistry.getAdvices(), 0)
+            deleteDocument(doc, StorageRegistry.get().getAdvices(), 0)
         }
     }
 
@@ -176,11 +176,11 @@ class StandardStorageImp: Storage {
 
             val globalContext = contexts.get()
             val context = if(globalContext == null) DeleteDocumentOperationContext(null, oldDoc) else DeleteDocumentOperationContext(globalContext, oldDoc)
-            StorageRegistry.getInterceptors().forEach {
+            StorageRegistry.get().getInterceptors().forEach {
                 it.onDelete(doc, context)
             }
             Database.get().deleteDocument(doc)
-            StorageRegistry.getIndexHandlers(doc::class).forEach {
+            StorageRegistry.get().getIndexHandlers(doc::class).forEach {
                 Database.get().deleteIndexes(it.indexClass, doc.uid)
             }
             return
@@ -191,7 +191,7 @@ class StandardStorageImp: Storage {
     }
 
     override fun <D : BaseDocument, I : BaseIndex<D>> searchDocuments(cls: KClass<I>, query: SearchQuery): List<I> {
-        return searchDocumentsInternal(cls, query, StorageRegistry.getAdvices(), 0)
+        return searchDocumentsInternal(cls, query, StorageRegistry.get().getAdvices(), 0)
     }
 
     private fun<D : BaseDocument,I : BaseIndex<D>> searchDocumentsInternal(cls: KClass<I>, query: SearchQuery, interceptors: List<StorageAdvice>, idx:Int): List<I> {
@@ -204,7 +204,7 @@ class StandardStorageImp: Storage {
     }
 
     override fun <D : BaseDocument, I : BaseIndex<D>> searchDocuments(cls: KClass<I>, query: ProjectionQuery): List<Map<String, Any>> {
-        return searchDocumentsInternal(cls, query, StorageRegistry.getAdvices(), 0)
+        return searchDocumentsInternal(cls, query, StorageRegistry.get().getAdvices(), 0)
     }
 
     private fun<D : BaseDocument,I : BaseIndex<D>> searchDocumentsInternal(cls: KClass<I>, query: ProjectionQuery, interceptors: List<StorageAdvice>, idx:Int): List<Map<String, Any>> {
@@ -232,7 +232,7 @@ class StandardStorageImp: Storage {
     }
 
     override fun <A : BaseAsset> loadAsset(cls: KClass<A>, uid: String): A? {
-        return loadAsset(cls, uid, StorageRegistry.getAdvices(), 0)
+        return loadAsset(cls, uid, StorageRegistry.get().getAdvices(), 0)
     }
 
     private fun<D : BaseAsset> loadAsset(cls: KClass<D>, uid: String, advices: List<StorageAdvice>, idx:Int): D?{
@@ -245,7 +245,7 @@ class StandardStorageImp: Storage {
     }
 
     override fun <A : BaseAsset,E> findUniqueAsset(index: KClass<A>, property: E, propertyValue: Any): A?  where E:PropertyNameSupport, E : EqualitySupport{
-        return findUniqueAsset(index, property, propertyValue, StorageRegistry.getAdvices(), 0)
+        return findUniqueAsset(index, property, propertyValue, StorageRegistry.get().getAdvices(), 0)
     }
 
     private fun<D : BaseAsset,E> findUniqueAsset(index: KClass<D>, property: E, propertyValue: Any?, interceptors: List<StorageAdvice>, idx:Int): D? where E:PropertyNameSupport, E: EqualitySupport {
@@ -273,7 +273,7 @@ class StandardStorageImp: Storage {
     }
     override fun <A : BaseAsset> saveAsset(doc: A) {
         wrapWithContext{
-            saveAsset(doc, StorageRegistry.getAdvices(), 0)
+            saveAsset(doc, StorageRegistry.get().getAdvices(), 0)
         }
     }
 
@@ -283,7 +283,7 @@ class StandardStorageImp: Storage {
 
             val globalContext = contexts.get()
             val context = if(globalContext == null) SaveAssetOperationContext(null, oldDoc) else SaveAssetOperationContext(globalContext, oldDoc)
-            StorageRegistry.getInterceptors().forEach {
+            StorageRegistry.get().getInterceptors().forEach {
                 it.onSave(doc, context)
             }
             val sb = StringBuilder()
@@ -311,7 +311,7 @@ class StandardStorageImp: Storage {
 
     override fun <A : BaseAsset> deleteAsset(doc: A) {
         wrapWithContext {
-            deleteAsset(doc, StorageRegistry.getAdvices(), 0)
+            deleteAsset(doc, StorageRegistry.get().getAdvices(), 0)
         }
     }
 
@@ -320,7 +320,7 @@ class StandardStorageImp: Storage {
             val oldDoc:D? = Database.get().loadAsset(doc::class, doc.uid)
             val globalContext = contexts.get()
             val context = if(globalContext == null) DeleteAssetOperationContext(null, oldDoc) else DeleteAssetOperationContext(globalContext, oldDoc)
-            StorageRegistry.getInterceptors().forEach {
+            StorageRegistry.get().getInterceptors().forEach {
                 it.onDelete(doc, context)
             }
             Database.get().deleteAsset(doc)
@@ -332,7 +332,7 @@ class StandardStorageImp: Storage {
     }
 
     override fun <A : BaseAsset> searchAssets(cls: KClass<A>, query: SearchQuery): List<A> {
-        return searchAssets(cls, query, StorageRegistry.getAdvices(), 0)
+        return searchAssets(cls, query, StorageRegistry.get().getAdvices(), 0)
     }
 
     private fun<D : BaseAsset> searchAssets(cls: KClass<D>, query: SearchQuery, interceptors: List<StorageAdvice>, idx:Int): List<D> {
@@ -345,7 +345,7 @@ class StandardStorageImp: Storage {
     }
 
     override fun <A : BaseAsset> searchAssets(cls: KClass<A>, query: ProjectionQuery): List<Map<String, Any>> {
-        return searchAssets(cls, query, StorageRegistry.getAdvices(), 0)
+        return searchAssets(cls, query, StorageRegistry.get().getAdvices(), 0)
     }
 
     private fun<D : BaseAsset> searchAssets(cls: KClass<D>, query: ProjectionQuery, interceptors: List<StorageAdvice>, idx:Int): List<Map<String, Any>> {

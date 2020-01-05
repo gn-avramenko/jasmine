@@ -58,6 +58,11 @@ object ValidationMessagesFactory {
     }
 }
 
+class SelectItem(val id:String?, val caption:String?)
+
+class SelectConfiguration{
+    val possibleValues = arrayListOf<SelectItem>()
+}
 
 class EnumSelectConfiguration<E:Enum<E>> {
     var nullAllowed:Boolean? = true

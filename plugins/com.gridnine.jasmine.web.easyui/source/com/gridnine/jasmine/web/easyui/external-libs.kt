@@ -2,18 +2,23 @@
  * Gridnine AB http://www.gridnine.com
  * Project: Jasmine
  *****************************************************************/
-@file:Suppress("unused", "UNCHECKED_CAST")
+@file:Suppress("unused", "UNCHECKED_CAST", "DEPRECATION")
 
 package com.gridnine.jasmine.web.easyui
 
 
 external interface JQuery {
     fun remove()
+    fun empty()
     fun html(htmlString: String): JQuery
     fun layout():Any?
+    fun layout(options:Any):Any?
     fun tabs(options:Any)
     fun tabs(method:String):dynamic
     fun tabs(method:String, arg:Any?):dynamic
+    fun jtabs(options:Any)
+    fun jtabs(method:String):dynamic
+    fun jtabs(method:String, arg:Any?):dynamic
     fun accordion():Any?
     fun accordion(method:String):Any?
     fun accordion(method:String, arg:Any?):Any?
@@ -21,8 +26,16 @@ external interface JQuery {
     fun searchbox(method:String):Any
     fun datagrid(method: String): Any?
     fun datagrid(options:Any)
+    fun datalist(options:Any)
+    fun tree(options:Any)
+    fun height(value:Int)
+    fun height():Int
+    fun tree(method:String, args:Any):dynamic
     fun linkbutton(options:Any)
     fun dialog(options:Any)
+    fun dialog(method:String)
+    fun menu(options:Any)
+    fun menu(method:String, arg:Any)
     fun combobox(options:Any)
     fun combobox(method:String):Any?
     fun combobox(method: String , arg:Any?)
@@ -52,7 +65,6 @@ external interface JQueryStatic {
 external var jQuery: JQueryStatic = definedExternally
 external fun createDatagrid(id:String, columns:dynamic, loader:dynamic, onDblClickRow:dynamic):Unit = definedExternally
 external fun createTable(id:String, columns:dynamic, loader:dynamic, onClickRow: dynamic):Unit = definedExternally
-external fun createDatalist(id:String,  onClickRow:dynamic):Unit = definedExternally
 external fun createSearchBox(id:String, prompt:String, searcher:dynamic): JQuery = definedExternally
 external fun confirm(question:String, handler:() ->Unit):Unit = definedExternally
 external fun showMessage(title:String?, message:String ,timeout: Int)

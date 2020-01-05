@@ -190,7 +190,7 @@ abstract class BaseIndex<D : BaseDocument> : BaseEntity() {
             return
         }
         if (BaseIndex.navigationKey == propertyName) {
-            navigationKey = value as String
+            navigationKey = value as String?
             return
         }
         super.setValue(propertyName, value)

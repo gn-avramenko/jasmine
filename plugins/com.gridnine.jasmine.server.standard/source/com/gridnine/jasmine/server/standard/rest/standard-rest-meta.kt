@@ -32,7 +32,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
             val entityDescr = RestEntityDescriptionDT()
             entityDescr.id = it.id+"JS"
             entityDescr.abstract = it.abstract
-            entityDescr.extends = it.extends
+            entityDescr.extends = it.extends?.let { ext -> ext+"JS"}
 
             it.properties.values.forEach { propertyDescrition ->
                 val property = RestPropertyDescriptionDT()
@@ -71,6 +71,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
         }
         DomainMetaRegistry.get().indexes.values.forEach {
             val indexDescr = IndexDescriptionDT()
+            indexDescr.displaName = it.getDisplayName()
             indexDescr.id = it.id+"JS"
             indexDescr.document = it.document
             it.properties.values.forEach { propertyDescription ->
@@ -93,6 +94,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
         }
         DomainMetaRegistry.get().assets.values.forEach {
             val assetDescription = AssetDescriptionDT()
+            assetDescription.displaName = it.getDisplayName()
             assetDescription.id = it.id+"JS"
             it.properties.values.forEach { propertyDescription ->
                 val property = IndexPropertyDescriptionDT()
