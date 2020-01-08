@@ -155,6 +155,7 @@ abstract class BaseTableColumnDescriptionJS(id:String, val displayName: String):
 }
 
 class TextTableColumnDescriptionJS(id:String,displayName: String) :BaseTableColumnDescriptionJS(id,displayName)
+class SelectTableColumnDescriptionJS(id:String,displayName: String) :BaseTableColumnDescriptionJS(id,displayName)
 class IntegerTableColumnDescriptionJS( id:String, displayName: String,val notNullable: Boolean) :BaseTableColumnDescriptionJS(id, displayName)
 class FloatTableColumnDescriptionJS(id:String, displayName: String,val notNullable: Boolean) :BaseTableColumnDescriptionJS(id,displayName)
 class EnumTableColumnDescriptionJS(id:String, val enumId:String,displayName: String) :BaseTableColumnDescriptionJS(id,displayName)

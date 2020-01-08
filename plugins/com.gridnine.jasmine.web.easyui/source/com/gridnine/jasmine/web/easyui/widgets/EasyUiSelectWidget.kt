@@ -13,36 +13,33 @@ import com.gridnine.jasmine.web.easyui.jQuery
 @Suppress("UnsafeCastFromDynamic")
 class EasyUiSelectWidget(uid:String, description:SelectDescriptionJS):SelectWidget(){
     val div: JQuery = jQuery("#${description.id}${uid}")
-    private var initialized:Boolean = false
     val selectItems = arrayListOf<SelectItemJS?>()
     var spanElm:dynamic = null
     init {
 
         configure = {settings:SelectConfigurationJS ->
-            if(!initialized){
                 selectItems.clear()
                 selectItems.addAll(settings.possibleValues)
                 selectItems.sortBy { it?.caption }
                 if(settings.nullAllowed){
                     selectItems.add(0,null)
                 }
-                initialized = true
                 val options = object {
                     val valueField = "id"
                     val textField = "caption"
                     val editable = false
                     val limitToList = true
                     val data = selectItems.toTypedArray()
-                    val onChange = { _: String?, _: String? ->
+                    val onChange = { newValue: String?, oldValue: String? ->
                         if(spanElm != null) {
                             spanElm.css("border-color", "")
                             spanElm.removeAttr("title")
                         }
+                        valueChangeListener?.let { it(findValue(newValue), findValue(oldValue)) }
                     }
                 }
                 div.combobox(options)
                 spanElm = div.combobox("textbox").asDynamic().parent()
-            }
         }
         setData = {
             if(it == null){
@@ -67,5 +64,9 @@ class EasyUiSelectWidget(uid:String, description:SelectDescriptionJS):SelectWidg
             val text =  div.combobox("getText") as String?
             value?.let{SelectItemJS(value, text)}
         }
+    }
+
+    private fun findValue(newValue: String?): SelectItemJS? {
+        return newValue?.let{selectItems.find { item -> item?.id == newValue }}
     }
 }

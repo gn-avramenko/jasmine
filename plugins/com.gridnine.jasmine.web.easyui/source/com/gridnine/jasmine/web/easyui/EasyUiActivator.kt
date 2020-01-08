@@ -9,12 +9,17 @@ package com.gridnine.jasmine.web.easyui
 import com.gridnine.jasmine.web.core.application.ActivatorJS
 import com.gridnine.jasmine.web.core.application.EnvironmentJS
 import com.gridnine.jasmine.web.core.ui.*
+import com.gridnine.jasmine.web.core.utils.ReflectionFactoryJS
 import com.gridnine.jasmine.web.easyui.mainframe.EasyUiMainFrameImpl
 import com.gridnine.jasmine.web.easyui.mainframe.EasyUiWorkspaceEditor
+import com.gridnine.jasmine.web.easyui.mainframe.EasyUiWorkspaceListEditor
 
 class EasyUiActivator : ActivatorJS{
 
     override fun configure(config: Map<String, Any?>) {
+        ReflectionFactoryJS.get().registerClass("com.gridnine.jasmine.web.easyui.mainframe.EasyUiWorkspaceListEditor.SortOrderWrapperVMJS") {EasyUiWorkspaceListEditor.SortOrderWrapperVMJS()}
+        ReflectionFactoryJS.get().registerClass("com.gridnine.jasmine.web.easyui.mainframe.EasyUiWorkspaceListEditor.SortOrderWrapperVSJS") {EasyUiWorkspaceListEditor.SortOrderWrapperVSJS()}
+        ReflectionFactoryJS.get().registerClass("com.gridnine.jasmine.web.easyui.mainframe.EasyUiWorkspaceListEditor.SortOrderWrapperVVJS") {EasyUiWorkspaceListEditor.SortOrderWrapperVVJS()}
         EnvironmentJS.publish(ErrorHandler::class, object:ErrorHandler{
             override fun showError(msg: String, stacktrace: String) {
                 showError(null, msg, stacktrace)

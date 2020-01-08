@@ -2,7 +2,7 @@
  * Gridnine AB http://www.gridnine.com
  * Project: Jasmine
  *****************************************************************/
-@file:Suppress("unused")
+@file:Suppress("unused", "UNCHECKED_CAST")
 package com.gridnine.jasmine.web.core.model.ui
 
 import com.gridnine.jasmine.web.core.model.common.BaseEntityJS
@@ -53,17 +53,19 @@ class Editor<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS, V:BaseView
     lateinit var objectId:String
 }
 
+
 abstract class ValueWidget<T:Any, VS:Any>{
     lateinit var setData: (value:T?)->Unit
     lateinit var configure: (settings:VS)->Unit
     lateinit var getData: ()->T?
     lateinit var showValidation:(String?) ->Unit
+    var valueChangeListener: ((newValue:T?, oldValue:T?) -> Unit)? = null
 }
 
 abstract class CollectionWidget<T:BaseVMEntityJS, VS:Any, VV:BaseVVEntityJS>{
     lateinit var readData: (value:List<T>)->Unit
     lateinit var configure: (settings:VS)->Unit
-    lateinit var writeData: (value:List<T>)->Unit
+    lateinit var writeData: (value:MutableList<T>)->Unit
     lateinit var showValidation:(value:List<VV>) ->Unit
 }
 
@@ -166,6 +168,17 @@ class EnumColumnConfigurationJS<E:Enum<E>>:BaseColumnConfigurationJS(){
         const val qualifiedClassName = "com.gridnine.jasmine.web.core.model.ui.EnumColumnConfigurationJS"
     }
 }
+
+class SelectColumnConfigurationJS:BaseColumnConfigurationJS(){
+    var nullAllowed:Boolean = true
+    val possibleValues = arrayListOf<SelectItemJS>()
+    companion object{
+        const val possibleValues = "possibleValues"
+        const val nullAllowed ="nullAllowed"
+        const val qualifiedClassName = "com.gridnine.jasmine.web.core.model.ui.SelectColumnConfigurationJS"
+    }
+}
+
 class EntityColumnConfigurationJS:BaseColumnConfigurationJS(){
     var nullAllowed:Boolean? = true
     var limit:Int = 10
@@ -180,7 +193,10 @@ class EntityColumnConfigurationJS:BaseColumnConfigurationJS(){
 }
 
 class TableConfigurationJS<VS:BaseVSEntityJS>{
+
     lateinit var columnSettings:VS
+
+    var nonEditable:Boolean = false
 
     companion object{
         const val columnSettings ="columnSettings"
@@ -201,3 +217,85 @@ interface ListToolButtonHandler{
     fun onClick(list:ObjectList)
 
 }
+
+
+class SimplePropertyWrapperVMJS<T:Any>():BaseVMEntityJS(){
+
+    constructor(uid:String, property:T?):this(){
+        this.uid = uid
+        this.property = property
+    }
+    var property: T? = null
+
+    override fun getValue(propertyName: String): Any? {
+        if (SimplePropertyWrapperVMJS.property == propertyName) {
+            return property
+        }
+        return super.getValue(propertyName)
+    }
+
+    override fun setValue(propertyName: String, value: Any?) {
+        if (SimplePropertyWrapperVMJS.property == propertyName) {
+            property = value as T?
+            return
+        }
+        super.setValue(propertyName, value)
+    }
+
+    companion object{
+        const val property = "property"
+        const val qualifiedClassName = "com.gridnine.jasmine.web.core.model.ui.SimplePropertyWrapperVMJS"
+    }
+}
+
+class SimplePropertyWrapperVSJS<T:Any>():BaseVSEntityJS(){
+
+    constructor(property:T?):this(){
+        this.property = property
+    }
+    var property: T? = null
+
+    override fun getValue(propertyName: String): Any? {
+        if (SimplePropertyWrapperVSJS.property == propertyName) {
+            return property
+        }
+        return super.getValue(propertyName)
+    }
+
+    override fun setValue(propertyName: String, value: Any?) {
+        if (SimplePropertyWrapperVSJS.property == propertyName) {
+            property = value as T?
+            return
+        }
+        super.setValue(propertyName, value)
+    }
+
+    companion object{
+        const val property = "property"
+    }
+}
+
+class SimplePropertyWrapperVVJS:BaseVVEntityJS(){
+    var property: String? = null
+
+    override fun getValue(propertyName: String): Any? {
+        if (SimplePropertyWrapperVVJS.property == propertyName) {
+            return property
+        }
+        return super.getValue(propertyName)
+    }
+
+    override fun setValue(propertyName: String, value: Any?) {
+        if (SimplePropertyWrapperVVJS.property == propertyName) {
+            property = value as String?
+            return
+        }
+        super.setValue(propertyName, value)
+    }
+
+    companion object{
+        const val property = "property"
+    }
+}
+
+

@@ -10,9 +10,7 @@ package com.gridnine.jasmine.server.sandbox.rest
 
 import com.gridnine.jasmine.server.sandbox.model.domain.SandboxComplexDocumentIndex
 import com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccountIndex
-import com.gridnine.jasmine.server.standard.model.rest.ListWorkspaceItemDT
-import com.gridnine.jasmine.server.standard.model.rest.WorkspaceDT
-import com.gridnine.jasmine.server.standard.model.rest.WorkspaceGroupDT
+import com.gridnine.jasmine.server.standard.model.rest.*
 import com.gridnine.jasmine.server.standard.rest.WorkspaceProvider
 
 class SandboxWorkspaceProvider : WorkspaceProvider{
@@ -24,8 +22,22 @@ class SandboxWorkspaceProvider : WorkspaceProvider{
             val item = ListWorkspaceItemDT()
             item.columns.add(SandboxUserAccountIndex.login.name)
             item.columns.add(SandboxUserAccountIndex.name.name)
+            item.filters.add(SandboxUserAccountIndex.login.name)
+            val order =SortOrderDT()
+            order.orderType = SortOrderTypeDT.ASC
+            order.field = SandboxUserAccountIndex.login.name
+            item.sortOrders
             item.listId="com.gridnine.jasmine.server.sandbox.model.ui.SandboxUserAccountList"
             item.displayName = "Профили"
+            run{
+                val criterion = SimpleWorkspaceCriterionDT()
+                criterion.property = SandboxUserAccountIndex.login.name
+                criterion.condition = WorkspaceSimpleCriterionConditionDT.EQUALS
+                val value = WorkspaceSimpleCriterionStringValueDT()
+                value.value = "admin"
+                criterion.value = value
+                item.criterions.add(criterion)
+            }
             group.items.add(item)
             result.groups.add(group)
         }

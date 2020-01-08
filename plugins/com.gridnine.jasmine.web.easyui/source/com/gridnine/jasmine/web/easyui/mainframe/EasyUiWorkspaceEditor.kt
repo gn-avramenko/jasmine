@@ -88,10 +88,17 @@ class EasyUiWorkspaceEditor : EasyUiTabHandler<WorkspaceDTJS>{
         treeElm.tree(object{
             val dnd = true
             val fit = true
-            val onSelect = {node:dynamic ->
+            val onSelect = lambda@ {node:dynamic ->
                 if (lastEditor != null) {
+                    if(lastNode.id == node.id){
+                        return@lambda
+                    }
                     val existingNode = treeElm.tree("find", lastNode.id)
                     if(existingNode != null) {
+                        if(!lastEditor!!.validate()){
+                            treeElm.tree("select", lastNode.target)
+                            return@lambda
+                        }
                         lastNode.userData = lastEditor!!.getData()
                         lastNode.text = lastNode.userData.displayName
                         treeElm.tree("update", object {

@@ -8,6 +8,7 @@ package com.gridnine.jasmine.web.easyui
 
 
 external interface JQuery {
+    fun data(prop:String):dynamic
     fun remove()
     fun empty()
     fun html(htmlString: String): JQuery
@@ -24,7 +25,7 @@ external interface JQuery {
     fun accordion(method:String, arg:Any?):Any?
     fun on(event:String, callback:(event:dynamic) -> Unit)
     fun searchbox(method:String):Any
-    fun datagrid(method: String): Any?
+    fun datagrid(method: String, vararg args:Any?): Any?
     fun datagrid(options:Any)
     fun datalist(options:Any)
     fun tree(options:Any)
@@ -51,6 +52,7 @@ external interface JQuery {
     fun addClass(cls:String)
     fun removeClass(cls:String)
     fun click(handler: () -> Unit)
+    fun focus()
     val length:Int
     fun append(content:String)
 }

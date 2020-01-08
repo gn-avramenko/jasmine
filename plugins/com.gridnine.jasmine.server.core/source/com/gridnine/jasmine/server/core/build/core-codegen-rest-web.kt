@@ -36,6 +36,12 @@ object RestWebGenerator {
         if(propertyType == RestPropertyType.BIG_DECIMAL ){
             return "Double"
         }
+        if(propertyType == RestPropertyType.LOCAL_DATE ){
+            return "kotlin.js.Date"
+        }
+        if(propertyType == RestPropertyType.LOCAL_DATE_TIME ){
+            return "kotlin.js.Date"
+        }
         if(className != null){
             if(BaseIndex::class.qualifiedName == className){
                 return "com.gridnine.jasmine.web.core.model.domain.BaseIndexJS"
@@ -72,8 +78,8 @@ object RestWebGenerator {
             RestPropertyType.ENTITY_REFERENCE ->GenPropertyType.ENTITY_REFERENCE
             RestPropertyType.ENUM ->GenPropertyType.ENUM
             RestPropertyType.INT ->GenPropertyType.INT
-            RestPropertyType.LOCAL_DATE ->GenPropertyType.LOCAL_DATE
-            RestPropertyType.LOCAL_DATE_TIME ->GenPropertyType.LOCAL_DATE_TIME
+            RestPropertyType.LOCAL_DATE ->GenPropertyType.ENTITY
+            RestPropertyType.LOCAL_DATE_TIME ->GenPropertyType.ENTITY
             RestPropertyType.LONG ->GenPropertyType.LONG
         }
     }

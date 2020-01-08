@@ -328,10 +328,57 @@
     <entity id="com.gridnine.jasmine.server.standard.model.rest.BaseWorkspaceItemDT" abstract="true">
         <property id="displayName" type="STRING"/>
     </entity>
+    <enum id="com.gridnine.jasmine.server.standard.model.rest.SortOrderTypeDT">
+        <enum-item id="ASC"/>
+        <enum-item id="DESC"/>
+    </enum>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.SortOrderDT">
+        <property id="orderType" type="ENUM" className="com.gridnine.jasmine.server.standard.model.rest.SortOrderTypeDT"/>
+        <property id="field" type="STRING"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.BaseWorkspaceSimpleCriterionValueDT" abstract="true"/>
+    <enum id="com.gridnine.jasmine.server.standard.model.rest.WorkspaceSimpleCriterionConditionDT">
+        <enum-item id="EQUALS"/>
+        <enum-item id="NOT_EQUALS"/>
+        <enum-item id="GREATER_THAN"/>
+        <enum-item id="GREATER_THAN_OR_EQUALS"/>
+        <enum-item id="LESS_THAN_OR_EQUALS"/>
+        <enum-item id="LESS_THAN"/>
+        <enum-item id="SET"/>
+        <enum-item id="NOT_SET"/>
+        <enum-item id="CONTAINS"/>
+        <enum-item id="NOT_CONTAINS"/>
+        <enum-item id="WITHIN_PERIOD"/>
+    </enum>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.WorkspaceSimpleCriterionStringValueDT" extends="com.gridnine.jasmine.server.standard.model.rest.BaseWorkspaceSimpleCriterionValueDT">
+        <property id="value" type="STRING"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.WorkspaceSimpleCriterionEntityValueDT" extends="com.gridnine.jasmine.server.standard.model.rest.BaseWorkspaceSimpleCriterionValueDT">
+        <property id="value" type="ENTITY" className="com.gridnine.jasmine.server.core.model.common.BaseEntity"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.WorkspaceSimpleCriterionDateValueDT" extends="com.gridnine.jasmine.server.standard.model.rest.BaseWorkspaceSimpleCriterionValueDT">
+        <property id="value" type="LOCAL_DATE"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.WorkspaceSimpleCriterionDateIntervalValueDT" extends="com.gridnine.jasmine.server.standard.model.rest.BaseWorkspaceSimpleCriterionValueDT">
+        <property id="startDate" type="LOCAL_DATE"/>
+        <property id="endDate" type="LOCAL_DATE"/>
+    </entity>
+
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.BaseWorkspaceCriterionDT" abstract="true"/>
+
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.SimpleWorkspaceCriterionDT" extends="com.gridnine.jasmine.server.standard.model.rest.BaseWorkspaceCriterionDT">
+        <property id="property" type="STRING"/>
+        <property id="condition" type="ENUM" className="com.gridnine.jasmine.server.standard.model.rest.WorkspaceSimpleCriterionConditionDT"/>
+        <property id="value" type="ENTITY" className="com.gridnine.jasmine.server.standard.model.rest.BaseWorkspaceSimpleCriterionValueDT"/>
+    </entity>
+
+
     <entity id="com.gridnine.jasmine.server.standard.model.rest.ListWorkspaceItemDT" extends="com.gridnine.jasmine.server.standard.model.rest.BaseWorkspaceItemDT">
         <property id="listId" type="STRING"/>
-        <property id="encodedCriterions" type="STRING"/>
+        <collection id="criterions" element-type="ENTITY" elementClassName="com.gridnine.jasmine.server.standard.model.rest.BaseWorkspaceCriterionDT"/>
         <collection id="columns" element-type="STRING"/>
+        <collection id="filters" element-type="STRING"/>
+        <collection id="sortOrders" element-type="ENTITY" elementClassName="com.gridnine.jasmine.server.standard.model.rest.SortOrderDT"/>
     </entity>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.WorkspaceGroupDT">
         <property id="displayName" type="STRING"/>
@@ -437,5 +484,6 @@
     </entity>
 
 </rest>
+
 
 

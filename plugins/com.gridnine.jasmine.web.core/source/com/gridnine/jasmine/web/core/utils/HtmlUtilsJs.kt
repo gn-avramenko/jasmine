@@ -224,7 +224,11 @@ object HtmlUtilsJS {
     }
 
     class TR : TagWithText("tr") {
-
+        var style: String?
+            get() = attributes["style"]
+            set(value) {
+                if (value != null) attributes["style"] = value else attributes.remove("style")
+            }
         fun td(`class`: String? = null, id: String? = null, style: String? = null, hSpan:Int =1, init: TD.() -> Unit) {
             val result = initTag(TD(), init)
             result.`class` = `class`
@@ -288,8 +292,9 @@ object HtmlUtilsJS {
                 if (value != null) attributes["data-options"] = value else attributes.remove("data-options")
             }
 
-        fun tr(init: TR.() -> Unit) {
-            initTag(TR(), init)
+        fun tr(style:String?=null, init: TR.() -> Unit) {
+            val result = initTag(TR(), init)
+            result.style = style
         }
     }
 
@@ -348,6 +353,14 @@ object HtmlUtilsJS {
     }
 
     class HTML : TagWithText("html") {
+
+        fun table(`class`: String? = null, id: String? = null, style: String? = null, data_options: String? = null, init: TABLE.() -> Unit) {
+            val result = initTag(TABLE(), init)
+            result.`class` = `class`
+            result.id = id
+            result.style = style
+            result.dataOptions = data_options
+        }
 
         fun ul(`class`: String? = null, id: String? = null, lines: Boolean? = null, style: String? = null, init: UL.() -> Unit) {
             val result = initTag(UL(), init)

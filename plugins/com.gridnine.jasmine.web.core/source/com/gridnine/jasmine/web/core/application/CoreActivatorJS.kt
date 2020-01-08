@@ -42,6 +42,7 @@ class CoreActivatorJS:ActivatorJS{
         ReflectionFactoryJS.get().registerClass(EnumColumnConfigurationJS.qualifiedClassName)  {EnumColumnConfigurationJS<FakeEnumJS>()}
         ReflectionFactoryJS.get().registerClass(EntityColumnConfigurationJS.qualifiedClassName)  {EntityColumnConfigurationJS()}
         ReflectionFactoryJS.get().registerClass(TableConfigurationJS.qualifiedClassName) {TableConfigurationJS<BaseVSEntityJS>()}
+        ReflectionFactoryJS.get().registerClass(SimplePropertyWrapperVMJS.qualifiedClassName) {SimplePropertyWrapperVMJS<BaseVMEntityJS>()}
         val domainRegisty = DomainMetaRegistryJS()
         EnvironmentJS.publish(domainRegisty)
         val restRegistry = RestMetaRegistryJS()
