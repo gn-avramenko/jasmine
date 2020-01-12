@@ -284,7 +284,7 @@ class StorageRegistry {
     fun <D : BaseDocument> getIndexHandlers(
             cls: KClass<D>): List<IndexHandler<BaseDocument, BaseIndex<BaseDocument>>> {
         return indexHandlers[cls] as List<IndexHandler<BaseDocument, BaseIndex<BaseDocument>>>??:
-        throw IllegalStateException("no handlers registered for document ${cls.qualifiedName}")
+        emptyList()
     }
 
     companion object{

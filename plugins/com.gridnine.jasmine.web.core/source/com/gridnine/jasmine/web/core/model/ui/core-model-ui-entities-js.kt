@@ -62,6 +62,13 @@ abstract class ValueWidget<T:Any, VS:Any>{
     var valueChangeListener: ((newValue:T?, oldValue:T?) -> Unit)? = null
 }
 
+abstract class MultiValueWidget<T:Any, VS:Any>{
+    lateinit var readData: (value:List<T>)->Unit
+    lateinit var configure: (settings:VS)->Unit
+    lateinit var writeData: (MutableList<T>)->Unit
+    lateinit var showValidation:(String?) ->Unit
+}
+
 abstract class CollectionWidget<T:BaseVMEntityJS, VS:Any, VV:BaseVVEntityJS>{
     lateinit var readData: (value:List<T>)->Unit
     lateinit var configure: (settings:VS)->Unit
@@ -79,7 +86,7 @@ open class DateBoxWidget:ValueWidget<Date,Unit>()
 open class DateTimeBoxWidget:ValueWidget<Date,Unit>()
 open class EnumSelectWidget<E:Enum<E>>:ValueWidget<E,EnumSelectConfigurationJS<E>>()
 open class SelectWidget:ValueWidget<SelectItemJS,SelectConfigurationJS>()
-
+open class EnumMultiSelectWidget<E:Enum<E>>:MultiValueWidget<E,EnumSelectConfigurationJS<E>>()
 
 open class EntityAutocompletetWidget:ValueWidget<EntityReferenceJS, EntityAutocompleteConfigurationJS>()
 

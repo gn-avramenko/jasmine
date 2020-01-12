@@ -6,20 +6,22 @@
 
 package com.gridnine.jasmine.web.easyui.widgets
 
-import com.gridnine.jasmine.web.core.model.ui.TextBoxWidget
-import com.gridnine.jasmine.web.core.model.ui.TextboxDescriptionJS
+import com.gridnine.jasmine.web.core.model.ui.IntegerBoxDescriptionJS
+import com.gridnine.jasmine.web.core.model.ui.IntegerBoxWidget
 import com.gridnine.jasmine.web.easyui.JQuery
 import com.gridnine.jasmine.web.easyui.jQuery
 
-class EasyUiTextBoxWidget(uid:String, description:TextboxDescriptionJS):TextBoxWidget(){
+class EasyUiIntBoxWidget(uid:String, description:IntegerBoxDescriptionJS):IntegerBoxWidget(){
     val div: JQuery = jQuery("#${description.id}${uid}")
     private var initialized:Boolean = false
     init {
 
         configure = {_:Unit ->
             if(!initialized){
-                div.textbox(object{})
-                val tb = div.textbox("textbox").asDynamic()
+                div.numberbox(object{
+                    val precision = 0
+                })
+                val tb = div.numberbox("textbox").asDynamic()
                 tb.on("input") {
                     val spanElm = tb.parent()
                     spanElm.css("border-color", "")
@@ -29,10 +31,10 @@ class EasyUiTextBoxWidget(uid:String, description:TextboxDescriptionJS):TextBoxW
             }
         }
         setData = {
-            div.textbox("setValue", it)
+            div.numberbox("setValue", it)
         }
         showValidation = {
-            val tb =div.textbox("textbox").asDynamic()
+            val tb =div.numberbox("textbox").asDynamic()
             val spanElm = tb.parent()
             if (it != null) {
                 spanElm.css("border-color", "#d9534f")
@@ -44,8 +46,8 @@ class EasyUiTextBoxWidget(uid:String, description:TextboxDescriptionJS):TextBoxW
             Unit
         }
         getData ={
-            val value = div.textbox("getText") as String?
-            if (value.isNullOrBlank()) null else value
+            val value = div.numberbox("getText") as String?
+            if (value.isNullOrBlank()) null else value.toDouble().toInt()
         }
     }
 }

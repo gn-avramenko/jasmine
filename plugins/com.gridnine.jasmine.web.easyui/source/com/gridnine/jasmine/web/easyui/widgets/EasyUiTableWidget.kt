@@ -9,7 +9,7 @@ package com.gridnine.jasmine.web.easyui.widgets
 
 import com.gridnine.jasmine.web.core.model.common.BaseEntityJS
 import com.gridnine.jasmine.web.core.model.ui.*
-import com.gridnine.jasmine.web.core.ui.TextUtilsJS
+import com.gridnine.jasmine.web.core.utils.TextUtilsJS
 import com.gridnine.jasmine.web.core.utils.ReflectionFactoryJS
 import com.gridnine.jasmine.web.easyui.JQuery
 import com.gridnine.jasmine.web.easyui.jQuery

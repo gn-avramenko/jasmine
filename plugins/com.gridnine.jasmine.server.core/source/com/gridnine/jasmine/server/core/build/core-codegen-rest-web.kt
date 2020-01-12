@@ -75,7 +75,7 @@ object RestWebGenerator {
             RestPropertyType.BIG_DECIMAL ->GenPropertyType.ENTITY
             RestPropertyType.BOOLEAN ->GenPropertyType.BOOLEAN
             RestPropertyType.ENTITY ->GenPropertyType.ENTITY
-            RestPropertyType.ENTITY_REFERENCE ->GenPropertyType.ENTITY_REFERENCE
+            RestPropertyType.ENTITY_REFERENCE ->GenPropertyType.ENTITY
             RestPropertyType.ENUM ->GenPropertyType.ENUM
             RestPropertyType.INT ->GenPropertyType.INT
             RestPropertyType.LOCAL_DATE ->GenPropertyType.ENTITY

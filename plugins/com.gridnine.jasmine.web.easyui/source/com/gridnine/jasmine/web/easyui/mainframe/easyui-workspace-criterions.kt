@@ -7,63 +7,49 @@
 package com.gridnine.jasmine.web.easyui.mainframe
 
 import com.gridnine.jasmine.server.standard.model.rest.*
-import com.gridnine.jasmine.web.core.model.domain.BaseIndexDescriptionJS
-import com.gridnine.jasmine.web.core.model.domain.DatabaseCollectionTypeJS
-import com.gridnine.jasmine.web.core.model.domain.DatabasePropertyTypeJS
-import com.gridnine.jasmine.web.core.model.ui.*
-import com.gridnine.jasmine.web.core.ui.TextUtilsJS
+import com.gridnine.jasmine.web.core.utils.TextUtilsJS
 import com.gridnine.jasmine.web.core.utils.HtmlUtilsJS
+import com.gridnine.jasmine.web.easyui.JQuery
 import com.gridnine.jasmine.web.easyui.jQuery
-import com.gridnine.jasmine.web.easyui.widgets.EasyUiSelectWidget
-import com.gridnine.jasmine.web.easyui.widgets.EasyUiTextBoxWidget
 
 
-class EasyUiWorkspaceCriterionsEditor(private val divId: String, private val listId: String?) {
+@Suppress("UnsafeCastFromDynamic")
+class EasyUiWorkspaceCriterionsEditor(private val divId: String, listId: String?) {
 
-    private val handlers = arrayListOf<CriterionHandler<*>>()
+    private val uid = TextUtilsJS.createUUID()
+    private val criterionsContainerEditor = CriterionsContainerEditor(divId, listId, uid, 0)
 
     init {
         val content = HtmlUtilsJS.html {
             div(id = "${divId}Header", style = "width:100%") {
                 table(style = "width:100%;border-collapse: collapse") {
                     tr {
-                        td(style = "width:300px;border:1px solid  #D3D3D3;padding:5px") { "Поле"() }
-                        td(style = "width:200px;border:1px solid #D3D3D3;padding:5px") { "Условие"() }
-                        td(style = "border:1px solid #D3D3D3;padding:5px") { "Значение"() }
+                        td(style = "width:${CriterionsContainerEditor.propertyFieldWidth}px;border:1px solid  #D3D3D3;padding:${CriterionsContainerEditor.padding}px") { "Поле"() }
+                        td(style = "width:${CriterionsContainerEditor.conditionFieldWidth}px;border:1px solid #D3D3D3;padding:${CriterionsContainerEditor.padding}px") { "Условие"() }
+                        td(style = "border:1px solid #D3D3D3;padding:${CriterionsContainerEditor.padding}px") { "Значение"() }
                         td(style = "width:20px") {
-                            div(style = "display:inline;float:right;width:15px;height:20px", id = "criterionsAddToolButton", `class` = "jasmine-datagrid-expand") { }
+                            div(style = "display:inline;float:right;width:15px;height:20px", id = "${uid}criterionsAddToolButton", `class` = "jasmine-datagrid-expand") { }
                         }
                     }
                 }
             }
-            div(id = "${divId}Criterions", style = "width:100%") {
+            div(id = "${uid}${divId}Criterions", style = "width:100%") {
 
             }
-            div(id = "criterionsAddDialogMenu", style = "display:none") {
-                div (id="criterionsAddSimpleCriterionMenuItem"){ "простое условие"()  }
+            div(id = "${uid}criterionsAddDialogMenu", style = "display:none") {
+                div(id = "${uid}criterionsAddSimpleCriterionMenuItem") { "простое условие"() }
+                div(id = "${uid}criterionsAddOrCriterionMenuItem") { "логическое ИЛИ"() }
+                div(id = "${uid}criterionsAddAndCriterionMenuItem") { "логическое И"() }
+                div(id = "${uid}criterionsAddNotCriterionMenuItem") { "логическое НЕ"() }
             }
         }.toString()
         jQuery("#${divId}").html(content)
-        val menuDiv = jQuery("#criterionsAddDialogMenu")
-        menuDiv.menu(object{
-            val onClick = { item:dynamic ->
-                when(item.id){
-                    "criterionsAddSimpleCriterionMenuItem" ->{
-                        if(listId != null) {
-                            val handler = SimpleCriterionHandler(divId, listId)
-                            val crit = SimpleWorkspaceCriterionDTJS()
-                            handler.addCriterion(crit, 0)
-                            handlers.add(0, handler)
-                        }
-                    }
-                    else -> throw IllegalArgumentException("unknown item ${item.id}")
-                }
-            }
-        })
-        val addButtonDiv = jQuery("#criterionsAddToolButton")
+        criterionsContainerEditor.decorate()
+        val addButtonDiv = jQuery("#${uid}criterionsAddToolButton")
         addButtonDiv.click {
+            criterionsContainerEditor.idx = -1
             val pos = addButtonDiv.asDynamic().offset()
-            menuDiv.menu("show",object{
+            criterionsContainerEditor.menuDiv.menu("show", object {
                 val left = pos.left
                 val top = pos.top
             })
@@ -71,315 +57,195 @@ class EasyUiWorkspaceCriterionsEditor(private val divId: String, private val lis
     }
 
     fun clear() {
-        jQuery("#${divId}Criterions").empty()
+        criterionsContainerEditor.clear()
     }
 
-    fun setData(criterions: List<BaseWorkspaceCriterionDTJS>) {
+    fun readData(criterions: List<BaseWorkspaceCriterionDTJS>) {
+        criterionsContainerEditor.readData(criterions)
+    }
+
+    fun writeData(criterions: MutableList<BaseWorkspaceCriterionDTJS>) {
+        criterionsContainerEditor.writeData(criterions)
+    }
+
+}
+
+@Suppress("UnsafeCastFromDynamic")
+class CriterionsContainerEditor(private val divId: String, private val listId: String?, private val uid: String, private val indent: Int){
+    lateinit var menuDiv: JQuery
+    private val handlers = arrayListOf<CriterionHandler<*>>()
+
+    var idx = 0
+
+    fun decorate() {
+        menuDiv = jQuery("#${uid}criterionsAddDialogMenu")
+        menuDiv.menu(object {
+            val onClick = onClick@ { item: dynamic ->
+                //console.log("idx is $idx")
+                var localIndent = indent
+                if(idx != -1 && handlers.size > 0 ){
+                    val target = handlers[idx]
+                    if(target is CriterionsContainerHandler && target.getCriterionsCount() ==0){
+                        localIndent = indent+CriterionsContainerEditor.indent
+                    }
+                }
+
+                val handler: CriterionHandler<BaseWorkspaceCriterionDTJS> =
+                        when (item.id) {
+                            "${uid}criterionsAddSimpleCriterionMenuItem" -> {
+                                SimpleCriterionHandler(listId!!, localIndent ) as CriterionHandler<BaseWorkspaceCriterionDTJS>
+                            }
+                            "${uid}criterionsAddOrCriterionMenuItem" -> {
+                                EasyUiWorkspaceOrCriterionHandler(listId!!,localIndent) as CriterionHandler<BaseWorkspaceCriterionDTJS>
+                            }
+                            "${uid}criterionsAddAndCriterionMenuItem" -> {
+                                EasyUiWorkspaceAndCriterionHandler(listId!!,localIndent) as CriterionHandler<BaseWorkspaceCriterionDTJS>
+                            }
+                            "${uid}criterionsAddNotCriterionMenuItem" -> {
+                                EasyUiWorkspaceNotCriterionHandler(listId!!,localIndent) as CriterionHandler<BaseWorkspaceCriterionDTJS>
+                            }
+                            else -> throw IllegalArgumentException("unsupported menu item id ${item.id}")
+                        }
+                if(idx != -1 && handlers.size > 0){
+                    val target = handlers[idx]
+                    if(target is CriterionsContainerHandler && target.getCriterionsCount() ==0){
+                        target.addCriterion(handler)
+                        return@onClick
+                    }
+                }
+                addCriterion(handler, idx)
+            }
+        })
+
+
+    }
+
+    fun clear() {
+        val div = jQuery("#${uid}${divId}Criterions")
+        div.asDynamic().off("click")
+        div.empty()
+    }
+
+    fun readData(criterions: List<BaseWorkspaceCriterionDTJS>) {
         clear()
         if (listId == null) {
             return
         }
         criterions.forEach { crit ->
-            when (crit) {
-                is SimpleWorkspaceCriterionDTJS -> {
-                    val handler = SimpleCriterionHandler(divId, listId)
-                    handler.addCriterion(crit,null)
-                    handlers.add(handler)
-                }
-                else -> {
-                }
-            }
+            val handler: CriterionHandler<BaseWorkspaceCriterionDTJS> =
+                    when (crit) {
+                        is SimpleWorkspaceCriterionDTJS -> SimpleCriterionHandler(listId, indent) as CriterionHandler<BaseWorkspaceCriterionDTJS>
+                        is OrWorkspaceCriterionDTJS -> EasyUiWorkspaceOrCriterionHandler(listId,indent) as CriterionHandler<BaseWorkspaceCriterionDTJS>
+                        is AndWorkspaceCriterionDTJS -> EasyUiWorkspaceAndCriterionHandler(listId,indent) as CriterionHandler<BaseWorkspaceCriterionDTJS>
+                        is NotWorkspaceCriterionDTJS -> EasyUiWorkspaceNotCriterionHandler(listId,indent) as CriterionHandler<BaseWorkspaceCriterionDTJS>
+                        else -> throw IllegalArgumentException("unsupported criterion type $crit")
+                    }
+            addCriterion(handler, handlers.size-1)
+            handler.setData(crit)
         }
     }
-}
 
-interface CriterionHandler<T : BaseWorkspaceCriterionDTJS> {
-    fun addCriterion(crit: T, idx:Int?)
-}
+    fun writeData(criterions: MutableList<BaseWorkspaceCriterionDTJS>) {
+        criterions.clear()
+        handlers.forEach {
+            it.getData()?.let { crit -> criterions.add(crit) }
+        }
+    }
 
-class SimpleCriterionHandler(private val divId: String, private val listId: String) : CriterionHandler<SimpleWorkspaceCriterionDTJS> {
 
-    private val uid = TextUtilsJS.createUUID()
-
-    private lateinit var propertyWidget: SelectWidget
-
-    private var conditionWidget: SelectWidget? = null
-
-    private var valueWidget: EasyUiCriterionValueRenderer<BaseWorkspaceSimpleCriterionValueDTJS>? = null
-
-    override fun addCriterion(crit: SimpleWorkspaceCriterionDTJS, idx:Int?) {
-        val content = HtmlUtilsJS.html {
-            table(id = "${uid}Table", style = "width:100%;border-collapse: collapse") {
-                tr {
-                    td(style = "width:300px;border:1px solid  #D3D3D3;padding:0px") { "<input style=\"width:100%\" id = \"${uid}Property\"/>"() }
-                    td(style = "width:200px;border:1px solid #D3D3D3;padding:0px") { "<input style=\"width:100%\" id = \"${uid}Condition\"/>"() }
-                    td(style = "border:1px solid #D3D3D3;padding:0px", id = "${uid}Value" ) { }
-                    td(style = "width:70px") {
-                        ("<div style=\"display:inline;width:15px;height:30px\" id=\"${uid}Up\" class = \"jasmine-datagrid-sort-asc\"></div>" +
-                                "<div style=\"display:inline;width:15px;height:30px\" id=\"${uid}Down\" class = \"jasmine-datagrid-sort-desc\"></div>" +
-                                "<div style=\"display:inline;width:15px;height:30px\" id=\"${uid}Add\" class = \"jasmine-datagrid-expand\"></div>" +
-                                "<div style=\"display:inline;width:15px;height:30px\" id=\"${uid}Remove\" class = \"jasmine-datagrid-collapse\"></div>"
-                                )()
-                    }
-                }
-            }
-
-        }.toString()
-        if(idx == null) {
-            jQuery("#${divId}Criterions").append(content)
-        } else {
-            val criterionsDiv = jQuery("#${divId}Criterions")
-            val children = criterionsDiv.asDynamic().children()
-            if(children.length ==0 ){
+    fun addCriterion(handler: CriterionHandler<BaseWorkspaceCriterionDTJS>, position: Int) {
+        //console.log("trying to addd to $position")
+        val content = handler.getContent()
+        val criterionsDiv = jQuery("#${uid}${divId}Criterions")
+        val children = criterionsDiv.asDynamic().children()
+        when {
+            children.length ==0 -> {
+                handlers.add(0,handler)
                 criterionsDiv.append(content)
-            } else {
+                //console.log("added to 0 because lengt = 0")
+            }
+            position == -1 -> {
+                handlers.add(0,handler)
+                //console.log("added to 0 becaus position -1")
                 jQuery(content).asDynamic().insertBefore(children[0])
             }
-        }
-        val propertyDescription = SelectDescriptionJS("")
-        val propertyWidget = EasyUiSelectWidget("${uid}Property", propertyDescription)
-        val propertyConfig = SelectConfigurationJS()
-        propertyConfig.nullAllowed = false
-        propertyConfig.possibleValues.addAll(EasyUiWorkspaceListEditor.getPossibleFieldValues(listId))
-        propertyWidget.configure(propertyConfig)
-
-        propertyWidget.valueChangeListener = { newValue, _ ->
-            val conditionDescr = SelectDescriptionJS("")
-            conditionWidget = EasyUiSelectWidget("${uid}Condition", conditionDescr)
-            val conditionConfig = SelectConfigurationJS()
-            conditionConfig.nullAllowed = false
-            if(newValue != null) {
-                val conditions = getConditions(getPropertyType(newValue.id!!, EasyUiWorkspaceListEditor.getListDescription(listId)!!))
-                conditionConfig.possibleValues.addAll(conditions.map { SelectItemJS(it.name, it.toString()) }.sortedBy { it.caption }.toList())
-            }
-            val cw1 = conditionWidget!!
-            cw1.configure(conditionConfig)
-            jQuery("#${uid}Value").empty()
-            cw1.valueChangeListener = { _, _ ->
-                val property = propertyWidget.getData()
-                val condition = conditionWidget?.getData?.invoke()
-                valueWidget = null
-                jQuery("#${uid}Value").empty()
-                if(property != null && condition != null){
-                    val propertyType = getPropertyType(property.id!!, EasyUiWorkspaceListEditor.getListDescription(listId)!!)
-                    valueWidget = getValueWidget(propertyType,EasyUiListCondition.valueOf(condition.id!!)) as EasyUiCriterionValueRenderer<BaseWorkspaceSimpleCriterionValueDTJS>
-                    valueWidget?.let {
-                        jQuery("#${uid}Value").html(it.getContent())
-                        it.decorate()
-                    }
-                }
+            else -> {
+                handlers.add(position+1,handler)
+                //console.log("added to ${position+1}")
+                jQuery(content).asDynamic().insertAfter(children[position])
             }
         }
+        handler.decorate()
 
-        crit.property?.let { prop-> propertyWidget.setData(SelectItemJS(prop, propertyConfig.possibleValues.find { it.id == prop }?.caption)) }
-        crit.condition?.let{cond ->
-            val item = propertyWidget.getData()
-            if(item != null){
-                val possibleCondition = getConditions(getPropertyType(item.id!!, EasyUiWorkspaceListEditor.getListDescription(listId)!!)).find { it.name == cond.name }
-                if(possibleCondition != null){
-                    conditionWidget!!.setData(SelectItemJS(possibleCondition.name, possibleCondition.toString()))
-                }
+        val addButtonDiv = jQuery("#${handler.getUid()}Add")
+        addButtonDiv.click {
+            val menuDiv = jQuery("#${uid}criterionsAddDialogMenu")
+            idx = handlers.indexOf(handler)
+            //console.log("$idx : ${handler.getUid()} (${handlers.joinToString { it.getUid() }})")
+            val pos = addButtonDiv.asDynamic().offset()
+            menuDiv.menu("show", object {
+                val left = pos.left
+                val top = pos.top
+            })
+        }
+        val removeButtonDiv = jQuery("#${handler.getUid()}Remove")
+        removeButtonDiv.click {
+            idx = handlers.indexOf(handler)
+            jQuery(criterionsDiv.asDynamic().children()[idx]).remove()
+            handlers.remove(handler)
+        }
+        val upButtonDiv = jQuery("#${handler.getUid()}Up")
+        upButtonDiv.click {
+            idx = handlers.indexOf(handler)
+            if(idx == 0){
+                return@click
             }
+            move(criterionsDiv, idx, idx-1)
+            handlers.add(idx-1, handlers.removeAt(idx))
         }
-        crit.value?.let {value ->
-            valueWidget?.setData(value)
+        val downButtonDiv = jQuery("#${handler.getUid()}Down")
+        downButtonDiv.click {
+            idx = handlers.indexOf(handler)
+            if(idx ==handlers.size-1){
+                return@click
+            }
+            move(criterionsDiv, idx, idx+1)
+            handlers.add(idx+1, handlers.removeAt(idx))
         }
-        @Suppress("SENSELESS_COMPARISON")
-        if(conditionWidget == null){
-            val conditionDescr = SelectDescriptionJS("")
-            conditionWidget = EasyUiSelectWidget("${uid}Condition", conditionDescr)
-            val conditionConfig = SelectConfigurationJS()
-            conditionConfig.nullAllowed = false
-            conditionWidget!!.configure(conditionConfig)
+    }
+
+    private fun move(criterionsDiv: JQuery, from: Int, to: Int) {
+        val children = criterionsDiv.asDynamic().children()
+        val toElm  = children[to]
+        val detached = jQuery(children[from]).asDynamic().detach()
+        if(to > from){
+            detached.insertAfter(toElm)
+        } else {
+            detached.insertBefore(toElm)
         }
+    }
+
+    companion object{
+        const val propertyFieldWidth = 300
+        const val controlWidth = 70
+        const val conditionFieldWidth = 200
+        const val padding = 5
+        const val indent = 40
     }
 
 }
 
-private enum class EasyUiListPropertyType{
-    STRING,
-    ENUM,
-    NUMBER,
-    ENTITY_REFERENCE,
-    LOCAL_DATE_TIME,
-    LOCAL_DATE,
-    BOOLEAN,
-    COLLECTION_STRING,
-    COLLECTION_ENUM,
-    COLLECTION_ENTITY_REFERENCE
-}
 
-
-
-private enum class EasyUiListCondition{
-    EQUALS{
-        override fun toString(): String {
-            return "равно"
-        }
-    },
-    NOT_EQUALS{
-        override fun toString(): String {
-            return "не равно"
-        }
-    },
-    GREATER_THAN{
-        override fun toString(): String {
-            return "больше"
-        }
-    },
-    GREATER_THAN_OR_EQUALS{
-        override fun toString(): String {
-            return "больше либо равно"
-        }
-    },
-    LESS_THAN_OR_EQUALS{
-        override fun toString(): String {
-            return "меньше либо равно"
-        }
-    },
-    LESS_THAN{
-        override fun toString(): String {
-            return "меньше"
-        }
-    },
-    SET{
-        override fun toString(): String {
-            return "задано"
-        }
-    },
-    NOT_SET{
-        override fun toString(): String {
-            return "не задано"
-        }
-    },
-    CONTAINS{
-        override fun toString(): String {
-            return "содержит"
-        }
-    },
-    NOT_CONTAINS{
-        override fun toString(): String {
-            return "не содержит"
-        }
-    },
-    WITHIN_PERIOD{
-        override fun toString(): String {
-            return "внутри периода"
-        }
-    }
-}
-
-private fun getCondition(condition:WorkspaceSimpleCriterionConditionDTJS):EasyUiListCondition{
-    return when(condition){
-        WorkspaceSimpleCriterionConditionDTJS.CONTAINS->EasyUiListCondition.CONTAINS
-        WorkspaceSimpleCriterionConditionDTJS.EQUALS->EasyUiListCondition.EQUALS
-        WorkspaceSimpleCriterionConditionDTJS.GREATER_THAN->EasyUiListCondition.GREATER_THAN
-        WorkspaceSimpleCriterionConditionDTJS.GREATER_THAN_OR_EQUALS->EasyUiListCondition.GREATER_THAN_OR_EQUALS
-        WorkspaceSimpleCriterionConditionDTJS.LESS_THAN->EasyUiListCondition.LESS_THAN
-        WorkspaceSimpleCriterionConditionDTJS.LESS_THAN_OR_EQUALS->EasyUiListCondition.LESS_THAN_OR_EQUALS
-        WorkspaceSimpleCriterionConditionDTJS.NOT_CONTAINS->EasyUiListCondition.NOT_CONTAINS
-        WorkspaceSimpleCriterionConditionDTJS.NOT_EQUALS->EasyUiListCondition.NOT_EQUALS
-        WorkspaceSimpleCriterionConditionDTJS.NOT_SET->EasyUiListCondition.NOT_SET
-        WorkspaceSimpleCriterionConditionDTJS.SET->EasyUiListCondition.SET
-        WorkspaceSimpleCriterionConditionDTJS.WITHIN_PERIOD->EasyUiListCondition.WITHIN_PERIOD
-
-    }
-}
-
-
-private fun getPropertyType(id:String, descr:BaseIndexDescriptionJS):EasyUiListPropertyType{
-    val propertyDescr = descr.properties[id]
-    if(propertyDescr != null){
-        return when(propertyDescr.type){
-            DatabasePropertyTypeJS.STRING -> EasyUiListPropertyType.STRING
-            DatabasePropertyTypeJS.TEXT -> EasyUiListPropertyType.STRING
-            DatabasePropertyTypeJS.LOCAL_DATE -> EasyUiListPropertyType.LOCAL_DATE
-            DatabasePropertyTypeJS.LOCAL_DATE_TIME -> EasyUiListPropertyType.LOCAL_DATE_TIME
-            DatabasePropertyTypeJS.ENUM -> EasyUiListPropertyType.ENUM
-            DatabasePropertyTypeJS.BOOLEAN -> EasyUiListPropertyType.BOOLEAN
-            DatabasePropertyTypeJS.ENTITY_REFERENCE -> EasyUiListPropertyType.ENTITY_REFERENCE
-            DatabasePropertyTypeJS.LONG -> EasyUiListPropertyType.NUMBER
-            DatabasePropertyTypeJS.INT -> EasyUiListPropertyType.NUMBER
-            DatabasePropertyTypeJS.BIG_DECIMAL -> EasyUiListPropertyType.NUMBER
-        }
-    }
-    val collectionDescription = descr.collections[id]?:throw IllegalArgumentException("unable to find description for property $id")
-    return when(collectionDescription.elementType){
-        DatabaseCollectionTypeJS.STRING -> EasyUiListPropertyType.COLLECTION_STRING
-        DatabaseCollectionTypeJS.ENUM -> EasyUiListPropertyType.COLLECTION_ENUM
-        DatabaseCollectionTypeJS.ENTITY_REFERENCE -> EasyUiListPropertyType.COLLECTION_ENTITY_REFERENCE
-    }
-}
-
-private fun getConditions(propertyType: EasyUiListPropertyType):List<EasyUiListCondition>{
-    return when(propertyType){
-        EasyUiListPropertyType.STRING -> arrayListOf(EasyUiListCondition.EQUALS, EasyUiListCondition.NOT_EQUALS, EasyUiListCondition.SET,EasyUiListCondition.NOT_SET, EasyUiListCondition.CONTAINS, EasyUiListCondition.NOT_CONTAINS)
-        EasyUiListPropertyType.ENUM -> arrayListOf(EasyUiListCondition.EQUALS, EasyUiListCondition.NOT_EQUALS, EasyUiListCondition.SET,EasyUiListCondition.NOT_SET)
-        EasyUiListPropertyType.NUMBER -> arrayListOf(EasyUiListCondition.EQUALS, EasyUiListCondition.NOT_EQUALS, EasyUiListCondition.SET,EasyUiListCondition.NOT_SET, EasyUiListCondition.GREATER_THAN_OR_EQUALS, EasyUiListCondition.GREATER_THAN, EasyUiListCondition.LESS_THAN_OR_EQUALS, EasyUiListCondition.LESS_THAN)
-        EasyUiListPropertyType.ENTITY_REFERENCE -> arrayListOf(EasyUiListCondition.EQUALS, EasyUiListCondition.NOT_EQUALS, EasyUiListCondition.SET,EasyUiListCondition.NOT_SET)
-        EasyUiListPropertyType.LOCAL_DATE_TIME -> arrayListOf(EasyUiListCondition.GREATER_THAN, EasyUiListCondition.GREATER_THAN_OR_EQUALS, EasyUiListCondition.SET,EasyUiListCondition.NOT_SET, EasyUiListCondition.LESS_THAN,EasyUiListCondition.LESS_THAN_OR_EQUALS,EasyUiListCondition.WITHIN_PERIOD)
-        EasyUiListPropertyType.LOCAL_DATE -> arrayListOf(EasyUiListCondition.EQUALS, EasyUiListCondition.NOT_EQUALS,EasyUiListCondition.GREATER_THAN, EasyUiListCondition.GREATER_THAN_OR_EQUALS, EasyUiListCondition.SET,EasyUiListCondition.NOT_SET, EasyUiListCondition.LESS_THAN,EasyUiListCondition.LESS_THAN_OR_EQUALS,EasyUiListCondition.WITHIN_PERIOD)
-        EasyUiListPropertyType.BOOLEAN -> arrayListOf(EasyUiListCondition.EQUALS, EasyUiListCondition.NOT_EQUALS)
-        EasyUiListPropertyType.COLLECTION_STRING -> arrayListOf(EasyUiListCondition.SET,EasyUiListCondition.NOT_SET,EasyUiListCondition.CONTAINS,EasyUiListCondition.NOT_CONTAINS)
-        EasyUiListPropertyType.COLLECTION_ENUM -> arrayListOf(EasyUiListCondition.SET,EasyUiListCondition.NOT_SET,EasyUiListCondition.CONTAINS,EasyUiListCondition.NOT_CONTAINS)
-        EasyUiListPropertyType.COLLECTION_ENTITY_REFERENCE -> arrayListOf(EasyUiListCondition.SET,EasyUiListCondition.NOT_SET,EasyUiListCondition.CONTAINS,EasyUiListCondition.NOT_CONTAINS)
-    }
-}
-
-private interface EasyUiCriterionValueRenderer<T:BaseWorkspaceSimpleCriterionValueDTJS>{
-    fun getContent():String
+interface CriterionHandler<T : BaseWorkspaceCriterionDTJS> {
+    fun getUid(): String
+    fun getContent(): String
     fun decorate()
-    fun setData(value:T?)
-    fun getData():T?
+    fun setData(data: T?)
+    fun getData(): T?
+
 }
 
-private class EasyUiCriterionStringValueRenderer:EasyUiCriterionValueRenderer<WorkspaceSimpleCriterionStringValueDTJS>{
-    private val uid = TextUtilsJS.createUUID()
-
-    private lateinit var widget:EasyUiTextBoxWidget
-    override fun getContent(): String {
-        return "<input id = \"${uid}Control\" style = \"width:100%\">"
-    }
-
-    override fun decorate() {
-
-        widget = EasyUiTextBoxWidget("${uid}Control", TextboxDescriptionJS(""))
-        widget.configure(Unit)
-    }
-
-    override fun setData(value: WorkspaceSimpleCriterionStringValueDTJS?) {
-        widget.setData(value?.value)
-    }
-
-    override fun getData(): WorkspaceSimpleCriterionStringValueDTJS?{
-        return widget.getData()?.let {
-            val res = WorkspaceSimpleCriterionStringValueDTJS()
-            res.value = it
-            res
-        }
-    }
-}
-
-
-private fun getValueWidget(propertyType: EasyUiListPropertyType, condition: EasyUiListCondition): EasyUiCriterionValueRenderer<*>{
-    return when(propertyType){
-        EasyUiListPropertyType.STRING -> {
-            when(condition){
-                EasyUiListCondition.EQUALS,
-                EasyUiListCondition.NOT_EQUALS,
-                EasyUiListCondition.CONTAINS,
-                EasyUiListCondition.NOT_CONTAINS -> EasyUiCriterionStringValueRenderer()
-                else ->throw IllegalArgumentException("unsupported condition $condition")
-            }
-        }
-        EasyUiListPropertyType.ENUM -> TODO()
-        EasyUiListPropertyType.NUMBER -> TODO()
-        EasyUiListPropertyType.ENTITY_REFERENCE -> TODO()
-        EasyUiListPropertyType.LOCAL_DATE_TIME -> TODO()
-        EasyUiListPropertyType.LOCAL_DATE -> TODO()
-        EasyUiListPropertyType.BOOLEAN -> TODO()
-        EasyUiListPropertyType.COLLECTION_STRING -> TODO()
-        EasyUiListPropertyType.COLLECTION_ENUM -> TODO()
-        EasyUiListPropertyType.COLLECTION_ENTITY_REFERENCE -> TODO()
-    }
+interface CriterionsContainerHandler<T : BaseWorkspaceCriterionDTJS> :CriterionHandler<T>{
+    fun getCriterionsCount():Int
+    fun addCriterion(handler:CriterionHandler<*>)
 }

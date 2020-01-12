@@ -8,7 +8,6 @@ package com.gridnine.jasmine.web.easyui.mainframe
 
 import com.gridnine.jasmine.server.standard.model.rest.WorkspaceGroupDTJS
 import com.gridnine.jasmine.web.core.model.ui.TextboxDescriptionJS
-import com.gridnine.jasmine.web.core.ui.TextUtilsJS
 import com.gridnine.jasmine.web.easyui.widgets.EasyUiTextBoxWidget
 
 class EasyUiWorkspaceGroupEditor : EasyUiWorkspaceElementEditor<WorkspaceGroupDTJS>{

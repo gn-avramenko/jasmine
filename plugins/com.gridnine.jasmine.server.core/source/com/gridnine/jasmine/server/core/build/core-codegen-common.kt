@@ -10,6 +10,7 @@ import com.gridnine.jasmine.server.core.model.domain.EntityReference
 import com.gridnine.jasmine.server.core.storage.search.*
 import java.io.File
 import java.math.BigDecimal
+import java.time.LocalDate
 import java.time.LocalDateTime
 import kotlin.IllegalArgumentException
 
@@ -231,7 +232,7 @@ internal object GenUtils {
         return when (type) {
             GenPropertyType.LONG -> "Long"
             GenPropertyType.LOCAL_DATE_TIME -> LocalDateTime::class.qualifiedName!!
-            GenPropertyType.LOCAL_DATE -> LocalDateTime::class.qualifiedName!!
+            GenPropertyType.LOCAL_DATE -> LocalDate::class.qualifiedName!!
             GenPropertyType.INT -> "Int"
             GenPropertyType.ENTITY_REFERENCE -> "${EntityReference::class.qualifiedName}<${className}>"
             GenPropertyType.BIG_DECIMAL -> BigDecimal::class.qualifiedName!!

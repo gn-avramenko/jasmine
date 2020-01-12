@@ -6,52 +6,56 @@
 
 package com.gridnine.jasmine.web.easyui.widgets
 
+import com.gridnine.jasmine.web.core.model.common.FakeEnumJS
 import com.gridnine.jasmine.web.core.model.ui.*
+import com.gridnine.jasmine.web.core.utils.ReflectionFactoryJS
+import com.gridnine.jasmine.web.core.utils.UiUtilsJS
 import com.gridnine.jasmine.web.easyui.JQuery
 import com.gridnine.jasmine.web.easyui.jQuery
 
 @Suppress("UnsafeCastFromDynamic")
-class EasyUiSelectWidget(uid:String, description:SelectDescriptionJS):SelectWidget(){
-    val div: JQuery = jQuery("#${description.id}${uid}")
-    val selectItems = arrayListOf<SelectItemJS?>()
+class EasyUiEnumMultiSelectWidget<E:Enum<E>>(uid:String, description:EnumSelectDescriptionJS):EnumMultiSelectWidget<E>(){
+    private val div: JQuery = jQuery("#${description.id}${uid}")
+    private val selectItems = arrayListOf<SelectItemJS?>()
+    private var initialized  = false
     var spanElm:dynamic = null
-
     init {
 
-        configure = {settings:SelectConfigurationJS ->
+        configure = {settings:EnumSelectConfigurationJS<E> ->
+            if (!initialized) {
                 selectItems.clear()
-                selectItems.addAll(settings.possibleValues)
-                selectItems.sortBy { it?.caption }
-                if(settings.nullAllowed){
-                    selectItems.add(0,null)
+                selectItems.addAll(UiUtilsJS.getEnumValues(description.enumId))
+                if (settings.nullAllowed) {
+                    selectItems.add(0, null)
                 }
                 val options = object {
                     val valueField = "id"
                     val textField = "caption"
                     val editable = false
                     val limitToList = true
+                    val hasDownArrow =  true
                     val data = selectItems.toTypedArray()
-                    val onChange = { newValue: String?, oldValue: String? ->
-                        if(spanElm != null) {
+                    val onChange = { _: String?, _: String? ->
+                        if (spanElm != null) {
                             spanElm.css("border-color", "")
                             spanElm.removeAttr("title")
                         }
-                        valueChangeListener?.let { it(findValue(newValue), findValue(oldValue)) }
                     }
                 }
-                div.combobox(options)
-                spanElm = div.combobox("textbox").asDynamic().parent()
+                div.tagbox(options)
+                spanElm = div.tagbox("textbox").asDynamic().parent()
+            }
         }
-        setData = {
-            if(it == null){
-                div.combobox("setValue", null)
-                div.combobox("setText", null)
+        readData = { values ->
+            if(values.isEmpty()){
+                div.tagbox("setValue", null)
+                div.tagbox("setText", null)
             } else{
-                div.combobox("setValue", it.id)
+                div.tagbox("setValues", values.map { it.name}.toTypedArray())
             }
         }
         showValidation = {
-            val spanElm = div.combobox("textbox").asDynamic().parent()
+            val spanElm = div.tagbox("textbox").asDynamic().parent()
             if (it == null) {
                 spanElm.css("border-color", "")
                 spanElm.removeAttr("title")
@@ -60,10 +64,11 @@ class EasyUiSelectWidget(uid:String, description:SelectDescriptionJS):SelectWidg
                 spanElm.attr("title", it)
             }
         }
-        getData ={
-            val value = div.combobox("getValue") as String?
-            val text =  div.combobox("getText") as String?
-            value?.let{SelectItemJS(value, text)}
+        writeData ={data ->
+            val values = div.tagbox("getValues") as Array<String>
+            data.clear()
+            values.map { ReflectionFactoryJS.get().getEnum<FakeEnumJS>(description.enumId, it)  }.forEach { data.add(it as E) }
+
         }
     }
 

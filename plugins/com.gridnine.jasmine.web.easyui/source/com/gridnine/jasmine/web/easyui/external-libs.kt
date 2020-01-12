@@ -40,6 +40,8 @@ external interface JQuery {
     fun combobox(options:Any)
     fun combobox(method:String):Any?
     fun combobox(method: String , arg:Any?)
+    fun tagbox(options:Any):JQuery
+    fun tagbox(method: String, vararg  args:Any?):JQuery
     fun textbox(method:String):Any?
     fun textbox(options:Any)
     fun textbox(method: String , arg:Any?)
@@ -55,6 +57,10 @@ external interface JQuery {
     fun focus()
     val length:Int
     fun append(content:String)
+    fun datebox(options: Any):JQuery
+    fun datebox(method:String, vararg args:Any?):Any?
+    fun datetimebox(options: Any):JQuery
+    fun datetimebox(method:String, vararg args:Any?):Any?
 }
 
 
@@ -68,6 +74,7 @@ external var jQuery: JQueryStatic = definedExternally
 external fun createDatagrid(id:String, columns:dynamic, loader:dynamic, onDblClickRow:dynamic):Unit = definedExternally
 external fun createTable(id:String, columns:dynamic, loader:dynamic, onClickRow: dynamic):Unit = definedExternally
 external fun createSearchBox(id:String, prompt:String, searcher:dynamic): JQuery = definedExternally
+
 external fun confirm(question:String, handler:() ->Unit):Unit = definedExternally
 external fun showMessage(title:String?, message:String ,timeout: Int)
 external fun showError(title:String?, message:String, stacktrace:String?)

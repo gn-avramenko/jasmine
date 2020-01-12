@@ -60,7 +60,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
         }
         DomainMetaRegistry.get().enums.values.forEach {
             val enumDescr = DomainEnumDescriptionDT()
-            enumDescr.id = it.id
+            enumDescr.id = it.id+"JS"
             it.items.values.forEach { enumItem ->
                 val itemDT = DomainEnumItemDescriptionDT()
                 itemDT.id = enumItem.id

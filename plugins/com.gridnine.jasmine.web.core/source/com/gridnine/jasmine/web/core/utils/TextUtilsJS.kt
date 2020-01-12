@@ -4,7 +4,7 @@
  *****************************************************************/
 @file:Suppress("unused", "UnsafeCastFromDynamic", "UNCHECKED_CAST")
 
-package com.gridnine.jasmine.web.core.ui
+package com.gridnine.jasmine.web.core.utils
 
 import kotlin.math.round
 import kotlin.random.Random
@@ -26,5 +26,9 @@ object TextUtilsJS {
         s[18] = "-"
         s[23] = "-"
         return s.joinToString(separator = "")
+    }
+
+    fun fillWithZeros(value:Int, order:Int = 2):String{
+        return "${if(order>2 && value < 100) "0" else ""}${if(value < 10) "0" else ""}$value"
     }
 }

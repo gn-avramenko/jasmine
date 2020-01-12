@@ -141,9 +141,15 @@ function openFileJS(accept, resolve){
     control.trigger('click')
 }
 
+
+
 $.fn.combobox.defaults.labelAlign="right";
 $.fn.combobox.defaults.panelHeight="auto";
 $.fn.combobox.defaults.panelMaxHeight=200;
+
+$.fn.tagbox.defaults.labelAlign="right";
+$.fn.tagbox.defaults.panelHeight="auto";
+$.fn.tagbox.defaults.panelMaxHeight=200;
 
 $.fn.textbox.defaults.labelAlign = "right";
 $.fn.passwordbox.defaults.labelAlign = "right";

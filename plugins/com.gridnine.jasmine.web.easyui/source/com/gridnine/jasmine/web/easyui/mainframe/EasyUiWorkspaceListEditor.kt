@@ -160,7 +160,7 @@ class EasyUiWorkspaceListEditor : EasyUiWorkspaceElementEditor<ListWorkspaceItem
                 res
         }.toList()
         sortOrdersWidget.readData(sortOrderList)
-        criterionsEditor.setData(data.criterions)
+        criterionsEditor.readData(data.criterions)
     }
 
     override fun getData(): ListWorkspaceItemDTJS {
@@ -188,6 +188,8 @@ class EasyUiWorkspaceListEditor : EasyUiWorkspaceElementEditor<ListWorkspaceItem
             res.orderType = SortOrderTypeDTJS.valueOf(it.order!!.id!!)
             res
         }.toList())
+        criterionsEditor.writeData(result.criterions)
+
         return result
     }
 

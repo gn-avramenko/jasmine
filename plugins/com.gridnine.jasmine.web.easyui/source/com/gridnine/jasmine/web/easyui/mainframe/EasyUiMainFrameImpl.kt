@@ -11,7 +11,7 @@ import com.gridnine.jasmine.server.standard.model.rest.GetWorkspaceRequestJS
 import com.gridnine.jasmine.web.core.StandardRestClient
 import com.gridnine.jasmine.web.core.ui.MainFrame
 import com.gridnine.jasmine.web.core.ui.MainFrameConfiguration
-import com.gridnine.jasmine.web.core.ui.TextUtilsJS
+import com.gridnine.jasmine.web.core.utils.TextUtilsJS
 import com.gridnine.jasmine.web.core.utils.HtmlUtilsJS
 import com.gridnine.jasmine.web.easyui.jQuery
 import kotlin.browser.window

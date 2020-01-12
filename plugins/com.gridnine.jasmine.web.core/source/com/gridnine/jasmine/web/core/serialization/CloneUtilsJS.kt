@@ -8,7 +8,7 @@ package com.gridnine.jasmine.web.core.serialization
 
 import com.gridnine.jasmine.web.core.model.common.BaseEntityJS
 import com.gridnine.jasmine.web.core.model.common.BaseIntrospectableObjectJS
-import com.gridnine.jasmine.web.core.ui.TextUtilsJS
+import com.gridnine.jasmine.web.core.utils.TextUtilsJS
 import com.gridnine.jasmine.web.core.utils.ReflectionFactoryJS
 
 object CloneUtilsJS {

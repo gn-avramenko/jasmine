@@ -7,7 +7,9 @@
 package com.gridnine.jasmine.web.core.serialization
 
 import com.gridnine.jasmine.web.core.model.common.BaseEntityJS
+import com.gridnine.jasmine.web.core.utils.TextUtilsJS
 import com.gridnine.jasmine.web.core.utils.ReflectionFactoryJS
+import kotlin.js.Date
 
 
 internal abstract class ObjectMetadataProviderJS<T:Any> {
@@ -41,8 +43,35 @@ internal class SerializablePropertyDescriptionJS(val id: String, val type: Seria
 internal class SerializableCollectionDescriptionJS(val id: String, val elementType: SerializablePropertyTypeJS, val elementClassName: String?, val isAbstract: Boolean)
 
 
+
 internal object CommonSerializationUtilsJS {
     private val providersCache = hashMapOf<String, ObjectMetadataProviderJS<*>>()
+
+    private val dateFormatter = { date: Date? ->
+        date?.let { "${it.getFullYear()}-${TextUtilsJS.fillWithZeros(it.getMonth()+1)}-${TextUtilsJS.fillWithZeros(it.getDate())}" }
+    }
+    private val dateParser = lambda@{ value: String? ->
+        if (value.isNullOrBlank()) {
+            return@lambda null
+        }
+        val components = value.split("-")
+        Date(components[0].toInt(), components[1].toInt() - 1, components[2].toInt())
+    }
+
+    private val dateTimeFormatter = { date: Date? ->
+        date?.let { "${it.getFullYear()}-${TextUtilsJS.fillWithZeros(it.getMonth()+1)}-${TextUtilsJS.fillWithZeros(it.getDate())}_${TextUtilsJS.fillWithZeros(it.getHours())}-${TextUtilsJS.fillWithZeros(it.getMinutes())}-${TextUtilsJS.fillWithZeros(it.getSeconds())}-${TextUtilsJS.fillWithZeros(it.getMilliseconds(), 3)}" }
+    }
+
+    private val dateTimeParser = lambda@{ value: String? ->
+        if (value.isNullOrBlank()) {
+            return@lambda null
+        }
+        val parts = value.split("_")
+        val comps1 = parts[0].split("-")
+        val comps2 = parts[1].split("-")
+        Date(year = comps1[0].toInt(), month = comps1[1].toInt() - 1, day = comps1[2].toInt(), hour = comps2[0].toInt(), minute = comps2[1].toInt(), second = comps2[2].toInt(), millisecond = comps2[3].toInt())
+    }
+
 
 
     fun <T : Any> serialize(obj: T, factory: ProviderFactoryJS): String {
@@ -80,8 +109,8 @@ internal object CommonSerializationUtilsJS {
                     SerializablePropertyTypeJS.BIG_DECIMAL,SerializablePropertyTypeJS.INT, SerializablePropertyTypeJS.LONG -> result[prop.id] = value as Number
                     SerializablePropertyTypeJS.BOOLEAN -> result[prop.id] = value as Boolean
                     SerializablePropertyTypeJS.BYTE_ARRAY -> result[prop.id] = value as String
-                    SerializablePropertyTypeJS.LOCAL_DATE_TIME -> result[prop.id] = value as String
-                    SerializablePropertyTypeJS.LOCAL_DATE -> result[prop.id] = value as String
+                    SerializablePropertyTypeJS.LOCAL_DATE_TIME -> result[prop.id] = dateTimeFormatter(value as Date)
+                    SerializablePropertyTypeJS.LOCAL_DATE -> result[prop.id] = dateFormatter(value as Date)
                 }
             }
         }
@@ -102,8 +131,8 @@ internal object CommonSerializationUtilsJS {
                                 array[idx] = elm as Number
                             SerializablePropertyTypeJS.BOOLEAN -> array[idx] = elm as Boolean
                             SerializablePropertyTypeJS.BYTE_ARRAY -> array[idx] = elm as String
-                            SerializablePropertyTypeJS.LOCAL_DATE_TIME -> array[idx] = elm as String
-                            SerializablePropertyTypeJS.LOCAL_DATE -> array[idx] = elm as String
+                            SerializablePropertyTypeJS.LOCAL_DATE_TIME -> array[idx] = dateTimeFormatter(elm as Date)
+                            SerializablePropertyTypeJS.LOCAL_DATE -> array[idx] = dateFormatter(elm as Date)
                         }
 
                 }
@@ -111,6 +140,8 @@ internal object CommonSerializationUtilsJS {
         }
         return result
     }
+
+
 
     private fun clearClassName(className: String): String {
         if(className.endsWith("JS")){
@@ -167,8 +198,8 @@ internal object CommonSerializationUtilsJS {
                             SerializablePropertyTypeJS.LONG -> (propValue as Number).toLong()
                             SerializablePropertyTypeJS.BOOLEAN -> propValue as Boolean
                             SerializablePropertyTypeJS.BYTE_ARRAY -> propValue
-                            SerializablePropertyTypeJS.LOCAL_DATE_TIME -> propValue
-                            SerializablePropertyTypeJS.LOCAL_DATE -> propValue
+                            SerializablePropertyTypeJS.LOCAL_DATE_TIME -> dateTimeParser(propValue as String)
+                            SerializablePropertyTypeJS.LOCAL_DATE -> dateParser(propValue as String)
                         }
                 provider.setPropertyValue(result, prop.id, value)
             }
@@ -186,8 +217,8 @@ internal object CommonSerializationUtilsJS {
                         SerializablePropertyTypeJS.LONG -> elm
                         SerializablePropertyTypeJS.BOOLEAN -> elm
                         SerializablePropertyTypeJS.BYTE_ARRAY -> elm
-                        SerializablePropertyTypeJS.LOCAL_DATE_TIME -> elm
-                        SerializablePropertyTypeJS.LOCAL_DATE -> elm
+                        SerializablePropertyTypeJS.LOCAL_DATE_TIME -> dateTimeParser(elm as String)
+                        SerializablePropertyTypeJS.LOCAL_DATE -> dateParser(elm as String)
                     }
                     if (value != null) {
                         provider.getCollection(result, coll.id).add(value)

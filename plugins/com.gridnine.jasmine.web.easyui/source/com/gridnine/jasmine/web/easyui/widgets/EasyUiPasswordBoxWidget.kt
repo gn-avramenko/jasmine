@@ -15,9 +15,7 @@ class EasyUiPasswordBoxWidget(uid:String, description:PasswordBoxDescriptionJS):
     val div: JQuery = jQuery("#${description.id}${uid}")
     private var initialized:Boolean = false
     init {
-        setData = {
-            div.passwordbox("setValue", it)
-        }
+
         configure = {_:Unit ->
             if(!initialized){
                 div.passwordbox(object{})
