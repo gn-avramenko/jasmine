@@ -206,7 +206,18 @@ private enum class EasyUiListCondition{
         override fun toString(): String {
             return "внутри периода"
         }
+    },
+    TRUE{
+        override fun toString(): String {
+            return "истина"
+        }
+    },
+    FALSE{
+        override fun toString(): String {
+            return "ложь"
+        }
     }
+
 }
 
 private fun getCondition(condition:WorkspaceSimpleCriterionConditionDTJS):EasyUiListCondition{
@@ -222,6 +233,8 @@ private fun getCondition(condition:WorkspaceSimpleCriterionConditionDTJS):EasyUi
         WorkspaceSimpleCriterionConditionDTJS.NOT_SET->EasyUiListCondition.NOT_SET
         WorkspaceSimpleCriterionConditionDTJS.SET->EasyUiListCondition.SET
         WorkspaceSimpleCriterionConditionDTJS.WITHIN_PERIOD->EasyUiListCondition.WITHIN_PERIOD
+        WorkspaceSimpleCriterionConditionDTJS.TRUE->EasyUiListCondition.TRUE
+        WorkspaceSimpleCriterionConditionDTJS.FALSE->EasyUiListCondition.FALSE
 
     }
 }
@@ -239,6 +252,8 @@ private fun getCondition(condition:EasyUiListCondition):WorkspaceSimpleCriterion
         EasyUiListCondition.NOT_SET->WorkspaceSimpleCriterionConditionDTJS.NOT_SET
         EasyUiListCondition.SET->WorkspaceSimpleCriterionConditionDTJS.SET
         EasyUiListCondition.WITHIN_PERIOD->WorkspaceSimpleCriterionConditionDTJS.WITHIN_PERIOD
+        EasyUiListCondition.TRUE->WorkspaceSimpleCriterionConditionDTJS.TRUE
+        EasyUiListCondition.FALSE->WorkspaceSimpleCriterionConditionDTJS.FALSE
 
     }
 }
@@ -278,7 +293,7 @@ private fun getConditions(propertyType: EasyUiListPropertyType):List<EasyUiListC
         EasyUiListPropertyType.ENTITY_REFERENCE -> arrayListOf(EasyUiListCondition.EQUALS, EasyUiListCondition.NOT_EQUALS, EasyUiListCondition.SET,EasyUiListCondition.NOT_SET)
         EasyUiListPropertyType.LOCAL_DATE_TIME -> arrayListOf(EasyUiListCondition.GREATER_THAN, EasyUiListCondition.GREATER_THAN_OR_EQUALS, EasyUiListCondition.SET,EasyUiListCondition.NOT_SET, EasyUiListCondition.LESS_THAN,EasyUiListCondition.LESS_THAN_OR_EQUALS,EasyUiListCondition.WITHIN_PERIOD)
         EasyUiListPropertyType.LOCAL_DATE -> arrayListOf(EasyUiListCondition.EQUALS, EasyUiListCondition.NOT_EQUALS,EasyUiListCondition.GREATER_THAN, EasyUiListCondition.GREATER_THAN_OR_EQUALS, EasyUiListCondition.SET,EasyUiListCondition.NOT_SET, EasyUiListCondition.LESS_THAN,EasyUiListCondition.LESS_THAN_OR_EQUALS,EasyUiListCondition.WITHIN_PERIOD)
-        EasyUiListPropertyType.BOOLEAN -> arrayListOf(EasyUiListCondition.EQUALS, EasyUiListCondition.NOT_EQUALS)
+        EasyUiListPropertyType.BOOLEAN -> arrayListOf(EasyUiListCondition.FALSE, EasyUiListCondition.TRUE,EasyUiListCondition.NOT_SET)
         EasyUiListPropertyType.COLLECTION_STRING -> arrayListOf(EasyUiListCondition.SET,EasyUiListCondition.NOT_SET,EasyUiListCondition.CONTAINS,EasyUiListCondition.NOT_CONTAINS)
         EasyUiListPropertyType.COLLECTION_ENUM -> arrayListOf(EasyUiListCondition.SET,EasyUiListCondition.NOT_SET,EasyUiListCondition.CONTAINS,EasyUiListCondition.NOT_CONTAINS)
         EasyUiListPropertyType.COLLECTION_ENTITY_REFERENCE -> arrayListOf(EasyUiListCondition.SET,EasyUiListCondition.NOT_SET,EasyUiListCondition.CONTAINS,EasyUiListCondition.NOT_CONTAINS)
@@ -328,7 +343,13 @@ private fun getValueWidget(propertyType: EasyUiListPropertyType, condition: Easy
                 else ->throw IllegalArgumentException("unsupported condition $condition")
             }
         }
-        EasyUiListPropertyType.ENTITY_REFERENCE -> TODO()
+        EasyUiListPropertyType.ENTITY_REFERENCE -> {
+            when(condition) {
+                EasyUiListCondition.EQUALS, EasyUiListCondition.NOT_EQUALS -> EasyUiCriterionEntityValuesRenderer(className!!)
+                EasyUiListCondition.SET,EasyUiListCondition.NOT_SET -> null
+                else ->throw IllegalArgumentException("unsupported condition $condition")
+            }
+        }
         EasyUiListPropertyType.LOCAL_DATE_TIME -> {
             when(condition){
                 EasyUiListCondition.EQUALS, EasyUiListCondition.NOT_EQUALS,EasyUiListCondition.GREATER_THAN, EasyUiListCondition.GREATER_THAN_OR_EQUALS,
@@ -347,7 +368,7 @@ private fun getValueWidget(propertyType: EasyUiListPropertyType, condition: Easy
                 else ->throw IllegalArgumentException("unsupported condition $condition")
             }
         }
-        EasyUiListPropertyType.BOOLEAN -> TODO()
+        EasyUiListPropertyType.BOOLEAN -> null
         EasyUiListPropertyType.COLLECTION_STRING -> TODO()
         EasyUiListPropertyType.COLLECTION_ENUM -> TODO()
         EasyUiListPropertyType.COLLECTION_ENTITY_REFERENCE -> TODO()

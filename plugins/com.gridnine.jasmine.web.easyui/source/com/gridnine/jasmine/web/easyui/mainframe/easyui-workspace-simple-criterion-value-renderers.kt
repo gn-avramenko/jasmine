@@ -9,6 +9,8 @@ package com.gridnine.jasmine.web.easyui.mainframe
 import com.gridnine.jasmine.server.sandbox.model.domain.WorkspaceSimpleCriterionEnumValuesDTJS
 import com.gridnine.jasmine.server.standard.model.rest.*
 import com.gridnine.jasmine.web.core.model.common.FakeEnumJS
+import com.gridnine.jasmine.web.core.model.domain.DomainMetaRegistryJS
+import com.gridnine.jasmine.web.core.model.domain.EntityReferenceJS
 import com.gridnine.jasmine.web.core.model.ui.*
 import com.gridnine.jasmine.web.core.utils.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.utils.TextUtilsJS
@@ -252,6 +254,49 @@ class EasyUiCriterionEnumValuesRenderer(private val enumId:String):EasyUiCriteri
         val res = WorkspaceSimpleCriterionEnumValuesDTJS()
         res.enumClassName = enumId
         res.values.addAll(data.map { it.name })
+        return res
+    }
+}
+
+class EasyUiCriterionEntityValuesRenderer(private val entityClassName:String):EasyUiCriterionValueRenderer<WorkspaceSimpleCriterionEntityValuesDTJS>{
+    private val uid = TextUtilsJS.createUUID()
+
+    private lateinit var widget:EntityMultiSelectWidget
+    override fun getContent(): String {
+        return "<input id = \"${uid}Control\" style = \"width:100%\">"
+    }
+
+    override fun decorate() {
+        widget = EasyUiEntityMultiSelectWidget("${uid}Control", EntitySelectDescriptionJS("",entityClassName))
+        val config = EntitySelectConfigurationJS()
+        config.limit = 10
+        config.nullAllowed = false
+        DomainMetaRegistryJS.get().indexes.values.filter { it.document  == entityClassName}.forEach {
+            val dataSource = EntityAutocompleteDataSourceJS()
+            dataSource.indexClassName = it.id
+            dataSource.name = it.displayName
+            config.dataSources.add(dataSource)
+        }
+        config.nullAllowed = false
+        widget.configure(config)
+    }
+
+    override fun setData(value: WorkspaceSimpleCriterionEntityValuesDTJS?) {
+        if(value == null){
+            widget.readData(emptyList())
+            return
+        }
+        widget.readData(value.values)
+    }
+
+    override fun getData(): WorkspaceSimpleCriterionEntityValuesDTJS?{
+        val data  = arrayListOf<EntityReferenceJS>()
+        widget.writeData(data)
+        if(data.isEmpty()){
+            return null
+        }
+        val res = WorkspaceSimpleCriterionEntityValuesDTJS()
+        res.values.addAll(data)
         return res
     }
 }

@@ -8,6 +8,8 @@ package com.gridnine.jasmine.web.easyui.mainframe
 
 import com.gridnine.jasmine.server.standard.model.rest.BaseWorkspaceItemDTJS
 import com.gridnine.jasmine.server.standard.model.rest.GetWorkspaceRequestJS
+import com.gridnine.jasmine.server.standard.model.rest.ListWorkspaceItemDTJS
+import com.gridnine.jasmine.server.standard.model.rest.WorkspaceDTJS
 import com.gridnine.jasmine.web.core.StandardRestClient
 import com.gridnine.jasmine.web.core.ui.MainFrame
 import com.gridnine.jasmine.web.core.ui.MainFrameConfiguration
@@ -59,32 +61,7 @@ class EasyUiMainFrameImpl :MainFrame{
 
 
         StandardRestClient.standard_standard_getWorkspace(GetWorkspaceRequestJS()).then {
-            val navigationDiv = jQuery("#mf-navigation")
-            navigationDiv.accordion()
-            it.workspace.groups.withIndex().forEach { (idx, group) ->
-                val itemsMap = hashMapOf<Int, BaseWorkspaceItemDTJS>()
-                val navbarContent = HtmlUtilsJS.html {
-                    ul(id = "navigation_group_${idx}", `class` = "easyui-datalist", lines = false, style = "width:100%") {
-                        group.items.withIndex().forEach { (idx2, item) ->
-                            li {
-                                (item.displayName?:"???")()
-                                itemsMap[idx2] = item
-                            }
-                        }
-
-                    }
-                }.toString()
-                navigationDiv.accordion("add", object {
-                    val title = group.displayName
-                    val content = navbarContent
-                })
-                jQuery("#navigation_group_${idx}").datalist(object{
-                    val onClickRow ={idx:Int, row:dynamic ->
-                        val item = itemsMap[idx]
-                        console.log("$idx, $item $row")
-                    }
-                })
-            }
+            setWorkspace(it.workspace)
             jQuery("#mf-content-tabs").jtabs(object {
                 val toolPosition = "left"
                 val tools = arrayOf(object{
@@ -107,6 +84,40 @@ class EasyUiMainFrameImpl :MainFrame{
         }
     }
 
+    fun setWorkspace(workspace:WorkspaceDTJS){
+        val navigationDiv = jQuery("#mf-navigation")
+        navigationDiv.accordion(object{})
+        val existingSize = navigationDiv.accordion("panels").asDynamic().length as Int
+        for(n in existingSize-1 downTo 0){
+            navigationDiv.accordion("remove", n)
+        }
+        workspace.groups.withIndex().forEach { (idx, group) ->
+            val itemsMap = hashMapOf<Int, BaseWorkspaceItemDTJS>()
+            val navbarContent = HtmlUtilsJS.html {
+                ul(id = "navigation_group_${idx}", `class` = "easyui-datalist", lines = false, style = "width:100%") {
+                    group.items.withIndex().forEach { (idx2, item) ->
+                        li {
+                            (item.displayName?:"???")()
+                            itemsMap[idx2] = item
+                        }
+                    }
+
+                }
+            }.toString()
+            navigationDiv.accordion("add", object {
+                val title = group.displayName
+                val content = navbarContent
+            })
+            jQuery("#navigation_group_${idx}").datalist(object{
+                val onClickRow ={ idx:Int, _:dynamic ->
+                    val item = itemsMap[idx]
+                    if(item is ListWorkspaceItemDTJS){
+                        openTab(EasyUiListTabHandler(item))
+                    }
+                }
+            })
+        }
+    }
     fun<T> openTab(handler: EasyUiTabHandler<T>){
         val existingTab = tabs.find { handler.getId() == it.getId() }
         val tabsDiv = jQuery("#mf-content-tabs")

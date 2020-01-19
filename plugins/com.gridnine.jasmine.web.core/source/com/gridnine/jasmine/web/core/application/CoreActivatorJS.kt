@@ -34,7 +34,7 @@ class CoreActivatorJS:ActivatorJS{
         ReflectionFactoryJS.get().registerQualifiedName(EntityReferenceJS::class, EntityReferenceJS.qualifiedClassName)
         ReflectionFactoryJS.get().registerClass(EnumSelectConfigurationJS.qualifiedClassName) {EnumSelectConfigurationJS<FakeEnumJS>()}
         ReflectionFactoryJS.get().registerClass(EntityAutocompleteDataSourceJS.qualifiedClassName) { EntityAutocompleteDataSourceJS()}
-        ReflectionFactoryJS.get().registerClass(EntityAutocompleteConfigurationJS.qualifiedClassName) { EntityAutocompleteConfigurationJS()}
+        ReflectionFactoryJS.get().registerClass(EntitySelectConfigurationJS.qualifiedClassName) { EntitySelectConfigurationJS()}
         ReflectionFactoryJS.get().registerQualifiedName(EnumSelectConfigurationJS::class, EnumSelectConfigurationJS.qualifiedClassName)
         ReflectionFactoryJS.get().registerClass(TextColumnConfigurationJS.qualifiedClassName)  {TextColumnConfigurationJS()}
         ReflectionFactoryJS.get().registerClass(IntegerColumnConfigurationJS.qualifiedClassName) {IntegerColumnConfigurationJS()}
@@ -174,7 +174,7 @@ class CoreActivatorJS:ActivatorJS{
                                         layout.widgets[widgetIt.id] = widget
                                     }
                                     WidgetTypeDTJS.ENTITY_AUTOCOMPLETE -> {
-                                        val widget = EntityAutocompleteDescriptionJS(widgetIt.id, widgetIt.elementClassName)
+                                        val widget = EntitySelectDescriptionJS(widgetIt.id, widgetIt.elementClassName)
                                         widget.hSpan = widgetIt.hSpan
                                         layout.widgets[widgetIt.id] = widget
                                     }
@@ -320,11 +320,13 @@ class CoreActivatorJS:ActivatorJS{
         itJs.properties?.forEach{ prop:dynamic ->
             val id = DatabasePropertyDescriptionJS(prop.id,DatabasePropertyTypeJS.valueOf(prop.type),prop.displayName)
             id.className = prop.className
+            id.usedInAutocomplete = prop.usedInAutocomplete
             entity.properties.put(prop.id, id)
         }
         itJs.collections?.forEach{ coll:dynamic ->
             val cd = DatabaseCollectionDescriptionJS(coll.id, DatabaseCollectionTypeJS.valueOf(coll.elementType), coll.displayName)
             cd.elementClassName = coll.elementClassName
+            cd.usedInAutocomplete = coll.usedInAutocomplete
             entity.collections.put(coll.id, cd)
         }
     }

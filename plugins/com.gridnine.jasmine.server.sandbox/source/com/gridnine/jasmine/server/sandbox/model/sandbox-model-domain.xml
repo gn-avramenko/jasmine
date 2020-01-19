@@ -8,6 +8,9 @@
         <property id="name" type="STRING"/>
         <property id="login" type="STRING"/>
         <property id="password" type="STRING"/>
+        <codeInjection>
+            override fun toString():String = name?:"???"
+        </codeInjection>
     </document>
     <document id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxNestedDocument">
         <property id="textColumn" type="STRING"/>

@@ -150,8 +150,8 @@ object EasyUiViewBuilder {
                     is EnumSelectDescriptionJS -> {
                         (view.getValue(it.id) as EnumSelectWidget<*>).setData(model.getValue(it.id)?.asDynamic())
                     }
-                    is EntityAutocompleteDescriptionJS -> {
-                        (view.getValue(it.id) as EntityAutocompletetWidget).setData(model.getValue(it.id)?.asDynamic())
+                    is EntitySelectDescriptionJS -> {
+                        (view.getValue(it.id) as EntitySelectWidget).setData(model.getValue(it.id)?.asDynamic())
                     }
                     is FloatBoxDescriptionJS -> {
                         (view.getValue(it.id) as FloatBoxWidget).setData(model.getValue(it.id) as Double?)
@@ -180,8 +180,8 @@ object EasyUiViewBuilder {
                     is EnumSelectDescriptionJS -> {
                         (view.getValue(it.id) as EnumSelectWidget<*>).configure(settings.getValue(it.id).asDynamic())
                     }
-                    is EntityAutocompleteDescriptionJS -> {
-                        (view.getValue(it.id) as EntityAutocompletetWidget).configure(settings.getValue(it.id).asDynamic())
+                    is EntitySelectDescriptionJS -> {
+                        (view.getValue(it.id) as EntitySelectWidget).configure(settings.getValue(it.id).asDynamic())
                     }
                     is FloatBoxDescriptionJS -> {
                         (view.getValue(it.id) as FloatBoxWidget).configure(Unit)
@@ -210,8 +210,8 @@ object EasyUiViewBuilder {
                     is EnumSelectDescriptionJS -> {
                         (view.getValue(it.id) as EnumSelectWidget<*>).showValidation(validation.getValue(it.id) as String?)
                     }
-                    is EntityAutocompleteDescriptionJS -> {
-                        (view.getValue(it.id) as EntityAutocompletetWidget).showValidation(validation.getValue(it.id) as String?)
+                    is EntitySelectDescriptionJS -> {
+                        (view.getValue(it.id) as EntitySelectWidget).showValidation(validation.getValue(it.id) as String?)
                     }
                     is FloatBoxDescriptionJS -> {
                         (view.getValue(it.id) as FloatBoxWidget).showValidation(validation.getValue(it.id) as String?)
@@ -240,8 +240,8 @@ object EasyUiViewBuilder {
                     is EnumSelectDescriptionJS -> {
                         model.setValue(it.id, (view.getValue(it.id) as EnumSelectWidget<*>).getData())
                     }
-                    is EntityAutocompleteDescriptionJS -> {
-                        model.setValue(it.id, (view.getValue(it.id) as EntityAutocompletetWidget).getData())
+                    is EntitySelectDescriptionJS -> {
+                        model.setValue(it.id, (view.getValue(it.id) as EntitySelectWidget).getData())
                     }
                     is FloatBoxDescriptionJS -> {
                         model.setValue(it.id, (view.getValue(it.id) as FloatBoxWidget).getData())

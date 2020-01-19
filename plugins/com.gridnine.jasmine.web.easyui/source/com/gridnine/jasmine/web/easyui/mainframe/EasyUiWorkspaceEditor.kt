@@ -9,6 +9,7 @@ package com.gridnine.jasmine.web.easyui.mainframe
 import com.gridnine.jasmine.server.standard.model.rest.*
 import com.gridnine.jasmine.web.core.StandardRestClient
 import com.gridnine.jasmine.web.core.serialization.CloneUtilsJS
+import com.gridnine.jasmine.web.core.ui.MainFrame
 import com.gridnine.jasmine.web.core.utils.TextUtilsJS
 import com.gridnine.jasmine.web.core.utils.HtmlUtilsJS
 import com.gridnine.jasmine.web.easyui.JQuery
@@ -18,6 +19,8 @@ import kotlin.js.Promise
 
 @Suppress("UnsafeCastFromDynamic")
 class EasyUiWorkspaceEditor : EasyUiTabHandler<WorkspaceDTJS> {
+
+    private val uid = TextUtilsJS.createUUID()
 
     private var lastEditor: EasyUiWorkspaceElementEditor<Any>? = null
 
@@ -41,31 +44,31 @@ class EasyUiWorkspaceEditor : EasyUiTabHandler<WorkspaceDTJS> {
 
     override fun getContent(data: WorkspaceDTJS, uid: String): String {
         return HtmlUtilsJS.html {
-            div(id = "workspace-editor", `class` = "easyui-layout", data_options = "fit:true") {
+            div(id = "${uid}workspace-editor", `class` = "easyui-layout", data_options = "fit:true") {
                 div(data_options = "region:'west',split:true,width:200") {
-                    ul(id = "workspace-editor-tree") {}
-                    div(id = "workspace-editor-tree-group-menu", style = "display:none") {
-                        div(id = "workspace-editor-tree-group-menu-add-above") { "Добавить группу выше"() }
-                        div(id = "workspace-editor-tree-group-menu-add-below") { "Добавить группу ниже"() }
+                    ul(id = "${uid}workspace-editor-tree") {}
+                    div(id = "${uid}workspace-editor-tree-group-menu", style = "display:none") {
+                        div(id = "${uid}workspace-editor-tree-group-menu-add-above") { "Добавить группу выше"() }
+                        div(id = "${uid}workspace-editor-tree-group-menu-add-below") { "Добавить группу ниже"() }
                         div(`class` = "menu-sep") {}
-                        div(id = "workspace-editor-tree-group-menu-add-list") { "Добавить список"() }
+                        div(id = "${uid}workspace-editor-tree-group-menu-add-list") { "Добавить список"() }
                         div(`class` = "menu-sep") {}
-                        div(id = "workspace-editor-tree-group-delete") { "Удалить группу"() }
+                        div(id = "${uid}workspace-editor-tree-group-delete") { "Удалить группу"() }
                     }
-                    div(id = "workspace-editor-tree-item-menu", style = "display:none") {
-                        div(id = "workspace-editor-tree-item-menu-add") { "Добавить список"() }
+                    div(id = "${uid}workspace-editor-tree-item-menu", style = "display:none") {
+                        div(id = "${uid}workspace-editor-tree-item-menu-add") { "Добавить список"() }
                         div(`class` = "menu-sep") {}
-                        div(id = "workspace-editor-tree-item-menu-copy") { "Копировать элемент"() }
+                        div(id = "${uid}workspace-editor-tree-item-menu-copy") { "Копировать элемент"() }
                         div(`class` = "menu-sep") {}
-                        div(id = "workspace-editor-tree-item-delete") { "Удалить список"() }
+                        div(id = "${uid}workspace-editor-tree-item-delete") { "Удалить список"() }
                     }
                 }
                 div(data_options = "region:'center'") {
-                    div(id = "workspace-editor-center-panel", `class` = "easyui-layout", data_options = "fit:true") {
-                        div(id = "workspace-editor-buttons-panel", region = "north", border = false, style = "padding:5px;height:50px") {
-                            a(id = "workspace-editor-save-button", href = "#") { "Сохранить"() }
+                    div(id = "${uid}workspace-editor-center-panel", `class` = "easyui-layout", data_options = "fit:true") {
+                        div(id = "${uid}workspace-editor-buttons-panel", region = "north", border = false, style = "padding:5px;height:50px") {
+                            a(id = "${uid}workspace-editor-save-button", href = "#") { "Сохранить"() }
                         }
-                        div(id = "workspace-editor-element-panel", region = "center", border = false, style = "padding:5px") { }
+                        div(id = "${uid}workspace-editor-element-panel", region = "center", border = false, style = "padding:5px") { }
                     }
                 }
             }
@@ -73,9 +76,9 @@ class EasyUiWorkspaceEditor : EasyUiTabHandler<WorkspaceDTJS> {
     }
 
     override fun decorateData(data: WorkspaceDTJS, uid: String, setTitle: (String) -> Unit, close: () -> Unit) {
-        jQuery("#workspace-editor").layout()
-        jQuery("#workspace-editor-center-panel").layout()
-        jQuery("#workspace-editor-save-button").linkbutton(object {
+        jQuery("#${uid}workspace-editor").layout()
+        jQuery("#${uid}workspace-editor-center-panel").layout()
+        jQuery("#${uid}workspace-editor-save-button").linkbutton(object {
             val onClick = onClick@{
                 if (lastEditor != null) {
                     if (!saveState()) {
@@ -88,7 +91,7 @@ class EasyUiWorkspaceEditor : EasyUiTabHandler<WorkspaceDTJS> {
                     val group = groupElm.userData as WorkspaceGroupDTJS
                     result.groups.add(group)
                     group.items.clear()
-                    groupElm.children.forEach{childElm ->
+                    groupElm.children?.forEach{childElm ->
                         group.items.add(childElm.userData)
                         Unit
                     }
@@ -98,13 +101,14 @@ class EasyUiWorkspaceEditor : EasyUiTabHandler<WorkspaceDTJS> {
                 request.workspace = result
                 StandardRestClient.standard_standard_saveWorkspace(request).then {
                     setData(it.workspace)
+                    (MainFrame.get() as EasyUiMainFrameImpl).setWorkspace(it.workspace)
                 }
             }
         })
 
 
-        val elementEditorPanel = jQuery("#workspace-editor-element-panel")
-        treeElm = jQuery("#workspace-editor-tree")
+        val elementEditorPanel = jQuery("#${uid}workspace-editor-element-panel")
+        treeElm = jQuery("#${uid}workspace-editor-tree")
         treeElm.tree(object {
             val dnd = true
             val fit = true
@@ -136,12 +140,12 @@ class EasyUiWorkspaceEditor : EasyUiTabHandler<WorkspaceDTJS> {
                 treeElm.tree("select", node.target)
                 val menuId = when (val userData = node.userData) {
                     is WorkspaceGroupDTJS -> {
-                        val menuId = "workspace-editor-tree-group-menu"
+                        val menuId = "${uid}workspace-editor-tree-group-menu"
 
                         jQuery("#$menuId").menu(object {
                             val onClick = { item: dynamic ->
                                 when (item.id) {
-                                    "workspace-editor-tree-group-menu-add-above" -> {
+                                    "${uid}workspace-editor-tree-group-menu-add-above" -> {
                                         val elementId = TextUtilsJS.createUUID()
                                         val userDataVal = WorkspaceGroupDTJS()
                                         userDataVal.displayName = "Новая группа"
@@ -155,7 +159,7 @@ class EasyUiWorkspaceEditor : EasyUiTabHandler<WorkspaceDTJS> {
                                         })
                                         selectElement(treeElm, elementId)
                                     }
-                                    "workspace-editor-tree-group-menu-add-below" -> {
+                                    "${uid}workspace-editor-tree-group-menu-add-below" -> {
                                         val elementId = TextUtilsJS.createUUID()
                                         val userDataVal = WorkspaceGroupDTJS()
                                         userDataVal.displayName = "Новая группа"
@@ -169,7 +173,7 @@ class EasyUiWorkspaceEditor : EasyUiTabHandler<WorkspaceDTJS> {
                                         })
                                         selectElement(treeElm, elementId)
                                     }
-                                    "workspace-editor-tree-group-menu-add-list" -> {
+                                    "${uid}workspace-editor-tree-group-menu-add-list" -> {
                                         val elementId = TextUtilsJS.createUUID()
                                         val userDataVal = ListWorkspaceItemDTJS()
                                         userDataVal.displayName = "Новый список"
@@ -183,7 +187,7 @@ class EasyUiWorkspaceEditor : EasyUiTabHandler<WorkspaceDTJS> {
                                         })
                                         selectElement(treeElm, elementId)
                                     }
-                                    "workspace-editor-tree-group-delete" -> {
+                                    "${uid}workspace-editor-tree-group-delete" -> {
                                         val selectedNodeId = node.id as String
                                         val roots = treeElm.tree("getRoots", Unit)
                                         if (roots.length == 1) {
@@ -210,12 +214,12 @@ class EasyUiWorkspaceEditor : EasyUiTabHandler<WorkspaceDTJS> {
                         menuId
                     }
                     is ListWorkspaceItemDTJS -> {
-                        val menuId = "workspace-editor-tree-item-menu"
+                        val menuId = "${uid}workspace-editor-tree-item-menu"
                         jQuery("#$menuId").menu(object {
                             val onClick = { item: dynamic ->
                                 when (item.id) {
 
-                                    "workspace-editor-tree-item-menu-add" -> {
+                                    "${uid}workspace-editor-tree-item-menu-add" -> {
                                         val elementId = TextUtilsJS.createUUID()
                                         val userDataVal = ListWorkspaceItemDTJS()
                                         userDataVal.displayName = "Новый список"
@@ -229,7 +233,7 @@ class EasyUiWorkspaceEditor : EasyUiTabHandler<WorkspaceDTJS> {
                                         })
                                         selectElement(treeElm, elementId)
                                     }
-                                    "workspace-editor-tree-item-menu-copy" -> {
+                                    "${uid}workspace-editor-tree-item-menu-copy" -> {
                                         val elementId = TextUtilsJS.createUUID()
                                         val newUserData = CloneUtilsJS.clone(node.userData, true)
                                         newUserData.displayName += "(копия)"
@@ -243,7 +247,7 @@ class EasyUiWorkspaceEditor : EasyUiTabHandler<WorkspaceDTJS> {
                                         })
                                         selectElement(treeElm, elementId)
                                     }
-                                    "workspace-editor-tree-item-delete" -> {
+                                    "${uid}workspace-editor-tree-item-delete" -> {
                                         val parentNode = treeElm.tree("getParent", node.target)
                                         treeElm.tree("remove", node.target)
                                         selectElement(treeElm, parentNode.id)

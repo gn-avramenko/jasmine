@@ -15,6 +15,8 @@ import com.gridnine.jasmine.server.core.storage.search.SearchQuery
 import com.gridnine.jasmine.server.core.web.WebAppFilter
 import com.gridnine.jasmine.server.core.web.WebApplication
 import com.gridnine.jasmine.server.core.web.WebServerConfig
+import com.gridnine.jasmine.server.sandbox.model.domain.SandboxComplexDocument
+import com.gridnine.jasmine.server.sandbox.model.domain.SandboxEnum
 import com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccount
 import com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccountIndex
 import com.gridnine.jasmine.server.sandbox.rest.SandboxWorkspaceProvider
@@ -22,7 +24,10 @@ import com.gridnine.jasmine.server.sandbox.storage.SandboxComplexDocumentIndexHa
 import com.gridnine.jasmine.server.sandbox.storage.SandboxUserAccountIndexHandler
 import com.gridnine.jasmine.server.standard.rest.WorkspaceProvider
 import java.lang.IllegalArgumentException
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
+import kotlin.math.roundToInt
 
 class SandboxActivator:IPluginActivator{
     override fun configure(config: Properties) {
@@ -69,5 +74,21 @@ class SandboxActivator:IPluginActivator{
                 Storage.get().saveDocument(userAccount)
             }
         }
+        for(n in 0..9){
+            val complexObject = SandboxComplexDocument()
+            complexObject.booleanProperty = randomInt(1) ==1
+            complexObject.dateProperty = LocalDate.of(2000+randomInt(20), randomInt(11)+1, randomInt(27)+1)
+            complexObject.dateTimeProperty = LocalDateTime.of(2000+randomInt(20), randomInt(11)+1, randomInt(27)+1, randomInt(23), randomInt(59), randomInt(59))
+            complexObject.entityRefProperty = Storage.get().findUniqueDocumentReference(SandboxUserAccountIndex::class, SandboxUserAccountIndex.login, "user${randomInt(10)}")
+            complexObject.enumProperty = SandboxEnum.valueOf("ELEMENT_${randomInt(1)+1}")
+            complexObject.floatProperty = (randomInt(100).toDouble()/10.toDouble()).toBigDecimal()
+            complexObject.integerProperty = randomInt(100)
+            complexObject.stringProperty = "string_${randomInt(10)}"
+            Storage.get().saveDocument(complexObject)
+        }
+    }
+
+    private fun randomInt(max:Int):Int{
+        return (max * Math.random()).roundToInt()
     }
 }

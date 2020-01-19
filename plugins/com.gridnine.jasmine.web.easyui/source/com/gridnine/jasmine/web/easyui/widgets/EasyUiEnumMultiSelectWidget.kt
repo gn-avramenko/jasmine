@@ -35,14 +35,22 @@ class EasyUiEnumMultiSelectWidget<E:Enum<E>>(uid:String, description:EnumSelectD
                     val limitToList = true
                     val hasDownArrow =  true
                     val data = selectItems.toTypedArray()
-                    val onChange = { _: String?, _: String? ->
+                    val onChange = { newValue: Array<String>, _: String? ->
+                        div.tagbox("getIcon",0).asDynamic().css("visibility",if(newValue.isEmpty()) "hidden" else "visible");
                         if (spanElm != null) {
                             spanElm.css("border-color", "")
                             spanElm.removeAttr("title")
                         }
                     }
+                    val icons = arrayOf(object{
+                        val iconCls = "icon-clear"
+                        val handler = {_:dynamic ->
+                            div.tagbox("setValues", arrayOfNulls<String>(0))
+                        }
+                    })
                 }
                 div.tagbox(options)
+                div.tagbox("getIcon",0).asDynamic().css("visibility", "hidden");
                 spanElm = div.tagbox("textbox").asDynamic().parent()
             }
         }

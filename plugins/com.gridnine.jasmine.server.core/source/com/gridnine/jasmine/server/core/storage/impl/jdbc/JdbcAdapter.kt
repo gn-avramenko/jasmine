@@ -57,7 +57,7 @@ class JdbcAdapter : Database, Disposable {
             cls: KClass<E>, query: ProjectionQuery): List<Map<String, Any>> {
         val className = cls.qualifiedName!!
         val descr = descriptions[JdbcUtils.getTableName(className)]?:throw IllegalArgumentException("no table with description for id ${JdbcUtils.getTableName(className)}")
-        val wherePart = JdbcUtils.prepareWherePart(query.criterions, null,  descr)
+        val wherePart = JdbcUtils.prepareWherePart(query.criterions, query.freeText,  descr)
 
         val selectSql = "select ${JdbcUtils.prepareProjectionSelectPart(query)} from ${JdbcUtils.getTableName(className)} ${wherePart.sql}${JdbcUtils.prepareProjectionGroupByPart(query)}"
         val searchStatement = createPreparedStatementSetter(wherePart)

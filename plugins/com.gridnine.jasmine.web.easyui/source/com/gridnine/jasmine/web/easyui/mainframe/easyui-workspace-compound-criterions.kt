@@ -1,10 +1,15 @@
+/*****************************************************************
+ * Gridnine AB http://www.gridnine.com
+ * Project: Jasmine
+ *****************************************************************/
+@file:Suppress("unused", "UNCHECKED_CAST")
+
 package com.gridnine.jasmine.web.easyui.mainframe
 
 import com.gridnine.jasmine.server.standard.model.rest.*
 import com.gridnine.jasmine.web.core.utils.TextUtilsJS
 import com.gridnine.jasmine.web.core.utils.HtmlUtilsJS
 
-@Suppress("UNCHECKED_CAST")
 abstract class BaseEasyUiWorkspaceComplexCriterionHandler<T:BaseComplexWorkspaceCriterionDTJS>(listId: String, indent:Int)  : CriterionsContainerHandler<T>{
     private val uid = TextUtilsJS.createUUID()
 

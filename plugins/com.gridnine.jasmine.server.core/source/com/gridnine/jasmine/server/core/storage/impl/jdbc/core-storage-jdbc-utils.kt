@@ -29,6 +29,8 @@ object JdbcUtils {
 
         const val AGGREGATED_DATA_COLUMN_NAME = "aggregatedData"
 
+        const val DOCUMENT_CAPTION_COLUMN_NAME = "documentCaption"
+
         private val contexts = ThreadLocal<JdbcContext>()
 
         fun <T : Any> query(sql: String, pss: ((ps:PreparedStatement)->Unit)?, rm: (rs:ResultSet)->T): List<T> {
@@ -411,12 +413,15 @@ object JdbcUtils {
 
     private fun getSQLFieldValue(value: Any,
                                  descr: DatabaseTableDescription, propertyName: String): FieldValue {
-        val type = if (AGGREGATED_DATA_COLUMN_NAME.equals(propertyName, true)) {
-            JdbcPropertyType.TEXT
-        } else {
-            val coll = descr.collections[propertyName]
-            coll?.elementType ?: (descr.properties[propertyName] ?: error("")).type
-        }
+        val type =
+                when (propertyName) {
+                    AGGREGATED_DATA_COLUMN_NAME -> JdbcPropertyType.TEXT
+                    DOCUMENT_CAPTION_COLUMN_NAME -> JdbcPropertyType.STRING
+                    else -> {
+                        val coll = descr.collections[propertyName]
+                        coll?.elementType ?: (descr.properties[propertyName] ?: error("")).type
+                    }
+                }
         return JdbcHandlerUtils.getHandler(type).getSqlQueryValue(value)
     }
 

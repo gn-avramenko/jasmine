@@ -106,7 +106,7 @@ object UiWebGenerator {
     private fun getClassName(propertyType: VSPropertyType, className: String?): String? {
         return when(propertyType){
             VSPropertyType.ENUM_SELECT -> "com.gridnine.jasmine.web.core.model.ui.EnumSelectConfigurationJS<${className}JS>"
-            VSPropertyType.ENTITY_AUTOCOMPLETE -> "com.gridnine.jasmine.web.core.model.ui.EntityAutocompleteConfigurationJS"
+            VSPropertyType.ENTITY_AUTOCOMPLETE -> "com.gridnine.jasmine.web.core.model.ui.EntitySelectConfigurationJS"
             VSPropertyType.ENTITY -> {
                 if(className != null && className.startsWith(TableConfiguration::class.qualifiedName!!)){
                     val idx1 =className.indexOf("<")
@@ -183,7 +183,7 @@ object UiWebGenerator {
             is TableNextRowDescription ->null
             is TableNextColumnDescription ->null
             is EnumSelectDescription -> "com.gridnine.jasmine.web.core.model.ui.EnumSelectWidget<${widgetDescription.enumId}JS>"
-            is EntityAutocompleteDescription ->"com.gridnine.jasmine.web.core.model.ui.EntityAutocompletetWidget"
+            is EntitySelectDescription ->"com.gridnine.jasmine.web.core.model.ui.EntitySelectWidget"
             is TextboxDescription -> "com.gridnine.jasmine.web.core.model.ui.TextBoxWidget"
             is TextAreaDescription -> "com.gridnine.jasmine.web.core.model.ui.TextAreaWidget"
             is IntegerBoxDescription -> "com.gridnine.jasmine.web.core.model.ui.IntegerBoxWidget"

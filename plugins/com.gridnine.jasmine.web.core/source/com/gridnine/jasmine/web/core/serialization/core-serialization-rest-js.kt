@@ -115,11 +115,11 @@ object RestSerializationUtilsJS {
         }
 
         private fun toClassName(elementType: RestPropertyTypeJS, elementClassName: String?): String? {
-            if (elementClassName != null) {
-                return elementClassName
-            }
             if (elementType == RestPropertyTypeJS.ENTITY_REFERENCE) {
                 return EntityReferenceJS.qualifiedClassName
+            }
+            if (elementClassName != null) {
+                return elementClassName
             }
             return null
         }
@@ -153,7 +153,7 @@ object RestSerializationUtilsJS {
             if(EnumSelectConfigurationJS.qualifiedClassName == className){
                 return UiSerializationUtilsJS.uiProviderFactory.create(className)
             }
-            if(EntityAutocompleteConfigurationJS.qualifiedClassName == className){
+            if(EntitySelectConfigurationJS.qualifiedClassName == className){
                 return UiSerializationUtilsJS.uiProviderFactory.create(className)
             }
             if(EntityAutocompleteDataSourceJS.qualifiedClassName == className){

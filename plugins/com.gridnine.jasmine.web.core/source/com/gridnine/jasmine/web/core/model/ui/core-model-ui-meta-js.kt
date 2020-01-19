@@ -141,7 +141,7 @@ class FloatBoxDescriptionJS(id: String, val notNullable:Boolean)  : BaseWidgetDe
 
 class EnumSelectDescriptionJS(id: String, val enumId:String) : BaseWidgetDescriptionJS(id)
 
-class EntityAutocompleteDescriptionJS(id: String, val entityClassName:String) : BaseWidgetDescriptionJS(id)
+class EntitySelectDescriptionJS(id: String, val entityClassName:String) : BaseWidgetDescriptionJS(id)
 
 class DateboxDescriptionJS(id: String)  : BaseWidgetDescriptionJS(id)
 

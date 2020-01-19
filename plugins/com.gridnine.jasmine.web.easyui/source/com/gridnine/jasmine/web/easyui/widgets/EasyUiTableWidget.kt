@@ -57,7 +57,7 @@ class EasyUiTableWidget<VM : BaseVMEntityJS, VS : BaseVSEntityJS, VV : BaseVVEnt
             if(!configuration.nonEditable){
                 columns.add(object {
                     val field = "controlButtons"
-                    val title = "<div style=\"display:inline-block;width:15px;height:30px;float:right\" id=\"${uid}AddToolButton\" class = \"jasmine-datagrid-expand\"></div>"
+                    val title = "<div style=\"display:inline-block;width:15px;height:30px;float:right\" id=\"${description.id}${uid}AddToolButton\" class = \"jasmine-datagrid-expand\"></div>"
                     val formatter = { _: dynamic, row: dynamic, _: dynamic ->
                         "<div style=\"display:inline-block;width:15px;height:30px\" id=\"${row.uid}Up\" class = \"jasmine-datagrid-sort-asc\"></div>"+
                                 "<div style=\"display:inline-block;width:15px;height:30px\" id=\"${row.uid}Down\" class = \"jasmine-datagrid-sort-desc\"></div>"+
@@ -77,7 +77,7 @@ class EasyUiTableWidget<VM : BaseVMEntityJS, VS : BaseVSEntityJS, VV : BaseVVEnt
                 val onEndEdit = if (!configuration.nonEditable) this@EasyUiTableWidget::createOnEndEdit else null
             })
             if(!configuration.nonEditable){
-                val addButtonDiv = jQuery("#${uid}AddToolButton").asDynamic()
+                val addButtonDiv = jQuery("#${description.id}${uid}AddToolButton").asDynamic()
                 addButtonDiv.off("click")
                 addButtonDiv.click{
                     div.datagrid("insertRow", object{

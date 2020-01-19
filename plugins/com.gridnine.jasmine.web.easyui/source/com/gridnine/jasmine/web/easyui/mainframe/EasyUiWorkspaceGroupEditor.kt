@@ -8,18 +8,20 @@ package com.gridnine.jasmine.web.easyui.mainframe
 
 import com.gridnine.jasmine.server.standard.model.rest.WorkspaceGroupDTJS
 import com.gridnine.jasmine.web.core.model.ui.TextboxDescriptionJS
+import com.gridnine.jasmine.web.core.utils.TextUtilsJS
 import com.gridnine.jasmine.web.easyui.widgets.EasyUiTextBoxWidget
 
 class EasyUiWorkspaceGroupEditor : EasyUiWorkspaceElementEditor<WorkspaceGroupDTJS>{
 
+    private val uid = TextUtilsJS.createUUID()
 
     private lateinit var widget:EasyUiTextBoxWidget
 
-    override fun getContent():String ="<div class=\"jasmine-label\" style=\"display:inline-block;width:70px;position:relative;top:2px\">Название: </div><input id =\"groupName\" style =\"width:300px\">"
+    override fun getContent():String ="<div class=\"jasmine-label\" style=\"display:inline-block;width:70px;position:relative;top:2px\">Название: </div><input id =\"groupName${uid}\" style =\"width:300px\">"
 
     override fun decorate() {
         val description = TextboxDescriptionJS("groupName")
-        widget = EasyUiTextBoxWidget("",description)
+        widget = EasyUiTextBoxWidget(uid,description)
         widget.configure(Unit)
 
     }

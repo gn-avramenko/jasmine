@@ -20,11 +20,12 @@ external interface JQuery {
     fun jtabs(options:Any)
     fun jtabs(method:String):dynamic
     fun jtabs(method:String, arg:Any?):dynamic
-    fun accordion():Any?
+    fun accordion(options:Any):Any?
     fun accordion(method:String):Any?
     fun accordion(method:String, arg:Any?):Any?
     fun on(event:String, callback:(event:dynamic) -> Unit)
     fun searchbox(method:String):Any
+    fun searchbox(options:Any):dynamic
     fun datagrid(method: String, vararg args:Any?): Any?
     fun datagrid(options:Any)
     fun datalist(options:Any)
@@ -53,6 +54,7 @@ external interface JQuery {
     fun numberbox(method: String ):Any?
     fun addClass(cls:String)
     fun removeClass(cls:String)
+    fun removeClass()
     fun click(handler: () -> Unit)
     fun focus()
     val length:Int

@@ -44,12 +44,12 @@ object RestSerializationUtils {
 
                 private fun fillProperties(descr: RestEntityDescription){
                     descr.properties.values.forEach {
-                        properties.add(SerializablePropertyDescription(it.id, toSerializableType(it.type), toClassName(it.type, it.className), isAbstractClass(it.className)))
+                        properties.add(SerializablePropertyDescription(it.id, toSerializableType(it.type), toClassName(it.type, it.className), isAbstractClass(it.type, it.className)))
                     }
                 }
                 private fun fillCollections(descr: RestEntityDescription){
                     descr.collections.values.forEach {
-                        collections.add(SerializableCollectionDescription(it.id, toSerializableType(it.elementType), toClassName(it.elementType, it.elementClassName), isAbstractClass(it.elementClassName)))
+                        collections.add(SerializableCollectionDescription(it.id, toSerializableType(it.elementType), toClassName(it.elementType, it.elementClassName), isAbstractClass(it.elementType, it.elementClassName)))
                     }
                 }
                 override fun getCollection(obj: BaseRestEntity, id: String): MutableCollection<Any> {
@@ -70,7 +70,10 @@ object RestSerializationUtils {
 
 
 
-        private fun isAbstractClass(elementClassName: String?): Boolean {
+        private fun isAbstractClass(elementType:RestPropertyType, elementClassName: String?): Boolean {
+            if(elementType == RestPropertyType.ENTITY_REFERENCE){
+                return false
+            }
             if(elementClassName == null){
                 return false
             }
@@ -115,11 +118,11 @@ object RestSerializationUtils {
         }
 
         private fun toClassName(elementType: RestPropertyType, elementClassName: String?): String? {
-            if (elementClassName != null) {
-                return elementClassName
-            }
             if (elementType == RestPropertyType.ENTITY_REFERENCE) {
                 return EntityReference::class.qualifiedName
+            }
+            if (elementClassName != null) {
+                return elementClassName
             }
             return null
         }

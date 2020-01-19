@@ -128,16 +128,15 @@ abstract class BaseDocument : BaseEntity() {
     }
 }
 
-open class EntityReference<D : BaseEntity>:BaseEntity {
+open class EntityReference<D : BaseEntity>():BaseEntity() {
 
 
     var caption: String? = null
 
     lateinit var type: KClass<D>
 
-    constructor()
 
-    constructor(type: KClass<D>, uid: String, caption: String?) {
+    constructor(type: KClass<D>, uid: String, caption: String?):this() {
         this.uid = uid
         this.type = type
         this.caption = caption
@@ -196,9 +195,13 @@ abstract class BaseIndex<D : BaseDocument> : BaseEntity() {
         super.setValue(propertyName, value)
     }
 
+    class _TestDomainDocumentIndexProperty0(name:String):com.gridnine.jasmine.server.core.storage.search.PropertyNameSupport(name),com.gridnine.jasmine.server.core.storage.search.EqualitySupport,com.gridnine.jasmine.server.core.storage.search.StringOperationsSupport
+
+
     companion object{
         const val document= "document"
         const val navigationKey="navigationKey"
+        val referenceCaption = _TestDomainDocumentIndexProperty0("documentCaption")
     }
 }
 abstract class BaseNestedDocument : BaseEntity()

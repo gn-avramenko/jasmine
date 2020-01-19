@@ -220,6 +220,7 @@ class StandardStorageImpl: Storage {
         val pq = ProjectionQuery()
         pq.projections.add(query.projection)
         pq.criterions.addAll(query.criterions)
+        pq.freeText = query.freeText
         val res = searchDocuments(cls, pq)
         return when (res.size){
             1 -> res[0].values.iterator().next() as R

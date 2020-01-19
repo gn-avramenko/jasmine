@@ -57,17 +57,17 @@ class SandboxAuthFilter : Filter {
                 return
             }
             authInfo.set(AuthInfo(login))
-            try {
-                chain.doFilter(request, response)
-            } finally {
-                authInfo.remove()
-            }
         } catch (e:Exception){
             LoggerFactory.getLogger(javaClass).error("unable to check credentials", e)
             cookie.maxAge = 0
             response.addCookie(cookie)
             httpResponse.status = 403
             return
+        }
+        try {
+            chain.doFilter(request, response)
+        } finally {
+            authInfo.remove()
         }
     }
 

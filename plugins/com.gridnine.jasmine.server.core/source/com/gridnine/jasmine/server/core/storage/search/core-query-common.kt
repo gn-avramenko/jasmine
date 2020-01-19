@@ -115,7 +115,7 @@ fun not(criterion:SearchCriterion):SearchCriterion{
     return NotCriterion(criterion)
 }
 
-data class SimpleCriterion internal constructor(val property:String, val operation: Operation, val value: Any) : SearchCriterion() {
+data class SimpleCriterion constructor(val property:String, val operation: Operation, val value: Any) : SearchCriterion() {
 
     override fun toString(): String {
         return "$property $operation ${value2String(value)}"
@@ -135,7 +135,7 @@ data class SimpleCriterion internal constructor(val property:String, val operati
     }
 }
 
-data class CheckCriterion internal constructor(val property:String,val check:Check) : SearchCriterion() {
+data class CheckCriterion constructor(val property:String,val check:Check) : SearchCriterion() {
 
     enum class Check {
         IS_EMPTY,
@@ -148,14 +148,14 @@ data class CheckCriterion internal constructor(val property:String,val check:Che
         return "$property ${check.name}"
     }
 }
-data class BetweenCriterion internal constructor(val property:String,val lo:Any, val hi:Any ) : SearchCriterion() {
+data class BetweenCriterion constructor(val property:String,val lo:Any, val hi:Any ) : SearchCriterion() {
 
     override fun toString(): String {
         return "$property BETWEEN ${value2String(lo)} AND ${value2String(hi)}"
     }
 }
 
-data class NotBetweenCriterion internal constructor(val property:String,val lo:Any, val hi:Any ) : SearchCriterion() {
+data class NotBetweenCriterion constructor(val property:String,val lo:Any, val hi:Any ) : SearchCriterion() {
 
     override fun toString(): String {
         return "$property NOT BETWEEN ${value2String(lo)} AND ${value2String(hi)}"
@@ -163,21 +163,21 @@ data class NotBetweenCriterion internal constructor(val property:String,val lo:A
 
 }
 
-data class InCriterion internal constructor(val property:String,val objects:List<Any> ) : SearchCriterion() {
+data class InCriterion constructor(val property:String,val objects:List<Any> ) : SearchCriterion() {
 
     override fun toString(): String {
         return "$property IN [${objects.joinToString(", ") { value2String(it)}}]"
     }
 }
 
-data class JunctionCriterion internal constructor(val disjunction:Boolean,val criterions:List<SearchCriterion> ) : SearchCriterion() {
+data class JunctionCriterion constructor(val disjunction:Boolean,val criterions:List<SearchCriterion> ) : SearchCriterion() {
 
     override fun toString(): String {
         return "(${criterions.joinToString(if(disjunction) " OR " else " AND "){ "($it)" }})"
     }
 }
 
-data class NotCriterion internal constructor(val criterion: SearchCriterion) : SearchCriterion() {
+data class NotCriterion constructor(val criterion: SearchCriterion) : SearchCriterion() {
 
     override fun toString(): String {
         return "NOT ($criterion)"
@@ -185,6 +185,7 @@ data class NotCriterion internal constructor(val criterion: SearchCriterion) : S
 }
 
 abstract class BaseQuery{
+    var freeText: String? = null
     val criterions = arrayListOf<SearchCriterion>()
 }
 

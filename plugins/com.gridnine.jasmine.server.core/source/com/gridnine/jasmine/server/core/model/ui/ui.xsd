@@ -111,7 +111,7 @@
                 <element name="password-box" type="tns:passwordBox"/>
                 <element name="enum-select" type="tns:enumSelect"/>
                 <element name="select" type="tns:select"/>
-                <element name="entity-autocomplete" type="tns:entityAutocomplete"/>
+                <element name="entity-select" type="tns:entitySelect"/>
                 <element name="text-area" type="tns:textArea"/>
                 <element name="integer-box" type="tns:integerBox"/>
                 <element name="float-box" type="tns:floatBox"/>
@@ -152,7 +152,7 @@
             </extension>
         </complexContent>
     </complexType>
-    <complexType name="entityAutocomplete">
+    <complexType name="entitySelect">
         <complexContent>
             <extension base="tns:baseWidget">
                 <attribute name="entity-class-name" type="string" use="required"/>
@@ -283,7 +283,7 @@
                                 <choice maxOccurs="unbounded">
                                     <element name="text-column" type="tns:textColumn"/>
                                     <element name="enum-select-column" type="tns:enumColumn"/>
-                                    <element name="entity-autocomplete-column" type="tns:entityColumn"/>
+                                    <element name="entity-select-column" type="tns:entityColumn"/>
                                     <element name="integer-column" type="tns:integerColumn"/>
                                     <element name="float-column" type="tns:floatColumn"/>
                                     <element name="date-column" type="tns:dateColumn"/>

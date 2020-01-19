@@ -149,7 +149,7 @@ class EnumSelectDescription(owner: String, id: String, val enumId:String) : Base
 
 class SelectDescription(owner: String, id: String) : BaseWidgetDescription(owner, id)
 
-class EntityAutocompleteDescription(owner: String, id: String, val entityClassName:String) : BaseWidgetDescription(owner, id)
+class EntitySelectDescription(owner: String, id: String, val entityClassName:String) : BaseWidgetDescription(owner, id)
 
 class DateboxDescription(owner: String, id: String)  : BaseWidgetDescription(owner, id)
 

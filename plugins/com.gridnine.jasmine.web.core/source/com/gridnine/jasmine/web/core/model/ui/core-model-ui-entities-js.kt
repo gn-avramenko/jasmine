@@ -88,11 +88,12 @@ open class EnumSelectWidget<E:Enum<E>>:ValueWidget<E,EnumSelectConfigurationJS<E
 open class SelectWidget:ValueWidget<SelectItemJS,SelectConfigurationJS>()
 open class EnumMultiSelectWidget<E:Enum<E>>:MultiValueWidget<E,EnumSelectConfigurationJS<E>>()
 
-open class EntityAutocompletetWidget:ValueWidget<EntityReferenceJS, EntityAutocompleteConfigurationJS>()
+open class EntitySelectWidget:ValueWidget<EntityReferenceJS, EntitySelectConfigurationJS>()
+open class EntityMultiSelectWidget:MultiValueWidget<EntityReferenceJS,EntitySelectConfigurationJS>()
 
 open class TableWidget<T:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS>:CollectionWidget<T, TableConfigurationJS<VS>, VV>()
 
-class SelectItemJS(val id:String?, val caption:String?)
+data class SelectItemJS(val id:String?, val caption:String?)
 
 class EnumSelectConfigurationJS<E:Enum<E>> {
     var nullAllowed = true
@@ -128,12 +129,12 @@ class EntityAutocompleteDataSourceJS {
     }
 }
 
-class EntityAutocompleteConfigurationJS {
-    var nullAllowed:Boolean? = true
+class EntitySelectConfigurationJS {
+    var nullAllowed:Boolean = true
     var limit:Int = 10
     var dataSources = arrayListOf<EntityAutocompleteDataSourceJS>()
     companion object{
-        const val qualifiedClassName = "com.gridnine.jasmine.web.core.model.ui.EntityAutocompleteConfigurationJS"
+        const val qualifiedClassName = "com.gridnine.jasmine.web.core.model.ui.EntitySelectConfigurationJS"
         const val nullAllowed = "nullAllowed"
         const val limit = "limit"
         const val dataSources = "dataSources"

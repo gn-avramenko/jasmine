@@ -23,7 +23,7 @@ class EasyUiSelectWidget(uid:String, description:SelectDescriptionJS):SelectWidg
                 selectItems.addAll(settings.possibleValues)
                 selectItems.sortBy { it?.caption }
                 if(settings.nullAllowed){
-                    selectItems.add(0,null)
+                    selectItems.add(0, SelectItemJS(null, null))
                 }
                 val options = object {
                     val valueField = "id"
@@ -60,10 +60,13 @@ class EasyUiSelectWidget(uid:String, description:SelectDescriptionJS):SelectWidg
                 spanElm.attr("title", it)
             }
         }
-        getData ={
+        getData =getData@ {
             val value = div.combobox("getValue") as String?
+            if(value.isNullOrBlank()){
+                return@getData null
+            }
             val text =  div.combobox("getText") as String?
-            value?.let{SelectItemJS(value, text)}
+            SelectItemJS(value, text)
         }
     }
 

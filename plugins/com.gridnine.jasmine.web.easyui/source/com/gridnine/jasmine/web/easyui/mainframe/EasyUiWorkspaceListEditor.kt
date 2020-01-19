@@ -12,12 +12,15 @@ import com.gridnine.jasmine.server.standard.model.rest.SortOrderTypeDTJS
 import com.gridnine.jasmine.web.core.model.domain.BaseIndexDescriptionJS
 import com.gridnine.jasmine.web.core.model.domain.DomainMetaRegistryJS
 import com.gridnine.jasmine.web.core.model.ui.*
+import com.gridnine.jasmine.web.core.utils.TextUtilsJS
 import com.gridnine.jasmine.web.easyui.jQuery
 import com.gridnine.jasmine.web.easyui.widgets.EasyUiSelectWidget
 import com.gridnine.jasmine.web.easyui.widgets.EasyUiTableWidget
 import com.gridnine.jasmine.web.easyui.widgets.EasyUiTextBoxWidget
 
 class EasyUiWorkspaceListEditor : EasyUiWorkspaceElementEditor<ListWorkspaceItemDTJS>{
+
+    private val uid = TextUtilsJS.createUUID()
 
     private lateinit var nameWidget:TextBoxWidget
 
@@ -38,40 +41,40 @@ class EasyUiWorkspaceListEditor : EasyUiWorkspaceElementEditor<ListWorkspaceItem
     private lateinit var criterionsEditor: EasyUiWorkspaceCriterionsEditor
 
     override fun getContent():String {
-        return "<div id=\"editor-wrapper\" fit=\"true\"><div region=\"north\" border=\"false\" style=\"height:80px\">${createNameDiv()}\n${createListControl()}</div><div region=\"center\" >${createAccordion()}</div></div>"
+        return "<div id=\"editor-wrapper${uid}\" fit=\"true\"><div region=\"north\" border=\"false\" style=\"height:80px\">${createNameDiv()}\n${createListControl()}</div><div region=\"center\" >${createAccordion()}</div></div>"
     }
 
     private fun createAccordion(): String {
-        return "<div id=\"accordion\" fit=\"true\" class=\"easyui-accordion\">\n${createFieldsDiv()}\n${createSortOrdersDiv()}\n${createFiltersDiv()}\n${createCriterionsDiv()}\n</div>"
+        return "<div id=\"accordion${uid}\" fit=\"true\" class=\"easyui-accordion\">\n${createFieldsDiv()}\n${createSortOrdersDiv()}\n${createFiltersDiv()}\n${createCriterionsDiv()}\n</div>"
     }
 
     private fun createCriterionsDiv(): String {
-        return "<div title=\"Критерии\"><div id = \"criterions\" style = \"width:100%;height:100%\"/></div>"
+        return "<div title=\"Критерии\"><div id = \"criterions${uid}\" style = \"width:100%;height:100%\"/></div>"
 
     }
 
     private fun createFiltersDiv(): String {
-        return "<div title=\"Фильтры\"><table id = \"filters\" style = \"width:${labelWidth+ inputWidth}px\"/></div>"
+        return "<div title=\"Фильтры\"><table id = \"filters${uid}\" style = \"width:${labelWidth+ inputWidth}px\"/></div>"
     }
 
     private fun createSortOrdersDiv(): String {
-        return "<div title=\"Сортировки\"><table id = \"sortOrders\" style = \"width:${2*(labelWidth + inputWidth)}px\"/></div>"
+        return "<div title=\"Сортировки\"><table id = \"sortOrders${uid}\" style = \"width:${2*(labelWidth + inputWidth)}px\"/></div>"
     }
 
     private fun createFieldsDiv(): String {
-        return "<div title=\"Поля\"><table id = \"fields\" style = \"width:${labelWidth+ inputWidth}px\"/></div>"
+        return "<div title=\"Поля\"><table id = \"fields${uid}\" style = \"width:${labelWidth+ inputWidth}px\"/></div>"
     }
 
-    private fun createListControl() = "<div style=\"padding-top:5px\"><div class=\"jasmine-label\" style=\"display:inline-block;width:${labelWidth}px;position:relative;top:2px\">Список: </div><input id =\"list-select\" style =\"width:${inputWidth}px\"></div>"
+    private fun createListControl() = "<div style=\"padding-top:5px\"><div class=\"jasmine-label\" style=\"display:inline-block;width:${labelWidth}px;position:relative;top:2px\">Список: </div><input id =\"list-select${uid}\" style =\"width:${inputWidth}px\"></div>"
 
-    private fun createNameDiv() = "<div style=\"padding-top:5px\"><div class=\"jasmine-label\" style=\"display:inline-block;width:${labelWidth}px;position:relative;top:2px\">Название: </div><input id =\"item-name\" style =\"width:${inputWidth}px\"></div>"
+    private fun createNameDiv() = "<div style=\"padding-top:5px\"><div class=\"jasmine-label\" style=\"display:inline-block;width:${labelWidth}px;position:relative;top:2px\">Название: </div><input id =\"item-name${uid}\" style =\"width:${inputWidth}px\"></div>"
 
     override fun decorate() {
         possibleSortOrderValues = arrayListOf(SelectItemJS(SortOrderTypeDTJS.ASC.name, "По возрастанию"), SelectItemJS(SortOrderTypeDTJS.DESC.name, "По убыванию"))
-        jQuery("#editor-wrapper").layout()
+        jQuery("#editor-wrapper${uid}").layout()
         run {
             val description = TextboxDescriptionJS("item-name")
-            nameWidget = EasyUiTextBoxWidget("", description)
+            nameWidget = EasyUiTextBoxWidget(uid, description)
             nameWidget.configure(Unit)
         }
         run {
@@ -83,7 +86,7 @@ class EasyUiWorkspaceListEditor : EasyUiWorkspaceElementEditor<ListWorkspaceItem
                 val descr = DomainMetaRegistryJS.get().indexes[descriptionId]?:DomainMetaRegistryJS.get().assets[descriptionId]?:throw IllegalArgumentException("unable to find description for list $descriptionId")
                 config.possibleValues.add(SelectItemJS(it.id, descr.displayName))
             }
-            listSelectWidget = EasyUiSelectWidget("", description)
+            listSelectWidget = EasyUiSelectWidget(uid, description)
             listSelectWidget.configure(config)
             possibleListValues = config.possibleValues
             listSelectWidget.valueChangeListener = {newValue, _ ->
@@ -110,32 +113,32 @@ class EasyUiWorkspaceListEditor : EasyUiWorkspaceElementEditor<ListWorkspaceItem
                 sortOrderTableConfig.columnSettings = sortOrderColumnSettings
                 sortOrdersWidget.configure(sortOrderTableConfig)
                 sortOrdersWidget.readData(arrayListOf())
-                criterionsEditor = EasyUiWorkspaceCriterionsEditor("criterions", newValue?.id)
+                criterionsEditor = EasyUiWorkspaceCriterionsEditor("criterions${uid}", newValue?.id)
                 criterionsEditor.clear()
             }
         }
         run{
-            val tableDescription = TableDescriptionJS("","com.gridnine.jasmine.web.core.model.ui.SimplePropertyWrapper")
+            val tableDescription = TableDescriptionJS("fields","com.gridnine.jasmine.web.core.model.ui.SimplePropertyWrapper")
             val columnDescr = SelectTableColumnDescriptionJS(SimplePropertyWrapperVMJS.property, "Поле")
             tableDescription.columns[columnDescr.id] = columnDescr
-            fieldsWidget = EasyUiTableWidget("fields", tableDescription)
+            fieldsWidget = EasyUiTableWidget(uid, tableDescription)
         }
         run{
-            val tableDescription = TableDescriptionJS("","com.gridnine.jasmine.web.core.model.ui.SimplePropertyWrapper")
+            val tableDescription = TableDescriptionJS("filters","com.gridnine.jasmine.web.core.model.ui.SimplePropertyWrapper")
             val columnDescr = SelectTableColumnDescriptionJS(SimplePropertyWrapperVMJS.property, "Поле")
             tableDescription.columns[columnDescr.id] = columnDescr
-            filtersWidget = EasyUiTableWidget("filters", tableDescription)
+            filtersWidget = EasyUiTableWidget(uid, tableDescription)
         }
         run{
-            val tableDescription = TableDescriptionJS("","com.gridnine.jasmine.web.easyui.mainframe.EasyUiWorkspaceListEditor.SortOrderWrapper")
+            val tableDescription = TableDescriptionJS("sortOrders","com.gridnine.jasmine.web.easyui.mainframe.EasyUiWorkspaceListEditor.SortOrderWrapper")
             val fieldColumnDescr = SelectTableColumnDescriptionJS(SortOrderWrapperVMJS.field, "Поле")
             tableDescription.columns[fieldColumnDescr.id] = fieldColumnDescr
             val sortOrderDescription = SelectTableColumnDescriptionJS(SortOrderWrapperVMJS.order, "Сортировка")
             tableDescription.columns[sortOrderDescription.id] = sortOrderDescription
-            sortOrdersWidget = EasyUiTableWidget("sortOrders", tableDescription)
+            sortOrdersWidget = EasyUiTableWidget(uid, tableDescription)
         }
 
-        jQuery("#accordion").accordion()
+        jQuery("#accordion${uid}").accordion(object{})
     }
 
 
@@ -145,7 +148,7 @@ class EasyUiWorkspaceListEditor : EasyUiWorkspaceElementEditor<ListWorkspaceItem
         nameWidget.setData(data.displayName)
         listSelectWidget.setData(data.listId?.let {
             SelectItemJS(it, possibleListValues.find { elm ->elm.id == it }?.caption)
-        })
+        }?:possibleListValues[0])
         val fieldsList = data.columns.withIndex().map { (idx, c) -> SimplePropertyWrapperVMJS("field$idx", SelectItemJS(c, possibleFieldValues.find { it.id == c }?.caption)) }.toList()
         fieldsWidget.readData(fieldsList)
 
@@ -376,7 +379,7 @@ class EasyUiWorkspaceListEditor : EasyUiWorkspaceElementEditor<ListWorkspaceItem
         }
 
         fun getPossibleFieldValues(listId:String?): List<SelectItemJS> {
-            val descr = getListDescription(listId)?: return emptyList<SelectItemJS>()
+            val descr = getListDescription(listId)?: return emptyList()
             val result = arrayListOf<SelectItemJS>()
             descr.properties.values.forEach { result.add(SelectItemJS(it.id,it.displayName)) }
             descr.collections.values.forEach { result.add(SelectItemJS(it.id,it.displayName)) }

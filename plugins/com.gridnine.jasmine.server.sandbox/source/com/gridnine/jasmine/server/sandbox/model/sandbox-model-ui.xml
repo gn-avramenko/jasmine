@@ -24,7 +24,7 @@
                 <boolean-box id="booleanProperty"/>
                 <next-row/>
                 <label id="entityPropertyLabel" caption="entityPropertyLabel.caption"/>
-                <entity-autocomplete id="entityProperty" entity-class-name="com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccount"/>
+                <entity-select id="entityProperty" entity-class-name="com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccount"/>
                 <next-row/>
                 <label id="enumPropertyLabel" caption="enumPropertyLabel.caption"/>
                 <enum-select id="enumProperty" enum-id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxEnum"/>
@@ -40,7 +40,7 @@
                 <table id="entityCollection" h_span="3" class-name="com.gridnine.jasmine.server.sandbox.model.ui.SandboxTable">
                     <columns>
                         <text-column id="textColumn" caption="textColumn.caption"/>
-                        <entity-autocomplete-column id="entityColumn" entity-class-name="com.gridnine.jasmine.server.sandbox.model.domain.SandboxSimpleDocument" caption="entityColumn.caption"/>
+                        <entity-select-column id="entityColumn" entity-class-name="com.gridnine.jasmine.server.sandbox.model.domain.SandboxSimpleDocument" caption="entityColumn.caption"/>
                         <enum-select-column id="enumColumn" enum-id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxEnum" caption="SandboxUserAccount.caption"/>
                         <float-column id="floatColumn" caption="floatColumn.caption"/>
                         <integer-column id="integerColumn" caption="integerColumn.caption"/>

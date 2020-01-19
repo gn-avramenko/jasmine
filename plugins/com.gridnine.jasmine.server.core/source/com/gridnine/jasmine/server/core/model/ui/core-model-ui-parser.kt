@@ -163,8 +163,8 @@ object UiMetadataParser {
                         vsEntityDescr.properties[es.id] = VSPropertyDescription(editorId, es.id, VSPropertyType.SELECT, null)
                         vvEntityDescr.properties[es.id] = VVPropertyDescription(editorId, es.id, VVPropertyType.STRING, null)
                     }
-                    "entity-autocomplete" ->{
-                        val es = EntityAutocompleteDescription(editorId, ParserUtils.getIdAttribute(it), it.attributes["entity-class-name"]?:throw IllegalArgumentException("${it.name} has no entity-class-name attribute"))
+                    "entity-select" ->{
+                        val es = EntitySelectDescription(editorId, ParserUtils.getIdAttribute(it), it.attributes["entity-class-name"]?:throw IllegalArgumentException("${it.name} has no entity-class-name attribute"))
                         updateHspan(es, it)
                         layout.widgets[es.id] = es
                         val vmp = VMPropertyDescription(editorId, es.id, VMPropertyType.ENTITY_REFERENCE, es.entityClassName,false)

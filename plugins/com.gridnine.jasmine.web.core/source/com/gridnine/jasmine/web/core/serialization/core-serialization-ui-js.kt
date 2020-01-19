@@ -310,42 +310,42 @@ internal object UiSerializationUtilsJS {
             }
         }
 
-        private fun createEntityAutocompleteConfigurationDescription(): ObjectMetadataProviderJS<EntityAutocompleteConfigurationJS> {
-            return object : ObjectMetadataProviderJS<EntityAutocompleteConfigurationJS>() {
+        private fun createEntityAutocompleteConfigurationDescription(): ObjectMetadataProviderJS<EntitySelectConfigurationJS> {
+            return object : ObjectMetadataProviderJS<EntitySelectConfigurationJS>() {
                 init {
-                    properties.add(SerializablePropertyDescriptionJS(EntityAutocompleteConfigurationJS.limit, SerializablePropertyTypeJS.INT, null, false))
-                    properties.add(SerializablePropertyDescriptionJS(EntityAutocompleteConfigurationJS.nullAllowed, SerializablePropertyTypeJS.BOOLEAN, null, false))
-                    collections.add(SerializableCollectionDescriptionJS(EntityAutocompleteConfigurationJS.dataSources, SerializablePropertyTypeJS.ENTITY, "com.flinty.jasmine.web.model.ui.EntityAutocompleteDataSourceJS", false))
+                    properties.add(SerializablePropertyDescriptionJS(EntitySelectConfigurationJS.limit, SerializablePropertyTypeJS.INT, null, false))
+                    properties.add(SerializablePropertyDescriptionJS(EntitySelectConfigurationJS.nullAllowed, SerializablePropertyTypeJS.BOOLEAN, null, false))
+                    collections.add(SerializableCollectionDescriptionJS(EntitySelectConfigurationJS.dataSources, SerializablePropertyTypeJS.ENTITY, "com.flinty.jasmine.web.model.ui.EntityAutocompleteDataSourceJS", false))
                 }
 
                 override fun hasUid(): Boolean {
                     return false
                 }
 
-                override fun getCollection(obj: EntityAutocompleteConfigurationJS, id: String): MutableCollection<Any> {
-                    if (EntityAutocompleteConfigurationJS.dataSources == id) {
+                override fun getCollection(obj: EntitySelectConfigurationJS, id: String): MutableCollection<Any> {
+                    if (EntitySelectConfigurationJS.dataSources == id) {
                         return obj.dataSources as MutableCollection<Any>
                     }
                     throw IllegalArgumentException("no collection fields")
                 }
 
-                override fun setPropertyValue(obj: EntityAutocompleteConfigurationJS, id: String, value: Any?) {
-                    if (EntityAutocompleteConfigurationJS.nullAllowed == id) {
-                        obj.nullAllowed = value as Boolean?
+                override fun setPropertyValue(obj: EntitySelectConfigurationJS, id: String, value: Any?) {
+                    if (EntitySelectConfigurationJS.nullAllowed == id) {
+                        obj.nullAllowed = value as Boolean
                         return
                     }
-                    if (EntityAutocompleteConfigurationJS.limit == id) {
+                    if (EntitySelectConfigurationJS.limit == id) {
                         obj.limit = value as Int
                         return
                     }
                     throw IllegalArgumentException("no field with id $id")
                 }
 
-                override fun getPropertyValue(obj: EntityAutocompleteConfigurationJS, id: String): Any? {
-                    if (EntityAutocompleteConfigurationJS.nullAllowed == id) {
+                override fun getPropertyValue(obj: EntitySelectConfigurationJS, id: String): Any? {
+                    if (EntitySelectConfigurationJS.nullAllowed == id) {
                         return obj.nullAllowed
                     }
-                    if (EntityAutocompleteConfigurationJS.limit == id) {
+                    if (EntitySelectConfigurationJS.limit == id) {
                         return obj.limit
                     }
                     throw IllegalArgumentException("no field with id $id")
@@ -519,7 +519,7 @@ internal object UiSerializationUtilsJS {
             return when (elementType) {
                 VSPropertyTypeJS.ENTITY -> elementClassName
                 VSPropertyTypeJS.ENUM_SELECT -> EnumSelectConfigurationJS.qualifiedClassName
-                VSPropertyTypeJS.ENTITY_AUTOCOMPLETE -> EntityAutocompleteConfigurationJS.qualifiedClassName
+                VSPropertyTypeJS.ENTITY_AUTOCOMPLETE -> EntitySelectConfigurationJS.qualifiedClassName
                 VSPropertyTypeJS.COLUMN_TEXT -> TextColumnConfigurationJS.qualifiedClassName
                 VSPropertyTypeJS.COLUMN_INT -> IntegerColumnConfigurationJS.qualifiedClassName
                 VSPropertyTypeJS.COLUMN_FLOAT -> FloatColumnConfigurationJS.qualifiedClassName
@@ -566,7 +566,7 @@ internal object UiSerializationUtilsJS {
             if (className == EntityAutocompleteDataSourceJS.qualifiedClassName) {
                 return createEntityAutocompleteDatasourceDescription()
             }
-            if (className == EntityAutocompleteConfigurationJS.qualifiedClassName) {
+            if (className == EntitySelectConfigurationJS.qualifiedClassName) {
                 return createEntityAutocompleteConfigurationDescription()
             }
 

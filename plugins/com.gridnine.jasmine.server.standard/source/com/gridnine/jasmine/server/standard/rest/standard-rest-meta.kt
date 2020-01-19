@@ -73,13 +73,14 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
             val indexDescr = IndexDescriptionDT()
             indexDescr.displaName = it.getDisplayName()
             indexDescr.id = it.id+"JS"
-            indexDescr.document = it.document
+            indexDescr.document = it.document+"JS"
             it.properties.values.forEach { propertyDescription ->
                 val property = IndexPropertyDescriptionDT()
                 property.className = getClassName(propertyDescription.className)
                 property.id = propertyDescription.id
                 property.type = toRestCollectionType(propertyDescription.type)
                 property.displayName = propertyDescription.getDisplayName()
+                property.usedInAutocomplete = propertyDescription.usedInAutocomplete
                 indexDescr.properties.add(property)
             }
             it.collections.values.forEach { collectionDescription ->
@@ -88,6 +89,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                 coll.id = collectionDescription.id
                 coll.elementType = toRestCollectionType(collectionDescription.elementType)
                 coll.displayName = collectionDescription.getDisplayName()
+                coll.usedInAutocomplete = collectionDescription.usedInAutocomplete
                 indexDescr.collections.add(coll)
             }
             result.domainIndexes.add(indexDescr)
@@ -245,7 +247,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                                         widget.type = WidgetTypeDT.ENUM_SELECT
                                         tlDT.widgets.add(widget)
                                     }
-                                    is EntityAutocompleteDescription -> {
+                                    is EntitySelectDescription -> {
                                         val widget = EntityAutocompleteDescriptionDT()
                                         widget.id = it.id
                                         widget.entityClassName = it.entityClassName
@@ -436,3 +438,4 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
 
 
 }
+

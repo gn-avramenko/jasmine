@@ -58,6 +58,7 @@ object DomainMetadataParser {
             ParserUtils.updateParameters(child, property)
             ParserUtils.updateLocalizations(property, localizations)
             property.className = child.attributes["className"]
+            property.usedInAutocomplete = "true" == child.attributes["usedInAutocomplete"]
             property.type = getDatabasePropertyType(child.attributes["type"]?:throw IllegalArgumentException("type attribute is absent in property $child"))
         }
         elm.children("collection").forEach { child ->
@@ -67,6 +68,7 @@ object DomainMetadataParser {
             ParserUtils.updateLocalizations(collection, localizations)
             collection.elementClassName = child.attributes["elementClassName"]
             collection.elementType = getDatabaseCollectionType(child.attributes["elementType"]?:throw IllegalArgumentException("type attribute is absent in collection $child"))
+            collection.usedInAutocomplete = "true" == child.attributes["usedInAutocomplete"]
         }
     }
 

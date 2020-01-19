@@ -89,6 +89,7 @@
 												   default="false"/>
 										<attribute name="type" type="tns:dbPropertyType" use="required" />
 										<attribute name="className" type="string"/>
+										<attribute name="usedInAutocomplete" type="boolean" default="false"/>
 									</extension>
 								</complexContent>
 							</complexType>
@@ -106,6 +107,7 @@
 										</attribute>
 										<attribute name="element-type" type="tns:dbCollectionType" use="required" />
 										<attribute name="elementClassName" type="string" />
+										<attribute name="usedInAutocomplete" type="boolean" default="false"/>
 									</extension>
 								</complexContent>
 							</complexType>

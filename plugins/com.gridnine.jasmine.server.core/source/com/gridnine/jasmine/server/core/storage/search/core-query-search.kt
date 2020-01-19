@@ -15,7 +15,7 @@ interface SortableProperty
 
 class SearchQuery :BaseQuery(){
 
-    var freeText: String? = null
+
 
     val orders = linkedMapOf<String, SortOrder>()
 
