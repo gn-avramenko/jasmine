@@ -16,14 +16,14 @@
         <property id="textColumn" type="STRING"/>
         <property id="enumColumn" type="ENUM" className="com.gridnine.jasmine.server.sandbox.model.domain.SandboxEnum"/>
         <property id="entityRefColumn" type="ENTITY_REFERENCE" className="com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccount"/>
-        <property id="integetColumn" type="INT"/>
+        <property id="integerColumn" type="INT"/>
         <property id="floatColumn" type="BIG_DECIMAL"/>
     </document>
     <document id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxComplexDocument">
         <property id="stringProperty" type="STRING"/>
         <property id="floatProperty" type="BIG_DECIMAL"/>
-        <property id="integerProperty" type="INT" notNullable="true"/>
-        <property id="booleanProperty" type="BOOLEAN" notNullable="true"/>
+        <property id="integerProperty" type="INT" nonNullable="true"/>
+        <property id="booleanProperty" type="BOOLEAN" nonNullable="true"/>
         <property id="entityRefProperty" type="ENTITY_REFERENCE" className="com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccount"/>
         <property id="enumProperty" type="ENUM" className="com.gridnine.jasmine.server.sandbox.model.domain.SandboxEnum"/>
         <property id="dateProperty" type="LOCAL_DATE"/>

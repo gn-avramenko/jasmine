@@ -233,7 +233,6 @@ class EasyUiCriterionEnumValuesRenderer(private val enumId:String):EasyUiCriteri
 
         widget = EasyUiEnumMultiSelectWidget("${uid}Control", EnumSelectDescriptionJS("",enumId))
         val config = EnumSelectConfigurationJS<FakeEnumJS>()
-        config.nullAllowed = false
         widget.configure(config)
     }
 
@@ -272,10 +271,7 @@ class EasyUiCriterionEntityValuesRenderer(private val entityClassName:String):Ea
         config.limit = 10
         config.nullAllowed = false
         DomainMetaRegistryJS.get().indexes.values.filter { it.document  == entityClassName}.forEach {
-            val dataSource = EntityAutocompleteDataSourceJS()
-            dataSource.indexClassName = it.id
-            dataSource.name = it.displayName
-            config.dataSources.add(dataSource)
+            config.dataSources.add(UiMetaRegistryJS.get().autocompletes.values.find { ac -> ac.entity == it.id }?.id?: throw IllegalArgumentException("unable to find autocomplete description for ${it.id}"))
         }
         config.nullAllowed = false
         widget.configure(config)

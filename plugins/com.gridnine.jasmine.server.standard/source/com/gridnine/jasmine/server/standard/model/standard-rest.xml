@@ -64,7 +64,6 @@
     <entity id="com.gridnine.jasmine.server.standard.model.rest.IndexPropertyDescriptionDT">
         <property id="id" type="STRING"/>
         <property id="type" type="ENUM" className="com.gridnine.jasmine.server.standard.model.rest.DatabasePropertyTypeDT"/>
-        <property id="usedInAutocomplete" type="BOOLEAN"/>
         <property id="displayName" type="STRING"/>
         <property id="className" type="STRING"/>
     </entity>
@@ -72,7 +71,6 @@
         <property id="id" type="STRING"/>
         <property id="elementType" type="ENUM" className="com.gridnine.jasmine.server.standard.model.rest.DatabaseCollectionTypeDT"/>
         <property id="displayName" type="STRING"/>
-        <property id="usedInAutocomplete" type="BOOLEAN"/>
         <property id="elementClassName" type="STRING"/>
     </entity>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.IndexDescriptionDT">
@@ -100,6 +98,18 @@
         <property id="displayName" type="STRING"/>
         <property id="weight" type="BIG_DECIMAL"/>
     </entity>
+    <enum id="com.gridnine.jasmine.server.standard.model.rest.AutocompleteSortOrderDT">
+        <enum-item id="ASC"/>
+        <enum-item id="DESC"/>
+    </enum>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.AutocompleteDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="entity" type="STRING"/>
+        <property id="sortProperty" type="STRING"/>
+        <property id="sortOrder" type="ENUM" className="com.gridnine.jasmine.server.standard.model.rest.AutocompleteSortOrderDT"/>
+        <collection id="columns" element-type="STRING"/>
+        <collection id="filters" element-type="STRING"/>
+    </entity>
 
     <enum id="com.gridnine.jasmine.server.standard.model.rest.VMPropertyTypeDT">
         <enum-item id="STRING"/>
@@ -118,7 +128,7 @@
         <property id="id" type="STRING"/>
         <property id="type" type="ENUM" className="com.gridnine.jasmine.server.standard.model.rest.VMPropertyTypeDT"/>
         <property id="className" type="STRING"/>
-        <property id="notNullable" type="BOOLEAN"/>
+        <property id="nonNullable" type="BOOLEAN"/>
     </entity>
 
     <entity id="com.gridnine.jasmine.server.standard.model.rest.VMCollectionDescriptionDT">
@@ -197,6 +207,7 @@
         <enum-item id="TABLE"/>
         <enum-item id="NEXT_ROW"/>
         <enum-item id="NEXT_COLUMN"/>
+        <enum-item id="TILE"/>
     </enum>
 
 
@@ -212,28 +223,34 @@
         <property id="id" type="STRING"/>
         <property id="type" type="ENUM" className="com.gridnine.jasmine.server.standard.model.rest.WidgetTypeDT"/>
         <property id="hSpan" type="INT"/>
+        <property id="notEditable" type="BOOLEAN"/>
     </entity>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.TableNextColumnDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT"/>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.TableNextRowDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT"/>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.TextAreaDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT"/>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.IntegerBoxDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT">
-        <property id="notNullable" type="BOOLEAN"/>
+        <property id="nonNullable" type="BOOLEAN"/>
     </entity>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.FloatBoxDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT">
-        <property id="notNullable" type="BOOLEAN"/>
+        <property id="nonNullable" type="BOOLEAN"/>
     </entity>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.TextboxDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT"/>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.PasswordBoxDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT"/>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.DateBoxDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT"/>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.DateTimeBoxDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT"/>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.BooleanBoxDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT">
-        <property id="notNullable" type="BOOLEAN"/>
+        <property id="nonNullable" type="BOOLEAN"/>
     </entity>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.EnumSelectDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT">
         <property id="enumId" type="STRING"/>
     </entity>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.EntityAutocompleteDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT">
         <property id="entityClassName" type="STRING"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.TileDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT">
+        <property id="compactViewId" type="STRING"/>
+        <property id="fullViewId" type="STRING"/>
+        <property id="displayName" type="STRING"/>
     </entity>
     <enum id="com.gridnine.jasmine.server.standard.model.rest.TableColumnTypeDT">
         <enum-item id="TEXT"/>
@@ -250,10 +267,10 @@
     </entity>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.TextTableColumnDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseTableColumnDescriptionDT"/>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.IntegerTableColumnDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseTableColumnDescriptionDT">
-        <property id="notNullable" type="BOOLEAN"/>
+        <property id="nonNullable" type="BOOLEAN"/>
     </entity>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.FloatTableColumnDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseTableColumnDescriptionDT">
-        <property id="notNullable" type="BOOLEAN"/>
+        <property id="nonNullable" type="BOOLEAN"/>
     </entity>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.EnumTableColumnDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseTableColumnDescriptionDT">
         <property id="enumId" type="STRING"/>
@@ -475,6 +492,8 @@
                 <collection id="lists" element-type="ENTITY" elementClassName="com.gridnine.jasmine.server.standard.model.rest.ListDescriptionDT"/>
                 <collection id="dialogs" element-type="ENTITY" elementClassName="com.gridnine.jasmine.server.standard.model.rest.DialogDescriptionDT"/>
                 <collection id="sharedEditorButtons" element-type="ENTITY" elementClassName="com.gridnine.jasmine.server.standard.model.rest.StandardButtonDescriptionDT"/>
+                <collection id="sharedListButtons" element-type="ENTITY" elementClassName="com.gridnine.jasmine.server.standard.model.rest.StandardButtonDescriptionDT"/>
+                <collection id="autocompletes" element-type="ENTITY" elementClassName="com.gridnine.jasmine.server.standard.model.rest.AutocompleteDescriptionDT"/>
             </response>
         </operation>
         <operation id="getWorkspace" handler="com.gridnine.jasmine.server.standard.rest.StandardGetWorkspaceRestHandler">
@@ -510,38 +529,38 @@
         </operation>
         <operation id="getEditorData" handler="com.gridnine.jasmine.server.standard.rest.StandardGetEditorDataRestHandler">
             <request id="com.gridnine.jasmine.server.standard.model.rest.GetEditorDataRequest">
-                <property id="objectId" type="STRING"/>
+                <property id="objectId" type="STRING" lateinit="true"/>
                 <property id="objectUid" type="STRING"/>
             </request>
             <response id="com.gridnine.jasmine.server.standard.model.rest.GetEditorDataResponse">
-                <property id="viewModel" type="ENTITY" className="com.gridnine.jasmine.server.core.model.ui.BaseVMEntity"/>
-                <property id="viewSettings" type="ENTITY" className="com.gridnine.jasmine.server.core.model.ui.BaseVSEntity"/>
-                <property id="title" type="STRING"/>
+                <property id="viewModel" type="ENTITY" className="com.gridnine.jasmine.server.core.model.ui.BaseVMEntity" lateinit="true"/>
+                <property id="viewSettings" type="ENTITY" className="com.gridnine.jasmine.server.core.model.ui.BaseVSEntity" lateinit="true"/>
+                <property id="title" type="STRING" lateinit="true"/>
             </response>
         </operation>
         <operation id="saveEditorData" handler="com.gridnine.jasmine.server.standard.rest.StandardSaveEditorDataRestHandler">
             <request id="com.gridnine.jasmine.server.standard.model.rest.SaveEditorDataRequest">
-                <property id="objectId" type="STRING"/>
-                <property id="viewModel" type="ENTITY" className="com.gridnine.jasmine.server.core.model.ui.BaseVMEntity"/>
+                <property id="objectId" type="STRING" lateinit="true"/>
+                <property id="viewModel" type="ENTITY" className="com.gridnine.jasmine.server.core.model.ui.BaseVMEntity" lateinit="true"/>
             </request>
             <response id="com.gridnine.jasmine.server.standard.model.rest.SaveEditorDataResponse">
                 <property id="viewModel" type="ENTITY" className="com.gridnine.jasmine.server.core.model.ui.BaseVMEntity"/>
                 <property id="viewSettings" type="ENTITY" className="com.gridnine.jasmine.server.core.model.ui.BaseVSEntity"/>
                 <property id="viewValidation" type="ENTITY" className="com.gridnine.jasmine.server.core.model.ui.BaseVVEntity"/>
-                <property id="title" type="STRING"/>
+                <property id="title" type="STRING" />
             </response>
         </operation>
         <operation id="deleteObject" handler="com.gridnine.jasmine.server.standard.rest.StandardDeleteObjectRestHandler">
             <request id="com.gridnine.jasmine.server.standard.model.rest.DeleteObjectRequest">
-                <property id="objectId" type="STRING"/>
-                <property id="objectUid" type="STRING"/>
+                <property id="objectId" type="STRING" lateinit="true"/>
+                <property id="objectUid" type="STRING" lateinit="true"/>
             </request>
             <response id="com.gridnine.jasmine.server.standard.model.rest.DeleteObjectResponse"/>
         </operation>
         <operation id="defaultAutocomplete" handler="com.gridnine.jasmine.server.standard.rest.DefaultEntityAutocompleteRestHandler">
             <request id="com.gridnine.jasmine.server.standard.model.rest.EntityAutocompleteRequest">
                 <property id="searchText" type="STRING"/>
-                <property id="limit" type="INT"/>
+                <property id="limit" type="INT" nonNullable="true"/>
                 <collection id="entitiesIds" element-type="STRING"/>
             </request>
             <response id="com.gridnine.jasmine.server.standard.model.rest.EntityAutocompleteResponse">

@@ -352,12 +352,13 @@ class StandardListRestHandler: RestHandler<GetListRequest, GetListResponse>{
                 }
             }
         }
-        val collectionDescription = descr.collections[filter.fieldId]?: throw IllegalArgumentException("no property or collection found for id ${filter.fieldId}")
-        return when(collectionDescription.elementType){
-            DatabaseCollectionType.STRING -> TODO()
-            DatabaseCollectionType.ENUM -> TODO()
-            DatabaseCollectionType.ENTITY_REFERENCE -> TODO()
-        }
+//        val collectionDescription = descr.collections[filter.fieldId]?: throw IllegalArgumentException("no property or collection found for id ${filter.fieldId}")
+//        return when(collectionDescription.elementType){
+//            DatabaseCollectionType.STRING -> TODO()
+//            DatabaseCollectionType.ENUM -> TODO()
+//            DatabaseCollectionType.ENTITY_REFERENCE -> TODO()
+//        }
+        throw IllegalArgumentException("unsupported filter id ${filter.fieldId}")
     }
 
 }

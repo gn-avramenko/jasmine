@@ -25,9 +25,6 @@ class EasyUiEnumMultiSelectWidget<E:Enum<E>>(uid:String, description:EnumSelectD
             if (!initialized) {
                 selectItems.clear()
                 selectItems.addAll(UiUtilsJS.getEnumValues(description.enumId))
-                if (settings.nullAllowed) {
-                    selectItems.add(0, null)
-                }
                 val options = object {
                     val valueField = "id"
                     val textField = "caption"

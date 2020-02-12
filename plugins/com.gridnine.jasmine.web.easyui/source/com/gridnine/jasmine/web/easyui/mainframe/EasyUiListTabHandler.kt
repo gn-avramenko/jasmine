@@ -11,12 +11,16 @@ import com.gridnine.jasmine.server.standard.model.rest.GetListRequestJS
 import com.gridnine.jasmine.server.standard.model.rest.ListFilterDTJS
 import com.gridnine.jasmine.server.standard.model.rest.ListWorkspaceItemDTJS
 import com.gridnine.jasmine.web.core.StandardRestClient
+import com.gridnine.jasmine.web.core.model.common.BaseEntityJS
 import com.gridnine.jasmine.web.core.model.domain.*
-import com.gridnine.jasmine.web.core.model.ui.UiMetaRegistryJS
+import com.gridnine.jasmine.web.core.model.ui.*
+import com.gridnine.jasmine.web.core.ui.MainFrame
 import com.gridnine.jasmine.web.core.utils.HtmlUtilsJS
 import com.gridnine.jasmine.web.core.utils.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.utils.TextUtilsJS
+import com.gridnine.jasmine.web.easyui.JQuery
 import com.gridnine.jasmine.web.easyui.jQuery
+import com.gridnine.jasmine.web.easyui.widgets.EasyUiListButtonWidget
 import kotlin.js.Date
 import kotlin.js.Promise
 
@@ -24,6 +28,10 @@ import kotlin.js.Promise
 class EasyUiListTabHandler(private val element: ListWorkspaceItemDTJS) : EasyUiTabHandler<Unit> {
 
     private val filterHandlers = arrayListOf<EasyUiListFilter<*>>()
+
+    private val listDescr = UiMetaRegistryJS.get().lists[element.listId]
+            ?: throw IllegalArgumentException("unable to find description for ${element.listId}")
+    private val listIdJs = "${listDescr.objectId}JS"
 
     override fun getId(): String {
         return "list-${element.displayName}"
@@ -42,16 +50,12 @@ class EasyUiListTabHandler(private val element: ListWorkspaceItemDTJS) : EasyUiT
     override fun getContent(data: Unit, uid: String): String {
         val descr = UiMetaRegistryJS.get().lists[element.listId]
                 ?: throw IllegalArgumentException("unable to find description for ${element.listId}")
+
         return HtmlUtilsJS.html {
             div(`class` = "easyui-layout", data_options = "fit:true") {
                 div(region = "north", border = false, `class` = "group wrap header", style = "height:45px;font-size:100%;padding:5px") {
                     div(`class` = "content") {
                         div(id = "buttons${uid}", style = "float:left") {
-                            descr.toolButtons.forEach {
-                                a(href = "#", id = "${it.id}${uid}") {
-                                    it.displayName()
-                                }
-                            }
                         }
                         div(style = "float:right") {
                             input(id = "search${uid}", `class` = "easyui-searchbox", style = "width:200px")
@@ -105,16 +109,68 @@ class EasyUiListTabHandler(private val element: ListWorkspaceItemDTJS) : EasyUiT
     }
 
     override fun decorateData(data: Unit, uid: String, setTitle: (String) -> Unit, close: () -> Unit) {
+        val datagridDiv = jQuery("#table${uid}")
         val searchboxdiv = jQuery("#search${uid}").searchbox(object {
             val prompt = "поиск"
             val searcher = { _: String, _: String ->
-                jQuery("#table${uid}").datagrid("load")
+                datagridDiv.datagrid("load")
             }
         })
+        val selectionChangeListeners = arrayListOf<(List<BaseEntityJS>)->Unit>()
+        val list = object:EntityList<BaseEntityJS>{
 
-        val listDescr = UiMetaRegistryJS.get().lists[element.listId]
-                ?: throw IllegalArgumentException("unable to find description for ${element.listId}")
-        val listIdJs = "${listDescr.objectId}JS"
+
+            override fun getSelectedElements(): List<BaseEntityJS> {
+                return getSelectedElements(datagridDiv)
+            }
+
+            override fun addSelectionChangeListener(listener: (List<BaseEntityJS>) -> Unit) {
+                selectionChangeListeners.add(listener)
+            }
+
+            override fun getListId(): String {
+                return listIdJs
+            }
+
+            override fun reload() {
+                datagridDiv.datagrid("load")
+            }
+
+        }
+        val descriptions = hashMapOf<BaseListToolButtonHandler<BaseEntityJS>, BaseToolButtonDescriptionJS>()
+        val toolButtonHandlers = arrayListOf<BaseListToolButtonHandler<BaseEntityJS>>()
+        UiMetaRegistryJS.get().sharedListToolButtons.forEach {
+            val handler = ReflectionFactoryJS.get().getFactory(it.handler)() as SharedListToolButtonHandler<BaseEntityJS>
+            if(handler.isApplicableToList(listIdJs)){
+                toolButtonHandlers.add(handler)
+                descriptions[handler] =it
+            }
+        }
+        listDescr.toolButtons.forEach {
+            val handler = ReflectionFactoryJS.get().getFactory(it.handler)() as BaseListToolButtonHandler<BaseEntityJS>
+            toolButtonHandlers.add(handler)
+            descriptions[handler] =it
+        }
+        toolButtonHandlers.sortBy { descriptions[it]!!.weight }
+        val buttonsContent = HtmlUtilsJS.html {
+            toolButtonHandlers.forEach {
+                val descr = descriptions[it]!!
+                a(href = "#", id = "${descr.id}${uid}") {
+                    descr.displayName()
+                }
+            }
+        }.toString()
+        jQuery("#buttons${uid}").html(buttonsContent)
+        val widgets = hashMapOf<BaseListToolButtonHandler<BaseEntityJS>, ToolButtonWidget>()
+        toolButtonHandlers.forEach {
+            val descr = descriptions[it]!!
+            widgets[it] = EasyUiListButtonWidget("${descr.id}${uid}", it, list)
+        }
+
+        list.addSelectionChangeListener{
+            updateVisibility(toolButtonHandlers,  widgets, list)
+        }
+
         val domainDescr: BaseIndexDescriptionJS =
                 DomainMetaRegistryJS.get().indexes[listIdJs] ?: DomainMetaRegistryJS.get().assets[listIdJs]
                 ?: throw IllegalArgumentException("no description found for $listIdJs")
@@ -141,17 +197,42 @@ class EasyUiListTabHandler(private val element: ListWorkspaceItemDTJS) : EasyUiT
             )
         }
 
-        jQuery("#table${uid}").datagrid(object {
+
+        datagridDiv.datagrid(object {
+            private var ignoreSelect = false
             val fitColumns = true
             val fit = true
             val columns = /*js("[[{field:'login'," +
                     "title:'Login', width:150}]]")*/arrayOf(columns.toTypedArray())
             val onDblClickRow = { _: Int, row: dynamic ->
                 val doc = row["document"]
-                console.log(doc)
-//                if(doc is EntityReferenceJS){
-//                    //MainFrame.get().openTab(doc.type, doc.uid!!)
-//                }
+                if(doc is EntityReferenceJS){
+                    MainFrame.get().openTab(doc.type, doc.uid)
+                }
+            }
+            private val onSelectionChanged = onSelectionChanged@ {
+                val selected = getSelectedElements(datagridDiv)
+                selectionChangeListeners.forEach { it(selected) }
+            }
+            val onSelect = onSelect@ {
+                if(ignoreSelect){
+                    return@onSelect
+                }
+                ignoreSelect = true
+                onSelectionChanged()
+                ignoreSelect = false
+
+            }
+            val onUnSelect = onSelect@ {
+                if(ignoreSelect){
+                    return@onSelect
+                }
+                ignoreSelect = true
+                onSelectionChanged()
+                ignoreSelect = false
+            }
+            val onLoadSuccess ={
+                updateVisibility(toolButtonHandlers, widgets, list)
             }
             val loader = { params: dynamic, success: dynamic, _: dynamic ->
 
@@ -194,13 +275,10 @@ class EasyUiListTabHandler(private val element: ListWorkspaceItemDTJS) : EasyUiT
             }
         })
 
-        listDescr.toolButtons.forEach { tbDescr ->
-            jQuery("#${tbDescr.id}${uid}").linkbutton(object {
-                val onClick = {
-                    console.log("clicked button")
-                }
-            })
-        }
+
+
+        updateVisibility(toolButtonHandlers,  widgets, list)
+
         jQuery("#resetFilters${uid}").linkbutton(object{
             val onClick = {
                 filterHandlers.forEach { it.resetFilter() }
@@ -240,6 +318,35 @@ class EasyUiListTabHandler(private val element: ListWorkspaceItemDTJS) : EasyUiT
                 }
             }
         }
+    }
+
+    private fun updateVisibility(toolButtonHandlers: ArrayList<BaseListToolButtonHandler<BaseEntityJS>>,  widgets: HashMap<BaseListToolButtonHandler<BaseEntityJS>, ToolButtonWidget>, list: EntityList<BaseEntityJS>) {
+        toolButtonHandlers.forEach { handler ->
+            widgets[handler]!!.setVisible(handler.isVisible(list))
+            widgets[handler]!!.setEnabled(handler.isEnabled(list))
+        }
+    }
+
+    private fun getSelectedElements(datagridDiv: JQuery): List<BaseEntityJS> {
+        val selectedRows = datagridDiv.datagrid("getSelections") as Array<dynamic>
+        if(selectedRows.isEmpty()){
+            return emptyList()
+        }
+        val selections = arrayListOf<BaseEntityJS>()
+        selectedRows.forEach{
+            val row = ReflectionFactoryJS.get().getFactory(listIdJs)() as BaseEntityJS
+            if(row is BaseIndexJS){
+                row.setValue(BaseIndexJS.document, it[BaseIndexJS.document])
+            } else {
+                row.setValue(BaseEntityJS.uid, it[BaseEntityJS.uid])
+            }
+            element.columns.forEach { columnId ->
+                row.setValue(columnId, it[columnId])
+            }
+            selections.add(row)
+        }
+        return selections
+
     }
 
     private fun createListColumnFormatter(type: Any, maxLength: Int = 50): (value: dynamic, row: dynamic, index: Int) -> String {

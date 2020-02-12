@@ -34,6 +34,12 @@ object UiWebGenerator {
         if(vmPropertyType == VMPropertyType.LOCAL_DATE_TIME){
             return "kotlin.js.Date"
         }
+        if(className != null && className.startsWith(TileData::class.qualifiedName!!)){
+            val idx1 =className.indexOf("<")
+            val idx2 =className.length-1
+            val generics = className.substring(idx1+1,idx2).split(",")
+            return "com.gridnine.jasmine.web.core.model.ui.TileDataJS<${generics[0].trim()}JS,${generics[1].trim()}JS>"
+        }
         return className+"JS"
     }
 
@@ -112,7 +118,12 @@ object UiWebGenerator {
                     val idx1 =className.indexOf("<")
                     val idx2 =className.length-1
                     "com.gridnine.jasmine.web.core.model.ui.TableConfigurationJS<${className.substring(idx1+1,idx2)}JS>"
-                } else {
+                } else if(className != null && className.startsWith(TileData::class.qualifiedName!!)){
+                    val idx1 =className.indexOf("<")
+                    val idx2 =className.length-1
+                    val generics = className.substring(idx1+1,idx2).split(",")
+                    "com.gridnine.jasmine.web.core.model.ui.TileDataJS<${generics[0].trim()}JS,${generics[1].trim()}JS>"
+                }else {
                     throw IllegalArgumentException("unsupported classname $className")
                 }
             }
@@ -130,7 +141,7 @@ object UiWebGenerator {
 
         val result = GenClassData(descr.id+"JS","com.gridnine.jasmine.web.core.model.ui.BaseVVEntityJS", abstract = false, enum = false, noEnumProperties = true)
         descr.properties.values.forEach { prop ->
-            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.type)))
+            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.type, prop.className)))
         }
         descr.collections.values.forEach { coll ->
             result.collections.add(GenCollectionDescription(coll.id, getPropertyType(coll.elementType),  getClassName(coll.elementType, coll.elementClassName)))
@@ -141,6 +152,7 @@ object UiWebGenerator {
     private fun getPropertyType(type: VVPropertyType): GenPropertyType {
         return when (type) {
             VVPropertyType.STRING ->GenPropertyType.STRING
+            VVPropertyType.ENTITY ->GenPropertyType.ENTITY
         }
     }
     private fun getPropertyType(type: VVCollectionType): GenPropertyType {
@@ -148,9 +160,16 @@ object UiWebGenerator {
             VVCollectionType.ENTITY ->GenPropertyType.ENTITY
         }
     }
-    private fun getClassName(propertyType: VVPropertyType): String? {
+    private fun getClassName(propertyType: VVPropertyType, className: String?): String? {
+        if(className != null && className.startsWith(TileData::class.qualifiedName!!)){
+            val idx1 =className.indexOf("<")
+            val idx2 =className.length-1
+            val generics = className.substring(idx1+1,idx2).split(",")
+            return "com.gridnine.jasmine.web.core.model.ui.TileDataJS<${generics[0].trim()}JS,${generics[1].trim()}JS>"
+        }
         return when (propertyType) {
             VVPropertyType.STRING -> null
+            VVPropertyType.ENTITY -> className
         }
     }
 
@@ -194,6 +213,7 @@ object UiWebGenerator {
             is DateboxDescription ->"com.gridnine.jasmine.web.core.model.ui.DateBoxWidget"
             is DateTimeBoxDescription ->"com.gridnine.jasmine.web.core.model.ui.DateTimeBoxWidget"
             is PasswordBoxDescription ->"com.gridnine.jasmine.web.core.model.ui.PasswordBoxWidget"
+            is TileDescription ->"com.gridnine.jasmine.web.core.model.ui.TileWidget<${widgetDescription.baseClassName}CompactView,${widgetDescription.baseClassName}FullView>"
             else -> throw IllegalArgumentException("unsupported widget $widgetDescription")
         }
     }
@@ -237,6 +257,14 @@ object UiWebGenerator {
                val viewDescription = registry.views[dialogDescription.viewId]?:throw IllegalArgumentException("unable to find view for dialog ${dialogDescription.id}")
                classesData.add(toGenData(dialogDescription,viewDescription))
                 classes.add(dialogDescription.id)
+            }
+            registry.sharedListToolButtons.forEach { if(it.handler  != "stub") classes.add(it.handler)  }
+            registry.sharedEditorToolButtons.forEach { if(it.handler  != "stub") classes.add(it.handler)  }
+            registry.lists.values.forEach {listDescription ->
+                listDescription.toolButtons.forEach { if(it.handler  != "stub") classes.add(it.handler) }
+            }
+            registry.editors.values.forEach {editorDescription ->
+                editorDescription.toolButtons.forEach { if(it.handler  != "stub") classes.add(it.handler) }
             }
             GenUtils.generateClasses(classesData, File(projectDir, "plugins/$key"), projectName, generatedFiles.getOrPut(key, { arrayListOf() }))
             val sb = StringBuilder()

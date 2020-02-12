@@ -141,7 +141,7 @@
 				</sequence>
 				<attribute name="type" type="tns:documentPropertyType" use="required" />
 				<attribute name="className" type="string"  />
-				<attribute name="notNullable" type="boolean"/>
+				<attribute name="nonNullable" type="boolean"/>
 			</extension>
 		</complexContent>
 	</complexType>

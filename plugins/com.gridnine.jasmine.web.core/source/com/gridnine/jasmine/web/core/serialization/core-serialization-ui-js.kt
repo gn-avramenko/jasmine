@@ -42,6 +42,10 @@ internal object UiSerializationUtilsJS {
                     return false
                 }
 
+                override fun createInstance(): TableConfigurationJS<BaseVSEntityJS>? {
+                    return TableConfigurationJS()
+                }
+
             }
         }
         private fun createTextColumnConfigurationDescription():ObjectMetadataProviderJS<TextColumnConfigurationJS>{
@@ -141,14 +145,10 @@ internal object UiSerializationUtilsJS {
             return object:ObjectMetadataProviderJS<EnumColumnConfigurationJS<*>>(){
                 init{
                     properties.add(SerializablePropertyDescriptionJS(BaseColumnConfigurationJS.notEditable, SerializablePropertyTypeJS.BOOLEAN, null, false))
-                    properties.add(SerializablePropertyDescriptionJS(EnumColumnConfigurationJS.nullAllowed, SerializablePropertyTypeJS.BOOLEAN, null, false))
                 }
                 override fun getPropertyValue(obj: EnumColumnConfigurationJS<*>, id: String): Any? {
                     if(BaseColumnConfigurationJS.notEditable == id){
                         return obj.notEditable
-                    }
-                    if(EnumColumnConfigurationJS.nullAllowed == id){
-                        return obj.nullAllowed
                     }
                     throw IllegalArgumentException("no field with id $id")
                 }
@@ -160,10 +160,6 @@ internal object UiSerializationUtilsJS {
                 override fun setPropertyValue(obj: EnumColumnConfigurationJS<*>, id: String, value: Any?) {
                     if(BaseColumnConfigurationJS.notEditable == id){
                         obj.notEditable = value as Boolean
-                        return
-                    }
-                    if(EnumColumnConfigurationJS.nullAllowed == id){
-                        obj.nullAllowed = value as Boolean
                         return
                     }
                     throw IllegalArgumentException("no field with id $id")
@@ -180,7 +176,6 @@ internal object UiSerializationUtilsJS {
                 init{
                     properties.add(SerializablePropertyDescriptionJS(BaseColumnConfigurationJS.notEditable, SerializablePropertyTypeJS.BOOLEAN, null, false))
                     properties.add(SerializablePropertyDescriptionJS(EntityColumnConfigurationJS.limit, SerializablePropertyTypeJS.INT, null, false))
-                    properties.add(SerializablePropertyDescriptionJS(EntityColumnConfigurationJS.nullAllowed, SerializablePropertyTypeJS.BOOLEAN, null, false))
                     collections.add(SerializableCollectionDescriptionJS(EntityColumnConfigurationJS.dataSources, SerializablePropertyTypeJS.ENTITY, "com.flinty.jasmine.web.model.ui.EntityAutocompleteDataSourceJS", false))
                 }
 
@@ -200,10 +195,6 @@ internal object UiSerializationUtilsJS {
                         obj.notEditable = value as Boolean
                         return
                     }
-                    if(EntityColumnConfigurationJS.nullAllowed == id){
-                        obj.nullAllowed = value as Boolean?
-                        return
-                    }
                     if(EntityColumnConfigurationJS.limit == id){
                         obj.limit = value as Int
                         return
@@ -214,9 +205,6 @@ internal object UiSerializationUtilsJS {
                 override fun getPropertyValue(obj: EntityColumnConfigurationJS, id: String): Any? {
                     if(BaseColumnConfigurationJS.notEditable == id){
                         return obj.notEditable
-                    }
-                    if(EntityColumnConfigurationJS.nullAllowed == id){
-                        return obj.nullAllowed
                     }
                     if(EntityColumnConfigurationJS.limit == id){
                         return obj.limit
@@ -232,90 +220,30 @@ internal object UiSerializationUtilsJS {
                     return false
                 }
 
-                init {
-                    properties.add(SerializablePropertyDescriptionJS(EnumSelectConfigurationJS.nullAllowed, SerializablePropertyTypeJS.BOOLEAN, null, false))
-                }
 
                 override fun getCollection(obj: EnumSelectConfigurationJS<*>, id: String): MutableCollection<Any> {
                     throw IllegalArgumentException("unsupported property $id")
                 }
 
                 override fun setPropertyValue(obj: EnumSelectConfigurationJS<*>, id: String, value: Any?) {
-                    if (EnumSelectConfigurationJS.nullAllowed == id) {
-                        obj.nullAllowed = value as Boolean
-                        return
-                    }
                     throw IllegalArgumentException("unsupported property $id")
                 }
 
                 override fun getPropertyValue(obj: EnumSelectConfigurationJS<*>, id: String): Any? {
-                    if (EnumSelectConfigurationJS.nullAllowed == id) {
-                        return obj.nullAllowed
-                    }
                     throw IllegalArgumentException("unsupported property $id")
                 }
 
             }
         }
 
-        private fun createEntityAutocompleteDatasourceDescription(): ObjectMetadataProviderJS<EntityAutocompleteDataSourceJS> {
-            return object : ObjectMetadataProviderJS<EntityAutocompleteDataSourceJS>() {
-                init{
-                    properties.add(SerializablePropertyDescriptionJS(EntityAutocompleteDataSourceJS.name, SerializablePropertyTypeJS.STRING, null, false))
-                    properties.add(SerializablePropertyDescriptionJS(EntityAutocompleteDataSourceJS.autocompleteId, SerializablePropertyTypeJS.STRING, null, false))
-                    properties.add(SerializablePropertyDescriptionJS(EntityAutocompleteDataSourceJS.indexClassName, SerializablePropertyTypeJS.STRING, null, false))
-                    collections.add(SerializableCollectionDescriptionJS(EntityAutocompleteDataSourceJS.columnsNames, SerializablePropertyTypeJS.STRING, null, false))
-                }
 
-                override fun hasUid(): Boolean {
-                    return false
-                }
-
-                override fun getCollection(obj: EntityAutocompleteDataSourceJS, id: String): MutableCollection<Any> {
-                    if(EntityAutocompleteDataSourceJS.columnsNames == id){
-                        return obj.columnsNames as MutableCollection<Any>
-                    }
-                    throw IllegalArgumentException("no collection fields")
-                }
-
-                override fun setPropertyValue(obj: EntityAutocompleteDataSourceJS, id: String, value: Any?) {
-                    if(EntityAutocompleteDataSourceJS.name == id){
-                        obj.name = value as String?
-                        return
-                    }
-                    if(EntityAutocompleteDataSourceJS.autocompleteId == id){
-                        obj.autocompleteId = value as String?
-                        return
-                    }
-                    if(EntityAutocompleteDataSourceJS.indexClassName == id){
-                        obj.indexClassName = value as String?
-                        return
-                    }
-                    throw IllegalArgumentException("no field with id $id")
-                }
-
-                override fun getPropertyValue(obj: EntityAutocompleteDataSourceJS, id: String): Any? {
-                    if(EntityAutocompleteDataSourceJS.name == id){
-                        return obj.name
-                    }
-                    if(EntityAutocompleteDataSourceJS.autocompleteId == id){
-                        return obj.autocompleteId
-                    }
-                    if(EntityAutocompleteDataSourceJS.indexClassName == id){
-                        return obj.indexClassName
-                    }
-                    throw IllegalArgumentException("no field with id $id")
-                }
-
-            }
-        }
 
         private fun createEntityAutocompleteConfigurationDescription(): ObjectMetadataProviderJS<EntitySelectConfigurationJS> {
             return object : ObjectMetadataProviderJS<EntitySelectConfigurationJS>() {
                 init {
                     properties.add(SerializablePropertyDescriptionJS(EntitySelectConfigurationJS.limit, SerializablePropertyTypeJS.INT, null, false))
                     properties.add(SerializablePropertyDescriptionJS(EntitySelectConfigurationJS.nullAllowed, SerializablePropertyTypeJS.BOOLEAN, null, false))
-                    collections.add(SerializableCollectionDescriptionJS(EntitySelectConfigurationJS.dataSources, SerializablePropertyTypeJS.ENTITY, "com.flinty.jasmine.web.model.ui.EntityAutocompleteDataSourceJS", false))
+                    collections.add(SerializableCollectionDescriptionJS(EntitySelectConfigurationJS.dataSources, SerializablePropertyTypeJS.STRING, null, false))
                 }
 
                 override fun hasUid(): Boolean {
@@ -426,7 +354,7 @@ internal object UiSerializationUtilsJS {
 
                 init {
                     descr.properties.values.forEach {
-                        properties.add(SerializablePropertyDescriptionJS(it.id, toSerializableType(it.type), toClassName(it.type), false))
+                        properties.add(SerializablePropertyDescriptionJS(it.id, toSerializableType(it.type), toClassName(it.type, it.className), false))
                     }
                     descr.collections.values.forEach {
                         collections.add(SerializableCollectionDescriptionJS(it.id, toSerializableType(it.elementType), toClassName(it.elementType, it.elementClassName), isAbstractClass(it.elementClassName)))
@@ -538,12 +466,16 @@ internal object UiSerializationUtilsJS {
         private fun toSerializableType(elementType: VVPropertyTypeJS): SerializablePropertyTypeJS {
             return when (elementType) {
                 VVPropertyTypeJS.STRING -> SerializablePropertyTypeJS.STRING
+                VVPropertyTypeJS.ENTITY -> SerializablePropertyTypeJS.ENTITY
             }
         }
 
-        private fun toClassName(elementType: VVPropertyTypeJS): String? {
+        private fun toClassName(elementType: VVPropertyTypeJS, className:String?): String? {
             return when (elementType) {
                 VVPropertyTypeJS.STRING -> null
+                VVPropertyTypeJS.ENTITY ->{
+                    className
+                }
             }
         }
 
@@ -563,14 +495,11 @@ internal object UiSerializationUtilsJS {
             if (className == EnumSelectConfigurationJS.qualifiedClassName) {
                 return createEnumSelectConfigurationDescription()
             }
-            if (className == EntityAutocompleteDataSourceJS.qualifiedClassName) {
-                return createEntityAutocompleteDatasourceDescription()
-            }
             if (className == EntitySelectConfigurationJS.qualifiedClassName) {
                 return createEntityAutocompleteConfigurationDescription()
             }
 
-            if(className == TableConfigurationJS.qualifiedClassName){
+            if(className.startsWith(TableConfigurationJS.serverQualifiedClassName) || className.startsWith(TableConfigurationJS.qualifiedClassName) ){
                 return createTableConfigurationDescription()
             }
             if(className == TextColumnConfigurationJS.qualifiedClassName){

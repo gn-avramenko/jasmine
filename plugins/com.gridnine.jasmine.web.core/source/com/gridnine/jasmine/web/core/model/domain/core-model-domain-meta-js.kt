@@ -38,14 +38,12 @@ class DomainEnumDescriptionJS(id:String) : BaseIdentityDescriptionJS(id){
 }
 
 class DatabasePropertyDescriptionJS(id:String,val type: DatabasePropertyTypeJS, val displayName: String) : BaseIdentityDescriptionJS(id) {
-    var notNullable = false
+    var nonNullable = false
     var className: String? = null
-    var usedInAutocomplete = false
 }
 
 class DatabaseCollectionDescriptionJS(id:String, val elementType: DatabaseCollectionTypeJS, val displayName: String) : BaseIdentityDescriptionJS(id) {
     var elementClassName: String? = null
-    var usedInAutocomplete = false
 
 }
 abstract class BaseIndexDescriptionJS(id:String, val displayName: String) : BaseIdentityDescriptionJS(id) {

@@ -21,6 +21,26 @@
             <response id="com.gridnine.jasmine.server.sandbox.model.rest.LogoutResponse"/>
         </operation>
     </group>
+    <group id="userAccount">
+        <operation id="createAccount" handler="com.gridnine.jasmine.server.sandbox.rest.SandboxCreateUserAccountHandler">
+            <request id="com.gridnine.jasmine.server.sandbox.model.rest.SandboxCreateUserAccountRequest">
+                <property id="model" type="ENTITY" className="com.gridnine.jasmine.server.sandbox.model.ui.SandboxCreateUserAccountDialogVM" lateinit="true"/>
+            </request>
+            <response id="com.gridnine.jasmine.server.sandbox.model.rest.SandboxCreateUserAccountResponse">
+                <property id="validation" type="ENTITY" className="com.gridnine.jasmine.server.sandbox.model.ui.SandboxCreateUserAccountDialogVV" lateinit="true"/>
+                <property id="result" type="ENTITY_REFERENCE" className="com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccount"/>
+            </response>
+        </operation>
+        <operation id="updatePassword" handler="com.gridnine.jasmine.server.sandbox.rest.SandboxUpdatePasswordHandler">
+            <request id="com.gridnine.jasmine.server.sandbox.model.rest.SandboxUpdatePasswordRequest">
+                <property id="login" type="STRING"/>
+                <property id="model" type="ENTITY" className="com.gridnine.jasmine.server.sandbox.model.ui.SandboxUpdatePasswordDialogVM" lateinit="true"/>
+            </request>
+            <response id="com.gridnine.jasmine.server.sandbox.model.rest.SandboxUpdatePasswordResponse">
+                <property id="validation" type="ENTITY" className="com.gridnine.jasmine.server.sandbox.model.ui.SandboxUpdatePasswordDialogVV" lateinit="true"/>
+            </response>
+        </operation>
+    </group>
 </rest>
 
 

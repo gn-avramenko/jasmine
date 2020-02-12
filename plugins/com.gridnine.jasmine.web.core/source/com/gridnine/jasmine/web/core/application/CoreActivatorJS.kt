@@ -33,7 +33,6 @@ class CoreActivatorJS:ActivatorJS{
         ReflectionFactoryJS.get().registerClass(EntityReferenceJS.qualifiedClassName){EntityReferenceJS()}
         ReflectionFactoryJS.get().registerQualifiedName(EntityReferenceJS::class, EntityReferenceJS.qualifiedClassName)
         ReflectionFactoryJS.get().registerClass(EnumSelectConfigurationJS.qualifiedClassName) {EnumSelectConfigurationJS<FakeEnumJS>()}
-        ReflectionFactoryJS.get().registerClass(EntityAutocompleteDataSourceJS.qualifiedClassName) { EntityAutocompleteDataSourceJS()}
         ReflectionFactoryJS.get().registerClass(EntitySelectConfigurationJS.qualifiedClassName) { EntitySelectConfigurationJS()}
         ReflectionFactoryJS.get().registerQualifiedName(EnumSelectConfigurationJS::class, EnumSelectConfigurationJS.qualifiedClassName)
         ReflectionFactoryJS.get().registerClass(TextColumnConfigurationJS.qualifiedClassName)  {TextColumnConfigurationJS()}
@@ -43,6 +42,8 @@ class CoreActivatorJS:ActivatorJS{
         ReflectionFactoryJS.get().registerClass(EntityColumnConfigurationJS.qualifiedClassName)  {EntityColumnConfigurationJS()}
         ReflectionFactoryJS.get().registerClass(TableConfigurationJS.qualifiedClassName) {TableConfigurationJS<BaseVSEntityJS>()}
         ReflectionFactoryJS.get().registerClass(SimplePropertyWrapperVMJS.qualifiedClassName) {SimplePropertyWrapperVMJS<BaseVMEntityJS>()}
+        ReflectionFactoryJS.get().registerClass(TileDataJS.qualifiedClassName) {TileDataJS<Any,Any>()}
+        ReflectionFactoryJS.get().registerQualifiedName(TileDataJS::class, TileDataJS.qualifiedClassName)
         val domainRegisty = DomainMetaRegistryJS()
         EnvironmentJS.publish(domainRegisty)
         val restRegistry = RestMetaRegistryJS()
@@ -70,7 +71,7 @@ class CoreActivatorJS:ActivatorJS{
             val listId = itJs.id
             val objectId = itJs.objectId
             val listDescr = ListDescriptionJS(listId, objectId)
-            itJs.toolbuttons?.forEach { button ->
+            itJs.buttons?.forEach { button ->
                 listDescr.toolButtons.add(ListToolButtonDescriptionJS(button.id, button.handler, button.weight, button.displayName))
             }
             uiRegistry.lists[listId] = listDescr
@@ -79,9 +80,12 @@ class CoreActivatorJS:ActivatorJS{
         it.sharedEditorButtons?.forEach{ itDT ->
             uiRegistry.sharedEditorToolButtons.add(SharedEditorToolButtonDescriptionJS(itDT.id,itDT.handler,itDT.weight, itDT.displayName))
         }
+        it.sharedListButtons?.forEach{ itDT ->
+            uiRegistry.sharedListToolButtons.add(SharedListToolButtonDescriptionJS(itDT.id,itDT.handler,itDT.weight, itDT.displayName))
+        }
         it.editors?.forEach { itJs ->
             val editorId = itJs.id
-            val editor = EditorDescriptionJS(editorId,  itJs.viewId)
+            val editor = EditorDescriptionJS(editorId, itJs.entityId, itJs.viewId)
             uiRegistry.editors[editorId] = editor
             itJs.buttons?.forEach { button ->
                 editor.toolButtons.add(EditorToolButtonDescriptionJS(button.id, button.handler, button.weight, button.displayName))
@@ -133,6 +137,13 @@ class CoreActivatorJS:ActivatorJS{
             uiRegistry.viewValidations[entity.id] = entity
             Unit
         }
+        it.autocompletes?.forEach { itJs ->
+            val entity = AutocompleteDescriptionJS(itJs.id, itJs.entity, itJs.sortProperty, AutocompleteSortOrderJS.valueOf(itJs.sortOrder))
+            entity.columns.addAll(itJs.columns as Array<out String>)
+            itJs.filters?.let { entity.filters.addAll(it as Array<out String>) }
+            uiRegistry.autocompletes[entity.id] = entity
+            Unit
+        }
         it.views?.forEach { viewJS ->
             val view2 = when (ViewTypeDTJS.valueOf(viewJS.type)) {
                 ViewTypeDTJS.STANDARD-> {
@@ -148,34 +159,46 @@ class CoreActivatorJS:ActivatorJS{
                             }
                             itLayout.widgets.forEach { widgetIt ->
                                 when (WidgetTypeDTJS.valueOf(widgetIt.type)) {
+                                    WidgetTypeDTJS.TILE -> {
+                                        val widget = TileDescriptionJS(widgetIt.id, widgetIt.compactViewId, widgetIt.fullViewId, widgetIt.displayName)
+                                        widget.hSpan = widgetIt.hSpan
+                                        widget.notEditable = widgetIt.notEditable
+                                        layout.widgets[widgetIt.id] = widget
+                                    }
                                     WidgetTypeDTJS.TEXTBOX -> {
                                         val widget = TextboxDescriptionJS(widgetIt.id)
                                         widget.hSpan = widgetIt.hSpan
+                                        widget.notEditable = widgetIt.notEditable
                                         layout.widgets[widgetIt.id] = widget
                                     }
                                     WidgetTypeDTJS.TEXTAREA -> {
                                         val widget = TextAreaDescriptionJS(widgetIt.id)
                                         widget.hSpan = widgetIt.hSpan
+                                        widget.notEditable = widgetIt.notEditable
                                         layout.widgets[widgetIt.id] = widget
                                     }
                                     WidgetTypeDTJS.INTBOX -> {
-                                        val widget = IntegerBoxDescriptionJS(widgetIt.id, widgetIt.notNullable)
+                                        val widget = IntegerBoxDescriptionJS(widgetIt.id, widgetIt.nonNullable)
                                         widget.hSpan = widgetIt.hSpan
+                                        widget.notEditable = widgetIt.notEditable
                                         layout.widgets[widgetIt.id] = widget
                                     }
                                     WidgetTypeDTJS.FLOATBOX -> {
-                                        val widget = FloatBoxDescriptionJS(widgetIt.id, widgetIt.notNullable)
+                                        val widget = FloatBoxDescriptionJS(widgetIt.id, widgetIt.nonNullable)
                                         widget.hSpan = widgetIt.hSpan
+                                        widget.notEditable = widgetIt.notEditable
                                         layout.widgets[widgetIt.id] = widget
                                     }
                                     WidgetTypeDTJS.ENUM_SELECT -> {
                                         val widget = EnumSelectDescriptionJS(widgetIt.id, widgetIt.enumId)
                                         widget.hSpan = widgetIt.hSpan
+                                        widget.notEditable = widgetIt.notEditable
                                         layout.widgets[widgetIt.id] = widget
                                     }
                                     WidgetTypeDTJS.ENTITY_AUTOCOMPLETE -> {
                                         val widget = EntitySelectDescriptionJS(widgetIt.id, widgetIt.elementClassName)
                                         widget.hSpan = widgetIt.hSpan
+                                        widget.notEditable = widgetIt.notEditable
                                         layout.widgets[widgetIt.id] = widget
                                     }
                                     WidgetTypeDTJS.LABEL -> {
@@ -184,6 +207,7 @@ class CoreActivatorJS:ActivatorJS{
                                         val widget = LabelDescriptionJS(widgetIt.id, widgetIt.displayName, if (verticalAlignment != null) VerticalAlignmentJS.valueOf(verticalAlignment) else null
                                                 , if (horizontalAlignment != null) HorizontalAlignmentJS.valueOf(horizontalAlignment) else null)
                                         widget.hSpan = widgetIt.hSpan
+                                        widget.notEditable = widgetIt.notEditable
                                         layout.widgets[widgetIt.id] = widget
                                     }
                                     WidgetTypeDTJS.NEXT_ROW -> {
@@ -195,26 +219,31 @@ class CoreActivatorJS:ActivatorJS{
                                     WidgetTypeDTJS.DATEBOX ->{
                                         val widget = DateboxDescriptionJS(widgetIt.id)
                                         widget.hSpan = widgetIt.hSpan
+                                        widget.notEditable = widgetIt.notEditable
                                         layout.widgets[widgetIt.id] = widget
                                     }
                                     WidgetTypeDTJS.DATETIMEBOX ->{
                                         val widget = DateTimeBoxDescriptionJS(widgetIt.id)
                                         widget.hSpan = widgetIt.hSpan
+                                        widget.notEditable = widgetIt.notEditable
                                         layout.widgets[widgetIt.id] = widget
                                     }
                                     WidgetTypeDTJS.BOOLEANBOX ->{
-                                        val widget = BooleanBoxDescriptionJS(widgetIt.id, widgetIt.notNullable)
+                                        val widget = BooleanBoxDescriptionJS(widgetIt.id, widgetIt.nonNullable)
                                         widget.hSpan = widgetIt.hSpan
+                                        widget.notEditable = widgetIt.notEditable
                                         layout.widgets[widgetIt.id] = widget
                                     }
                                     WidgetTypeDTJS.PASSWORDBOX ->{
                                         val widget = PasswordBoxDescriptionJS(widgetIt.id)
                                         widget.hSpan = widgetIt.hSpan
+                                        widget.notEditable = widgetIt.notEditable
                                         layout.widgets[widgetIt.id] = widget
                                     }
                                     WidgetTypeDTJS.TABLE -> {
                                         val widget = TableDescriptionJS(widgetIt.id, widgetIt.baseClassesName)
                                         widget.hSpan = widgetIt.hSpan
+                                        widget.notEditable = widgetIt.notEditable
                                         layout.widgets[widgetIt.id] = widget
                                         val colls = widgetIt.columns
                                         colls.forEach { columnIt ->
@@ -225,22 +254,22 @@ class CoreActivatorJS:ActivatorJS{
                                                     widget.columns.put(columnDescriptionJS.id, columnDescriptionJS)
                                                 }
                                                 TableColumnTypeDTJS.INTEGER -> {
-                                                    val columnDescriptionJS = IntegerTableColumnDescriptionJS(columnIt.id, columnIt.caption,columnIt.notNullable)
+                                                    val columnDescriptionJS = IntegerTableColumnDescriptionJS(columnIt.id, columnIt.caption,columnIt.nonNullable)
                                                     columnDescriptionJS.width = columnIt.width
                                                     widget.columns.put(columnDescriptionJS.id, columnDescriptionJS)
                                                 }
                                                 TableColumnTypeDTJS.FLOAT -> {
-                                                    val columnDescriptionJS = FloatTableColumnDescriptionJS(columnIt.id, columnIt.caption,columnIt.notNullable)
+                                                    val columnDescriptionJS = FloatTableColumnDescriptionJS(columnIt.id, columnIt.caption,columnIt.nonNullable)
                                                     columnDescriptionJS.width = columnIt.width
                                                     widget.columns.put(columnDescriptionJS.id, columnDescriptionJS)
                                                 }
                                                 TableColumnTypeDTJS.ENUM -> {
-                                                    val columnDescriptionJS = EnumTableColumnDescriptionJS(columnIt.id, columnIt.caption, columnIt.enumId)
+                                                    val columnDescriptionJS = EnumTableColumnDescriptionJS(columnIt.id,  columnIt.enumId,columnIt.caption)
                                                     columnDescriptionJS.width = columnIt.width
                                                     widget.columns.put(columnDescriptionJS.id, columnDescriptionJS)
                                                 }
                                                 TableColumnTypeDTJS.ENTITY-> {
-                                                    val columnDescriptionJS = EntityTableColumnDescriptionJS(columnIt.id, columnIt.caption, columnIt.entityClassName)
+                                                    val columnDescriptionJS = EntityTableColumnDescriptionJS(columnIt.id, columnIt.entityClassName, columnIt.caption)
                                                     columnDescriptionJS.width = columnIt.width
                                                     widget.columns.put(columnDescriptionJS.id, columnDescriptionJS)
                                                 }
@@ -320,13 +349,11 @@ class CoreActivatorJS:ActivatorJS{
         itJs.properties?.forEach{ prop:dynamic ->
             val id = DatabasePropertyDescriptionJS(prop.id,DatabasePropertyTypeJS.valueOf(prop.type),prop.displayName)
             id.className = prop.className
-            id.usedInAutocomplete = prop.usedInAutocomplete
             entity.properties.put(prop.id, id)
         }
         itJs.collections?.forEach{ coll:dynamic ->
             val cd = DatabaseCollectionDescriptionJS(coll.id, DatabaseCollectionTypeJS.valueOf(coll.elementType), coll.displayName)
             cd.elementClassName = coll.elementClassName
-            cd.usedInAutocomplete = coll.usedInAutocomplete
             entity.collections.put(coll.id, cd)
         }
     }

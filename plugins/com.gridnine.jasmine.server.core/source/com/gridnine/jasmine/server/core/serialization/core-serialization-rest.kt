@@ -2,7 +2,7 @@
  * Gridnine AB http://www.gridnine.com
  * Project: Jasmine
  *****************************************************************/
-@file:Suppress("unused")
+@file:Suppress("unused", "UNCHECKED_CAST")
 package com.gridnine.jasmine.server.core.serialization
 
 import com.google.gson.JsonObject
@@ -68,6 +68,46 @@ object RestSerializationUtils {
         }
 
 
+        private fun createTileDescription(): ObjectMetadataProvider<TileData<Any,Any>> {
+            return object : ObjectMetadataProvider<TileData<Any,Any>>() {
+                override fun hasUid(): Boolean {
+                    return false
+                }
+
+                init {
+                    properties.add(SerializablePropertyDescription(TileData.compactData, SerializablePropertyType.ENTITY, BaseEntity::class.qualifiedName, true))
+                    properties.add(SerializablePropertyDescription(TileData.fullData, SerializablePropertyType.ENTITY, BaseEntity::class.qualifiedName, true))
+                }
+
+                override fun getPropertyValue(obj: TileData<Any,Any>, id: String): Any? {
+                    if(id == TileData.compactData){
+                        return obj.compactData
+                    }
+                    if(id == TileData.fullData){
+                        return obj.fullData
+                    }
+                    throw IllegalArgumentException("property $id does not exist")
+                }
+
+                override fun getCollection(obj: TileData<Any,Any>, id: String): MutableCollection<Any> {
+                    throw IllegalArgumentException("class has no collections")
+                }
+
+                override fun setPropertyValue(obj: TileData<Any,Any>, id: String, value: Any?) {
+                    if(id == TileData.compactData){
+                        obj.compactData = value as Any
+                        return;
+                    }
+                    if(id == TileData.fullData){
+                        obj.fullData = value as Any
+                        return;
+                    }
+                    throw IllegalArgumentException("property $id does not exist")
+                }
+
+
+            }
+        }
 
 
         private fun isAbstractClass(elementType:RestPropertyType, elementClassName: String?): Boolean {
@@ -167,9 +207,6 @@ object RestSerializationUtils {
             if(EntityAutocompleteConfiguration::class.qualifiedName == className){
                 return UiSerializationUtils.uiProviderFactory.create(className)
             }
-            if(EntityAutocompleteDataSource::class.qualifiedName == className){
-                return UiSerializationUtils.uiProviderFactory.create(className)
-            }
             if(TableConfiguration::class.qualifiedName == className){
                 return UiSerializationUtils.uiProviderFactory.create(className)
             }
@@ -187,6 +224,9 @@ object RestSerializationUtils {
             }
             if(EntityColumnConfiguration::class.qualifiedName == className){
                 return UiSerializationUtils.uiProviderFactory.create(className)
+            }
+            if(className.startsWith(TileData::class.qualifiedName!!)){
+                return createTileDescription()
             }
 
             throw RuntimeException("unsupported type $className")

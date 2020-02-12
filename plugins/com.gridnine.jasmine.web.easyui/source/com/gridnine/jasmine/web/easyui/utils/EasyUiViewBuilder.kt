@@ -6,27 +6,29 @@
 
 package com.gridnine.jasmine.web.easyui.utils
 
+import com.gridnine.jasmine.web.core.model.common.FakeEnumJS
 import com.gridnine.jasmine.web.core.model.ui.*
+import com.gridnine.jasmine.web.core.model.ui.widgets.*
 import com.gridnine.jasmine.web.core.utils.HtmlUtilsJS
 import com.gridnine.jasmine.web.core.utils.ReflectionFactoryJS
-import com.gridnine.jasmine.web.easyui.widgets.EasyUiPasswordBoxWidget
-import com.gridnine.jasmine.web.easyui.widgets.EasyUiTextBoxWidget
+import com.gridnine.jasmine.web.easyui.widgets.*
+import kotlin.js.Date
 
 object EasyUiViewBuilder {
-    fun generateHtml(viewId: String, uid: String, expandToParent: Boolean, builder: HtmlUtilsJS.Div) {
+    fun generateHtml(viewId: String, uid: String, expandToParent: Boolean, builder: HtmlUtilsJS.BaseDiv) {
         val viewDescr = UiMetaRegistryJS.get().views[viewId]
                 ?: throw IllegalArgumentException("unable to load description for view $viewId")
         when (viewDescr) {
             is StandardViewDescriptionJS -> {
                 when (val layout = viewDescr.layout) {
                     is TableLayoutDescriptionJS -> {
-                        builder.table(style = if (expandToParent) "width:100%; height:100%" else null) {
+                        builder.table(style = if (expandToParent) "width:100%; height:100%" else "width:100%") {
                             tr {
                                 layout.columns.forEach { column ->
                                     if ("remaining" == column.width) {
                                         td { }
                                     } else {
-                                        td(style = "width:${column.width};height:1px") { }
+                                        td(style = "width:${column.width}px;height:1px") { }
                                     }
                                 }
                             }
@@ -83,15 +85,21 @@ object EasyUiViewBuilder {
                                                         HorizontalAlignmentJS.CENTER -> "center"
                                                         HorizontalAlignmentJS.RIGHT -> "right"
                                                     }
-                                                    "<div class = \"jasmine-label\" style=\"text-align: ${textAlight};width:$widthValue;\">${widget.displayName}<div>"()
+                                                    "<div class = \"jasmine-label\" style=\"text-align: ${textAlight};width:${widthValue}px;\">${widget.displayName}<div>"()
                                                 }
                                                 is TextAreaDescriptionJS ->{
-                                                    "<input id=\"${td.widget.id}${uid}\" style=\"width:$widthValue;height:200px\">"()
+                                                    "<input id=\"${td.widget.id}${uid}\" style=\"width:${widthValue}px;height:200px\">"()
                                                 }
                                                 is TableDescriptionJS ->{
                                                     "<table id=\"${td.widget.id}${uid}\"/>"()
                                                 }
-                                                else -> "<input id=\"${td.widget.id}${uid}\" style=\"width:$widthValue\">"()
+                                                is TileDescriptionJS ->{
+                                                    div (id="${td.widget.id}${uid}", style = "width:100%;padding:5px"){
+                                                        generateHtml(widget.compactViewId, "${widget.id}-compact-${uid}", false, this)
+                                                    }
+                                                }
+                                                else -> "<input id=\"${td.widget.id}${uid}\" style=\"width:${widthValue}px\">"()
+
                                             }
                                         }
                                         currentIdx+=td.widget.hSpan?:1
@@ -114,7 +122,7 @@ object EasyUiViewBuilder {
         }
     }
 
-    fun<VM:BaseVMEntityJS,VS:BaseVSEntityJS,VV:BaseVVEntityJS, V:BaseView<VM,VS,VV>> createView(viewId: String, uid:String):V {
+    fun<VM:BaseVMEntityJS,VS:BaseVSEntityJS,VV:BaseVVEntityJS, V:BaseView<VM,VS,VV>> createView(viewId: String, uid:String, createProxy:Boolean = false):V {
         val view = ReflectionFactoryJS.get().getFactory(viewId).invoke() as V
         val viewDescr = UiMetaRegistryJS.get().views[viewId]
                 ?: throw IllegalArgumentException("unable to load description for view $viewId")
@@ -130,12 +138,25 @@ object EasyUiViewBuilder {
         }
         widgetsDescriptions.forEach {wd ->
             when(wd){
-                is TextboxDescriptionJS -> view.setValue(wd.id, EasyUiTextBoxWidget(uid, wd))
-                is PasswordBoxDescriptionJS -> view.setValue(wd.id, EasyUiPasswordBoxWidget(uid, wd))
+                is TextboxDescriptionJS -> view.setValue(wd.id, if(createProxy) ProxyTextBoxWidget() else EasyUiTextBoxWidget(uid, wd))
+                is PasswordBoxDescriptionJS -> view.setValue(wd.id, if(createProxy) ProxyPasswordBoxWidget() else  EasyUiPasswordBoxWidget(uid, wd))
+                is TileDescriptionJS ->view.setValue(wd.id, EasyUiTileWidget<BaseView<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS>,BaseView<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS>>(uid, wd))
+                is DateboxDescriptionJS -> view.setValue(wd.id, if(createProxy) ProxyDateBoxWidget() else  EasyUiDateBoxWidget(uid, wd))
+                is DateTimeBoxDescriptionJS -> view.setValue(wd.id, if(createProxy) ProxyDateTimeBoxWidget() else  EasyUiDateTimeBoxWidget(uid, wd))
+                is EnumSelectDescriptionJS -> view.setValue(wd.id, if(createProxy) ProxyEnumSelectWidget<FakeEnumJS>() else  EasyUiEnumSelectWidget<FakeEnumJS>(uid, wd))
+                is EntitySelectDescriptionJS ->view.setValue(wd.id, if(createProxy) ProxyEntitySelectWidget() else  EasyUiEntitySelectWidget(uid, wd))
+                is FloatBoxDescriptionJS -> view.setValue(wd.id, if(createProxy) ProxyFloatBoxWidget() else  EasyUiFloatBoxWidget(uid, wd))
+                is IntegerBoxDescriptionJS -> view.setValue(wd.id, if(createProxy) ProxyIntBoxWidget() else  EasyUiIntBoxWidget(uid, wd))
+                is SelectDescriptionJS -> view.setValue(wd.id, if(createProxy) ProxySelectWidget() else  EasyUiSelectWidget(uid, wd))
+                is BooleanBoxDescriptionJS -> view.setValue(wd.id, if(createProxy) ProxyBooleanBoxWidget() else  EasyUiBooleanBoxWidget(uid, wd))
+                is TableDescriptionJS -> view.setValue(wd.id, if(createProxy) ProxyTableWidget<BaseVMEntityJS,BaseVSEntityJS,BaseVVEntityJS>() else  EasyUiTableWidget<BaseVMEntityJS,BaseVSEntityJS,BaseVVEntityJS>(uid, wd))
                 else -> {}
+
             }
         }
+        var modelUid :String? = null
         view.readData = {model ->
+            modelUid = model.uid
             widgetsDescriptions.forEach {
                 when (it) {
                     is TextboxDescriptionJS -> {
@@ -159,8 +180,20 @@ object EasyUiViewBuilder {
                     is IntegerBoxDescriptionJS -> {
                         (view.getValue(it.id) as IntegerBoxWidget).setData(model.getValue(it.id) as Int?)
                     }
+                    is DateboxDescriptionJS -> {
+                        (view.getValue(it.id) as DateBoxWidget).setData(model.getValue(it.id) as Date?)
+                    }
+                    is DateTimeBoxDescriptionJS -> {
+                        (view.getValue(it.id) as DateTimeBoxWidget).setData(model.getValue(it.id) as Date?)
+                    }
+                    is BooleanBoxDescriptionJS -> {
+                        (view.getValue(it.id) as BooleanBoxWidget).setData(model.getValue(it.id) as Boolean?)
+                    }
                     is TableDescriptionJS -> {
                         (view.getValue(it.id) as TableWidget<BaseVMEntityJS,BaseVSEntityJS,BaseVVEntityJS>).readData(model.getCollection(it.id).asDynamic())
+                    }
+                    is TileDescriptionJS -> {
+                        (view.getValue(it.id) as TileWidget<*,*>).setData(model.getValue(it.id).asDynamic())
                     }
                 }
             }
@@ -170,6 +203,9 @@ object EasyUiViewBuilder {
                 when (it) {
                     is TextboxDescriptionJS -> {
                         (view.getValue(it.id) as TextBoxWidget).configure(Unit)
+                    }
+                    is BooleanBoxDescriptionJS -> {
+                        (view.getValue(it.id) as BooleanBoxWidget).configure(Unit)
                     }
                     is PasswordBoxDescriptionJS -> {
                         (view.getValue(it.id) as PasswordBoxWidget).configure(Unit)
@@ -186,11 +222,20 @@ object EasyUiViewBuilder {
                     is FloatBoxDescriptionJS -> {
                         (view.getValue(it.id) as FloatBoxWidget).configure(Unit)
                     }
+                    is DateboxDescriptionJS -> {
+                        (view.getValue(it.id) as DateBoxWidget).configure(Unit)
+                    }
+                    is DateTimeBoxDescriptionJS -> {
+                        (view.getValue(it.id) as DateTimeBoxWidget).configure(Unit)
+                    }
                     is IntegerBoxDescriptionJS -> {
                         (view.getValue(it.id) as IntegerBoxWidget).configure(Unit)
                     }
                     is TableDescriptionJS -> {
                         (view.getValue(it.id) as TableWidget<BaseVMEntityJS,BaseVSEntityJS,BaseVVEntityJS>).configure(settings.getValue(it.id).asDynamic())
+                    }
+                    is TileDescriptionJS -> {
+                        (view.getValue(it.id) as TileWidget<*,*>).configure(settings.getValue(it.id).asDynamic())
                     }
                 }
             }
@@ -200,6 +245,9 @@ object EasyUiViewBuilder {
                 when (it) {
                     is TextboxDescriptionJS -> {
                         (view.getValue(it.id) as TextBoxWidget).showValidation(validation.getValue(it.id) as String?)
+                    }
+                    is BooleanBoxDescriptionJS -> {
+                        (view.getValue(it.id) as BooleanBoxWidget).showValidation(validation.getValue(it.id) as String?)
                     }
                     is PasswordBoxDescriptionJS -> {
                         (view.getValue(it.id) as PasswordBoxWidget).showValidation(validation.getValue(it.id) as String?)
@@ -222,14 +270,27 @@ object EasyUiViewBuilder {
                     is TableDescriptionJS -> {
                         (view.getValue(it.id) as TableWidget<BaseVMEntityJS,BaseVSEntityJS,BaseVVEntityJS>).showValidation(validation.getValue(it.id)?.asDynamic())
                     }
+                    is DateboxDescriptionJS -> {
+                        (view.getValue(it.id) as DateBoxWidget).showValidation(validation.getValue(it.id) as String?)
+                    }
+                    is DateTimeBoxDescriptionJS -> {
+                        (view.getValue(it.id) as DateTimeBoxWidget).showValidation(validation.getValue(it.id) as String?)
+                    }
+                    is TileDescriptionJS -> {
+                        (view.getValue(it.id) as TileWidget<*,*>).showValidation(validation.getValue(it.id).asDynamic())
+                    }
                 }
             }
         }
         view.writeData = {model ->
+            model.uid = modelUid
             widgetsDescriptions.forEach {
                 when (it) {
                     is TextboxDescriptionJS -> {
                         model.setValue(it.id, (view.getValue(it.id) as TextBoxWidget).getData())
+                    }
+                    is BooleanBoxDescriptionJS -> {
+                        model.setValue(it.id, (view.getValue(it.id) as BooleanBoxWidget).getData())
                     }
                     is PasswordBoxDescriptionJS -> {
                         model.setValue(it.id, (view.getValue(it.id) as PasswordBoxWidget).getData())
@@ -249,8 +310,17 @@ object EasyUiViewBuilder {
                     is IntegerBoxDescriptionJS -> {
                         model.setValue(it.id, (view.getValue(it.id) as IntegerBoxWidget).getData())
                     }
+                    is DateboxDescriptionJS -> {
+                        model.setValue(it.id, (view.getValue(it.id) as DateBoxWidget).getData())
+                    }
+                    is DateTimeBoxDescriptionJS -> {
+                        model.setValue(it.id, (view.getValue(it.id) as DateTimeBoxWidget).getData())
+                    }
                     is TableDescriptionJS -> {
                         (view.getValue(it.id) as TableWidget<BaseVMEntityJS,BaseVSEntityJS,BaseVVEntityJS>).writeData(model.getCollection(it.id).asDynamic())
+                    }
+                    is TileDescriptionJS -> {
+                        model.setValue(it.id, (view.getValue(it.id) as TileWidget<*,*>).getData())
                     }
                 }
             }

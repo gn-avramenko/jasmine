@@ -48,7 +48,7 @@ enum class DatabaseCollectionType {
 
 
 class DocumentPropertyDescription(owner: String, id: String) : BaseOwnedIdentityDescription(owner, id){
-    var notNullable = false
+    var nonNullable = false
     var className: String? = null
     lateinit var type: DocumentPropertyType
 }
@@ -80,16 +80,14 @@ abstract class BaseDocumentDescription(id:String) : BaseIdentityDescription(id) 
 }
 
 class IndexPropertyDescription(owner: String, id:String) : BaseOwnedIdentityDescription(owner, id) {
-    var notNullable = false
+    var nonNullable = false
     var className: String? = null
-    var usedInAutocomplete = false
     lateinit var type: DatabasePropertyType
 }
 
 class IndexCollectionDescription(owner: String, id:String) : BaseOwnedIdentityDescription(owner, id) {
 
     var elementClassName: String? = null
-    var usedInAutocomplete = false
     lateinit var elementType: DatabaseCollectionType
     var unique = false
 

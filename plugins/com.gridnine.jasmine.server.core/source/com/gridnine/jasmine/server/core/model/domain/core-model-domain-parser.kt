@@ -38,7 +38,7 @@ object DomainMetadataParser {
             ParserUtils.updateLocalizations(propDescr, localizations)
             propDescr.type = getDocumentPropertyType(it.attributes["type"]?:throw IllegalArgumentException("type attribute is absent in property $it"))
             propDescr.className = it.attributes["className"]
-            propDescr.notNullable = "true" == it.attributes["notNullable"]
+            propDescr.nonNullable = "true" == it.attributes["nonNullable"]
         }
         elm.children("collection").forEach {
             val id = it.attributes["id"]?:throw IllegalArgumentException("id attribute is absent in collection $it")
@@ -58,7 +58,6 @@ object DomainMetadataParser {
             ParserUtils.updateParameters(child, property)
             ParserUtils.updateLocalizations(property, localizations)
             property.className = child.attributes["className"]
-            property.usedInAutocomplete = "true" == child.attributes["usedInAutocomplete"]
             property.type = getDatabasePropertyType(child.attributes["type"]?:throw IllegalArgumentException("type attribute is absent in property $child"))
         }
         elm.children("collection").forEach { child ->
@@ -68,7 +67,6 @@ object DomainMetadataParser {
             ParserUtils.updateLocalizations(collection, localizations)
             collection.elementClassName = child.attributes["elementClassName"]
             collection.elementType = getDatabaseCollectionType(child.attributes["elementType"]?:throw IllegalArgumentException("type attribute is absent in collection $child"))
-            collection.usedInAutocomplete = "true" == child.attributes["usedInAutocomplete"]
         }
     }
 

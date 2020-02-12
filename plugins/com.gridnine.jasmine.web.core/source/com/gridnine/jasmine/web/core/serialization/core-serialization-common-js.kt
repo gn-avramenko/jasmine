@@ -19,6 +19,9 @@ internal abstract class ObjectMetadataProviderJS<T:Any> {
     abstract fun getCollection(obj:T, id: String): MutableCollection<Any>
     abstract fun setPropertyValue(obj:T, id: String, value: Any?)
     abstract fun hasUid():Boolean
+    open fun createInstance():T?{
+        return null
+    }
 }
 
 internal interface ProviderFactoryJS {
@@ -174,16 +177,19 @@ internal object CommonSerializationUtilsJS {
             provider = getProvider("${realClassName}JS", factory) as ObjectMetadataProviderJS<T>
         } else {
             provider  = getProvider(quilifiedClassName, factory) as ObjectMetadataProviderJS<T>
-            result = ReflectionFactoryJS.get().getFactory(quilifiedClassName).invoke() as T
+            val instance = provider.createInstance()
+            result = instance?:ReflectionFactoryJS.get().getFactory(quilifiedClassName).invoke() as T
         }
 
         if (provider.hasUid()) {
-            val uid = jsonObj[BaseEntityJS.uid] as String
-            val existing = context[uid]
-            if (existing != null) {
-                return existing as T
+            val uid = jsonObj[BaseEntityJS.uid] as String?
+            if(uid != null) {
+                val existing = context[uid]
+                if (existing != null) {
+                    return existing as T
+                }
+                context[uid] = result
             }
-            context[uid] = result
         }
         provider.properties.forEach { prop ->
             val propValue = jsonObj[prop.id]

@@ -34,10 +34,12 @@ external interface JQuery {
     fun height():Int
     fun tree(method:String, args:Any):dynamic
     fun linkbutton(options:Any)
+    fun linkbutton(method:String, vararg args:Any)
     fun dialog(options:Any)
     fun dialog(method:String)
     fun menu(options:Any)
     fun menu(method:String, arg:Any)
+    fun panel(options:Any):JQuery
     fun combobox(options:Any)
     fun combobox(method:String):Any?
     fun combobox(method: String , arg:Any?)
@@ -59,10 +61,14 @@ external interface JQuery {
     fun focus()
     val length:Int
     fun append(content:String)
+    fun switchbutton(options: Any):JQuery
+    fun switchbutton(method:String, vararg args:Any?):Any?
     fun datebox(options: Any):JQuery
     fun datebox(method:String, vararg args:Any?):Any?
     fun datetimebox(options: Any):JQuery
     fun datetimebox(method:String, vararg args:Any?):Any?
+    fun hide()
+    fun show()
 }
 
 
@@ -81,3 +87,5 @@ external fun confirm(question:String, handler:() ->Unit):Unit = definedExternall
 external fun showMessage(title:String?, message:String ,timeout: Int)
 external fun showError(title:String?, message:String, stacktrace:String?)
 external fun openFileJS(accept:String?, resolve:(file:dynamic) ->Unit)
+
+

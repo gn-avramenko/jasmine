@@ -28,7 +28,8 @@ enum class VMPropertyType {
     LOCAL_DATE_TIME,
     LOCAL_DATE,
     ENTITY,
-    BOOLEAN
+    BOOLEAN,
+
 
 }
 
@@ -39,7 +40,7 @@ enum class VMCollectionType {
 
 class VMCollectionDescription(owner:String, id:String, val elementType:VMCollectionType, val elementClassName:String?) : BaseOwnedIdentityDescription(owner, id)
 
-class VMPropertyDescription(owner:String, id:String, val type:VMPropertyType, val className:String?,val notNullable: Boolean) : BaseOwnedIdentityDescription(owner, id)
+class VMPropertyDescription(owner:String, id:String, val type:VMPropertyType, val className:String?,val nonNullable: Boolean) : BaseOwnedIdentityDescription(owner, id)
 
 class VMEnumItemDescription(owner:String, id:String) : BaseOwnedIdentityDescription(owner, id)
 
@@ -82,7 +83,8 @@ class VSEntityDescription(id: String) : BaseIdentityDescription(id) {
 
 
 enum class VVPropertyType {
-    STRING
+    STRING,
+    ENTITY
 }
 
 enum class VVCollectionType {
@@ -104,6 +106,7 @@ class VVEntityDescription(id: String) : BaseIdentityDescription(id) {
 
 abstract class BaseWidgetDescription (owner: String, id: String) : BaseOwnedIdentityDescription(owner,id){
     var hSpan:Int? = null
+    var notEditable = false
 }
 class TableColumnDescription(val width:String?)
 
@@ -141,9 +144,9 @@ class TextboxDescription(owner: String, id: String)  : BaseWidgetDescription(own
 class PasswordBoxDescription(owner: String, id: String)  : BaseWidgetDescription(owner, id)
 
 
-class IntegerBoxDescription(owner: String, id: String, val notNullable:Boolean)  : BaseWidgetDescription(owner, id)
+class IntegerBoxDescription(owner: String, id: String, val nonNullable:Boolean)  : BaseWidgetDescription(owner, id)
 
-class FloatBoxDescription(owner: String, id: String, val notNullable:Boolean)  : BaseWidgetDescription(owner, id)
+class FloatBoxDescription(owner: String, id: String, val nonNullable:Boolean)  : BaseWidgetDescription(owner, id)
 
 class EnumSelectDescription(owner: String, id: String, val enumId:String) : BaseWidgetDescription(owner, id)
 
@@ -155,16 +158,17 @@ class DateboxDescription(owner: String, id: String)  : BaseWidgetDescription(own
 
 class DateTimeBoxDescription(owner: String, id: String)  : BaseWidgetDescription(owner, id)
 
-class BooleanBoxDescription(owner: String, id: String, val notNullable:Boolean)  : BaseWidgetDescription(owner, id)
+class BooleanBoxDescription(owner: String, id: String, val nonNullable:Boolean)  : BaseWidgetDescription(owner, id)
 
+class TileDescription(owner:String, id:String, val baseClassName: String, val compactView:BaseViewDescription, val fullView:BaseViewDescription):BaseWidgetDescription(owner, id)
 
 abstract class BaseTableColumnDescription(owner:String, id:String):BaseOwnedIdentityDescription(owner, id){
     var width:Int? = null
 }
 
 class TextTableColumnDescription(owner:String, id:String) :BaseTableColumnDescription(owner, id)
-class IntegerTableColumnDescription(owner:String, id:String,val notNullable:Boolean) :BaseTableColumnDescription(owner, id)
-class FloatTableColumnDescription(owner:String, id:String,val notNullable:Boolean) :BaseTableColumnDescription(owner, id)
+class IntegerTableColumnDescription(owner:String, id:String,val nonNullable:Boolean) :BaseTableColumnDescription(owner, id)
+class FloatTableColumnDescription(owner:String, id:String,val nonNullable:Boolean) :BaseTableColumnDescription(owner, id)
 class EnumTableColumnDescription(owner:String, id:String, val enumId:String) :BaseTableColumnDescription(owner, id)
 class EntityTableColumnDescription(owner:String, id:String, val entityClassName:String) :BaseTableColumnDescription(owner, id)
 class DateTableColumnDescription(owner:String, id:String) :BaseTableColumnDescription(owner, id)
@@ -178,11 +182,13 @@ class TableDescription(owner: String, id: String, val className:String) : BaseWi
     val columns = linkedMapOf<String, BaseTableColumnDescription>()
     var additionalRowDataClass:String? = null
 }
+
 class ListToolButtonDescription( owner:String, id:String, val handler:String, val weight:Double) : BaseOwnedIdentityDescription(owner, id)
 
 
 class EditorToolButtonDescription( owner:String, id:String, val handler:String, val weight:Double) : BaseOwnedIdentityDescription(owner, id)
 class SharedEditorToolButtonDescription(id:String, val handler:String, val weight:Double) : BaseIdentityDescription(id)
+class SharedListToolButtonDescription(id:String, val handler:String, val weight:Double) : BaseIdentityDescription(id)
 class DialogToolButtonDescription( owner:String, id:String, val handler:String,val caption:String) : BaseOwnedIdentityDescription(owner, id)
 
 class DialogDescription(id:String, val viewId:String) : BaseIdentityDescription(id){
@@ -195,12 +201,25 @@ class EditorDescription(id:String, val entityId: String, val viewId:String) : Ba
     val handlers  = arrayListOf<String>()
 }
 
+enum class AutocompleteSortOrder {
 
+    ASC,
+    DESC
+
+
+}
+
+class AutocompleteDescription(id:String, val entity:String, val sortProperty:String, val sortOrder: AutocompleteSortOrder, val criterionsModifier:String?) : BaseIdentityDescription(id){
+    val columns = arrayListOf<String>()
+    val filters = arrayListOf<String>()
+}
 
 
 class UiMetaRegistry{
 
     val sharedEditorToolButtons = arrayListOf<SharedEditorToolButtonDescription>()
+
+    val sharedListToolButtons = arrayListOf<SharedListToolButtonDescription>()
 
     val validationMessages = linkedMapOf<String, ValidationMessagesEnumDescription>()
 
@@ -217,6 +236,8 @@ class UiMetaRegistry{
     val lists = linkedMapOf<String, ListDescription>()
 
     val dialogs = linkedMapOf<String, DialogDescription>()
+
+    val autocompletes =  linkedMapOf<String, AutocompleteDescription>()
 
     companion object{
         fun get() = Environment.getPublished(UiMetaRegistry::class)

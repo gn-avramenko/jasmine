@@ -7,6 +7,7 @@
 package com.gridnine.jasmine.web.core.ui
 
 import com.gridnine.jasmine.web.core.application.EnvironmentJS
+import com.gridnine.jasmine.web.core.model.common.BaseEntityJS
 import com.gridnine.jasmine.web.core.model.ui.BaseVMEntityJS
 import com.gridnine.jasmine.web.core.model.ui.BaseVSEntityJS
 import com.gridnine.jasmine.web.core.model.ui.BaseVVEntityJS
@@ -29,10 +30,13 @@ interface DialogButtonHandler<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEnt
     fun handle(dialog:Dialog<VM,VS,VV,V>)
 }
 
+
+
 interface UiFactory{
     fun<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS,V:BaseView<VM,VS,VV>,D:Dialog<VM,VS,VV,V>> showDialog(dialog:D, model:VM, settings:VS):D
     fun publishMainFrame()
     fun showConfirmDialog(question:String, handler:()->Unit)
+    fun showNotification(message:String ,title:String?=null, timeout: Int=3000)
     companion object{
         fun get() = EnvironmentJS.getPublished(UiFactory::class)
     }
@@ -41,6 +45,7 @@ interface UiFactory{
 
 
 interface MainFrame{
+    fun openTab(objectId: String, uid:String?)
     companion object{
         fun get()=EnvironmentJS.getPublished(MainFrame::class)
     }
@@ -68,3 +73,6 @@ class MainFrameConfiguration{
         fun get() = EnvironmentJS.getPublished(MainFrameConfiguration::class)
     }
 }
+
+
+

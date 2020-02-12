@@ -118,6 +118,10 @@ class EasyUiMainFrameImpl :MainFrame{
             })
         }
     }
+    override fun openTab(objectId: String, uid:String?){
+        openTab(EasyUiEditorTabHandler(objectId, uid))
+    }
+
     fun<T> openTab(handler: EasyUiTabHandler<T>){
         val existingTab = tabs.find { handler.getId() == it.getId() }
         val tabsDiv = jQuery("#mf-content-tabs")
@@ -135,7 +139,7 @@ class EasyUiMainFrameImpl :MainFrame{
             tabs.add(handler)
             val tab = tabsDiv.jtabs("getSelected")  // get selected panel
             handler.decorateData(it,uid, { newTitle ->
-                tabsDiv.tabs("update", object{
+                tabsDiv.jtabs("update", object{
                     val tab = tab
                     val type = "header"
                     val options = object{

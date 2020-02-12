@@ -68,4 +68,8 @@ class EasyUiFactory:UiFactory{
     override fun showConfirmDialog(question: String, handler: () -> Unit) {
         confirm(question, handler)
     }
+
+    override fun showNotification(message: String, title: String?, timeout: Int) {
+        showMessage(title, message, timeout)
+    }
 }

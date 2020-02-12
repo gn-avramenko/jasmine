@@ -18,7 +18,9 @@ class EasyUiTextBoxWidget(uid:String, description:TextboxDescriptionJS):TextBoxW
 
         configure = {_:Unit ->
             if(!initialized){
-                div.textbox(object{})
+                div.textbox(object{
+                    val editable = !description.notEditable
+                })
                 val tb = div.textbox("textbox").asDynamic()
                 tb.on("input") {
                     val spanElm = tb.parent()

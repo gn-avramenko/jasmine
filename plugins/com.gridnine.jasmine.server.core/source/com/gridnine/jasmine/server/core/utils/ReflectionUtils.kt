@@ -6,8 +6,6 @@
 
 package com.gridnine.jasmine.server.core.utils
 
-import java.lang.Exception
-import java.lang.IllegalStateException
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
@@ -22,13 +20,13 @@ object ReflectionUtils{
 
     @Suppress("UNCHECKED_CAST")
     fun<T:Any> getClass(className:String):KClass<T>{
-        return (cache.getOrPut(className, {
-            try {
-                Class.forName(className).kotlin
-            } catch (e:Exception){
-                null
-            }
-        })?:throw ClassNotFoundException("unable to load class $className")) as KClass<T>
+        var cleanClassName = className
+        if(className.indexOf("<") != -1){
+            cleanClassName = className.substringBefore("<")
+        }
+        return cache.getOrPut(cleanClassName, {
+             Class.forName(cleanClassName).kotlin
+        }) as KClass<T>
     }
 
     fun safeGetEnum(className:String, element:String):Enum<*>?{

@@ -2,51 +2,84 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cf145ffd-ff9d-45fe-a37a-c75ec66ab68a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/rest/StandardListRestHandler.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/rest/standard-rest-autocomplete.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiListTabHandler.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-workspace-compound-criterions.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiEntityMultiSelectWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/utils/UiUtils.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/rest/sandbox-complex-document.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/rest/sandbox-user-account.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/rest/standard-rest-editor.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyBooleanBoxWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyDateBoxWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyDateTimeBoxWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyEntityMultiSelectWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyEntitySelectWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyEnumMultiSelectWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyEnumSelectWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyFloatBoxWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyIntBoxWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyPasswordBoxWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxySelectWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyTableWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyTextBoxWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-editor-tab-handler.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiBooleanBoxWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiEditorButtonWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiEntitySelectWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiEnumSelectWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiListButtonWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiTileWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox/source/com/gridnine/jasmine/web/sandbox/shared/SandboxSharedEditorSaveButtonHandler.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox/source/com/gridnine/jasmine/web/sandbox/shared/SandboxSharedListDeleteButtonHandler.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox/source/com/gridnine/jasmine/web/sandbox/userAccount/sandbox-user-account-js.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/build/core-codegen-domain-server.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/build/core-codegen-domain-server.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/build/core-codegen-rest-server.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/build/core-codegen-rest-server.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/build/core-codegen-ui-server.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/build/core-codegen-ui-server.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/build/core-codegen-ui-web.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/build/core-codegen-ui-web.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/domain/core-model-domain-entities.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/domain/core-model-domain-entities.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/domain/core-model-domain-meta.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/domain/core-model-domain-meta.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/domain/core-model-domain-parser.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/domain/core-model-domain-parser.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/domain/domain.xsd" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/domain/domain.xsd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/rest/core-model-rest-meta.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/rest/core-model-rest-meta.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/rest/core-model-rest-parser.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/rest/core-model-rest-parser.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/rest/rest.xsd" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/rest/rest.xsd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/ui/core-model-ui-entities.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/ui/core-model-ui-entities.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/ui/core-model-ui-meta.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/ui/core-model-ui-meta.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/ui/core-model-ui-parser.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/ui/core-model-ui-parser.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/ui/ui.xsd" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/ui/ui.xsd" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/serialization/core-serialization-rest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/serialization/core-serialization-rest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/storage/impl/core-storage-impl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/storage/impl/core-storage-impl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/storage/impl/jdbc/JdbcAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/storage/impl/jdbc/JdbcAdapter.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/storage/impl/jdbc/core-storage-jdbc-utils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/storage/impl/jdbc/core-storage-jdbc-utils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/storage/search/core-query-common.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/storage/search/core-query-common.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/storage/search/core-query-search.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/storage/search/core-query-search.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/resources/sb_easyui/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/resources/sb_easyui/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/serialization/core-serialization-ui.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/serialization/core-serialization-ui.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/utils/ReflectionUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/utils/ReflectionUtils.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/utils/ValidationUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/utils/ValidationUtils.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/activator/SandboxActivator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/activator/SandboxActivator.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/model/l10n/sandbox-model-domain_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/model/l10n/sandbox-model-domain_ru.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/model/l10n/sandbox-model-ui_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/model/l10n/sandbox-model-ui_ru.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/model/sandbox-model-domain.xml" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/model/sandbox-model-domain.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/model/sandbox-model-ui.xml" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/model/sandbox-model-ui.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/rest/SandboxAuthFilter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/rest/SandboxAuthFilter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/model/sandbox-rest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/model/sandbox-rest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/model/standard-rest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/model/standard-rest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/rest/StandardListRestHandler.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/rest/StandardListRestHandler.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/rest/standard-rest-autocomplete.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/rest/standard-rest-autocomplete.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/rest/standard-rest-meta.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/rest/standard-rest-meta.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/application/CoreActivatorJS.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/application/CoreActivatorJS.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/domain/core-model-domain-meta-js.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/domain/core-model-domain-meta-js.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/core-model-ui-entities-js.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/core-model-ui-entities-js.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/core-model-ui-meta-js.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/core-model-ui-meta-js.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/serialization/core-serialization-common-js.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/serialization/core-serialization-common-js.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/serialization/core-serialization-rest-js.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/serialization/core-serialization-rest-js.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/serialization/core-serialization-ui-js.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/serialization/core-serialization-ui-js.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/ui/ValidationUtilsJS.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/ui/ValidationUtilsJS.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/ui/core-ui-js.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/ui/core-ui-js.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/utils/HtmlUtilsJs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/utils/HtmlUtilsJs.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/resources/easyui-libs/easyui-adapter/easyuiadapter.js" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/resources/easyui-libs/easyui-adapter/easyuiadapter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/EasyUiFactory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/EasyUiFactory.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/external-libs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/external-libs.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiListTabHandler.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiListTabHandler.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiMainFrameImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiMainFrameImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiWorkspaceEditor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiWorkspaceEditor.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiWorkspaceGroupEditor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiWorkspaceGroupEditor.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiWorkspaceListEditor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiWorkspaceListEditor.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-workspace-compound-criterions.kt.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-list-filters.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-list-filters.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-list-filters.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-workspace-simple-criterion-value-renderers.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-workspace-simple-criterion-value-renderers.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-workspace-simple-criterion.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-workspace-simple-criterion.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/utils/EasyUiViewBuilder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/utils/EasyUiViewBuilder.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiEntityMultiSelectWidget.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiEntityMultiSelectWidget.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiEnumMultiSelectWidget.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiEnumMultiSelectWidget.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiSelectWidget.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiSelectWidget.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiTableWidget.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiTableWidget.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiTextBoxWidget.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiTextBoxWidget.kt" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox/resources/web-sandbox/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -103,33 +136,30 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/rest/StandardListRestHandler.kt">
+        <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiTableWidget.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="284">
-              <caret line="319" selection-start-line="319" selection-end-line="319" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
+            <state relative-caret-position="95">
+              <caret line="276" column="66" lean-forward="true" selection-start-line="276" selection-start-column="66" selection-end-line="276" selection-end-column="66" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source-gen/com/gridnine/jasmine/server/standard/model/rest/ListFilterBooleanValuesDTJS.kt">
+        <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/core-model-ui-meta-js.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="10" column="6" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
+            <state relative-caret-position="193">
+              <caret line="162" column="6" selection-start-line="162" selection-start-column="6" selection-end-line="162" selection-end-column="6" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-list-filters.kt">
+        <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiEntitySelectWidget.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="244">
-              <caret line="155" column="17" selection-start-line="155" selection-start-column="17" selection-end-line="155" selection-end-column="17" />
+            <state relative-caret-position="86">
+              <caret line="19" column="4" selection-start-line="19" selection-start-column="4" selection-end-line="19" selection-end-column="50" />
               <folding>
-                <element signature="n#!!doc" expanded="true" />
+                <element signature="e#287#633#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -147,36 +177,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>EntityAutocompletetWidget</find>
-      <find>entity-autocomplete</find>
-      <find>entity-a</find>
-      <find>entity-autocomplete-column</find>
-      <find>.combobox(</find>
-      <find>index</find>
-      <find>ReferenceCaption</find>
-      <find>refere</find>
-      <find>Caption</find>
-      <find>usera</find>
+      <find>autocompleter description</find>
+      <find>ui</find>
+      <find>autocom</find>
+      <find>notEditable</find>
+      <find>AutocompleteDescriptionDT</find>
+      <find>to find autocompleter description for</find>
+      <find>auto</find>
+      <find>autoco</find>
+      <find>c</find>
+      <find>*,*</find>
+      <find>nullA</find>
+      <find>no fa</find>
+      <find>tablecon</find>
+      <find>tiled</find>
+      <find>label</find>
+      <find>savee</find>
+      <find>tile</find>
+      <find>tag</find>
+      <find>tagbox</find>
+      <find>toRefe</find>
+      <find>unsupp</find>
+      <find>panel</find>
+      <find>SandboxSimpleDocument</find>
+      <find>column</find>
+      <find>select</find>
+      <find>SelectTableColumnDescriptionJS</find>
+      <find>enumta</find>
+      <find>editors</find>
       <find>conso</find>
-      <find>condi</find>
-      <find>workspace-editor-save-button</find>
-      <find>add</find>
-      <find>createse</find>
-      <find>consol</find>
-      <find>created</find>
-      <find>list</find>
-      <find>criterionDT</find>
-      <find>datag</find>
-      <find>internal constructor</find>
-      <find>AddToolButton</find>
-      <find>filt</find>
-      <find>filters</find>
-      <find>ListFilterDT</find>
-      <find>from</find>
-      <find>com.gridnine.jasmine.server.standard.model.rest.ListCriterion</find>
-      <find>ENUM</find>
-      <find>ENTITY_REFERENCE</find>
-      <find>ilike</find>
+      <find>wri</find>
     </findStrings>
     <replaceStrings>
       <replace>'jtabs'</replace>
@@ -198,6 +228,10 @@
       <replace>.tagbox(</replace>
       <replace>constructor</replace>
       <replace>com.gridnine.jasmine.server.standard.model.rest.ListFilter</replace>
+      <replace>Any</replace>
+      <replace>nonNullable</replace>
+      <replace>Any,Any</replace>
+      <replace>combobox</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -206,57 +240,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiDateTimeBoxWidget.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/rest/SandboxWorkspaceProvider.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiFloatBoxWidget.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiIntBoxWidget.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/utils/TextUtilsJS.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/utils/UiUtilsJS.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/domain/domain.xsd" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/domain/core-model-domain-meta.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/domain/core-model-domain-parser.kt" />
         <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/domain/core-model-domain-meta-js.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/application/CoreActivatorJS.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/core-model-ui-meta-js.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/serialization/core-serialization-ui-js.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/build/core-codegen-ui-web.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/ui/core-model-ui-parser.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/ui/ui.xsd" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/model/sandbox-model-ui.xml" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/ui/core-model-ui-entities.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-list-filters.kt" />
         <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-workspace-simple-criterion-value-renderers.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/serialization/core-serialization-ui.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/serialization/core-serialization-common-js.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/serialization/core-serialization-ui-js.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/core-model-ui-meta-js.kt" />
         <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/rest/standard-rest-meta.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/rest/SandboxAuthFilter.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/storage/impl/jdbc/core-storage-jdbc-utils.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/rest/standard-rest-autocomplete.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source-gen/com/gridnine/jasmine/server/sandbox/model/domain/SandboxUserAccount.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/model/sandbox-model-domain.xml" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/ui/ui.xsd" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/model/standard-rest.xml" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox/source/com/gridnine/jasmine/web/sandbox/shared/SandboxSharedEditorSaveButtonHandler.kt" />
         <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/serialization/core-serialization-rest-js.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/core-model-ui-entities-js.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiEntityMultiSelectWidget.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/utils/ReflectionUtils.kt" />
         <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/serialization/core-serialization-rest.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/domain/core-model-domain-entities.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/ui/ValidationUtilsJS.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/utils/ValidationUtils.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/rest/standard-rest-editor.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyUiDateBoxWidget.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyUiDateTimeBoxWidget.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyEntityMultiselectWidget.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyDateBoxWidget.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyDateTimeBoxWidget.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyEntityMultiSelectWidget.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyEnumMultiSelectWidget.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyIntBoxWidget.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyFloatBoxWidget.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyPasswordBoxWidget.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyTextBoxWidget.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxySelectWidget.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/core-model-ui-entities-js.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyEnumSelectWidget.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyEntitySelectWidget.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-editor-tab-handler.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiTileWidget.kt" />
         <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiEnumMultiSelectWidget.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-workspace-simple-criterion.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiWorkspaceGroupEditor.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiWorkspaceEditor.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiTextBoxWidget.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiWorkspaceListEditor.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiEnumSelectWidget.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiEntitySelectWidget.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiBooleanBoxWidget.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyBooleanBoxWidget.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/utils/EasyUiViewBuilder.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/activator/SandboxActivator.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyTableWidget.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/rest/sandbox-complex-document.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/model/l10n/sandbox-model-ui_ru.properties" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/ui/core-model-ui-parser.kt" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/model/sandbox-model-ui.xml" />
+        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/application/CoreActivatorJS.kt" />
         <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/external-libs.kt" />
         <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/resources/easyui-libs/easyui-adapter/easyuiadapter.js" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiMainFrameImpl.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/storage/search/core-query-search.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/storage/impl/jdbc/JdbcAdapter.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/storage/impl/core-storage-impl.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/resources/sb_easyui/index.html" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/storage/search/core-query-common.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/activator/SandboxActivator.kt" />
         <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiTableWidget.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-workspace-compound-criterions.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/model/standard-rest.xml" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiListTabHandler.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiSelectWidget.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/rest/StandardListRestHandler.kt" />
-        <option value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-list-filters.kt" />
       </list>
     </option>
   </component>
@@ -267,17 +301,16 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="31" />
-    <option name="y" value="299" />
-    <option name="width" value="1388" />
-    <option name="height" value="994" />
+    <option name="x" value="266" />
+    <option name="y" value="22" />
+    <option name="width" value="1390" />
+    <option name="height" value="1007" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -323,7 +356,7 @@
               <item name="com.gridnine.jasmine.server.core" type="462c0819:PsiDirectoryNode" />
               <item name="source" type="462c0819:PsiDirectoryNode" />
               <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="storage" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
@@ -332,8 +365,8 @@
               <item name="com.gridnine.jasmine.server.core" type="462c0819:PsiDirectoryNode" />
               <item name="source" type="462c0819:PsiDirectoryNode" />
               <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="storage" type="462c0819:PsiDirectoryNode" />
-              <item name="impl" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+              <item name="common" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
@@ -342,40 +375,14 @@
               <item name="com.gridnine.jasmine.server.core" type="462c0819:PsiDirectoryNode" />
               <item name="source" type="462c0819:PsiDirectoryNode" />
               <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="storage" type="462c0819:PsiDirectoryNode" />
-              <item name="impl" type="462c0819:PsiDirectoryNode" />
-              <item name="jdbc" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="com.gridnine.jasmine.server.core" type="462c0819:PsiDirectoryNode" />
-              <item name="source" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="storage" type="462c0819:PsiDirectoryNode" />
-              <item name="search" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+              <item name="ui" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
               <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="plugins" type="462c0819:PsiDirectoryNode" />
               <item name="com.gridnine.jasmine.server.sandbox" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="com.gridnine.jasmine.server.sandbox" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="com.gridnine.jasmine.server.sandbox" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="sb_easyui" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
@@ -399,7 +406,7 @@
               <item name="com.gridnine.jasmine.server.sandbox" type="462c0819:PsiDirectoryNode" />
               <item name="source" type="462c0819:PsiDirectoryNode" />
               <item name="sandbox" type="462c0819:PsiDirectoryNode" />
-              <item name="activator" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
@@ -408,7 +415,17 @@
               <item name="com.gridnine.jasmine.server.sandbox" type="462c0819:PsiDirectoryNode" />
               <item name="source" type="462c0819:PsiDirectoryNode" />
               <item name="sandbox" type="462c0819:PsiDirectoryNode" />
-              <item name="storage" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+              <item name="l10n" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="com.gridnine.jasmine.server.sandbox" type="462c0819:PsiDirectoryNode" />
+              <item name="source" type="462c0819:PsiDirectoryNode" />
+              <item name="sandbox" type="462c0819:PsiDirectoryNode" />
+              <item name="rest" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
@@ -423,6 +440,15 @@
               <item name="plugins" type="462c0819:PsiDirectoryNode" />
               <item name="com.gridnine.jasmine.server.sandbox" type="462c0819:PsiDirectoryNode" />
               <item name="source-gen" type="462c0819:PsiDirectoryNode" />
+              <item name="sandbox" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="com.gridnine.jasmine.server.sandbox" type="462c0819:PsiDirectoryNode" />
+              <item name="source-gen" type="462c0819:PsiDirectoryNode" />
+              <item name="sandbox" type="462c0819:PsiDirectoryNode" />
               <item name="model" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -431,8 +457,9 @@
               <item name="plugins" type="462c0819:PsiDirectoryNode" />
               <item name="com.gridnine.jasmine.server.sandbox" type="462c0819:PsiDirectoryNode" />
               <item name="source-gen" type="462c0819:PsiDirectoryNode" />
+              <item name="sandbox" type="462c0819:PsiDirectoryNode" />
               <item name="model" type="462c0819:PsiDirectoryNode" />
-              <item name="domain" type="462c0819:PsiDirectoryNode" />
+              <item name="ui" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
@@ -454,15 +481,6 @@
               <item name="com.gridnine.jasmine.server.standard" type="462c0819:PsiDirectoryNode" />
               <item name="source" type="462c0819:PsiDirectoryNode" />
               <item name="standard" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="com.gridnine.jasmine.server.standard" type="462c0819:PsiDirectoryNode" />
-              <item name="source" type="462c0819:PsiDirectoryNode" />
-              <item name="standard" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
@@ -536,16 +554,6 @@
               <item name="source" type="462c0819:PsiDirectoryNode" />
               <item name="core" type="462c0819:PsiDirectoryNode" />
               <item name="model" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="com.gridnine.jasmine.web.core" type="462c0819:PsiDirectoryNode" />
-              <item name="source" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
-              <item name="domain" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
@@ -561,84 +569,7 @@
               <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
               <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="com.gridnine.jasmine.web.core" type="462c0819:PsiDirectoryNode" />
-              <item name="source-gen" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="com.gridnine.jasmine.web.core" type="462c0819:PsiDirectoryNode" />
-              <item name="source-gen" type="462c0819:PsiDirectoryNode" />
-              <item name="jasmine" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="com.gridnine.jasmine.web.core" type="462c0819:PsiDirectoryNode" />
-              <item name="source-gen" type="462c0819:PsiDirectoryNode" />
-              <item name="jasmine" type="462c0819:PsiDirectoryNode" />
-              <item name="server" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="com.gridnine.jasmine.web.core" type="462c0819:PsiDirectoryNode" />
-              <item name="source-gen" type="462c0819:PsiDirectoryNode" />
-              <item name="jasmine" type="462c0819:PsiDirectoryNode" />
-              <item name="server" type="462c0819:PsiDirectoryNode" />
-              <item name="rest" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
               <item name="com.gridnine.jasmine.web.easyui" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="com.gridnine.jasmine.web.easyui" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="com.gridnine.jasmine.web.easyui" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="easyui-libs" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="com.gridnine.jasmine.web.easyui" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="easyui-libs" type="462c0819:PsiDirectoryNode" />
-              <item name="easyui" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="com.gridnine.jasmine.web.easyui" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="easyui-libs" type="462c0819:PsiDirectoryNode" />
-              <item name="easyui" type="462c0819:PsiDirectoryNode" />
-              <item name="locale" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="com.gridnine.jasmine.web.easyui" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="easyui-libs" type="462c0819:PsiDirectoryNode" />
-              <item name="easyui-adapter" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
@@ -654,15 +585,6 @@
               <item name="com.gridnine.jasmine.web.easyui" type="462c0819:PsiDirectoryNode" />
               <item name="source" type="462c0819:PsiDirectoryNode" />
               <item name="easyui" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="com.gridnine.jasmine.web.easyui" type="462c0819:PsiDirectoryNode" />
-              <item name="source" type="462c0819:PsiDirectoryNode" />
-              <item name="easyui" type="462c0819:PsiDirectoryNode" />
-              <item name="mainframe" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
@@ -672,46 +594,6 @@
               <item name="source" type="462c0819:PsiDirectoryNode" />
               <item name="easyui" type="462c0819:PsiDirectoryNode" />
               <item name="widgets" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="com.gridnine.jasmine.web.sandbox" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="com.gridnine.jasmine.web.sandbox" type="462c0819:PsiDirectoryNode" />
-              <item name="source-gen" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="com.gridnine.jasmine.web.sandbox" type="462c0819:PsiDirectoryNode" />
-              <item name="source-gen" type="462c0819:PsiDirectoryNode" />
-              <item name="jasmine" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="com.gridnine.jasmine.web.sandbox" type="462c0819:PsiDirectoryNode" />
-              <item name="source-gen" type="462c0819:PsiDirectoryNode" />
-              <item name="jasmine" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jasmine" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="com.gridnine.jasmine.web.sandbox" type="462c0819:PsiDirectoryNode" />
-              <item name="source-gen" type="462c0819:PsiDirectoryNode" />
-              <item name="jasmine" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
-              <item name="ui" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
@@ -752,94 +634,91 @@
               <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
               <item name="server" type="70bed36:NamedLibraryElementNode" />
-              <item name="tomcat-embed-core-9.0.30.jar" type="462c0819:PsiDirectoryNode" />
+              <item name="gson-2.8.6.jar" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
               <item name="server" type="70bed36:NamedLibraryElementNode" />
-              <item name="tomcat-embed-core-9.0.30.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="apache" type="462c0819:PsiDirectoryNode" />
+              <item name="gson-2.8.6.jar" type="462c0819:PsiDirectoryNode" />
+              <item name="gson" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
               <item name="server" type="70bed36:NamedLibraryElementNode" />
-              <item name="tomcat-embed-core-9.0.30.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="apache" type="462c0819:PsiDirectoryNode" />
-              <item name="catalina" type="462c0819:PsiDirectoryNode" />
+              <item name="kotlin-stdlib-1.3.61.jar" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
               <item name="server" type="70bed36:NamedLibraryElementNode" />
-              <item name="tomcat-embed-core-9.0.30.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="apache" type="462c0819:PsiDirectoryNode" />
-              <item name="catalina" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="web_js" type="70bed36:NamedLibraryElementNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="web_js" type="70bed36:NamedLibraryElementNode" />
-              <item name="kotlin-stdlib-js.jar" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="web_js" type="70bed36:NamedLibraryElementNode" />
-              <item name="kotlin-stdlib-js.jar" type="462c0819:PsiDirectoryNode" />
+              <item name="kotlin-stdlib-1.3.61.jar" type="462c0819:PsiDirectoryNode" />
               <item name="kotlin" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="web_js" type="70bed36:NamedLibraryElementNode" />
-              <item name="kotlin-stdlib-js.jar" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="70bed36:NamedLibraryElementNode" />
+              <item name="kotlin-stdlib-1.3.61.jar" type="462c0819:PsiDirectoryNode" />
               <item name="kotlin" type="462c0819:PsiDirectoryNode" />
+              <item name="collections" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="server" type="70bed36:NamedLibraryElementNode" />
+              <item name="kotlin-stdlib-common-1.3.61.jar" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="server" type="70bed36:NamedLibraryElementNode" />
+              <item name="kotlin-stdlib-common-1.3.61.jar" type="462c0819:PsiDirectoryNode" />
               <item name="kotlin" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jasmine" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="web_js" type="70bed36:NamedLibraryElementNode" />
-              <item name="kotlin-stdlib-js.jar" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="70bed36:NamedLibraryElementNode" />
+              <item name="kotlin-stdlib-common-1.3.61.jar" type="462c0819:PsiDirectoryNode" />
               <item name="kotlin" type="462c0819:PsiDirectoryNode" />
-              <item name="kotlin" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
+              <item name="collections" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/rest" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.34651405" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe" />
+    </key>
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
       <recent name="com.gridnine.jasmine.web.core.utils" />
       <recent name="com.gridnine.jasmine.web.easyui.utils" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe" />
-      <recent name="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/rest" />
-      <recent name="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/resources/easyui-libs/easyui-adapter" />
-    </key>
     <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
+      <recent name="com.gridnine.jasmine.web.core.model.ui.widgets" />
       <recent name="com.gridnine.jasmine.web.easyui.widgets" />
+      <recent name="com.gridnine.jasmine.web.sandbox.shared" />
       <recent name="com.gridnine.jasmine.web.easyui.mainframe" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/rest" />
+      <recent name="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/rest" />
       <recent name="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe" />
+      <recent name="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/resources/easyui-libs/easyui-adapter" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -868,13 +747,32 @@
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
+        <option name="scriptParameters" value="--stacktrace" />
         <option name="taskDescriptions">
           <list />
         </option>
         <option name="taskNames">
           <list>
             <option value="codeGen" />
+          </list>
+        </option>
+        <option name="vmOptions" value="" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="jasmine [makeProject]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="makeProject" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -913,8 +811,16 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.jasmine" />
+      <item itemvalue="Gradle.jasmine [codeGen]" />
+      <item itemvalue="Gradle.jasmine [makeProject]" />
+      <item itemvalue="JUnit.BasicStorageTest" />
+      <item itemvalue="JUnit.BasicStorageTest.testCRUD" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.jasmine [makeProject]" />
         <item itemvalue="Gradle.jasmine [codeGen]" />
         <item itemvalue="JUnit.BasicStorageTest.testCRUD" />
         <item itemvalue="JUnit.BasicStorageTest" />
@@ -953,7 +859,14 @@
       <option name="project" value="LOCAL" />
       <updated>1578860916512</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="second commit">
+      <created>1579439862204</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1579439862204</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -987,8 +900,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="0" width="1932" height="1050" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.25987193" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.28068304" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -1002,14 +916,14 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32929516" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="7" visible="true" weight="0.32929516" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32929516" />
       <window_info anchor="bottom" id="Terminal" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50053364" side_tool="true" weight="0.32929516" />
       <window_info anchor="bottom" id="Build" order="10" weight="0.32929516" />
-      <window_info anchor="bottom" id="Messages" order="11" weight="0.32929516" />
+      <window_info anchor="bottom" id="Messages" order="11" visible="true" weight="0.32929516" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.2497332" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" visible="true" weight="0.2497332" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.2497332" />
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="right" id="Maven" order="4" weight="0.32977587" />
       <window_info anchor="right" id="Gradle" order="5" weight="0.22091782" />
@@ -1018,7 +932,7 @@
       <window_info anchor="right" id="Palette&#9;" order="8" />
     </layout>
     <layout-to-restore>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25987193" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.28068304" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -1026,7 +940,7 @@
       <window_info id="UI Designer" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info active="true" anchor="bottom" id="Find" order="1" sideWeight="0.4994664" visible="true" weight="0.32929516" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4994664" weight="0.32929516" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32929516" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39977974" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -1036,13 +950,13 @@
       <window_info anchor="bottom" id="Terminal" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50053364" side_tool="true" weight="0.32929516" />
       <window_info anchor="bottom" id="Build" order="10" weight="0.32929516" />
-      <window_info anchor="bottom" id="Messages" order="11" weight="0.32929516" />
+      <window_info active="true" anchor="bottom" id="Messages" order="11" visible="true" weight="0.32929516" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.2497332" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.2497332" />
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="right" id="Maven" order="4" weight="0.32977587" />
-      <window_info anchor="right" id="Gradle" order="5" visible="true" weight="0.22091782" />
+      <window_info anchor="right" id="Gradle" order="5" weight="0.22091782" />
       <window_info anchor="right" id="Theme Preview" order="6" />
       <window_info anchor="right" id="Capture Analysis" order="7" />
       <window_info anchor="right" id="Palette&#9;" order="8" />
@@ -1085,12 +999,6 @@
           <properties />
           <option name="timeStamp" value="9" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/serialization/core-serialization-rest.kt</url>
-          <line>191</line>
-          <properties />
-          <option name="timeStamp" value="20" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
@@ -1098,384 +1006,475 @@
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
     <option name="FILTER_TARGETS" value="false" />
   </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="breakpointCondition">
+      <expression>
+        <expression-string>(key == null || value == null)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>key==null</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>&quot;true&quot; == it.attributes[&quot;not-editable&quot;]</expression-string>
+        <language-id>kotlin</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/storage/core-storage-api.kt">
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/rest/standard-rest-editor.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="91" selection-start-line="91" selection-end-line="91" />
+        <state relative-caret-position="214">
+          <caret line="120" column="46" lean-forward="true" selection-start-line="120" selection-start-column="46" selection-end-line="120" selection-end-column="46" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source-gen/com/gridnine/jasmine/server/standard/model/rest/GetListRequest.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="12" selection-start-line="12" selection-end-line="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/utils/ReflectionUtils.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="358">
-          <caret line="30" selection-start-line="30" selection-end-line="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/storage/impl/core-storage-impl.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="222" column="36" selection-start-line="222" selection-start-column="36" selection-end-line="222" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/storage/impl/jdbc/JdbcAdapter.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="57" selection-start-line="57" selection-end-line="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/resources/easyui-libs/easyui/locale/easyui-lang-ru.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="14" selection-start-line="5" selection-start-column="9" selection-end-line="5" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/resources/sb_easyui/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="93" selection-start-line="10" selection-start-column="93" selection-end-line="10" selection-end-column="93" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source-gen/com/gridnine/jasmine/server/standard/model/rest/BaseComplexWorkspaceCriterionDT.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="12" column="8" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source-gen/com/gridnine/jasmine/server/standard/model/rest/WorkspaceSimpleCriterionConditionDTJS.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="10" column="47" selection-start-line="10" selection-start-column="47" selection-end-line="10" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source-gen/com/gridnine/jasmine/server/standard/model/rest/SimpleWorkspaceCriterionDTJS.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="14" column="66" selection-start-line="14" selection-start-column="66" selection-end-line="14" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source-gen/com/gridnine/jasmine/server/sandbox/model/domain/WorkspaceSimpleCriterionEnumValuesDT.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="10" column="6" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source-gen/com/gridnine/jasmine/server/standard/model/rest/SimpleWorkspaceCriterionDT.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="16" column="8" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.3.61/72876c4e34feff9bf8d93d0b100e71ce6f5f8244/kotlin-stdlib-1.3.61-sources.jar!/kotlin/Boolean.kt">
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/ui/core-ui-js.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state>
-          <caret line="14" column="3" lean-forward="true" selection-start-line="14" selection-start-column="3" selection-end-line="14" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source-gen/com/gridnine/jasmine/server/standard/model/rest/WorkspaceSimpleCriterionEntityValuesDT.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="12" column="8" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-workspace-simple-criterion.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="489">
-          <caret line="343" column="13" selection-start-line="338" selection-start-column="12" selection-end-line="343" selection-end-column="13" />
           <folding>
-            <element signature="e#289#1253#0" expanded="true" />
+            <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source-gen/com/gridnine/jasmine/server/standard/model/rest/WorkspaceSimpleCriterionIntValueDT.kt">
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyDateTimeBoxWidget.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="10" column="6" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
+        <state relative-caret-position="119">
+          <caret line="11" column="28" selection-start-line="11" selection-start-column="28" selection-end-line="11" selection-end-column="28" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/programs/jdk12/lib/src.zip!/java.base/java/lang/Math.java">
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyEntityMultiSelectWidget.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="738" column="23" selection-start-line="738" selection-start-column="23" selection-end-line="738" selection-end-column="23" />
+        <state relative-caret-position="85">
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
+          <folding>
+            <element signature="e#294#505#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.3.61/72876c4e34feff9bf8d93d0b100e71ce6f5f8244/kotlin-stdlib-1.3.61-sources.jar!/kotlin/util/MathJVM.kt">
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyEnumMultiSelectWidget.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="600" column="25" selection-start-line="600" selection-start-column="25" selection-end-line="600" selection-end-column="25" />
+        <state relative-caret-position="221">
+          <caret line="18" column="67" selection-start-line="18" selection-start-column="67" selection-end-line="18" selection-end-column="67" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/programs/jdk12/lib/src.zip!/java.base/java/time/LocalDateTime.java">
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyIntBoxWidget.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="334" column="32" selection-start-line="334" selection-start-column="32" selection-end-line="334" selection-end-column="32" />
+        <state relative-caret-position="153">
+          <caret line="12" column="25" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="25" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source-gen/com/gridnine/jasmine/server/sandbox/model/domain/SandboxComplexDocument.kt">
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyPasswordBoxWidget.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="14" column="8" selection-start-line="14" selection-start-column="8" selection-end-line="14" selection-end-column="8" />
+        <state relative-caret-position="153">
+          <caret line="12" column="28" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/storage/sandbox-index-handlers.kt">
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxySelectWidget.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="27" column="40" selection-start-line="27" selection-start-column="6" selection-end-line="27" selection-end-column="40" />
+        <state relative-caret-position="561">
+          <caret line="36" column="42" selection-start-line="36" selection-start-column="42" selection-end-line="36" selection-end-column="42" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source-gen/com/gridnine/jasmine/server/sandbox/model/domain/SandboxEnum.kt">
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyTextBoxWidget.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="10" column="11" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
+        <state relative-caret-position="136">
+          <caret line="11" column="40" selection-start-line="11" selection-start-column="40" selection-end-line="11" selection-end-column="40" />
+          <folding>
+            <element signature="e#294#417#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source-gen/com/gridnine/jasmine/server/standard/model/rest/DatabasePropertyTypeDTJS.kt">
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/EasyUiFactory.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="10" column="11" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiDateBoxWidget.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="19" column="4" selection-start-line="19" selection-start-column="4" selection-end-line="21" selection-end-column="5" />
+        <state relative-caret-position="193">
+          <caret line="51" column="37" selection-start-line="51" selection-start-column="37" selection-end-line="51" selection-end-column="37" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiDateTimeBoxWidget.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="19" column="3" selection-start-line="19" selection-start-column="3" selection-end-line="21" selection-end-column="5" />
+        <state relative-caret-position="119">
+          <caret line="15" column="6" selection-start-line="15" selection-start-column="6" selection-end-line="15" selection-end-column="6" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/domain/core-model-domain-meta-js.kt">
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiSelectWidget.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="39" column="50" selection-start-line="39" selection-start-column="50" selection-end-line="39" selection-end-column="50" />
+        <state relative-caret-position="289">
+          <caret line="26" column="17" lean-forward="true" selection-start-line="24" selection-start-column="16" selection-end-line="26" selection-end-column="17" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/activator/SandboxActivator.kt">
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyFloatBoxWidget.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="163">
-          <caret line="79" column="106" selection-start-line="79" selection-start-column="106" selection-end-line="79" selection-end-column="106" />
+        <state relative-caret-position="153">
+          <caret line="12" column="28" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/storage/impl/jdbc/core-storage-jdbc-handlers.kt">
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyEnumSelectWidget.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="157" selection-start-line="157" selection-end-line="157" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/storage/impl/jdbc/core-storage-jdbc-utils.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="410" selection-start-line="410" selection-end-line="410" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiWorkspaceEditor.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1799">
-          <caret line="126" column="59" selection-start-line="126" selection-start-column="59" selection-end-line="126" selection-end-column="59" />
+        <state relative-caret-position="595">
+          <caret line="38" column="42" selection-start-line="38" selection-start-column="42" selection-end-line="38" selection-end-column="42" />
           <folding>
-            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#294#489#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiWorkspaceListEditor.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1117">
-          <caret line="150" column="11" selection-start-line="150" selection-start-column="11" selection-end-line="150" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiTableWidget.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="910">
-          <caret line="82" column="37" selection-start-line="82" selection-start-column="37" selection-end-line="82" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-workspace-criterions.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="4" selection-end-column="42" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-workspace-compound-criterions.kt">
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyEntitySelectWidget.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
-          <caret line="12" selection-start-line="12" selection-end-line="12" />
+          <caret line="13" column="39" selection-start-line="13" selection-start-column="39" selection-end-line="13" selection-end-column="39" />
           <folding>
-            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#294#409#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source-gen/com/gridnine/jasmine/server/standard/model/rest/ListFilterDTJS.kt">
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiTileWidget.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiEnumMultiSelectWidget.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="16" column="92" selection-start-line="16" selection-start-column="69" selection-end-line="16" selection-end-column="92" />
+        <state relative-caret-position="115">
+          <caret line="37" column="59" lean-forward="true" selection-start-line="37" selection-start-column="59" selection-end-line="37" selection-end-column="59" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiEntityMultiSelectWidget.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
-          <caret line="19" column="6" selection-start-line="19" selection-start-column="6" selection-end-line="19" selection-end-column="6" />
+          <caret line="16" column="6" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="6" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-workspace-simple-criterion-value-renderers.kt">
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-editor-tab-handler.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="269" column="17" selection-start-line="269" selection-start-column="17" selection-end-line="269" selection-end-column="17" />
+        <state relative-caret-position="669">
+          <caret line="70" column="90" selection-start-line="70" selection-start-column="90" selection-end-line="70" selection-end-column="90" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/core-model-ui-meta-js.kt">
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiEditorButtonWidget.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="12" column="6" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiDateBoxWidget.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="15" column="6" selection-start-line="15" selection-start-column="6" selection-end-line="15" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyDateBoxWidget.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="11" column="24" selection-start-line="11" selection-start-column="24" selection-end-line="11" selection-end-column="24" />
+          <folding>
+            <element signature="e#294#375#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyBooleanBoxWidget.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="14" column="29" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiBooleanBoxWidget.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="561">
+          <caret line="43" column="16" selection-start-line="43" selection-start-column="16" selection-end-line="43" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/utils/EasyUiViewBuilder.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4811">
+          <caret line="292" column="87" selection-start-line="292" selection-start-column="87" selection-end-line="292" selection-end-column="87" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiWorkspaceListEditor.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1479">
+          <caret line="100" column="29" selection-start-line="100" selection-start-column="29" selection-end-line="100" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/activator/SandboxActivator.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1156">
+          <caret line="89" column="62" selection-start-line="89" selection-start-column="62" selection-end-line="89" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/widgets/ProxyTableWidget.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="16" column="44" lean-forward="true" selection-start-line="16" selection-start-column="44" selection-end-line="16" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/rest/sandbox-complex-document.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="31" column="37" selection-start-line="31" selection-start-column="37" selection-end-line="31" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/model/l10n/sandbox-model-ui_ru.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="33" selection-start-line="33" selection-end-line="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source-gen/com/gridnine/jasmine/server/standard/model/rest/TextTableColumnDescriptionDT.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="10" column="96" selection-start-line="10" selection-start-column="96" selection-end-line="10" selection-end-column="96" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source-gen/com/gridnine/jasmine/server/standard/model/rest/BaseTableColumnDescriptionDT.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="16" column="15" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/common/core-model-common-parser.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="184">
-          <caret line="137" column="29" selection-start-line="137" selection-start-column="29" selection-end-line="137" selection-end-column="29" />
+          <caret line="23" column="38" selection-start-line="23" selection-start-column="38" selection-end-line="23" selection-end-column="38" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/model/standard-rest.xml">
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/ui/core-model-ui-meta.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="447" column="25" selection-start-line="447" selection-start-column="25" selection-end-line="447" selection-end-column="25" />
+        <state relative-caret-position="184">
+          <caret line="168" column="72" selection-start-line="168" selection-start-column="72" selection-end-line="168" selection-end-column="72" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiListTabHandler.kt">
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source-gen/com/gridnine/jasmine/server/sandbox/model/ui/SandboxTableVM.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="397">
-          <caret line="99" column="25" selection-start-line="99" selection-start-column="25" selection-end-line="99" selection-end-column="25" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
+        <state relative-caret-position="170">
+          <caret line="14" column="132" selection-start-line="14" selection-start-column="132" selection-end-line="14" selection-end-column="132" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/rest/standard-rest-meta.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="338" column="72" selection-start-line="338" selection-start-column="72" selection-end-line="338" selection-end-column="72" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/model/sandbox-model-ui.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="60" column="40" selection-start-line="60" selection-start-column="40" selection-end-line="60" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/ui/core-model-ui-parser.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="334" selection-start-line="334" selection-end-line="334" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/application/CoreActivatorJS.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3804">
+          <caret line="266" column="153" selection-start-line="266" selection-start-column="153" selection-end-line="266" selection-end-column="153" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiEnumMultiSelectWidget.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-201">
+          <caret line="26" column="77" selection-start-line="26" selection-start-column="77" selection-end-line="26" selection-end-column="77" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiEnumSelectWidget.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="734">
+          <caret line="76" column="110" selection-start-line="76" selection-start-column="43" selection-end-line="76" selection-end-column="110" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/utils/UiUtilsJS.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="12" column="8" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/domain/core-model-domain-meta-js.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="36" column="8" selection-start-line="36" selection-start-column="8" selection-end-line="36" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/utils/ReflectionFactoryJS.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="426">
+          <caret line="41" column="20" selection-start-line="41" selection-start-column="20" selection-end-line="41" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/resources/easyui-libs/easyui/jquery.easyui.min.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="479">
+          <caret line="11605" column="36" lean-forward="true" selection-start-line="11605" selection-start-column="36" selection-end-line="11605" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/external-libs.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="486">
+          <caret line="91" selection-start-line="91" selection-end-line="91" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/resources/easyui-libs/easyui-adapter/easyuiadapter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="409">
+          <caret line="157" selection-start-line="157" selection-start-column="2" selection-end-line="161" selection-end-column="62" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/core-model-ui-entities-js.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="83" column="13" lean-forward="true" selection-start-line="83" selection-start-column="13" selection-end-line="83" selection-end-column="13" />
+        <state relative-caret-position="193">
+          <caret line="75" column="17" selection-start-line="75" selection-start-column="17" selection-end-line="75" selection-end-column="17" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiSelectWidget.kt">
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/domain/core-model-domain-entities-js.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="581">
-          <caret line="65" column="30" selection-start-line="65" selection-start-column="30" selection-end-line="65" selection-end-column="30" />
+        <state relative-caret-position="153">
+          <caret line="12" column="11" selection-start-line="12" selection-start-column="11" selection-end-line="12" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source-gen/com/gridnine/jasmine/server/standard/model/rest/BaseListFilterValueDT.kt">
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiEntitySelectWidget.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="10" column="15" selection-start-line="10" selection-start-column="15" selection-end-line="10" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source-gen/com/gridnine/jasmine/server/standard/model/rest/ListFilterDT.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="14" column="69" selection-start-line="14" selection-start-column="69" selection-end-line="14" selection-end-column="69" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source-gen/com/gridnine/jasmine/server/standard/model/rest/ListFilterStringValuesDT.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="10" column="30" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/storage/search/core-query-common.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="292">
-          <caret line="137" column="26" selection-start-line="137" selection-start-column="26" selection-end-line="137" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/model/domain/core-model-domain-meta.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="292">
-          <caret line="98" column="68" selection-start-line="98" selection-start-column="42" selection-end-line="98" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source-gen/com/gridnine/jasmine/server/standard/model/rest/ListFilterBooleanValuesDTJS.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="10" column="6" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-list-filters.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="244">
-          <caret line="155" column="17" selection-start-line="155" selection-start-column="17" selection-end-line="155" selection-end-column="17" />
+        <state relative-caret-position="86">
+          <caret line="19" column="4" selection-start-line="19" selection-start-column="4" selection-end-line="19" selection-end-column="50" />
           <folding>
-            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#287#633#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/rest/StandardListRestHandler.kt">
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/core-model-ui-meta-js.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="319" selection-start-line="319" selection-end-line="319" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
+        <state relative-caret-position="193">
+          <caret line="162" column="6" selection-start-line="162" selection-start-column="6" selection-end-line="162" selection-end-column="6" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiTableWidget.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="276" column="66" lean-forward="true" selection-start-line="276" selection-start-column="66" selection-end-line="276" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>com.gridnine.jasmine.server.core.test|jasmine</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.34651405" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>server_test</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.34651405" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>

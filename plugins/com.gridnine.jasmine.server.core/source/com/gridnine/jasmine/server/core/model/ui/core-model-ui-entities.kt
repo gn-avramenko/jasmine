@@ -64,21 +64,12 @@ class SelectConfiguration{
     val possibleValues = arrayListOf<SelectItem>()
 }
 
-class EnumSelectConfiguration<E:Enum<E>> {
-    var nullAllowed:Boolean? = true
-}
+class EnumSelectConfiguration<E:Enum<E>>
 
-class EntityAutocompleteDataSource {
-    var name:String? = null
-    var autocompleteId:String? = "standard"
-    var indexClassName:String? = null
-    val columnsNames = arrayListOf<String>()
-}
 
-class EntityAutocompleteConfiguration<E:BaseEntity> {
-    var nullAllowed:Boolean? = true
+class EntityAutocompleteConfiguration {
     var limit:Int = 10
-    var dataSources = arrayListOf<EntityAutocompleteDataSource>()
+    var dataSources = arrayListOf<String>()
 }
 
 abstract class BaseColumnConfiguration{
@@ -114,15 +105,13 @@ class EnumColumnConfiguration<E:Enum<E>>():BaseColumnConfiguration(){
     constructor(init: EnumColumnConfiguration<E>.()->Unit):this(){
         this.init()
     }
-    var nullAllowed:Boolean? = true
 }
 class EntityColumnConfiguration<E:BaseEntity>():BaseColumnConfiguration(){
     constructor(init: EntityColumnConfiguration<E>.()->Unit):this(){
         this.init()
     }
-    var nullAllowed:Boolean? = true
     var limit:Int = 10
-    var dataSources = arrayListOf<EntityAutocompleteDataSource>()
+    var dataSources = arrayListOf<String>()
 }
 
 class TableConfiguration<VS:BaseVSEntity>(){
@@ -132,4 +121,16 @@ class TableConfiguration<VS:BaseVSEntity>(){
     }
 
     lateinit var columnSettings:VS
+}
+
+@Suppress("UNCHECKED_CAST")
+class TileData<VMC:Any, VMF:Any>:BaseIntrospectableObject(){
+    lateinit var compactData:VMC
+    lateinit var fullData:VMF
+
+
+    companion object{
+        const val compactData = "compactData"
+        const val fullData = "fullData"
+    }
 }

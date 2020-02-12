@@ -153,3 +153,10 @@ $.fn.tagbox.defaults.panelMaxHeight=200;
 
 $.fn.textbox.defaults.labelAlign = "right";
 $.fn.passwordbox.defaults.labelAlign = "right";
+
+
+//var oldSetValue = $.fn.datagrid.defaults.editors.combobox.setValue
+//$.fn.datagrid.defaults.editors.combobox.setValue = function(target, value){
+//                                                               console.log(value)
+//                                                               oldSetValue(target, value);
+//                                                           }

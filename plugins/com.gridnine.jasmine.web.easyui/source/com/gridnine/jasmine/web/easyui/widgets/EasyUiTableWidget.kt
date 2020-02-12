@@ -7,10 +7,16 @@
 
 package com.gridnine.jasmine.web.easyui.widgets
 
+import com.gridnine.jasmine.server.standard.model.rest.EntityAutocompleteRequestJS
+import com.gridnine.jasmine.web.core.StandardRestClient
 import com.gridnine.jasmine.web.core.model.common.BaseEntityJS
+import com.gridnine.jasmine.web.core.model.common.FakeEnumJS
+import com.gridnine.jasmine.web.core.model.domain.DomainMetaRegistryJS
+import com.gridnine.jasmine.web.core.model.domain.EntityReferenceJS
 import com.gridnine.jasmine.web.core.model.ui.*
 import com.gridnine.jasmine.web.core.utils.TextUtilsJS
 import com.gridnine.jasmine.web.core.utils.ReflectionFactoryJS
+import com.gridnine.jasmine.web.core.utils.UiUtilsJS
 import com.gridnine.jasmine.web.easyui.JQuery
 import com.gridnine.jasmine.web.easyui.jQuery
 
@@ -44,7 +50,19 @@ class EasyUiTableWidget<VM : BaseVMEntityJS, VS : BaseVSEntityJS, VV : BaseVVEnt
                             wrapWithSpan(row, (value as SelectItemJS?)?.let { it.caption?.let { caption -> if (caption.length > 30) caption.substring(0, 30) else caption } }, columnDescription.id)
                         }
                     }
-                    else -> throw IllegalArgumentException("unsupported column type $columnDescription")
+                    is EnumTableColumnDescriptionJS -> {
+                        { value: dynamic, row: dynamic, _: dynamic ->
+                            wrapWithSpan(row, (if(value is Enum<*>) value.name else value as String?).let { DomainMetaRegistryJS.get().enums[columnDescription.enumId+"JS"]?.items?.get(it)?.displayName?.let { caption -> if (caption.length > 30) caption.substring(0, 30) else caption } }, columnDescription.id)
+                        }
+                    }
+                    is EntityTableColumnDescriptionJS -> {
+                        { value: dynamic, row: dynamic, _: dynamic ->
+                            wrapWithSpan(row, (if(value is EntityReferenceJS) value.caption else value as String?)?.let {  caption -> if (caption.length > 30) caption.substring(0, 30) else caption }, columnDescription.id)
+                        }
+                    }
+                    else -> { value: dynamic, row: dynamic, _: dynamic ->
+                        wrapWithSpan(row, (value as Any?)?.let { it.toString()?.let { caption -> if (caption.length > 30) caption.substring(0, 30) else caption } }, columnDescription.id)
+                    }
                 }
                 columns.add(object {
                     val field = columnDescription.id
@@ -122,7 +140,7 @@ class EasyUiTableWidget<VM : BaseVMEntityJS, VS : BaseVSEntityJS, VV : BaseVVEnt
         }
 
         readData = {
-            div.datagrid("loadData", it.toTypedArray())
+           div.datagrid("loadData", it.toTypedArray())
             if(!lastConfig.nonEditable){
                 bindControls()
             }
@@ -225,7 +243,7 @@ class EasyUiTableWidget<VM : BaseVMEntityJS, VS : BaseVSEntityJS, VV : BaseVVEnt
                 selectItems.addAll(config.possibleValues)
                 selectItems.sortBy { it?.caption }
                 if (config.nullAllowed) {
-                    selectItems.add(0, null)
+                    selectItems.add(0, SelectItemJS(null,null))
                 }
                 object {
                     val type = "combobox"
@@ -237,21 +255,124 @@ class EasyUiTableWidget<VM : BaseVMEntityJS, VS : BaseVSEntityJS, VV : BaseVVEnt
                     }
                 }
             }
-            else -> throw IllegalArgumentException("unsupported column type $columnDescription")
+            is EnumTableColumnDescriptionJS -> {
+                val selectItems = arrayListOf<SelectItemJS?>()
+                selectItems.clear()
+                selectItems.addAll(UiUtilsJS.getEnumValues(columnDescription.enumId+"JS"))
+                selectItems.sortBy { it?.caption }
+                selectItems.add(0, SelectItemJS(null,null))
+                object {
+                    val type = "combobox"
+                    val options = object {
+                        val valueField = "id"
+                        val textField = "caption"
+                        val limitToList = true
+                        val data = selectItems.toTypedArray()
+                    }
+                }
+            }
+            is EntityTableColumnDescriptionJS -> {
+                val config = value as EntityTableColumnDescriptionJS
+                val options = object {
+                    private var selectedValue:SelectItemJS? = null
+                    private var ignoreSearchRequest = false
+                    val valueField = "id"
+                    val textField = "caption"
+                    val editable = true
+                    val limitToList = true
+                    val hasDownArrow =  true
+                    val multiple = false
+                    val mode = "remote"
+                    val onChange = { newValue: String, _: String? ->
+                        selectedValue = if(newValue.isNotBlank()) toSelectItem(toReference(newValue)) else null
+
+                        div.combobox("getIcon",0).asDynamic().css("visibility",if(selectedValue == null) "hidden" else "visible")
+                    }
+                    val loader = loader@ {	param:dynamic,success:dynamic,_:dynamic ->
+                        if(ignoreSearchRequest){
+                            selectedValue?.let { success(arrayOf(it))}?:success(emptyArray<SelectItemJS>())
+                            return@loader true
+                        }
+
+                        val request = EntityAutocompleteRequestJS()
+                        request.limit =10
+                        request.searchText = param.q
+                        DomainMetaRegistryJS.get().indexes.values.filter { it.document == config.entityClassName }.forEach { request.entitiesIds.add(it.id) }
+                        StandardRestClient.standard_standard_defaultAutocomplete(request).then { response ->
+                            val set = response.items.map { toSelectItem(it) }.toMutableSet()
+                            selectedValue?.let { set.add(it) }
+                            val result = set.toMutableList().sortedBy { it.caption }
+                            success(result.toTypedArray())
+                        }
+                        return@loader true
+                    }
+                    val icons = arrayOf(object{
+                        val iconCls = "icon-clear"
+                        val handler = {_:dynamic ->
+                            ignoreSearchRequest = true
+                            selectedValue = null
+                            div.combobox("setValues", arrayOfNulls<String>(0))
+                            ignoreSearchRequest = false
+                        }
+                    })
+                }
+                object {
+                    val type = "combobox"
+                    val options = object {
+                        val valueField = "id"
+                        val textField = "caption"
+                        val limitToList = true
+                        val data = selectItems.toTypedArray()
+                    }
+                }
+            }
+            is TextTableColumnDescriptionJS -> {
+                object {
+                    val type = "textbox"
+                }
+            }
+            is FloatTableColumnDescriptionJS -> {
+                object {
+                    val type = "numberbox"
+                }
+            }
+            is IntegerTableColumnDescriptionJS -> {
+                object {
+                    val type = "numberbox"
+                    val precision = 0
+                }
+            }
+            else -> null
         }
     }
 
     @Suppress("UNUSED_PARAMETER")
     private fun createOnEndEdit(index:Int, row:dynamic, changes:dynamic) {
+        //console.log(row)
         description.columns.values.forEach {
-            if(it is SelectTableColumnDescriptionJS){
-                val value = row[it.id]
-                if(value is String){
-                    val columnConfig = lastConfig.columnSettings.getValue(it.id) as SelectColumnConfigurationJS
-                    row[it.id] = columnConfig.possibleValues.find { valIt -> valIt.id == value }
+            when(it){
+                is SelectTableColumnDescriptionJS ->{
+                    val value = row[it.id]
+                    if(value is String  && (value as String).isNotBlank()){
+                        val columnConfig = lastConfig.columnSettings.getValue(it.id) as SelectColumnConfigurationJS
+                        row[it.id] = columnConfig.possibleValues.find { valIt -> valIt.id == value }
+                    } else {
+                        row[it.id] = null
+                    }
                 }
+//                is EnumTableColumnDescriptionJS ->{
+//                    val value = row[it.id]
+//                    if(value is String && (value as String).isNotBlank()){
+//                        row[it.id] = ReflectionFactoryJS.get().getEnum<FakeEnumJS>(it.enumId+"JS", value)
+//                    } else {
+//                        row[it.id] = null
+//                    }
+//                }
+                else -> {}
             }
+
         }
+
     }
 
     private fun createOnClickCell(index: Int, field: dynamic) {

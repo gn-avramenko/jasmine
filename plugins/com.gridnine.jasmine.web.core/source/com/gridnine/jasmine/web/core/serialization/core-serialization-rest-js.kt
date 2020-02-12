@@ -67,6 +67,49 @@ object RestSerializationUtilsJS {
             }
         }
 
+        private fun createTileDescription(): ObjectMetadataProviderJS<TileDataJS<Any,Any>> {
+            return object : ObjectMetadataProviderJS<TileDataJS<Any,Any>>() {
+                override fun hasUid(): Boolean {
+                    return false
+                }
+
+                init {
+                    properties.add(SerializablePropertyDescriptionJS(TileDataJS.compactData, SerializablePropertyTypeJS.ENTITY, BaseEntityJS.qualifiedClassName, true))
+                    properties.add(SerializablePropertyDescriptionJS(TileDataJS.fullData, SerializablePropertyTypeJS.ENTITY, BaseEntityJS.qualifiedClassName, true))
+                }
+
+                override fun getPropertyValue(obj: TileDataJS<Any,Any>, id: String): Any? {
+                    if(id == TileDataJS.compactData){
+                        return obj.compactData
+                    }
+                    if(id == TileDataJS.fullData){
+                        return obj.fullData
+                    }
+                    throw IllegalArgumentException("property $id does not exist")
+                }
+
+                override fun getCollection(obj: TileDataJS<Any,Any>, id: String): MutableCollection<Any> {
+                    throw IllegalArgumentException("class has no collections")
+                }
+
+                override fun setPropertyValue(obj: TileDataJS<Any,Any>, id: String, value: Any?) {
+                    if(id == TileDataJS.compactData){
+                        obj.compactData = value as Any
+                        return;
+                    }
+                    if(id == TileDataJS.fullData){
+                        obj.fullData = value as Any
+                        return;
+                    }
+                    throw IllegalArgumentException("property $id does not exist")
+                }
+
+                override fun createInstance(): TileDataJS<Any, Any>? {
+                    return TileDataJS()
+                }
+
+            }
+        }
 
 
 
@@ -87,6 +130,9 @@ object RestSerializationUtilsJS {
                 return true
             }
             if(elementClassName == BaseVVEntityJS.qualifiedClassName){
+                return true
+            }
+            if(elementClassName == "com.gridnine.jasmine.server.core.model.ui.BaseVMEntity"){
                 return true
             }
             val rett = RestMetaRegistryJS.get().entities[elementClassName]
@@ -156,10 +202,8 @@ object RestSerializationUtilsJS {
             if(EntitySelectConfigurationJS.qualifiedClassName == className){
                 return UiSerializationUtilsJS.uiProviderFactory.create(className)
             }
-            if(EntityAutocompleteDataSourceJS.qualifiedClassName == className){
-                return UiSerializationUtilsJS.uiProviderFactory.create(className)
-            }
-            if(TableConfigurationJS.qualifiedClassName == className){
+
+            if(className.startsWith(TableConfigurationJS.serverQualifiedClassName) || className.startsWith(TableConfigurationJS.qualifiedClassName) ){
                 return UiSerializationUtilsJS.uiProviderFactory.create(className)
             }
             if(TextColumnConfigurationJS.qualifiedClassName == className){
@@ -176,6 +220,9 @@ object RestSerializationUtilsJS {
             }
             if(EntityColumnConfigurationJS.qualifiedClassName == className){
                 return UiSerializationUtilsJS.uiProviderFactory.create(className)
+            }
+            if(className.startsWith(TileDataJS.serverQualifiedClassName) || className.startsWith(TileDataJS.qualifiedClassName) ){
+                return createTileDescription()
             }
 
             throw RuntimeException("unsupported type $className")

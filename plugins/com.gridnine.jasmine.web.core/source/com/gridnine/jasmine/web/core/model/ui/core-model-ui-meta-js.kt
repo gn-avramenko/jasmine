@@ -31,7 +31,7 @@ enum class VMCollectionTypeJS {
 
 class VMCollectionDescriptionJS(id:String, val elementType:VMCollectionTypeJS, val elementClassName:String?) : BaseIdentityDescriptionJS(id)
 
-class VMPropertyDescriptionJS(id:String, val type:VMPropertyTypeJS, val className:String?,val notNullable: Boolean) : BaseIdentityDescriptionJS(id)
+class VMPropertyDescriptionJS(id:String, val type:VMPropertyTypeJS, val className:String?,val nonNullable: Boolean) : BaseIdentityDescriptionJS(id)
 
 class VMEnumItemDescriptionJS(id:String) : BaseIdentityDescriptionJS(id)
 
@@ -73,7 +73,8 @@ class VSEntityDescriptionJS(id: String) : BaseIdentityDescriptionJS(id) {
 
 
 enum class VVPropertyTypeJS {
-    STRING
+    STRING,
+    ENTITY
 }
 
 enum class VVCollectionTypeJS {
@@ -91,10 +92,9 @@ class VVEntityDescriptionJS(id: String) : BaseIdentityDescriptionJS(id) {
 
 
 
-
-
 abstract class BaseWidgetDescriptionJS (id: String) : BaseIdentityDescriptionJS(id){
     var hSpan:Int? = null
+    var notEditable = false
 }
 class TableColumnDescriptionJS(val width:String?)
 
@@ -135,9 +135,9 @@ class SelectDescriptionJS(id: String)  : BaseWidgetDescriptionJS(id)
 class PasswordBoxDescriptionJS(id: String)  : BaseWidgetDescriptionJS(id)
 
 
-class IntegerBoxDescriptionJS(id: String, val notNullable:Boolean)  : BaseWidgetDescriptionJS(id)
+class IntegerBoxDescriptionJS(id: String, val nonNullable:Boolean)  : BaseWidgetDescriptionJS(id)
 
-class FloatBoxDescriptionJS(id: String, val notNullable:Boolean)  : BaseWidgetDescriptionJS(id)
+class FloatBoxDescriptionJS(id: String, val nonNullable:Boolean)  : BaseWidgetDescriptionJS(id)
 
 class EnumSelectDescriptionJS(id: String, val enumId:String) : BaseWidgetDescriptionJS(id)
 
@@ -147,8 +147,9 @@ class DateboxDescriptionJS(id: String)  : BaseWidgetDescriptionJS(id)
 
 class DateTimeBoxDescriptionJS(id: String)  : BaseWidgetDescriptionJS(id)
 
-class BooleanBoxDescriptionJS(id: String, val notNullable:Boolean)  : BaseWidgetDescriptionJS(id)
+class BooleanBoxDescriptionJS(id: String, val nonNullable:Boolean)  : BaseWidgetDescriptionJS(id)
 
+class TileDescriptionJS(id:String, val compactViewId:String, val fullViewId:String, val displayName: String):BaseWidgetDescriptionJS(id)
 
 abstract class BaseTableColumnDescriptionJS(id:String, val displayName: String):BaseIdentityDescriptionJS(id){
     var width:Int? = null
@@ -156,8 +157,8 @@ abstract class BaseTableColumnDescriptionJS(id:String, val displayName: String):
 
 class TextTableColumnDescriptionJS(id:String,displayName: String) :BaseTableColumnDescriptionJS(id,displayName)
 class SelectTableColumnDescriptionJS(id:String,displayName: String) :BaseTableColumnDescriptionJS(id,displayName)
-class IntegerTableColumnDescriptionJS( id:String, displayName: String,val notNullable: Boolean) :BaseTableColumnDescriptionJS(id, displayName)
-class FloatTableColumnDescriptionJS(id:String, displayName: String,val notNullable: Boolean) :BaseTableColumnDescriptionJS(id,displayName)
+class IntegerTableColumnDescriptionJS( id:String, displayName: String,val nonNullable: Boolean) :BaseTableColumnDescriptionJS(id, displayName)
+class FloatTableColumnDescriptionJS(id:String, displayName: String,val nonNullable: Boolean) :BaseTableColumnDescriptionJS(id,displayName)
 class EnumTableColumnDescriptionJS(id:String, val enumId:String,displayName: String) :BaseTableColumnDescriptionJS(id,displayName)
 class EntityTableColumnDescriptionJS(id:String, val entityClassName:String,displayName: String) :BaseTableColumnDescriptionJS(id,displayName)
 class DateTableColumnDescriptionJS(id:String,displayName: String) :BaseTableColumnDescriptionJS(id,displayName)
@@ -171,11 +172,12 @@ class TableDescriptionJS(id: String, val className:String) : BaseWidgetDescripti
     val columns = linkedMapOf<String, BaseTableColumnDescriptionJS>()
     var additionalRowDataClass:String? = null
 }
-class ListToolButtonDescriptionJS(id:String, val handler:String, val weight:Double, val displayName:String) : BaseIdentityDescriptionJS(id)
+abstract class BaseToolButtonDescriptionJS(id:String, val handler:String, val weight:Double, val displayName:String) : BaseIdentityDescriptionJS(id)
 
-
-class EditorToolButtonDescriptionJS( id:String, val handler:String, val weight:Double, val displayName:String) : BaseIdentityDescriptionJS(id)
-class SharedEditorToolButtonDescriptionJS(id:String, val handler:String, val weight:Double, val displayName:String) : BaseIdentityDescriptionJS(id)
+class ListToolButtonDescriptionJS(id:String, handler:String, weight:Double, displayName:String) : BaseToolButtonDescriptionJS(id, handler, weight, displayName)
+class EditorToolButtonDescriptionJS(id:String, handler:String, weight:Double, displayName:String) : BaseToolButtonDescriptionJS(id, handler, weight, displayName)
+class SharedEditorToolButtonDescriptionJS(id:String, handler:String, weight:Double, displayName:String) : BaseToolButtonDescriptionJS(id, handler, weight, displayName)
+class SharedListToolButtonDescriptionJS(id:String, handler:String, weight:Double, displayName:String) : BaseToolButtonDescriptionJS(id, handler, weight, displayName)
 class DialogToolButtonDescriptionJS( id:String, val handler:String, val displayName:String) : BaseIdentityDescriptionJS(id)
 
 class DialogDescriptionJS(id:String, val viewId:String, val title:String) : BaseIdentityDescriptionJS(id){
@@ -183,15 +185,26 @@ class DialogDescriptionJS(id:String, val viewId:String, val title:String) : Base
     val buttons = arrayListOf<DialogToolButtonDescriptionJS>()
 }
 
-class EditorDescriptionJS(id:String, val viewId:String) : BaseIdentityDescriptionJS(id){
+class EditorDescriptionJS(id:String, val entityId: String, val viewId:String) : BaseIdentityDescriptionJS(id){
     val toolButtons = arrayListOf<EditorToolButtonDescriptionJS>()
     val handlers  = arrayListOf<String>()
 }
 
+class AutocompleteDescriptionJS(id:String, val entity:String, val sortProperty:String, val sortOrder: AutocompleteSortOrderJS) : BaseIdentityDescriptionJS(id){
+    val columns = arrayListOf<String>()
+    val filters = arrayListOf<String>()
+}
 
+
+enum class AutocompleteSortOrderJS {
+    ASC,
+    DESC
+}
 
 
 class UiMetaRegistryJS{
+
+    val sharedListToolButtons = arrayListOf<SharedListToolButtonDescriptionJS>()
 
     val sharedEditorToolButtons = arrayListOf<SharedEditorToolButtonDescriptionJS>()
 
@@ -208,6 +221,8 @@ class UiMetaRegistryJS{
     val lists = linkedMapOf<String, ListDescriptionJS>()
 
     val dialogs = linkedMapOf<String, DialogDescriptionJS>()
+
+    val autocompletes =  linkedMapOf<String, AutocompleteDescriptionJS>()
 
     companion object{
         fun get() = EnvironmentJS.getPublished(UiMetaRegistryJS::class)

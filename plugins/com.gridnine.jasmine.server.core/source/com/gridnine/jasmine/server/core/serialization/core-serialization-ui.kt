@@ -116,7 +116,7 @@ object UiSerializationUtils {
 
                     private fun fillProperties(vvDescription: VVEntityDescription) {
                         vvDescription.properties.values.forEach {
-                            properties.add(SerializablePropertyDescription(it.id, toSerializableType(it.type), toClassName(it.type), isAbstractClass(it.className)))
+                            properties.add(SerializablePropertyDescription(it.id, toSerializableType(it.type), toClassName(it.type, it.className), isAbstractClass(it.className)))
                         }
                     }
 
@@ -136,9 +136,7 @@ object UiSerializationUtils {
             }
             if(EnumSelectConfiguration::class.qualifiedName == className){
                 return object : ObjectMetadataProvider<EnumSelectConfiguration<*>>() {
-                    init{
-                        properties.add(SerializablePropertyDescription("nullAllowed", SerializablePropertyType.BOOLEAN, null, false))
-                    }
+
 
                     override fun hasUid(): Boolean {
                         return false
@@ -149,46 +147,34 @@ object UiSerializationUtils {
                     }
 
                     override fun setPropertyValue(obj: EnumSelectConfiguration<*>, id: String, value: Any?) {
-                        if("nullAllowed" == id){
-                            obj.nullAllowed = value as Boolean
-                            return
-                        }
                         throw IllegalArgumentException("no field with id $id")
                     }
 
                     override fun getPropertyValue(obj: EnumSelectConfiguration<*>, id: String): Any? {
-                        if("nullAllowed" == id){
-                            return obj.nullAllowed
-                        }
                         throw IllegalArgumentException("no field with id $id")
                     }
 
                 }
             }
             if(EntityAutocompleteConfiguration::class.qualifiedName == className){
-                return object : ObjectMetadataProvider<EntityAutocompleteConfiguration<*>>() {
+                return object : ObjectMetadataProvider<EntityAutocompleteConfiguration>() {
                     init{
                         properties.add(SerializablePropertyDescription("limit", SerializablePropertyType.INT, null, false))
-                        properties.add(SerializablePropertyDescription("nullAllowed", SerializablePropertyType.BOOLEAN, null, false))
-                        collections.add(SerializableCollectionDescription("dataSources", SerializablePropertyType.ENTITY, EntityAutocompleteDataSource::class.qualifiedName, false))
+                        collections.add(SerializableCollectionDescription("dataSources", SerializablePropertyType.STRING, null, false))
                     }
 
                     override fun hasUid(): Boolean {
                         return false
                     }
 
-                    override fun getCollection(obj: EntityAutocompleteConfiguration<*>, id: String): MutableCollection<Any> {
+                    override fun getCollection(obj: EntityAutocompleteConfiguration, id: String): MutableCollection<Any> {
                         if("dataSources" == id){
                             return obj.dataSources as MutableCollection<Any>
                         }
                         throw IllegalArgumentException("no collection fields")
                     }
 
-                    override fun setPropertyValue(obj: EntityAutocompleteConfiguration<*>, id: String, value: Any?) {
-                        if("nullAllowed" == id){
-                            obj.nullAllowed = value as Boolean?
-                            return
-                        }
+                    override fun setPropertyValue(obj: EntityAutocompleteConfiguration, id: String, value: Any?) {
                         if("limit" == id){
                             obj.limit = value as Int
                             return
@@ -196,10 +182,7 @@ object UiSerializationUtils {
                         throw IllegalArgumentException("no field with id $id")
                     }
 
-                    override fun getPropertyValue(obj: EntityAutocompleteConfiguration<*>, id: String): Any? {
-                        if("nullAllowed" == id){
-                            return obj.nullAllowed
-                        }
+                    override fun getPropertyValue(obj: EntityAutocompleteConfiguration, id: String): Any? {
                         if("limit" == id){
                             return obj.limit
                         }
@@ -208,57 +191,7 @@ object UiSerializationUtils {
 
                 }
             }
-            if(EntityAutocompleteDataSource::class.qualifiedName == className){
-                return object : ObjectMetadataProvider<EntityAutocompleteDataSource>() {
-                    init{
-                        properties.add(SerializablePropertyDescription("name", SerializablePropertyType.STRING, null, false))
-                        properties.add(SerializablePropertyDescription("autocompleteId", SerializablePropertyType.STRING, null, false))
-                        properties.add(SerializablePropertyDescription("indexClassName", SerializablePropertyType.STRING, null, false))
-                        collections.add(SerializableCollectionDescription("columnsNames", SerializablePropertyType.STRING, null, false))
-                    }
 
-                    override fun hasUid(): Boolean {
-                        return false
-                    }
-
-                    override fun getCollection(obj: EntityAutocompleteDataSource, id: String): MutableCollection<Any> {
-                        if("columnsNames" == id){
-                            return obj.columnsNames as MutableCollection<Any>
-                        }
-                        throw IllegalArgumentException("no collection fields")
-                    }
-
-                    override fun setPropertyValue(obj: EntityAutocompleteDataSource, id: String, value: Any?) {
-                        if("name" == id){
-                            obj.name = value as String?
-                            return
-                        }
-                        if("autocompleteId" == id){
-                            obj.autocompleteId = value as String?
-                            return
-                        }
-                        if("indexClassName" == id){
-                            obj.indexClassName = value as String?
-                            return
-                        }
-                        throw IllegalArgumentException("no field with id $id")
-                    }
-
-                    override fun getPropertyValue(obj: EntityAutocompleteDataSource, id: String): Any? {
-                        if("name" == id){
-                            return obj.name
-                        }
-                        if("autocompleteId" == id){
-                            return obj.autocompleteId
-                        }
-                        if("indexClassName" == id){
-                            return obj.indexClassName
-                        }
-                        throw IllegalArgumentException("no field with id $id")
-                    }
-
-                }
-            }
             if(TableConfiguration::class.qualifiedName == className){
                 return object:ObjectMetadataProvider<TableConfiguration<BaseVSEntity>>(){
                     init{
@@ -389,9 +322,6 @@ object UiSerializationUtils {
                         if("notEditable" == id){
                             return obj.notEditable
                         }
-                        if("nullAllowed" == id){
-                            return obj.nullAllowed
-                        }
                         throw IllegalArgumentException("no field with id $id")
                     }
 
@@ -402,10 +332,6 @@ object UiSerializationUtils {
                     override fun setPropertyValue(obj: EnumColumnConfiguration<*>, id: String, value: Any?) {
                         if("notEditable" == id){
                             obj.notEditable = value as Boolean
-                            return
-                        }
-                        if("nullAllowed" == id){
-                            obj.nullAllowed = value as Boolean
                             return
                         }
                         throw IllegalArgumentException("no field with id $id")
@@ -423,7 +349,7 @@ object UiSerializationUtils {
                         properties.add(SerializablePropertyDescription("notEditable", SerializablePropertyType.BOOLEAN, null, false))
                         properties.add(SerializablePropertyDescription("limit", SerializablePropertyType.INT, null, false))
                         properties.add(SerializablePropertyDescription("nullAllowed", SerializablePropertyType.BOOLEAN, null, false))
-                        collections.add(SerializableCollectionDescription("dataSources", SerializablePropertyType.ENTITY, EntityAutocompleteDataSource::class.qualifiedName, false))
+                        collections.add(SerializableCollectionDescription("dataSources", SerializablePropertyType.STRING, null, false))
                     }
 
                     override fun hasUid(): Boolean {
@@ -442,10 +368,6 @@ object UiSerializationUtils {
                             obj.notEditable = value as Boolean
                             return
                         }
-                        if("nullAllowed" == id){
-                            obj.nullAllowed = value as Boolean?
-                            return
-                        }
                         if("limit" == id){
                             obj.limit = value as Int
                             return
@@ -456,9 +378,6 @@ object UiSerializationUtils {
                     override fun getPropertyValue(obj: EntityColumnConfiguration<*>, id: String): Any? {
                         if("notEditable" == id){
                             return obj.notEditable
-                        }
-                        if("nullAllowed" == id){
-                            return obj.nullAllowed
                         }
                         if("limit" == id){
                             return obj.limit
@@ -500,9 +419,10 @@ object UiSerializationUtils {
 
     }
 
-    private fun toClassName(elementType: VVPropertyType): String? {
+    private fun toClassName(elementType: VVPropertyType,className:String?): String? {
         return when (elementType) {
             VVPropertyType.STRING -> null
+            VVPropertyType.ENTITY -> className
         }
     }
 
@@ -581,7 +501,7 @@ object UiSerializationUtils {
     private fun toSerializableType(elementType: VVPropertyType): SerializablePropertyType {
         return when (elementType) {
             VVPropertyType.STRING -> SerializablePropertyType.STRING
-
+            VVPropertyType.ENTITY -> SerializablePropertyType.ENTITY
         }
     }
 

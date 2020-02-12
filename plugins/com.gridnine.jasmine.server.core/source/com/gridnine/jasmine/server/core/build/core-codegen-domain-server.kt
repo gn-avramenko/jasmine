@@ -19,7 +19,7 @@ internal object DomainServerGenerator {
         }
         val result = GenClassData(descr.id, extendsId, descr.isAbstract, enum = false, noEnumProperties = true)
         descr.properties.values.forEach { prop ->
-            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), prop.className, nonNullable = prop.notNullable, lateinit = false))
+            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), prop.className, nonNullable = prop.nonNullable, lateinit = false))
         }
         descr.collections.values.forEach { coll ->
             result.collections.add(GenCollectionDescription(coll.id, getPropertyType(coll.elementType), coll.elementClassName))

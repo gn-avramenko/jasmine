@@ -9,10 +9,7 @@ package com.gridnine.jasmine.web.easyui.widgets
 import com.gridnine.jasmine.server.standard.model.rest.EntityAutocompleteRequestJS
 import com.gridnine.jasmine.web.core.StandardRestClient
 import com.gridnine.jasmine.web.core.model.domain.EntityReferenceJS
-import com.gridnine.jasmine.web.core.model.ui.EntityMultiSelectWidget
-import com.gridnine.jasmine.web.core.model.ui.EntitySelectConfigurationJS
-import com.gridnine.jasmine.web.core.model.ui.EntitySelectDescriptionJS
-import com.gridnine.jasmine.web.core.model.ui.SelectItemJS
+import com.gridnine.jasmine.web.core.model.ui.*
 import com.gridnine.jasmine.web.easyui.JQuery
 import com.gridnine.jasmine.web.easyui.jQuery
 
@@ -38,7 +35,7 @@ class EasyUiEntityMultiSelectWidget(uid:String, description:EntitySelectDescript
                     val onChange = { newValue: Array<String>, _: Array<String>? ->
                         selectedValues.clear()
                         newValue.forEach{selectedValues.add(toSelectItem(toReference(it)))}
-                        div.tagbox("getIcon",0).asDynamic().css("visibility",if(selectedValues.isEmpty()) "hidden" else "visible");
+                        div.tagbox("getIcon",0).asDynamic().css("visibility",if(selectedValues.isEmpty()) "hidden" else "visible")
                         if (spanElm != null) {
                             spanElm.css("border-color", "")
                             spanElm.removeAttr("title")
@@ -53,7 +50,11 @@ class EasyUiEntityMultiSelectWidget(uid:String, description:EntitySelectDescript
                         val request = EntityAutocompleteRequestJS()
                         request.limit =settings.limit
                         request.searchText = param.q
-                        request.entitiesIds.addAll(settings.dataSources.mapNotNull { it.indexClassName }.toSet())
+                        settings.dataSources.forEach {
+                            val autocompleteDescription = UiMetaRegistryJS.get().autocompletes[it]?:throw IllegalArgumentException("unable to find autocomplete for dataSource $it")
+                            request.entitiesIds.add(autocompleteDescription.entity)
+
+                        }
                         StandardRestClient.standard_standard_defaultAutocomplete(request).then { response ->
                             val set = response.items.map { toSelectItem(it) }.toMutableSet()
                             set.addAll(selectedValues)
@@ -74,7 +75,7 @@ class EasyUiEntityMultiSelectWidget(uid:String, description:EntitySelectDescript
                 }
                 div.tagbox(options)
                 spanElm = div.tagbox("textbox").asDynamic().parent()
-                div.tagbox("getIcon",0).asDynamic().css("visibility", "hidden");
+                div.tagbox("getIcon",0).asDynamic().css("visibility", "hidden")
                 ignoreSearchRequest = false
             }
         }

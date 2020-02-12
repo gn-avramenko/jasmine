@@ -80,7 +80,6 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                 property.id = propertyDescription.id
                 property.type = toRestCollectionType(propertyDescription.type)
                 property.displayName = propertyDescription.getDisplayName()
-                property.usedInAutocomplete = propertyDescription.usedInAutocomplete
                 indexDescr.properties.add(property)
             }
             it.collections.values.forEach { collectionDescription ->
@@ -89,7 +88,6 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                 coll.id = collectionDescription.id
                 coll.elementType = toRestCollectionType(collectionDescription.elementType)
                 coll.displayName = collectionDescription.getDisplayName()
-                coll.usedInAutocomplete = collectionDescription.usedInAutocomplete
                 indexDescr.collections.add(coll)
             }
             result.domainIndexes.add(indexDescr)
@@ -125,7 +123,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                 propertyDescriptionDT.id = propertyDescription.id
                 propertyDescriptionDT.className = getClassName(propertyDescription.className)
                 propertyDescriptionDT.type = VMPropertyTypeDT.valueOf(propertyDescription.type.name)
-                propertyDescriptionDT.notNullable = propertyDescription.notNullable
+                propertyDescriptionDT.nonNullable = propertyDescription.nonNullable
                 entityDescription.properties.add(propertyDescriptionDT)
             }
             it.collections.values.forEach { collectionDescription ->
@@ -174,6 +172,16 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                 entityDescription.collections.add(collectionDescriptionDT)
             }
         }
+        UiMetaRegistry.get().autocompletes.values.forEach {
+            val autocompleteDescription = AutocompleteDescriptionDT()
+            autocompleteDescription.id = it.id
+            autocompleteDescription.entity = it.entity
+            autocompleteDescription.sortOrder = AutocompleteSortOrderDT.valueOf(it.sortOrder.name)
+            autocompleteDescription.sortProperty = it.sortProperty
+            autocompleteDescription.columns.addAll(it.columns)
+            autocompleteDescription.filters.addAll(it.filters)
+            result.autocompletes.add(autocompleteDescription)
+        }
         UiMetaRegistry.get().views.values.forEach { viewDescription ->
             when (viewDescription) {
                 is StandardViewDescription -> {
@@ -197,6 +205,15 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                             tlDT.expandLastRow = layout.expandLastRow
                             layout.widgets.values.forEach {
                                 when (it) {
+                                    is TileDescription -> {
+                                        val widget = TileDescriptionDT()
+                                        widget.id = it.id
+                                        widget.type = WidgetTypeDT.TILE
+                                        widget.compactViewId = it.compactView.id
+                                        widget.fullViewId = it.fullView.id
+                                        widget.displayName = it.getDisplayName()
+                                        tlDT.widgets.add(widget)
+                                    }
                                     is TableNextColumnDescription -> {
                                         val widget = TableNextColumnDescriptionDT()
                                         widget.id = it.id
@@ -213,6 +230,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                                         val widget = TextboxDescriptionDT()
                                         widget.id = it.id
                                         widget.hSpan = it.hSpan
+                                        widget.notEditable = it.notEditable
                                         widget.type = WidgetTypeDT.TEXTBOX
                                         tlDT.widgets.add(widget)
                                     }
@@ -220,6 +238,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                                         val widget = TextAreaDescriptionDT()
                                         widget.id = it.id
                                         widget.hSpan = it.hSpan
+                                        widget.notEditable = it.notEditable
                                         widget.type = WidgetTypeDT.TEXTAREA
                                         tlDT.widgets.add(widget)
                                     }
@@ -227,16 +246,18 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                                         val widget = IntegerBoxDescriptionDT()
                                         widget.id = it.id
                                         widget.hSpan = it.hSpan
+                                        widget.notEditable = it.notEditable
                                         widget.type = WidgetTypeDT.INTBOX
-                                        widget.notNullable = it.notNullable
+                                        widget.nonNullable = it.nonNullable
                                         tlDT.widgets.add(widget)
                                     }
                                     is FloatBoxDescription -> {
                                         val widget = FloatBoxDescriptionDT()
                                         widget.id = it.id
+                                        widget.notEditable = it.notEditable
                                         widget.type = WidgetTypeDT.FLOATBOX
                                         widget.hSpan = it.hSpan
-                                        widget.notNullable = it.notNullable
+                                        widget.nonNullable = it.nonNullable
                                         tlDT.widgets.add(widget)
                                     }
                                     is EnumSelectDescription -> {
@@ -244,6 +265,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                                         widget.id = it.id
                                         widget.enumId = it.enumId
                                         widget.hSpan = it.hSpan
+                                        widget.notEditable = it.notEditable
                                         widget.type = WidgetTypeDT.ENUM_SELECT
                                         tlDT.widgets.add(widget)
                                     }
@@ -252,6 +274,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                                         widget.id = it.id
                                         widget.entityClassName = it.entityClassName
                                         widget.hSpan = it.hSpan
+                                        widget.notEditable = it.notEditable
                                         widget.type = WidgetTypeDT.ENTITY_AUTOCOMPLETE
                                         tlDT.widgets.add(widget)
                                     }
@@ -262,6 +285,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                                         widget.verticalAlignment = if (it.verticalAlignment != null) VerticalAlignmentDT.valueOf(it.verticalAlignment!!.name) else null
                                         widget.horizontalAlignment = if (it.horizontalAlignment != null) HorizontalAlignmentDT.valueOf(it.horizontalAlignment!!.name) else null
                                         widget.hSpan = it.hSpan
+                                        widget.notEditable = it.notEditable
                                         widget.type = WidgetTypeDT.LABEL
                                         tlDT.widgets.add(widget)
                                     }
@@ -269,14 +293,16 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                                         val widget = BooleanBoxDescriptionDT()
                                         widget.id = it.id
                                         widget.hSpan = it.hSpan
+                                        widget.notEditable = it.notEditable
                                         widget.type = WidgetTypeDT.BOOLEANBOX
-                                        widget.notNullable = it.notNullable
+                                        widget.nonNullable = it.nonNullable
                                         tlDT.widgets.add(widget)
                                     }
                                     is DateboxDescription -> {
                                         val widget = DateBoxDescriptionDT()
                                         widget.id = it.id
                                         widget.hSpan = it.hSpan
+                                        widget.notEditable = it.notEditable
                                         widget.type = WidgetTypeDT.DATEBOX
                                         tlDT.widgets.add(widget)
                                     }
@@ -284,6 +310,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                                         val widget = DateTimeBoxDescriptionDT()
                                         widget.id = it.id
                                         widget.hSpan = it.hSpan
+                                        widget.notEditable = it.notEditable
                                         widget.type = WidgetTypeDT.DATETIMEBOX
                                         tlDT.widgets.add(widget)
                                     }
@@ -291,6 +318,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                                         val widget = PasswordBoxDescriptionDT()
                                         widget.id = it.id
                                         widget.hSpan = it.hSpan
+                                        widget.notEditable = it.notEditable
                                         widget.type = WidgetTypeDT.PASSWORDBOX
                                         tlDT.widgets.add(widget)
                                     }
@@ -299,6 +327,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                                         widget.id = it.id
                                         widget.className = it.className
                                         widget.hSpan = it.hSpan
+                                        widget.notEditable = it.notEditable
                                         widget.type = WidgetTypeDT.TABLE
                                         tlDT.widgets.add(widget)
                                         it.columns.values.forEach { column ->
@@ -317,7 +346,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                                                     columnDescriptionDT.caption = column.getDisplayName()
                                                     columnDescriptionDT.columnType = TableColumnTypeDT.FLOAT
                                                     columnDescriptionDT.width = column.width
-                                                    columnDescriptionDT.notNullable = column.notNullable
+                                                    columnDescriptionDT.nonNullable = column.nonNullable
                                                     widget.columns.add(columnDescriptionDT)
                                                 }
                                                 is IntegerTableColumnDescription -> {
@@ -326,7 +355,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                                                     columnDescriptionDT.caption = column.getDisplayName()
                                                     columnDescriptionDT.columnType = TableColumnTypeDT.INTEGER
                                                     columnDescriptionDT.width = column.width
-                                                    columnDescriptionDT.notNullable = column.notNullable
+                                                    columnDescriptionDT.nonNullable = column.nonNullable
                                                     widget.columns.add(columnDescriptionDT)
                                                 }
                                                 is EnumTableColumnDescription -> {
@@ -380,6 +409,14 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
             button.weight = it.weight.toBigDecimal()
             result.sharedEditorButtons.add(button)
         }
+        UiMetaRegistry.get().sharedListToolButtons.forEach {
+            val button = StandardButtonDescriptionDT()
+            button.id = it.id
+            button.displayName = it.getDisplayName()
+            button.handler = it.handler
+            button.weight = it.weight.toBigDecimal()
+            result.sharedListButtons.add(button)
+        }
         UiMetaRegistry.get().editors.values.forEach {
             val entityDescription = EditorDescriptionDT()
             entityDescription.id = it.id
@@ -414,10 +451,13 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
     }
 
     private fun getClassName(className: String?): String? {
-        if(className == null){
-            return null
+        return when(className){
+            null -> null
+            BaseVVEntity::class.qualifiedName,
+            BaseVSEntity::class.qualifiedName,
+            BaseVMEntity::class.qualifiedName -> className
+            else -> "${className}JS"
         }
-        return className+"JS"
     }
 
     private fun toRestCollectionType(elementType: DatabaseCollectionType): DatabaseCollectionTypeDT {

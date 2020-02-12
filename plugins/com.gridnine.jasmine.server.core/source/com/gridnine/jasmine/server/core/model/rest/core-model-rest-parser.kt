@@ -20,7 +20,7 @@ object RestMetadataParser {
         description.extends = elm.attributes["extends"]
         elm.children("property").forEach {
             val id = ParserUtils.getIdAttribute(it)
-            val propDescr = description.properties.getOrPut(id){ RestPropertyDescription(id, getPropertyType(it.attributes["type"]), "true" == it.attributes["lateinit"])}
+            val propDescr = description.properties.getOrPut(id){ RestPropertyDescription(id, getPropertyType(it.attributes["type"]), "true" == it.attributes["lateinit"],"true" == it.attributes["nonNullable"])}
             propDescr.className = it.attributes["className"]
         }
         elm.children("collection").forEach {

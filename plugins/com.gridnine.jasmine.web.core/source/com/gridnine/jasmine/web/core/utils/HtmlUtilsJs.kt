@@ -55,8 +55,7 @@ object HtmlUtilsJS {
             children.add(TextElement(this))
         }
     }
-
-    class Div : TagWithText("div") {
+    abstract class BaseDiv(tagName:String) : TagWithText(tagName) {
         fun div(`class`: String? = null, id: String? = null, region: String? = null, border: Boolean? = null, style: String? = null, data_options: String? = null, init: Div.() -> Unit) {
             val result = initTag(Div(), init)
             result.`class` = `class`
@@ -148,6 +147,8 @@ object HtmlUtilsJS {
                 attributes["split"] = value?.toString()?:"false"
             }
     }
+    class Div : BaseDiv("div")
+
 
     class Nobr : TagWithText("nobr") {
 
@@ -352,35 +353,7 @@ object HtmlUtilsJS {
         }
     }
 
-    class HTML : TagWithText("html") {
-
-        fun table(`class`: String? = null, id: String? = null, style: String? = null, data_options: String? = null, init: TABLE.() -> Unit) {
-            val result = initTag(TABLE(), init)
-            result.`class` = `class`
-            result.id = id
-            result.style = style
-            result.dataOptions = data_options
-        }
-
-        fun ul(`class`: String? = null, id: String? = null, lines: Boolean? = null, style: String? = null, init: UL.() -> Unit) {
-            val result = initTag(UL(), init)
-            result.`class` = `class`
-            result.id = id
-            result.lines = lines
-            result.style = style
-        }
-
-        fun div(`class`: String? = null, id: String? = null, region: String? = null, border: Boolean? = null, style: String? = null, data_options: String? = null, split:Boolean = false, init: Div.() -> Unit) {
-            val result = initTag(Div(), init)
-            result.`class` = `class`
-            result.id = id
-            result.region = region
-            result.border = border
-            result.style = style
-            result.dataOptions = data_options
-            result.split = split
-        }
-
+    class HTML : BaseDiv("html") {
 
         override fun render(builder: StringBuilder, indent: String) {
             for (c in children) {
@@ -393,8 +366,6 @@ object HtmlUtilsJS {
             render(sb, " ")
             return sb.toString()
         }
-
-
     }
 
     fun html(init: HTML.() -> Unit): HTML {

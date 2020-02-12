@@ -50,7 +50,8 @@ class Editor<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS, V:BaseView
     lateinit var view:V
     lateinit var setTitle:(String) ->Unit
     lateinit var close:() ->Unit
-    lateinit var objectId:String
+    lateinit var type:String
+    lateinit var updateToolsVisibility:()->Unit
 }
 
 
@@ -90,16 +91,27 @@ open class EnumMultiSelectWidget<E:Enum<E>>:MultiValueWidget<E,EnumSelectConfigu
 
 open class EntitySelectWidget:ValueWidget<EntityReferenceJS, EntitySelectConfigurationJS>()
 open class EntityMultiSelectWidget:MultiValueWidget<EntityReferenceJS,EntitySelectConfigurationJS>()
+open class TileWidget<VC:BaseView<*,*,*>, VF:BaseView<*,*,*> >{
+    lateinit var compactView:VC
+    lateinit var fullView:VF
+    lateinit var configure: (settings:TileDataJS<*,*>) ->Unit
+    lateinit var setData: (model:TileDataJS<*,*>) ->Unit
+    lateinit var getData: ()->TileDataJS<*,*>
+    lateinit var showValidation:(validation:TileDataJS<*,*>) ->Unit
+}
 
+open class ToolButtonWidget{
+    lateinit var setEnabled: (Boolean)->Unit
+    lateinit var setVisible: (Boolean)->Unit
+}
 open class TableWidget<T:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS>:CollectionWidget<T, TableConfigurationJS<VS>, VV>()
 
 data class SelectItemJS(val id:String?, val caption:String?)
 
 class EnumSelectConfigurationJS<E:Enum<E>> {
-    var nullAllowed = true
+
     companion object{
         const val qualifiedClassName = "com.gridnine.jasmine.web.core.model.ui.EnumSelectConfigurationJS"
-        const val nullAllowed = "nullAllowed"
     }
 }
 
@@ -115,24 +127,14 @@ class SelectConfigurationJS {
 }
 
 
-class EntityAutocompleteDataSourceJS {
-    var name:String? = null
-    var autocompleteId:String? = "standard"
-    var indexClassName:String? = null
-    val columnsNames = arrayListOf<String>()
-    companion object{
-        const val qualifiedClassName = "com.gridnine.jasmine.web.core.model.ui.EntityAutocompleteDataSourceJS"
-        const val name = "name"
-        const val autocompleteId = "autocompleteId"
-        const val indexClassName = "indexClassName"
-        const val columnsNames = "columnsNames"
-    }
-}
+
+
+
 
 class EntitySelectConfigurationJS {
     var nullAllowed:Boolean = true
     var limit:Int = 10
-    var dataSources = arrayListOf<EntityAutocompleteDataSourceJS>()
+    var dataSources = arrayListOf<String>()
     companion object{
         const val qualifiedClassName = "com.gridnine.jasmine.web.core.model.ui.EntitySelectConfigurationJS"
         const val nullAllowed = "nullAllowed"
@@ -190,7 +192,7 @@ class SelectColumnConfigurationJS:BaseColumnConfigurationJS(){
 class EntityColumnConfigurationJS:BaseColumnConfigurationJS(){
     var nullAllowed:Boolean? = true
     var limit:Int = 10
-    var dataSources = arrayListOf<EntityAutocompleteDataSourceJS>()
+    var dataSources = arrayListOf<String>()
 
     companion object{
         const val nullAllowed ="nullAllowed"
@@ -209,21 +211,38 @@ class TableConfigurationJS<VS:BaseVSEntityJS>{
     companion object{
         const val columnSettings ="columnSettings"
         const val qualifiedClassName = "com.gridnine.jasmine.web.core.model.ui.TableConfigurationJS"
+        const val serverQualifiedClassName = "com.gridnine.jasmine.server.core.model.ui.TableConfiguration"
     }
 }
 
-interface EditorToolButtonHandler<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS, V:BaseView<VM,VS,VV>>{
-
-    fun onClick(view:V)
+interface BaseEditorToolButtonHandler<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS, V:BaseView<VM,VS,VV>>{
+    fun onClick(editor:Editor<VM,VS,VV,V>)
+    fun isVisible(editor:Editor<VM,VS,VV,V>):Boolean
+    fun isEnabled(editor:Editor<VM,VS,VV,V>):Boolean
 
 }
 
-class ObjectList(val listId:String)
+interface SharedEditorToolButtonHandler<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS, V:BaseView<VM,VS,VV>>:BaseEditorToolButtonHandler<VM,VS,VV,V>{
+    fun isApplicableToObject(objectId:String):Boolean
+}
 
-interface ListToolButtonHandler{
 
-    fun onClick(list:ObjectList)
 
+interface EntityList<E:BaseEntityJS>{
+    fun addSelectionChangeListener(listener:(List<E>) ->Unit)
+    fun getSelectedElements():List<E>
+    fun getListId():String
+    fun reload()
+}
+
+interface BaseListToolButtonHandler<E:BaseEntityJS>{
+    fun isVisible(list:EntityList<E>):Boolean
+    fun isEnabled(list:EntityList<E>):Boolean
+    fun onClick(list:EntityList<E>)
+}
+
+interface SharedListToolButtonHandler<E:BaseEntityJS>:BaseListToolButtonHandler<E>{
+    fun isApplicableToList(listId:String):Boolean
 }
 
 
@@ -306,4 +325,17 @@ class SimplePropertyWrapperVVJS:BaseVVEntityJS(){
     }
 }
 
+
+@Suppress("UNCHECKED_CAST")
+class TileDataJS<VMC:Any, VMF:Any>{
+    lateinit var compactData:VMC
+    lateinit var fullData:VMF
+
+    companion object{
+        const val compactData = "compactData"
+        const val fullData = "fullData"
+        const val qualifiedClassName = "com.gridnine.jasmine.web.core.model.ui.TileDataJS"
+        const val serverQualifiedClassName = "com.gridnine.jasmine.server.core.model.ui.TileData"
+    }
+}
 

@@ -65,7 +65,40 @@
                             </complexContent>
                         </complexType>
                     </element>
+                    <element name="autocomplete">
+                        <complexType>
+                            <complexContent>
+                                <extension base="tns:baseMetaElement">
+                                    <sequence>
+                                        <element name = "columns">
+                                            <complexType>
+                                                <sequence maxOccurs="unbounded">
+                                                    <element name="column" type="string"/>
+                                                </sequence>
+                                            </complexType>
+                                        </element>
+                                        <element name = "filters" minOccurs="0">
+                                            <complexType>
+                                                <sequence maxOccurs="unbounded">
+                                                    <element name="filter" type="string"/>
+                                                </sequence>
+                                            </complexType>
+                                        </element>
+                                        <element name="sortOrder">
+                                            <complexType>
+                                                <attribute name="property" type="string" use="required"/>
+                                                <attribute name="order" type="tns:sortOrder" use="required"/>
+                                            </complexType>
+                                        </element>
+                                    </sequence>
+                                    <attribute name="entity" type="string" use="required"/>
+                                    <attribute name="criterionsProvider" type="string"/>
+                                </extension>
+                            </complexContent>
+                        </complexType>
+                    </element>
                     <element name="shared-editor-tool-button" type="tns:toolButton" minOccurs="0" maxOccurs="unbounded"/>
+                    <element name="shared-list-tool-button" type="tns:toolButton" minOccurs="0" maxOccurs="unbounded"/>
                 </choice>
             </sequence>
         </complexType>
@@ -120,12 +153,14 @@
                 <element name="boolean-box" type="tns:booleanBox"/>
                 <element name="label" type="tns:label"/>
                 <element name="table" type="tns:tableWidget"/>
+                <element name="tile" type="tns:tile"/>
             </choice>
         </sequence>
     </group>
     <complexType name="baseWidget">
         <attribute name="id" type="string" use="required"/>
         <attribute name="h_span" type="integer"/>
+        <attribute name="not-editable" type="boolean" default="false"/>
     </complexType>
     <complexType name="passwordBox">
         <complexContent>
@@ -168,15 +203,14 @@
     <complexType name="integerBox">
         <complexContent>
             <extension base="tns:baseWidget">
-                <attribute name="notNullable" type="boolean"/>
+                <attribute name="nonNullable" type="boolean"/>
             </extension>
-
         </complexContent>
     </complexType>
     <complexType name="floatBox">
         <complexContent>
             <extension base="tns:baseWidget">
-                <attribute name="notNullable" type="boolean"/>
+                <attribute name="nonNullable" type="boolean"/>
             </extension>
         </complexContent>
     </complexType>
@@ -195,7 +229,27 @@
     <complexType name="booleanBox">
         <complexContent>
             <extension base="tns:baseWidget">
-                <attribute name="notNullable" type="boolean"/>
+                <attribute name="nonNullable" type="boolean"/>
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType name="tile">
+        <complexContent>
+            <extension base="tns:baseWidget">
+                <sequence>
+                    <element name="compact-view">
+                        <complexType>
+                            <group ref="tns:view-group"/>
+                        </complexType>
+                    </element>
+                    <element name="full-view">
+                        <complexType>
+                            <group ref="tns:view-group"/>
+                        </complexType>
+                    </element>
+                </sequence>
+                <attribute name="class-name" use="required"/>
+                <attribute name = "caption" type="string" use="required"/>
             </extension>
         </complexContent>
     </complexType>
@@ -213,6 +267,12 @@
             <enumeration value="TOP" />
             <enumeration value="BOTTOM" />
             <enumeration value="CENTER" />
+        </restriction>
+    </simpleType>
+    <simpleType name="sortOrder">
+        <restriction base="string">
+            <enumeration value="ASC" />
+            <enumeration value="DESC" />
         </restriction>
     </simpleType>
     <simpleType name="horizontalAlignment">
@@ -256,14 +316,14 @@
     <complexType name="integerColumn">
         <complexContent>
             <extension base="tns:baseColumn">
-                <attribute name="notNullable" type="boolean"/>
+                <attribute name="nonNullable" type="boolean"/>
             </extension>
         </complexContent>
     </complexType>
     <complexType name="floatColumn">
         <complexContent>
             <extension base="tns:baseColumn">
-                <attribute name="notNullable" type="boolean"/>
+                <attribute name="nonNullable" type="boolean"/>
             </extension>
         </complexContent>
     </complexType>
