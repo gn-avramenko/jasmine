@@ -6,8 +6,8 @@
 package com.gridnine.jasmine.server.core.serialization
 
 import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistry
+import com.gridnine.jasmine.server.core.model.domain.EntityReference
 import com.gridnine.jasmine.server.core.model.ui.*
-import javax.xml.stream.events.EntityReference
 
 
 @Suppress("UNCHECKED_CAST")
@@ -222,171 +222,6 @@ object UiSerializationUtils {
 
                 }
             }
-            if(TextColumnConfiguration::class.qualifiedName == className){
-                return object:ObjectMetadataProvider<TextColumnConfiguration>(){
-                    init{
-                        properties.add(SerializablePropertyDescription("notEditable", SerializablePropertyType.BOOLEAN, null, false))
-                    }
-                    override fun getPropertyValue(obj: TextColumnConfiguration, id: String): Any? {
-                        if("notEditable" == id){
-                            return obj.notEditable
-                        }
-                        throw IllegalArgumentException("no field with id $id")
-                    }
-
-                    override fun getCollection(obj: TextColumnConfiguration, id: String): MutableCollection<Any> {
-                        throw IllegalArgumentException("no collection with id $id")
-                    }
-
-                    override fun setPropertyValue(obj: TextColumnConfiguration, id: String, value: Any?) {
-                        if("notEditable" == id){
-                            obj.notEditable = value as Boolean
-                            return
-                        }
-                        throw IllegalArgumentException("no field with id $id")
-                    }
-
-                    override fun hasUid(): Boolean {
-                       return false
-                    }
-
-                }
-            }
-            if(IntegerColumnConfiguration::class.qualifiedName == className){
-                return object:ObjectMetadataProvider<IntegerColumnConfiguration>(){
-                    init{
-                        properties.add(SerializablePropertyDescription("notEditable", SerializablePropertyType.BOOLEAN, null, false))
-                    }
-                    override fun getPropertyValue(obj: IntegerColumnConfiguration, id: String): Any? {
-                        if("notEditable" == id){
-                            return obj.notEditable
-                        }
-                        throw IllegalArgumentException("no field with id $id")
-                    }
-
-                    override fun getCollection(obj: IntegerColumnConfiguration, id: String): MutableCollection<Any> {
-                        throw IllegalArgumentException("no collection with id $id")
-                    }
-
-                    override fun setPropertyValue(obj: IntegerColumnConfiguration, id: String, value: Any?) {
-                        if("notEditable" == id){
-                            obj.notEditable = value as Boolean
-                            return
-                        }
-                        throw IllegalArgumentException("no field with id $id")
-                    }
-
-                    override fun hasUid(): Boolean {
-                        return false
-                    }
-
-                }
-            }
-            if(FloatColumnConfiguration::class.qualifiedName == className){
-                return object:ObjectMetadataProvider<FloatColumnConfiguration>(){
-                    init{
-                        properties.add(SerializablePropertyDescription("notEditable", SerializablePropertyType.BOOLEAN, null, false))
-                    }
-                    override fun getPropertyValue(obj: FloatColumnConfiguration, id: String): Any? {
-                        if("notEditable" == id){
-                            return obj.notEditable
-                        }
-                        throw IllegalArgumentException("no field with id $id")
-                    }
-
-                    override fun getCollection(obj: FloatColumnConfiguration, id: String): MutableCollection<Any> {
-                        throw IllegalArgumentException("no collection with id $id")
-                    }
-
-                    override fun setPropertyValue(obj: FloatColumnConfiguration, id: String, value: Any?) {
-                        if("notEditable" == id){
-                            obj.notEditable = value as Boolean
-                            return
-                        }
-                        throw IllegalArgumentException("no field with id $id")
-                    }
-
-                    override fun hasUid(): Boolean {
-                        return false
-                    }
-
-                }
-            }
-            if(EnumColumnConfiguration::class.qualifiedName == className){
-                return object:ObjectMetadataProvider<EnumColumnConfiguration<*>>(){
-                    init{
-                        properties.add(SerializablePropertyDescription("notEditable", SerializablePropertyType.BOOLEAN, null, false))
-                        properties.add(SerializablePropertyDescription("nullAllowed", SerializablePropertyType.BOOLEAN, null, false))
-                    }
-                    override fun getPropertyValue(obj: EnumColumnConfiguration<*>, id: String): Any? {
-                        if("notEditable" == id){
-                            return obj.notEditable
-                        }
-                        throw IllegalArgumentException("no field with id $id")
-                    }
-
-                    override fun getCollection(obj: EnumColumnConfiguration<*>, id: String): MutableCollection<Any> {
-                        throw IllegalArgumentException("no collection with id $id")
-                    }
-
-                    override fun setPropertyValue(obj: EnumColumnConfiguration<*>, id: String, value: Any?) {
-                        if("notEditable" == id){
-                            obj.notEditable = value as Boolean
-                            return
-                        }
-                        throw IllegalArgumentException("no field with id $id")
-                    }
-
-                    override fun hasUid(): Boolean {
-                        return false
-                    }
-
-                }
-            }
-            if(EntityColumnConfiguration::class.qualifiedName == className){
-                return object : ObjectMetadataProvider<EntityColumnConfiguration<*>>() {
-                    init{
-                        properties.add(SerializablePropertyDescription("notEditable", SerializablePropertyType.BOOLEAN, null, false))
-                        properties.add(SerializablePropertyDescription("limit", SerializablePropertyType.INT, null, false))
-                        properties.add(SerializablePropertyDescription("nullAllowed", SerializablePropertyType.BOOLEAN, null, false))
-                        collections.add(SerializableCollectionDescription("dataSources", SerializablePropertyType.STRING, null, false))
-                    }
-
-                    override fun hasUid(): Boolean {
-                        return false
-                    }
-
-                    override fun getCollection(obj: EntityColumnConfiguration<*>, id: String): MutableCollection<Any> {
-                        if("dataSources" == id){
-                            return obj.dataSources as MutableCollection<Any>
-                        }
-                        throw IllegalArgumentException("no collection fields")
-                    }
-
-                    override fun setPropertyValue(obj: EntityColumnConfiguration<*>, id: String, value: Any?) {
-                        if("notEditable" == id){
-                            obj.notEditable = value as Boolean
-                            return
-                        }
-                        if("limit" == id){
-                            obj.limit = value as Int
-                            return
-                        }
-                        throw IllegalArgumentException("no field with id $id")
-                    }
-
-                    override fun getPropertyValue(obj: EntityColumnConfiguration<*>, id: String): Any? {
-                        if("notEditable" == id){
-                            return obj.notEditable
-                        }
-                        if("limit" == id){
-                            return obj.limit
-                        }
-                        throw IllegalArgumentException("no field with id $id")
-                    }
-
-                }
-            }
             throw IllegalArgumentException("unsupported class name $className")
         }
 
@@ -463,13 +298,7 @@ object UiSerializationUtils {
     private fun toClassName(elementType: VSPropertyType, elementClassName: String?): String? {
         return when(elementType){
             VSPropertyType.ENUM_SELECT -> EnumSelectConfiguration::class.qualifiedName
-            VSPropertyType.COLUMN_INT -> IntegerColumnConfiguration::class.qualifiedName
-            VSPropertyType.COLUMN_FLOAT -> FloatColumnConfiguration::class.qualifiedName
-            VSPropertyType.COLUMN_TEXT -> TextColumnConfiguration::class.qualifiedName
-            VSPropertyType.COLUMN_ENUM_SELECT -> EnumColumnConfiguration::class.qualifiedName
-            VSPropertyType.COLUMN_ENTITY -> EntityColumnConfiguration::class.qualifiedName
             VSPropertyType.ENTITY -> elementClassName
-            VSPropertyType.COLUMN_DATE -> DateColumnConfiguration::class.qualifiedName
             VSPropertyType.ENTITY_AUTOCOMPLETE ->"${EntityAutocompleteConfiguration::class.qualifiedName}<$elementClassName>"
             VSPropertyType.SELECT ->SelectConfiguration::class.qualifiedName
         }
@@ -481,12 +310,6 @@ object UiSerializationUtils {
             VSPropertyType.ENUM_SELECT -> SerializablePropertyType.ENTITY
             VSPropertyType.ENTITY -> SerializablePropertyType.ENTITY
             VSPropertyType.ENTITY_AUTOCOMPLETE -> SerializablePropertyType.ENTITY
-            VSPropertyType.COLUMN_INT -> SerializablePropertyType.ENTITY
-            VSPropertyType.COLUMN_FLOAT -> SerializablePropertyType.ENTITY
-            VSPropertyType.COLUMN_TEXT -> SerializablePropertyType.ENTITY
-            VSPropertyType.COLUMN_ENUM_SELECT -> SerializablePropertyType.ENTITY
-            VSPropertyType.COLUMN_ENTITY -> SerializablePropertyType.ENTITY
-            VSPropertyType.COLUMN_DATE -> SerializablePropertyType.ENTITY
             VSPropertyType.SELECT -> SerializablePropertyType.ENTITY
         }
     }

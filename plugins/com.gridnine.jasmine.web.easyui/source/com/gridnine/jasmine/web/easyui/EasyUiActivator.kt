@@ -13,6 +13,8 @@ import com.gridnine.jasmine.web.core.utils.ReflectionFactoryJS
 import com.gridnine.jasmine.web.easyui.mainframe.EasyUiMainFrameImpl
 import com.gridnine.jasmine.web.easyui.mainframe.EasyUiWorkspaceEditor
 import com.gridnine.jasmine.web.easyui.mainframe.EasyUiWorkspaceListEditor
+import com.gridnine.jasmine.web.easyui.widgets.table.EasyUiEntityTableColumnEditor
+import com.gridnine.jasmine.web.easyui.widgets.table.EasyUiEnumTableColumnEditor
 
 class EasyUiActivator : ActivatorJS{
 
@@ -20,6 +22,7 @@ class EasyUiActivator : ActivatorJS{
         ReflectionFactoryJS.get().registerClass("com.gridnine.jasmine.web.easyui.mainframe.EasyUiWorkspaceListEditor.SortOrderWrapperVMJS") {EasyUiWorkspaceListEditor.SortOrderWrapperVMJS()}
         ReflectionFactoryJS.get().registerClass("com.gridnine.jasmine.web.easyui.mainframe.EasyUiWorkspaceListEditor.SortOrderWrapperVSJS") {EasyUiWorkspaceListEditor.SortOrderWrapperVSJS()}
         ReflectionFactoryJS.get().registerClass("com.gridnine.jasmine.web.easyui.mainframe.EasyUiWorkspaceListEditor.SortOrderWrapperVVJS") {EasyUiWorkspaceListEditor.SortOrderWrapperVVJS()}
+        extendDatagridEditors(EasyUiEnumTableColumnEditor,EasyUiEntityTableColumnEditor)
         EnvironmentJS.publish(ErrorHandler::class, object:ErrorHandler{
             override fun showError(msg: String, stacktrace: String) {
                 showError(null, msg, stacktrace)

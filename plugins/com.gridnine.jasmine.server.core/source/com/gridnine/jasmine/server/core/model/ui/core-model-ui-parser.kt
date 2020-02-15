@@ -157,7 +157,12 @@ object UiMetadataParser {
         if(additionalData != null){
             vmEntityDescr.properties["additionalData"] = VMPropertyDescription(vmEntityDescr.id, "additionalData", VMPropertyType.ENTITY, additionalData, true)
         }
+        val interceptors = arrayListOf<String>()
         viewElm.children.forEach {layoutNode ->
+            if(layoutNode.name == "interceptor"){
+                interceptors.add(layoutNode.value!!)
+                return@forEach
+            }
             if(layoutNode.name == "table-layout"){
                 layout = TableLayoutDescription(layoutNode.attributes["expandLastRow"] == "true")
                 val tableLayout = layout as TableLayoutDescription
@@ -308,7 +313,6 @@ object UiMetadataParser {
                                     tableDescription.columns[id] = columnDescription
                                     tableVM.properties[id] = VMPropertyDescription(tableDescription.fullId,id,VMPropertyType.STRING, null,false)
                                     tableVV.properties[id] = VVPropertyDescription(tableDescription.fullId,id,VVPropertyType.STRING, null)
-                                    tableVS.properties[id] = VSPropertyDescription(tableDescription.fullId,id,VSPropertyType.COLUMN_TEXT, null)
                                 }
                                 "integer-column" -> {
                                     val columnDescription = IntegerTableColumnDescription(tableDescription.fullId, id, columnPropertyNonNullable)
@@ -317,7 +321,6 @@ object UiMetadataParser {
                                     tableDescription.columns[id] = columnDescription
                                     tableVM.properties[id] = VMPropertyDescription(tableDescription.fullId,id,VMPropertyType.INT, null,columnPropertyNonNullable)
                                     tableVV.properties[id] = VVPropertyDescription(tableDescription.fullId,id,VVPropertyType.STRING, null)
-                                    tableVS.properties[id] = VSPropertyDescription(tableDescription.fullId,id,VSPropertyType.COLUMN_INT, null)
                                 }
                                 "float-column" -> {
                                     val columnDescription = FloatTableColumnDescription(tableDescription.fullId, id, columnPropertyNonNullable)
@@ -326,7 +329,6 @@ object UiMetadataParser {
                                     tableDescription.columns[id] = columnDescription
                                     tableVM.properties[id] = VMPropertyDescription(tableDescription.fullId,id,VMPropertyType.BIG_DECIMAL, null, columnPropertyNonNullable )
                                     tableVV.properties[id] = VVPropertyDescription(tableDescription.fullId,id,VVPropertyType.STRING, null)
-                                    tableVS.properties[id] = VSPropertyDescription(tableDescription.fullId,id,VSPropertyType.COLUMN_FLOAT, null)
                                 }
                                 "enum-select-column" -> {
                                     val columnDescription = EnumTableColumnDescription(tableDescription.fullId, id, columnNode.attributes["enum-id"]
@@ -336,7 +338,7 @@ object UiMetadataParser {
                                     tableDescription.columns[id] = columnDescription
                                     tableVM.properties[id] = VMPropertyDescription(tableDescription.fullId,id,VMPropertyType.ENUM, columnDescription.enumId, false)
                                     tableVV.properties[id] = VVPropertyDescription(tableDescription.fullId,id,VVPropertyType.STRING, null)
-                                    tableVS.properties[id] = VSPropertyDescription(tableDescription.fullId,id,VSPropertyType.COLUMN_ENUM_SELECT, columnDescription.enumId)
+                                    tableVS.properties[id] = VSPropertyDescription(tableDescription.fullId,id,VSPropertyType.ENUM_SELECT, columnDescription.enumId)
                                 }
                                 "entity-select-column" -> {
                                     val columnDescription = EntityTableColumnDescription(tableDescription.fullId, id, columnNode.attributes["entity-class-name"]
@@ -346,7 +348,7 @@ object UiMetadataParser {
                                     tableDescription.columns[id] = columnDescription
                                     tableVM.properties[id] = VMPropertyDescription(tableDescription.fullId,id,VMPropertyType.ENTITY_REFERENCE, columnDescription.entityClassName,false)
                                     tableVV.properties[id] = VVPropertyDescription(tableDescription.fullId,id,VVPropertyType.STRING, null)
-                                    tableVS.properties[id] = VSPropertyDescription(tableDescription.fullId,id,VSPropertyType.COLUMN_ENTITY, columnDescription.entityClassName)
+                                    tableVS.properties[id] = VSPropertyDescription(tableDescription.fullId,id,VSPropertyType.ENTITY_AUTOCOMPLETE, columnDescription.entityClassName)
                                 }
                                 "date-column" -> {
                                     val columnDescription = DateTableColumnDescription(tableDescription.fullId, id)
@@ -355,7 +357,6 @@ object UiMetadataParser {
                                     tableDescription.columns[id] = columnDescription
                                     tableVM.properties[id] = VMPropertyDescription(tableDescription.fullId,id,VMPropertyType.LOCAL_DATE, null, false)
                                     tableVV.properties[id] = VVPropertyDescription(tableDescription.fullId,id,VVPropertyType.STRING, null)
-                                    tableVS.properties[id] = VSPropertyDescription(tableDescription.fullId,id,VSPropertyType.COLUMN_DATE, null)
                                 }
                             }
                         }
@@ -400,6 +401,7 @@ object UiMetadataParser {
         val viewDescr = StandardViewDescription(id = "${editorId}View",
                 layout = layout, viewModel = vmEntityDescr.id,  viewSettings = vsEntityDescr.id,viewValidation = vvEntityDescr.id
         )
+        viewDescr.interceptors.addAll(interceptors)
         registry.views[viewDescr.id] = viewDescr
         return viewDescr
     }

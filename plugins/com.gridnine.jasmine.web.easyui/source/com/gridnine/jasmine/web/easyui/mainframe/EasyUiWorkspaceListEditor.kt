@@ -32,9 +32,9 @@ class EasyUiWorkspaceListEditor : EasyUiWorkspaceElementEditor<ListWorkspaceItem
 
     private lateinit var possibleSortOrderValues:List<SelectItemJS>
 
-    private lateinit var fieldsWidget: TableWidget<SimplePropertyWrapperVMJS<SelectItemJS>,SimplePropertyWrapperVSJS<SelectColumnConfigurationJS>,SimplePropertyWrapperVVJS>
+    private lateinit var fieldsWidget: TableWidget<SimplePropertyWrapperVMJS<SelectItemJS>,SimplePropertyWrapperVSJS<SelectConfigurationJS>,SimplePropertyWrapperVVJS>
 
-    private lateinit var filtersWidget: TableWidget<SimplePropertyWrapperVMJS<SelectItemJS>,SimplePropertyWrapperVSJS<SelectColumnConfigurationJS>,SimplePropertyWrapperVVJS>
+    private lateinit var filtersWidget: TableWidget<SimplePropertyWrapperVMJS<SelectItemJS>,SimplePropertyWrapperVSJS<SelectConfigurationJS>,SimplePropertyWrapperVVJS>
 
     private lateinit var sortOrdersWidget: TableWidget<SortOrderWrapperVMJS,SortOrderWrapperVSJS,SortOrderWrapperVVJS>
 
@@ -91,22 +91,22 @@ class EasyUiWorkspaceListEditor : EasyUiWorkspaceElementEditor<ListWorkspaceItem
             possibleListValues = config.possibleValues
             listSelectWidget.valueChangeListener = {newValue, _ ->
                 possibleFieldValues = getPossibleFieldValues(newValue?.id)
-                val fieldConfig = SelectColumnConfigurationJS()
+                val fieldConfig = SelectConfigurationJS()
                 fieldConfig.nullAllowed = false
                 fieldConfig.possibleValues.addAll(possibleFieldValues)
                 val conf = SimplePropertyWrapperVSJS(fieldConfig)
-                val fieldsTableConfig = TableConfigurationJS<SimplePropertyWrapperVSJS<SelectColumnConfigurationJS>>()
+                val fieldsTableConfig = TableConfigurationJS<SimplePropertyWrapperVSJS<SelectConfigurationJS>>()
                 fieldsTableConfig.columnSettings = conf
                 fieldsWidget.configure(fieldsTableConfig)
                 fieldsWidget.readData(arrayListOf())
-                val filtersTableConfig = TableConfigurationJS<SimplePropertyWrapperVSJS<SelectColumnConfigurationJS>>()
+                val filtersTableConfig = TableConfigurationJS<SimplePropertyWrapperVSJS<SelectConfigurationJS>>()
                 filtersTableConfig.columnSettings = conf
                 filtersWidget.configure(filtersTableConfig)
                 filtersWidget.readData(arrayListOf())
                 val sortOrderTableConfig = TableConfigurationJS<SortOrderWrapperVSJS>()
                 val sortOrderColumnSettings = SortOrderWrapperVSJS()
                 sortOrderColumnSettings.field = fieldConfig
-                val sortOrderConfig = SelectColumnConfigurationJS()
+                val sortOrderConfig = SelectConfigurationJS()
                 sortOrderConfig.nullAllowed = false
                 sortOrderConfig.possibleValues.addAll(possibleSortOrderValues)
                 sortOrderColumnSettings.order = sortOrderConfig
@@ -301,8 +301,8 @@ class EasyUiWorkspaceListEditor : EasyUiWorkspaceElementEditor<ListWorkspaceItem
     }
 
     class SortOrderWrapperVSJS:BaseVSEntityJS(){
-        lateinit var field:SelectColumnConfigurationJS
-        lateinit var order:SelectColumnConfigurationJS
+        lateinit var field:SelectConfigurationJS
+        lateinit var order:SelectConfigurationJS
 
         override fun getValue(propertyName: String): Any? {
             if(SortOrderWrapperVSJS.field == propertyName){
@@ -316,11 +316,11 @@ class EasyUiWorkspaceListEditor : EasyUiWorkspaceElementEditor<ListWorkspaceItem
 
         override fun setValue(propertyName: String, value: Any?) {
             if(SortOrderWrapperVSJS.field == propertyName){
-                field = value as SelectColumnConfigurationJS
+                field = value as SelectConfigurationJS
                 return
             }
             if(SortOrderWrapperVSJS.order == propertyName){
-                order = value as SelectColumnConfigurationJS
+                order = value as SelectConfigurationJS
                 return
             }
             super.setValue(propertyName, value)

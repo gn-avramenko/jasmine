@@ -154,6 +154,12 @@ $.fn.tagbox.defaults.panelMaxHeight=200;
 $.fn.textbox.defaults.labelAlign = "right";
 $.fn.passwordbox.defaults.labelAlign = "right";
 
+function extendDatagridEditors(enumEditor,entityEditor){
+    $.extend($.fn.datagrid.defaults.editors, {
+        enumSelect:enumEditor,
+        entitySelect:entityEditor
+    })
+}
 
 //var oldSetValue = $.fn.datagrid.defaults.editors.combobox.setValue
 //$.fn.datagrid.defaults.editors.combobox.setValue = function(target, value){

@@ -154,6 +154,7 @@ object EasyUiViewBuilder {
 
             }
         }
+
         var modelUid :String? = null
         view.readData = {model ->
             modelUid = model.uid
@@ -324,6 +325,12 @@ object EasyUiViewBuilder {
                     }
                 }
             }
+        }
+        val interceptors = arrayListOf<ViewInterceptor<VM,VS,VV,V>>()
+        viewDescr.interceptors.forEach {
+            interceptors.add(ReflectionFactoryJS.get().getFactory(it).invoke() as ViewInterceptor<VM,VS,VV,V>) }
+        interceptors.forEach {
+            it.onCreate(view)
         }
         return view
     }

@@ -59,13 +59,7 @@ enum class VSPropertyType {
     ENUM_SELECT,
     SELECT,
     ENTITY_AUTOCOMPLETE,
-    ENTITY,
-    COLUMN_TEXT,
-    COLUMN_INT,
-    COLUMN_FLOAT,
-    COLUMN_ENUM_SELECT,
-    COLUMN_DATE,
-    COLUMN_ENTITY,
+    ENTITY
 }
 
 enum class VSCollectionType {
@@ -123,7 +117,9 @@ enum class HorizontalAlignment {
     RIGHT,
     CENTER
 }
-abstract class BaseViewDescription (id:String, val viewModel:String, val viewSettings:String, val viewValidation:String):BaseIdentityDescription(id)
+abstract class BaseViewDescription (id:String, val viewModel:String, val viewSettings:String, val viewValidation:String):BaseIdentityDescription(id){
+    val interceptors = arrayListOf<String>()
+}
 class StandardViewDescription ( id: String, viewModel:String,  viewSettings:String,  viewValidation:String,val layout: BaseLayoutDescription) :
         BaseViewDescription(id,  viewModel, viewSettings, viewValidation)
 

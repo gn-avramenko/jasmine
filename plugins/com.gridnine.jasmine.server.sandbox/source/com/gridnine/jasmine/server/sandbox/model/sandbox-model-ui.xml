@@ -7,6 +7,7 @@
     <editor id="com.gridnine.jasmine.server.sandbox.model.ui.SandboxComplexDocumentEditor" entity-id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxComplexDocument">
         <editor-handler>com.gridnine.jasmine.server.sandbox.rest.SandboxComplexDocumentEditorHandler</editor-handler>
         <view>
+            <interceptor>com.gridnine.jasmine.web.sandbox.complexDocument.SandboxComplexDocumentViewInterceptor</interceptor>
             <table-layout>
                 <column width="70"/>
                 <column width="200"/>

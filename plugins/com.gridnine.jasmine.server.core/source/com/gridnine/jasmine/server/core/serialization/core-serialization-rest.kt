@@ -210,21 +210,6 @@ object RestSerializationUtils {
             if(TableConfiguration::class.qualifiedName == className){
                 return UiSerializationUtils.uiProviderFactory.create(className)
             }
-            if(TextColumnConfiguration::class.qualifiedName == className){
-                return UiSerializationUtils.uiProviderFactory.create(className)
-            }
-            if(FloatColumnConfiguration::class.qualifiedName == className){
-                return UiSerializationUtils.uiProviderFactory.create(className)
-            }
-            if(IntegerColumnConfiguration::class.qualifiedName == className){
-                return UiSerializationUtils.uiProviderFactory.create(className)
-            }
-            if(EnumColumnConfiguration::class.qualifiedName == className){
-                return UiSerializationUtils.uiProviderFactory.create(className)
-            }
-            if(EntityColumnConfiguration::class.qualifiedName == className){
-                return UiSerializationUtils.uiProviderFactory.create(className)
-            }
             if(className.startsWith(TileData::class.qualifiedName!!)){
                 return createTileDescription()
             }

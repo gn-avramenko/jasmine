@@ -49,13 +49,7 @@ class VMEntityDescriptionJS(id: String) : BaseIdentityDescriptionJS(id) {
 enum class VSPropertyTypeJS {
     ENUM_SELECT,
     ENTITY_AUTOCOMPLETE,
-    ENTITY,
-    COLUMN_TEXT,
-    COLUMN_INT,
-    COLUMN_FLOAT,
-    COLUMN_ENUM_SELECT,
-    COLUMN_DATE,
-    COLUMN_ENTITY,
+    ENTITY
 }
 
 enum class VSCollectionTypeJS {
@@ -111,7 +105,9 @@ enum class HorizontalAlignmentJS {
     RIGHT,
     CENTER
 }
-abstract class BaseViewDescriptionJS (id:String, val viewModel:String, val viewSettings:String, val viewValidation:String):BaseIdentityDescriptionJS(id)
+abstract class BaseViewDescriptionJS (id:String, val viewModel:String, val viewSettings:String, val viewValidation:String):BaseIdentityDescriptionJS(id){
+    val interceptors = arrayListOf<String>()
+}
 class StandardViewDescriptionJS ( id: String, viewModel:String,  viewSettings:String,  viewValidation:String,val layout: BaseLayoutDescriptionJS) :
         BaseViewDescriptionJS(id,  viewModel, viewSettings, viewValidation)
 

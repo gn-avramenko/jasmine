@@ -305,6 +305,7 @@
         <property id="viewSettings" type="STRING"/>
         <property id="viewValidation" type="STRING"/>
         <property id="viewHandler" type="STRING"/>
+        <collection id="interceptors" element-type="STRING"/>
     </entity>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.BaseLayoutDescriptionDT" abstract="true">
         <property id="type" type="ENUM" className="com.gridnine.jasmine.server.standard.model.rest.LayoutTypeDT"/>

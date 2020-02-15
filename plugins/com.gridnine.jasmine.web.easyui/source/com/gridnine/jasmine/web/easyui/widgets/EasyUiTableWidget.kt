@@ -19,6 +19,8 @@ import com.gridnine.jasmine.web.core.utils.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.utils.UiUtilsJS
 import com.gridnine.jasmine.web.easyui.JQuery
 import com.gridnine.jasmine.web.easyui.jQuery
+import com.gridnine.jasmine.web.easyui.widgets.table.EasyUiEntityTableColumnEditorConfiguration
+import com.gridnine.jasmine.web.easyui.widgets.table.EasyUiEnumTableColumnEditorConfiguration
 
 @Suppress("UnsafeCastFromDynamic")
 class EasyUiTableWidget<VM : BaseVMEntityJS, VS : BaseVSEntityJS, VV : BaseVVEntityJS>(uid: String, val description: TableDescriptionJS) : TableWidget<VM, VS, VV>() {
@@ -69,7 +71,16 @@ class EasyUiTableWidget<VM : BaseVMEntityJS, VS : BaseVSEntityJS, VV : BaseVVEnt
                     val title = columnDescription.displayName
                     val formatter = formatter
                     val width = 100
-                    val editor = if (!configuration.nonEditable) createEditor(columnDescription, configuration.columnSettings.getValue(columnDescription.id)) else null
+                    val editor = if (!configuration.nonEditable) createEditor(columnDescription, getConfiguration(configuration.columnSettings, columnDescription)) else null
+
+                    private fun getConfiguration(columnSettings: VS, columnDescription: BaseTableColumnDescriptionJS): Any? {
+                        return when (columnDescription){
+                            is EnumTableColumnDescriptionJS,
+                            is EntityTableColumnDescriptionJS -> {columnSettings.getValue(columnDescription.id)}
+                            is SelectTableColumnDescriptionJS -> {columnSettings.getValue(columnDescription.id)}
+                            else -> null
+                        }
+                    }
                 })
             }
             if(!configuration.nonEditable){
@@ -127,6 +138,14 @@ class EasyUiTableWidget<VM : BaseVMEntityJS, VS : BaseVSEntityJS, VV : BaseVVEnt
                                 modelValue = SelectItemJS(tableValue["id"], tableValue["caption"])
                             }
                             modelValue
+                        }
+                        is FloatTableColumnDescriptionJS ->{
+                            val tableValue = row[columnDescr.id]
+                            if(tableValue is String) (tableValue as String).toDouble() else tableValue
+                        }
+                        is IntegerTableColumnDescriptionJS ->{
+                            val tableValue = row[columnDescr.id]
+                            if(tableValue is String) (tableValue as String).toInt() else tableValue
                         }
                         else ->{
                             row[columnDescr.id]
@@ -237,7 +256,7 @@ class EasyUiTableWidget<VM : BaseVMEntityJS, VS : BaseVSEntityJS, VV : BaseVVEnt
     private fun createEditor(columnDescription: BaseTableColumnDescriptionJS, value: Any?): dynamic {
         return when (columnDescription) {
             is SelectTableColumnDescriptionJS -> {
-                val config = value as SelectColumnConfigurationJS
+                val config = value as SelectConfigurationJS
                 val selectItems = arrayListOf<SelectItemJS?>()
                 selectItems.clear()
                 selectItems.addAll(config.possibleValues)
@@ -256,74 +275,15 @@ class EasyUiTableWidget<VM : BaseVMEntityJS, VS : BaseVSEntityJS, VV : BaseVVEnt
                 }
             }
             is EnumTableColumnDescriptionJS -> {
-                val selectItems = arrayListOf<SelectItemJS?>()
-                selectItems.clear()
-                selectItems.addAll(UiUtilsJS.getEnumValues(columnDescription.enumId+"JS"))
-                selectItems.sortBy { it?.caption }
-                selectItems.add(0, SelectItemJS(null,null))
                 object {
-                    val type = "combobox"
-                    val options = object {
-                        val valueField = "id"
-                        val textField = "caption"
-                        val limitToList = true
-                        val data = selectItems.toTypedArray()
-                    }
+                    val type = "enumSelect"
+                    val options = EasyUiEnumTableColumnEditorConfiguration<FakeEnumJS>(columnDescription, value as EnumSelectConfigurationJS<FakeEnumJS>)
                 }
             }
             is EntityTableColumnDescriptionJS -> {
-                val config = value as EntityTableColumnDescriptionJS
-                val options = object {
-                    private var selectedValue:SelectItemJS? = null
-                    private var ignoreSearchRequest = false
-                    val valueField = "id"
-                    val textField = "caption"
-                    val editable = true
-                    val limitToList = true
-                    val hasDownArrow =  true
-                    val multiple = false
-                    val mode = "remote"
-                    val onChange = { newValue: String, _: String? ->
-                        selectedValue = if(newValue.isNotBlank()) toSelectItem(toReference(newValue)) else null
-
-                        div.combobox("getIcon",0).asDynamic().css("visibility",if(selectedValue == null) "hidden" else "visible")
-                    }
-                    val loader = loader@ {	param:dynamic,success:dynamic,_:dynamic ->
-                        if(ignoreSearchRequest){
-                            selectedValue?.let { success(arrayOf(it))}?:success(emptyArray<SelectItemJS>())
-                            return@loader true
-                        }
-
-                        val request = EntityAutocompleteRequestJS()
-                        request.limit =10
-                        request.searchText = param.q
-                        DomainMetaRegistryJS.get().indexes.values.filter { it.document == config.entityClassName }.forEach { request.entitiesIds.add(it.id) }
-                        StandardRestClient.standard_standard_defaultAutocomplete(request).then { response ->
-                            val set = response.items.map { toSelectItem(it) }.toMutableSet()
-                            selectedValue?.let { set.add(it) }
-                            val result = set.toMutableList().sortedBy { it.caption }
-                            success(result.toTypedArray())
-                        }
-                        return@loader true
-                    }
-                    val icons = arrayOf(object{
-                        val iconCls = "icon-clear"
-                        val handler = {_:dynamic ->
-                            ignoreSearchRequest = true
-                            selectedValue = null
-                            div.combobox("setValues", arrayOfNulls<String>(0))
-                            ignoreSearchRequest = false
-                        }
-                    })
-                }
                 object {
-                    val type = "combobox"
-                    val options = object {
-                        val valueField = "id"
-                        val textField = "caption"
-                        val limitToList = true
-                        val data = selectItems.toTypedArray()
-                    }
+                    val type = "entitySelect"
+                    val options = EasyUiEntityTableColumnEditorConfiguration(columnDescription, value as EntitySelectConfigurationJS)
                 }
             }
             is TextTableColumnDescriptionJS -> {
@@ -334,12 +294,17 @@ class EasyUiTableWidget<VM : BaseVMEntityJS, VS : BaseVSEntityJS, VV : BaseVVEnt
             is FloatTableColumnDescriptionJS -> {
                 object {
                     val type = "numberbox"
+                    val options = object {
+                        val precision = 2
+                    }
                 }
             }
             is IntegerTableColumnDescriptionJS -> {
                 object {
                     val type = "numberbox"
-                    val precision = 0
+                    val options = object {
+                        val precision = 0
+                    }
                 }
             }
             else -> null
@@ -354,20 +319,12 @@ class EasyUiTableWidget<VM : BaseVMEntityJS, VS : BaseVSEntityJS, VV : BaseVVEnt
                 is SelectTableColumnDescriptionJS ->{
                     val value = row[it.id]
                     if(value is String  && (value as String).isNotBlank()){
-                        val columnConfig = lastConfig.columnSettings.getValue(it.id) as SelectColumnConfigurationJS
+                        val columnConfig = lastConfig.columnSettings.getValue(it.id) as SelectConfigurationJS
                         row[it.id] = columnConfig.possibleValues.find { valIt -> valIt.id == value }
                     } else {
                         row[it.id] = null
                     }
                 }
-//                is EnumTableColumnDescriptionJS ->{
-//                    val value = row[it.id]
-//                    if(value is String && (value as String).isNotBlank()){
-//                        row[it.id] = ReflectionFactoryJS.get().getEnum<FakeEnumJS>(it.enumId+"JS", value)
-//                    } else {
-//                        row[it.id] = null
-//                    }
-//                }
                 else -> {}
             }
 
@@ -376,6 +333,10 @@ class EasyUiTableWidget<VM : BaseVMEntityJS, VS : BaseVSEntityJS, VV : BaseVVEnt
     }
 
     private fun createOnClickCell(index: Int, field: dynamic) {
+        if(field == "controlButtons"){
+            endEditing()
+            return
+        }
         if (editIndex == index) {
             return
         }

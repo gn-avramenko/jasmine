@@ -48,172 +48,7 @@ internal object UiSerializationUtilsJS {
 
             }
         }
-        private fun createTextColumnConfigurationDescription():ObjectMetadataProviderJS<TextColumnConfigurationJS>{
-            return object:ObjectMetadataProviderJS<TextColumnConfigurationJS>(){
-                init{
-                    properties.add(SerializablePropertyDescriptionJS(BaseColumnConfigurationJS.notEditable, SerializablePropertyTypeJS.BOOLEAN, null, false))
-                }
-                override fun getPropertyValue(obj: TextColumnConfigurationJS, id: String): Any? {
-                    if(BaseColumnConfigurationJS.notEditable == id){
-                        return obj.notEditable
-                    }
-                    throw IllegalArgumentException("no field with id $id")
-                }
 
-                override fun getCollection(obj: TextColumnConfigurationJS, id: String): MutableCollection<Any> {
-                    throw IllegalArgumentException("no collection with id $id")
-                }
-
-                override fun setPropertyValue(obj: TextColumnConfigurationJS, id: String, value: Any?) {
-                    if(BaseColumnConfigurationJS.notEditable == id){
-                        obj.notEditable = value as Boolean
-                        return
-                    }
-                    throw IllegalArgumentException("no field with id $id")
-                }
-
-                override fun hasUid(): Boolean {
-                    return false
-                }
-
-            }
-        }
-
-        private fun createIntColumnConfigurationDescription():ObjectMetadataProviderJS<IntegerColumnConfigurationJS>{
-            return object:ObjectMetadataProviderJS<IntegerColumnConfigurationJS>(){
-                init{
-                    properties.add(SerializablePropertyDescriptionJS(BaseColumnConfigurationJS.notEditable, SerializablePropertyTypeJS.BOOLEAN, null, false))
-                }
-                override fun getPropertyValue(obj: IntegerColumnConfigurationJS, id: String): Any? {
-                    if(BaseColumnConfigurationJS.notEditable == id){
-                        return obj.notEditable
-                    }
-                    throw IllegalArgumentException("no field with id $id")
-                }
-
-                override fun getCollection(obj: IntegerColumnConfigurationJS, id: String): MutableCollection<Any> {
-                    throw IllegalArgumentException("no collection with id $id")
-                }
-
-                override fun setPropertyValue(obj: IntegerColumnConfigurationJS, id: String, value: Any?) {
-                    if(BaseColumnConfigurationJS.notEditable == id){
-                        obj.notEditable = value as Boolean
-                        return
-                    }
-                    throw IllegalArgumentException("no field with id $id")
-                }
-
-                override fun hasUid(): Boolean {
-                    return false
-                }
-
-            }
-
-        }
-        private fun createFloatColumnConfigurationDescription():ObjectMetadataProviderJS<FloatColumnConfigurationJS>{
-            return object:ObjectMetadataProviderJS<FloatColumnConfigurationJS>(){
-                init{
-                    properties.add(SerializablePropertyDescriptionJS(BaseColumnConfigurationJS.notEditable, SerializablePropertyTypeJS.BOOLEAN, null, false))
-                }
-                override fun getPropertyValue(obj: FloatColumnConfigurationJS, id: String): Any? {
-                    if(BaseColumnConfigurationJS.notEditable == id){
-                        return obj.notEditable
-                    }
-                    throw IllegalArgumentException("no field with id $id")
-                }
-
-                override fun getCollection(obj: FloatColumnConfigurationJS, id: String): MutableCollection<Any> {
-                    throw IllegalArgumentException("no collection with id $id")
-                }
-
-                override fun setPropertyValue(obj: FloatColumnConfigurationJS, id: String, value: Any?) {
-                    if("notEditable" == id){
-                        obj.notEditable = value as Boolean
-                        return
-                    }
-                    throw IllegalArgumentException("no field with id $id")
-                }
-
-                override fun hasUid(): Boolean {
-                    return false
-                }
-
-            }
-
-        }
-        private fun createEnumColumnConfigurationDescription():ObjectMetadataProviderJS<EnumColumnConfigurationJS<*>>{
-            return object:ObjectMetadataProviderJS<EnumColumnConfigurationJS<*>>(){
-                init{
-                    properties.add(SerializablePropertyDescriptionJS(BaseColumnConfigurationJS.notEditable, SerializablePropertyTypeJS.BOOLEAN, null, false))
-                }
-                override fun getPropertyValue(obj: EnumColumnConfigurationJS<*>, id: String): Any? {
-                    if(BaseColumnConfigurationJS.notEditable == id){
-                        return obj.notEditable
-                    }
-                    throw IllegalArgumentException("no field with id $id")
-                }
-
-                override fun getCollection(obj: EnumColumnConfigurationJS<*>, id: String): MutableCollection<Any> {
-                    throw IllegalArgumentException("no collection with id $id")
-                }
-
-                override fun setPropertyValue(obj: EnumColumnConfigurationJS<*>, id: String, value: Any?) {
-                    if(BaseColumnConfigurationJS.notEditable == id){
-                        obj.notEditable = value as Boolean
-                        return
-                    }
-                    throw IllegalArgumentException("no field with id $id")
-                }
-
-                override fun hasUid(): Boolean {
-                    return false
-                }
-
-            }
-        }
-        private fun createEntityColumnConfigurationDescription():ObjectMetadataProviderJS<EntityColumnConfigurationJS>{
-            return object : ObjectMetadataProviderJS<EntityColumnConfigurationJS>() {
-                init{
-                    properties.add(SerializablePropertyDescriptionJS(BaseColumnConfigurationJS.notEditable, SerializablePropertyTypeJS.BOOLEAN, null, false))
-                    properties.add(SerializablePropertyDescriptionJS(EntityColumnConfigurationJS.limit, SerializablePropertyTypeJS.INT, null, false))
-                    collections.add(SerializableCollectionDescriptionJS(EntityColumnConfigurationJS.dataSources, SerializablePropertyTypeJS.ENTITY, "com.flinty.jasmine.web.model.ui.EntityAutocompleteDataSourceJS", false))
-                }
-
-                override fun hasUid(): Boolean {
-                    return false
-                }
-
-                override fun getCollection(obj: EntityColumnConfigurationJS, id: String): MutableCollection<Any> {
-                    if(EntityColumnConfigurationJS.dataSources == id){
-                        return obj.dataSources as MutableCollection<Any>
-                    }
-                    throw IllegalArgumentException("no collection fields")
-                }
-
-                override fun setPropertyValue(obj: EntityColumnConfigurationJS, id: String, value: Any?) {
-                    if(BaseColumnConfigurationJS.notEditable == id){
-                        obj.notEditable = value as Boolean
-                        return
-                    }
-                    if(EntityColumnConfigurationJS.limit == id){
-                        obj.limit = value as Int
-                        return
-                    }
-                    throw IllegalArgumentException("no field with id $id")
-                }
-
-                override fun getPropertyValue(obj: EntityColumnConfigurationJS, id: String): Any? {
-                    if(BaseColumnConfigurationJS.notEditable == id){
-                        return obj.notEditable
-                    }
-                    if(EntityColumnConfigurationJS.limit == id){
-                        return obj.limit
-                    }
-                    throw IllegalArgumentException("no field with id $id")
-                }
-
-            }
-        }
         private fun createEnumSelectConfigurationDescription(): ObjectMetadataProviderJS<EnumSelectConfigurationJS<*>> {
             return object : ObjectMetadataProviderJS<EnumSelectConfigurationJS<*>>() {
                 override fun hasUid(): Boolean {
@@ -434,12 +269,6 @@ internal object UiSerializationUtilsJS {
                 VSPropertyTypeJS.ENTITY -> SerializablePropertyTypeJS.ENTITY
                 VSPropertyTypeJS.ENUM_SELECT -> SerializablePropertyTypeJS.ENTITY
                 VSPropertyTypeJS.ENTITY_AUTOCOMPLETE -> SerializablePropertyTypeJS.ENTITY
-                VSPropertyTypeJS.COLUMN_TEXT -> SerializablePropertyTypeJS.ENTITY
-                VSPropertyTypeJS.COLUMN_INT -> SerializablePropertyTypeJS.ENTITY
-                VSPropertyTypeJS.COLUMN_FLOAT -> SerializablePropertyTypeJS.ENTITY
-                VSPropertyTypeJS.COLUMN_ENUM_SELECT -> SerializablePropertyTypeJS.ENTITY
-                VSPropertyTypeJS.COLUMN_ENTITY -> SerializablePropertyTypeJS.ENTITY
-                VSPropertyTypeJS.COLUMN_DATE -> SerializablePropertyTypeJS.ENTITY
             }
         }
 
@@ -448,12 +277,7 @@ internal object UiSerializationUtilsJS {
                 VSPropertyTypeJS.ENTITY -> elementClassName
                 VSPropertyTypeJS.ENUM_SELECT -> EnumSelectConfigurationJS.qualifiedClassName
                 VSPropertyTypeJS.ENTITY_AUTOCOMPLETE -> EntitySelectConfigurationJS.qualifiedClassName
-                VSPropertyTypeJS.COLUMN_TEXT -> TextColumnConfigurationJS.qualifiedClassName
-                VSPropertyTypeJS.COLUMN_INT -> IntegerColumnConfigurationJS.qualifiedClassName
-                VSPropertyTypeJS.COLUMN_FLOAT -> FloatColumnConfigurationJS.qualifiedClassName
-                VSPropertyTypeJS.COLUMN_ENUM_SELECT ->EnumColumnConfigurationJS.qualifiedClassName
-                VSPropertyTypeJS.COLUMN_ENTITY -> EntityColumnConfigurationJS.qualifiedClassName
-                VSPropertyTypeJS.COLUMN_DATE -> DateColumnConfigurationJS.qualifiedClassName
+
             }
         }
 
@@ -501,21 +325,6 @@ internal object UiSerializationUtilsJS {
 
             if(className.startsWith(TableConfigurationJS.serverQualifiedClassName) || className.startsWith(TableConfigurationJS.qualifiedClassName) ){
                 return createTableConfigurationDescription()
-            }
-            if(className == TextColumnConfigurationJS.qualifiedClassName){
-                return createTextColumnConfigurationDescription()
-            }
-            if(className == IntegerColumnConfigurationJS.qualifiedClassName){
-                return createIntColumnConfigurationDescription()
-            }
-            if(className == FloatColumnConfigurationJS.qualifiedClassName){
-                return createFloatColumnConfigurationDescription()
-            }
-            if(className == EnumColumnConfigurationJS.qualifiedClassName){
-                return createEnumColumnConfigurationDescription()
-            }
-            if(className == EntityColumnConfigurationJS.qualifiedClassName){
-                return createEntityColumnConfigurationDescription()
             }
             val vmDescription = UiMetaRegistryJS.get().viewModels[className]
             if (vmDescription != null) {

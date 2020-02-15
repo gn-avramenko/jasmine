@@ -35,11 +35,6 @@ class CoreActivatorJS:ActivatorJS{
         ReflectionFactoryJS.get().registerClass(EnumSelectConfigurationJS.qualifiedClassName) {EnumSelectConfigurationJS<FakeEnumJS>()}
         ReflectionFactoryJS.get().registerClass(EntitySelectConfigurationJS.qualifiedClassName) { EntitySelectConfigurationJS()}
         ReflectionFactoryJS.get().registerQualifiedName(EnumSelectConfigurationJS::class, EnumSelectConfigurationJS.qualifiedClassName)
-        ReflectionFactoryJS.get().registerClass(TextColumnConfigurationJS.qualifiedClassName)  {TextColumnConfigurationJS()}
-        ReflectionFactoryJS.get().registerClass(IntegerColumnConfigurationJS.qualifiedClassName) {IntegerColumnConfigurationJS()}
-        ReflectionFactoryJS.get().registerClass(FloatColumnConfigurationJS.qualifiedClassName)  {FloatColumnConfigurationJS()}
-        ReflectionFactoryJS.get().registerClass(EnumColumnConfigurationJS.qualifiedClassName)  {EnumColumnConfigurationJS<FakeEnumJS>()}
-        ReflectionFactoryJS.get().registerClass(EntityColumnConfigurationJS.qualifiedClassName)  {EntityColumnConfigurationJS()}
         ReflectionFactoryJS.get().registerClass(TableConfigurationJS.qualifiedClassName) {TableConfigurationJS<BaseVSEntityJS>()}
         ReflectionFactoryJS.get().registerClass(SimplePropertyWrapperVMJS.qualifiedClassName) {SimplePropertyWrapperVMJS<BaseVMEntityJS>()}
         ReflectionFactoryJS.get().registerClass(TileDataJS.qualifiedClassName) {TileDataJS<Any,Any>()}
@@ -147,6 +142,10 @@ class CoreActivatorJS:ActivatorJS{
         it.views?.forEach { viewJS ->
             val view2 = when (ViewTypeDTJS.valueOf(viewJS.type)) {
                 ViewTypeDTJS.STANDARD-> {
+                    val interceptors = arrayListOf<String>()
+                    (viewJS.interceptors as Array<String>?)?.forEach{
+                        interceptors.add(it as String)
+                    }
                     when (LayoutTypeDTJS.valueOf(viewJS.layout.type)) {
                         LayoutTypeDTJS.TABLE -> {
                             val itLayout = viewJS.layout
@@ -154,6 +153,7 @@ class CoreActivatorJS:ActivatorJS{
 
                             val view = StandardViewDescriptionJS(id = viewJS.id, viewModel = viewJS.viewModel,
                                     viewValidation = viewJS.viewValidation, viewSettings = viewJS.viewSettings, layout = layout)
+                            view.interceptors.addAll(interceptors)
                             itLayout.columns.forEach { columnIt ->
                                 layout.columns.add(TableColumnDescriptionJS(columnIt.width))
                             }
@@ -241,7 +241,7 @@ class CoreActivatorJS:ActivatorJS{
                                         layout.widgets[widgetIt.id] = widget
                                     }
                                     WidgetTypeDTJS.TABLE -> {
-                                        val widget = TableDescriptionJS(widgetIt.id, widgetIt.baseClassesName)
+                                        val widget = TableDescriptionJS(widgetIt.id, widgetIt.className)
                                         widget.hSpan = widgetIt.hSpan
                                         widget.notEditable = widgetIt.notEditable
                                         layout.widgets[widgetIt.id] = widget

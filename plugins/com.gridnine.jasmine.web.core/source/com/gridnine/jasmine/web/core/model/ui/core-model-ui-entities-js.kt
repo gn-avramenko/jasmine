@@ -144,63 +144,7 @@ class EntitySelectConfigurationJS {
 }
 
 
-abstract class BaseColumnConfigurationJS{
-    var notEditable = false
-    companion object{
-        const val notEditable = "notEditable"
-    }
-}
 
-class TextColumnConfigurationJS:BaseColumnConfigurationJS(){
-    companion object{
-        const val qualifiedClassName = "com.gridnine.jasmine.web.core.model.ui.TextColumnConfigurationJS"
-    }
-}
-class IntegerColumnConfigurationJS:BaseColumnConfigurationJS(){
-    companion object{
-        const val qualifiedClassName = "com.gridnine.jasmine.web.core.model.ui.IntegerColumnConfigurationJS"
-    }
-}
-class FloatColumnConfigurationJS:BaseColumnConfigurationJS(){
-    companion object{
-        const val qualifiedClassName = "com.gridnine.jasmine.web.core.model.ui.FloatColumnConfigurationJS"
-    }
-}
-class DateColumnConfigurationJS:BaseColumnConfigurationJS(){
-    companion object{
-        const val qualifiedClassName = "com.gridnine.jasmine.web.core.model.ui.DateColumnConfigurationJS"
-    }
-}
-class EnumColumnConfigurationJS<E:Enum<E>>:BaseColumnConfigurationJS(){
-    var nullAllowed:Boolean? = true
-    companion object{
-        const val nullAllowed ="nullAllowed"
-        const val qualifiedClassName = "com.gridnine.jasmine.web.core.model.ui.EnumColumnConfigurationJS"
-    }
-}
-
-class SelectColumnConfigurationJS:BaseColumnConfigurationJS(){
-    var nullAllowed:Boolean = true
-    val possibleValues = arrayListOf<SelectItemJS>()
-    companion object{
-        const val possibleValues = "possibleValues"
-        const val nullAllowed ="nullAllowed"
-        const val qualifiedClassName = "com.gridnine.jasmine.web.core.model.ui.SelectColumnConfigurationJS"
-    }
-}
-
-class EntityColumnConfigurationJS:BaseColumnConfigurationJS(){
-    var nullAllowed:Boolean? = true
-    var limit:Int = 10
-    var dataSources = arrayListOf<String>()
-
-    companion object{
-        const val nullAllowed ="nullAllowed"
-        const val limit ="limit"
-        const val dataSources ="dataSources"
-        const val qualifiedClassName = "com.gridnine.jasmine.web.core.model.ui.EntityColumnConfigurationJS"
-    }
-}
 
 class TableConfigurationJS<VS:BaseVSEntityJS>{
 
@@ -337,5 +281,9 @@ class TileDataJS<VMC:Any, VMF:Any>{
         const val qualifiedClassName = "com.gridnine.jasmine.web.core.model.ui.TileDataJS"
         const val serverQualifiedClassName = "com.gridnine.jasmine.server.core.model.ui.TileData"
     }
+}
+
+interface ViewInterceptor<VM:BaseVMEntityJS, VS:BaseVSEntityJS,VV:BaseVVEntityJS,V:BaseView<VM,VS,VV>>{
+    fun onCreate(view:V)
 }
 

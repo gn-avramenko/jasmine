@@ -6,7 +6,10 @@
 package com.gridnine.jasmine.server.core.utils
 
 import com.gridnine.jasmine.server.core.model.common.BaseEntity
+import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistry
 import com.gridnine.jasmine.server.core.model.ui.BaseVMEntity
+import com.gridnine.jasmine.server.core.model.ui.EntityAutocompleteConfiguration
+import com.gridnine.jasmine.server.core.model.ui.UiMetaRegistry
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 import kotlin.reflect.full.primaryConstructor
@@ -19,6 +22,16 @@ object UiUtils {
             val elm = existingColl.find { it.uid == vm.uid  }?:cls.createInstance()
             elm.uid = vm.uid!!
             func.invoke(vm,elm)
+            modelList.add(elm)
         }
+    }
+
+    fun <E:BaseEntity> createStandardAutocompletetConfiguration(cls:KClass<E>):EntityAutocompleteConfiguration{
+        val result = EntityAutocompleteConfiguration()
+        result.limit = 10
+        DomainMetaRegistry.get().indexes.values.filter { it.document  == cls.qualifiedName}.forEach {
+            result.dataSources.add(UiMetaRegistry.get().autocompletes.values.find { ac -> ac.entity == it.id }?.id?: throw IllegalArgumentException("unable to find autocomplete description for ${it.id}"))
+        }
+        return result
     }
 }

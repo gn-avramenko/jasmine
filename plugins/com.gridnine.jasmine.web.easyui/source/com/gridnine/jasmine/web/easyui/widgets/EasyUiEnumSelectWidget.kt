@@ -52,9 +52,10 @@ class EasyUiEnumSelectWidget<E:Enum<E>>(uid:String, description:EnumSelectDescri
                 div.combobox(options)
                 div.combobox("getIcon",0).asDynamic().css("visibility", "hidden")
                 spanElm = div.combobox("textbox").asDynamic().parent()
+                initialized = true
             }
         }
-        setData = { value ->  
+        setData = { value ->
             if(value == null){
                 div.combobox("setValue", null)
                 div.combobox("setText", null)
@@ -74,7 +75,7 @@ class EasyUiEnumSelectWidget<E:Enum<E>>(uid:String, description:EnumSelectDescri
         }
         getData ={
             val values = div.combobox("getValues") as Array<String>
-            if(values.isEmpty()) null else ReflectionFactoryJS.get().getEnum<E>(description.enumId, values[0]) 
+            if(values.isEmpty() || values[0].isNullOrBlank()) null else ReflectionFactoryJS.get().getEnum<E>(description.enumId+"JS", values[0])
         }
     }
 

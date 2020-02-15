@@ -7,13 +7,13 @@
 
 package com.gridnine.jasmine.server.sandbox.rest
 
-import com.gridnine.jasmine.server.core.model.ui.EntityAutocompleteConfiguration
 import com.gridnine.jasmine.server.core.model.ui.EnumSelectConfiguration
 import com.gridnine.jasmine.server.core.model.ui.TableConfiguration
 import com.gridnine.jasmine.server.core.model.ui.TileData
 import com.gridnine.jasmine.server.core.utils.UiUtils
 import com.gridnine.jasmine.server.sandbox.model.domain.SandboxComplexDocument
 import com.gridnine.jasmine.server.sandbox.model.domain.SandboxNestedDocument
+import com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccount
 import com.gridnine.jasmine.server.sandbox.model.ui.*
 import com.gridnine.jasmine.server.standard.rest.RestEditorHandler
 
@@ -44,6 +44,8 @@ class SandboxComplexDocumentEditorHandler : RestEditorHandler<SandboxComplexDocu
             item.floatColumn = it.floatColumn
             item.integerColumn = it.integerColumn
             item.textColumn = it.textColumn
+            item.entityColumn = it.entityRefColumn
+            item.enumColumn = it.enumColumn
         }
     }
 
@@ -55,10 +57,13 @@ class SandboxComplexDocumentEditorHandler : RestEditorHandler<SandboxComplexDocu
         entity.integerProperty = vmEntity.generalTile.fullData.integerProperty
         entity.floatProperty = vmEntity.generalTile.fullData.floatProperty
         entity.enumProperty = vmEntity.generalTile.fullData.enumProperty
+        entity.entityRefProperty = vmEntity.generalTile.fullData.entityProperty
         UiUtils.writeCollection(vmEntity.generalTile.fullData.entityCollection, entity.entityCollection, SandboxNestedDocument::class){ sandboxTableVM, sandboxNestedDocument ->
             sandboxNestedDocument.integerColumn = sandboxTableVM.integerColumn
             sandboxNestedDocument.floatColumn = sandboxTableVM.floatColumn
             sandboxNestedDocument.textColumn = sandboxTableVM.textColumn
+            sandboxNestedDocument.enumColumn = sandboxTableVM.enumColumn
+            sandboxNestedDocument.entityRefColumn = sandboxTableVM.entityColumn
         }
     }
 
@@ -70,9 +75,12 @@ class SandboxComplexDocumentEditorHandler : RestEditorHandler<SandboxComplexDocu
         vsEntity.generalTile = TileData()
         vsEntity.generalTile.fullData = SandboxComplexDocumentGeneralTileFullVS{
             entityCollection = TableConfiguration{
-                columnSettings = SandboxTableVS()
+                columnSettings = SandboxTableVS(){
+                    enumColumn = EnumSelectConfiguration()
+                    entityColumn = UiUtils.createStandardAutocompletetConfiguration((SandboxUserAccount::class))
+                }
             }
-            entityProperty = EntityAutocompleteConfiguration()
+            entityProperty = UiUtils.createStandardAutocompletetConfiguration((SandboxUserAccount::class))
             enumProperty = EnumSelectConfiguration()
         }
         vsEntity.generalTile.compactData = SandboxComplexDocumentGeneralTileCompactVS()

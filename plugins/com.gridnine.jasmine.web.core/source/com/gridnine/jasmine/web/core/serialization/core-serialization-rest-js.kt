@@ -206,21 +206,6 @@ object RestSerializationUtilsJS {
             if(className.startsWith(TableConfigurationJS.serverQualifiedClassName) || className.startsWith(TableConfigurationJS.qualifiedClassName) ){
                 return UiSerializationUtilsJS.uiProviderFactory.create(className)
             }
-            if(TextColumnConfigurationJS.qualifiedClassName == className){
-                return UiSerializationUtilsJS.uiProviderFactory.create(className)
-            }
-            if(FloatColumnConfigurationJS.qualifiedClassName == className){
-                return UiSerializationUtilsJS.uiProviderFactory.create(className)
-            }
-            if(IntegerColumnConfigurationJS.qualifiedClassName == className){
-                return UiSerializationUtilsJS.uiProviderFactory.create(className)
-            }
-            if(EnumColumnConfigurationJS.qualifiedClassName == className){
-                return UiSerializationUtilsJS.uiProviderFactory.create(className)
-            }
-            if(EntityColumnConfigurationJS.qualifiedClassName == className){
-                return UiSerializationUtilsJS.uiProviderFactory.create(className)
-            }
             if(className.startsWith(TileDataJS.serverQualifiedClassName) || className.startsWith(TileDataJS.qualifiedClassName) ){
                 return createTileDescription()
             }

@@ -14,12 +14,18 @@ import com.gridnine.jasmine.web.easyui.jQuery
 class EasyUiTextBoxWidget(uid:String, description:TextboxDescriptionJS):TextBoxWidget(){
     val div: JQuery = jQuery("#${description.id}${uid}")
     private var initialized:Boolean = false
+    private var ignoreOnChange = false
     init {
 
         configure = {_:Unit ->
             if(!initialized){
                 div.textbox(object{
                     val editable = !description.notEditable
+                    val onChange = {newValue:String?, oldValue:String? ->
+                        if(!ignoreOnChange && valueChangeListener != null){
+                            valueChangeListener!!.invoke(newValue, oldValue)
+                        }
+                    }
                 })
                 val tb = div.textbox("textbox").asDynamic()
                 tb.on("input") {
@@ -31,7 +37,9 @@ class EasyUiTextBoxWidget(uid:String, description:TextboxDescriptionJS):TextBoxW
             }
         }
         setData = {
+            ignoreOnChange = true
             div.textbox("setValue", it)
+            ignoreOnChange = false
         }
         showValidation = {
             val tb =div.textbox("textbox").asDynamic()

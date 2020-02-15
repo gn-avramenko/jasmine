@@ -72,47 +72,6 @@ class EntityAutocompleteConfiguration {
     var dataSources = arrayListOf<String>()
 }
 
-abstract class BaseColumnConfiguration{
-    var notEditable = false
-}
-
-class TextColumnConfiguration():BaseColumnConfiguration(){
-    constructor(init: TextColumnConfiguration.()->Unit):this(){
-        this.init()
-    }
-}
-class IntegerColumnConfiguration():BaseColumnConfiguration()
-{
-    constructor(init: IntegerColumnConfiguration.()->Unit):this(){
-        this.init()
-    }
-}
-
-class DateColumnConfiguration():BaseColumnConfiguration()
-{
-    constructor(init: DateColumnConfiguration.()->Unit):this(){
-        this.init()
-    }
-}
-
-class FloatColumnConfiguration():BaseColumnConfiguration()
-{
-    constructor(init: FloatColumnConfiguration.()->Unit):this(){
-        this.init()
-    }
-}
-class EnumColumnConfiguration<E:Enum<E>>():BaseColumnConfiguration(){
-    constructor(init: EnumColumnConfiguration<E>.()->Unit):this(){
-        this.init()
-    }
-}
-class EntityColumnConfiguration<E:BaseEntity>():BaseColumnConfiguration(){
-    constructor(init: EntityColumnConfiguration<E>.()->Unit):this(){
-        this.init()
-    }
-    var limit:Int = 10
-    var dataSources = arrayListOf<String>()
-}
 
 class TableConfiguration<VS:BaseVSEntity>(){
 

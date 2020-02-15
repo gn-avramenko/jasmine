@@ -77,6 +77,7 @@ class EasyUiEntityMultiSelectWidget(uid:String, description:EntitySelectDescript
                 spanElm = div.tagbox("textbox").asDynamic().parent()
                 div.tagbox("getIcon",0).asDynamic().css("visibility", "hidden")
                 ignoreSearchRequest = false
+                initialized = true
             }
         }
         readData = { values ->

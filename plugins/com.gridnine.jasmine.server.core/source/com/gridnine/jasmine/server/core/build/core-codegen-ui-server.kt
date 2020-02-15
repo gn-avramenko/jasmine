@@ -78,12 +78,6 @@ object UiServerGenerator {
             VSPropertyType.ENTITY_AUTOCOMPLETE -> EntityAutocompleteConfiguration::class.java.name
             VSPropertyType.ENTITY -> elementClassName
             VSPropertyType.SELECT -> SelectItem::javaClass.name
-            VSPropertyType.COLUMN_ENTITY -> "${EntityColumnConfiguration::class.java.name}<${elementClassName}>"
-            VSPropertyType.COLUMN_ENUM_SELECT -> "${EnumColumnConfiguration::class.java.name}<${elementClassName}>"
-            VSPropertyType.COLUMN_TEXT -> TextColumnConfiguration::class.java.name
-            VSPropertyType.COLUMN_FLOAT -> FloatColumnConfiguration::class.java.name
-            VSPropertyType.COLUMN_INT -> IntegerColumnConfiguration::class.java.name
-            VSPropertyType.COLUMN_DATE -> DateColumnConfiguration::class.java.name
         }
     }
 

@@ -12,6 +12,14 @@
 	background:url('settings.png') no-repeat center center;
 }
 
+.icon-link{
+	background:url('right-arrow.png') no-repeat center center;
+}
+
+.icon-select{
+	background:url('select.png') no-repeat center center;
+}
+
 .jasmine-datagrid-sort-desc {
   display: inline;
   padding: 0 13px 0 0;

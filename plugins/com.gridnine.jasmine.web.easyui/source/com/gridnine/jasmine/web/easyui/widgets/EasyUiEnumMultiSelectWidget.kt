@@ -49,6 +49,7 @@ class EasyUiEnumMultiSelectWidget<E:Enum<E>>(uid:String, description:EnumSelectD
                 div.tagbox(options)
                 div.tagbox("getIcon",0).asDynamic().css("visibility", "hidden");
                 spanElm = div.tagbox("textbox").asDynamic().parent()
+                initialized = true
             }
         }
         readData = { values ->

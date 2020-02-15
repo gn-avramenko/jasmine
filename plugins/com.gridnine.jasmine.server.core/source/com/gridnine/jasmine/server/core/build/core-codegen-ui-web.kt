@@ -101,12 +101,6 @@ object UiWebGenerator {
             VSPropertyType.ENTITY_AUTOCOMPLETE ->GenPropertyType.ENTITY
             VSPropertyType.ENTITY ->GenPropertyType.ENTITY
             VSPropertyType.SELECT ->GenPropertyType.ENTITY
-            VSPropertyType.COLUMN_ENTITY ->GenPropertyType.ENTITY
-            VSPropertyType.COLUMN_ENUM_SELECT ->GenPropertyType.ENTITY
-            VSPropertyType.COLUMN_TEXT ->GenPropertyType.ENTITY
-            VSPropertyType.COLUMN_FLOAT ->GenPropertyType.ENTITY
-            VSPropertyType.COLUMN_INT ->GenPropertyType.ENTITY
-            VSPropertyType.COLUMN_DATE ->GenPropertyType.ENTITY
         }
     }
     private fun getClassName(propertyType: VSPropertyType, className: String?): String? {
@@ -127,12 +121,6 @@ object UiWebGenerator {
                     throw IllegalArgumentException("unsupported classname $className")
                 }
             }
-            VSPropertyType.COLUMN_DATE -> "com.gridnine.jasmine.web.core.model.ui.DateColumnConfigurationJS"
-            VSPropertyType.COLUMN_ENTITY -> "com.gridnine.jasmine.web.core.model.ui.EntityColumnConfigurationJS"
-            VSPropertyType.COLUMN_ENUM_SELECT ->"com.gridnine.jasmine.web.core.model.ui.EnumColumnConfigurationJS<${className}JS>"
-            VSPropertyType.COLUMN_INT -> "com.gridnine.jasmine.web.core.model.ui.IntegerColumnConfigurationJS"
-            VSPropertyType.COLUMN_FLOAT-> "com.gridnine.jasmine.web.core.model.ui.FloatColumnConfigurationJS"
-            VSPropertyType.COLUMN_TEXT -> "com.gridnine.jasmine.web.core.model.ui.TextColumnConfigurationJS"
             VSPropertyType.SELECT -> "com.gridnine.jasmine.web.core.model.ui.SelectItemJS"
         }
     }
@@ -250,6 +238,7 @@ object UiWebGenerator {
                     val docClassData = toGenData(it)
                     classesData.add(docClassData)
                     classes.add(it.id)
+                    classes.addAll(it.interceptors)
                 }
             }
             registry.dialogs.values.forEach {dialogDescription ->

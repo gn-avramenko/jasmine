@@ -6,6 +6,9 @@
 
 package com.gridnine.jasmine.web.easyui
 
+import com.gridnine.jasmine.web.easyui.widgets.table.EasyUiEntityTableColumnEditor
+import com.gridnine.jasmine.web.easyui.widgets.table.EasyUiEnumTableColumnEditor
+
 
 external interface JQuery {
     fun data(prop:String):dynamic
@@ -89,3 +92,4 @@ external fun showError(title:String?, message:String, stacktrace:String?)
 external fun openFileJS(accept:String?, resolve:(file:dynamic) ->Unit)
 
 
+external fun extendDatagridEditors(enumEditor:EasyUiEnumTableColumnEditor,entityEditor:EasyUiEntityTableColumnEditor): Unit

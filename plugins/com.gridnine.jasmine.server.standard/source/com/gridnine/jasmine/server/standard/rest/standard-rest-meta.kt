@@ -192,6 +192,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                     view.viewModel = viewDescription.viewModel + "JS"
                     view.viewSettings = viewDescription.viewSettings + "JS"
                     view.viewValidation = viewDescription.viewValidation + "JS"
+                    view.interceptors.addAll(viewDescription.interceptors)
                     when (val layout = viewDescription.layout) {
                         is TableLayoutDescription -> {
                             val tlDT = TableLayoutDescriptionDT()

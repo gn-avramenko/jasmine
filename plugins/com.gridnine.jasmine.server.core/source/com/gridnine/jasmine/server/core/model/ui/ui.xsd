@@ -116,6 +116,7 @@
             <element name="view">
                 <complexType>
                     <sequence>
+                        <element name="interceptor" type="string" minOccurs="0" maxOccurs="unbounded"/>
                         <group ref="tns:layout-group"/>
                     </sequence>
                     <attribute name="additional-data-class" type="string"/>

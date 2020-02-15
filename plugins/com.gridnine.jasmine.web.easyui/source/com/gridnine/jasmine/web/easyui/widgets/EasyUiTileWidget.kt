@@ -17,6 +17,9 @@ class EasyUiTileWidget<VC: BaseView<*, *, *>, VF: BaseView<*, *, *>>(uid: String
     private lateinit var fullModel:BaseVMEntityJS
     private lateinit var fullSettings:BaseVMEntityJS
 
+    private var mustRereadData = false
+    private var maximized = false
+    private var viewIsProxy = true
 
     init {
         val div = jQuery("#${description.id}${uid}")
@@ -31,6 +34,12 @@ class EasyUiTileWidget<VC: BaseView<*, *, *>, VF: BaseView<*, *, *>>(uid: String
                     var fullPaneDiv = jQuery("#$fullPaneId")
                     if(fullPaneDiv.length >0){
                         fullPaneDiv.show()
+                        maximized = true
+                        if(mustRereadData){
+                            fullView.configure(fullSettings.asDynamic())
+                            fullView.readData(fullModel.asDynamic())
+                            mustRereadData = false
+                        }
                         return@handler
                     }
                     val fullPaneHtml = HtmlUtilsJS.html {
@@ -49,6 +58,7 @@ class EasyUiTileWidget<VC: BaseView<*, *, *>, VF: BaseView<*, *, *>>(uid: String
                             val handler = {
                                 jQuery("#$fullPaneId").hide()
                                 jQuery("#mainPane${uid}").show()
+                                maximized = false
                             }
                         })
                     })
@@ -57,6 +67,8 @@ class EasyUiTileWidget<VC: BaseView<*, *, *>, VF: BaseView<*, *, *>>(uid: String
                     fullView =EasyUiViewBuilder.createView<BaseVMEntityJS,BaseVSEntityJS, BaseVVEntityJS, BaseView<BaseVMEntityJS,BaseVSEntityJS, BaseVVEntityJS>>(description.fullViewId, "${fullPaneId}View") as VF
                     fullView.configure(fullSettings.asDynamic())
                     fullView.readData(fullModel.asDynamic())
+                    maximized = true
+                    viewIsProxy = false
                 }
             })
         })
@@ -72,8 +84,15 @@ class EasyUiTileWidget<VC: BaseView<*, *, *>, VF: BaseView<*, *, *>>(uid: String
 
         setData ={tileData ->
             compactView.readData(tileData.compactData.asDynamic())
-            fullView.readData(tileData.fullData.asDynamic())
             fullModel = tileData.fullData.asDynamic()
+            if(!maximized){
+                mustRereadData = true
+                if(viewIsProxy){
+                    fullView.readData(tileData.fullData.asDynamic())
+                }
+            } else {
+                fullView.readData(tileData.fullData.asDynamic())
+            }
         }
 
         getData ={
