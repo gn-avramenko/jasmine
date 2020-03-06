@@ -14,6 +14,8 @@ import com.gridnine.jasmine.web.core.model.common.FakeEnumJS
 import com.gridnine.jasmine.web.core.model.domain.DomainMetaRegistryJS
 import com.gridnine.jasmine.web.core.model.domain.EntityReferenceJS
 import com.gridnine.jasmine.web.core.model.ui.*
+import com.gridnine.jasmine.web.core.ui.MainFrame
+import com.gridnine.jasmine.web.core.ui.UiFactory
 import com.gridnine.jasmine.web.core.utils.TextUtilsJS
 import com.gridnine.jasmine.web.core.utils.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.utils.UiUtilsJS
@@ -62,16 +64,22 @@ class EasyUiTableWidget<VM : BaseVMEntityJS, VS : BaseVSEntityJS, VV : BaseVVEnt
                             wrapWithSpan(row, (if(value is EntityReferenceJS) value.caption else value as String?)?.let {  caption -> if (caption.length > 30) caption.substring(0, 30) else caption }, columnDescription.id)
                         }
                     }
+                    is NavigationTableColumnDescriptionJS -> {
+                        { value: dynamic, row: dynamic, _: dynamic ->
+                            "<div style=\"display:inline-block;width:15px;height:30px\" id=\"${row.uid}${columnDescription.id}Navigate\" class = \"icon-link\"></div>"
+                        }
+                    }
                     else -> { value: dynamic, row: dynamic, _: dynamic ->
                         wrapWithSpan(row, (value as Any?)?.let { it.toString()?.let { caption -> if (caption.length > 30) caption.substring(0, 30) else caption } }, columnDescription.id)
                     }
                 }
                 columns.add(object {
                     val field = columnDescription.id
-                    val title = columnDescription.displayName
+                    val title = if(columnDescription is NavigationTableColumnDescriptionJS) "" else columnDescription.displayName
                     val formatter = formatter
-                    val width = 100
-                    val editor = if (!configuration.nonEditable) createEditor(columnDescription, getConfiguration(configuration.columnSettings, columnDescription)) else null
+                    val width = if(columnDescription is NavigationTableColumnDescriptionJS) 30 else 100
+                    val fixed = columnDescription is NavigationTableColumnDescriptionJS
+                    val editor = if (!configuration.nonEditable && !description.notEditable) createEditor(columnDescription, getConfiguration(configuration.columnSettings, columnDescription)) else null
 
                     private fun getConfiguration(columnSettings: VS, columnDescription: BaseTableColumnDescriptionJS): Any? {
                         return when (columnDescription){
@@ -83,7 +91,7 @@ class EasyUiTableWidget<VM : BaseVMEntityJS, VS : BaseVSEntityJS, VV : BaseVVEnt
                     }
                 })
             }
-            if(!configuration.nonEditable){
+            if(!configuration.nonEditable && !description.notEditable){
                 columns.add(object {
                     val field = "controlButtons"
                     val title = "<div style=\"display:inline-block;width:15px;height:30px;float:right\" id=\"${description.id}${uid}AddToolButton\" class = \"jasmine-datagrid-expand\"></div>"
@@ -105,7 +113,7 @@ class EasyUiTableWidget<VM : BaseVMEntityJS, VS : BaseVSEntityJS, VV : BaseVVEnt
                 val onClickCell =  if (!configuration.nonEditable) this@EasyUiTableWidget::createOnClickCell else null
                 val onEndEdit = if (!configuration.nonEditable) this@EasyUiTableWidget::createOnEndEdit else null
             })
-            if(!configuration.nonEditable){
+            if(!configuration.nonEditable && !description.notEditable){
                 val addButtonDiv = jQuery("#${description.id}${uid}AddToolButton").asDynamic()
                 addButtonDiv.off("click")
                 addButtonDiv.click{
@@ -163,6 +171,7 @@ class EasyUiTableWidget<VM : BaseVMEntityJS, VS : BaseVSEntityJS, VV : BaseVVEnt
             if(!lastConfig.nonEditable){
                 bindControls()
             }
+            bindNavigation()
 
         }
 
@@ -192,7 +201,28 @@ class EasyUiTableWidget<VM : BaseVMEntityJS, VS : BaseVSEntityJS, VV : BaseVVEnt
     private fun wrapWithSpan(row:dynamic, content: String?, fieldId:String): String {
         return "<span id=\"cell-wrapper-${fieldId}-${row.uid}\">${content?:""}</span>"
     }
-
+    private fun bindNavigation() {
+        div.datagrid("getData").asDynamic().rows.forEach { rowVM ->
+            description.columns.values.forEach {
+                if (it is NavigationTableColumnDescriptionJS) {
+                    val icon = jQuery("#${rowVM.uid}${it.id}Navigate").asDynamic()
+                    icon.off("click")
+                    icon.click{
+                        endEditing()
+                        val nav = rowVM[it.id]
+                        if(nav is NavigationTableColumnDataJS){
+                            if(nav.reference != null){
+                                MainFrame.get().openTab(nav.reference!!.type, nav.reference!!.uid, nav.navigationKey)
+                            } else {
+                                UiUtilsJS.findEditor(EasyUiTableWidget@this.parent)?.view?.navigate?.invoke(nav.navigationKey!!)
+                            }
+                        }
+                        Unit
+                    }
+                }
+            }
+        }
+    }
     private fun bindControls() {
         div.datagrid("getData").asDynamic().rows.forEach { rowVM ->
             bindControl(rowVM.uid, "Up") { idx,_->
@@ -334,6 +364,10 @@ class EasyUiTableWidget<VM : BaseVMEntityJS, VS : BaseVSEntityJS, VV : BaseVVEnt
 
     private fun createOnClickCell(index: Int, field: dynamic) {
         if(field == "controlButtons"){
+            endEditing()
+            return
+        }
+        if(description.columns[field] is NavigationTableColumnDescriptionJS){
             endEditing()
             return
         }

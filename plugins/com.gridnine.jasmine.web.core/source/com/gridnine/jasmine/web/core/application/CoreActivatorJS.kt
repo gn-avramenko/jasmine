@@ -39,6 +39,9 @@ class CoreActivatorJS:ActivatorJS{
         ReflectionFactoryJS.get().registerClass(SimplePropertyWrapperVMJS.qualifiedClassName) {SimplePropertyWrapperVMJS<BaseVMEntityJS>()}
         ReflectionFactoryJS.get().registerClass(TileDataJS.qualifiedClassName) {TileDataJS<Any,Any>()}
         ReflectionFactoryJS.get().registerQualifiedName(TileDataJS::class, TileDataJS.qualifiedClassName)
+        ReflectionFactoryJS.get().registerClass(NavigationTableColumnDataJS.qualifiedClassName) {NavigationTableColumnDataJS()}
+        ReflectionFactoryJS.get().registerClass(NavigationTableColumnDataJS.serverQualifiedClassName) {NavigationTableColumnDataJS()}
+        ReflectionFactoryJS.get().registerQualifiedName(NavigationTableColumnDataJS::class, NavigationTableColumnDataJS.qualifiedClassName)
         val domainRegisty = DomainMetaRegistryJS()
         EnvironmentJS.publish(domainRegisty)
         val restRegistry = RestMetaRegistryJS()
@@ -165,6 +168,14 @@ class CoreActivatorJS:ActivatorJS{
                                         widget.notEditable = widgetIt.notEditable
                                         layout.widgets[widgetIt.id] = widget
                                     }
+                                    WidgetTypeDTJS.NAVIGATOR -> {
+                                        val widget = NavigatorDescriptionJS(widgetIt.id)
+                                        widget.hSpan = widgetIt.hSpan
+                                        widget.notEditable = widgetIt.notEditable
+                                        widget.buttonsHandler = widgetIt.buttonsHandler
+                                        widget.viewIds.addAll((widgetIt.viewIds as Array<out String>).toList())
+                                        layout.widgets[widgetIt.id] = widget
+                                    }
                                     WidgetTypeDTJS.TEXTBOX -> {
                                         val widget = TextboxDescriptionJS(widgetIt.id)
                                         widget.hSpan = widgetIt.hSpan
@@ -191,6 +202,12 @@ class CoreActivatorJS:ActivatorJS{
                                     }
                                     WidgetTypeDTJS.ENUM_SELECT -> {
                                         val widget = EnumSelectDescriptionJS(widgetIt.id, widgetIt.enumId)
+                                        widget.hSpan = widgetIt.hSpan
+                                        widget.notEditable = widgetIt.notEditable
+                                        layout.widgets[widgetIt.id] = widget
+                                    }
+                                    WidgetTypeDTJS.SELECT -> {
+                                        val widget = SelectDescriptionJS(widgetIt.id)
                                         widget.hSpan = widgetIt.hSpan
                                         widget.notEditable = widgetIt.notEditable
                                         layout.widgets[widgetIt.id] = widget
@@ -271,6 +288,10 @@ class CoreActivatorJS:ActivatorJS{
                                                 TableColumnTypeDTJS.ENTITY-> {
                                                     val columnDescriptionJS = EntityTableColumnDescriptionJS(columnIt.id, columnIt.entityClassName, columnIt.caption)
                                                     columnDescriptionJS.width = columnIt.width
+                                                    widget.columns.put(columnDescriptionJS.id, columnDescriptionJS)
+                                                }
+                                                TableColumnTypeDTJS.NAVIGATION-> {
+                                                    val columnDescriptionJS = NavigationTableColumnDescriptionJS(columnIt.id,  columnIt.caption)
                                                     widget.columns.put(columnDescriptionJS.id, columnDescriptionJS)
                                                 }
                                             }

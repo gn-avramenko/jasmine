@@ -44,7 +44,7 @@ class SandboxCreateUserAccountDialogButtonHandler:DialogButtonHandler<SandboxCre
                 return@then
             }
             dialog.close()
-            MainFrame.get().openTab(it.result!!.type, it.result!!.uid)
+            MainFrame.get().openTab(it.result!!.type, it.result!!.uid, null)
         }
     }
 

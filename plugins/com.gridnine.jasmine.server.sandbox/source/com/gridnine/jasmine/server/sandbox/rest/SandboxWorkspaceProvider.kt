@@ -167,16 +167,25 @@ class SandboxWorkspaceProvider : WorkspaceProvider {
         run {
             val group = WorkspaceGroup()
             group.displayName = "Объекты"
-            val item = ListWorkspaceItem()
-            item.columns.add(SandboxComplexDocumentIndex.stringProperty.name)
-            item.columns.add(SandboxComplexDocumentIndex.enumProperty.name)
-            item.columns.add(SandboxComplexDocumentIndex.booleanProperty.name)
-            item.columns.add(SandboxComplexDocumentIndex.dateProperty.name)
-            item.columns.add(SandboxComplexDocumentIndex.dateTimeProperty.name)
-            item.columns.add(SandboxComplexDocumentIndex.floatProperty.name)
-            item.listId = "com.gridnine.jasmine.server.sandbox.model.ui.SandboxComplexDocumentList"
-            item.displayName = "Сложные объекты"
-            group.items.add(item)
+            run {
+                val item = ListWorkspaceItem()
+                item.columns.add(SandboxComplexDocumentIndex.stringProperty.name)
+                item.columns.add(SandboxComplexDocumentIndex.enumProperty.name)
+                item.columns.add(SandboxComplexDocumentIndex.booleanProperty.name)
+                item.columns.add(SandboxComplexDocumentIndex.dateProperty.name)
+                item.columns.add(SandboxComplexDocumentIndex.dateTimeProperty.name)
+                item.columns.add(SandboxComplexDocumentIndex.floatProperty.name)
+                item.listId = "com.gridnine.jasmine.server.sandbox.model.ui.SandboxComplexDocumentList"
+                item.displayName = "Сложные объекты"
+                group.items.add(item)
+            }
+            run {
+                val item = ListWorkspaceItem()
+                item.columns.add(SandboxComplexDocumentVariantIndex.title.name)
+                item.listId = "com.gridnine.jasmine.server.sandbox.model.ui.SandboxComplexDocumentVariantList"
+                item.displayName = "Вложенные объекты"
+                group.items.add(item)
+            }
             result.groups.add(group)
         }
         return result

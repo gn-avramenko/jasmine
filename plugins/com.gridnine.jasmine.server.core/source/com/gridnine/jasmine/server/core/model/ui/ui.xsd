@@ -155,6 +155,7 @@
                 <element name="label" type="tns:label"/>
                 <element name="table" type="tns:tableWidget"/>
                 <element name="tile" type="tns:tile"/>
+                <element name="navigator" type="tns:navigator"/>
             </choice>
         </sequence>
     </group>
@@ -254,6 +255,21 @@
             </extension>
         </complexContent>
     </complexType>
+    <complexType name="navigator">
+        <complexContent>
+            <extension base="tns:baseWidget">
+                <sequence>
+                    <element name="variant" minOccurs="0" maxOccurs="unbounded">
+                        <complexType>
+                            <group ref="tns:view-group"/>
+                            <attribute name="id" type="string" use="required"/>
+                        </complexType>
+                    </element>
+                </sequence>
+                <attribute name="buttons-handler" type="string"/>
+            </extension>
+        </complexContent>
+    </complexType>
     <complexType name="label">
         <complexContent>
             <extension base="tns:baseWidget">
@@ -295,6 +311,12 @@
         <attribute name="caption" use="required"/>
     </complexType>
     <complexType name="textColumn">
+        <complexContent>
+            <extension base="tns:baseColumn">
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType name="navigationColumn">
         <complexContent>
             <extension base="tns:baseColumn">
             </extension>
@@ -348,6 +370,7 @@
                                     <element name="integer-column" type="tns:integerColumn"/>
                                     <element name="float-column" type="tns:floatColumn"/>
                                     <element name="date-column" type="tns:dateColumn"/>
+                                    <element name="navigation-column" type="tns:navigationColumn"/>
                                 </choice>
                             </sequence>
                         </complexType>

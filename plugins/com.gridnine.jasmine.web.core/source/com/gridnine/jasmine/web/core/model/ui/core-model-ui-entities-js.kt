@@ -34,6 +34,7 @@ abstract class BaseView<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS>
     lateinit var readData:(model:VM) ->Unit
     lateinit var writeData:(model:VM) ->Unit
     lateinit var showValidation:(validation:VV) ->Unit
+    lateinit var navigate: (uid:String) -> Boolean
 
     open fun getValue(propertyName: String): Any? {
         throw IllegalArgumentException(
@@ -55,7 +56,11 @@ class Editor<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS, V:BaseView
 }
 
 
-abstract class ValueWidget<T:Any, VS:Any>{
+open class WidgetWithParent{
+    lateinit var parent:BaseView<*,*,*>
+}
+
+abstract class ValueWidget<T:Any, VS:Any>:WidgetWithParent(){
     lateinit var setData: (value:T?)->Unit
     lateinit var configure: (settings:VS)->Unit
     lateinit var getData: ()->T?
@@ -63,14 +68,14 @@ abstract class ValueWidget<T:Any, VS:Any>{
     var valueChangeListener: ((newValue:T?, oldValue:T?) -> Unit)? = null
 }
 
-abstract class MultiValueWidget<T:Any, VS:Any>{
+abstract class MultiValueWidget<T:Any, VS:Any>:WidgetWithParent(){
     lateinit var readData: (value:List<T>)->Unit
     lateinit var configure: (settings:VS)->Unit
     lateinit var writeData: (MutableList<T>)->Unit
     lateinit var showValidation:(String?) ->Unit
 }
 
-abstract class CollectionWidget<T:BaseVMEntityJS, VS:Any, VV:BaseVVEntityJS>{
+abstract class CollectionWidget<T:BaseVMEntityJS, VS:Any, VV:BaseVVEntityJS>:WidgetWithParent(){
     lateinit var readData: (value:List<T>)->Unit
     lateinit var configure: (settings:VS)->Unit
     lateinit var writeData: (value:MutableList<T>)->Unit
@@ -91,13 +96,30 @@ open class EnumMultiSelectWidget<E:Enum<E>>:MultiValueWidget<E,EnumSelectConfigu
 
 open class EntitySelectWidget:ValueWidget<EntityReferenceJS, EntitySelectConfigurationJS>()
 open class EntityMultiSelectWidget:MultiValueWidget<EntityReferenceJS,EntitySelectConfigurationJS>()
-open class TileWidget<VC:BaseView<*,*,*>, VF:BaseView<*,*,*> >{
+open class TileWidget<VC:BaseView<*,*,*>, VF:BaseView<*,*,*> >:WidgetWithParent(){
+    lateinit var navigate: (uid:String) -> Boolean
     lateinit var compactView:VC
     lateinit var fullView:VF
     lateinit var configure: (settings:TileDataJS<*,*>) ->Unit
     lateinit var setData: (model:TileDataJS<*,*>) ->Unit
     lateinit var getData: ()->TileDataJS<*,*>
     lateinit var showValidation:(validation:TileDataJS<*,*>) ->Unit
+}
+
+open class NavigatorWidget<T:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS>:WidgetWithParent(){
+    lateinit var add: (vm:T, vs:VS,  idx:Int?) ->Unit
+    lateinit var hasNavigationKey: (uid:String) ->Boolean
+    lateinit var navigate: (uid:String) ->Boolean
+    lateinit var remove: (uid:String) ->Unit
+    lateinit var readData: (value:List<T>)->Unit
+    lateinit var configure: (settings:List<VS>)->Unit
+    lateinit var writeData: (value:MutableList<T>)->Unit
+    lateinit var showValidation:(value:List<VV>) ->Unit
+}
+
+interface NavigatorButtonsHandler<T:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS>{
+    fun onAdd(widget:NavigatorWidget<T,VS,VV> , selected:T)
+    fun onDelete(widget:NavigatorWidget<T,VS,VV>, selected: T)
 }
 
 open class ToolButtonWidget{
@@ -287,3 +309,14 @@ interface ViewInterceptor<VM:BaseVMEntityJS, VS:BaseVSEntityJS,VV:BaseVVEntityJS
     fun onCreate(view:V)
 }
 
+class NavigationTableColumnDataJS{
+
+    var reference:EntityReferenceJS? = null
+    var navigationKey:String? = null
+    companion object{
+        const val reference = "reference"
+        const val navigationKey = "navigationKey"
+        const val qualifiedClassName = "com.gridnine.jasmine.web.core.model.ui.NavigationTableColumnDataJS"
+        const val serverQualifiedClassName = "com.gridnine.jasmine.server.core.model.ui.NavigationTableColumnDataJS"
+    }
+}

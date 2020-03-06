@@ -210,9 +210,19 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                                         val widget = TileDescriptionDT()
                                         widget.id = it.id
                                         widget.type = WidgetTypeDT.TILE
+                                        widget.hSpan = it.hSpan
                                         widget.compactViewId = it.compactView.id
                                         widget.fullViewId = it.fullView.id
                                         widget.displayName = it.getDisplayName()
+                                        tlDT.widgets.add(widget)
+                                    }
+                                    is NavigatorDescription -> {
+                                        val widget = NavigatorDescriptionDT()
+                                        widget.id = it.id
+                                        widget.hSpan = it.hSpan
+                                        widget.type = WidgetTypeDT.NAVIGATOR
+                                        widget.buttonsHandler = it.buttonsHandler
+                                        widget.viewIds.addAll(it.viewIds)
                                         tlDT.widgets.add(widget)
                                     }
                                     is TableNextColumnDescription -> {
@@ -233,6 +243,14 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                                         widget.hSpan = it.hSpan
                                         widget.notEditable = it.notEditable
                                         widget.type = WidgetTypeDT.TEXTBOX
+                                        tlDT.widgets.add(widget)
+                                    }
+                                    is SelectDescription -> {
+                                        val widget = SelectDescriptionDT()
+                                        widget.id = it.id
+                                        widget.hSpan = it.hSpan
+                                        widget.notEditable = it.notEditable
+                                        widget.type = WidgetTypeDT.SELECT
                                         tlDT.widgets.add(widget)
                                     }
                                     is TextAreaDescription -> {
@@ -375,6 +393,13 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                                                     columnDescriptionDT.entityClassName = column.entityClassName
                                                     columnDescriptionDT.columnType = TableColumnTypeDT.ENTITY
                                                     columnDescriptionDT.width = column.width
+                                                    widget.columns.add(columnDescriptionDT)
+                                                }
+                                                is NavigationTableColumnDescription -> {
+                                                    val columnDescriptionDT = NavigationTableColumnDescriptionDT()
+                                                    columnDescriptionDT.id = column.id
+                                                    columnDescriptionDT.caption = column.getDisplayName()
+                                                    columnDescriptionDT.columnType = TableColumnTypeDT.NAVIGATION
                                                     widget.columns.add(columnDescriptionDT)
                                                 }
                                             }

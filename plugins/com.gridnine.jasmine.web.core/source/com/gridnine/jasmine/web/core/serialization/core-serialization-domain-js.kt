@@ -49,6 +49,7 @@ internal object DomainSerializationUtilsJS {
 
                 init {
                     properties.add(SerializablePropertyDescriptionJS(BaseIndexJS.document, SerializablePropertyTypeJS.ENTITY, EntityReferenceJS.qualifiedClassName, false))
+                    properties.add(SerializablePropertyDescriptionJS(BaseIndexJS.navigationKey, SerializablePropertyTypeJS.STRING, null, false))
                     descr.properties.values.forEach {
                         properties.add(SerializablePropertyDescriptionJS(it.id, toSerializableType(it.type), toClassName(it.type, it.className), false))
                     }

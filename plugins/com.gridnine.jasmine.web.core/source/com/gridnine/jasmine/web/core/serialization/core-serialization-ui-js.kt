@@ -216,13 +216,16 @@ internal object UiSerializationUtilsJS {
             if (elementClassName == null) {
                 return false
             }
-            if (elementClassName == "com.flinty.jasmine.core.ui.model.BaseVMEntity") {
+            if (elementClassName == "com.gridnine.jasmine.web.core.model.ui.BaseVMEntity") {
                 return true
             }
-            if (elementClassName == "com.flinty.jasmine.core.ui.model.BaseVSEntity") {
+            if (elementClassName == "com.gridnine.jasmine.web.core.model.ui.BaseVSEntity") {
                 return true
             }
-            if (elementClassName == "com.flinty.jasmine.core.ui.model.BaseVSEntity") {
+            if (elementClassName == "com.gridnine.jasmine.web.core.model.ui.BaseVVEntity") {
+                return true
+            }
+            if (elementClassName == "com.gridnine.jasmine.server.core.model.ui.BaseVMEntity") {
                 return true
             }
             return false
@@ -248,6 +251,7 @@ internal object UiSerializationUtilsJS {
                 VMPropertyTypeJS.BIG_DECIMAL -> SerializablePropertyTypeJS.BIG_DECIMAL
                 VMPropertyTypeJS.STRING -> SerializablePropertyTypeJS.STRING
                 VMPropertyTypeJS.ENTITY -> SerializablePropertyTypeJS.ENTITY
+                VMPropertyTypeJS.SELECT -> SerializablePropertyTypeJS.ENTITY
             }
         }
 
@@ -267,6 +271,7 @@ internal object UiSerializationUtilsJS {
         private fun toSerializableType(elementType: VSPropertyTypeJS): SerializablePropertyTypeJS {
             return when (elementType) {
                 VSPropertyTypeJS.ENTITY -> SerializablePropertyTypeJS.ENTITY
+                VSPropertyTypeJS.SELECT -> SerializablePropertyTypeJS.ENTITY
                 VSPropertyTypeJS.ENUM_SELECT -> SerializablePropertyTypeJS.ENTITY
                 VSPropertyTypeJS.ENTITY_AUTOCOMPLETE -> SerializablePropertyTypeJS.ENTITY
             }
@@ -276,6 +281,7 @@ internal object UiSerializationUtilsJS {
             return when (elementType) {
                 VSPropertyTypeJS.ENTITY -> elementClassName
                 VSPropertyTypeJS.ENUM_SELECT -> EnumSelectConfigurationJS.qualifiedClassName
+                VSPropertyTypeJS.SELECT -> SelectConfigurationJS.qualifiedClassName
                 VSPropertyTypeJS.ENTITY_AUTOCOMPLETE -> EntitySelectConfigurationJS.qualifiedClassName
 
             }

@@ -7,6 +7,7 @@ package com.gridnine.jasmine.server.core.model.ui
 
 import com.gridnine.jasmine.server.core.model.common.BaseEntity
 import com.gridnine.jasmine.server.core.model.common.BaseIntrospectableObject
+import com.gridnine.jasmine.server.core.model.domain.EntityReference
 
 abstract class BaseVMEntity:BaseIntrospectableObject() {
 
@@ -93,3 +94,17 @@ class TileData<VMC:Any, VMF:Any>:BaseIntrospectableObject(){
         const val fullData = "fullData"
     }
 }
+
+class NavigationTableColumnData{
+
+    var reference:EntityReference<*>? = null
+    var navigationKey:String? = null
+
+    companion object{
+        const val reference = "reference"
+        const val navigationKey = "navigationKey"
+    }
+
+}
+
+

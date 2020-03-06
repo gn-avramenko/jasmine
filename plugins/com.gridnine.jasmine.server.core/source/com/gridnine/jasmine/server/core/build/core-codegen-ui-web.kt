@@ -28,11 +28,21 @@ object UiWebGenerator {
         if(vmPropertyType == VMPropertyType.ENTITY_REFERENCE){
             return "com.gridnine.jasmine.web.core.model.domain.EntityReferenceJS"
         }
+        if(vmPropertyType == VMPropertyType.SELECT){
+            return "com.gridnine.jasmine.web.core.model.ui.SelectItemJS"
+        }
         if(vmPropertyType == VMPropertyType.LOCAL_DATE){
             return "kotlin.js.Date"
         }
         if(vmPropertyType == VMPropertyType.LOCAL_DATE_TIME){
             return "kotlin.js.Date"
+        }
+        if(BaseVMEntity::class.qualifiedName == className){
+            return "com.gridnine.jasmine.web.core.model.ui.BaseVMEntityJS"
+        }
+        if(NavigationTableColumnData::class.qualifiedName == className){
+            return "com.gridnine.jasmine.web.core.model.ui.NavigationTableColumnDataJS"
+
         }
         if(className != null && className.startsWith(TileData::class.qualifiedName!!)){
             val idx1 =className.indexOf("<")
@@ -51,7 +61,12 @@ object UiWebGenerator {
 
     private fun getClassName(vmPropertyType: VMCollectionType, className: String?): String? {
         return when(vmPropertyType){
-            VMCollectionType.ENTITY ->className+"JS"
+            VMCollectionType.ENTITY ->{
+                if(BaseVMEntity::class.qualifiedName == className){
+                    return "com.gridnine.jasmine.web.core.model.ui.BaseVMEntityJS"
+                }
+                className+"JS"
+            }
         }
     }
 
@@ -85,7 +100,17 @@ object UiWebGenerator {
 
     private fun getClassName(elementType: VSCollectionType, elementClassName: String?): String? {
         return when (elementType) {
-            VSCollectionType.ENTITY -> elementClassName
+            VSCollectionType.ENTITY -> {
+                if(BaseVSEntity::class.qualifiedName == elementClassName){
+                    return "com.gridnine.jasmine.web.core.model.ui.BaseVMEntityJS"
+                }
+                if(NavigationTableColumnData::class.qualifiedName == elementClassName){
+                    return "com.gridnine.jasmine.web.core.model.ui.NavigationTableColumnDataJS"
+
+                }else {
+                    elementClassName+"JS"
+                }
+            }
         }
     }
 
@@ -117,11 +142,13 @@ object UiWebGenerator {
                     val idx2 =className.length-1
                     val generics = className.substring(idx1+1,idx2).split(",")
                     "com.gridnine.jasmine.web.core.model.ui.TileDataJS<${generics[0].trim()}JS,${generics[1].trim()}JS>"
+                } else if(BaseVSEntity::class.qualifiedName == className){
+                    "com.gridnine.jasmine.web.core.model.ui.BaseVSEntityJS"
                 }else {
                     throw IllegalArgumentException("unsupported classname $className")
                 }
             }
-            VSPropertyType.SELECT -> "com.gridnine.jasmine.web.core.model.ui.SelectItemJS"
+            VSPropertyType.SELECT -> "com.gridnine.jasmine.web.core.model.ui.SelectConfigurationJS"
         }
     }
 
@@ -155,25 +182,35 @@ object UiWebGenerator {
             val generics = className.substring(idx1+1,idx2).split(",")
             return "com.gridnine.jasmine.web.core.model.ui.TileDataJS<${generics[0].trim()}JS,${generics[1].trim()}JS>"
         }
+        if(BaseVVEntity::class.qualifiedName == className){
+            return "com.gridnine.jasmine.web.core.model.ui.BaseVVEntityJS"
+        }
         return when (propertyType) {
             VVPropertyType.STRING -> null
-            VVPropertyType.ENTITY -> className
+            VVPropertyType.ENTITY -> {
+                className
+            }
         }
     }
 
     private fun getClassName(propertyType: VVCollectionType, className: String?): String? {
         return when (propertyType) {
-            VVCollectionType.ENTITY -> "${className}JS"
+            VVCollectionType.ENTITY -> {
+                if(BaseVVEntity::class.qualifiedName == className){
+                    return "com.gridnine.jasmine.web.core.model.ui.BaseVVEntityJS"
+                }
+                "${className}JS"
+            }
         }
     }
 
-    private fun  toGenData(viewDescription: StandardViewDescription): GenClassData {
+    private fun  toGenData(viewDescription: StandardViewDescription, registry: UiMetaRegistry): GenClassData {
         val result = GenClassData(viewDescription.id,"com.gridnine.jasmine.web.core.model.ui.BaseView<${viewDescription.viewModel}JS,${viewDescription.viewSettings}JS,${viewDescription.viewValidation}JS>", abstract = false, enum = false, noEnumProperties = true)
 
         viewDescription.layout.widgets.values.forEach { prop ->
             when (prop){
                 is  TableNextRowDescription,is TableNextColumnDescription,is LabelDescription ->{}
-                else -> result.properties.add(GenPropertyDescription(prop.id, GenPropertyType.ENTITY, getClassName(prop), true))
+                else -> result.properties.add(GenPropertyDescription(prop.id, GenPropertyType.ENTITY, getClassName(prop, registry), true))
             }
         }
         return result
@@ -185,7 +222,7 @@ object UiWebGenerator {
     }
 
 
-    private fun getClassName(widgetDescription: BaseWidgetDescription): String? {
+    private fun getClassName(widgetDescription: BaseWidgetDescription, registry: UiMetaRegistry): String? {
         return when(widgetDescription){
             is TableNextRowDescription ->null
             is TableNextColumnDescription ->null
@@ -202,6 +239,23 @@ object UiWebGenerator {
             is DateTimeBoxDescription ->"com.gridnine.jasmine.web.core.model.ui.DateTimeBoxWidget"
             is PasswordBoxDescription ->"com.gridnine.jasmine.web.core.model.ui.PasswordBoxWidget"
             is TileDescription ->"com.gridnine.jasmine.web.core.model.ui.TileWidget<${widgetDescription.baseClassName}CompactView,${widgetDescription.baseClassName}FullView>"
+            is SelectDescription ->"com.gridnine.jasmine.web.core.model.ui.SelectWidget"
+            is NavigatorDescription ->{
+                lateinit var modelId:String
+                lateinit var settingsId:String
+                lateinit var validationId:String
+                if(widgetDescription.viewIds.size ==1){
+                    val viewDescr = registry.views[widgetDescription.viewIds[0]]!!
+                    modelId = viewDescr.viewModel+"JS"
+                    settingsId = viewDescr.viewSettings+"JS"
+                    validationId = viewDescr.viewValidation+"JS"
+                } else {
+                    modelId = "com.gridnine.jasmine.web.core.model.ui.BaseVMEntityJS"
+                    settingsId = "com.gridnine.jasmine.web.core.model.ui.BaseVSEntityJS"
+                    validationId = "com.gridnine.jasmine.web.core.model.ui.BaseVVEntityJS"
+                }
+                "com.gridnine.jasmine.web.core.model.ui.NavigatorWidget<$modelId,$settingsId,$validationId>"
+            }
             else -> throw IllegalArgumentException("unsupported widget $widgetDescription")
         }
     }
@@ -235,10 +289,17 @@ object UiWebGenerator {
             }
             registry.views.values.forEach {
                 if(it is StandardViewDescription){
-                    val docClassData = toGenData(it)
+                    val docClassData = toGenData(it, registry)
                     classesData.add(docClassData)
                     classes.add(it.id)
                     classes.addAll(it.interceptors)
+                    it.layout.widgets.values.forEach { widget ->
+                        if(widget is NavigatorDescription){
+                            if(widget.buttonsHandler != null){
+                                classes.add(widget.buttonsHandler!!)
+                            }
+                        }
+                    }
                 }
             }
             registry.dialogs.values.forEach {dialogDescription ->

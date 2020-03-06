@@ -121,6 +121,7 @@
         <enum-item id="ENTITY_REFERENCE"/>
         <enum-item id="LOCAL_DATE_TIME"/>
         <enum-item id="LOCAL_DATE"/>
+        <enum-item id="SELECT"/>
         <enum-item id="BOOLEAN"/>
     </enum>
 
@@ -146,6 +147,7 @@
         <enum-item id="ENUM_SELECT"/>
         <enum-item id="ENTITY_AUTOCOMPLETE"/>
         <enum-item id="ENTITY"/>
+        <enum-item id="SELECT"/>
         <enum-item id="COLUMN_TEXT"/>
         <enum-item id="COLUMN_INT"/>
         <enum-item id="COLUMN_FLOAT"/>
@@ -208,6 +210,8 @@
         <enum-item id="NEXT_ROW"/>
         <enum-item id="NEXT_COLUMN"/>
         <enum-item id="TILE"/>
+        <enum-item id="NAVIGATOR"/>
+        <enum-item id="SELECT"/>
     </enum>
 
 
@@ -244,6 +248,7 @@
     <entity id="com.gridnine.jasmine.server.standard.model.rest.EnumSelectDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT">
         <property id="enumId" type="STRING"/>
     </entity>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.SelectDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT"/>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.EntityAutocompleteDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT">
         <property id="entityClassName" type="STRING"/>
     </entity>
@@ -252,12 +257,17 @@
         <property id="fullViewId" type="STRING"/>
         <property id="displayName" type="STRING"/>
     </entity>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.NavigatorDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseWidgetDescriptionDT">
+        <property id="buttonsHandler" type="STRING"/>
+        <collection id="viewIds" element-type="STRING"/>
+    </entity>
     <enum id="com.gridnine.jasmine.server.standard.model.rest.TableColumnTypeDT">
         <enum-item id="TEXT"/>
         <enum-item id="INTEGER"/>
         <enum-item id="FLOAT"/>
         <enum-item id="ENUM"/>
         <enum-item id="ENTITY"/>
+        <enum-item id="NAVIGATION"/>
     </enum>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.BaseTableColumnDescriptionDT" abstract="true">
         <property id="id" type="STRING"/>
@@ -268,6 +278,8 @@
     <entity id="com.gridnine.jasmine.server.standard.model.rest.TextTableColumnDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseTableColumnDescriptionDT"/>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.IntegerTableColumnDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseTableColumnDescriptionDT">
         <property id="nonNullable" type="BOOLEAN"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.NavigationTableColumnDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseTableColumnDescriptionDT">
     </entity>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.FloatTableColumnDescriptionDT"  extends="com.gridnine.jasmine.server.standard.model.rest.BaseTableColumnDescriptionDT">
         <property id="nonNullable" type="BOOLEAN"/>

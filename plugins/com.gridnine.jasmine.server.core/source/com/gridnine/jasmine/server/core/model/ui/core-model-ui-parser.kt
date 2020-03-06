@@ -277,8 +277,8 @@ object UiMetadataParser {
                         layout.widgets[ta.id] = ta
                     }
                     "label" ->{
-                        val vAlign = it.attributes["v_align"]?.let {attr -> VerticalAlignment.valueOf(attr)}
-                        val hAlign = it.attributes["h_align"]?.let {attr -> HorizontalAlignment.valueOf(attr)}
+                        val vAlign = it.attributes["v-align"]?.let {attr -> VerticalAlignment.valueOf(attr)}
+                        val hAlign = it.attributes["h-align"]?.let {attr -> HorizontalAlignment.valueOf(attr)}
                         val ta = LabelDescription(editorId, ParserUtils.getIdAttribute(it), vAlign, hAlign)
                         updateHspan(ta, it)
                         ParserUtils.updateLocalizations(ta, localizations, ParserUtils.getCaptionAttribute(it))
@@ -358,6 +358,12 @@ object UiMetadataParser {
                                     tableVM.properties[id] = VMPropertyDescription(tableDescription.fullId,id,VMPropertyType.LOCAL_DATE, null, false)
                                     tableVV.properties[id] = VVPropertyDescription(tableDescription.fullId,id,VVPropertyType.STRING, null)
                                 }
+                                "navigation-column" -> {
+                                    val columnDescription = NavigationTableColumnDescription(tableDescription.fullId, id)
+                                    ParserUtils.updateLocalizations(columnDescription, localizations, ParserUtils.getCaptionAttribute(columnNode))
+                                    tableDescription.columns[id] = columnDescription
+                                    tableVM.properties[id] = VMPropertyDescription(tableDescription.fullId,id,VMPropertyType.ENTITY, NavigationTableColumnData::class.qualifiedName, false)
+                                }
                             }
                         }
                     }
@@ -392,6 +398,41 @@ object UiMetadataParser {
                         vmEntityDescr.properties[tileDescription.id] = VMPropertyDescription(editorId, tileDescription.id,VMPropertyType.ENTITY, "${TileData::class.qualifiedName}<${baseClassName}CompactVM, ${baseClassName}FullVM>", true)
                         vsEntityDescr.properties[tileDescription.id] = VSPropertyDescription(editorId, tileDescription.id,VSPropertyType.ENTITY, "${TileData::class.qualifiedName}<${baseClassName}CompactVS, ${baseClassName}FullVS>")
                         vvEntityDescr.properties[tileDescription.id] = VVPropertyDescription(editorId, tileDescription.id,VVPropertyType.ENTITY, "${TileData::class.qualifiedName}<${baseClassName}CompactVV, ${baseClassName}FullVV>")
+
+                    }
+                    "navigator" ->{
+                        val navigatorDescription = NavigatorDescription(editorId, ParserUtils.getIdAttribute(it))
+                        navigatorDescription.buttonsHandler = it.attributes["buttons-handler"]
+                        layout.widgets[navigatorDescription.id] = navigatorDescription
+                        it.children("variant").forEach {variantElm ->
+                            val variantId = ParserUtils.getIdAttribute(variantElm)
+                            val viewId = "${variantId}View"
+                            navigatorDescription.viewIds.add(viewId)
+                            val variantVM = VMEntityDescription("${viewId}VM")
+                            variantVM.properties["caption"]= VMPropertyDescription(navigatorDescription.id, "caption",VMPropertyType.STRING, null, true)
+                            val variantVS = VSEntityDescription("${viewId}VS")
+                            val variantVV = VVEntityDescription("${viewId}VV")
+                            registry.viewModels[variantVM.id] = variantVM
+                            registry.viewSettings[variantVS.id] = variantVS
+                            registry.viewValidations[variantVV.id] = variantVV
+                            updateViews(registry, variantVM, variantVS, variantVV,  variantElm.children("view")[0], variantId, localizations)
+                        }
+                        lateinit var modelId:String
+                        lateinit var settingsId:String
+                        lateinit var validationId:String
+                        if(navigatorDescription.viewIds.size ==1){
+                            val viewDescr = registry.views[navigatorDescription.viewIds[0]]!!
+                            modelId = viewDescr.viewModel
+                            settingsId = viewDescr.viewSettings
+                            validationId = viewDescr.viewValidation
+                        } else {
+                            modelId = BaseVMEntity::class.qualifiedName!!
+                            settingsId = BaseVSEntity::class.qualifiedName!!
+                            validationId = BaseVVEntity::class.qualifiedName!!
+                        }
+                        vmEntityDescr.collections[navigatorDescription.id] = VMCollectionDescription(editorId, navigatorDescription.id, VMCollectionType.ENTITY, modelId)
+                        vsEntityDescr.collections[navigatorDescription.id] = VSCollectionDescription(editorId, navigatorDescription.id, VSCollectionType.ENTITY, settingsId)
+                        vvEntityDescr.collections[navigatorDescription.id] = VVCollectionDescription(editorId, navigatorDescription.id, VVCollectionType.ENTITY, validationId)
 
                     }
                 }

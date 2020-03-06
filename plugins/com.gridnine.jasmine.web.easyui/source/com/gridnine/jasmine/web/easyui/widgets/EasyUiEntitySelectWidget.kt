@@ -91,7 +91,7 @@ class EasyUiEntitySelectWidget(uid: String, description: EntitySelectDescription
                                 val handler = { _: dynamic ->
                                     val ref = getData()
                                     if(ref != null){
-                                        MainFrame.get().openTab(ref.type, ref.uid)
+                                        MainFrame.get().openTab(ref.type, ref.uid, null)
                                     }
                                 }
                             })

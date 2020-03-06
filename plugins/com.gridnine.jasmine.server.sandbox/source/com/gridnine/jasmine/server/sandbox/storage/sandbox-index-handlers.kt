@@ -9,10 +9,7 @@
 package com.gridnine.jasmine.server.sandbox.storage
 
 import com.gridnine.jasmine.server.core.storage.IndexHandler
-import com.gridnine.jasmine.server.sandbox.model.domain.SandboxComplexDocument
-import com.gridnine.jasmine.server.sandbox.model.domain.SandboxComplexDocumentIndex
-import com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccount
-import com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccountIndex
+import com.gridnine.jasmine.server.sandbox.model.domain.*
 
 class SandboxUserAccountIndexHandler:IndexHandler<SandboxUserAccount, SandboxUserAccountIndex>{
     override val documentClass = SandboxUserAccount::class
@@ -39,5 +36,20 @@ class SandboxComplexDocumentIndexHandler:IndexHandler<SandboxComplexDocument, Sa
         idx.stringProperty = doc.stringProperty
         idx.integerProperty = doc.integerProperty
         return arrayListOf(idx)
+    }
+}
+
+class SandboxComplexDocumentVariantIndexHandler:IndexHandler<SandboxComplexDocument, SandboxComplexDocumentVariantIndex>{
+    override val documentClass = SandboxComplexDocument::class
+    override val indexClass = SandboxComplexDocumentVariantIndex::class
+    override fun createIndexes(doc: SandboxComplexDocument): List<SandboxComplexDocumentVariantIndex> {
+        val result = arrayListOf<SandboxComplexDocumentVariantIndex>()
+        doc.nestedDocuments.forEach {
+            val idx = SandboxComplexDocumentVariantIndex()
+            idx.title = it.title
+            idx.navigationKey = it.uid
+            result.add(idx)
+        }
+        return result;
     }
 }

@@ -67,6 +67,48 @@ object RestSerializationUtilsJS {
             }
         }
 
+
+        private fun createNavigationTableColumnDataDescription(): ObjectMetadataProviderJS<NavigationTableColumnDataJS> {
+            return object : ObjectMetadataProviderJS<NavigationTableColumnDataJS>() {
+                override fun hasUid(): Boolean {
+                    return false
+                }
+
+                init {
+                    properties.add(SerializablePropertyDescriptionJS(NavigationTableColumnDataJS.reference, SerializablePropertyTypeJS.ENTITY, EntityReferenceJS.qualifiedClassName, false))
+                    properties.add(SerializablePropertyDescriptionJS(NavigationTableColumnDataJS.navigationKey, SerializablePropertyTypeJS.STRING, null, false))
+                }
+
+                override fun getPropertyValue(obj: NavigationTableColumnDataJS, id: String): Any? {
+                    if(id == NavigationTableColumnDataJS.reference){
+                        return obj.reference
+                    }
+                    if(id == NavigationTableColumnDataJS.navigationKey){
+                        return obj.navigationKey
+                    }
+                    throw IllegalArgumentException("property $id does not exist")
+                }
+
+                override fun getCollection(obj: NavigationTableColumnDataJS, id: String): MutableCollection<Any> {
+                    throw IllegalArgumentException("class has no collections")
+                }
+
+                override fun setPropertyValue(obj: NavigationTableColumnDataJS, id: String, value: Any?) {
+                    if(id == NavigationTableColumnDataJS.navigationKey){
+                        obj.navigationKey = value as String?
+                        return;
+                    }
+                    if(id == NavigationTableColumnDataJS.reference){
+                        obj.reference = value as EntityReferenceJS?
+                        return;
+                    }
+                    throw IllegalArgumentException("property $id does not exist")
+                }
+
+
+            }
+        }
+
         private fun createTileDescription(): ObjectMetadataProviderJS<TileDataJS<Any,Any>> {
             return object : ObjectMetadataProviderJS<TileDataJS<Any,Any>>() {
                 override fun hasUid(): Boolean {
@@ -110,7 +152,6 @@ object RestSerializationUtilsJS {
 
             }
         }
-
 
 
         private fun isAbstractClass(elementClassName: String?): Boolean {
@@ -209,7 +250,9 @@ object RestSerializationUtilsJS {
             if(className.startsWith(TileDataJS.serverQualifiedClassName) || className.startsWith(TileDataJS.qualifiedClassName) ){
                 return createTileDescription()
             }
-
+            if(className == NavigationTableColumnDataJS.qualifiedClassName || className == NavigationTableColumnDataJS.serverQualifiedClassName ){
+                return createNavigationTableColumnDataDescription()
+            }
             throw RuntimeException("unsupported type $className")
 
         }

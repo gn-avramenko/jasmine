@@ -8,16 +8,19 @@ package com.gridnine.jasmine.server.sandbox.activator
 
 import com.gridnine.jasmine.server.core.app.Environment
 import com.gridnine.jasmine.server.core.app.IPluginActivator
+import com.gridnine.jasmine.server.core.rest.KotlinFileDevFilter
 import com.gridnine.jasmine.server.core.rest.NoCacheFilter
 import com.gridnine.jasmine.server.core.storage.Storage
 import com.gridnine.jasmine.server.core.storage.StorageRegistry
 import com.gridnine.jasmine.server.core.storage.search.SearchQuery
+import com.gridnine.jasmine.server.core.utils.TextUtils
 import com.gridnine.jasmine.server.core.web.WebAppFilter
 import com.gridnine.jasmine.server.core.web.WebApplication
 import com.gridnine.jasmine.server.core.web.WebServerConfig
 import com.gridnine.jasmine.server.sandbox.model.domain.*
 import com.gridnine.jasmine.server.sandbox.rest.SandboxWorkspaceProvider
 import com.gridnine.jasmine.server.sandbox.storage.SandboxComplexDocumentIndexHandler
+import com.gridnine.jasmine.server.sandbox.storage.SandboxComplexDocumentVariantIndexHandler
 import com.gridnine.jasmine.server.sandbox.storage.SandboxUserAccountIndexHandler
 import com.gridnine.jasmine.server.standard.rest.WorkspaceProvider
 import java.lang.IllegalArgumentException
@@ -29,6 +32,7 @@ import kotlin.math.roundToInt
 class SandboxActivator : IPluginActivator {
     override fun configure(config: Properties) {
         StorageRegistry.get().register(SandboxComplexDocumentIndexHandler())
+        StorageRegistry.get().register(SandboxComplexDocumentVariantIndexHandler())
         StorageRegistry.get().register(SandboxUserAccountIndexHandler())
         val easyuiApp = WebApplication("/sandbox/easyui", javaClass.classLoader.getResource("sb_easyui")
                 ?: throw IllegalArgumentException("unable to load resource sb_easyui"),
@@ -51,7 +55,13 @@ class SandboxActivator : IPluginActivator {
                 ?: throw IllegalArgumentException("unable to load resource easyui-script"),
                 javaClass.classLoader)
         WebServerConfig.get().addApplication(easyuiScriptWebapp)
+        val sourceWebApp = WebApplication("/source", javaClass.classLoader.getResource("easyui-script")
+                ?: throw IllegalArgumentException("unable to load resource easyui-script"),
+                javaClass.classLoader)
+        WebServerConfig.get().addApplication(sourceWebApp)
+
         WebServerConfig.get().globalFilters.add(WebAppFilter("nocache", NoCacheFilter::class))
+        WebServerConfig.get().globalFilters.add(WebAppFilter("dev-kt-files", KotlinFileDevFilter::class))
         Environment.publish(WorkspaceProvider::class, SandboxWorkspaceProvider())
     }
 
@@ -90,9 +100,29 @@ class SandboxActivator : IPluginActivator {
                     nestedObject.integerColumn =randomInt(100)
                     complexObject.entityCollection.add(nestedObject)
                 }
+                complexObject.nestedDocuments.add(createVariant1())
+                complexObject.nestedDocuments.add(createVariant2())
+                complexObject.nestedDocuments.add(createVariant1())
+                complexObject.nestedDocuments.add(createVariant2())
+
                 Storage.get().saveDocument(complexObject)
             }
         }
+    }
+
+    private fun createVariant1(): SandboxNavigatorVariant1 {
+        val nestedObject = SandboxNavigatorVariant1()
+        nestedObject.uid = UUID.randomUUID().toString()
+        nestedObject.title = "string_${randomInt(10)}"
+        nestedObject.intValue = randomInt(100)
+        return nestedObject
+    }
+    private fun createVariant2(): SandboxNavigatorVariant2 {
+        val nestedObject = SandboxNavigatorVariant2()
+        nestedObject.uid = UUID.randomUUID().toString()
+        nestedObject.title = "string_${randomInt(10)}"
+        nestedObject.dateValue = LocalDate.of(2000 + randomInt(20), randomInt(11) + 1, randomInt(27) + 1)
+        return nestedObject
     }
 
     private fun randomInt(max: Int): Int {

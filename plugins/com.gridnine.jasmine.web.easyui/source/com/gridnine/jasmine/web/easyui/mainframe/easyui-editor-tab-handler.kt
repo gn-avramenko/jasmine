@@ -18,7 +18,7 @@ import kotlin.js.Promise
 
 data class EditorTabHandlerData(val content: String, val data: GetEditorDataResponseJS)
 
-class EasyUiEditorTabHandler(private val type: String, private var objectUid: String?) : EasyUiTabHandler<EditorTabHandlerData> {
+class EasyUiEditorTabHandler(private val type: String, private var objectUid: String?, private var navigationKey:String?) : EasyUiTabHandler<EditorTabHandlerData> {
 
     private val descriptions = hashMapOf<BaseEditorToolButtonHandler<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS, BaseView<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS>>, BaseToolButtonDescriptionJS>()
     private val toolButtonHandlers = arrayListOf<BaseEditorToolButtonHandler<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS, BaseView<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS>>>()
@@ -134,6 +134,7 @@ class EasyUiEditorTabHandler(private val type: String, private var objectUid: St
         editor.type = type
         editor.setTitle = setTitle
         editor.view = view
+        view.parent = editor
         editor.updateToolsVisibility=this::updateToolsVisibility
         widgets = hashMapOf()
         toolButtonHandlers.forEach {
@@ -141,6 +142,9 @@ class EasyUiEditorTabHandler(private val type: String, private var objectUid: St
             widgets[it]  = EasyUiEditorButtonWidget("${descr.id}${uid}",it, editor)
         }
         updateToolsVisibility()
+        if(navigationKey != null){
+            view.navigate(navigationKey!!)
+        }
 
     }
 

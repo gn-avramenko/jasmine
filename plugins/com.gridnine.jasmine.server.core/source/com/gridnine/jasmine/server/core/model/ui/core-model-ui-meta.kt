@@ -158,6 +158,12 @@ class BooleanBoxDescription(owner: String, id: String, val nonNullable:Boolean) 
 
 class TileDescription(owner:String, id:String, val baseClassName: String, val compactView:BaseViewDescription, val fullView:BaseViewDescription):BaseWidgetDescription(owner, id)
 
+
+class NavigatorDescription(owner:String, id:String):BaseWidgetDescription(owner, id){
+    val viewIds = arrayListOf<String>()
+    var buttonsHandler:String? = null
+}
+
 abstract class BaseTableColumnDescription(owner:String, id:String):BaseOwnedIdentityDescription(owner, id){
     var width:Int? = null
 }
@@ -168,6 +174,7 @@ class FloatTableColumnDescription(owner:String, id:String,val nonNullable:Boolea
 class EnumTableColumnDescription(owner:String, id:String, val enumId:String) :BaseTableColumnDescription(owner, id)
 class EntityTableColumnDescription(owner:String, id:String, val entityClassName:String) :BaseTableColumnDescription(owner, id)
 class DateTableColumnDescription(owner:String, id:String) :BaseTableColumnDescription(owner, id)
+class NavigationTableColumnDescription(owner:String, id:String) :BaseTableColumnDescription(owner, id)
 
 class ListDescription(id:String, val objectId:String) : BaseIdentityDescription(id){
     val toolButtons= arrayListOf<ListToolButtonDescription>()

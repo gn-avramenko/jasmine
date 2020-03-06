@@ -73,10 +73,15 @@ abstract class BaseIndexJS : BaseEntityJS() {
 
     lateinit var document: EntityReferenceJS
 
+    var navigationKey:String? = null
+
 
     override fun getValue(propertyName: String): Any? {
         if (Companion.document == propertyName) {
             return document
+        }
+        if (Companion.navigationKey == propertyName) {
+            return navigationKey
         }
         return super.getValue(propertyName)
     }
@@ -87,11 +92,16 @@ abstract class BaseIndexJS : BaseEntityJS() {
             document = value as EntityReferenceJS
             return
         }
+        if (Companion.navigationKey == propertyName) {
+            navigationKey = value as String?
+            return
+        }
         super.setValue(propertyName, value)
     }
 
     companion object{
         const val document="document"
+        const val navigationKey="navigationKey"
         const val qualifiedClassName = "com.gridnine.jasmine.web.core.model.domain.BaseIndexJS"
     }
 }

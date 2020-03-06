@@ -118,8 +118,8 @@ class EasyUiMainFrameImpl :MainFrame{
             })
         }
     }
-    override fun openTab(objectId: String, uid:String?){
-        openTab(EasyUiEditorTabHandler(objectId, uid))
+    override fun openTab(objectId: String, uid:String?, navigationKey:String?){
+        openTab(EasyUiEditorTabHandler(objectId, uid, navigationKey))
     }
 
     fun<T> openTab(handler: EasyUiTabHandler<T>){

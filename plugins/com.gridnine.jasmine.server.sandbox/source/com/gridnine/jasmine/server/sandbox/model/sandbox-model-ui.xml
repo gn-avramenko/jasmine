@@ -69,6 +69,61 @@
                         </view>
                     </full-view>
                 </tile>
+                <next-row/>
+                <tile id="variants" class-name="com.gridnine.jasmine.server.sandbox.model.ui.SandboxComplexDocumentVariantsTile" caption="variants.caption" h_span="3">
+                    <compact-view>
+                        <view>
+                            <table-layout>
+                                <column width="remaining"/>
+                                <label id="tableCaption" caption="table.caption" h-align="LEFT"/>
+                                <next-row/>
+                                <table id="variants" class-name="com.gridnine.jasmine.server.sandbox.model.ui.SandboxVariantsCompactTable" not-editable="true">
+                                    <columns>
+                                        <text-column id="name" caption="name.caption"/>
+                                        <navigation-column id="navigation" caption="navigate.caption"/>
+                                    </columns>
+                                </table>
+                            </table-layout>
+                        </view>
+                    </compact-view>
+                    <full-view>
+                        <view>
+                            <table-layout expandLastRow="true">
+                                <column width="remaining"/>
+                                <navigator id="variants" buttons-handler="com.gridnine.jasmine.web.sandbox.complexDocument.SandboxComplexDocumentVariantButtonsHandler">
+                                    <variant id="com.gridnine.jasmine.server.sandbox.model.ui.SandboxComplexDocumentVariant1">
+                                        <view>
+                                            <table-layout>
+                                                <column width="70"/>
+                                                <column width="200"/>
+                                                <column width="remaining"/>
+                                                <label id="nameLabel" caption="name.caption"/>
+                                                <text-box id="nameValue"/>
+                                                <next-row/>
+                                                <label id="intLabel" caption="int.caption"/>
+                                                <integer-box id="intValue" nonNullable="true"/>
+                                            </table-layout>
+                                        </view>
+                                    </variant>
+                                    <variant id="com.gridnine.jasmine.server.sandbox.model.ui.SandboxComplexDocumentVariant2">
+                                        <view>
+                                            <table-layout>
+                                                <column width="70"/>
+                                                <column width="200"/>
+                                                <column width="remaining"/>
+                                                <label id="nameLabel" caption="name.caption"/>
+                                                <text-box id="nameValue"/>
+                                                <next-row/>
+                                                <label id="dateLabel" caption="date.caption"/>
+                                                <date-box id="dateValue"/>
+                                            </table-layout>
+                                        </view>
+                                    </variant>
+                                </navigator>
+                            </table-layout>
+                        </view>
+                    </full-view>
+                </tile>
             </table-layout>
         </view>
     </editor>
@@ -144,12 +199,29 @@
             <button id="updatePassword" handler="com.gridnine.jasmine.web.sandbox.userAccount.SandboxUpdatePasswordDialogButtonHandler" caption="update"/>
         </buttons>
     </dialog>
+
+    <dialog id="com.gridnine.jasmine.server.sandbox.model.ui.SandboxSelectVariantDialog">
+        <view>
+            <table-layout>
+                <column width="70"/>
+                <column width="200"/>
+                <label id="variantLabel" caption="variant.caption"/>
+                <select id="variantSelect"/>
+            </table-layout>
+        </view>
+        <buttons>
+            <button id="selectVariant" handler="com.gridnine.jasmine.web.sandbox.complexDocument.SandboxComplexDocumentVariantButtonHandler" caption="select"/>
+        </buttons>
+    </dialog>
     <list id="com.gridnine.jasmine.server.sandbox.model.ui.SandboxUserAccountList" object-id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccountIndex">
         <toolbar>
             <tool-button id="createButton" handler="com.gridnine.jasmine.web.sandbox.userAccount.SandboxCreateUserAccountListToolButtonHandler" weight="2" caption="createButton"/>
         </toolbar>
     </list>
     <list id="com.gridnine.jasmine.server.sandbox.model.ui.SandboxComplexDocumentList" object-id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxComplexDocumentIndex">
+
+    </list>
+    <list id="com.gridnine.jasmine.server.sandbox.model.ui.SandboxComplexDocumentVariantList" object-id="com.gridnine.jasmine.server.sandbox.model.domain.SandboxComplexDocumentVariantIndex">
 
     </list>
     <validation-messages id="com.gridnine.jasmine.server.sandbox.model.ui.SandboxValidationMessages">

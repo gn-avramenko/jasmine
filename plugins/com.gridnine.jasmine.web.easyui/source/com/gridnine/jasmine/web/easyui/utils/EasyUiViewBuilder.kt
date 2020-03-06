@@ -74,7 +74,7 @@ object EasyUiViewBuilder {
                                                 width+=columnWidth?.toInt()?:0
                                             }
                                         }
-                                        val widthValue = if(hasRemaining) "100%" else "$width"
+                                        val widthValue = if(hasRemaining) "100%" else "${width}px"
 
                                         td(style = tdStyleAttr, hSpan = td.widget.hSpan ?: 1) {
                                             when (val widget = td.widget) {
@@ -85,10 +85,10 @@ object EasyUiViewBuilder {
                                                         HorizontalAlignmentJS.CENTER -> "center"
                                                         HorizontalAlignmentJS.RIGHT -> "right"
                                                     }
-                                                    "<div class = \"jasmine-label\" style=\"text-align: ${textAlight};width:${widthValue}px;\">${widget.displayName}<div>"()
+                                                    "<div class = \"jasmine-label\" style=\"text-align: ${textAlight};width:${widthValue};\">${widget.displayName}<div>"()
                                                 }
                                                 is TextAreaDescriptionJS ->{
-                                                    "<input id=\"${td.widget.id}${uid}\" style=\"width:${widthValue}px;height:200px\">"()
+                                                    "<input id=\"${td.widget.id}${uid}\" style=\"width:${widthValue};height:200px\">"()
                                                 }
                                                 is TableDescriptionJS ->{
                                                     "<table id=\"${td.widget.id}${uid}\"/>"()
@@ -96,6 +96,22 @@ object EasyUiViewBuilder {
                                                 is TileDescriptionJS ->{
                                                     div (id="${td.widget.id}${uid}", style = "width:100%;padding:5px"){
                                                         generateHtml(widget.compactViewId, "${widget.id}-compact-${uid}", false, this)
+                                                    }
+                                                }
+                                                is NavigatorDescriptionJS ->{
+                                                    div (id="${td.widget.id}${uid}", style = "width:100%;height:100%"){
+                                                        table (style="width:100%;height:100%"){
+                                                            tr (style="height:20px"){
+                                                                td{
+                                                                    input(id="${td.widget.id}Select${uid}", style = "width:100%")
+                                                                }
+                                                            }
+                                                            tr {
+                                                                td{
+                                                                    div(id="${td.widget.id}Panel${uid}", style = "width:100%;height:100%"){}
+                                                                }
+                                                            }
+                                                        }
                                                     }
                                                 }
                                                 else -> "<input id=\"${td.widget.id}${uid}\" style=\"width:${widthValue}px\">"()
@@ -136,22 +152,70 @@ object EasyUiViewBuilder {
             }
             else -> throw IllegalArgumentException("unsupported view type  ${viewDescr::class.simpleName}")
         }
+        val wdsIds = arrayListOf<String>()
         widgetsDescriptions.forEach {wd ->
             when(wd){
-                is TextboxDescriptionJS -> view.setValue(wd.id, if(createProxy) ProxyTextBoxWidget() else EasyUiTextBoxWidget(uid, wd))
-                is PasswordBoxDescriptionJS -> view.setValue(wd.id, if(createProxy) ProxyPasswordBoxWidget() else  EasyUiPasswordBoxWidget(uid, wd))
-                is TileDescriptionJS ->view.setValue(wd.id, EasyUiTileWidget<BaseView<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS>,BaseView<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS>>(uid, wd))
-                is DateboxDescriptionJS -> view.setValue(wd.id, if(createProxy) ProxyDateBoxWidget() else  EasyUiDateBoxWidget(uid, wd))
-                is DateTimeBoxDescriptionJS -> view.setValue(wd.id, if(createProxy) ProxyDateTimeBoxWidget() else  EasyUiDateTimeBoxWidget(uid, wd))
-                is EnumSelectDescriptionJS -> view.setValue(wd.id, if(createProxy) ProxyEnumSelectWidget<FakeEnumJS>() else  EasyUiEnumSelectWidget<FakeEnumJS>(uid, wd))
-                is EntitySelectDescriptionJS ->view.setValue(wd.id, if(createProxy) ProxyEntitySelectWidget() else  EasyUiEntitySelectWidget(uid, wd))
-                is FloatBoxDescriptionJS -> view.setValue(wd.id, if(createProxy) ProxyFloatBoxWidget() else  EasyUiFloatBoxWidget(uid, wd))
-                is IntegerBoxDescriptionJS -> view.setValue(wd.id, if(createProxy) ProxyIntBoxWidget() else  EasyUiIntBoxWidget(uid, wd))
-                is SelectDescriptionJS -> view.setValue(wd.id, if(createProxy) ProxySelectWidget() else  EasyUiSelectWidget(uid, wd))
-                is BooleanBoxDescriptionJS -> view.setValue(wd.id, if(createProxy) ProxyBooleanBoxWidget() else  EasyUiBooleanBoxWidget(uid, wd))
-                is TableDescriptionJS -> view.setValue(wd.id, if(createProxy) ProxyTableWidget<BaseVMEntityJS,BaseVSEntityJS,BaseVVEntityJS>() else  EasyUiTableWidget<BaseVMEntityJS,BaseVSEntityJS,BaseVVEntityJS>(uid, wd))
+                is TextboxDescriptionJS -> {
+                    view.setValue(wd.id, if (createProxy) ProxyTextBoxWidget() else EasyUiTextBoxWidget(uid, wd))
+                    wdsIds.add(wd.id)
+                }
+                is PasswordBoxDescriptionJS -> {
+                    view.setValue(wd.id, if (createProxy) ProxyPasswordBoxWidget() else EasyUiPasswordBoxWidget(uid, wd))
+                    wdsIds.add(wd.id)
+                }
+                is TileDescriptionJS -> {
+                    view.setValue(wd.id, EasyUiTileWidget<BaseView<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS>, BaseView<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS>>(uid, wd))
+                    wdsIds.add(wd.id)
+                }
+                is DateboxDescriptionJS -> {
+                    view.setValue(wd.id, if (createProxy) ProxyDateBoxWidget() else EasyUiDateBoxWidget(uid, wd))
+                    wdsIds.add(wd.id)
+                }
+                is DateTimeBoxDescriptionJS -> {
+                    view.setValue(wd.id, if(createProxy) ProxyDateTimeBoxWidget() else  EasyUiDateTimeBoxWidget(uid, wd))
+                    wdsIds.add(wd.id)
+                }
+                is EnumSelectDescriptionJS -> {
+                    view.setValue(wd.id, if(createProxy) ProxyEnumSelectWidget<FakeEnumJS>() else  EasyUiEnumSelectWidget<FakeEnumJS>(uid, wd))
+                    wdsIds.add(wd.id)
+                }
+                is EntitySelectDescriptionJS ->{
+                    view.setValue(wd.id, if(createProxy) ProxyEntitySelectWidget() else  EasyUiEntitySelectWidget(uid, wd))
+                    wdsIds.add(wd.id)
+                }
+                is FloatBoxDescriptionJS -> {
+                    view.setValue(wd.id, if(createProxy) ProxyFloatBoxWidget() else  EasyUiFloatBoxWidget(uid, wd))
+                    wdsIds.add(wd.id)
+                }
+                is IntegerBoxDescriptionJS ->{
+                    view.setValue(wd.id, if(createProxy) ProxyIntBoxWidget() else  EasyUiIntBoxWidget(uid, wd))
+                    wdsIds.add(wd.id)
+                }
+                is SelectDescriptionJS -> {
+                    view.setValue(wd.id, if(createProxy) ProxySelectWidget() else  EasyUiSelectWidget(uid, wd))
+                    wdsIds.add(wd.id)
+                }
+                is BooleanBoxDescriptionJS -> {
+                    view.setValue(wd.id, if(createProxy) ProxyBooleanBoxWidget() else  EasyUiBooleanBoxWidget(uid, wd))
+                    wdsIds.add(wd.id)
+                }
+                is TableDescriptionJS -> {
+                    view.setValue(wd.id, if(createProxy) ProxyTableWidget<BaseVMEntityJS,BaseVSEntityJS,BaseVVEntityJS>() else  EasyUiTableWidget<BaseVMEntityJS,BaseVSEntityJS,BaseVVEntityJS>(uid, wd))
+                    wdsIds.add(wd.id)
+                }
+                is NavigatorDescriptionJS -> {
+                    view.setValue(wd.id, if(createProxy) ProxyNavigatorWidget<BaseVMEntityJS,BaseVSEntityJS,BaseVVEntityJS>() else  EasyUiNavigatorWidget<BaseVMEntityJS,BaseVSEntityJS,BaseVVEntityJS>(uid, wd))
+                    wdsIds.add(wd.id)
+                }
                 else -> {}
 
+            }
+        }
+
+        wdsIds.forEach {id ->
+            val widget = view.getValue(id)
+            if(widget is WidgetWithParent){
+                widget.parent = view
             }
         }
 
@@ -171,6 +235,9 @@ object EasyUiViewBuilder {
                     }
                     is EnumSelectDescriptionJS -> {
                         (view.getValue(it.id) as EnumSelectWidget<*>).setData(model.getValue(it.id)?.asDynamic())
+                    }
+                    is SelectDescriptionJS -> {
+                        (view.getValue(it.id) as SelectWidget).setData(model.getValue(it.id).asDynamic())
                     }
                     is EntitySelectDescriptionJS -> {
                         (view.getValue(it.id) as EntitySelectWidget).setData(model.getValue(it.id)?.asDynamic())
@@ -196,6 +263,9 @@ object EasyUiViewBuilder {
                     is TileDescriptionJS -> {
                         (view.getValue(it.id) as TileWidget<*,*>).setData(model.getValue(it.id).asDynamic())
                     }
+                    is NavigatorDescriptionJS -> {
+                        (view.getValue(it.id) as NavigatorWidget<*,*,*>).readData(model.getCollection(it.id).asDynamic())
+                    }
                 }
             }
         }
@@ -216,6 +286,9 @@ object EasyUiViewBuilder {
                     }
                     is EnumSelectDescriptionJS -> {
                         (view.getValue(it.id) as EnumSelectWidget<*>).configure(settings.getValue(it.id).asDynamic())
+                    }
+                    is SelectDescriptionJS -> {
+                        (view.getValue(it.id) as SelectWidget).configure(settings.getValue(it.id).asDynamic())
                     }
                     is EntitySelectDescriptionJS -> {
                         (view.getValue(it.id) as EntitySelectWidget).configure(settings.getValue(it.id).asDynamic())
@@ -238,6 +311,9 @@ object EasyUiViewBuilder {
                     is TileDescriptionJS -> {
                         (view.getValue(it.id) as TileWidget<*,*>).configure(settings.getValue(it.id).asDynamic())
                     }
+                    is NavigatorDescriptionJS -> {
+                        (view.getValue(it.id) as NavigatorWidget<*,*,*>).configure(settings.getCollection(it.id).asDynamic())
+                    }
                 }
             }
         }
@@ -259,6 +335,9 @@ object EasyUiViewBuilder {
                     is EnumSelectDescriptionJS -> {
                         (view.getValue(it.id) as EnumSelectWidget<*>).showValidation(validation.getValue(it.id) as String?)
                     }
+                    is SelectDescriptionJS -> {
+                        (view.getValue(it.id) as SelectWidget).showValidation(validation.getValue(it.id).asDynamic())
+                    }
                     is EntitySelectDescriptionJS -> {
                         (view.getValue(it.id) as EntitySelectWidget).showValidation(validation.getValue(it.id) as String?)
                     }
@@ -279,6 +358,9 @@ object EasyUiViewBuilder {
                     }
                     is TileDescriptionJS -> {
                         (view.getValue(it.id) as TileWidget<*,*>).showValidation(validation.getValue(it.id).asDynamic())
+                    }
+                    is NavigatorDescriptionJS -> {
+                        (view.getValue(it.id) as NavigatorWidget<*,*,*>).showValidation(validation.getCollection(it.id).asDynamic())
                     }
                 }
             }
@@ -302,6 +384,9 @@ object EasyUiViewBuilder {
                     is EnumSelectDescriptionJS -> {
                         model.setValue(it.id, (view.getValue(it.id) as EnumSelectWidget<*>).getData())
                     }
+                    is SelectDescriptionJS -> {
+                        model.setValue(it.id, (view.getValue(it.id) as SelectWidget).getData())
+                    }
                     is EntitySelectDescriptionJS -> {
                         model.setValue(it.id, (view.getValue(it.id) as EntitySelectWidget).getData())
                     }
@@ -323,8 +408,30 @@ object EasyUiViewBuilder {
                     is TileDescriptionJS -> {
                         model.setValue(it.id, (view.getValue(it.id) as TileWidget<*,*>).getData())
                     }
+                    is NavigatorDescriptionJS -> {
+                        (view.getValue(it.id) as NavigatorWidget<*,*,*>).writeData(model.getCollection(it.id).asDynamic())
+                    }
                 }
             }
+        }
+        view.navigate = navigate@{uid  ->
+            widgetsDescriptions.forEach {
+                when (it) {
+                    is TileDescriptionJS -> {
+                        val result = (view.getValue(it.id) as TileWidget<*,*>).navigate(uid)
+                        if(result){
+                            return@navigate true
+                        }
+                    }
+                    is NavigatorDescriptionJS -> {
+                        val result = (view.getValue(it.id) as NavigatorWidget<*,*,*>).navigate(uid)
+                        if(result){
+                            return@navigate true
+                        }
+                    }
+                }
+            }
+            false
         }
         val interceptors = arrayListOf<ViewInterceptor<VM,VS,VV,V>>()
         viewDescr.interceptors.forEach {

@@ -15,7 +15,7 @@ object UiServerGenerator {
 
         val result = GenClassData(descr.id, BaseVMEntity::class.qualifiedName, abstract = false, enum = false, noEnumProperties = true)
         descr.properties.values.forEach { prop ->
-            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), prop.className, isLateInit(prop), isNonNullable(prop) ))
+            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop), isLateInit(prop), isNonNullable(prop) ))
         }
         descr.collections.values.forEach { coll ->
             result.collections.add(GenCollectionDescription(coll.id, getPropertyType(coll.elementType), coll.elementClassName))
@@ -71,13 +71,18 @@ object UiServerGenerator {
             VMPropertyType.LONG -> GenPropertyType.LONG
         }
     }
-
+    private fun getClassName(prop: VMPropertyDescription): String? {
+        return when (prop.type) {
+            VMPropertyType.SELECT -> SelectItem::class.qualifiedName
+            else -> prop.className
+        }
+    }
     private fun getClassName(type: VSPropertyType, elementClassName: String?): String? {
         return when (type) {
             VSPropertyType.ENUM_SELECT -> "${EnumSelectConfiguration::class.java.name}<${elementClassName}>"
             VSPropertyType.ENTITY_AUTOCOMPLETE -> EntityAutocompleteConfiguration::class.java.name
             VSPropertyType.ENTITY -> elementClassName
-            VSPropertyType.SELECT -> SelectItem::javaClass.name
+            VSPropertyType.SELECT -> SelectConfiguration::class.qualifiedName
         }
     }
 

@@ -21,6 +21,7 @@ interface ErrorHandler{
 }
 
 open class Dialog<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS,V:BaseView<VM,VS,VV>>{
+    val properties = hashMapOf<String,Any>()
     lateinit var view:V
     var editorView:BaseView<*,*,*>? = null
     lateinit var close:()->Unit
@@ -45,7 +46,7 @@ interface UiFactory{
 
 
 interface MainFrame{
-    fun openTab(objectId: String, uid:String?)
+    fun openTab(objectId: String, uid:String?, navigationKey:String?)
     companion object{
         fun get()=EnvironmentJS.getPublished(MainFrame::class)
     }

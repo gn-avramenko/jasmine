@@ -16,10 +16,14 @@ import kotlin.reflect.full.primaryConstructor
 
 object UiUtils {
     fun<VM:BaseVMEntity, E:BaseEntity> writeCollection(editorList:List<VM>, modelList:MutableList<E>, cls:KClass<E>, func: (VM, E) ->Unit){
+        writeCollection(editorList, modelList, {cls.createInstance()}, func)
+    }
+
+    fun<VM:BaseVMEntity, E:BaseEntity> writeCollection(editorList:List<VM>, modelList:MutableList<E>, factory:(VM) -> E, func: (VM, E) ->Unit){
         val existingColl = ArrayList(modelList)
         modelList.clear()
         editorList.forEach { vm->
-            val elm = existingColl.find { it.uid == vm.uid  }?:cls.createInstance()
+            val elm = existingColl.find { it.uid == vm.uid  }?:factory(vm)
             elm.uid = vm.uid!!
             func.invoke(vm,elm)
             modelList.add(elm)

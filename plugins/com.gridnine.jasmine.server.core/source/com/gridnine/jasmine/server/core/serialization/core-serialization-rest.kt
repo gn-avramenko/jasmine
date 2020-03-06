@@ -109,6 +109,46 @@ object RestSerializationUtils {
             }
         }
 
+        private fun createNavigationTableColumnDataDescription(): ObjectMetadataProvider<NavigationTableColumnData> {
+            return object : ObjectMetadataProvider<NavigationTableColumnData>() {
+                override fun hasUid(): Boolean {
+                    return false
+                }
+
+                init {
+                    properties.add(SerializablePropertyDescription(NavigationTableColumnData.reference, SerializablePropertyType.ENTITY, EntityReference::class.qualifiedName, false))
+                    properties.add(SerializablePropertyDescription(NavigationTableColumnData.navigationKey, SerializablePropertyType.STRING, null, false))
+                }
+
+                override fun getPropertyValue(obj: NavigationTableColumnData, id: String): Any? {
+                    if(id == NavigationTableColumnData.reference){
+                        return obj.reference
+                    }
+                    if(id == NavigationTableColumnData.navigationKey){
+                        return obj.navigationKey
+                    }
+                    throw IllegalArgumentException("property $id does not exist")
+                }
+
+                override fun getCollection(obj: NavigationTableColumnData, id: String): MutableCollection<Any> {
+                    throw IllegalArgumentException("class has no collections")
+                }
+
+                override fun setPropertyValue(obj: NavigationTableColumnData, id: String, value: Any?) {
+                    if(id == NavigationTableColumnData.navigationKey){
+                        obj.navigationKey = value as String?
+                        return;
+                    }
+                    if(id == NavigationTableColumnData.reference){
+                        obj.reference = value as EntityReference<*>?
+                        return;
+                    }
+                    throw IllegalArgumentException("property $id does not exist")
+                }
+
+
+            }
+        }
 
         private fun isAbstractClass(elementType:RestPropertyType, elementClassName: String?): Boolean {
             if(elementType == RestPropertyType.ENTITY_REFERENCE){
@@ -213,7 +253,9 @@ object RestSerializationUtils {
             if(className.startsWith(TileData::class.qualifiedName!!)){
                 return createTileDescription()
             }
-
+            if(className == NavigationTableColumnData::class.qualifiedName){
+                return createNavigationTableColumnDataDescription()
+            }
             throw RuntimeException("unsupported type $className")
 
         }

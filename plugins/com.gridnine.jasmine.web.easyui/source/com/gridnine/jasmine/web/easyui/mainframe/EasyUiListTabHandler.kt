@@ -207,7 +207,7 @@ class EasyUiListTabHandler(private val element: ListWorkspaceItemDTJS) : EasyUiT
             val onDblClickRow = { _: Int, row: dynamic ->
                 val doc = row["document"]
                 if(doc is EntityReferenceJS){
-                    MainFrame.get().openTab(doc.type, doc.uid)
+                    MainFrame.get().openTab(doc.type, doc.uid,row["navigationKey"])
                 }
             }
             private val onSelectionChanged = onSelectionChanged@ {
@@ -262,6 +262,8 @@ class EasyUiListTabHandler(private val element: ListWorkspaceItemDTJS) : EasyUiT
                         }
                         if (idx is BaseIndexJS) {
                             item["document"] = idx.document
+                            item["navigationKey"] = idx.navigationKey
+
                         } else {
                             item["uid"] = idx.uid
                         }

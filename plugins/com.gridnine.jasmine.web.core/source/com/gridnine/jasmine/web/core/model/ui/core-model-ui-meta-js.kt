@@ -19,6 +19,7 @@ enum class VMPropertyTypeJS {
     ENTITY_REFERENCE,
     LOCAL_DATE_TIME,
     LOCAL_DATE,
+    SELECT,
     ENTITY,
     BOOLEAN
 
@@ -47,6 +48,7 @@ class VMEntityDescriptionJS(id: String) : BaseIdentityDescriptionJS(id) {
 }
 
 enum class VSPropertyTypeJS {
+    SELECT,
     ENUM_SELECT,
     ENTITY_AUTOCOMPLETE,
     ENTITY
@@ -146,6 +148,10 @@ class DateTimeBoxDescriptionJS(id: String)  : BaseWidgetDescriptionJS(id)
 class BooleanBoxDescriptionJS(id: String, val nonNullable:Boolean)  : BaseWidgetDescriptionJS(id)
 
 class TileDescriptionJS(id:String, val compactViewId:String, val fullViewId:String, val displayName: String):BaseWidgetDescriptionJS(id)
+class NavigatorDescriptionJS(id:String):BaseWidgetDescriptionJS(id){
+    val viewIds = arrayListOf<String>()
+    var buttonsHandler:String? = null
+}
 
 abstract class BaseTableColumnDescriptionJS(id:String, val displayName: String):BaseIdentityDescriptionJS(id){
     var width:Int? = null
@@ -157,6 +163,7 @@ class IntegerTableColumnDescriptionJS( id:String, displayName: String,val nonNul
 class FloatTableColumnDescriptionJS(id:String, displayName: String,val nonNullable: Boolean) :BaseTableColumnDescriptionJS(id,displayName)
 class EnumTableColumnDescriptionJS(id:String, val enumId:String,displayName: String) :BaseTableColumnDescriptionJS(id,displayName)
 class EntityTableColumnDescriptionJS(id:String, val entityClassName:String,displayName: String) :BaseTableColumnDescriptionJS(id,displayName)
+class NavigationTableColumnDescriptionJS(id:String, displayName: String) :BaseTableColumnDescriptionJS(id,displayName)
 class DateTableColumnDescriptionJS(id:String,displayName: String) :BaseTableColumnDescriptionJS(id,displayName)
 
 class ListDescriptionJS(id:String, val objectId:String) : BaseIdentityDescriptionJS(id){
