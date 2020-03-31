@@ -8,16 +8,16 @@ package com.gridnine.jasmine.web.sandbox.activator
 
 import com.gridnine.jasmine.server.sandbox.model.rest.CheckAuthRequestJS
 import com.gridnine.jasmine.server.sandbox.model.rest.LogoutRequestJS
-import com.gridnine.jasmine.server.sandbox.model.ui.*
+import com.gridnine.jasmine.server.sandbox.model.ui.SandboxLoginDialog
+import com.gridnine.jasmine.server.sandbox.model.ui.SandboxLoginDialogVMJS
+import com.gridnine.jasmine.server.sandbox.model.ui.SandboxLoginDialogVSJS
 import com.gridnine.jasmine.web.core.application.CoreActivatorJS
-import com.gridnine.jasmine.web.core.application.EnvironmentJS
 import com.gridnine.jasmine.web.core.remote.StandardRpcManager
 import com.gridnine.jasmine.web.core.ui.MainFrame
 import com.gridnine.jasmine.web.core.ui.MainFrameConfiguration
 import com.gridnine.jasmine.web.core.ui.MainFrameTool
 import com.gridnine.jasmine.web.core.ui.UiFactory
 import com.gridnine.jasmine.web.easyui.EasyUiActivator
-import com.gridnine.jasmine.web.easyui.jQuery
 import com.gridnine.jasmine.web.sandbox.DomainReflectionUtils
 import com.gridnine.jasmine.web.sandbox.RestReflectionUtilsJS
 import com.gridnine.jasmine.web.sandbox.SandboxRestClient

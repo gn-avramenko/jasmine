@@ -51,6 +51,7 @@ open class CreateArtifactsTask: DefaultTask() {
     private fun createKotlinc() {
         val content = xml("project", "version" to "4"){
             "component"("name" to "Kotlin2JsCompilerArguments"){
+                emptyTag("option", "name" to "moduleKind", "value" to "umd")
                 emptyTag("option", "name" to "sourceMap", "value" to "true")
                 emptyTag("option", "name" to "sourceMapEmbedSources", "value" to "always")
             }

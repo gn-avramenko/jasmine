@@ -85,7 +85,7 @@ open class CreateModulesTask : DefaultTask() {
                                 }
                             }
                         }
-                        SpfPluginType.WEB -> {
+                        SpfPluginType.WEB,SpfPluginType.WEB_TEST -> {
                             val outputDir = "file://\$MODULE_DIR\$/../../plugins/${pluginDescr.id}/${pluginDescr.parameters.find { param -> param.id == "kotlin-output-dir" }?.value}"
                             emptyTag("output", "url" to outputDir)
                             emptyTag("output-test", "url" to outputDir)
@@ -123,6 +123,10 @@ open class CreateModulesTask : DefaultTask() {
                         }
                         SpfPluginType.WEB -> {
                             emptyTag("orderEntry", "type" to "sourceFolder", "forTests" to "false")
+                            emptyTag("orderEntry", "type" to "library", "name" to "web_js", "level" to "project")
+                        }
+                        SpfPluginType.WEB_TEST -> {
+                            emptyTag("orderEntry", "type" to "sourceFolder", "forTests" to "true")
                             emptyTag("orderEntry", "type" to "library", "name" to "web_js", "level" to "project")
                         }
                     }

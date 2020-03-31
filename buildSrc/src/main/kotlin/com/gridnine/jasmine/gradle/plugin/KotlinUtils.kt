@@ -53,5 +53,6 @@ enum class SpfPluginType{
     SERVER,
     SERVER_TEST,
     SPF,
-    WEB
+    WEB,
+    WEB_TEST
 }

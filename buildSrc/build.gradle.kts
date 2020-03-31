@@ -1,3 +1,7 @@
+//plugins {
+//    id("com.github.node-gradle.node") version "2.2.3"
+//}
+
 buildscript {
     repositories {
         mavenCentral()
@@ -8,9 +12,13 @@ buildscript {
         "classpath"(files("../lib/spf-1.0.jar"))
     }
 }
+
 repositories {
     mavenCentral() // or jcentrer
     jcenter()
+    maven {
+        setUrl("https://plugins.gradle.org/m2/")
+    }
 }
 
 
@@ -20,5 +28,6 @@ apply{
 
 dependencies{
     "compile"(files("../lib/spf-1.0.jar"))
+    "compile"("com.github.node-gradle:gradle-node-plugin:2.2.3")
 }
 

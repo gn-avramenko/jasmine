@@ -80,7 +80,7 @@ external interface JQueryStatic {
     operator fun invoke(selector: String): JQuery
 }
 
-
+external var debugger: dynamic = definedExternally
 external var jQuery: JQueryStatic = definedExternally
 external fun createDatagrid(id:String, columns:dynamic, loader:dynamic, onDblClickRow:dynamic):Unit = definedExternally
 external fun createTable(id:String, columns:dynamic, loader:dynamic, onClickRow: dynamic):Unit = definedExternally

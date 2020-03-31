@@ -53,7 +53,7 @@ open class CompileKotlinJVMPluginTask :DefaultTask(){
         val res = exec.invoke(compiler.getConstructor().newInstance(), out, emptyServices, args)
         val exitCode = ExitCode.valueOf(res.toString())
         if(exitCode != ExitCode.OK){
-            throw Exception("error compilint $pluginId")
+            throw Exception("error compiling $pluginId")
         }
     }
 
