@@ -2,12 +2,38 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0514aaa4-51f8-47c1-a5c0-72be3324d39a" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.gradle/nodejs/node-v10.14.0-linux-x64/lib/node_modules/npm/node_modules/clone/clone.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.sandbox.test.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.core.test.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.sandbox.test.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jasmine.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.spf/source/com/gridnine/jasmine/server/spf/PgMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.core.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.core.test.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.core.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.core.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.easyui.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.easyui.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.sandbox.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.sandbox.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/jasmine.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/jasmine.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/JasminePlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/JasminePlugin.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/StartServerTask.kt" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/StartServerTask.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/spf-1.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/lib/spf-1.0.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/spf-1.0-sources.jar" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/spf-1.0-sources.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/web/TomcatWebServer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/web/TomcatWebServer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.spf/source/com/gridnine/jasmine/server/spf/spf-common.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.spf/source/com/gridnine/jasmine/server/spf/spf-common.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/resources/js/com.gridnine.jasmine.web.sandbox.test-launcher.js" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/resources/js/com.gridnine.jasmine.web.sandbox.test-launcher.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DefaultGradleProjectSettings">
+    <option name="testRunner" value="GRADLE" />
+    <option name="delegatedBuild" value="true" />
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
@@ -35,6 +61,12 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="jasmine" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="idea" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="jasmine" type="f1a62948:ProjectNode" />
                 <item name="buildSrc" type="2d1252cf:ModuleNode" />
               </path>
             </expand>
@@ -44,8 +76,22 @@
       </state>
     </system>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Kotlin File" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="266" />
+    <option name="y" value="22" />
+    <option name="width" value="1392" />
+    <option name="height" value="1020" />
   </component>
   <component name="ProjectId" id="1a2HsOhfMrIGf22U0SrgeZN6hc7" />
   <component name="ProjectViewState">
@@ -57,30 +103,97 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/src" />
     <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.34651405" />
+    <property name="settings.editor.selected.configurable" value="project.propCompiler" />
   </component>
-  <component name="RunManager" selected="Application.jasmine (1)">
-    <configuration name="jasmine (1)" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="com.gridnine.spf.app.SpfBoot" />
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib/src" />
+      <recent name="$PROJECT_DIR$/lib" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Gradle.jasmine [jsTests]">
+    <configuration name="PgMain2" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="PgMain2" />
       <module name="jasmine" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PgMaine" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.gridnine.spf.app.SpfBoot" />
+      <module name="com.gridnine.jasmine.server.spf" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="jasmine" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="12" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="com.gridnine.spf.app.SpfBoot" />
       <module name="jasmine" />
-      <option name="VM_PARAMETERS" value="-Dspf.mode=shell -Dspf.applicationClass=com.gridnine.jasmine.server.spf.SpfApplicationImpl" />
+      <option name="VM_PARAMETERS" value="-Dspf.mode=start -Dspf.applicationClass=com.gridnine.jasmine.server.spf.SpfApplicationImpl" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="jasmine [jsTests]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="jsTests" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="jasmine [makeProject]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="makeProject" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Application.jasmine" />
-      <item itemvalue="Application.jasmine (1)" />
+      <item itemvalue="Application.PgMain2" />
+      <item itemvalue="Application.PgMaine" />
+      <item itemvalue="Gradle.jasmine [jsTests]" />
+      <item itemvalue="Gradle.jasmine [makeProject]" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.jasmine [jsTests]" />
+        <item itemvalue="Gradle.jasmine [makeProject]" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -92,6 +205,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1585926974991</updated>
+      <workItem from="1585932907206" duration="225000" />
     </task>
     <task id="LOCAL-00001" summary="development process">
       <created>1585930870695</created>
@@ -100,33 +214,121 @@
       <option name="project" value="LOCAL" />
       <updated>1585930870695</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="development process">
+      <created>1585931043962</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1585931043962</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="225000" />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="development process" />
     <option name="LAST_COMMIT_MESSAGE" value="development process" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="417" y="173" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1585930915504">
+    <state x="554" y="177" key="#Project_Structure" timestamp="1585935564962">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="417" y="173" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1585930915504" />
-    <state x="693" y="279" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog" timestamp="1585930499282">
+    <state x="554" y="177" key="#Project_Structure/0.0.1920.1044@0.0.1920.1044" timestamp="1585935564962" />
+    <state x="417" y="173" width="1086" height="871" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1585935834283">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="693" y="279" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1585930499282" />
-    <state x="260" y="90" key="CommitChangelistDialog2" timestamp="1585930870391">
+    <state x="417" y="173" width="1086" height="871" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1585935834283" />
+    <state x="773" y="360" width="375" height="337" key="#com.intellij.ide.actions.DebugLogConfigureAction" timestamp="1585932216789">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="260" y="90" key="CommitChangelistDialog2/0.0.1920.1044@0.0.1920.1044" timestamp="1585930870391" />
-    <state x="443" y="99" width="1036" height="858" key="SettingsEditor" timestamp="1585930790809">
+    <state x="773" y="360" width="375" height="337" key="#com.intellij.ide.actions.DebugLogConfigureAction/0.0.1920.1044@0.0.1920.1044" timestamp="1585932216789" />
+    <state x="693" y="279" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog" timestamp="1585936129612">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="443" y="99" width="1036" height="858" key="SettingsEditor/0.0.1920.1044@0.0.1920.1044" timestamp="1585930790809" />
+    <state x="693" y="279" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1585936129612" />
+    <state x="654" y="184" key="#jasmine" timestamp="1585931574202">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state x="654" y="184" key="#jasmine/0.0.1920.1044@0.0.1920.1044" timestamp="1585931574202" />
+    <state x="260" y="90" key="CommitChangelistDialog2" timestamp="1585931043719">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state x="260" y="90" key="CommitChangelistDialog2/0.0.1920.1044@0.0.1920.1044" timestamp="1585931043719" />
+    <state x="743" y="279" key="FileChooserDialogImpl" timestamp="1585935555020">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state x="743" y="279" key="FileChooserDialogImpl/0.0.1920.1044@0.0.1920.1044" timestamp="1585935555020" />
+    <state width="1874" height="272" key="GridCell.Tab.0.bottom" timestamp="1585938833100">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state width="1874" height="272" key="GridCell.Tab.0.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1585938833100" />
+    <state width="1874" height="272" key="GridCell.Tab.0.center" timestamp="1585938833098">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state width="1874" height="272" key="GridCell.Tab.0.center/0.0.1920.1044@0.0.1920.1044" timestamp="1585938833098" />
+    <state width="1874" height="272" key="GridCell.Tab.0.left" timestamp="1585938833097">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state width="1874" height="272" key="GridCell.Tab.0.left/0.0.1920.1044@0.0.1920.1044" timestamp="1585938833097" />
+    <state width="1874" height="272" key="GridCell.Tab.0.right" timestamp="1585938833099">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state width="1874" height="272" key="GridCell.Tab.0.right/0.0.1920.1044@0.0.1920.1044" timestamp="1585938833099" />
+    <state width="1874" height="336" key="GridCell.Tab.1.bottom" timestamp="1585938812044">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state width="1874" height="336" key="GridCell.Tab.1.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1585938812044" />
+    <state width="1874" height="336" key="GridCell.Tab.1.center" timestamp="1585938812043">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state width="1874" height="336" key="GridCell.Tab.1.center/0.0.1920.1044@0.0.1920.1044" timestamp="1585938812043" />
+    <state width="1874" height="336" key="GridCell.Tab.1.left" timestamp="1585938812043">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state width="1874" height="336" key="GridCell.Tab.1.left/0.0.1920.1044@0.0.1920.1044" timestamp="1585938812043" />
+    <state width="1874" height="336" key="GridCell.Tab.1.right" timestamp="1585938812044">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state width="1874" height="336" key="GridCell.Tab.1.right/0.0.1920.1044@0.0.1920.1044" timestamp="1585938812044" />
+    <state x="549" y="208" key="RollbackChangesDialog" timestamp="1585938775183">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state x="549" y="208" key="RollbackChangesDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1585938775183" />
+    <state x="339" y="0" width="1036" height="858" key="SettingsEditor" timestamp="1585936131137">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state x="339" y="0" width="1036" height="858" key="SettingsEditor/0.0.1920.1044@0.0.1920.1044" timestamp="1585936131137" />
+    <state x="554" y="251" key="Vcs.Push.Dialog.v2" timestamp="1585931050279">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state x="554" y="251" key="Vcs.Push.Dialog.v2/0.0.1920.1044@0.0.1920.1044" timestamp="1585931050279" />
     <state x="554" y="232" key="com.intellij.openapi.vcs.changes.SpecificFilesViewDialog" timestamp="1585931027802">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="554" y="232" key="com.intellij.openapi.vcs.changes.SpecificFilesViewDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1585931027802" />
+    <state x="232" y="23" key="new project wizard" timestamp="1585936112227">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state x="232" y="23" key="new project wizard/0.0.1920.1044@0.0.1920.1044" timestamp="1585936112227" />
+    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup" timestamp="1585938534156">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1585938534156" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-core/9.0.30/73fc8b54346500884e0af113a26b7e5501bf3121/tomcat-embed-core-9.0.30-sources.jar!/org/apache/tomcat/util/scan/StandardJarScanner.java</url>
+          <line>368</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 apply<com.gridnine.jasmine.gradle.plugin.JasminePlugin>()
 
 buildscript{

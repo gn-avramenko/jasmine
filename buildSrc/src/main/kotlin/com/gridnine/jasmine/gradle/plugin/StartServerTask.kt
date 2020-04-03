@@ -37,7 +37,6 @@ open class StartServerTask : ConventionTask(), JavaExecSpec{
         setMain(getMain()) // make convention mapping work (at least for 'main'...
         setJvmArgs(getJvmArgs()) // ...and for 'jvmArgs')
         setIgnoreExitValue(true)
-        errorOutput= ByteArrayOutputStream()
         javaExecHandleBuilder.build().start()
     }
 

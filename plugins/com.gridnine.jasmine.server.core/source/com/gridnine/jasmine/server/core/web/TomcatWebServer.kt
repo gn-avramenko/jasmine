@@ -11,6 +11,7 @@ import org.apache.catalina.LifecycleException
 import org.apache.catalina.LifecycleState
 import org.apache.catalina.core.StandardContext
 import org.apache.catalina.startup.Tomcat
+import org.apache.tomcat.JarScanFilter
 import org.apache.tomcat.util.descriptor.web.FilterDef
 import org.apache.tomcat.util.descriptor.web.FilterMap
 import org.slf4j.LoggerFactory
@@ -57,9 +58,15 @@ constructor(port: Int) : WebServer {
                 context.addFilterMap(filterMap)
             }
             if (context is StandardContext) {
+
                 context.delegate = true
                 context.tldValidation = false
                 context.xmlValidation = false
+                context.clearReferencesObjectStreamClassCaches = false
+                context.clearReferencesRmiTargets = false
+                context.clearReferencesThreadLocals = false
+                context.jarScanner.jarScanFilter = JarScanFilter { jarScanType, jarName ->
+                    false }
             }
 
             if (context.state !=  LifecycleState.STARTED) {

@@ -4,8 +4,10 @@
  *****************************************************************/
 package com.gridnine.jasmine.gradle.plugin
 
+import com.gridnine.spf.app.SpfBoot
 import com.gridnine.spf.meta.SpfPluginsRegistry
 import com.moowork.gradle.node.npm.NpmTask
+import com.moowork.gradle.node.task.NodeTask
 import org.gradle.api.DefaultTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -171,32 +173,30 @@ class JasminePlugin : Plugin<Project> {
                     task.main = "com.gridnine.spf.app.SpfBoot"
                     task.classpath = createClassPath(target)
                     task.doLast{
-                        Thread.sleep(3000L)
+                        while (!SpfBoot.isApplicationRunning()){
+                            Thread.sleep(1000L)
+                        }
                     }
                 }
-//                target.tasks.create("_${it.id}-jsTestStartServer", JavaFork::class.java) { task ->
-//                    task.setJvmArgs(arrayListOf("-Dspf.mode=shell", "-Dspf.applicationClass=$launcherClassName"))
-//                    task.main = "com.gridnine.spf.app.SpfBoot"
-//                    task.classpath = createClassPath(target)
-//                    task.doLast{
-//                        Thread.sleep(3000L)
-//                    }
-//                }
-//                target.tasks.create("_${it.id}-jsTest", NodeTask::class.java) { task ->
-//                    task.setIgnoreExitValue(true)
-//                    task.dependsOn("_installMocha", "_installReporter", "_populateNode","_${it.id}-jsTestStartServer")
-//                    task.group = "other"
-//                    task.script = File(target.projectDir, "node_modules/mocha/bin/mocha")
-//                    task.setArgs(arrayListOf("--timeout", "10000", "--reporter", "mocha-jenkins-reporter", "--reporter-option", "junit_report_name=Tests,junit_report_path=build/junit-reports/${it.id}-junit.xml,junit_report_stack=1", "build/node_modules/${it.id}-launcher.js"))
-//                }
+
+                target.tasks.create("_${it.id}-jsTest", NodeTask::class.java) { task ->
+                    task.setIgnoreExitValue(true)
+                    task.dependsOn("_installMocha", "_installReporter", "_populateNode","_${it.id}-jsTestStartServer")
+                    task.group = "other"
+                    task.script = File(target.projectDir, "node_modules/mocha/bin/mocha")
+                    task.setArgs(arrayListOf("--timeout", "10000", "--reporter", "mocha-jenkins-reporter", "--reporter-option", "junit_report_name=Tests,junit_report_path=build/junit-reports/${it.id}-junit.xml,junit_report_stack=1", "build/node_modules/${it.id}-launcher.js"))
+                }
                 target.tasks.create("_${it.id}-jsTestStopServer", JavaExec::class.java) { task ->
-                    task.dependsOn("_${it.id}-jsTestStartServer")
+                    task.dependsOn("_${it.id}-jsTestStartServer","_${it.id}-jsTest")
                     task.setJvmArgs(arrayListOf("-Dspf.mode=stop", "-Dspf.applicationClass=$launcherClassName"))
                     task.main = "com.gridnine.spf.app.SpfBoot"
                     task.classpath = createClassPath(target)
+                    task.doLast{
+                        println("application stopped")
+                    }
                 }
                testDepends.add("_${it.id}-jsTestStartServer")
-               // testDepends.add("_${it.id}-jsTestStopServer")
+               testDepends.add("_${it.id}-jsTestStopServer")
             }
         }
         target.tasks.create("jsTests") { task ->

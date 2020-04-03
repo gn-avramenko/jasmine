@@ -1,0 +1,24 @@
+/*****************************************************************
+ * Gridnine AB http://www.gridnine.com
+ * Project: jasmine
+ * This file is auto generated, don't modify it manually
+ *****************************************************************/
+
+@file:Suppress("unused","RemoveRedundantQualifierName","UNCHECKED_CAST","MemberVisibilityCanBePrivate","RemoveEmptyPrimaryConstructor", "FunctionName")
+
+package com.gridnine.jasmine.server.standard.model.rest
+
+class EntityAutocompleteResponseJS():com.gridnine.jasmine.web.core.model.rest.BaseRestEntityJS(){
+
+    val items = arrayListOf<com.gridnine.jasmine.web.core.model.domain.EntityReferenceJS>()
+
+    @Suppress("UNCHECKED_CAST")
+    override fun getCollection(collectionName: String): MutableCollection<Any>{
+
+        if("items" == collectionName){
+            return this.items as MutableCollection<Any>
+        }
+
+        return super.getCollection(collectionName)
+    }
+}
