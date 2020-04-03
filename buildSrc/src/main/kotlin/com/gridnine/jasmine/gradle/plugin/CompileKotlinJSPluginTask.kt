@@ -6,17 +6,13 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 import java.io.PrintStream
-import java.lang.Exception
-import java.lang.IllegalArgumentException
 import java.net.URLClassLoader
 
-open class CompileKotlinJVMPluginTask :DefaultTask(){
+open class CompileKotlinJSPluginTask :DefaultTask(){
 
     lateinit var pluginId:String
 
     lateinit var registry:SpfPluginsRegistry
-
-    val dependencies = arrayListOf<String>()
 
     @TaskAction
     fun compile(){
@@ -25,7 +21,7 @@ open class CompileKotlinJVMPluginTask :DefaultTask(){
         val classLoader = URLClassLoader(compilerClassPath.map { it.toURI().toURL() }.toTypedArray())
         val servicesClass = Class.forName("org.jetbrains.kotlin.config.Services", true, classLoader)
         val emptyServices = servicesClass.getField("EMPTY").get(servicesClass)
-        val compiler = Class.forName(KotlinUtils.COMPILER_CLASS_JVM, true, classLoader)
+        val compiler = Class.forName(KotlinUtils.COMPILER_CLASS_JS, true, classLoader)
         val exec = compiler.getMethod(
                 "execAndOutputXml",
                 PrintStream::class.java,
@@ -33,26 +29,22 @@ open class CompileKotlinJVMPluginTask :DefaultTask(){
                 Array<String>::class.java
         )
         val cpFiles = hashSetOf<File>()
-        dependencies.forEach{
-            cpFiles.addAll(project.configurations.getByName(it).toSet())
-        }
+        cpFiles.addAll(project.configurations.getByName("web-js").toSet().filter { it.name.contains("kotlin-stdlib-js") })
+
         val plugin = registry.plugins.find { pluginId == it.id }?:throw IllegalArgumentException ("unable to find plugin $pluginId")
         plugin.pluginsDependencies.forEach {
             cpFiles.add(File(project.projectDir, "build/plugins/${it.pluginId}/classes"))
         }
-        if(KotlinUtils.getType(plugin) == SpfPluginType.SPF || KotlinUtils.getType(plugin) == SpfPluginType.SERVER_TEST){
-            cpFiles.add(File(project.projectDir, "lib/spf-1.0.jar"))
-        }
-
-        val cp = cpFiles.joinToString(separator = ":"){it.absolutePath}
 
         val argsLst = arrayListOf("${project.projectDir.absolutePath}/plugins/$pluginId/source")
         if(File("${project.projectDir.absolutePath}/plugins/$pluginId/source-gen").exists()){
             argsLst.add("${project.projectDir.absolutePath}/plugins/$pluginId/source-gen")
         }
-        argsLst.addAll(arrayListOf("-d", "${project.projectDir.absolutePath}/build/plugins/$pluginId/classes",
-                "-no-stdlib", "-no-reflect", "-jvm-target", "12","-cp",cp))
-
+        argsLst.addAll(arrayListOf("-output", "${project.projectDir.absolutePath}/build/plugins/$pluginId/classes/${pluginId}.js",
+                "-no-stdlib", "-source-map", "-source-map-embed-sources", "always", "-meta-info", "-module-kind", "umd"))
+        if(cpFiles.isNotEmpty()){
+            argsLst.addAll(arrayListOf("-libraries", cpFiles.joinToString(separator = ":"){it.absolutePath}))
+        }
         val res = exec.invoke(compiler.getConstructor().newInstance(), out, emptyServices, argsLst.toArray(arrayOfNulls<String>(0)))
         val exitCode = ExitCode.valueOf(res.toString())
         if(exitCode != ExitCode.OK){

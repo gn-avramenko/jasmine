@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="4">
-   <component name="NewModuleRootManager">
-      <output url="file://$MODULE_DIR$/../../plugins/com.gridnine.jasmine.web.easyui/resources/easyui-script"/>
-      <output-test url="file://$MODULE_DIR$/../../plugins/com.gridnine.jasmine.web.easyui/resources/easyui-script"/>
-      <content url="file://$MODULE_DIR$/../../plugins/com.gridnine.jasmine.web.easyui">
-         <sourceFolder url="file://$MODULE_DIR$/../../plugins/com.gridnine.jasmine.web.easyui/source" isTestSource="false" type="kotlin-source"/>
-         <excludeFolder url="file://$MODULE_DIR$/../../plugins/com.gridnine.jasmine.web.easyui/resources/easyui-script"/>
-      </content>
-      <orderEntry type="sourceFolder" forTests="false"/>
-      <orderEntry type="library" name="web_js" level="project"/>
-      <orderEntry type="module" module-name="com.gridnine.jasmine.web.core"/>
-   </component>
+  <component name="NewModuleRootManager">
+    <output url="file://$MODULE_DIR$/../../plugins/com.gridnine.jasmine.web.easyui/resources/easyui-script" />
+    <output-test url="file://$MODULE_DIR$/../../plugins/com.gridnine.jasmine.web.easyui/resources/easyui-script" />
+    <content url="file://$MODULE_DIR$/../../plugins/com.gridnine.jasmine.web.easyui">
+      <sourceFolder url="file://$MODULE_DIR$/../../plugins/com.gridnine.jasmine.web.easyui/source" type="kotlin-source" />
+      <excludeFolder url="file://$MODULE_DIR$/../../plugins/com.gridnine.jasmine.web.easyui/resources/easyui-script" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="web_js" level="project" />
+    <orderEntry type="module" module-name="com.gridnine.jasmine.web.core" />
+  </component>
 </module>

@@ -8,7 +8,7 @@ import java.util.*
 
 interface IExtension {
 
-    val classLoader: ClassLoader
+    val plugin: IPlugin
 
     fun getParameters(paramName: String): List<String>
 }

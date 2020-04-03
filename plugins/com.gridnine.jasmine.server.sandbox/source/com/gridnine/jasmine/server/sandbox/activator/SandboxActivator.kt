@@ -13,7 +13,6 @@ import com.gridnine.jasmine.server.core.rest.NoCacheFilter
 import com.gridnine.jasmine.server.core.storage.Storage
 import com.gridnine.jasmine.server.core.storage.StorageRegistry
 import com.gridnine.jasmine.server.core.storage.search.SearchQuery
-import com.gridnine.jasmine.server.core.utils.TextUtils
 import com.gridnine.jasmine.server.core.web.WebAppFilter
 import com.gridnine.jasmine.server.core.web.WebApplication
 import com.gridnine.jasmine.server.core.web.WebServerConfig
@@ -23,7 +22,6 @@ import com.gridnine.jasmine.server.sandbox.storage.SandboxComplexDocumentIndexHa
 import com.gridnine.jasmine.server.sandbox.storage.SandboxComplexDocumentVariantIndexHandler
 import com.gridnine.jasmine.server.sandbox.storage.SandboxUserAccountIndexHandler
 import com.gridnine.jasmine.server.standard.rest.WorkspaceProvider
-import java.lang.IllegalArgumentException
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -55,10 +53,7 @@ class SandboxActivator : IPluginActivator {
                 ?: throw IllegalArgumentException("unable to load resource easyui-script"),
                 javaClass.classLoader)
         WebServerConfig.get().addApplication(easyuiScriptWebapp)
-        val sourceWebApp = WebApplication("/source", javaClass.classLoader.getResource("easyui-script")
-                ?: throw IllegalArgumentException("unable to load resource easyui-script"),
-                javaClass.classLoader)
-        WebServerConfig.get().addApplication(sourceWebApp)
+
 
         WebServerConfig.get().globalFilters.add(WebAppFilter("nocache", NoCacheFilter::class))
         WebServerConfig.get().globalFilters.add(WebAppFilter("dev-kt-files", KotlinFileDevFilter::class))

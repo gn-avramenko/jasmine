@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="4">
-   <component name="NewModuleRootManager">
-      <output url="file://$MODULE_DIR$/../../plugins/com.gridnine.jasmine.web.core/resources/webapp-core"/>
-      <output-test url="file://$MODULE_DIR$/../../plugins/com.gridnine.jasmine.web.core/resources/webapp-core"/>
-      <content url="file://$MODULE_DIR$/../../plugins/com.gridnine.jasmine.web.core">
-         <sourceFolder url="file://$MODULE_DIR$/../../plugins/com.gridnine.jasmine.web.core/source" isTestSource="false" type="kotlin-source"/>
-         <sourceFolder url="file://$MODULE_DIR$/../../plugins/com.gridnine.jasmine.web.core/source-gen" isTestSource="false" type="kotlin-source" generated="true"/>
-         <excludeFolder url="file://$MODULE_DIR$/../../plugins/com.gridnine.jasmine.web.core/resources/webapp-core"/>
-      </content>
-      <orderEntry type="sourceFolder" forTests="false"/>
-      <orderEntry type="library" name="web_js" level="project"/>
-   </component>
+  <component name="NewModuleRootManager">
+    <output url="file://$MODULE_DIR$/../../plugins/com.gridnine.jasmine.web.core/resources/webapp-core" />
+    <output-test url="file://$MODULE_DIR$/../../plugins/com.gridnine.jasmine.web.core/resources/webapp-core" />
+    <content url="file://$MODULE_DIR$/../../plugins/com.gridnine.jasmine.web.core">
+      <sourceFolder url="file://$MODULE_DIR$/../../plugins/com.gridnine.jasmine.web.core/source" type="kotlin-source" />
+      <sourceFolder url="file://$MODULE_DIR$/../../plugins/com.gridnine.jasmine.web.core/source-gen" type="kotlin-source" generated="true" />
+      <excludeFolder url="file://$MODULE_DIR$/../../plugins/com.gridnine.jasmine.web.core/resources/webapp-core" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="web_js" level="project" />
+  </component>
 </module>

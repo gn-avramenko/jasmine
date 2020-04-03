@@ -29,5 +29,6 @@ apply{
 dependencies{
     "compile"(files("../lib/spf-1.0.jar"))
     "compile"("com.github.node-gradle:gradle-node-plugin:2.2.3")
+    //"compile"("gradle.plugin.com.github.jengelman.gradle.plugins:gradle-processes:0.5.0")
 }
 

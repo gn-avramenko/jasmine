@@ -31,13 +31,14 @@ class SpfApplicationMetadataProvider(private val registry: SpfPluginsRegistry) :
 
     override fun getExtensions(extensionPointId: String): List<IExtension> {
 
-        return registry.getExtensions(extensionPointId).map {
+        return registry.getExtensions(extensionPointId).map {spfExtendsion ->
             object : IExtension {
-                override val classLoader: ClassLoader
-                    get() = clsLoader
+                override val plugin: IPlugin
+                    get() = plugins.find { it.pluginId == spfExtendsion.pluginId}!!
+
 
                 override fun getParameters(paramName: String): List<String> {
-                    return it.parameters.filter { p -> p.id == paramName }.map { p -> p.value }.toList()
+                    return spfExtendsion.parameters.filter { p -> p.id == paramName }.map { p -> p.value }.toList()
                 }
 
 
@@ -58,7 +59,7 @@ class SpfApplicationImpl: SpfApplication {
         val registry = SpfPluginsRegistry()
         registry.initRegistry(urls)
         Environment.publish(IApplicationMetadataProvider::class, SpfApplicationMetadataProvider(registry))
-        val activators =IApplicationMetadataProvider.get().getExtensions("activator").map { ep ->ep.classLoader.loadClass(ep.getParameters("class").first()).constructors.first().newInstance() as IPluginActivator }.toList()
+        val activators =IApplicationMetadataProvider.get().getExtensions("activator").map { ep ->ep.plugin.classLoader.loadClass(ep.getParameters("class").first()).constructors.first().newInstance() as IPluginActivator }.toList()
         activators.forEach { a ->a.configure(config) }
         activators.forEach { a ->a.activate() }
 

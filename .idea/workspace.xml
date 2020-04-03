@@ -1,32 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cf145ffd-ff9d-45fe-a37a-c75ec66ab68a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.easyui.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/jasmine_buildSrc.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/jasmine_buildSrc_main.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/jasmine_buildSrc_test.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core.test/plugin.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core.test/resources/js/com.gridnine.jasmine.web.core.test-launcher.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core.test/source/com/gridnine/jasmine/web/core/test/ext/external-libs-test.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core.test/source/com/gridnine/jasmine/web/core/test/suite/CoreTestSuite.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core.test/source/com/gridnine/jasmine/web/core/test/suite/LoadMetadataTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
+    <list default="true" id="0514aaa4-51f8-47c1-a5c0-72be3324d39a" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/CompileKotlinJSPluginTask.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/StartServerTask.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/js/kotlin.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/js/kotlin.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/js/kotlin.meta.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox.test/plugin.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox.test/source/com/gridnine/jasmine/server/sandbox/test/web/SandboxWebTest.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/plugin.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/source/com/gridnine/jasmine/web/sandbox/test/suite/SandboxTestSuite.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.core.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.core.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.core.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.core.test.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.db.h2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.db.h2.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.sandbox.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.sandbox.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.spf.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.spf.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.standard.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.standard.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.core.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.core.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.easyui.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.easyui.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.sandbox.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.sandbox.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules/jasmine.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/jasmine.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/jasmine_buildSrc_main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/jasmine_buildSrc_main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/jasmine_buildSrc_test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/jasmine_buildSrc_test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/buildSrc/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/CompileKotlinJVMPluginTask.kt" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/CompileKotlinJVMPluginTask.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/CreateArtifactsTask.kt" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/CreateArtifactsTask.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/CreateModulesTask.kt" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/CreateModulesTask.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/JasminePlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/JasminePlugin.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/KotlinUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/KotlinUtils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/external-libs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/external-libs.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox/source/com/gridnine/jasmine/web/sandbox/activator/sandbox-easyui-activator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox/source/com/gridnine/jasmine/web/sandbox/activator/sandbox-easyui-activator.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/spf-1.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/lib/spf-1.0.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/spf-1.0-sources.jar" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/spf-1.0-sources.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/activator/CoreActivator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/activator/CoreActivator.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/app/core-application.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/app/core-application.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/activator/SandboxActivator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/activator/SandboxActivator.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.spf/source/com/gridnine/jasmine/server/spf/spf-common.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.spf/source/com/gridnine/jasmine/server/spf/spf-common.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core.test/resources/js/com.gridnine.jasmine.web.core.test-launcher.js" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/resources/js/com.gridnine.jasmine.web.sandbox.test-launcher.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core.test/source/com/gridnine/jasmine/web/core/test/suite/CoreTestSuite.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core.test/source/com/gridnine/jasmine/web/core/test/suite/LoadMetadataTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/source/com/gridnine/jasmine/web/sandbox/test/suite/LoadMetadataTest.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,14 +72,7 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="jasmine" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="idea" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="jasmine" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="other" type="c8890929:TasksNode$1" />
+                <item name="buildSrc" type="2d1252cf:ModuleNode" />
               </path>
             </expand>
             <select />
@@ -75,25 +81,10 @@
       </state>
     </system>
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Kotlin Class" />
-        <option value="Class" />
-        <option value="Kotlin File" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="260" />
-    <option name="y" value="22" />
-    <option name="width" value="1400" />
-    <option name="height" value="1000" />
-  </component>
-  <component name="ProjectId" id="1ZUL0shLK6uwTJlMpzRrDn2uf9n" />
+  <component name="ProjectId" id="1a2HsOhfMrIGf22U0SrgeZN6hc7" />
   <component name="ProjectViewState">
     <option name="autoscrollFromSource" value="true" />
     <option name="autoscrollToSource" value="true" />
@@ -103,362 +94,45 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/plugins" />
     <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.34651405" />
-    <property name="settings.editor.selected.configurable" value="project.kotlinCompiler" />
   </component>
-  <component name="RecentsManager">
-    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
-      <recent name="com.gridnine.jasmine.web.core.test.suite" />
-      <recent name="com.gridnine.jasmine.web.core.utils" />
-      <recent name="com.gridnine.jasmine.web.easyui.utils" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/plugins" />
-      <recent name="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/table" />
-      <recent name="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/rest" />
-      <recent name="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.standard/source/com/gridnine/jasmine/server/standard/rest" />
-      <recent name="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe" />
-    </key>
-    <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
-      <recent name="com.gridnine.jasmine.web.easyui.widgets" />
-      <recent name="com.gridnine.jasmine.web.core.model.ui.widgets" />
-      <recent name="com.gridnine.jasmine.web.easyui.utils" />
-      <recent name="com.gridnine.jasmine.web.sandbox.shared" />
-      <recent name="com.gridnine.jasmine.web.easyui.mainframe" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe" />
-    </key>
-  </component>
-  <component name="RunManager" selected="Gradle.jasmine [jsTests]">
+  <component name="RunManager">
     <configuration name="jasmine" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="com.gridnine.spf.app.SpfBoot" />
       <module name="jasmine" />
-      <option name="VM_PARAMETERS" value="-Dspf.mode=start -Dspf.applicationClass=com.gridnine.jasmine.server.spf.SpfApplicationImpl -Xshare:off" />
+      <option name="VM_PARAMETERS" value="-Dspf.mode=shell -Dspf.applicationClass=com.gridnine.jasmine.server.spf.SpfApplicationImpl" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="jasmine [_installMocha]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="_installMocha" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="jasmine [_populateNode]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="_populateNode" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="jasmine [codeGen]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="--stacktrace" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="codeGen" />
-          </list>
-        </option>
-        <option name="vmOptions" value="" />
-      </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="jasmine [installNode]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="installNode" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="jasmine [jsTests]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="jsTests" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
-      <method v="2" />
-    </configuration>
-    <list>
-      <item itemvalue="Application.jasmine" />
-      <item itemvalue="Gradle.jasmine [codeGen]" />
-      <item itemvalue="Gradle.jasmine [_installMocha]" />
-      <item itemvalue="Gradle.jasmine [installNode]" />
-      <item itemvalue="Gradle.jasmine [jsTests]" />
-      <item itemvalue="Gradle.jasmine [_populateNode]" />
-    </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Gradle.jasmine [_populateNode]" />
-        <item itemvalue="Gradle.jasmine [jsTests]" />
-        <item itemvalue="Gradle.jasmine [installNode]" />
-        <item itemvalue="Gradle.jasmine [_installMocha]" />
-        <item itemvalue="Gradle.jasmine [codeGen]" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="cf145ffd-ff9d-45fe-a37a-c75ec66ab68a" name="Default Changelist" comment="" />
-      <created>1577969435027</created>
+      <changelist id="0514aaa4-51f8-47c1-a5c0-72be3324d39a" name="Default Changelist" comment="" />
+      <created>1585926974991</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1577969435027</updated>
+      <updated>1585926974991</updated>
     </task>
-    <task id="LOCAL-00001" summary="second commit">
-      <created>1578242651937</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1578242651937</updated>
-    </task>
-    <task id="LOCAL-00002" summary="second commit">
-      <created>1578494192810</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1578494192810</updated>
-    </task>
-    <task id="LOCAL-00003" summary="second commit">
-      <created>1578860916512</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1578860916512</updated>
-    </task>
-    <task id="LOCAL-00004" summary="second commit">
-      <created>1579439862204</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1579439862204</updated>
-    </task>
-    <task id="LOCAL-00005" summary="second commit">
-      <created>1581518163148</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1581518163148</updated>
-    </task>
-    <task id="LOCAL-00006" summary="second commit">
-      <created>1581792457426</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1581792457426</updated>
-    </task>
-    <task id="LOCAL-00007" summary="second commit">
-      <created>1583511801523</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1583511801523</updated>
-    </task>
-    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
-  <component name="TodoView">
-    <todo-panel id="selected-file">
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-    <todo-panel id="all">
-      <are-packages-shown value="true" />
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-  </component>
-  <component name="VcsManagerConfiguration">
-    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="second commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="second commit" />
-  </component>
   <component name="WindowStateProjectService">
-    <state x="554" y="177" width="1133" height="690" key="#Project_Structure" timestamp="1585668760074">
+    <state x="417" y="173" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1585930646732">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="554" y="177" width="1133" height="690" key="#Project_Structure/0.0.1920.1044@0.0.1920.1044" timestamp="1585668760074" />
-    <state x="582" y="153" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog" timestamp="1585668121389">
+    <state x="417" y="173" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1585930646732" />
+    <state x="693" y="279" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog" timestamp="1585930499282">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="582" y="153" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1585668121389" />
-    <state width="1874" height="272" key="GridCell.Tab.0.bottom" timestamp="1585673231997">
+    <state x="693" y="279" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1585930499282" />
+    <state x="443" y="99" width="1036" height="858" key="SettingsEditor" timestamp="1585930790809">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1874" height="272" key="GridCell.Tab.0.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1585673231997" />
-    <state width="1874" height="272" key="GridCell.Tab.0.center" timestamp="1585673231996">
-      <screen x="0" y="0" width="1920" height="1044" />
-    </state>
-    <state width="1874" height="272" key="GridCell.Tab.0.center/0.0.1920.1044@0.0.1920.1044" timestamp="1585673231996" />
-    <state width="1874" height="272" key="GridCell.Tab.0.left" timestamp="1585673231996">
-      <screen x="0" y="0" width="1920" height="1044" />
-    </state>
-    <state width="1874" height="272" key="GridCell.Tab.0.left/0.0.1920.1044@0.0.1920.1044" timestamp="1585673231996" />
-    <state width="1874" height="272" key="GridCell.Tab.0.right" timestamp="1585673231997">
-      <screen x="0" y="0" width="1920" height="1044" />
-    </state>
-    <state width="1874" height="272" key="GridCell.Tab.0.right/0.0.1920.1044@0.0.1920.1044" timestamp="1585673231997" />
-    <state width="1874" height="336" key="GridCell.Tab.1.bottom" timestamp="1585669430295">
-      <screen x="0" y="0" width="1920" height="1044" />
-    </state>
-    <state width="1874" height="336" key="GridCell.Tab.1.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1585669430295" />
-    <state width="1874" height="336" key="GridCell.Tab.1.center" timestamp="1585669430295">
-      <screen x="0" y="0" width="1920" height="1044" />
-    </state>
-    <state width="1874" height="336" key="GridCell.Tab.1.center/0.0.1920.1044@0.0.1920.1044" timestamp="1585669430295" />
-    <state width="1874" height="336" key="GridCell.Tab.1.left" timestamp="1585669430295">
-      <screen x="0" y="0" width="1920" height="1044" />
-    </state>
-    <state width="1874" height="336" key="GridCell.Tab.1.left/0.0.1920.1044@0.0.1920.1044" timestamp="1585669430295" />
-    <state width="1874" height="336" key="GridCell.Tab.1.right" timestamp="1585669430295">
-      <screen x="0" y="0" width="1920" height="1044" />
-    </state>
-    <state width="1874" height="336" key="GridCell.Tab.1.right/0.0.1920.1044@0.0.1920.1044" timestamp="1585669430295" />
-    <state x="442" y="93" width="1009" height="900" key="SettingsEditor" timestamp="1585664860779">
-      <screen x="0" y="0" width="1920" height="1044" />
-    </state>
-    <state x="442" y="93" width="1009" height="900" key="SettingsEditor/0.0.1920.1044@0.0.1920.1044" timestamp="1585664860779" />
-    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup" timestamp="1585669737291">
-      <screen x="0" y="0" width="1920" height="1044" />
-    </state>
-    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1585669737291" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint type="java-line">
-          <url>jar://$USER_HOME$/programs/jdk12/lib/src.zip!/java.sql/java/sql/DriverManager.java</url>
-          <line>268</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint type="java-line">
-          <url>jar://$USER_HOME$/programs/jdk12/lib/src.zip!/java.sql/java/sql/DriverManager.java</url>
-          <line>270</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint type="java-line">
-          <url>jar://$USER_HOME$/programs/jdk12/lib/src.zip!/java.sql/java/sql/DriverManager.java</url>
-          <line>596</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint type="java-field">
-          <url>jar://$USER_HOME$/programs/jdk12/lib/src.zip!/java.sql/java/sql/DriverManager.java</url>
-          <line>85</line>
-          <properties field="registeredDrivers" class="java.sql.DriverManager" />
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.db.h2/source/com/gridnine/jasmine/server/db/h2/H2DbDialect.kt</url>
-          <line>56</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
-  <component name="antWorkspaceConfiguration">
-    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
-    <option name="FILTER_TARGETS" value="false" />
-  </component>
-  <component name="debuggerHistoryManager">
-    <expressions id="breakpointCondition">
-      <expression>
-        <expression-string>className == null</expression-string>
-        <language-id>kotlin</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>(key == null || value == null)</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>key==null</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>&quot;true&quot; == it.attributes[&quot;not-editable&quot;]</expression-string>
-        <language-id>kotlin</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-    </expressions>
-    <expressions id="evaluateExpression">
-      <expression>
-        <expression-string>httpRequest.requestURI</expression-string>
-        <language-id>kotlin</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>httpRequest.pathTranslated</expression-string>
-        <language-id>kotlin</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>httpRequest.contextPath</expression-string>
-        <language-id>kotlin</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-    </expressions>
+    <state x="443" y="99" width="1036" height="858" key="SettingsEditor/0.0.1920.1044@0.0.1920.1044" timestamp="1585930790809" />
   </component>
 </project>

@@ -3,6 +3,9 @@ apply<com.gridnine.jasmine.gradle.plugin.JasminePlugin>()
 buildscript{
     repositories{
         mavenCentral()
+        maven {
+            setUrl("https://plugins.gradle.org/m2/")
+        }
     }
     dependencies{
         "classpath"("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.61")
@@ -11,6 +14,7 @@ buildscript{
 plugins {
     id("com.github.node-gradle.node")
 }
+
 
 //node{
 //    download = true

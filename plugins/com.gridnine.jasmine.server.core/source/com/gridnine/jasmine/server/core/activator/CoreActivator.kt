@@ -56,7 +56,7 @@ class CoreActivator:IPluginActivator{
                 .getExtensions("rest-metadata")
         for (ext in extensions) {
             for (location in ext.getParameters("url")) {
-                RestMetadataParser.updateRestMetaRegistry(restRegistry, location, ext.classLoader)
+                RestMetadataParser.updateRestMetaRegistry(restRegistry, location, ext.plugin.classLoader)
             }
         }
 
@@ -67,7 +67,7 @@ class CoreActivator:IPluginActivator{
                 .getExtensions("ui-metadata")
         for (ext in extensions) {
             for (location in ext.getParameters("url")) {
-                UiMetadataParser.updateUiMetaRegistry(uiMetaRegistry, location, ext.classLoader)
+                UiMetadataParser.updateUiMetaRegistry(uiMetaRegistry, location, ext.plugin.classLoader)
             }
         }
 
@@ -80,7 +80,7 @@ class CoreActivator:IPluginActivator{
                 .getExtensions("domain-metadata")
         for (ext in extensions) {
             for (location in ext.getParameters("url")) {
-                DomainMetadataParser.updateDomainMetaRegistry(result, location, ext.classLoader)
+                DomainMetadataParser.updateDomainMetaRegistry(result, location, ext.plugin.classLoader)
             }
         }
     }

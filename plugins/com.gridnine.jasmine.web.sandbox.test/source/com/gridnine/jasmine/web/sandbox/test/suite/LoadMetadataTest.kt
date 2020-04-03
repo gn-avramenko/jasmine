@@ -1,4 +1,4 @@
-package com.gridnine.jasmine.web.core.test.suite
+package com.gridnine.jasmine.web.sandbox.test.suite
 
 import com.gridnine.jasmine.web.core.test.ext.Assert
 import com.gridnine.jasmine.web.core.test.ext.it

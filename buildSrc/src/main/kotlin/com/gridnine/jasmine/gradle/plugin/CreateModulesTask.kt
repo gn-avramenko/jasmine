@@ -29,6 +29,7 @@ open class CreateModulesTask : DefaultTask() {
 
     private fun createExternals() {
         val sb = StringBuilder()
+        val testCP = arrayListOf<String>()
         registry.plugins.forEach { plugin ->
             val baseDir = File(project.projectDir, "plugins/${plugin.id}")
             val pluginType = SpfPluginType.valueOf(plugin.parameters.find { par -> "type" == par.id }?.value
@@ -51,6 +52,16 @@ open class CreateModulesTask : DefaultTask() {
                         sb.append("\n${resourcesDir.absolutePath}/")
                     }
                 }
+                SpfPluginType.SERVER_TEST -> {
+                    val classesDir = File(baseDir, "classes")
+                    if (classesDir.exists()) {
+                        testCP.add(classesDir.absolutePath)
+                    }
+                    val resourcesDir = File(baseDir, "resources")
+                    if (resourcesDir.exists()) {
+                        testCP.add(resourcesDir.absolutePath)
+                    }
+                }
                 else -> {
                 }
             }
@@ -60,6 +71,9 @@ open class CreateModulesTask : DefaultTask() {
             sb.append("\n${it.absolutePath}")
         }
         File(project.projectDir, "lib/externals.txt").writeIfDiffers(sb.substring(1))
+        sb.append("\n").append(testCP.joinToString("\n"))
+
+        File(project.projectDir, "lib/externals-test.txt").writeIfDiffers(sb.substring(1))
     }
 
     private fun createPlugins() {
@@ -70,7 +84,7 @@ open class CreateModulesTask : DefaultTask() {
                     when (pluginType) {
                         SpfPluginType.SERVER, SpfPluginType.CORE, SpfPluginType.SERVER_TEST, SpfPluginType.SPF -> {
                             emptyTag("output", "url" to "file://\$MODULE_DIR\$/../../plugins/${pluginDescr.id}/classes")
-                            emptyTag("output-test", "url" to "file://\$MODULE_DIR\$/../..plugins/${pluginDescr.id}/classes")
+                            emptyTag("output-test", "url" to "file://\$MODULE_DIR\$/../../plugins/${pluginDescr.id}/classes")
                             "content"("url" to "file://\$MODULE_DIR\$/../../plugins/${pluginDescr.id}") {
                                 if (File(project.projectDir, "plugins/${pluginDescr.id}/source").exists()) {
                                     emptyTag("sourceFolder", "url" to "file://\$MODULE_DIR\$/../../plugins/${pluginDescr.id}/source",
@@ -114,6 +128,7 @@ open class CreateModulesTask : DefaultTask() {
                             emptyTag("orderEntry", "type" to "inheritedJdk")
                             emptyTag("orderEntry", "type" to "library", "name" to "server", "level" to "project")
                             emptyTag("orderEntry", "type" to "library", "name" to "server_test", "level" to "project")
+                            emptyTag("orderEntry", "type" to "library", "name" to "spf", "level" to "project")
                         }
                         SpfPluginType.SPF -> {
                             emptyTag("orderEntry", "type" to "sourceFolder", "forTests" to "false")
