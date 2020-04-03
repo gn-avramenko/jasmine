@@ -2,44 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0514aaa4-51f8-47c1-a5c0-72be3324d39a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/CompileKotlinJSPluginTask.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/StartServerTask.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/js/kotlin.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/js/kotlin.js.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/js/kotlin.meta.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox.test/plugin.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox.test/source/com/gridnine/jasmine/server/sandbox/test/web/SandboxWebTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/plugin.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/source/com/gridnine/jasmine/web/sandbox/test/suite/SandboxTestSuite.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.core.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.core.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.core.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.core.test.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.db.h2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.db.h2.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.sandbox.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.sandbox.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.spf.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.spf.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.standard.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.standard.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.core.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.core.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.easyui.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.easyui.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.sandbox.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.sandbox.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/jasmine.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/jasmine.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/jasmine_buildSrc_main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/jasmine_buildSrc_main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/jasmine_buildSrc_test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/jasmine_buildSrc_test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/buildSrc/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/CompileKotlinJVMPluginTask.kt" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/CompileKotlinJVMPluginTask.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/CreateModulesTask.kt" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/CreateModulesTask.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/JasminePlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/JasminePlugin.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/spf-1.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/lib/spf-1.0.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/spf-1.0-sources.jar" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/spf-1.0-sources.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/activator/CoreActivator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/activator/CoreActivator.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/app/core-application.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/app/core-application.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/activator/SandboxActivator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/activator/SandboxActivator.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.spf/source/com/gridnine/jasmine/server/spf/spf-common.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.spf/source/com/gridnine/jasmine/server/spf/spf-common.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core.test/resources/js/com.gridnine.jasmine.web.core.test-launcher.js" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/resources/js/com.gridnine.jasmine.web.sandbox.test-launcher.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core.test/source/com/gridnine/jasmine/web/core/test/suite/CoreTestSuite.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core.test/source/com/gridnine/jasmine/web/core/test/suite/LoadMetadataTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/source/com/gridnine/jasmine/web/sandbox/test/suite/LoadMetadataTest.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +61,14 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.34651405" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.jasmine (1)">
+    <configuration name="jasmine (1)" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.gridnine.spf.app.SpfBoot" />
+      <module name="jasmine" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="jasmine" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="com.gridnine.spf.app.SpfBoot" />
       <module name="jasmine" />
@@ -107,6 +77,10 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.jasmine" />
+      <item itemvalue="Application.jasmine (1)" />
+    </list>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -119,20 +93,40 @@
       <option name="presentableId" value="Default" />
       <updated>1585926974991</updated>
     </task>
+    <task id="LOCAL-00001" summary="development process">
+      <created>1585930870695</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1585930870695</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="development process" />
+    <option name="LAST_COMMIT_MESSAGE" value="development process" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="417" y="173" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1585930646732">
+    <state x="417" y="173" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1585930915504">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="417" y="173" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1585930646732" />
+    <state x="417" y="173" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1585930915504" />
     <state x="693" y="279" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog" timestamp="1585930499282">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="693" y="279" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1585930499282" />
+    <state x="260" y="90" key="CommitChangelistDialog2" timestamp="1585930870391">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state x="260" y="90" key="CommitChangelistDialog2/0.0.1920.1044@0.0.1920.1044" timestamp="1585930870391" />
     <state x="443" y="99" width="1036" height="858" key="SettingsEditor" timestamp="1585930790809">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="443" y="99" width="1036" height="858" key="SettingsEditor/0.0.1920.1044@0.0.1920.1044" timestamp="1585930790809" />
+    <state x="554" y="232" key="com.intellij.openapi.vcs.changes.SpecificFilesViewDialog" timestamp="1585931027802">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state x="554" y="232" key="com.intellij.openapi.vcs.changes.SpecificFilesViewDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1585931027802" />
   </component>
 </project>
