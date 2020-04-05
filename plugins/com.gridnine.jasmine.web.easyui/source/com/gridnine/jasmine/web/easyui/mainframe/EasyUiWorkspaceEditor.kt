@@ -18,7 +18,7 @@ import com.gridnine.jasmine.web.easyui.showError
 import kotlin.js.Promise
 
 @Suppress("UnsafeCastFromDynamic")
-class EasyUiWorkspaceEditor : EasyUiTabHandler<WorkspaceDTJS> {
+class EasyUiWorkspaceEditor : EasyUiTabHandler<WorkspaceDTJS,Unit> {
 
     private val uid = TextUtilsJS.createUUID()
 
@@ -383,6 +383,7 @@ class EasyUiWorkspaceEditor : EasyUiTabHandler<WorkspaceDTJS> {
         return true
     }
 
+    override var cachedEditor: Unit? = null
 }
 
 interface EasyUiWorkspaceElementEditor<T : Any> {

@@ -25,7 +25,7 @@ import kotlin.js.Date
 import kotlin.js.Promise
 
 @Suppress("UNUSED_VARIABLE", "UnsafeCastFromDynamic")
-class EasyUiListTabHandler(private val element: ListWorkspaceItemDTJS) : EasyUiTabHandler<Unit> {
+class EasyUiListTabHandler(private val element: ListWorkspaceItemDTJS) : EasyUiTabHandler<Unit,EntityList<*>> {
 
     private val filterHandlers = arrayListOf<EasyUiListFilter<*>>()
 
@@ -108,7 +108,7 @@ class EasyUiListTabHandler(private val element: ListWorkspaceItemDTJS) : EasyUiT
         }.toString()
     }
 
-    override fun decorateData(data: Unit, uid: String, setTitle: (String) -> Unit, close: () -> Unit) {
+    override fun decorateData(data: Unit, uid: String, setTitle: (String) -> Unit, close: () -> Unit):EntityList<*> {
         val datagridDiv = jQuery("#table${uid}")
         val searchboxdiv = jQuery("#search${uid}").searchbox(object {
             val prompt = "поиск"
@@ -320,6 +320,7 @@ class EasyUiListTabHandler(private val element: ListWorkspaceItemDTJS) : EasyUiT
                 }
             }
         }
+        return  list
     }
 
     private fun updateVisibility(toolButtonHandlers: ArrayList<BaseListToolButtonHandler<BaseEntityJS>>,  widgets: HashMap<BaseListToolButtonHandler<BaseEntityJS>, ToolButtonWidget>, list: EntityList<BaseEntityJS>) {
@@ -386,7 +387,6 @@ class EasyUiListTabHandler(private val element: ListWorkspaceItemDTJS) : EasyUiT
     private val dateTimeFormatter = { date: Date? ->
         date?.let { "${it.getFullYear()}-${TextUtilsJS.fillWithZeros(it.getMonth() + 1)}-${TextUtilsJS.fillWithZeros(it.getDate())} ${TextUtilsJS.fillWithZeros(it.getHours())}:${TextUtilsJS.fillWithZeros(it.getMinutes())}" }
     }
-
-
+    override var cachedEditor: EntityList<*>? = null
 
 }

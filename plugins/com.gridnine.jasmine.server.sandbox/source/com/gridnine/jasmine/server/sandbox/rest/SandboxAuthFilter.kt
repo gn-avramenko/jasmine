@@ -31,8 +31,12 @@ class SandboxAuthFilter : Filter {
         val httpRequest = request as HttpServletRequest
         val httpResponse = response as HttpServletResponse
         val restId = httpRequest.pathInfo.substring(1)
-        val cookie = httpRequest.cookies?.find { it.name == AUTH_COOKIE }
-        if (cookie == null || cookie.value == null) {
+        var cookie = httpRequest.cookies?.find { it.name == AUTH_COOKIE }
+        var cookieValue = cookie?.value
+        if (cookieValue == null) {
+            cookieValue = httpRequest.getHeader("AUTH_COOKIE")
+        }
+        if (cookieValue == null) {
             if (restId == "sandbox_auth_checkAuth" || restId == "standard_standard_meta" || restId == "sandbox_auth_login") {
                 chain.doFilter(request, response)
                 return
@@ -41,27 +45,33 @@ class SandboxAuthFilter : Filter {
             return
         }
         if (restId == "logout") {
-            cookie.maxAge = 0
-            response.addCookie(cookie)
+            if (cookie != null) {
+                cookie.maxAge = 0
+                response.addCookie(cookie)
+            }
             return
         }
-        val decoded = DesUtil.decode(cookie.value).split("|")
+        val decoded = DesUtil.decode(cookieValue).split("|")
         try {
             val login = decoded[0]
             val password = decoded[1]
             val userAccount = Storage.get().findUniqueDocument(SandboxUserAccountIndex::class, SandboxUserAccountIndex.login, login)
-            if(userAccount == null || password != userAccount.password){
-                cookie.maxAge = 0
-                response.addCookie(cookie)
+            if (userAccount == null || password != userAccount.password) {
+                if (cookie != null) {
+                    cookie.maxAge = 0
+                    response.addCookie(cookie)
+                }
                 httpResponse.status = 403
                 return
             }
             authInfo.set(AuthInfo(login))
-        } catch (e:Exception){
+        } catch (e: Exception) {
             LoggerFactory.getLogger(javaClass).error("unable to check credentials", e)
-            cookie.maxAge = 0
-            response.addCookie(cookie)
-            httpResponse.status = 403
+            if(cookie != null) {
+                cookie.maxAge = 0
+                response.addCookie(cookie)
+                httpResponse.status = 403
+            }
             return
         }
         try {
@@ -76,12 +86,14 @@ class SandboxAuthFilter : Filter {
         fun getAuthInfo(): AuthInfo? {
             return authInfo.get()
         }
-        fun setCookie(login:String, password:String, response:HttpServletResponse){
-            val cookie = Cookie(AUTH_COOKIE,DesUtil.encode("$login|$password"))
+
+        fun setCookie(login: String, password: String, response: HttpServletResponse) {
+            val cookie = Cookie(AUTH_COOKIE, DesUtil.encode("$login|$password"))
             cookie.maxAge = 2147483647
             response.addCookie(cookie)
         }
-        fun removeCookie(response:HttpServletResponse){
+
+        fun removeCookie(response: HttpServletResponse) {
             val cookie = Cookie(AUTH_COOKIE, null)
             cookie.maxAge = 0
             response.addCookie(cookie)

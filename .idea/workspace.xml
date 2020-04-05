@@ -2,29 +2,50 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0514aaa4-51f8-47c1-a5c0-72be3324d39a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gradle/nodejs/node-v10.14.0-linux-x64/lib/node_modules/npm/node_modules/clone/clone.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.sandbox.test.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.core.test.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.sandbox.test.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jasmine.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.spf/source/com/gridnine/jasmine/server/spf/PgMain.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core.test/resources/js/core-test-initializer.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core.test/source/com/gridnine/jasmine/web/core/test/activator/CoreTestActivator.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core.test/source/com/gridnine/jasmine/web/core/test/rpc/TestRpcManager.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core.test/source/com/gridnine/jasmine/web/core/test/ui/ProxyTileWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core.test/source/com/gridnine/jasmine/web/core/test/ui/TestMainFrame.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core.test/source/com/gridnine/jasmine/web/core/test/ui/TestUiFactory.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core.test/source/com/gridnine/jasmine/web/core/test/ui/TestViewBuilder.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/resources/js/com.gridnine.jasmine.web.sandbox.test-suite-launcher.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/source/com/gridnine/jasmine/web/sandbox/test/suite/CreateNewAccountTest.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/source/com/gridnine/jasmine/web/sandbox/test/suite/SandboxIndividualTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.core.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.server.core.test.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.core.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.core.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.easyui.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.easyui.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.sandbox.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.gridnine.jasmine.web.sandbox.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules/jasmine.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/jasmine.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/jasmine_buildSrc_main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/jasmine_buildSrc_main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/jasmine_buildSrc_test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/jasmine_buildSrc_test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/JasminePlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/JasminePlugin.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/StartServerTask.kt" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/com/gridnine/jasmine/gradle/plugin/StartServerTask.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/spf-1.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/lib/spf-1.0.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/spf-1.0-sources.jar" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/spf-1.0-sources.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/web/TomcatWebServer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/web/TomcatWebServer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.spf/source/com/gridnine/jasmine/server/spf/spf-common.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.spf/source/com/gridnine/jasmine/server/spf/spf-common.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/resources/js/com.gridnine.jasmine.web.sandbox.test-launcher.js" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/resources/js/com.gridnine.jasmine.web.sandbox.test-launcher.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jasmine.iml" beforeDir="false" afterPath="$PROJECT_DIR$/jasmine.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/rest/RestServlet.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.core/source/com/gridnine/jasmine/server/core/rest/RestServlet.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox.test/classes/com/gridnine/jasmine/server/sandbox/test/web/SandboxWebTest$start$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox.test/classes/com/gridnine/jasmine/server/sandbox/test/web/SandboxWebTest$start$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox.test/classes/com/gridnine/jasmine/server/sandbox/test/web/SandboxWebTest$start$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox.test/classes/com/gridnine/jasmine/server/sandbox/test/web/SandboxWebTest$start$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox.test/classes/com/gridnine/jasmine/server/sandbox/test/web/SandboxWebTest$start$urls$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox.test/classes/com/gridnine/jasmine/server/sandbox/test/web/SandboxWebTest$start$urls$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox.test/classes/com/gridnine/jasmine/server/sandbox/test/web/SandboxWebTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox.test/classes/com/gridnine/jasmine/server/sandbox/test/web/SandboxWebTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox.test/source/com/gridnine/jasmine/server/sandbox/test/web/SandboxWebTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox.test/source/com/gridnine/jasmine/server/sandbox/test/web/SandboxWebTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/rest/SandboxAuthFilter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/rest/SandboxAuthFilter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/rest/sandbox-user-account.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.server.sandbox/source/com/gridnine/jasmine/server/sandbox/rest/sandbox-user-account.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core.test/source/com/gridnine/jasmine/web/core/test/ext/external-libs-test.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core.test/source/com/gridnine/jasmine/web/core/test/ext/external-libs-test.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/core-model-ui-entities-js.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/model/ui/core-model-ui-entities-js.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/ui/core-ui-js.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.core/source/com/gridnine/jasmine/web/core/ui/core-ui-js.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/EasyUiFactory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/EasyUiFactory.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiListTabHandler.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiListTabHandler.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiMainFrameImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiMainFrameImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiWorkspaceEditor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/EasyUiWorkspaceEditor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-editor-tab-handler.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/mainframe/easyui-editor-tab-handler.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiEditorButtonWidget.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.easyui/source/com/gridnine/jasmine/web/easyui/widgets/EasyUiEditorButtonWidget.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/plugin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/plugin.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/resources/js/com.gridnine.jasmine.web.sandbox.test-launcher.js" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/resources/js/com.gridnine.jasmine.web.sandbox.test-individual-launcher.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/source/com/gridnine/jasmine/web/sandbox/test/suite/LoadMetadataTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/source/com/gridnine/jasmine/web/sandbox/test/suite/LoadMetadataTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/source/com/gridnine/jasmine/web/sandbox/test/suite/SandboxTestSuite.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/source/com/gridnine/jasmine/web/sandbox/test/suite/SandboxTestSuite.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox/source/com/gridnine/jasmine/web/sandbox/activator/sandbox-easyui-activator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox/source/com/gridnine/jasmine/web/sandbox/activator/sandbox-easyui-activator.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox/source/com/gridnine/jasmine/web/sandbox/login/SandboxLoginButtonHandler.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox/source/com/gridnine/jasmine/web/sandbox/login/SandboxLoginButtonHandler.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox/source/com/gridnine/jasmine/web/sandbox/shared/SandboxSharedEditorSaveButtonHandler.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox/source/com/gridnine/jasmine/web/sandbox/shared/SandboxSharedEditorSaveButtonHandler.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox/source/com/gridnine/jasmine/web/sandbox/userAccount/sandbox-user-account-js.kt" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox/source/com/gridnine/jasmine/web/sandbox/userAccount/sandbox-user-account-js.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +88,18 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="jasmine" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="js-tests" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="jasmine" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="other" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="jasmine" type="f1a62948:ProjectNode" />
                 <item name="buildSrc" type="2d1252cf:ModuleNode" />
               </path>
             </expand>
@@ -79,8 +112,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Kotlin File" />
         <option value="Class" />
+        <option value="Kotlin Object" />
+        <option value="Kotlin File" />
       </list>
     </option>
   </component>
@@ -106,19 +140,29 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/src" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/build/node_modules" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.34651405" />
-    <property name="settings.editor.selected.configurable" value="project.propCompiler" />
+    <property name="project.structure.side.proportion" value="0.45427728" />
+    <property name="settings.editor.selected.configurable" value="project.kotlinCompiler" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
+      <recent name="com.gridnine.jasmine.web.core.test.ui" />
+      <recent name="" />
+    </key>
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="com.gridnine.jasmine.web.core.test.rpc" />
+      <recent name="com.gridnine.jasmine.web.sandbox.test.suite" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/build/node_modules" />
+      <recent name="$PROJECT_DIR$/plugins/com.gridnine.jasmine.web.sandbox.test/resources/js" />
       <recent name="$PROJECT_DIR$/lib/src" />
       <recent name="$PROJECT_DIR$/lib" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.jasmine [jsTests]">
+  <component name="RunManager" selected="Gradle.jasmine [com.gridnine.jasmine.web.sandbox.test-jsIndividualTestDebug]">
     <configuration name="PgMain2" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="PgMain2" />
       <module name="jasmine" />
@@ -143,7 +187,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="jasmine [jsTests]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="jasmine [com.gridnine.jasmine.web.sandbox.test-jsIndividualTestDebug]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -154,7 +198,45 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="jsTests" />
+            <option value="com.gridnine.jasmine.web.sandbox.test-jsIndividualTestDebug" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="jasmine [com.gridnine.jasmine.web.sandbox.test-jsIndividualTest]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="com.gridnine.jasmine.web.sandbox.test-jsIndividualTest" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="jasmine [com.gridnine.jasmine.web.sandbox.test-jsSuiteTest]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="com.gridnine.jasmine.web.sandbox.test-jsSuiteTest" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -181,17 +263,42 @@
       <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="jasmine [setupNode]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="setupNode" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Application.jasmine" />
       <item itemvalue="Application.PgMain2" />
       <item itemvalue="Application.PgMaine" />
-      <item itemvalue="Gradle.jasmine [jsTests]" />
+      <item itemvalue="Gradle.jasmine [com.gridnine.jasmine.web.sandbox.test-jsIndividualTest]" />
+      <item itemvalue="Gradle.jasmine [com.gridnine.jasmine.web.sandbox.test-jsSuiteTest]" />
+      <item itemvalue="Gradle.jasmine [com.gridnine.jasmine.web.sandbox.test-jsIndividualTestDebug]" />
+      <item itemvalue="Gradle.jasmine [setupNode]" />
       <item itemvalue="Gradle.jasmine [makeProject]" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.jasmine [jsTests]" />
         <item itemvalue="Gradle.jasmine [makeProject]" />
+        <item itemvalue="Gradle.jasmine [setupNode]" />
+        <item itemvalue="Gradle.jasmine [com.gridnine.jasmine.web.sandbox.test-jsIndividualTestDebug]" />
+        <item itemvalue="Gradle.jasmine [com.gridnine.jasmine.web.sandbox.test-jsSuiteTest]" />
+        <item itemvalue="Gradle.jasmine [com.gridnine.jasmine.web.sandbox.test-jsIndividualTest]" />
       </list>
     </recent_temporary>
   </component>
@@ -221,7 +328,21 @@
       <option name="project" value="LOCAL" />
       <updated>1585931043962</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="development process">
+      <created>1585938937399</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1585938937399</updated>
+    </task>
+    <task id="LOCAL-00004" summary="development process">
+      <created>1585938943273</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1585938943273</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -235,10 +356,10 @@
     <option name="LAST_COMMIT_MESSAGE" value="development process" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="554" y="177" key="#Project_Structure" timestamp="1585935564962">
+    <state x="554" y="177" key="#Project_Structure" timestamp="1586010732654">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="554" y="177" key="#Project_Structure/0.0.1920.1044@0.0.1920.1044" timestamp="1585935564962" />
+    <state x="554" y="177" key="#Project_Structure/0.0.1920.1044@0.0.1920.1044" timestamp="1586010732654" />
     <state x="417" y="173" width="1086" height="871" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1585935834283">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
@@ -247,6 +368,10 @@
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="773" y="360" width="375" height="337" key="#com.intellij.ide.actions.DebugLogConfigureAction/0.0.1920.1044@0.0.1920.1044" timestamp="1585932216789" />
+    <state x="745" y="234" key="#com.intellij.ide.util.MemberChooser" timestamp="1586098188503">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state x="745" y="234" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1044@0.0.1920.1044" timestamp="1586098188503" />
     <state x="693" y="279" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog" timestamp="1585936129612">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
@@ -255,70 +380,90 @@
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="654" y="184" key="#jasmine/0.0.1920.1044@0.0.1920.1044" timestamp="1585931574202" />
-    <state x="260" y="90" key="CommitChangelistDialog2" timestamp="1585931043719">
+    <state x="558" y="153" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog" timestamp="1586010026361">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="260" y="90" key="CommitChangelistDialog2/0.0.1920.1044@0.0.1920.1044" timestamp="1585931043719" />
-    <state x="743" y="279" key="FileChooserDialogImpl" timestamp="1585935555020">
+    <state x="558" y="153" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1586010026361" />
+    <state x="260" y="90" key="CommitChangelistDialog2" timestamp="1585938943217">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="743" y="279" key="FileChooserDialogImpl/0.0.1920.1044@0.0.1920.1044" timestamp="1585935555020" />
-    <state width="1874" height="272" key="GridCell.Tab.0.bottom" timestamp="1585938833100">
+    <state x="260" y="90" key="CommitChangelistDialog2/0.0.1920.1044@0.0.1920.1044" timestamp="1585938943217" />
+    <state x="743" y="279" key="FileChooserDialogImpl" timestamp="1586013528422">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1874" height="272" key="GridCell.Tab.0.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1585938833100" />
-    <state width="1874" height="272" key="GridCell.Tab.0.center" timestamp="1585938833098">
+    <state x="743" y="279" key="FileChooserDialogImpl/0.0.1920.1044@0.0.1920.1044" timestamp="1586013528422" />
+    <state width="1874" height="272" key="GridCell.Tab.0.bottom" timestamp="1586103093472">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1874" height="272" key="GridCell.Tab.0.center/0.0.1920.1044@0.0.1920.1044" timestamp="1585938833098" />
-    <state width="1874" height="272" key="GridCell.Tab.0.left" timestamp="1585938833097">
+    <state width="1874" height="272" key="GridCell.Tab.0.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1586103093472" />
+    <state width="1874" height="272" key="GridCell.Tab.0.center" timestamp="1586103093471">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1874" height="272" key="GridCell.Tab.0.left/0.0.1920.1044@0.0.1920.1044" timestamp="1585938833097" />
-    <state width="1874" height="272" key="GridCell.Tab.0.right" timestamp="1585938833099">
+    <state width="1874" height="272" key="GridCell.Tab.0.center/0.0.1920.1044@0.0.1920.1044" timestamp="1586103093471" />
+    <state width="1874" height="272" key="GridCell.Tab.0.left" timestamp="1586103093471">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1874" height="272" key="GridCell.Tab.0.right/0.0.1920.1044@0.0.1920.1044" timestamp="1585938833099" />
-    <state width="1874" height="336" key="GridCell.Tab.1.bottom" timestamp="1585938812044">
+    <state width="1874" height="272" key="GridCell.Tab.0.left/0.0.1920.1044@0.0.1920.1044" timestamp="1586103093471" />
+    <state width="1874" height="272" key="GridCell.Tab.0.right" timestamp="1586103093472">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1874" height="336" key="GridCell.Tab.1.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1585938812044" />
-    <state width="1874" height="336" key="GridCell.Tab.1.center" timestamp="1585938812043">
+    <state width="1874" height="272" key="GridCell.Tab.0.right/0.0.1920.1044@0.0.1920.1044" timestamp="1586103093472" />
+    <state width="1874" height="336" key="GridCell.Tab.1.bottom" timestamp="1586102554793">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1874" height="336" key="GridCell.Tab.1.center/0.0.1920.1044@0.0.1920.1044" timestamp="1585938812043" />
-    <state width="1874" height="336" key="GridCell.Tab.1.left" timestamp="1585938812043">
+    <state width="1874" height="336" key="GridCell.Tab.1.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1586102554793" />
+    <state width="1874" height="336" key="GridCell.Tab.1.center" timestamp="1586102554792">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1874" height="336" key="GridCell.Tab.1.left/0.0.1920.1044@0.0.1920.1044" timestamp="1585938812043" />
-    <state width="1874" height="336" key="GridCell.Tab.1.right" timestamp="1585938812044">
+    <state width="1874" height="336" key="GridCell.Tab.1.center/0.0.1920.1044@0.0.1920.1044" timestamp="1586102554792" />
+    <state width="1874" height="336" key="GridCell.Tab.1.left" timestamp="1586102554791">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1874" height="336" key="GridCell.Tab.1.right/0.0.1920.1044@0.0.1920.1044" timestamp="1585938812044" />
+    <state width="1874" height="336" key="GridCell.Tab.1.left/0.0.1920.1044@0.0.1920.1044" timestamp="1586102554791" />
+    <state width="1874" height="336" key="GridCell.Tab.1.right" timestamp="1586102554792">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state width="1874" height="336" key="GridCell.Tab.1.right/0.0.1920.1044@0.0.1920.1044" timestamp="1586102554792" />
     <state x="549" y="208" key="RollbackChangesDialog" timestamp="1585938775183">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="549" y="208" key="RollbackChangesDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1585938775183" />
-    <state x="339" y="0" width="1036" height="858" key="SettingsEditor" timestamp="1585936131137">
+    <state x="339" y="0" width="1036" height="858" key="SettingsEditor" timestamp="1586010855209">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="339" y="0" width="1036" height="858" key="SettingsEditor/0.0.1920.1044@0.0.1920.1044" timestamp="1585936131137" />
-    <state x="554" y="251" key="Vcs.Push.Dialog.v2" timestamp="1585931050279">
+    <state x="339" y="0" width="1036" height="858" key="SettingsEditor/0.0.1920.1044@0.0.1920.1044" timestamp="1586010855209" />
+    <state x="689" y="252" width="540" height="524" key="StructurePopup" timestamp="1586015848892">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="554" y="251" key="Vcs.Push.Dialog.v2/0.0.1920.1044@0.0.1920.1044" timestamp="1585931050279" />
-    <state x="554" y="232" key="com.intellij.openapi.vcs.changes.SpecificFilesViewDialog" timestamp="1585931027802">
+    <state x="689" y="252" width="540" height="524" key="StructurePopup/0.0.1920.1044@0.0.1920.1044" timestamp="1586015848892" />
+    <state x="554" y="251" key="Vcs.Push.Dialog.v2" timestamp="1585938952839">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="554" y="232" key="com.intellij.openapi.vcs.changes.SpecificFilesViewDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1585931027802" />
+    <state x="554" y="251" key="Vcs.Push.Dialog.v2/0.0.1920.1044@0.0.1920.1044" timestamp="1585938952839" />
+    <state x="554" y="232" key="com.intellij.openapi.vcs.changes.SpecificFilesViewDialog" timestamp="1585938917391">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state x="554" y="232" key="com.intellij.openapi.vcs.changes.SpecificFilesViewDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1585938917391" />
+    <state x="637" y="262" width="808" height="520" key="find.popup" timestamp="1586098970252">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state x="637" y="262" width="808" height="520" key="find.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1586098970252" />
     <state x="232" y="23" key="new project wizard" timestamp="1585936112227">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="232" y="23" key="new project wizard/0.0.1920.1044@0.0.1920.1044" timestamp="1585936112227" />
-    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup" timestamp="1585938534156">
+    <state x="703" y="159" key="refactoring.ChangeSignatureDialog" timestamp="1586084474745">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1585938534156" />
+    <state x="703" y="159" key="refactoring.ChangeSignatureDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1586084474745" />
+    <state x="624" y="236" key="run.anything.popup" timestamp="1586101392038">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state x="624" y="236" key="run.anything.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1586101392038" />
+    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup" timestamp="1586103049234">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1586103049234" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

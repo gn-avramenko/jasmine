@@ -9,6 +9,7 @@ import com.gridnine.jasmine.web.core.model.common.BaseEntityJS
 import com.gridnine.jasmine.web.core.model.common.BaseIntrospectableObjectJS
 import com.gridnine.jasmine.web.core.model.domain.EntityReferenceJS
 import kotlin.js.Date
+import kotlin.js.Promise
 
 abstract class BaseVMEntityJS:BaseEntityJS(){
     companion object{
@@ -48,6 +49,7 @@ abstract class BaseView<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS>
 
 
 class Editor<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS, V:BaseView<VM, VS,VV>>{
+    var toolButtons = arrayListOf<ToolButtonWidget>()
     lateinit var view:V
     lateinit var setTitle:(String) ->Unit
     lateinit var close:() ->Unit
@@ -122,10 +124,24 @@ interface NavigatorButtonsHandler<T:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVV
     fun onDelete(widget:NavigatorWidget<T,VS,VV>, selected: T)
 }
 
+
+
 open class ToolButtonWidget{
+    lateinit var id:String
     lateinit var setEnabled: (Boolean)->Unit
     lateinit var setVisible: (Boolean)->Unit
 }
+open class TestableToolButtonWidget<T>:ToolButtonWidget(){
+    lateinit var click:()->Promise<T>
+}
+open class DialogButtonWidget{
+    lateinit var id:String
+}
+
+open class TestableDialogButtonWidget<T:Any>:DialogButtonWidget(){
+    lateinit var click:()->Promise<T>
+}
+
 open class TableWidget<T:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS>:CollectionWidget<T, TableConfigurationJS<VS>, VV>()
 
 data class SelectItemJS(val id:String?, val caption:String?)
@@ -181,18 +197,32 @@ class TableConfigurationJS<VS:BaseVSEntityJS>{
     }
 }
 
+
 interface BaseEditorToolButtonHandler<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS, V:BaseView<VM,VS,VV>>{
-    fun onClick(editor:Editor<VM,VS,VV,V>)
     fun isVisible(editor:Editor<VM,VS,VV,V>):Boolean
     fun isEnabled(editor:Editor<VM,VS,VV,V>):Boolean
 
 }
 
-interface SharedEditorToolButtonHandler<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS, V:BaseView<VM,VS,VV>>:BaseEditorToolButtonHandler<VM,VS,VV,V>{
+interface StandardEditorToolButtonHandler<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS, V:BaseView<VM,VS,VV>>:BaseEditorToolButtonHandler<VM,VS,VV,V>{
+    fun onClick(editor:Editor<VM,VS,VV,V>)
+}
+
+interface BaseTestableEditorToolButtonHandler<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS, V:BaseView<VM,VS,VV>, T>:BaseEditorToolButtonHandler<VM,VS,VV,V>{
+    fun onClick(editor:Editor<VM,VS,VV,V>):Promise<T>
+}
+
+interface BaseSharedEditorToolButtonHandler<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS, V:BaseView<VM,VS,VV>>:BaseEditorToolButtonHandler<VM,VS,VV,V>{
     fun isApplicableToObject(objectId:String):Boolean
 }
 
+interface SharedEditorToolButtonHandler<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS, V:BaseView<VM,VS,VV>>:BaseSharedEditorToolButtonHandler<VM,VS,VV,V>{
+    fun onClick(editor:Editor<VM,VS,VV,V>)
+}
 
+interface TestableSharedEditorToolButtonHandler<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS, V:BaseView<VM,VS,VV>, T>:BaseSharedEditorToolButtonHandler<VM,VS,VV,V>{
+    fun onClick(editor:Editor<VM,VS,VV,V>):Promise<T>
+}
 
 interface EntityList<E:BaseEntityJS>{
     fun addSelectionChangeListener(listener:(List<E>) ->Unit)

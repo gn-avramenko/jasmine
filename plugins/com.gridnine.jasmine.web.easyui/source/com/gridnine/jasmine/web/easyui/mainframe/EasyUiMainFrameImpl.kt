@@ -11,6 +11,7 @@ import com.gridnine.jasmine.server.standard.model.rest.GetWorkspaceRequestJS
 import com.gridnine.jasmine.server.standard.model.rest.ListWorkspaceItemDTJS
 import com.gridnine.jasmine.server.standard.model.rest.WorkspaceDTJS
 import com.gridnine.jasmine.web.core.StandardRestClient
+import com.gridnine.jasmine.web.core.model.ui.Editor
 import com.gridnine.jasmine.web.core.ui.MainFrame
 import com.gridnine.jasmine.web.core.ui.MainFrameConfiguration
 import com.gridnine.jasmine.web.core.utils.TextUtilsJS
@@ -21,9 +22,9 @@ import kotlin.js.Promise
 
 
 @Suppress("UnsafeCastFromDynamic")
-class EasyUiMainFrameImpl :MainFrame{
+class EasyUiMainFrameImpl : MainFrame {
 
-    private  val tabs = arrayListOf<EasyUiTabHandler<*>>()
+    private val tabs = arrayListOf<EasyUiTabHandler<*, *>>()
 
     init {
         val config = MainFrameConfiguration.get()
@@ -44,12 +45,12 @@ class EasyUiMainFrameImpl :MainFrame{
                     }
                 }
                 div(data_options = "region:'center'") {
-                    div(id = "mf-content-tabs",data_options = "fit:true") { }
+                    div(id = "mf-content-tabs", data_options = "fit:true") { }
                 }
             }
             div(id = "mf-content-tabs-settings-menu", style = "display:none;width:200px"/*,data_options = "onClick:function(item){alert(item.name)}"*/) {
-                MainFrameConfiguration.get().getTools().withIndex().forEach {(idx, item) ->
-                    div(id="mf-content-tabs-settings-menu-$idx"){item.displayName()}
+                MainFrameConfiguration.get().getTools().withIndex().forEach { (idx, item) ->
+                    div(id = "mf-content-tabs-settings-menu-$idx") { item.displayName() }
                 }
             }
         }.toString()
@@ -64,31 +65,31 @@ class EasyUiMainFrameImpl :MainFrame{
             setWorkspace(it.workspace)
             jQuery("#mf-content-tabs").jtabs(object {
                 val toolPosition = "left"
-                val tools = arrayOf(object{
+                val tools = arrayOf(object {
                     val iconCls = "icon-settings"
                     val menu = "#mf-content-tabs-settings-menu"
                     val showEvent = "click"
-                    }
+                }
                 )
-                val onClose = {_:String, index:Int ->
+                val onClose = { _: String, index: Int ->
                     tabs.removeAt(index)
                 }
             })
-            jQuery("#mf-content-tabs-settings-menu").menu(object{
-                val onClick = { item:dynamic ->
+            jQuery("#mf-content-tabs-settings-menu").menu(object {
+                val onClick = { item: dynamic ->
                     val id = item.id as String
-                    val idx = id.substring(id.lastIndexOf("-")+1).toInt()
+                    val idx = id.substring(id.lastIndexOf("-") + 1).toInt()
                     MainFrameConfiguration.get().getTools()[idx].handle(MainFrame.get())
                 }
             })
         }
     }
 
-    fun setWorkspace(workspace:WorkspaceDTJS){
+    fun setWorkspace(workspace: WorkspaceDTJS) {
         val navigationDiv = jQuery("#mf-navigation")
-        navigationDiv.accordion(object{})
+        navigationDiv.accordion(object {})
         val existingSize = navigationDiv.accordion("panels").asDynamic().length as Int
-        for(n in existingSize-1 downTo 0){
+        for (n in existingSize - 1 downTo 0) {
             navigationDiv.accordion("remove", n)
         }
         workspace.groups.withIndex().forEach { (idx, group) ->
@@ -97,7 +98,7 @@ class EasyUiMainFrameImpl :MainFrame{
                 ul(id = "navigation_group_${idx}", `class` = "easyui-datalist", lines = false, style = "width:100%") {
                     group.items.withIndex().forEach { (idx2, item) ->
                         li {
-                            (item.displayName?:"???")()
+                            (item.displayName ?: "???")()
                             itemsMap[idx2] = item
                         }
                     }
@@ -108,61 +109,68 @@ class EasyUiMainFrameImpl :MainFrame{
                 val title = group.displayName
                 val content = navbarContent
             })
-            jQuery("#navigation_group_${idx}").datalist(object{
-                val onClickRow ={ idx:Int, _:dynamic ->
+            jQuery("#navigation_group_${idx}").datalist(object {
+                val onClickRow = { idx: Int, _: dynamic ->
                     val item = itemsMap[idx]
-                    if(item is ListWorkspaceItemDTJS){
+                    if (item is ListWorkspaceItemDTJS) {
                         openTab(EasyUiListTabHandler(item))
                     }
                 }
             })
         }
     }
-    override fun openTab(objectId: String, uid:String?, navigationKey:String?){
-        openTab(EasyUiEditorTabHandler(objectId, uid, navigationKey))
+
+    override fun openTab(objectId: String, uid: String?, navigationKey: String?): Promise<Editor<*, *, *, *>> {
+        return openTab(EasyUiEditorTabHandler(objectId, uid, navigationKey))
     }
 
-    fun<T> openTab(handler: EasyUiTabHandler<T>){
-        val existingTab = tabs.find { handler.getId() == it.getId() }
-        val tabsDiv = jQuery("#mf-content-tabs")
-        if(existingTab!= null){
-            tabsDiv.jtabs("select", tabs.indexOf(existingTab))
-            return
-        }
-        val uid = TextUtilsJS.createUUID()
-        handler.getData(uid).then {
-            tabsDiv.jtabs("add", object{
-                val title = processTabTitle(handler.getTitle(it))
-                val content = handler.getContent(it, uid)
-                val closable = true
-            })
-            tabs.add(handler)
-            val tab = tabsDiv.jtabs("getSelected")  // get selected panel
-            handler.decorateData(it,uid, { newTitle ->
-                tabsDiv.jtabs("update", object{
-                    val tab = tab
-                    val type = "header"
-                    val options = object{
-                        val title = processTabTitle(newTitle)
-                    }
+    fun <T, I> openTab(handler: EasyUiTabHandler<T, I>): Promise<I> {
+        return Promise { resolve, reject ->
+            val existingTab = tabs.find { handler.getId() == it.getId() }
+            val tabsDiv = jQuery("#mf-content-tabs")
+            if (existingTab != null) {
+                tabsDiv.jtabs("select", tabs.indexOf(existingTab))
+                resolve(existingTab.cachedEditor as I)
+                return@Promise
+            }
+            val uid = TextUtilsJS.createUUID()
+            handler.getData(uid).then {
+                tabsDiv.jtabs("add", object {
+                    val title = processTabTitle(handler.getTitle(it))
+                    val content = handler.getContent(it, uid)
+                    val closable = true
                 })
-            }, {
-                val idx = tabsDiv.jtabs("getTabIndex", tab)
-                tabsDiv.jtabs("close", idx)
-            })
+                tabs.add(handler)
+                val tab = tabsDiv.jtabs("getSelected")  // get selected panel
+                val editor = handler.decorateData(it, uid, { newTitle ->
+                    tabsDiv.jtabs("update", object {
+                        val tab = tab
+                        val type = "header"
+                        val options = object {
+                            val title = processTabTitle(newTitle)
+                        }
+                    })
+                }, {
+                    val idx = tabsDiv.jtabs("getTabIndex", tab)
+                    tabsDiv.jtabs("close", idx)
+                })
+                handler.cachedEditor = editor
+                resolve(editor)
+            }.catch(reject)
         }
     }
 
     private fun processTabTitle(title: String): String {
-        return if(title.length > 30) title.substring(0,30)+"..." else title
+        return if (title.length > 30) title.substring(0, 30) + "..." else title
     }
 
 }
 
-interface EasyUiTabHandler<T>{
-    fun getId():String
-    fun getData(uid:String): Promise<T>
-    fun getTitle(data: T):String
-    fun getContent(data: T, uid:String):String
-    fun decorateData(data:T,uid:String, setTitle:(String)->Unit, close:()->Unit)
+interface EasyUiTabHandler<T, I> {
+    var cachedEditor: I?
+    fun getId(): String
+    fun getData(uid: String): Promise<T>
+    fun getTitle(data: T): String
+    fun getContent(data: T, uid: String): String
+    fun decorateData(data: T, uid: String, setTitle: (String) -> Unit, close: () -> Unit): I
 }

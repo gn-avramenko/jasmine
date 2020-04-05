@@ -18,7 +18,7 @@ import kotlin.js.Promise
 
 data class EditorTabHandlerData(val content: String, val data: GetEditorDataResponseJS)
 
-class EasyUiEditorTabHandler(private val type: String, private var objectUid: String?, private var navigationKey:String?) : EasyUiTabHandler<EditorTabHandlerData> {
+class EasyUiEditorTabHandler(private val type: String, private var objectUid: String?, private var navigationKey: String?) : EasyUiTabHandler<EditorTabHandlerData, Editor<*, *, *, *>> {
 
     private val descriptions = hashMapOf<BaseEditorToolButtonHandler<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS, BaseView<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS>>, BaseToolButtonDescriptionJS>()
     private val toolButtonHandlers = arrayListOf<BaseEditorToolButtonHandler<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS, BaseView<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS>>>()
@@ -29,10 +29,11 @@ class EasyUiEditorTabHandler(private val type: String, private var objectUid: St
 
     private val editor = Editor<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS, BaseView<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS>>()
 
-    private lateinit var  widgets: MutableMap<BaseEditorToolButtonHandler<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS, BaseView<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS>>, ToolButtonWidget>
-            init {
+    private lateinit var widgets: MutableMap<BaseEditorToolButtonHandler<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS, BaseView<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS>>, ToolButtonWidget>
+
+    init {
         UiMetaRegistryJS.get().sharedEditorToolButtons.forEach {
-            val handler = ReflectionFactoryJS.get().getFactory(it.handler)() as SharedEditorToolButtonHandler<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS, BaseView<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS>>
+            val handler = ReflectionFactoryJS.get().getFactory(it.handler)() as BaseSharedEditorToolButtonHandler<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS, BaseView<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS>>
             if (handler.isApplicableToObject(type)) {
                 toolButtonHandlers.add(handler)
                 descriptions[handler] = it
@@ -67,8 +68,8 @@ class EasyUiEditorTabHandler(private val type: String, private var objectUid: St
                             when (val layout = viewDescription.layout) {
                                 is TableLayoutDescriptionJS -> {
                                     resolveView(HtmlUtilsJS.html {
-                                        div (id="contentPane${uid}", style = "width:100%;height:100%") {
-                                            div (id="mainPane${uid}", style = "width:100%;height:100%") {
+                                        div(id = "contentPane${uid}", style = "width:100%;height:100%") {
+                                            div(id = "mainPane${uid}", style = "width:100%;height:100%") {
                                                 EasyUiViewBuilder.generateHtml(viewDescription.id, uid, false, this)
                                             }
                                         }
@@ -120,12 +121,13 @@ class EasyUiEditorTabHandler(private val type: String, private var objectUid: St
         return data.content
     }
 
-    private fun updateToolsVisibility(){
+    private fun updateToolsVisibility() {
         toolButtonHandlers.forEach {
             widgets[it]!!.setEnabled(it.isEnabled(editor))
         }
     }
-    override fun decorateData(data: EditorTabHandlerData, uid: String, setTitle: (String) -> Unit, close: () -> Unit) {
+
+    override fun decorateData(data: EditorTabHandlerData, uid: String, setTitle: (String) -> Unit, close: () -> Unit): Editor<*, *, *, *> {
         val view = EasyUiViewBuilder.createView<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS, BaseView<BaseVMEntityJS, BaseVSEntityJS, BaseVVEntityJS>>(descr.viewId, uid)
         view.configure(data.data.viewSettings)
         view.readData(data.data.viewModel)
@@ -135,17 +137,38 @@ class EasyUiEditorTabHandler(private val type: String, private var objectUid: St
         editor.setTitle = setTitle
         editor.view = view
         view.parent = editor
-        editor.updateToolsVisibility=this::updateToolsVisibility
+        editor.updateToolsVisibility = this::updateToolsVisibility
         widgets = hashMapOf()
         toolButtonHandlers.forEach {
             val descr = descriptions[it]!!
-            widgets[it]  = EasyUiEditorButtonWidget("${descr.id}${uid}",it, editor)
+            widgets[it] = EasyUiEditorButtonWidget("${descr.id}${uid}", it, editor)
+            if (it is BaseTestableEditorToolButtonHandler<*, *, *, *, *>) {
+                val toolButton = TestableToolButtonWidget<Any>()
+                toolButton.click = {
+                    it.onClick(editor.asDynamic()) as Promise<Any>
+                }
+                toolButton.id = descr.id
+                editor.toolButtons.add(toolButton)
+            } else if (it is TestableSharedEditorToolButtonHandler<*, *, *, *, *>) {
+                val toolButton = TestableToolButtonWidget<Any>()
+                toolButton.click = {
+                    it.onClick(editor.asDynamic()) as Promise<Any>
+                }
+                toolButton.id = descr.id
+                editor.toolButtons.add(toolButton)
+            } else {
+                val toolButton = ToolButtonWidget()
+                toolButton.id = descr.id
+                editor.toolButtons.add(toolButton)
+            }
         }
         updateToolsVisibility()
-        if(navigationKey != null){
+        if (navigationKey != null) {
             view.navigate(navigationKey!!)
         }
-
+        return editor
     }
+
+    override var cachedEditor: Editor<*, *, *, *>? = null
 
 }

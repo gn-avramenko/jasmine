@@ -33,11 +33,14 @@ class EasyUiFactory:UiFactory{
         jQuery("body").append(dialogContent)
         val buttonsArr = arrayOfNulls<Any>(dialogDescription.buttons.size)
         dialogDescription.buttons.withIndex().forEach { (idx, elm) ->
+            val widget = DialogButtonWidget()
+            widget.id= elm.id
+            dialog.buttons.add(widget)
             buttonsArr[idx] = object {
-                val buttonHandler =ReflectionFactoryJS.get().getFactory(elm.handler).invoke() as DialogButtonHandler<VM, VS, VV, V>
+                val buttonHandler =ReflectionFactoryJS.get().getFactory(elm.handler).invoke()
                 val text = elm.displayName
                 val handler = {
-                    buttonHandler.handle(dialog)
+                    buttonHandler.asDynamic().handle(dialog)
                 }
             }
         }

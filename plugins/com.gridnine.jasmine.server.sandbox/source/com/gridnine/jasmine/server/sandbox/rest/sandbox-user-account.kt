@@ -41,7 +41,7 @@ class SandboxUserAccountEditorHandler : RestEditorHandler<SandboxUserAccount, Sa
             vvEntity.login = StandardValidationMessages.EMPTY_VALUE()
         }
         if(vmEntity.name == null){
-            vmEntity.name = StandardValidationMessages.EMPTY_VALUE()
+            vvEntity.name = StandardValidationMessages.EMPTY_VALUE()
         }
     }
 

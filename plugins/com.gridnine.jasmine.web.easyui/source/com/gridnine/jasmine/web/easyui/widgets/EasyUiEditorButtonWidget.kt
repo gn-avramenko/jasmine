@@ -16,7 +16,7 @@ class EasyUiEditorButtonWidget<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEn
     init {
         div.linkbutton(object {
             val onClick = {
-                handler.onClick(editor)
+                handler.asDynamic().onClick(editor)
             }
         })
         setEnabled = {value -> if(value) div.linkbutton("enable") else div.linkbutton("disable")}

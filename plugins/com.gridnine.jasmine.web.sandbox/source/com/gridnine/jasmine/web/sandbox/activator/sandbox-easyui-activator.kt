@@ -24,9 +24,13 @@ import com.gridnine.jasmine.web.sandbox.SandboxRestClient
 import com.gridnine.jasmine.web.sandbox.UiReflectionUtilsJS
 import org.w3c.dom.get
 import kotlin.browser.window
+import kotlin.reflect.typeOf
 
 
 fun main() {
+    if(window.asDynamic().testMode){
+        return
+    }
     val config = hashMapOf<String,Any?>()
     config[StandardRpcManager.BASE_REST_URL_KEY] = "/sandbox/easyui/ui-rest"
     val coreActivator = CoreActivatorJS()

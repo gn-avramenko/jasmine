@@ -8,10 +8,8 @@ package com.gridnine.jasmine.web.core.ui
 
 import com.gridnine.jasmine.web.core.application.EnvironmentJS
 import com.gridnine.jasmine.web.core.model.common.BaseEntityJS
-import com.gridnine.jasmine.web.core.model.ui.BaseVMEntityJS
-import com.gridnine.jasmine.web.core.model.ui.BaseVSEntityJS
-import com.gridnine.jasmine.web.core.model.ui.BaseVVEntityJS
-import com.gridnine.jasmine.web.core.model.ui.BaseView
+import com.gridnine.jasmine.web.core.model.ui.*
+import kotlin.js.Promise
 
 interface ErrorHandler{
     fun showError(msg:String, stacktrace:String)
@@ -22,6 +20,7 @@ interface ErrorHandler{
 
 open class Dialog<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS,V:BaseView<VM,VS,VV>>{
     val properties = hashMapOf<String,Any>()
+    val buttons = arrayListOf<DialogButtonWidget>()
     lateinit var view:V
     var editorView:BaseView<*,*,*>? = null
     lateinit var close:()->Unit
@@ -31,7 +30,9 @@ interface DialogButtonHandler<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEnt
     fun handle(dialog:Dialog<VM,VS,VV,V>)
 }
 
-
+interface TestableDialogButtonHandler<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS,V:BaseView<VM,VS,VV>, T:Any>{
+    fun handle(dialog:Dialog<VM,VS,VV,V>):Promise<T>
+}
 
 interface UiFactory{
     fun<VM:BaseVMEntityJS, VS:BaseVSEntityJS, VV:BaseVVEntityJS,V:BaseView<VM,VS,VV>,D:Dialog<VM,VS,VV,V>> showDialog(dialog:D, model:VM, settings:VS):D
@@ -46,7 +47,7 @@ interface UiFactory{
 
 
 interface MainFrame{
-    fun openTab(objectId: String, uid:String?, navigationKey:String?)
+    fun openTab(objectId: String, uid:String?, navigationKey:String?):Promise<Editor<*,*,*,*>>
     companion object{
         fun get()=EnvironmentJS.getPublished(MainFrame::class)
     }

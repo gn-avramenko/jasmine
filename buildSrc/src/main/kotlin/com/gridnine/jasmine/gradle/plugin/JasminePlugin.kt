@@ -138,6 +138,10 @@ class JasminePlugin : Plugin<Project> {
             it.group = "other"
             it.setArgs(arrayListOf("install", "mocha-jenkins-reporter"))
         }
+        target.tasks.create("_installXMLHttpRequest", NpmTask::class.java) {
+            it.group = "other"
+            it.setArgs(arrayListOf("install", "xmlhttprequest"))
+        }
 
         target.tasks.create("_populateNode", Copy::class.java) { task ->
             task.group = "other"
@@ -156,19 +160,29 @@ class JasminePlugin : Plugin<Project> {
                             }
                         }
                         if(pluginType == SpfPluginType.WEB_TEST){
-                            task.from(File("plugins/${spfPlugin.id}/resources/js/${spfPlugin.id}-launcher.js"))
+                            val suiteLauncher = spfPlugin.parameters.find { param -> param.id == "test-suite-launcher"}?.value
+                            val individualLauncher = spfPlugin.parameters.find { param -> param.id == "individual-test-launcher"}?.value
+                            if(suiteLauncher?.isNotBlank() == true) {
+                                task.from(File("plugins/${spfPlugin.id}/resources/js/${suiteLauncher}"))
+                            }
+                            if(individualLauncher?.isNotBlank() == true) {
+                                task.from(File("plugins/${spfPlugin.id}/resources/js/${individualLauncher}"))
+                            }
                         }
                     }
                 }
             }
+            task.from("plugins/com.gridnine.jasmine.web.core.test/resources/js/core-test-initializer.js")
             task.into("build/node_modules")
         }
 
-        val testDepends = arrayListOf<String>()
         registry.plugins.filter { it -> KotlinUtils.getType(it) == SpfPluginType.WEB_TEST}.forEach{
             val launcherClassName = it.parameters.find { param -> param.id == "server-launcher-class"}?.value
+            val suiteLauncher = it.parameters.find { param -> param.id == "test-suite-launcher"}?.value
+            val individualLauncher = it.parameters.find { param -> param.id == "individual-test-launcher"}?.value
+
             if(launcherClassName?.isNotBlank() == true) {
-                    target.tasks.create("_${it.id}-jsTestStartServer", StartServerTask::class.java) { task ->
+               target.tasks.create("_${it.id}-jsTestStartServer", StartServerTask::class.java) { task ->
                     task.setJvmArgs(arrayListOf("-Dspf.mode=shell", "-Dspf.applicationClass=$launcherClassName"))
                     task.main = "com.gridnine.spf.app.SpfBoot"
                     task.classpath = createClassPath(target)
@@ -178,32 +192,81 @@ class JasminePlugin : Plugin<Project> {
                         }
                     }
                 }
-
-                target.tasks.create("_${it.id}-jsTest", NodeTask::class.java) { task ->
-                    task.setIgnoreExitValue(true)
-                    task.dependsOn("_installMocha", "_installReporter", "_populateNode","_${it.id}-jsTestStartServer")
-                    task.group = "other"
-                    task.script = File(target.projectDir, "node_modules/mocha/bin/mocha")
-                    task.setArgs(arrayListOf("--timeout", "10000", "--reporter", "mocha-jenkins-reporter", "--reporter-option", "junit_report_name=Tests,junit_report_path=build/junit-reports/${it.id}-junit.xml,junit_report_stack=1", "build/node_modules/${it.id}-launcher.js"))
-                }
                 target.tasks.create("_${it.id}-jsTestStopServer", JavaExec::class.java) { task ->
-                    task.dependsOn("_${it.id}-jsTestStartServer","_${it.id}-jsTest")
+                    task.dependsOn("_${it.id}-jsTestStartServer")
+                    if(suiteLauncher?.isNotBlank() == true){
+                        task.mustRunAfter("_${it.id}-jsSuiteTest")
+                    }
+                    if(individualLauncher?.isNotBlank() == true){
+                        task.mustRunAfter("_${it.id}-jsIndividualTest")
+                        task.mustRunAfter("_${it.id}-jsIndividualTestDebug")
+                    }
                     task.setJvmArgs(arrayListOf("-Dspf.mode=stop", "-Dspf.applicationClass=$launcherClassName"))
                     task.main = "com.gridnine.spf.app.SpfBoot"
                     task.classpath = createClassPath(target)
-                    task.doLast{
-                        println("application stopped")
+                }
+
+            }
+            if(suiteLauncher?.isNotBlank() == true){
+                target.tasks.create("_${it.id}-jsSuiteTest", NodeTask::class.java) { task ->
+                    task.setIgnoreExitValue(true)
+                    if(launcherClassName?.isNotBlank() == true){
+                        task.dependsOn("_${it.id}-jsTestStartServer")
+                    }
+                    task.group = "other"
+                    task.script = File(target.projectDir, "node_modules/mocha/bin/mocha")
+                    task.setArgs(arrayListOf("--timeout", "10000", "--reporter", "mocha-jenkins-reporter", "--reporter-option", "junit_report_name=Tests,junit_report_path=build/junit-reports/${it.id}-junit.xml,junit_report_stack=1", "build/node_modules/$suiteLauncher"))
+                }
+                target.tasks.create("${it.id}-jsSuiteTest", DefaultTask::class.java) { task ->
+                    task.group = "js-tests"
+                    task.dependsOn("_${it.id}-jsSuiteTest")
+                    if(launcherClassName?.isNotBlank() == true){
+                        task.dependsOn("_${it.id}-jsTestStopServer")
                     }
                 }
-               testDepends.add("_${it.id}-jsTestStartServer")
-               testDepends.add("_${it.id}-jsTestStopServer")
+            }
+            if(individualLauncher?.isNotBlank() == true){
+                target.tasks.create("_${it.id}-jsIndividualTest", NodeTask::class.java) { task ->
+                    task.setIgnoreExitValue(true)
+                    task.dependsOn("_populateNode")
+                    if(launcherClassName?.isNotBlank() == true){
+                        task.dependsOn("_${it.id}-jsTestStartServer")
+                    }
+                    task.group = "other"
+                    task.script = File(target.projectDir, "node_modules/mocha/bin/mocha")
+                    task.setArgs(arrayListOf("--timeout", "10000",  "build/node_modules/$individualLauncher"))
+                }
+                target.tasks.create("_${it.id}-jsIndividualTestDebug", NodeTask::class.java) { task ->
+                    task.setIgnoreExitValue(true)
+                    task.dependsOn("_populateNode")
+                    if(launcherClassName?.isNotBlank() == true){
+                        task.dependsOn("_${it.id}-jsTestStartServer")
+                    }
+                    task.group = "other"
+                    task.script = File(target.projectDir, "node_modules/mocha/bin/mocha")
+                    task.setArgs(arrayListOf("--inspect-brk","--timeout", "10000",  "build/node_modules/$individualLauncher"))
+                }
+                target.tasks.create("${it.id}-jsIndividualTest", DefaultTask::class.java) { task ->
+                    task.group = "js-tests"
+                    task.dependsOn("_${it.id}-jsIndividualTest")
+                    if(launcherClassName?.isNotBlank() == true){
+                        task.dependsOn("_${it.id}-jsTestStopServer")
+                    }
+                }
+                target.tasks.create("${it.id}-jsIndividualTestDebug", DefaultTask::class.java) { task ->
+                    task.group = "js-tests"
+                    task.dependsOn("_${it.id}-jsIndividualTestDebug")
+                    if(launcherClassName?.isNotBlank() == true){
+                        task.dependsOn("_${it.id}-jsTestStopServer")
+                    }
+                }
             }
         }
-        target.tasks.create("jsTests") { task ->
+        target.tasks.create("setupNode") { task ->
             task.group = "idea"
-            task.dependsOn("_installMocha", "_installReporter","_populateNode")
-            task.dependsOn.addAll(testDepends)
+            task.dependsOn("_installMocha", "_installReporter", "_installXMLHttpRequest","_populateNode")
         }
+
     }
 
     private fun createClassPath(target:Project): FileCollection {

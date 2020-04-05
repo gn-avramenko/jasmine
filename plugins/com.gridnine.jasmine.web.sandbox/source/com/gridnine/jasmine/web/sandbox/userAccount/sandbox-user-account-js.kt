@@ -10,14 +10,12 @@ import com.gridnine.jasmine.server.sandbox.model.domain.SandboxUserAccountIndexJ
 import com.gridnine.jasmine.server.sandbox.model.rest.SandboxCreateUserAccountRequestJS
 import com.gridnine.jasmine.server.sandbox.model.rest.SandboxUpdatePasswordRequestJS
 import com.gridnine.jasmine.server.sandbox.model.ui.*
-import com.gridnine.jasmine.web.core.model.ui.BaseEditorToolButtonHandler
-import com.gridnine.jasmine.web.core.model.ui.BaseListToolButtonHandler
-import com.gridnine.jasmine.web.core.model.ui.Editor
-import com.gridnine.jasmine.web.core.model.ui.EntityList
+import com.gridnine.jasmine.web.core.model.ui.*
 import com.gridnine.jasmine.web.core.ui.*
 import com.gridnine.jasmine.web.sandbox.SandboxRestClient
+import kotlin.js.Promise
 
-class SandboxCreateUserAccountListToolButtonHandler : BaseListToolButtonHandler<SandboxUserAccountIndexJS>{
+class SandboxCreateUserAccountListToolButtonHandler : BaseListToolButtonHandler<SandboxUserAccountIndexJS> {
     override fun isVisible(list: EntityList<SandboxUserAccountIndexJS>): Boolean {
         return true;
     }
@@ -32,24 +30,30 @@ class SandboxCreateUserAccountListToolButtonHandler : BaseListToolButtonHandler<
 
 }
 
-class SandboxCreateUserAccountDialogButtonHandler:DialogButtonHandler<SandboxCreateUserAccountDialogVMJS, SandboxCreateUserAccountDialogVSJS, SandboxCreateUserAccountDialogVVJS,SandboxCreateUserAccountDialogView>{
-    override fun handle(dialog: Dialog<SandboxCreateUserAccountDialogVMJS, SandboxCreateUserAccountDialogVSJS, SandboxCreateUserAccountDialogVVJS, SandboxCreateUserAccountDialogView>) {
-        val model = SandboxCreateUserAccountDialogVMJS()
-        dialog.view.writeData(model)
-        val request = SandboxCreateUserAccountRequestJS()
-        request.model = model
-        SandboxRestClient.sandbox_userAccount_createAccount(request).then {
-            if(ValidationUtilsJS.hasValidationErrors(it.validation)){
-                dialog.view.showValidation(it.validation)
-                return@then
+class SandboxCreateUserAccountDialogButtonHandler : TestableDialogButtonHandler<SandboxCreateUserAccountDialogVMJS, SandboxCreateUserAccountDialogVSJS, SandboxCreateUserAccountDialogVVJS, SandboxCreateUserAccountDialogView, Editor<SandboxUserAccountEditorVMJS, SandboxUserAccountEditorVSJS, SandboxUserAccountEditorVVJS, SandboxUserAccountEditorView>> {
+    override fun handle(dialog: Dialog<SandboxCreateUserAccountDialogVMJS, SandboxCreateUserAccountDialogVSJS, SandboxCreateUserAccountDialogVVJS, SandboxCreateUserAccountDialogView>): Promise<Editor<SandboxUserAccountEditorVMJS, SandboxUserAccountEditorVSJS, SandboxUserAccountEditorVVJS, SandboxUserAccountEditorView>> {
+        return Promise { resolve, reject ->
+            val model = SandboxCreateUserAccountDialogVMJS()
+            dialog.view.writeData(model)
+            val request = SandboxCreateUserAccountRequestJS()
+            request.model = model
+            SandboxRestClient.sandbox_userAccount_createAccount(request).then {
+                if (ValidationUtilsJS.hasValidationErrors(it.validation)) {
+                    dialog.view.showValidation(it.validation)
+                    reject(Error("invalid data"))
+                    return@then
+                }
+                dialog.close()
+                MainFrame.get().openTab(it.result!!.type, it.result!!.uid, null).then {
+                    resolve(it as Editor<SandboxUserAccountEditorVMJS, SandboxUserAccountEditorVSJS, SandboxUserAccountEditorVVJS, SandboxUserAccountEditorView>)
+                }.catch(reject)
             }
-            dialog.close()
-            MainFrame.get().openTab(it.result!!.type, it.result!!.uid, null)
         }
     }
 
 }
-class SandboxUpdatePasswordEditorToolButtonHandler : BaseEditorToolButtonHandler<SandboxUserAccountEditorVMJS, SandboxUserAccountEditorVSJS, SandboxUserAccountEditorVVJS, SandboxUserAccountEditorView>{
+
+class SandboxUpdatePasswordEditorToolButtonHandler : StandardEditorToolButtonHandler<SandboxUserAccountEditorVMJS, SandboxUserAccountEditorVSJS, SandboxUserAccountEditorVVJS, SandboxUserAccountEditorView> {
     override fun onClick(editor: Editor<SandboxUserAccountEditorVMJS, SandboxUserAccountEditorVSJS, SandboxUserAccountEditorVVJS, SandboxUserAccountEditorView>) {
         val dialog = UiFactory.get().showDialog(SandboxUpdatePasswordDialog(), SandboxUpdatePasswordDialogVMJS(), SandboxUpdatePasswordDialogVSJS())
         dialog.editorView = editor.view
@@ -64,7 +68,7 @@ class SandboxUpdatePasswordEditorToolButtonHandler : BaseEditorToolButtonHandler
     }
 }
 
-class SandboxUpdatePasswordDialogButtonHandler:DialogButtonHandler<SandboxUpdatePasswordDialogVMJS, SandboxUpdatePasswordDialogVSJS,SandboxUpdatePasswordDialogVVJS, SandboxUpdatePasswordDialogView>{
+class SandboxUpdatePasswordDialogButtonHandler : DialogButtonHandler<SandboxUpdatePasswordDialogVMJS, SandboxUpdatePasswordDialogVSJS, SandboxUpdatePasswordDialogVVJS, SandboxUpdatePasswordDialogView> {
     override fun handle(dialog: Dialog<SandboxUpdatePasswordDialogVMJS, SandboxUpdatePasswordDialogVSJS, SandboxUpdatePasswordDialogVVJS, SandboxUpdatePasswordDialogView>) {
         val editorView = dialog.editorView as SandboxUserAccountEditorView
         val model = SandboxUpdatePasswordDialogVMJS()
@@ -73,7 +77,7 @@ class SandboxUpdatePasswordDialogButtonHandler:DialogButtonHandler<SandboxUpdate
         request.login = editorView.login.getData()
         request.model = model
         SandboxRestClient.sandbox_userAccount_updatePassword(request).then {
-            if(ValidationUtilsJS.hasValidationErrors(it.validation)){
+            if (ValidationUtilsJS.hasValidationErrors(it.validation)) {
                 dialog.view.showValidation(it.validation)
                 return@then
             }
