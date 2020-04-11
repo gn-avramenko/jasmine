@@ -75,4 +75,12 @@ class EasyUiFactory:UiFactory{
     override fun showNotification(message: String, title: String?, timeout: Int) {
         showMessage(title, message, timeout)
     }
+
+    override fun showLoader() {
+        com.gridnine.jasmine.web.easyui.showLoader()
+    }
+
+    override fun hideLoader() {
+        com.gridnine.jasmine.web.easyui.hideLoader()
+    }
 }

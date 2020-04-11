@@ -50,7 +50,6 @@ class SpfApplicationMetadataProvider(private val registry: SpfPluginsRegistry) :
 class SpfApplicationImpl: SpfApplication {
     override fun start(config: Properties) {
         val root = File(".")
-        print(root.absolutePath)
         Environment.configure(root)
         Environment.publish(ConfigurationProvider::class, object:ConfigurationProvider{
             override fun getProperty(propertyName: String): String? {

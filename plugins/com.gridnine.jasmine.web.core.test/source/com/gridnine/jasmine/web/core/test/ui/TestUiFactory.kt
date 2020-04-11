@@ -50,4 +50,11 @@ class TestUiFactory : UiFactory {
         console.log(message)
     }
 
+    override fun showLoader() {
+        console.log("showing loader")
+    }
+
+    override fun hideLoader() {
+        console.log("hiding loader")
+    }
 }

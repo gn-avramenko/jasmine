@@ -1,15 +1,19 @@
+import com.gridnine.jasmine.gradle.plugin.ServerDescriptionExtension
+import com.gridnine.jasmine.gradle.plugin.development
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 apply<com.gridnine.jasmine.gradle.plugin.JasminePlugin>()
 
-buildscript{
-    repositories{
+
+
+buildscript {
+    repositories {
         mavenCentral()
         maven {
             setUrl("https://plugins.gradle.org/m2/")
         }
     }
-    dependencies{
+    dependencies {
         "classpath"("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.61")
     }
 }
@@ -18,9 +22,7 @@ plugins {
 }
 
 
-//node{
-//    download = true
-//}
+
 //
 //task<com.moowork.gradle.node.npm.NpmTask>("_setupNode"){
 //    setArgs(arrayListOf("install", "mocha"))

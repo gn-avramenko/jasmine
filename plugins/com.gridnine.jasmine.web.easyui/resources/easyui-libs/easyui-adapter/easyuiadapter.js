@@ -161,6 +161,14 @@ function extendDatagridEditors(enumEditor,entityEditor){
     })
 }
 
+function showLoader(){
+    $.messager.progress();
+}
+function hideLoader(){
+    $.messager.progress("close");
+}
+
+
 //var oldSetValue = $.fn.datagrid.defaults.editors.combobox.setValue
 //$.fn.datagrid.defaults.editors.combobox.setValue = function(target, value){
 //                                                               console.log(value)

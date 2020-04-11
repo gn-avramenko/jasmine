@@ -21,6 +21,6 @@ external fun after(config:()->Any?):Any? = definedExternally
 
 external fun it(name:String, config:()->Any?):Any? = definedExternally
 
-external var debugger: dynamic = definedExternally
+
 
 external fun createXMLHttpRequest(): XMLHttpRequest = definedExternally

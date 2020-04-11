@@ -3,7 +3,6 @@ package com.gridnine.jasmine.web.core.test.ui
 import com.gridnine.jasmine.server.standard.model.rest.GetEditorDataRequestJS
 import com.gridnine.jasmine.web.core.StandardRestClient
 import com.gridnine.jasmine.web.core.model.ui.*
-import com.gridnine.jasmine.web.core.test.ext.debugger
 import com.gridnine.jasmine.web.core.ui.MainFrame
 import com.gridnine.jasmine.web.core.utils.ReflectionFactoryJS
 import kotlin.js.Promise

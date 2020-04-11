@@ -40,7 +40,8 @@ class SandboxWebTest : SpfApplication {
                 return null
             }
         })
-        val urls = this::javaClass.javaClass.classLoader.getResources("plugin.xml").toList()
+        val clLoader = this::class.java.classLoader
+        val urls = clLoader.getResources("plugin.xml").toList()
         val registry = SpfPluginsRegistry()
         registry.initRegistry(urls) {
             "com.gridnine.jasmine.server.core" == it.id

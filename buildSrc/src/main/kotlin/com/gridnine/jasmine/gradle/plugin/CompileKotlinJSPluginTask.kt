@@ -14,6 +14,8 @@ open class CompileKotlinJSPluginTask :DefaultTask(){
 
     lateinit var registry:SpfPluginsRegistry
 
+    lateinit var outputDir:String
+
     @TaskAction
     fun compile(){
         val compilerClassPath = project.configurations.getByName(KotlinUtils.COMPILER_CLASSPATH_CONFIGURATION_NAME).toList()
@@ -32,16 +34,18 @@ open class CompileKotlinJSPluginTask :DefaultTask(){
         cpFiles.addAll(project.configurations.getByName("web-js").toSet().filter { it.name.contains("kotlin-stdlib-js") })
 
         val plugin = registry.plugins.find { pluginId == it.id }?:throw IllegalArgumentException ("unable to find plugin $pluginId")
-        plugin.pluginsDependencies.forEach {
-            cpFiles.add(File(project.projectDir, "build/plugins/${it.pluginId}/classes"))
+        plugin.pluginsDependencies.forEach {pd ->
+            val outputDir = registry.plugins.find { it.id == pd.pluginId }!!.parameters.find { it.id =="kotlin-output-dir" }!!.value
+            cpFiles.add(File(project.projectDir, "build/plugins/${pd.pluginId}/${outputDir}"))
         }
 
         val argsLst = arrayListOf("${project.projectDir.absolutePath}/plugins/$pluginId/source")
         if(File("${project.projectDir.absolutePath}/plugins/$pluginId/source-gen").exists()){
             argsLst.add("${project.projectDir.absolutePath}/plugins/$pluginId/source-gen")
         }
-        argsLst.addAll(arrayListOf("-output", "${project.projectDir.absolutePath}/build/plugins/$pluginId/classes/${pluginId}.js",
+        argsLst.addAll(arrayListOf("-output", "${project.projectDir.absolutePath}/build/plugins/$pluginId/${outputDir}/${pluginId}.js",
                 "-no-stdlib", "-source-map", "-source-map-embed-sources", "always", "-meta-info", "-module-kind", "umd"))
+
         if(cpFiles.isNotEmpty()){
             argsLst.addAll(arrayListOf("-libraries", cpFiles.joinToString(separator = ":"){it.absolutePath}))
         }

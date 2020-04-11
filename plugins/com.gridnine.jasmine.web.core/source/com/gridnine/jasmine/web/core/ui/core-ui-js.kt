@@ -39,6 +39,8 @@ interface UiFactory{
     fun publishMainFrame()
     fun showConfirmDialog(question:String, handler:()->Unit)
     fun showNotification(message:String ,title:String?=null, timeout: Int=3000)
+    fun showLoader()
+    fun hideLoader()
     companion object{
         fun get() = EnvironmentJS.getPublished(UiFactory::class)
     }

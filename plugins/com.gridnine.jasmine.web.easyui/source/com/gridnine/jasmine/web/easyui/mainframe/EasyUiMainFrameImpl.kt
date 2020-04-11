@@ -124,6 +124,8 @@ class EasyUiMainFrameImpl : MainFrame {
         return openTab(EasyUiEditorTabHandler(objectId, uid, navigationKey))
     }
 
+
+
     fun <T, I> openTab(handler: EasyUiTabHandler<T, I>): Promise<I> {
         return Promise { resolve, reject ->
             val existingTab = tabs.find { handler.getId() == it.getId() }

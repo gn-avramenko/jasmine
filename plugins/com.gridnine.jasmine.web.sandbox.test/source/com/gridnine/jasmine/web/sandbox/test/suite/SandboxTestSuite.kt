@@ -20,23 +20,31 @@ import kotlin.js.Promise
 class SandboxTestSuite{
     fun describeSuite(){
         describe("sandbox-test-suite"){
-            before {
-                val config = hashMapOf<String,Any?>()
-                config[StandardRpcManager.BASE_REST_URL_KEY] = "/sandbox/easyui/ui-rest"
-                val coreActivator = CoreActivatorJS()
-                coreActivator.configure(config)
+            buildBefore()
+            LoadMetadataTest().loadMetadataTest()
+        }
+    }
 
-                val testActivator = CoreTestActivator()
-                testActivator.configure("http://localhost:8080/sandbox/easyui/ui-rest")
-                coreActivator.activate().then {
-                    Promise<Unit>{resolve, reject ->
-                        val vm = SandboxLoginDialogVMJS()
-                        val dialog = UiFactory.get().showDialog(SandboxLoginDialog(), vm, SandboxLoginDialogVSJS())
-                        (dialog.buttons.find { it.id == "loginButton" } as TestableDialogButtonWidget<Unit>).click().then(resolve).catch(reject)
-                    }
+    fun buildBefore(){
+        before {
+            val config = hashMapOf<String,Any?>()
+            config[StandardRpcManager.BASE_REST_URL_KEY] = "/sandbox/easyui/ui-rest"
+            val coreActivator = CoreActivatorJS()
+            coreActivator.configure(config)
+            val testActivator = CoreTestActivator()
+            testActivator.configure("http://localhost:8080/sandbox/easyui/ui-rest")
+            DomainReflectionUtils.registerWebDomainClasses()
+            RestReflectionUtilsJS.registerRestWebClasses()
+            UiReflectionUtilsJS.registerWebUiClasses()
+            coreActivator.activate().then {
+                Promise<Unit>{resolve, reject ->
+                    val vm = SandboxLoginDialogVMJS()
+                    val dialog = UiFactory.get().showDialog(SandboxLoginDialog(), vm, SandboxLoginDialogVSJS())
+                    dialog.view.login.setData("admin")
+                    dialog.view.password.setData("admin")
+                    (dialog.buttons.find { it.id == "loginButton" } as TestableDialogButtonWidget<Unit>).click().then(resolve).catch(reject)
                 }
             }
-            LoadMetadataTest().loadMetadataTest()
         }
     }
 }

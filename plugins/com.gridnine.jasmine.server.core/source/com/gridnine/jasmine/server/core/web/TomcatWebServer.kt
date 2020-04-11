@@ -20,6 +20,7 @@ import java.io.InputStream
 import java.net.URL
 import java.net.URLDecoder
 import java.util.*
+import java.util.jar.JarFile
 import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 import kotlin.collections.LinkedHashSet
@@ -30,6 +31,8 @@ constructor(port: Int) : WebServer {
     private val tomcat: Tomcat = Tomcat()
 
     init {
+        var webappDir = File(Environment.tempFolder, "tomcat-workdir/webapps")
+        if(!webappDir.exists()) webappDir.mkdirs()
         tomcat
                 .setBaseDir(File(Environment.tempFolder, "tomcat-workdir").canonicalPath)
 
@@ -42,21 +45,10 @@ constructor(port: Int) : WebServer {
         classLoader.addDelegate(javaClass.classLoader)
 
         for (app in WebServerConfig.get().getApplications()) {
+            classLoader.addDelegate(app.classLoader)
             val docBase = app.docBase
             val file = File(URLDecoder.decode(docBase.file, "UTF-8"))
-            classLoader.addDelegate(app.classLoader)
-            val context = tomcat.addWebapp(app.path,
-                    file.absolutePath)
-            WebServerConfig.get().globalFilters.forEach{
-                val filterDef = FilterDef()
-                filterDef.filterClass =it.cls.qualifiedName
-                filterDef.filterName = it.name
-                val filterMap = FilterMap()
-                filterMap.addURLPattern("/*")
-                filterMap.filterName = it.name
-                context.addFilterDef(filterDef)
-                context.addFilterMap(filterMap)
-            }
+            val context = tomcat.addWebapp(app.path, file.absolutePath)
             if (context is StandardContext) {
 
                 context.delegate = true
@@ -66,6 +58,17 @@ constructor(port: Int) : WebServer {
                 context.clearReferencesRmiTargets = false
                 context.clearReferencesThreadLocals = false
                 context.jarScanner.jarScanFilter = JarScanFilter { jarScanType, jarName ->
+
+                            WebServerConfig.get().globalFilters.forEach{
+                                val filterDef = FilterDef()
+                                filterDef.filterClass =it.cls.qualifiedName
+                                filterDef.filterName = it.name
+                                val filterMap = FilterMap()
+                                filterMap.addURLPattern("/*")
+                                filterMap.filterName = it.name
+                                context.addFilterDef(filterDef)
+                                context.addFilterMap(filterMap)
+                            }
                     false }
             }
 

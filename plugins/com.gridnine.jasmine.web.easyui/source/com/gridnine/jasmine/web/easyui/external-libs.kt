@@ -90,6 +90,7 @@ external fun confirm(question:String, handler:() ->Unit):Unit = definedExternall
 external fun showMessage(title:String?, message:String ,timeout: Int)
 external fun showError(title:String?, message:String, stacktrace:String?)
 external fun openFileJS(accept:String?, resolve:(file:dynamic) ->Unit)
-
+external fun showLoader():Unit = definedExternally
+external fun hideLoader():Unit = definedExternally
 
 external fun extendDatagridEditors(enumEditor:EasyUiEnumTableColumnEditor,entityEditor:EasyUiEntityTableColumnEditor): Unit

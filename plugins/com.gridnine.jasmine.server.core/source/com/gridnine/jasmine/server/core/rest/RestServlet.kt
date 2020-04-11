@@ -31,7 +31,6 @@ class RestServlet: HttpServlet() {
         resp.characterEncoding = "UTF-8"
         resp.status = 200
         resp.outputStream.use {
-            println(RestSerializationUtils.serializeToString(result))
             it.write(RestSerializationUtils.serializeToByteArray(result))
             it.flush()
         }

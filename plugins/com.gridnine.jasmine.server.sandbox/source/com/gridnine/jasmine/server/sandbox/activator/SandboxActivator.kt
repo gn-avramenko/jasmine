@@ -22,6 +22,7 @@ import com.gridnine.jasmine.server.sandbox.storage.SandboxComplexDocumentIndexHa
 import com.gridnine.jasmine.server.sandbox.storage.SandboxComplexDocumentVariantIndexHandler
 import com.gridnine.jasmine.server.sandbox.storage.SandboxUserAccountIndexHandler
 import com.gridnine.jasmine.server.standard.rest.WorkspaceProvider
+import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -33,24 +34,24 @@ class SandboxActivator : IPluginActivator {
         StorageRegistry.get().register(SandboxComplexDocumentVariantIndexHandler())
         StorageRegistry.get().register(SandboxUserAccountIndexHandler())
         val easyuiApp = WebApplication("/sandbox/easyui", javaClass.classLoader.getResource("sb_easyui")
-                ?: throw IllegalArgumentException("unable to load resource sb_easyui"),
+                ?: File("lib/sb_easyui.war").toURI().toURL(),
                 javaClass.classLoader)
         WebServerConfig.get().addApplication(easyuiApp)
         val webCoreApp = WebApplication("/web-core", javaClass.classLoader.getResource("webapp-core")
-                ?: throw IllegalArgumentException("unable to load resource webapp-core"),
+                ?: File("lib/webapp-core.war").toURI().toURL(),
                 javaClass.classLoader)
         WebServerConfig.get().addApplication(webCoreApp)
         val sandboxApp = WebApplication("/web-sandbox", javaClass.classLoader.getResource("web-sandbox")
-                ?: throw IllegalArgumentException("unable to load resource web-sandbox"),
+                ?: File("lib/web-sandbox.war").toURI().toURL(),
                 javaClass.classLoader)
         WebServerConfig.get().addApplication(sandboxApp)
         val easyuiWebapp = WebApplication("/web-easyui-libs", javaClass.classLoader.getResource("easyui-libs")
-                ?: throw IllegalArgumentException("unable to load resource easyui-libs"),
+                ?:  File("lib/easyui-libs.war").toURI().toURL(),
                 javaClass.classLoader)
         WebServerConfig.get().addApplication(easyuiWebapp)
 
         val easyuiScriptWebapp = WebApplication("/web-easyui-script", javaClass.classLoader.getResource("easyui-script")
-                ?: throw IllegalArgumentException("unable to load resource easyui-script"),
+                ?: File("lib/easyui-script.war").toURI().toURL(),
                 javaClass.classLoader)
         WebServerConfig.get().addApplication(easyuiScriptWebapp)
 

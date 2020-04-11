@@ -7,7 +7,6 @@ import com.gridnine.jasmine.web.core.model.ui.TestableSharedEditorToolButtonHand
 import com.gridnine.jasmine.web.core.model.ui.TestableToolButtonWidget
 import com.gridnine.jasmine.web.core.model.ui.widgets.ProxyTextBoxWidget
 import com.gridnine.jasmine.web.core.test.ext.Assert
-import com.gridnine.jasmine.web.core.test.ext.debugger
 import com.gridnine.jasmine.web.core.test.ext.describe
 import com.gridnine.jasmine.web.core.test.ext.it
 import com.gridnine.jasmine.web.core.ui.UiFactory
