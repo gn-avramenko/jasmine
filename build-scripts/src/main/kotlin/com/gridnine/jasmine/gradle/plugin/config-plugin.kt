@@ -1,3 +1,8 @@
+/*****************************************************************
+ * Gridnine AB http://www.gridnine.com
+ * Project: Jasmine
+ *****************************************************************/
+
 @file:Suppress("unused")
 
 package com.gridnine.jasmine.gradle.plugin
@@ -15,6 +20,9 @@ class JasmineConfigPlugin :Plugin<Project> {
 
 open class JasmineConfigExtension(private val project:Project){
     var kotlinVersion = "1.3.71"
+    var targetByteCodeLevel = "1.8"
+    var languageLevel = "JDK_1_8"
+    var libRelativePath = "lib"
     val pluginsFiles = arrayListOf<File>()
     fun plugins(submodulePath: String, configure:JasminePluginConfigurator.()->Unit) {
         JasminePluginConfigurator(submodulePath, this, project).configure()

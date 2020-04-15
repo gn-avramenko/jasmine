@@ -1,5 +1,10 @@
+/*****************************************************************
+ * Gridnine AB http://www.gridnine.com
+ * Project: Jasmine
+ *****************************************************************/
 package com.gridnine.jasmine.gradle.plugin
 
+import com.gridnine.jasmine.gradle.plugin.tasks.*
 import com.gridnine.spf.meta.SpfPluginsRegistry
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -18,7 +23,12 @@ class JasminePlugin: Plugin<Project>{
         }
         val registry = SpfPluginsRegistry()
         registry.initRegistry(pluginsURLs)
-        println(registry.plugins)
+        KotlinUtils.createConfiguration(KotlinUtils.SERVER_CONFIGURATION_NAME, registry, target, SpfPluginType.CORE, SpfPluginType.SERVER)
+        KotlinUtils.createConfiguration(KotlinUtils.SERVER_TEST_CONFIGURATION_NAME, registry, target, SpfPluginType.SERVER_TEST)
+        target.tasks.create(CreateArtifactsTask.TASK_NAME, CreateArtifactsTask::class.java, extension)
+        target.tasks.create(CreateLibrariesTask.TASK_NAME, CreateLibrariesTask::class.java, extension)
+        target.tasks.create(CreateModulesTask.TASK_NAME, CreateModulesTask::class.java,registry, extension, pluginsToFileMap)
+        target.tasks.create(MakeProjectTask.TASK_NAME, MakeProjectTask::class.java)
     }
 
 }
