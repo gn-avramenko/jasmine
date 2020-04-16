@@ -1,0 +1,7 @@
+<plugin xmlns="http://xtrip.gridnine.com/spf" id="com.gridnine.jasmine.server.core.test">
+    <parameter id="type" value="SERVER_TEST"/>
+    <dependencies>
+        <lib-dependency group="junit" name="junit" version="4.12"/>
+        <plugin-dependency plugin-id="com.gridnine.jasmine.server.core"/>
+    </dependencies>
+</plugin>
