@@ -2,11 +2,24 @@
     <parameter id="type" value="CORE"/>
     <dependencies>
         <lib-dependency group="ch.qos.logback" name="logback-classic" version="1.2.3"/>
-        <lib-dependency group="org.jetbrains.kotlin" name="kotlin-stdlib-jdk8" version="1.3.61"/>
-        <lib-dependency group="org.jetbrains.kotlin" name="kotlin-reflect" version="1.3.61"/>
+        <lib-dependency group="org.jetbrains.kotlin" name="kotlin-stdlib-jdk8" version="1.3.71"/>
+        <lib-dependency group="org.jetbrains.kotlin" name="kotlin-reflect" version="1.3.71"/>
         <lib-dependency group="com.mchange" name="c3p0" version="0.9.5.5"/>
         <lib-dependency group="org.apache.tomcat.embed" name="tomcat-embed-core" version="9.0.30"/>
         <lib-dependency group="org.apache.tomcat.embed" name="tomcat-embed-jasper" version="9.0.30"/>
         <lib-dependency group="org.slf4j" name="jul-to-slf4j" version="1.7.30"/>
+        <lib-dependency group="com.fasterxml.jackson.core" name="jackson-core" version="2.10.3"/>
     </dependencies>
+    <extension-point id="domain-metadata">
+        <parameter-def id="relative-path"/>
+        <parameter-def id="url"/>
+        <parameter-def id="dest-server-plugin-id"/>
+        <parameter-def id="dest-client-plugin-id"/>
+    </extension-point>
+    <extension-point id="rest-metadata">
+        <parameter-def id="relative-path"/>
+        <parameter-def id="url"/>
+        <parameter-def id="dest-server-plugin-id"/>
+        <parameter-def id="dest-client-plugin-id"/>
+    </extension-point>
 </plugin>

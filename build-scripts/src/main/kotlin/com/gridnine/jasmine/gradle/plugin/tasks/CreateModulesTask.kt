@@ -9,6 +9,7 @@ import com.gridnine.spf.meta.SpfPluginsRegistry
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import java.io.File
+import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 

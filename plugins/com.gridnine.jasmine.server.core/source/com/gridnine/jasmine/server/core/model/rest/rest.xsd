@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://xtrip.gridnine.com/jasmine/rest"
+	elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://xtrip.gridnine.com/jasmine/rest">
+    <element name="rest">
+		<complexType>
+			<sequence>
+				<choice maxOccurs="unbounded" minOccurs="0">
+					<element name="enum" type="tns:enumType"/>
+					<element name = "entity" type = "tns:entity"/>
+					<element name = "group">
+						<complexType>
+							<sequence>
+								<element name="operation"  maxOccurs="unbounded">
+									<complexType>
+										<sequence>
+											<element name="request">
+												<complexType>
+													<complexContent>
+														<extension base="tns:entity">
+															<attribute name="id" type="string" use="required"/>
+														</extension>
+													</complexContent>
+												</complexType>
+											</element>
+											<element name="response">
+												<complexType>
+													<complexContent>
+														<extension base="tns:entity">
+															<attribute name="id" type="string" use="required"/>
+														</extension>
+													</complexContent>
+												</complexType>
+											</element>
+										</sequence>
+										<attribute name="id" type="string" use="required"/>
+										<attribute name="handler" type="string" use="required"/>
+									</complexType>
+								</element>
+							</sequence>
+							<attribute name="id" type="string" use="required"/>
+						</complexType>
+					</element>
+				</choice>
+			</sequence>
+			<attribute name="id" type="string" use="required"/>
+		</complexType>
+	</element>
+
+
+	<element name="group">
+		<complexType>
+			<sequence>
+				<choice maxOccurs="unbounded" minOccurs="0">
+					<element name="enum" type="tns:enumType"/>
+					<element name = "entity" type = "tns:entity"/>
+				</choice>
+			</sequence>
+			<attribute name="id" type="string"/>
+		</complexType>
+	</element>
+	<simpleType name="valueType">
+		<restriction base="string">
+			<enumeration value="STRING" />
+			<enumeration value="LOCAL_DATE" />
+			<enumeration value="LOCAL_DATE_TIME" />
+			<enumeration value="ENUM" />
+			<enumeration value="BOOLEAN" />
+			<enumeration value="BLOB" />
+			<enumeration value="ENTITY" />
+			<enumeration value="ENTITY_REFERENCE" />
+			<enumeration value="LONG" />
+			<enumeration value="INT" />
+			<enumeration value="BIG_DECIMAL" />
+		</restriction>
+	</simpleType>
+	<complexType name="baseMetaElement">
+		<attribute name="id" type="string" use="required" />
+		<attribute name="deprecated" type="boolean"
+				   default="false" />
+	</complexType>
+	<complexType name="baseType">
+		<complexContent>
+			<extension base="tns:baseMetaElement">
+				<sequence>
+					<element name="param" maxOccurs="unbounded" minOccurs="0"
+							 type="tns:paramType">
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="paramType">
+		<attribute use="required" name="name" type="string"/>
+		<attribute use="required" name="value" type="string"/>
+	</complexType>
+	<complexType name="propertyType">
+		<complexContent>
+			<extension base="tns:baseMetaElement">
+				<sequence>
+					<element name="param" type="tns:paramType" maxOccurs="unbounded"
+							 minOccurs="0">
+					</element>
+				</sequence>
+				<attribute name="type" type="tns:valueType" use="required" />
+				<attribute name="lateinit" type="boolean"/>
+				<attribute name="non-nullable" type="boolean"/>
+				<attribute name="class-name" type="string" />
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="collectionType">
+		<complexContent>
+			<extension base="tns:baseMetaElement">
+				<sequence>
+					<element minOccurs="0" maxOccurs="unbounded" name="param"
+							 type="tns:paramType">
+					</element>
+				</sequence>
+				<attribute name="element-type" type="tns:valueType" use="required" />
+				<attribute name="element-class-name" type="string"/>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="baseClassType">
+		<complexContent>
+			<extension base="tns:baseType">
+				<attribute name="abstract" type="boolean"
+						   default="false">
+				</attribute>
+				<attribute name="extends" type="string" >
+				</attribute>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="enumType">
+			<complexContent>
+				<extension base="tns:baseType">
+					<sequence>
+						<element name="enum-item" maxOccurs="unbounded"
+								 minOccurs="0">
+							<complexType>
+								<complexContent>
+									<extension base="tns:baseMetaElement">
+										<sequence>
+											<element name="param" type="tns:paramType"
+													 maxOccurs="unbounded" minOccurs="0">
+											</element>
+										</sequence>
+									</extension>
+								</complexContent>
+							</complexType>
+						</element>
+					</sequence>
+				</extension>
+			</complexContent>
+	</complexType>
+	<complexType name="entity">
+		<complexContent>
+		<extension base="tns:baseClassType">
+			<sequence>
+				<choice maxOccurs="unbounded" minOccurs="0">
+					<element name="property" type="tns:propertyType"/>
+					<element name="collection" type="tns:collectionType" />
+				</choice>
+			</sequence>
+			<attribute  name="abstract" type="boolean"
+					   default="false"/>
+			<attribute  name="extends" type="string"/>
+		</extension>
+	</complexContent>
+	</complexType>
+</schema>

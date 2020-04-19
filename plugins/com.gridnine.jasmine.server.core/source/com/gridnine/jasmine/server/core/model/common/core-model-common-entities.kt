@@ -31,7 +31,7 @@ abstract class BaseIdentity : BaseIntrospectableObject(){
 
     override fun setValue(propertyName: String, value: Any?) {
         if (BaseIdentity.uid == propertyName) {
-            uid = value as String
+            uid = value as String?
             return
         }
         super.setValue(propertyName, value)
@@ -48,20 +48,69 @@ abstract class BaseIdentity : BaseIntrospectableObject(){
 abstract class BaseIntrospectableObject {
 
     open fun getValue(propertyName: String): Any? {
-        throw IllegalArgumentException("no property with id $propertyName")
+        throw Xeption.forDeveloper("no property with id $propertyName")
     }
 
-    open fun getCollection(listName: String): MutableList<Any> {
-        throw IllegalArgumentException("no collection with id $listName")
+    open fun getCollection(collectionName: String): MutableList<Any> {
+        throw Xeption.forDeveloper("no collection with id $collectionName")
     }
 
     open fun getMap(mapName: String): MutableMap<Any?,Any?> {
-        throw IllegalArgumentException("no map with id $mapName")
+        throw Xeption.forDeveloper("no map with id $mapName")
     }
 
     open fun setValue(propertyName: String, value: Any?) {
-        throw IllegalArgumentException("no property with id $propertyName")
+        throw Xeption.forDeveloper("no property with id $propertyName")
     }
 
 }
 
+
+class L10nMessage: BaseIntrospectableObject {
+    lateinit var key:String
+    val parameters = arrayListOf<Any>()
+
+    constructor()
+    constructor(key:String, vararg parameters:Any){
+        this.key = key
+        parameters.forEach {this.parameters.add(it)}
+    }
+
+    override fun getCollection(collectionName: String): MutableList<Any> {
+        if(Companion.parameters == collectionName){
+            return parameters
+        }
+        return super.getCollection(collectionName)
+    }
+
+    override fun getValue(propertyName: String): Any? {
+        if(Companion.key == propertyName){
+            return key
+        }
+        return super.getValue(propertyName)
+    }
+
+    override fun setValue(propertyName: String, value: Any?) {
+        if(Companion.key == propertyName){
+            key = value as String
+            return
+        }
+        super.setValue(propertyName, value)
+    }
+    companion object{
+        const val key ="key"
+        const val parameters = "parameters"
+    }
+}
+
+class Xeption(val type:XeptionType, val userMessage:L10nMessage?, val adminMessage:L10nMessage?, val developerMessage:String,exception:Exception?) : Exception(exception){
+    companion object{
+        fun forDeveloper(message:String, exception: Exception?=null) = Xeption(XeptionType.FOR_DEVELOPER, null, null, message, exception)
+    }
+}
+
+enum class XeptionType {
+    FOR_END_USER,
+    FOR_ADMIN,
+    FOR_DEVELOPER
+}

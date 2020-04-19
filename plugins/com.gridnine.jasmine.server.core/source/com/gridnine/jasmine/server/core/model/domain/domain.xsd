@@ -63,7 +63,7 @@
 								<extension base="tns:baseIndexType" >
 									<sequence>
 										<choice maxOccurs="unbounded" minOccurs="0">
-											<element name="codeInjection" type = "string"/>
+											<element name="code-injection" type = "string"/>
 										</choice>
 									</sequence>
 									<attribute name="x-cache-resolve" type="boolean"
@@ -88,8 +88,7 @@
 										<attribute name="x-cache-find" type="boolean"
 												   default="false"/>
 										<attribute name="type" type="tns:dbPropertyType" use="required" />
-										<attribute name="className" type="string"/>
-										<attribute name="usedInAutocomplete" type="boolean" default="false"/>
+										<attribute name="class-name" type="string"/>
 									</extension>
 								</complexContent>
 							</complexType>
@@ -106,8 +105,7 @@
 										<attribute name="unique" type="boolean" >
 										</attribute>
 										<attribute name="element-type" type="tns:dbCollectionType" use="required" />
-										<attribute name="elementClassName" type="string" />
-										<attribute name="usedInAutocomplete" type="boolean" default="false"/>
+										<attribute name="element-class-name" type="string" />
 									</extension>
 								</complexContent>
 							</complexType>
@@ -140,8 +138,8 @@
 					</element>
 				</sequence>
 				<attribute name="type" type="tns:documentPropertyType" use="required" />
-				<attribute name="className" type="string"  />
-				<attribute name="nonNullable" type="boolean"/>
+				<attribute name="class-name" type="string"  />
+				<attribute name="non-nullable" type="boolean"/>
 			</extension>
 		</complexContent>
 	</complexType>
@@ -169,12 +167,12 @@
 										<attribute name="unique" type="boolean"
 												   default="false"/>
 										<attribute name="element-type" type="tns:documentPropertyType" use="required" />
-										<attribute name="elementClassName" type="string"  />
+										<attribute name="element-class-name" type="string"  />
 									</extension>
 								</complexContent>
 							</complexType>
 						</element>
-						<element name="codeInjection" type = "string"/>
+						<element name="code-injection" type = "string"/>
 					</choice>
 				</sequence>
 				<attribute name="abstract" type="boolean"

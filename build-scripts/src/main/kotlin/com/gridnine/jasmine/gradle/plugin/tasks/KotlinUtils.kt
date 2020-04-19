@@ -10,6 +10,7 @@ import com.gridnine.spf.meta.SpfPlugin
 import com.gridnine.spf.meta.SpfPluginsRegistry
 import org.gradle.api.Project
 import java.io.File
+import java.lang.IllegalArgumentException
 
 object KotlinUtils{
     internal const val COMPILER_CLASSPATH_CONFIGURATION_NAME = "kotlinCompilerClasspath"
@@ -22,6 +23,10 @@ object KotlinUtils{
 
     fun getType(plugin:SpfPlugin) : SpfPluginType{
         return SpfPluginType.valueOf(plugin.parameters.first { it.id == "type" }.value)
+    }
+
+    fun getPlugin(pluginId:String, registry:SpfPluginsRegistry) : SpfPlugin{
+        return registry.plugins.find { it.id == pluginId }?:throw IllegalArgumentException("unable to find plugin with id $pluginId")
     }
 
     fun createConfiguration(configurationName: String, registry: SpfPluginsRegistry, project: Project, vararg types: SpfPluginType) {

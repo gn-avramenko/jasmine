@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain xmlns="http://xtrip.gridnine.com/jasmine/domain" >
+	<enum id="com.gridnine.jasmine.server.core.test.domain.TestEnum">
+		<enum-item id="ITEM1"/>
+	</enum>
+	<document id="com.gridnine.jasmine.server.core.test.domain.TestDomainDocument" x-cache-resolve="true">
+			<property type="STRING" id="stringProperty"/>
+			<collection element-type="STRING" id="stringCollection"/>
+			<property type="NESTED_DOCUMENT" id="entityProperty" class-name="com.gridnine.jasmine.server.core.test.domain.BaseTestDomainNestedDocument"/>
+			<property type="ENUM" id="enumProperty" class-name="com.gridnine.jasmine.server.core.test.domain.TestEnum"/>
+			<collection element-type="NESTED_DOCUMENT" id="entityCollection" element-class-name="com.gridnine.jasmine.server.core.test.domain.BaseTestDomainNestedDocument"/>
+			<collection element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.server.core.test.domain.TestGroup" id="groups"/>
+	</document>
+	<nested-document id="com.gridnine.jasmine.server.core.test.domain.BaseTestDomainNestedDocument" abstract="true">
+		<property type="STRING" id="name"/>
+	</nested-document>
+	<nested-document id="com.gridnine.jasmine.server.core.test.domain.TestDomainNestedDocumentImpl" extends = "com.gridnine.jasmine.server.core.test.domain.BaseTestDomainNestedDocument">
+		<property type="STRING" id="value"/>
+	</nested-document>
+	<nested-document id="com.gridnine.jasmine.server.core.test.domain.TestGroup">
+		<property type="STRING" id="name"/>
+		<collection element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.server.core.test.domain.TestItem" id="items"/>
+	</nested-document>
+	<nested-document id="com.gridnine.jasmine.server.core.test.domain.TestItem">
+		<property type="STRING" id="name"/>
+	</nested-document>
+	<index document="com.gridnine.jasmine.server.core.test.domain.TestDomainDocument" id="com.gridnine.jasmine.server.core.test.domain.TestDomainDocumentIndex">
+		<property type="STRING" id="stringProperty"/>
+	</index>
+	<asset id="com.gridnine.jasmine.server.core.test.domain.TestDomainAsset" x-cache-resolve="true">
+		<property type="STRING" id="stringProperty" x-cache-find="true"/>
+		<property id="dateProperty" type="LOCAL_DATE_TIME"/>
+	</asset>
+</domain>

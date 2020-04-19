@@ -15,3 +15,4 @@ object LocalizationUtils {
         return RU_LOCALE
     }
 }
+

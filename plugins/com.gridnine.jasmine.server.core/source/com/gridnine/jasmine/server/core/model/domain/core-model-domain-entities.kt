@@ -2,7 +2,7 @@
  * Gridnine AB http://www.gridnine.com
  * Project: Jasmine
  *****************************************************************/
-@file:Suppress("unused")
+@file:Suppress("unused", "UNCHECKED_CAST")
 package com.gridnine.jasmine.server.core.model.domain
 
 import com.gridnine.jasmine.server.core.model.common.BaseIdentity
@@ -13,10 +13,6 @@ import kotlin.reflect.KClass
 abstract class BaseAsset : BaseIdentity() {
 
 
-    var created: LocalDateTime? = null
-
-    var createdBy: String? = null
-
     var modified: LocalDateTime? = null
 
     var modifiedBy: String? = null
@@ -25,14 +21,6 @@ abstract class BaseAsset : BaseIdentity() {
 
     override fun setValue(propertyName: String, value: Any?) {
 
-        if (BaseAsset.created == propertyName) {
-            created = value as LocalDateTime?
-            return
-        }
-        if (BaseAsset.createdBy == propertyName) {
-            createdBy = value as String?
-            return
-        }
         if (BaseAsset.modified == propertyName) {
             modified = value as LocalDateTime?
             return
@@ -46,12 +34,6 @@ abstract class BaseAsset : BaseIdentity() {
 
     override fun getValue(propertyName: String): Any? {
 
-        if (BaseAsset.created== propertyName) {
-            return created
-        }
-        if (BaseAsset.createdBy == propertyName) {
-            return createdBy
-        }
         if (BaseAsset.modified == propertyName) {
             return modified
         }
@@ -62,8 +44,6 @@ abstract class BaseAsset : BaseIdentity() {
     }
 
     companion object{
-        const val created = "created"
-        const val createdBy ="createdBy"
         const val modified ="modified"
         const val modifiedBy = "modifiedBy"
     }
@@ -71,10 +51,6 @@ abstract class BaseAsset : BaseIdentity() {
 }
 
 abstract class BaseDocument : BaseIdentity() {
-
-    var created: LocalDateTime? = null
-
-    var createdBy: String? = null
 
     var modified: LocalDateTime? = null
 
@@ -84,20 +60,12 @@ abstract class BaseDocument : BaseIdentity() {
 
     override fun setValue(propertyName: String, value: Any?) {
 
-        if (BaseDocument.created == propertyName) {
-            created = value as LocalDateTime
-            return
-        }
-        if (BaseDocument.createdBy == propertyName) {
-            createdBy = value as String
-            return
-        }
         if (BaseDocument.modified == propertyName) {
-            modified = value as LocalDateTime
+            modified = value as LocalDateTime?
             return
         }
         if (BaseDocument.modifiedBy == propertyName) {
-            modifiedBy = value as String
+            modifiedBy = value as String?
             return
         }
         super.setValue(propertyName, value)
@@ -105,24 +73,16 @@ abstract class BaseDocument : BaseIdentity() {
 
     override fun getValue(propertyName: String): Any? {
 
-        if (BaseDocument.created== propertyName) {
-            return created
-        }
-        if (BaseDocument.createdBy == propertyName) {
-            return createdBy
-        }
         if (BaseDocument.modified == propertyName) {
             return modified
         }
         if (BaseDocument.modifiedBy == propertyName) {
-            modifiedBy
+            return modifiedBy
         }
         return super.getValue(propertyName)
     }
 
     companion object{
-        const val created = "created"
-        const val createdBy ="createdBy"
         const val modified ="modified"
         const val modifiedBy = "modifiedBy"
     }
@@ -130,11 +90,9 @@ abstract class BaseDocument : BaseIdentity() {
 
 open class EntityReference<D : BaseIdentity>():BaseIdentity() {
 
-
     var caption: String? = null
 
     lateinit var type: KClass<D>
-
 
     constructor(type: KClass<D>, uid: String, caption: String?):this() {
         this.uid = uid
@@ -157,6 +115,27 @@ open class EntityReference<D : BaseIdentity>():BaseIdentity() {
         return uid.hashCode()
     }
 
+    override fun getValue(propertyName: String): Any? {
+        if(EntityReference.type == propertyName){
+            return type
+        }
+        if(EntityReference.caption == propertyName){
+            return caption
+        }
+        return super.getValue(propertyName)
+    }
+
+    override fun setValue(propertyName: String, value: Any?) {
+        if(EntityReference.type == propertyName){
+            type = value as KClass<D>
+            return
+        }
+        if(EntityReference.caption == propertyName){
+            caption = value as String?
+            return
+        }
+        super.setValue(propertyName, value)
+    }
     companion object{
         const val type = "type"
         const val caption ="caption"
@@ -205,6 +184,7 @@ abstract class BaseIndex<D : BaseDocument> : BaseIdentity() {
     }
 }
 abstract class BaseNestedDocument : BaseIdentity()
+
 
 
 

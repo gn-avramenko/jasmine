@@ -5,6 +5,7 @@
 @file:Suppress("unused")
 package com.gridnine.jasmine.server.core.app
 
+import com.gridnine.jasmine.server.core.model.common.Xeption
 import org.slf4j.LoggerFactory
 import java.io.File
 import kotlin.reflect.KClass
@@ -23,6 +24,8 @@ object Environment {
 
     lateinit var tempFolder: File
         private set
+
+    var test = false
 
     private val publishedObjects = LinkedHashMap<KClass<*>, PublishedEntry<*>>()
 
@@ -48,7 +51,7 @@ object Environment {
     fun <T:Any> publish(obj: T) {
         val cls = obj::class
         if (publishedObjects.containsKey(cls)) {
-            throw IllegalArgumentException("object of class ${obj::class.qualifiedName} is already published")
+            throw Xeption.forDeveloper("object of class ${obj::class.qualifiedName} is already published")
         }
         publishedObjects[obj::class] = PublishedEntry(obj)
         log.info("published $obj")
@@ -56,7 +59,7 @@ object Environment {
 
     fun <T:Any> publish(cls: KClass<in T>, obj: T) {
         if (publishedObjects.containsKey(cls)) {
-            throw IllegalArgumentException("object of class ${cls.qualifiedName} is already published")
+            throw Xeption.forDeveloper("object of class ${cls.qualifiedName} is already published")
         }
         publishedObjects[cls] = PublishedEntry(obj)
         log.info("published $obj, class = ${cls.qualifiedName}")
@@ -76,7 +79,7 @@ object Environment {
 
     @Suppress("UNCHECKED_CAST")
     fun <T : Any> getPublished(cls: KClass<T>): T {
-        val result = publishedObjects[cls]?: throw IllegalArgumentException("object of class ${cls.qualifiedName} is not not published") //$NON-NLS-1$
+        val result = publishedObjects[cls]?: throw Xeption.forDeveloper("object of class ${cls.qualifiedName} is not not published") //$NON-NLS-1$
         return result.obj as T
     }
 

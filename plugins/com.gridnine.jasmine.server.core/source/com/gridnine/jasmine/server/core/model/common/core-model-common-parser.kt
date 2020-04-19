@@ -26,7 +26,7 @@ object ParserUtils {
         return updateLocalizations(description, localizations, id)
     }
 
-    fun <T : BaseModelElementDescription> updateLocalizations(description: T, localizations: Map<String, Map<Locale, String>>, id:String) {
+    private fun <T : BaseModelElementDescription> updateLocalizations(description: T, localizations: Map<String, Map<Locale, String>>, id:String) {
         localizations[id]?.entries?.forEach {
             description.displayNames[it.key] = it.value
         }
@@ -77,7 +77,7 @@ object ParserUtils {
             val url = classLoader.getResource("$packageName/l10n/${baseName}_${locale.language}.properties") ?: continue
             updateLocalization(url, localizations, locale)
         }
-        val url = classLoader.getResource(metaQualifiedName)?:throw IllegalArgumentException("cannot access resource $metaQualifiedName")
+        val url = classLoader.getResource(metaQualifiedName)?:throw Xeption.forDeveloper("cannot access resource $metaQualifiedName")
         val node = XmlUtils.parseXml(url.readBytes())
         return Pair(node, localizations)
     }
@@ -92,10 +92,10 @@ object ParserUtils {
         }
     }
     fun getIdAttribute(it: XmlNode): String {
-        return it.attributes["id"]?:throw IllegalArgumentException("node ${it.name} has no id attribute")
+        return it.attributes["id"]?:throw Xeption.forDeveloper("node ${it.name} has no id attribute")
     }
 
     fun getCaptionAttribute(it: XmlNode): String {
-        return it.attributes["caption"]?:throw IllegalArgumentException("node ${it.name} has no caption attribute")
+        return it.attributes["caption"]?:throw Xeption.forDeveloper("node ${it.name} has no caption attribute")
     }
 }

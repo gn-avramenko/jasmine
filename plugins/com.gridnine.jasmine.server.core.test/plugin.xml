@@ -4,4 +4,14 @@
         <lib-dependency group="junit" name="junit" version="4.12"/>
         <plugin-dependency plugin-id="com.gridnine.jasmine.server.core"/>
     </dependencies>
+    <extension point-id="domain-metadata">
+        <parameter id="relative-path" value="source/com/gridnine/jasmine/server/core/test/model/core-test-model-domain.xml"/>
+        <parameter id="url" value="com/gridnine/jasmine/server/core/test/model/core-test-model-domain.xml"/>
+        <parameter id="dest-server-plugin-id" value="com.gridnine.jasmine.server.core.test"/>
+    </extension>
+    <extension point-id="rest-metadata">
+        <parameter id="relative-path" value="source/com/gridnine/jasmine/server/core/test/model/core-test-model-rest.xml"/>
+        <parameter id="url" value="com/gridnine/jasmine/server/core/test/model/core-test-model-rest.xml"/>
+        <parameter id="dest-server-plugin-id" value="com.gridnine.jasmine.server.core.test"/>
+    </extension>
 </plugin>
