@@ -9,6 +9,7 @@ import com.gridnine.jasmine.server.core.app.Disposable
 import com.gridnine.jasmine.server.core.app.PublishableWrapper
 import com.gridnine.jasmine.server.core.model.common.BaseIdentity
 import com.gridnine.jasmine.server.core.model.domain.CachedObject
+import com.gridnine.jasmine.server.core.model.domain.ObjectReference
 import com.gridnine.jasmine.server.core.model.domain.ReadOnlyArrayList
 import com.gridnine.jasmine.server.core.reflection.ReflectionFactory
 import com.gridnine.jasmine.server.core.serialization.JsonSerializer
@@ -26,6 +27,13 @@ class CachedObjectsConverter: Disposable {
 
     }
 
+    fun<T:BaseIdentity> toStandard(obj:T):T{
+        if(obj !is CachedObject){
+            return obj
+        }
+        return toStandardObject(obj, hashMapOf())
+    }
+
     private fun <T:BaseIdentity> toCachedObject(obj:T, ctx:MutableMap<String, BaseIdentity>):T{
         val className = obj::class.java.name
         val idx = className.lastIndexOf(".")
@@ -37,7 +45,7 @@ class CachedObjectsConverter: Disposable {
         }
         val provider =JsonSerializer.get().providersCache.getOrPut(className, { JsonSerializer.createProvider(className) }) as ObjectMetadataProvider<T>
         val uid = obj.uid
-        if(uid != null){
+        if(uid != null && cachedObject !is ObjectReference<*>){
             val existing = ctx[uid]
             if(existing != null){
                 return existing as T
@@ -74,6 +82,42 @@ class CachedObjectsConverter: Disposable {
         return cachedDocument as T
     }
 
+    private fun <T:BaseIdentity> toStandardObject(obj:T, ctx:MutableMap<String, BaseIdentity>):T{
+        val className = obj::class.java.name.replace("_Cached", "")
+        val result =  ReflectionFactory.get().newInstance<T>(className)
+        val provider =JsonSerializer.get().providersCache.getOrPut(className, { JsonSerializer.createProvider(className) }) as ObjectMetadataProvider<T>
+        val uid = obj.uid
+        if(uid != null  && result !is ObjectReference<*>){
+            val existing = ctx[uid]
+            if(existing != null){
+                return existing as T
+            }
+            ctx[uid] = result
+        }
+        provider.getAllProperties().forEach{prop->
+            val cached = when(prop.type){
+                SerializablePropertyType.ENTITY -> {
+                    obj.getValue(prop.id)?.let{toStandardObject(it as BaseIdentity, ctx)}
+                }
+                else -> obj.getValue(prop.id)
+            }
+            result.setValue(prop.id, cached)
+        }
+        provider.getAllCollections().forEach{coll->
+            val collection = obj.getCollection(coll.id)
+            val resultCollection = result.getCollection(coll.id)
+            collection.forEach {elm ->
+                val convertedObj = when(coll.elementType){
+                    SerializablePropertyType.ENTITY -> {
+                        toStandardObject(elm as BaseIdentity, ctx)
+                    }
+                    else -> elm
+                }
+                resultCollection.add(convertedObj)
+            }
+        }
+        return result
+    }
 
     override fun dispose() {
         wrapper.dispose()

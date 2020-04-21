@@ -8,7 +8,7 @@ package com.gridnine.jasmine.server.core.build
 
 import com.gridnine.jasmine.server.core.model.common.Xeption
 import com.gridnine.jasmine.server.core.model.domain.CachedObject
-import com.gridnine.jasmine.server.core.model.domain.EntityReference
+import com.gridnine.jasmine.server.core.model.domain.ObjectReference
 import com.gridnine.jasmine.server.core.model.domain.ReadOnlyArrayList
 import com.gridnine.jasmine.server.core.storage.search.*
 import java.io.File
@@ -243,7 +243,7 @@ internal object GenUtils {
             GenPropertyType.LOCAL_DATE_TIME -> LocalDateTime::class.qualifiedName!!
             GenPropertyType.LOCAL_DATE -> LocalDate::class.qualifiedName!!
             GenPropertyType.INT -> "Int"
-            GenPropertyType.ENTITY_REFERENCE -> "${EntityReference::class.qualifiedName}<${className}>"
+            GenPropertyType.ENTITY_REFERENCE -> "${ObjectReference::class.qualifiedName}<${className}>"
             GenPropertyType.BIG_DECIMAL -> BigDecimal::class.qualifiedName!!
             GenPropertyType.DOUBLE -> "Double"
             GenPropertyType.BYTE_ARRAY -> "ByteArray"

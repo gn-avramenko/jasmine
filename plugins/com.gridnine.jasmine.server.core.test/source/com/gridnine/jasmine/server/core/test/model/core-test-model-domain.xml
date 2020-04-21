@@ -8,6 +8,7 @@
 			<collection element-type="STRING" id="stringCollection"/>
 			<property type="NESTED_DOCUMENT" id="entityProperty" class-name="com.gridnine.jasmine.server.core.test.domain.BaseTestDomainNestedDocument"/>
 			<property type="ENUM" id="enumProperty" class-name="com.gridnine.jasmine.server.core.test.domain.TestEnum"/>
+			<property id="entityReference" type="ENTITY_REFERENCE" class-name="com.gridnine.jasmine.server.core.test.domain.TestDomainDocument"/>
 			<collection element-type="NESTED_DOCUMENT" id="entityCollection" element-class-name="com.gridnine.jasmine.server.core.test.domain.BaseTestDomainNestedDocument"/>
 			<collection element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.server.core.test.domain.TestGroup" id="groups"/>
 	</document>

@@ -5,6 +5,7 @@
 package com.gridnine.jasmine.server.core.build
 
 import com.gridnine.jasmine.server.core.app.IApplicationMetadataProvider
+import com.gridnine.jasmine.server.core.model.common.BaseIdentity
 import com.gridnine.jasmine.server.core.model.common.Xeption
 import com.gridnine.jasmine.server.core.model.domain.*
 import java.io.File
@@ -15,11 +16,12 @@ internal object DomainServerGenerator {
     private fun <T : BaseDocumentDescription> toCachedGenData(descr: T, registry:DomainMetaRegistry): GenClassData {
         val result = GenClassData("${descr.id.substringBeforeLast(".")}._Cached${descr.id.substringAfterLast(".")}", descr.id, false,  noEnumProperties = true, implementCachedObject = true)
         result.properties.add(GenPropertyDescription(CachedObject.allowChanges, GenPropertyType.BOOLEAN, null, nonNullable = true, lateinit = false, openSetter = false, override = true))
+        result.properties.add(GenPropertyDescription(BaseIdentity.uid, GenPropertyType.STRING, null, nonNullable = false, lateinit = false, openSetter = false, override = true,disallowedSetter = true))
         var extendsId = descr.extendsId
         while(extendsId != null){
             val nestedDoc = registry.nestedDocuments[extendsId]!!
             nestedDoc.properties.values.forEach { prop ->
-                result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), prop.className, nonNullable = prop.nonNullable, lateinit = false, openSetter = false, override = true))
+                result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), prop.className, nonNullable = prop.nonNullable, lateinit = false, openSetter = false, override = true,disallowedSetter = true))
             }
             nestedDoc.collections.values.forEach { coll ->
                 result.collections.add(GenCollectionDescription(coll.id, getPropertyType(coll.elementType), coll.elementClassName, openGetter = false, readonlyImpl = true))
@@ -38,10 +40,11 @@ internal object DomainServerGenerator {
     }
 
     private fun  toCachedGenData(descr: AssetDescription): GenClassData {
-        val result = GenClassData("${descr.id.substringBeforeLast(".")}._Cached${descr.id.substringAfterLast(".")}", descr.id, false,  noEnumProperties = false, implementCachedObject = true)
+        val result = GenClassData("${descr.id.substringBeforeLast(".")}._Cached${descr.id.substringAfterLast(".")}", descr.id, false,  noEnumProperties = true, implementCachedObject = true)
+        result.properties.add(GenPropertyDescription(BaseIdentity.uid, GenPropertyType.STRING, null, nonNullable = false, lateinit = false, openSetter = false, override = true,disallowedSetter = true))
         result.properties.add(GenPropertyDescription(CachedObject.allowChanges, GenPropertyType.BOOLEAN, null, nonNullable = true, lateinit = false, openSetter = false, override = true))
         descr.properties.values.forEach { prop ->
-            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), prop.className, nonNullable = prop.nonNullable, lateinit = false, openSetter = false, override = true))
+            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), prop.className, nonNullable = prop.nonNullable, lateinit = false, openSetter = false, override = true,disallowedSetter = true))
         }
         descr.collections.values.forEach { coll ->
             result.collections.add(GenCollectionDescription(coll.id, getPropertyType(coll.elementType), coll.elementClassName, openGetter = false, readonlyImpl = true))

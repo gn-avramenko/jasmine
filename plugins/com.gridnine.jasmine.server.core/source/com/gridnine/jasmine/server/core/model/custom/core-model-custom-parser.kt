@@ -17,8 +17,8 @@ object CustomMetadataParser {
     }
 
     private fun  fillCustomEntity(elm: XmlNode, description: CustomEntityDescription) {
-        description.abstract = "true" == elm.attributes["abstract"]
-        description.extends = elm.attributes["extends"]
+        description.isAbstract = "true" == elm.attributes["abstract"]
+        description.extendsId = elm.attributes["extends"]
         elm.children("property").forEach {
             val id = ParserUtils.getIdAttribute(it)
             val propDescr = description.properties.getOrPut(id){ CustomPropertyDescription(id,

@@ -6,7 +6,7 @@
 
 package com.gridnine.jasmine.server.core.model.common
 
-import com.gridnine.jasmine.server.core.utils.LocalizationUtils
+import com.gridnine.jasmine.server.core.utils.LocaleUtils
 import java.util.*
 
 @Suppress("UNCHECKED_CAST")
@@ -15,8 +15,8 @@ abstract class BaseModelElementDescription(val id:String){
     val parameters = linkedMapOf<String, String>()
 
     fun getDisplayName(): String? {
-        return displayNames[LocalizationUtils.getCurrentLocale()]
-                ?:displayNames[LocalizationUtils.EN_LOCALE]
+        return displayNames[LocaleUtils.getCurrentLocale()]
+                ?:displayNames[LocaleUtils.EN_LOCALE]
     }
 }
 

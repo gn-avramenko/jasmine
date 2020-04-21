@@ -9,7 +9,7 @@ package com.gridnine.jasmine.server.core.model.common
 
 abstract class BaseIdentity : BaseIntrospectableObject(){
 
-    var uid:String? = null
+    open var uid:String? = null
 
     override fun equals(other: Any?): Boolean {
         if(other is BaseIdentity){
@@ -97,17 +97,29 @@ class L10nMessage: BaseIntrospectableObject {
         }
         super.setValue(propertyName, value)
     }
+
     companion object{
         const val key ="key"
         const val parameters = "parameters"
     }
 }
 
-class Xeption(val type:XeptionType, val userMessage:L10nMessage?, val adminMessage:L10nMessage?, val developerMessage:String,exception:Exception?) : Exception(exception){
+class Xeption(val type:XeptionType, val userMessage:L10nMessage?, val adminMessage:L10nMessage?, val developerMessage:String?,exception:Exception?) : Exception(getExceptionMessage(userMessage, adminMessage, developerMessage), exception){
+
     companion object{
+        private fun getExceptionMessage(userMessage: L10nMessage?, adminMessage: L10nMessage?, developerMessage: String?): String? {
+            if(developerMessage != null){
+                return developerMessage
+            }
+            return null
+        }
         fun forDeveloper(message:String, exception: Exception?=null) = Xeption(XeptionType.FOR_DEVELOPER, null, null, message, exception)
+        fun forAdmin(message:L10nMessage, exception: Exception?=null) = Xeption(XeptionType.FOR_ADMIN, null, message, null, exception)
     }
 }
+
+
+
 
 enum class XeptionType {
     FOR_END_USER,

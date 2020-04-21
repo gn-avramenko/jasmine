@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.server.core.serialization
 
-import com.gridnine.jasmine.server.core.model.domain.EntityReference
+import com.gridnine.jasmine.server.core.model.domain.ObjectReference
 import com.gridnine.jasmine.server.core.model.rest.BaseRestEntity
 import com.gridnine.jasmine.server.core.model.rest.RestEntityDescription
 import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistry
@@ -43,7 +43,7 @@ internal open class RestEntityMetadataProvider(description: RestEntityDescriptio
 
     private fun toClassName(elementType: RestPropertyType, elementClassName: String?): String? {
         if (elementType == RestPropertyType.ENTITY_REFERENCE) {
-            return EntityReference::class.qualifiedName
+            return ObjectReference::class.qualifiedName
         }
         return elementClassName
     }

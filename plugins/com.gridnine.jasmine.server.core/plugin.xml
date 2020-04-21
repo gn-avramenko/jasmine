@@ -22,4 +22,12 @@
         <parameter-def id="dest-server-plugin-id"/>
         <parameter-def id="dest-client-plugin-id"/>
     </extension-point>
+    <extension-point id="custom-metadata">
+        <parameter-def id="relative-path"/>
+        <parameter-def id="url"/>
+    </extension-point>
+    <extension point-id="custom-metadata">
+        <parameter id="relative-path" value="source/com/gridnine/jasmine/server/core/model/custom/core-custom.xml"/>
+        <parameter id="url" value="com/gridnine/jasmine/server/core/model/custom/core-custom.xml"/>
+    </extension>
 </plugin>

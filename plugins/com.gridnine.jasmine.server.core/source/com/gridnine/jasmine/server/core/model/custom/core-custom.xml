@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-entities xmlns="http://xtrip.gridnine.com/jasmine/custom" >
+    <entity id="com.gridnine.jasmine.server.core.model.domain.ObjectReference">
+        <property id="uid" type="STRING"/>
+        <property id="type" type="CLASS"/>
+        <property id="caption" type="STRING"/>
+    </entity>
+</custom-entities>

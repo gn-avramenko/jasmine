@@ -5,7 +5,7 @@
 @file:Suppress("unused")
 package com.gridnine.jasmine.server.core.storage.search
 
-import com.gridnine.jasmine.server.core.model.domain.EntityReference
+import com.gridnine.jasmine.server.core.model.domain.ObjectReference
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -18,7 +18,7 @@ private fun value2String(value:Any?):String{
         is Enum<*> ->{value.name}
         is LocalDate -> {df.format(value)}
         is LocalDateTime -> {dtf.format(value)}
-        is EntityReference<*> ->"\"${value.caption?:"${value.type.qualifiedName} ${value.uid}"}\""
+        is ObjectReference<*> ->"\"${value.caption?:"${value.type.qualifiedName} ${value.uid}"}\""
         null -> {"null"}
         else -> "\"$value}\""
     }

@@ -17,6 +17,9 @@ class PublishableWrapper<E : Any>(private val cls: KClass<E>) {
     private var disposed = false
 
     fun get(): E {
+        if(Environment.test){
+            return Environment.getPublished(cls)
+        }
         if (disposed) {
             throw Xeption.forDeveloper("object ${cls.qualifiedName} disposed")
         }

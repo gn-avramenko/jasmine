@@ -7,19 +7,18 @@
 package com.gridnine.jasmine.server.core.model.common
 
 
-import com.gridnine.jasmine.server.core.utils.LocalizationUtils
+import com.gridnine.jasmine.server.core.utils.LocaleUtils
 import com.gridnine.jasmine.server.core.utils.XmlNode
 import com.gridnine.jasmine.server.core.utils.XmlUtils
 import java.io.File
 import java.io.InputStreamReader
-import java.lang.IllegalArgumentException
 import java.net.URL
 import java.util.*
 
 
 object ParserUtils {
 
-    private val locales = arrayListOf(LocalizationUtils.EN_LOCALE, LocalizationUtils.RU_LOCALE)
+    private val locales = arrayListOf(LocaleUtils.EN_LOCALE, LocaleUtils.RU_LOCALE)
 
     fun <T : BaseModelElementDescription> updateLocalizations(description: T, parentId:String?, localizations: Map<String, Map<Locale, String>>) {
         val id = if (parentId != null) "${parentId}.${description.id}.name" else "${description.id}.name"

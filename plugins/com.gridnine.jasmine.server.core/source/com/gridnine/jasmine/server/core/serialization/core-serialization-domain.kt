@@ -65,7 +65,7 @@ internal open class BaseDomainDocumentMetadataProvider(description: BaseDocument
 
     private fun toClassName(elementType: DocumentPropertyType, elementClassName: String?): String? {
         if (elementType == DocumentPropertyType.ENTITY_REFERENCE) {
-            return EntityReference::class.qualifiedName
+            return ObjectReference::class.qualifiedName
         }
         return elementClassName
     }
@@ -159,14 +159,14 @@ internal open class BaseDomainIndexMetadataProvider(description: BaseIndexDescri
 
     private fun toClassName(elementType: DatabasePropertyType, elementClassName: String?): String? {
         if (elementType == DatabasePropertyType.ENTITY_REFERENCE) {
-            return EntityReference::class.qualifiedName
+            return ObjectReference::class.qualifiedName
         }
         return elementClassName
     }
 
     private fun toClassName(elementType: DatabaseCollectionType, elementClassName: String?): String? {
         if (elementType == DatabaseCollectionType.ENTITY_REFERENCE) {
-            return EntityReference::class.qualifiedName
+            return ObjectReference::class.qualifiedName
         }
         return elementClassName
     }
@@ -192,14 +192,14 @@ internal class DomainIndexMetadataProvider(description: IndexDescription) : Base
     init{
         addProperty(SerializablePropertyDescription(BaseIdentity.uid, SerializablePropertyType.STRING, null, false))
         addProperty(SerializablePropertyDescription(BaseIndex.navigationKey, SerializablePropertyType.STRING, null, false))
-        addProperty(SerializablePropertyDescription(BaseIndex.document, SerializablePropertyType.ENTITY, EntityReference::class.qualifiedName, false))
+        addProperty(SerializablePropertyDescription(BaseIndex.document, SerializablePropertyType.ENTITY, ObjectReference::class.qualifiedName, false))
     }
 }
 
 internal class AssetMetadataProvider(description: AssetDescription) : BaseDomainIndexMetadataProvider(description) {
     init{
         addProperty(SerializablePropertyDescription(BaseIdentity.uid, SerializablePropertyType.STRING, null, false))
-        addProperty(SerializablePropertyDescription(BaseAsset.modifiedBy, SerializablePropertyType.ENTITY, EntityReference::class.qualifiedName, false))
+        addProperty(SerializablePropertyDescription(BaseAsset.modifiedBy, SerializablePropertyType.ENTITY, ObjectReference::class.qualifiedName, false))
         addProperty(SerializablePropertyDescription(BaseAsset.modifiedBy, SerializablePropertyType.LOCAL_DATE_TIME, null, false))
     }
 }

@@ -8,6 +8,7 @@ package com.gridnine.jasmine.server.core.model.l10n
 import com.gridnine.jasmine.server.core.app.Disposable
 import com.gridnine.jasmine.server.core.model.common.BaseModelElementDescription
 import com.gridnine.jasmine.server.core.app.PublishableWrapper
+import com.gridnine.jasmine.server.core.model.common.L10nMessage
 
 enum class L10nParameterType {
     STRING,
@@ -28,15 +29,11 @@ class L10nParameterDescription(id:String, val type:L10nParameterDescription) : B
 }
 
 class L10nMessageDescription(id:String) : BaseModelElementDescription(id){
-    val params = hashMapOf<String, L10nParameterDescription>()
-}
-
-class L10nMessagesBundleDescription(id:String) : BaseModelElementDescription(id){
-    val messages = hashMapOf<String, L10nMessageDescription>()
+    val params = linkedMapOf<String, L10nParameterDescription>()
 }
 
 class L10nMetaregistry:Disposable{
-    val bundles = linkedMapOf<String, L10nMessagesBundleDescription>()
+    val messages = linkedMapOf<String, L10nMessageDescription>()
 
     override fun dispose() {
         wrapper.dispose()
@@ -47,4 +44,11 @@ class L10nMetaregistry:Disposable{
     }
 }
 
+fun L10nMessage.toString(){
+    val md = L10nMetaregistry.get().messages[this.key]
+    var result = md?.getDisplayName()?:this.key
+    this.parameters.withIndex().forEach{(idx, value) ->
+        result = result.replace("{$idx}", value.toString()?:"???")
+    }
+}
 

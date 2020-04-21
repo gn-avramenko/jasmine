@@ -10,12 +10,14 @@ package com.gridnine.jasmine.server.core.serialization
 import com.fasterxml.jackson.core.*
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
 import com.gridnine.jasmine.server.core.app.Disposable
+import com.gridnine.jasmine.server.core.app.PublishableWrapper
 import com.gridnine.jasmine.server.core.model.common.BaseIdentity
+import com.gridnine.jasmine.server.core.model.common.Xeption
+import com.gridnine.jasmine.server.core.model.custom.CustomMetaRegistry
 import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistry
+import com.gridnine.jasmine.server.core.model.domain.ObjectReference
 import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistry
 import com.gridnine.jasmine.server.core.reflection.ReflectionFactory
-import com.gridnine.jasmine.server.core.app.PublishableWrapper
-import com.gridnine.jasmine.server.core.model.common.Xeption
 import java.io.InputStream
 import java.io.OutputStream
 import java.math.BigDecimal
@@ -70,7 +72,7 @@ class JsonSerializer : Disposable {
                     parser.nextToken()
                     uid = parser.text
                     val existingObject = ctx[uid]
-                    if(existingObject != null){
+                    if(existingObject != null && existingObject !is ObjectReference<*>){
                         return existingObject as T
                     }
                 }
@@ -84,7 +86,7 @@ class JsonSerializer : Disposable {
                         result = ReflectionFactory.get().newInstance<T>(realClassName)
                         if(provider.hasUid()) {
                             provider.setPropertyValue(result, BaseIdentity.uid, uid)
-                            if(uid != null) {
+                            if(uid != null && result !is ObjectReference<*>) {
                                 ctx.putIfAbsent(uid, result)
                             }
                         }
@@ -203,7 +205,7 @@ class JsonSerializer : Disposable {
         generator.writeStartObject()
         if (provider.hasUid()) {
             val uid = provider.getPropertyValue(obj, "uid") as String?
-            if (uid != null) {
+            if (uid != null && obj !is ObjectReference<*>) {
                 if (uids.contains(uid)) {
                     generator.writeStringField("uid", uid)
                     return
@@ -290,6 +292,10 @@ class JsonSerializer : Disposable {
             val restEntityDescription = RestMetaRegistry.get().entities[key]
             if (restEntityDescription != null) {
                 return RestEntityMetadataProvider(restEntityDescription)
+            }
+            val customEntityDescription = CustomMetaRegistry.get().entities[key]
+            if (customEntityDescription != null) {
+                return CustomEntityMetadataProvider(customEntityDescription)
             }
             TODO()
         }

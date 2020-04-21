@@ -7,6 +7,8 @@
 package com.gridnine.jasmine.server.core.test
 
 import com.gridnine.jasmine.server.core.app.Environment
+import com.gridnine.jasmine.server.core.model.custom.CustomMetaRegistry
+import com.gridnine.jasmine.server.core.model.custom.CustomMetadataParser
 import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistry
 import com.gridnine.jasmine.server.core.model.domain.DomainMetadataParser
 import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistry
@@ -51,6 +53,7 @@ abstract class TestBase {
         }
         appHome.mkdirs()
         Environment.configure(appHome)
+        Environment.test = true
     }
 }
 
@@ -61,9 +64,20 @@ abstract class CoreTestBase : TestBase() {
         super.setUp()
         publishDomainMetadataProvider()
         publishRestMetadataProvider()
+        publishCustomMetaRegistry()
         publishReflectionFactory()
         publishSerializer()
         publishCachedObjectsConverter()
+    }
+
+    private fun publishCustomMetaRegistry() {
+        val result = CustomMetaRegistry()
+        registerCustomMetadata(result)
+        Environment.publish(result)
+    }
+
+    protected fun registerCustomMetadata(result: CustomMetaRegistry){
+        CustomMetadataParser.updateCustomMetaRegistry(result, "com/gridnine/jasmine/server/core/model/custom/core-custom.xml", this::class.java.classLoader)
     }
 
     private fun publishCachedObjectsConverter() {

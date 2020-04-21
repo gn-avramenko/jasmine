@@ -49,9 +49,9 @@ class CustomEnumDescription(id:String) : BaseCustomElementDescription(id){
 
 class CustomEntityDescription(id:String) : BaseCustomElementDescription(id) {
 
-    var abstract:Boolean = false
+    var isAbstract:Boolean = false
 
-    var extends:String? = null
+    var extendsId:String? = null
 
     val properties = linkedMapOf<String, CustomPropertyDescription>()
 
