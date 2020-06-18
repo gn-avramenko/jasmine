@@ -71,9 +71,11 @@ class JsonSerializer : Disposable {
                 BaseIdentity.uid ->{
                     parser.nextToken()
                     uid = parser.text
-                    val existingObject = ctx[uid]
-                    if(existingObject != null && existingObject !is ObjectReference<*>){
-                        return existingObject as T
+                    if(ObjectReference::class.qualifiedName != realClassName){
+                        val existingObject = ctx[uid]
+                        if(existingObject != null && existingObject !is ObjectReference<*>){
+                            return existingObject as T
+                        }
                     }
                 }
                 CLASS_NAME_PROPERTY ->{
@@ -125,11 +127,11 @@ class JsonSerializer : Disposable {
                             }
                             SerializablePropertyType.LOCAL_DATE_TIME ->{
                                 parser.nextToken()
-                                dateTimeFormatter.parse(parser.text)
+                                LocalDateTime.parse(parser.text, dateTimeFormatter)
                             }
                             SerializablePropertyType.LOCAL_DATE ->{
                                 parser.nextToken()
-                                dateFormatter.parse(parser.text)
+                                LocalDate.parse(parser.text, dateFormatter)
                             }
                             SerializablePropertyType.CLASS ->{
                                 parser.nextToken()

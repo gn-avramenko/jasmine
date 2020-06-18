@@ -36,6 +36,9 @@ class PublishableWrapper<E : Any>(private val cls: KClass<E>) {
     }
 
     fun dispose() {
+        if(instance is Disposable){
+            (instance as Disposable).dispose()
+        }
         disposed = true
         instance = null
     }

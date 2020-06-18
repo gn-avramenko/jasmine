@@ -76,7 +76,7 @@ open class _CachedObjectReference<D : BaseIdentity>: ObjectReference<D>(), Cache
 
     override lateinit var type: KClass<D>
 
-    override var uid: String? = null
+    override lateinit var uid: String
 
     override fun getValue(propertyName: String): Any? {
         if(ObjectReference.type == propertyName){
@@ -101,7 +101,7 @@ open class _CachedObjectReference<D : BaseIdentity>: ObjectReference<D>(), Cache
             return
         }
         if(BaseIdentity.uid == propertyName){
-            uid = value as String?
+            uid = value as String
             return
         }
         super.setValue(propertyName, value)

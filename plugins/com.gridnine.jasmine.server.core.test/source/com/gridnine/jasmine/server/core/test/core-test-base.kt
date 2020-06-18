@@ -7,6 +7,8 @@
 package com.gridnine.jasmine.server.core.test
 
 import com.gridnine.jasmine.server.core.app.Environment
+import com.gridnine.jasmine.server.core.lock.LockManager
+import com.gridnine.jasmine.server.core.lock.StandardLockManager
 import com.gridnine.jasmine.server.core.model.custom.CustomMetaRegistry
 import com.gridnine.jasmine.server.core.model.custom.CustomMetadataParser
 import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistry
@@ -68,7 +70,13 @@ abstract class CoreTestBase : TestBase() {
         publishReflectionFactory()
         publishSerializer()
         publishCachedObjectsConverter()
+        publishLockManager()
     }
+
+    protected fun publishLockManager() {
+        Environment.publish(LockManager::class, StandardLockManager())
+    }
+
 
     private fun publishCustomMetaRegistry() {
         val result = CustomMetaRegistry()

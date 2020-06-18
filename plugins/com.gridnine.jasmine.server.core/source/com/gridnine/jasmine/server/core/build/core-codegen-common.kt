@@ -84,7 +84,12 @@ internal object GenUtils {
                             blankLine()
                             when {
                                 prop.lateinit -> "${if(prop.override) "override " else ""}lateinit var ${prop.id}:${getPropertyType(prop.type, prop.className)}"()
-                                prop.nonNullable -> "${if(prop.override) "override " else ""} var ${prop.id}:${getPropertyType(prop.type, prop.className)}=${if(getPropertyType(prop.type, prop.className) == "Boolean") "false" else "0"}"()
+                                prop.nonNullable -> "${if(prop.override) "override " else ""} var ${prop.id}:${getPropertyType(prop.type, prop.className)}=${
+                                when(getPropertyType(prop.type, prop.className)){
+                                    "Boolean" ->"false"
+                                    "String" ->"\"\""
+                                    else ->"0"
+                                }}"()
                                 else -> "${if(prop.override) "override " else ""}${if(prop.openSetter) "open " else ""}var ${prop.id}:${getPropertyType(prop.type, prop.className)}?=null"()
                             }
                             if(prop.disallowedSetter) {

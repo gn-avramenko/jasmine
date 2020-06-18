@@ -45,7 +45,7 @@ class CachedObjectsConverter: Disposable {
         }
         val provider =JsonSerializer.get().providersCache.getOrPut(className, { JsonSerializer.createProvider(className) }) as ObjectMetadataProvider<T>
         val uid = obj.uid
-        if(uid != null && cachedObject !is ObjectReference<*>){
+        if(cachedObject !is ObjectReference<*>){
             val existing = ctx[uid]
             if(existing != null){
                 return existing as T
@@ -87,7 +87,7 @@ class CachedObjectsConverter: Disposable {
         val result =  ReflectionFactory.get().newInstance<T>(className)
         val provider =JsonSerializer.get().providersCache.getOrPut(className, { JsonSerializer.createProvider(className) }) as ObjectMetadataProvider<T>
         val uid = obj.uid
-        if(uid != null  && result !is ObjectReference<*>){
+        if(result !is ObjectReference<*>){
             val existing = ctx[uid]
             if(existing != null){
                 return existing as T

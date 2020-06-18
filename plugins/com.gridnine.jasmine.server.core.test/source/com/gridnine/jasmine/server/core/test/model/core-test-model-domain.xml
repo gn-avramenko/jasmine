@@ -2,6 +2,8 @@
 <domain xmlns="http://xtrip.gridnine.com/jasmine/domain" >
 	<enum id="com.gridnine.jasmine.server.core.test.domain.TestEnum">
 		<enum-item id="ITEM1"/>
+		<enum-item id="ITEM2"/>
+		<enum-item id="ITEM3"/>
 	</enum>
 	<document id="com.gridnine.jasmine.server.core.test.domain.TestDomainDocument" x-cache-resolve="true">
 			<property type="STRING" id="stringProperty"/>
@@ -11,6 +13,8 @@
 			<property id="entityReference" type="ENTITY_REFERENCE" class-name="com.gridnine.jasmine.server.core.test.domain.TestDomainDocument"/>
 			<collection element-type="NESTED_DOCUMENT" id="entityCollection" element-class-name="com.gridnine.jasmine.server.core.test.domain.BaseTestDomainNestedDocument"/>
 			<collection element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.server.core.test.domain.TestGroup" id="groups"/>
+			<collection element-type="ENUM" id="enumCollection" element-class-name="com.gridnine.jasmine.server.core.test.domain.TestEnum"/>
+			<collection element-type="ENTITY_REFERENCE" id="entityRefCollection" element-class-name="com.gridnine.jasmine.server.core.test.domain.TestDomainDocument"/>
 	</document>
 	<nested-document id="com.gridnine.jasmine.server.core.test.domain.BaseTestDomainNestedDocument" abstract="true">
 		<property type="STRING" id="name"/>
@@ -27,6 +31,12 @@
 	</nested-document>
 	<index document="com.gridnine.jasmine.server.core.test.domain.TestDomainDocument" id="com.gridnine.jasmine.server.core.test.domain.TestDomainDocumentIndex">
 		<property type="STRING" id="stringProperty"/>
+		<collection element-type="STRING" id="stringCollection"/>
+		<property type="ENUM" id="enumProperty" class-name="com.gridnine.jasmine.server.core.test.domain.TestEnum"/>
+		<property id="entityReference" type="ENTITY_REFERENCE" class-name="com.gridnine.jasmine.server.core.test.domain.TestDomainDocument"/>
+		<collection element-type="ENUM" id="enumCollection" element-class-name="com.gridnine.jasmine.server.core.test.domain.TestEnum"/>
+		<collection element-type="ENTITY_REFERENCE" id="entityRefCollection" element-class-name="com.gridnine.jasmine.server.core.test.domain.TestDomainDocument"/>
+
 	</index>
 	<asset id="com.gridnine.jasmine.server.core.test.domain.TestDomainAsset" x-cache-resolve="true">
 		<property type="STRING" id="stringProperty" x-cache-find="true"/>

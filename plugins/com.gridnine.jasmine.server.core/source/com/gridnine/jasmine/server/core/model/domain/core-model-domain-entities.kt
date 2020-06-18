@@ -13,21 +13,12 @@ import kotlin.reflect.KClass
 
 abstract class BaseAsset : BaseIdentity() {
 
-
-    var modified: LocalDateTime? = null
-
-    var modifiedBy: String? = null
-
-
+    private var revision:Int =0
 
     override fun setValue(propertyName: String, value: Any?) {
 
-        if (BaseAsset.modified == propertyName) {
-            modified = value as LocalDateTime?
-            return
-        }
-        if (BaseAsset.modifiedBy == propertyName) {
-            modifiedBy = value as String?
+        if (BaseAsset.revision == propertyName) {
+            revision = value as Int
             return
         }
         super.setValue(propertyName, value)
@@ -35,38 +26,26 @@ abstract class BaseAsset : BaseIdentity() {
 
     override fun getValue(propertyName: String): Any? {
 
-        if (BaseAsset.modified == propertyName) {
-            return modified
-        }
-        if (BaseAsset.modifiedBy == propertyName) {
-            return modifiedBy
+        if (BaseAsset.revision == propertyName) {
+            return revision
         }
         return super.getValue(propertyName)
     }
 
     companion object{
-        const val modified ="modified"
-        const val modifiedBy = "modifiedBy"
+        const val revision = "revision"
     }
 
 }
 
 abstract class BaseDocument : BaseIdentity() {
 
-    var modified: LocalDateTime? = null
-
-    var modifiedBy: String? = null
-
-
+    private var revision:Int =0
 
     override fun setValue(propertyName: String, value: Any?) {
 
-        if (BaseDocument.modified == propertyName) {
-            modified = value as LocalDateTime?
-            return
-        }
-        if (BaseDocument.modifiedBy == propertyName) {
-            modifiedBy = value as String?
+        if (BaseDocument.revision == propertyName) {
+            revision = value as Int
             return
         }
         super.setValue(propertyName, value)
@@ -74,18 +53,14 @@ abstract class BaseDocument : BaseIdentity() {
 
     override fun getValue(propertyName: String): Any? {
 
-        if (BaseDocument.modified == propertyName) {
-            return modified
-        }
-        if (BaseDocument.modifiedBy == propertyName) {
-            return modifiedBy
+        if (BaseDocument.revision == propertyName) {
+            return revision
         }
         return super.getValue(propertyName)
     }
 
     companion object{
-        const val modified ="modified"
-        const val modifiedBy = "modifiedBy"
+        const val revision = "revision"
     }
 }
 
@@ -151,16 +126,10 @@ abstract class BaseIndex<D : BaseDocument> : BaseIdentity() {
 
     var document: ObjectReference<D>? = null
 
-    var navigationKey: String? = null
-
-
 
     override fun getValue(propertyName: String): Any? {
         if (BaseIndex.document == propertyName) {
             return document
-        }
-        if (BaseIndex.navigationKey == propertyName) {
-            return navigationKey
         }
         return  super.getValue(propertyName)
     }
@@ -172,10 +141,6 @@ abstract class BaseIndex<D : BaseDocument> : BaseIdentity() {
             document = value as ObjectReference<D>
             return
         }
-        if (BaseIndex.navigationKey == propertyName) {
-            navigationKey = value as String?
-            return
-        }
         super.setValue(propertyName, value)
     }
 
@@ -184,7 +149,6 @@ abstract class BaseIndex<D : BaseDocument> : BaseIdentity() {
 
     companion object{
         const val document= "document"
-        const val navigationKey="navigationKey"
         val referenceCaption = _TestDomainDocumentIndexProperty0("documentCaption")
     }
 }
@@ -193,7 +157,7 @@ abstract class BaseNestedDocument : BaseIdentity()
 
 object EntityUtils{
     fun<D:BaseIdentity> toReference(doc:D):ObjectReference<D>{
-        return ObjectReference(doc::class as KClass<D>, doc.uid?:throw Xeption.forDeveloper("$doc has empty uid"), doc.toString())
+        return ObjectReference(doc::class as KClass<D>, doc.uid, doc.toString())
     }
 }
 

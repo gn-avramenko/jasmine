@@ -3,20 +3,36 @@
  * Project: Jasmine
  *****************************************************************/
 
+@file:Suppress("UNCHECKED_CAST")
+
 package com.gridnine.jasmine.server.core.storage.impl
 
+import com.gridnine.jasmine.server.core.lock.LockUtils
 import com.gridnine.jasmine.server.core.model.common.BaseIdentity
 import com.gridnine.jasmine.server.core.model.common.Xeption
-import com.gridnine.jasmine.server.core.model.domain.BaseAsset
-import com.gridnine.jasmine.server.core.model.domain.BaseDocument
-import com.gridnine.jasmine.server.core.model.domain.BaseIndex
-import com.gridnine.jasmine.server.core.model.domain.ObjectReference
+import com.gridnine.jasmine.server.core.model.domain.*
 import com.gridnine.jasmine.server.core.model.l10n.CoreL10nMessagesFactory
+import com.gridnine.jasmine.server.core.serialization.JsonSerializer
 import com.gridnine.jasmine.server.core.storage.*
 import com.gridnine.jasmine.server.core.storage.search.*
+import com.gridnine.jasmine.server.core.utils.AuthUtils
+import com.gridnine.jasmine.server.core.utils.IoUtils
+import com.nothome.delta.Delta
+import com.nothome.delta.GDiffPatcher
+import com.nothome.delta.GDiffWriter
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.zip.GZIPInputStream
+import java.util.zip.GZIPOutputStream
 import kotlin.reflect.KClass
 
 class StorageImpl:Storage{
+
+    private val patcher= GDiffPatcher()
+    private val delta = Delta()
+
     override fun <D : BaseDocument> loadDocument(ref: ObjectReference<D>?, forModification: Boolean): D? {
         return ref?.uid?.let { loadDocument(ref.type, it, forModification) }
     }
@@ -31,7 +47,17 @@ class StorageImpl:Storage{
 
     private fun<D : BaseDocument> loadDocumentVersion(cls: KClass<D>, uid: String, version: Int, advices: List<StorageAdvice>, idx:Int): D?{
         if(idx == advices.size){
-            return Database.get().loadDocumentVersion(cls, uid,version)
+            val documentData = Database.get().loadDocumentWrapper(cls, uid)?:throw Xeption.forDeveloper("unable to load document with uid $uid")
+            var result = IoUtils.gunzip(documentData.content)
+            for(vrs in documentData.metadata.version -1 downTo  version){
+                val versionData = Database.get().loadDocumentVersion(cls, uid,vrs)
+                result = versionData.use {
+                    val os = ByteArrayOutputStream()
+                    patcher.patch(result, GZIPInputStream(it.streamProvider()), os)
+                    os.toByteArray()
+                }
+            }
+            return JsonSerializer.get().deserialize(cls, ByteArrayInputStream(result))
         }
         return advices[idx].onLoadDocumentVersion(cls, uid, version) { cls2, uid2, version2 ->
             loadDocumentVersion(cls2, uid2,version2, advices,  idx+1)
@@ -40,7 +66,9 @@ class StorageImpl:Storage{
 
     private fun<D : BaseDocument> loadDocument(cls: KClass<D>, uid: String, forModification: Boolean, advices: List<StorageAdvice>, idx:Int): D?{
         if(idx == advices.size){
-            return Database.get().loadDocument(cls, uid)
+            return Database.get().loadDocument(cls, uid)?.use {
+                JsonSerializer.get().deserialize(cls,  GZIPInputStream(it.streamProvider()))
+            }
         }
         return advices[idx].onLoadDocument(cls, uid, forModification) { cls2, uid2, forModificationInt2 ->
             loadDocument(cls2, uid2,forModificationInt2, advices,  idx+1)
@@ -60,7 +88,7 @@ class StorageImpl:Storage{
         }
     }
 
-    override fun <D : BaseDocument, I : BaseIndex<D>, E : PropertyNameSupport> findUniqueDocumentReference(index: KClass<I>, property: E, propertyValue: Any?): ObjectReference<D>? where E : EqualitySupport {
+    override fun <D : BaseDocument, I : BaseIndex<D>, E> findUniqueDocumentReference(index: KClass<I>, property: E, propertyValue: Any?): ObjectReference<D>? where E : PropertyNameSupport, E : EqualitySupport {
         return findUniqueDocumentReference(index,property,propertyValue, StorageRegistry.get().getAdvices(), 0)
     }
 
@@ -88,68 +116,433 @@ class StorageImpl:Storage{
         }
     }
 
-    override fun <D : BaseDocument, I : BaseIndex<D>, E : PropertyNameSupport> findUniqueDocument(index: KClass<I>, property: E, propertyValue: Any?, forModification: Boolean): D? where E : EqualitySupport {
+    override fun <D : BaseDocument, I : BaseIndex<D>, E> findUniqueDocument(index: KClass<I>, property: E, propertyValue: Any?, forModification: Boolean): D? where E : PropertyNameSupport, E : EqualitySupport {
         return findUniqueDocumentReference(index, property, propertyValue)?.let { loadDocument(it, forModification) }
     }
 
-    override fun <D : BaseDocument> saveDocument(doc: D) {
-        TODO("Not yet implemented")
+    override fun <D : BaseDocument> saveDocument(doc: D, comment: String?) {
+        wrapWithLock(doc) {
+            wrapWithTransaction {ctx ->
+                 saveDocument(doc, comment, StorageRegistry.get().getAdvices(), ctx, 0)
+            }
+        }
+    }
+
+    private data class UpdateDocumentContext<D : BaseDocument>(val oldDocumentData: DocumentWrapper<D>?, val operationContext:OperationContext<D>)
+
+    private fun<D:BaseDocument> getUpdateDocumentContext(doc:D, ctx:TransactionContext):UpdateDocumentContext<D>{
+        val oldDocument= Database.get().loadDocumentWrapper(doc::class as KClass<D>, doc.uid)
+        val docRevision = doc.getValue(BaseDocument.revision) as Int?
+        if(oldDocument != null && docRevision != null && docRevision != oldDocument.revision){
+            throw Xeption.forDeveloper("revision conflict with document ${doc::class} ${doc.uid}, " +
+                    "db revision = ${oldDocument.revision}, operation revision ${doc.getValue(BaseDocument.revision)}")
+        }
+        var oldObject:D? = null
+        val factory:()->D? = {
+            if (oldDocument != null) {
+                if(oldObject == null){
+                    oldObject =JsonSerializer.get().deserialize(doc::class as KClass<D>, ByteArrayInputStream(oldDocument.content))
+                }
+                oldObject
+            } else {
+                null
+            }
+        }
+        val globalContext = if(contexts.get() != null){
+            contexts.get()
+        } else {
+            val gc = GlobalOperationContext(factory, doc, ctx)
+            contexts.set(gc)
+            gc
+        }
+        val localContext = LocalOperationContext<D>(factory)
+        val operationContext = OperationContext(globalContext, localContext)
+        return UpdateDocumentContext(oldDocument, operationContext)
+    }
+
+
+    private fun<D : BaseDocument> saveDocument(doc:D, comment: String?,advices: List<StorageAdvice>, ctx:TransactionContext, idx:Int){
+        if(idx == advices.size){
+            val (oldDocument, context) = getUpdateDocumentContext(doc, ctx)
+            StorageRegistry.get().getInterceptors().forEach {
+                it.onSave(doc, context)
+            }
+            doc.setValue(BaseDocument.revision, if(oldDocument == null) 0 else oldDocument.revision+1)
+            val baos = ByteArrayOutputStream()
+            JsonSerializer.get().serialize(doc, baos)
+            val data = baos.toByteArray()
+            val now = LocalDateTime.now()
+            val baos3 = ByteArrayOutputStream()
+            data.inputStream().use {ist ->
+                GZIPOutputStream(baos3).use {os ->
+                    ist.copyTo(os)
+                }
+            }
+            Database.get().saveDocument(DocumentWrapper(
+                    uid = doc.uid,
+                    oid = oldDocument?.oid,
+                    revision = doc.getValue(BaseDocument.revision) as Int,
+                    content = baos3.toByteArray(),
+                    metadata = VersionMetadata {
+                        modified = now
+                        modifiedBy = AuthUtils.getCurrentUser()
+                        this.comment = comment
+                        version = oldDocument?.let { it.metadata.version +1}?:0
+                    },
+            cls = doc::class as KClass<D>),  oldDocument)
+            if(oldDocument != null){
+                val metadata = VersionMetadata{
+                    modified = oldDocument.metadata.modified
+                    modifiedBy = oldDocument.metadata.modifiedBy
+                    this.comment = oldDocument.metadata.comment
+                    version = oldDocument.metadata.version
+                }
+                val baos2 = ByteArrayOutputStream()
+                GDiffWriter(baos2).use { writer ->
+                    delta.compute(data, GZIPInputStream(oldDocument.content.inputStream()), writer)
+                    writer.flush()
+                }
+                Database.get().saveDocumentVersion(doc::class as KClass<D>, doc.uid, IoUtils.gzip(baos2.toByteArray()), metadata)
+            }
+            StorageRegistry.get().getIndexHandlers(doc::class).forEach { indexHandler ->
+
+                val wrappers = arrayListOf<IndexWrapper<BaseDocument, BaseIndex<BaseDocument>>>()
+                indexHandler.createIndexes(doc).forEach { index ->
+                    val sb = StringBuilder()
+                    val indexDescription = DomainMetaRegistry.get().indexes[index::class.java.name]?:throw IllegalStateException("no index found for ${index::class.java.name}")
+                    indexDescription.properties.values.forEach idx@{ prop ->
+                        val value = index.getValue(prop.id)?:return@idx
+                        if(value is LocalDate || value is LocalDateTime){
+                            return@idx
+                        }
+                        if (value is Enum<*>) {
+                            DomainMetaRegistry.get().enums[value::class.qualifiedName]?.displayNames?.values?.forEach {
+                                sb.append(" ${it.toLowerCase()}")
+                            }
+                            return@idx
+                        }
+                        sb.append(" " + value.toString().toLowerCase())
+                    }
+                    index.document = EntityUtils.toReference(doc)
+                    wrappers.add(IndexWrapper(sb.toString(), index))
+                }
+                Database.get().updateIndexes(indexHandler.indexClass, doc.uid, wrappers, oldDocument != null)
+            }
+            return
+        }
+        advices[idx].onSaveDocument(doc) { doc2 ->
+            saveDocument(doc2, comment, advices, ctx, idx+1)
+        }
     }
 
     override fun <D : BaseDocument> deleteDocument(doc: D) {
-        TODO("Not yet implemented")
+        wrapWithLock(doc){
+            wrapWithTransaction {
+                deleteDocument(doc, StorageRegistry.get().getAdvices(), it, 0)
+            }
+        }
 
     }
+
+    override fun <D : BaseDocument> deleteDocument(ref: ObjectReference<D>) {
+        loadDocument(ref)?.let { deleteDocument(it) }
+    }
+
+    private fun<D : BaseDocument> deleteDocument(doc:D, advices: List<StorageAdvice>, ctx:TransactionContext, idx:Int){
+        if(idx == advices.size){
+            val (readData,  context) = getUpdateDocumentContext(doc, ctx)
+            if(readData == null){
+                throw Xeption.forDeveloper("document is absent in DB")
+            }
+            StorageRegistry.get().getInterceptors().forEach {
+                it.onDelete(doc, context)
+            }
+            Database.get().deleteDocument(readData)
+            StorageRegistry.get().getIndexHandlers(doc::class).forEach {
+                Database.get().deleteIndexes(it.indexClass, doc.uid)
+            }
+            return
+        }
+        advices[idx].onDeleteDocument(doc) { doc2 ->
+            deleteDocument(doc2, advices, ctx, idx+1)
+        }
+    }
+
+    private fun<D : BaseDocument,I : BaseIndex<D>> searchDocumentsInternal(cls: KClass<I>, query: SearchQuery, interceptors: List<StorageAdvice>, idx:Int): List<I> {
+        if(idx == interceptors.size){
+            return Database.get().searchIndex(cls, query)
+        }
+        return interceptors[idx].onSearchDocuments(cls, query) { cls2, query2 ->
+            searchDocumentsInternal(cls2, query2, interceptors, idx+1)
+        }
+    }
+
     override fun <D : BaseDocument, I : BaseIndex<D>> searchDocuments(cls: KClass<I>, query: SearchQuery): List<I> {
-        TODO("Not yet implemented")
+        return searchDocumentsInternal(cls, query, StorageRegistry.get().getAdvices(), 0)
     }
 
     override fun <D : BaseDocument, I : BaseIndex<D>> searchDocuments(cls: KClass<I>, query: ProjectionQuery): List<Map<String, Any>> {
-        TODO("Not yet implemented")
+        return searchDocumentsInternal(cls, query, StorageRegistry.get().getAdvices(), 0)
+    }
+
+    private fun<D : BaseDocument,I : BaseIndex<D>> searchDocumentsInternal(cls: KClass<I>, query: ProjectionQuery, interceptors: List<StorageAdvice>, idx:Int): List<Map<String, Any>> {
+        if(idx == interceptors.size){
+            return Database.get().searchIndex(cls, query)
+        }
+        return interceptors[idx].onSearchDocuments(cls, query) { cls2, query2 ->
+            searchDocumentsInternal(cls2, query2, interceptors, idx+1)
+        }
     }
 
     override fun <D : BaseDocument, I : BaseIndex<D>, R : Any> searchDocuments(cls: KClass<I>, query: SimpleProjectionQuery): R {
-        TODO("Not yet implemented")
+        val pq = ProjectionQuery()
+        pq.projections.add(query.projection)
+        pq.criterions.addAll(query.criterions)
+        pq.freeText = query.freeText
+        val res = searchDocuments(cls, pq)
+        @Suppress("UNCHECKED_CAST")
+        return when (res.size){
+            1 -> res[0].values.iterator().next() as R
+            else -> throw Exception("unsupported result size ${res.size}")
+        }
     }
 
     override fun <A : BaseAsset> loadAsset(ref: ObjectReference<A>?, forModification: Boolean): A? {
-        TODO("Not yet implemented")
+        return if(ref == null) null else loadAsset(ref.type, ref.uid, forModification)
     }
 
     override fun <A : BaseAsset> loadAsset(cls: KClass<A>, uid: String, forModification: Boolean): A? {
-        TODO("Not yet implemented")
+        return loadAsset(cls, uid, StorageRegistry.get().getAdvices(), forModification, 0)
     }
+
+    private fun<D : BaseAsset> loadAsset(cls: KClass<D>, uid: String, advices: List<StorageAdvice>,  forModification: Boolean, idx:Int): D?{
+        if(idx == advices.size){
+            return Database.get().loadAsset(cls, uid)?.asset
+        }
+        return advices[idx].onLoadAsset(cls, uid, forModification) { cls2, uid2,forModification2->
+            loadAsset(cls2, uid2, advices, forModification2, idx+1)
+        }
+    }
+
 
     override fun <A : BaseAsset> loadAssetVersion(cls: KClass<A>, uid: String, version: Int): A? {
-        TODO("Not yet implemented")
+        return loadAssetVersion(cls, uid, StorageRegistry.get().getAdvices(), version, 0)
     }
 
-    override fun <A : BaseAsset, E : PropertyNameSupport> findUniqueAsset(index: KClass<A>, property: E, propertyValue: Any, forModification: Boolean): A? where E : EqualitySupport {
-        TODO("Not yet implemented")
+    private fun<D : BaseAsset> loadAssetVersion(cls: KClass<D>, uid: String, advices: List<StorageAdvice>,  version:Int, idx:Int): D?{
+        if(idx == advices.size){
+             return Database.get().loadAssetVersion(cls, uid, version).use {
+                 GZIPInputStream(it.streamProvider()).use {gz ->
+                     JsonSerializer.get().deserialize(cls, gz)
+                 }
+             }
+        }
+        return advices[idx].onLoadAssetVersion(cls, uid, version) { cls2, uid2,version2->
+            loadAssetVersion(cls2, uid2, advices, version2, idx+1)
+        }
     }
 
-    override fun <A : BaseAsset> saveAsset(doc: A) {
-        TODO("Not yet implemented")
+    override fun <A : BaseAsset,E> findUniqueAsset(index: KClass<A>, property: E, propertyValue: Any, forModification: Boolean): A?  where E:PropertyNameSupport, E : EqualitySupport{
+        return findUniqueAsset(index, property, propertyValue, forModification, StorageRegistry.get().getAdvices(), 0)
     }
 
-    override fun <A : BaseAsset> deleteAsset(doc: A) {
-        TODO("Not yet implemented")
+    private fun<D : BaseAsset,E> findUniqueAsset(index: KClass<D>, property: E, propertyValue: Any?, forModification: Boolean, interceptors: List<StorageAdvice>, idx:Int): D? where E:PropertyNameSupport, E: EqualitySupport {
+        if(idx == interceptors.size){
+            val query = searchQuery {
+                select(property)
+                where {
+                    if(propertyValue != null) {
+                        eq(property, propertyValue)
+                    } else {
+                        isNull(property)
+                    }
+                }
+            }
+            val lst = Database.get().searchAsset(index, query)
+            return when (lst.size){
+                0 ->null
+                1 ->lst[0]
+                else -> throw Exception("найдено несколько записей ${index.qualifiedName} с ${property.name} = $propertyValue")
+            }
+        }
+        return interceptors[idx].onFindUniqueAsset(index, property, propertyValue,forModification) { index2, property2, propertyValue2, forModification2 ->
+            findUniqueAsset(index2, property2, propertyValue2, forModification2, interceptors, idx+1)
+        }
+    }
+
+    private data class UpdateAssetContext<A : BaseAsset>(val oldAsset:AssetWrapper<A>?, val operationContext:OperationContext<A>)
+
+    private fun<A : BaseAsset> getUpdateAssetContext(asset:A, ctx:TransactionContext):UpdateAssetContext<A>{
+        val oldAssetWrapperData= Database.get().loadAssetWrapper(asset::class as KClass<A>, asset.uid)
+        val oldAsset = oldAssetWrapperData?.asset
+        val revision = asset.getValue(BaseDocument.revision) as Int?
+        if(oldAsset != null && revision != null && revision != oldAsset.getValue(BaseAsset.revision)){
+            throw Xeption.forDeveloper("revision conflict with document ${asset::class} ${asset.uid}, " +
+                    "db revision = ${oldAsset.getValue(BaseAsset.revision)}, operation revision $revision")
+        }
+        val factory:()->A? = {
+            oldAsset
+        }
+        val globalContext = if(contexts.get() != null){
+            contexts.get()
+        } else {
+            val gc = GlobalOperationContext(factory, asset, ctx)
+            contexts.set(gc)
+            gc
+        }
+        val localContext = LocalOperationContext<A>(factory)
+        val operationContext = OperationContext(globalContext, localContext)
+        return UpdateAssetContext(oldAssetWrapperData,  operationContext)
+    }
+    override fun <A : BaseAsset> saveAsset(asset: A, comment: String?) {
+        wrapWithLock(asset){
+            wrapWithTransaction {
+                saveAsset(asset,comment, StorageRegistry.get().getAdvices(), it, 0)
+            }
+        }
+    }
+
+    private fun<A : BaseAsset> saveAsset(asset:A, comment:String?, advices: List<StorageAdvice>, ctx:TransactionContext, idx:Int){
+        if(idx == advices.size){
+            val (oldAssetReadData, context) = getUpdateAssetContext(asset, ctx)
+            val oldAsset = oldAssetReadData?.asset
+            StorageRegistry.get().getInterceptors().forEach {
+                it.onSave(asset, context)
+            }
+            asset.setValue(BaseDocument.revision, if(oldAsset == null) 0 else oldAsset.getValue(BaseAsset.revision) as Int +1)
+            val sb = StringBuilder()
+            val assetDescription =DomainMetaRegistry.get().assets[asset::class.java.name]?:throw Xeption.forDeveloper("no asset description found for ${asset::class.java.name}")
+            assetDescription.properties.values.forEach idx@{ prop ->
+                val value = asset.getValue(prop.id)?:return@idx
+                if(value is LocalDate || value is LocalDateTime){
+                    return@idx
+                }
+                if (value is Enum<*>) {
+                    DomainMetaRegistry.get().enums[value::class.qualifiedName]?.displayNames?.values?.forEach {
+                        sb.append(" ${it.toLowerCase()}")
+                    }
+                    return@idx
+                }
+                sb.append(" " + value.toString().toLowerCase())
+            }
+            val now = LocalDateTime.now()
+            Database.get().saveAsset(AssetWrapper(sb.toString(), comment, now, AuthUtils.getCurrentUser(),  if(oldAssetReadData == null) 0 else oldAssetReadData.version+1, asset), oldAssetReadData)
+            val metadata = VersionMetadata{
+                modified = now
+                modifiedBy = AuthUtils.getCurrentUser()
+                this.comment = comment
+                version = oldAssetReadData?.version?:0
+            }
+            if(oldAssetReadData != null){
+                val baos2 = ByteArrayOutputStream()
+                GZIPOutputStream(baos2).use {
+                    JsonSerializer.get().serialize(oldAssetReadData.asset, it)
+                    it.flush()
+                }
+                Database.get().saveAssetVersion(asset::class, asset.uid, baos2.toByteArray(), metadata )
+            }
+            return
+        }
+        advices[idx].onSaveAsset(asset) { asset2 ->
+            saveAsset(asset2, comment, advices, ctx, idx+1)
+        }
+    }
+
+    override fun <A : BaseAsset> deleteAsset(asset: A) {
+        wrapWithLock(asset){
+            wrapWithTransaction {
+                deleteAsset(asset, it, StorageRegistry.get().getAdvices(), 0)
+            }
+        }
+    }
+
+    override fun <A : BaseAsset> deleteAsset(ref: ObjectReference<A>) {
+        loadAsset(ref)?.let { deleteAsset(it) }
+    }
+
+    private fun<A : BaseAsset> deleteAsset(asset:A, ctx:TransactionContext, advices: List<StorageAdvice>, idx:Int){
+        if(idx == advices.size){
+            val updateAssetContext = getUpdateAssetContext(asset, ctx)
+            StorageRegistry.get().getInterceptors().forEach {
+                it.onDelete(asset, updateAssetContext.operationContext)
+            }
+            Database.get().deleteAsset(asset)
+            return
+        }
+        advices[idx].onDeleteAsset(asset) { asset2 ->
+            deleteAsset(asset2, ctx, advices, idx+1)
+        }
     }
 
     override fun <A : BaseAsset> searchAssets(cls: KClass<A>, query: SearchQuery, forModification: Boolean): List<A> {
-        TODO("Not yet implemented")
+        return searchAssets(cls, query, forModification, StorageRegistry.get().getAdvices(),   0)
+    }
+
+    private fun<D : BaseAsset> searchAssets(cls: KClass<D>, query: SearchQuery, forModification: Boolean, interceptors: List<StorageAdvice>, idx:Int): List<D> {
+        if(idx == interceptors.size){
+            return Database.get().searchAsset(cls, query)
+        }
+        return interceptors[idx].onSearchAssets(cls, query, forModification) { cls2, query2, forModification2 ->
+            searchAssets(cls2, query2, forModification2, interceptors, idx+1)
+        }
     }
 
     override fun <A : BaseAsset> searchAssets(cls: KClass<A>, query: ProjectionQuery): List<Map<String, Any>> {
-        TODO("Not yet implemented")
+        return searchAssets(cls, query, StorageRegistry.get().getAdvices(), 0)
+    }
+
+    private fun<D : BaseAsset> searchAssets(cls: KClass<D>, query: ProjectionQuery, interceptors: List<StorageAdvice>, idx:Int): List<Map<String, Any>> {
+        if(idx == interceptors.size){
+            return Database.get().searchAsset(cls, query)
+        }
+        return interceptors[idx].onSearchAssets(cls, query) { cls2, query2 ->
+            searchAssets(cls2, query2, interceptors, idx+1)
+        }
     }
 
     override fun <A : BaseAsset, T : Any> searchAssets(cls: KClass<A>, query: SimpleProjectionQuery): T {
-        TODO("Not yet implemented")
+        val pq = ProjectionQuery()
+        pq.projections.add(query.projection)
+        pq.criterions.addAll(query.criterions)
+        val res = searchAssets(cls, pq)
+        @Suppress("UNCHECKED_CAST")
+        return when (res.size){
+            1 -> res[0].values.iterator().next() as T
+            else -> throw Xeption.forDeveloper("unsupported result size ${res.size}")
+        }
     }
+
 
     override fun executeInTransaction(executable: (TransactionContext) -> Unit) {
-        TODO("Not yet implemented")
+        Database.get().executeInTransaction(executable)
+    }
+    private fun wrapWithLock(obj:Any, function: () -> Unit) {
+        val owner = contexts.get() == null
+        if(owner) {
+            LockUtils.withLock(obj, function)
+        } else {
+            function.invoke()
+        }
+    }
+    private fun wrapWithTransaction(function: (context:TransactionContext) -> Unit) {
+        val owner = contexts.get() == null
+        try {
+            if(owner) {
+                Database.get().executeInTransaction {
+                    function.invoke(it)
+                }
+            } else {
+                function.invoke(contexts.get().transactionContext)
+            }
+        } finally {
+            if (owner) {
+                contexts.remove()
+            }
+        }
+
     }
 
+    companion object {
+        internal val contexts = ThreadLocal<GlobalOperationContext>()
+    }
 }

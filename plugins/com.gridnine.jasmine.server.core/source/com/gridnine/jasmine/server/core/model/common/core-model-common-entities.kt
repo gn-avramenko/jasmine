@@ -6,10 +6,13 @@
 
 package com.gridnine.jasmine.server.core.model.common
 
+import com.gridnine.jasmine.server.core.model.l10n.L10nMetaregistry
+import java.util.*
+
 
 abstract class BaseIdentity : BaseIntrospectableObject(){
 
-    open var uid:String? = null
+    open var uid:String =UUID.randomUUID().toString()
 
     override fun equals(other: Any?): Boolean {
         if(other is BaseIdentity){
@@ -31,7 +34,7 @@ abstract class BaseIdentity : BaseIntrospectableObject(){
 
     override fun setValue(propertyName: String, value: Any?) {
         if (BaseIdentity.uid == propertyName) {
-            uid = value as String?
+            uid = value as String
             return
         }
         super.setValue(propertyName, value)
@@ -101,6 +104,15 @@ class L10nMessage: BaseIntrospectableObject {
     companion object{
         const val key ="key"
         const val parameters = "parameters"
+    }
+
+    override fun toString(): String {
+        val md = L10nMetaregistry.get().messages[this.key]
+        var result = md?.getDisplayName()?:this.key
+        this.parameters.withIndex().forEach{(idx, value) ->
+            result = result.replace("{$idx}", value.toString())
+        }
+        return result
     }
 }
 

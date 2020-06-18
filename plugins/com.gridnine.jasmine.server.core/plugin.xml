@@ -9,6 +9,7 @@
         <lib-dependency group="org.apache.tomcat.embed" name="tomcat-embed-jasper" version="9.0.30"/>
         <lib-dependency group="org.slf4j" name="jul-to-slf4j" version="1.7.30"/>
         <lib-dependency group="com.fasterxml.jackson.core" name="jackson-core" version="2.10.3"/>
+        <lib-dependency group="com.nothome" name="javaxdelta" version="2.0.1"/>
     </dependencies>
     <extension-point id="domain-metadata">
         <parameter-def id="relative-path"/>

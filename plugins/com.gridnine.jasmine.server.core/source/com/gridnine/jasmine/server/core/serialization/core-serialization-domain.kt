@@ -10,8 +10,7 @@ import com.gridnine.jasmine.server.core.model.domain.*
 
 internal open class DomainDocumentMetadataProvider(description: DocumentDescription) : BaseDomainDocumentMetadataProvider(description) {
     init {
-        addProperty(SerializablePropertyDescription(BaseDocument.modified, SerializablePropertyType.LOCAL_DATE_TIME, null, false))
-        addProperty(SerializablePropertyDescription(BaseDocument.modifiedBy, SerializablePropertyType.STRING, null, false))
+        addProperty(SerializablePropertyDescription(BaseDocument.revision, SerializablePropertyType.INT, null, false))
     }
 }
 
@@ -191,7 +190,6 @@ internal open class BaseDomainIndexMetadataProvider(description: BaseIndexDescri
 internal class DomainIndexMetadataProvider(description: IndexDescription) : BaseDomainIndexMetadataProvider(description) {
     init{
         addProperty(SerializablePropertyDescription(BaseIdentity.uid, SerializablePropertyType.STRING, null, false))
-        addProperty(SerializablePropertyDescription(BaseIndex.navigationKey, SerializablePropertyType.STRING, null, false))
         addProperty(SerializablePropertyDescription(BaseIndex.document, SerializablePropertyType.ENTITY, ObjectReference::class.qualifiedName, false))
     }
 }
@@ -199,7 +197,6 @@ internal class DomainIndexMetadataProvider(description: IndexDescription) : Base
 internal class AssetMetadataProvider(description: AssetDescription) : BaseDomainIndexMetadataProvider(description) {
     init{
         addProperty(SerializablePropertyDescription(BaseIdentity.uid, SerializablePropertyType.STRING, null, false))
-        addProperty(SerializablePropertyDescription(BaseAsset.modifiedBy, SerializablePropertyType.ENTITY, ObjectReference::class.qualifiedName, false))
-        addProperty(SerializablePropertyDescription(BaseAsset.modifiedBy, SerializablePropertyType.LOCAL_DATE_TIME, null, false))
+        addProperty(SerializablePropertyDescription(BaseAsset.revision, SerializablePropertyType.INT, null, false))
     }
 }
