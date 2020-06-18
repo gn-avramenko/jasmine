@@ -6,9 +6,8 @@
 package com.gridnine.jasmine.server.core.model.l10n
 
 import com.gridnine.jasmine.server.core.app.Disposable
-import com.gridnine.jasmine.server.core.model.common.BaseModelElementDescription
 import com.gridnine.jasmine.server.core.app.PublishableWrapper
-import com.gridnine.jasmine.server.core.model.common.L10nMessage
+import com.gridnine.jasmine.server.core.model.common.BaseModelElementDescription
 
 enum class L10nParameterType {
     STRING,
@@ -23,7 +22,7 @@ enum class L10nParameterType {
     INT,
     BIG_DECIMAL
 }
-class L10nParameterDescription(id:String, val type:L10nParameterDescription) : BaseModelElementDescription(id){
+class L10nParameterDescription(id:String, val type:L10nParameterType) : BaseModelElementDescription(id){
     var className:String?=null
     var collection:Boolean = false
 }
@@ -44,11 +43,5 @@ class L10nMetaregistry:Disposable{
     }
 }
 
-fun L10nMessage.toString(){
-    val md = L10nMetaregistry.get().messages[this.key]
-    var result = md?.getDisplayName()?:this.key
-    this.parameters.withIndex().forEach{(idx, value) ->
-        result = result.replace("{$idx}", value.toString()?:"???")
-    }
-}
+
 
