@@ -310,6 +310,13 @@ object JdbcUtils {
                 val result = callback.invoke(ctx)
                 if (owner && commit) {
                     ctx.connection.commit()
+                    ctx.context.postCommitCallbacks.forEach {
+                        try{
+                            it.invoke()
+                        } catch (e:Exception){
+                            log.error("error executing callback ", e)
+                        }
+                    }
                 }
                 return result
             } catch (e: Exception) {

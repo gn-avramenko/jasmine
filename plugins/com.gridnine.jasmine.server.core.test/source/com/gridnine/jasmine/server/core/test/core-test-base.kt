@@ -6,6 +6,7 @@
 
 package com.gridnine.jasmine.server.core.test
 
+import com.gridnine.jasmine.server.core.app.ConfigurationProvider
 import com.gridnine.jasmine.server.core.app.Environment
 import com.gridnine.jasmine.server.core.lock.LockManager
 import com.gridnine.jasmine.server.core.lock.StandardLockManager
@@ -64,6 +65,7 @@ abstract class CoreTestBase : TestBase() {
 
     override fun setUp() {
         super.setUp()
+        publishConfigurationProvider()
         publishDomainMetadataProvider()
         publishRestMetadataProvider()
         publishCustomMetaRegistry()
@@ -71,6 +73,14 @@ abstract class CoreTestBase : TestBase() {
         publishSerializer()
         publishCachedObjectsConverter()
         publishLockManager()
+    }
+
+    protected fun publishConfigurationProvider() {
+        Environment.publish(ConfigurationProvider::class, object:ConfigurationProvider{
+            override fun getProperty(propertyName: String): String? {
+                return System.getProperty(propertyName)
+            }
+        })
     }
 
     protected fun publishLockManager() {

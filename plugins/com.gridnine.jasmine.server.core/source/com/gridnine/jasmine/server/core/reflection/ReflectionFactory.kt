@@ -42,6 +42,7 @@ class ReflectionFactory:Disposable{
     }
 
     override fun dispose() {
+        cache.clear()
         wrapper.dispose()
     }
     companion object {

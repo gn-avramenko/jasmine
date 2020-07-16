@@ -7,6 +7,10 @@ package com.gridnine.jasmine.server.db.h2
 
 import com.gridnine.jasmine.server.core.app.Environment
 import com.gridnine.jasmine.server.core.app.IPluginActivator
+import com.gridnine.jasmine.server.core.storage.Database
+import com.gridnine.jasmine.server.core.storage.Storage
+import com.gridnine.jasmine.server.core.storage.impl.StorageImpl
+import com.gridnine.jasmine.server.core.storage.impl.jdbc.JdbcDatabase
 import com.gridnine.jasmine.server.core.storage.impl.jdbc.JdbcDialect
 import java.io.File
 import java.util.*
@@ -22,6 +26,8 @@ class H2dbActivator:IPluginActivator{
         }
         Environment.publish(DataSource::class, H2DataSource.createDataSource("jdbc:h2:${file.absolutePath}/jasmine"))
         Environment.publish(JdbcDialect::class, H2dbDialect())
+        Environment.publish(Database::class, JdbcDatabase())
+        Environment.publish(Storage::class,StorageImpl())
     }
 
 }

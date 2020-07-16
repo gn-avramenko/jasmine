@@ -10,6 +10,7 @@
         <lib-dependency group="org.slf4j" name="jul-to-slf4j" version="1.7.30"/>
         <lib-dependency group="com.fasterxml.jackson.core" name="jackson-core" version="2.10.3"/>
         <lib-dependency group="com.nothome" name="javaxdelta" version="2.0.1"/>
+        <lib-dependency group="org.ehcache" name="ehcache" version="3.8.1"/>
     </dependencies>
     <extension-point id="domain-metadata">
         <parameter-def id="relative-path"/>
@@ -27,8 +28,14 @@
         <parameter-def id="relative-path"/>
         <parameter-def id="url"/>
     </extension-point>
+    <extension-point id="activator">
+        <parameter-def id="class"/>
+    </extension-point>
     <extension point-id="custom-metadata">
         <parameter id="relative-path" value="source/com/gridnine/jasmine/server/core/model/custom/core-custom.xml"/>
         <parameter id="url" value="com/gridnine/jasmine/server/core/model/custom/core-custom.xml"/>
+    </extension>
+    <extension point-id="activator">
+        <parameter id="class" value="com.gridnine.jasmine.server.core.activator.CoreActivator"/>
     </extension>
 </plugin>

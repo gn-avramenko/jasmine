@@ -16,17 +16,16 @@ class SpfApplicationMetadataProvider(private val registry: SpfPluginsRegistry) :
 
     private val clsLoader = SpfApplicationMetadataProvider::class.java.classLoader
 
-    override val plugins: List<IPlugin>
-        get() {
-            return registry.plugins.map {
-                object : IPlugin {
-                    override val pluginId: String
-                        get() = it.id
-                    override val classLoader: ClassLoader
-                        get() = clsLoader
-                }
-            }.toList()
-        }
+    override val plugins: List<IPlugin> by lazy {
+        registry.plugins.map {
+            object : IPlugin {
+                override val pluginId: String
+                    get() = it.id
+                override val classLoader: ClassLoader
+                    get() = clsLoader
+            }
+        }.toList()
+    }
 
 
     override fun getExtensions(extensionPointId: String): List<IExtension> {

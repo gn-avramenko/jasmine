@@ -33,12 +33,12 @@ class StorageImpl:Storage{
     private val patcher= GDiffPatcher()
     private val delta = Delta()
 
-    override fun <D : BaseDocument> loadDocument(ref: ObjectReference<D>?, forModification: Boolean): D? {
-        return ref?.uid?.let { loadDocument(ref.type, it, forModification) }
+    override fun <D : BaseDocument> loadDocument(ref: ObjectReference<D>?, ignoreCache: Boolean): D? {
+        return ref?.uid?.let { loadDocument(ref.type, it, ignoreCache) }
     }
 
-    override fun <D : BaseDocument> loadDocument(cls: KClass<D>, uid: String, forModification: Boolean): D? {
-        return loadDocument(cls, uid, forModification, StorageRegistry.get().getAdvices(), 0)
+    override fun <D : BaseDocument> loadDocument(cls: KClass<D>, uid: String, ignoreCache: Boolean): D? {
+        return loadDocument(cls, uid, ignoreCache, StorageRegistry.get().getAdvices(), 0)
     }
 
     override fun <D : BaseDocument> loadDocumentVersion(cls: KClass<D>, uid: String, version: Int): D? {
@@ -64,14 +64,14 @@ class StorageImpl:Storage{
         }
     }
 
-    private fun<D : BaseDocument> loadDocument(cls: KClass<D>, uid: String, forModification: Boolean, advices: List<StorageAdvice>, idx:Int): D?{
+    private fun<D : BaseDocument> loadDocument(cls: KClass<D>, uid: String, ignoreCache: Boolean, advices: List<StorageAdvice>, idx:Int): D?{
         if(idx == advices.size){
             return Database.get().loadDocument(cls, uid)?.use {
                 JsonSerializer.get().deserialize(cls,  GZIPInputStream(it.streamProvider()))
             }
         }
-        return advices[idx].onLoadDocument(cls, uid, forModification) { cls2, uid2, forModificationInt2 ->
-            loadDocument(cls2, uid2,forModificationInt2, advices,  idx+1)
+        return advices[idx].onLoadDocument(cls, uid, ignoreCache) { cls2, uid2, ignoreCacheInt2 ->
+            loadDocument(cls2, uid2,ignoreCacheInt2, advices,  idx+1)
         }
     }
 
@@ -116,8 +116,8 @@ class StorageImpl:Storage{
         }
     }
 
-    override fun <D : BaseDocument, I : BaseIndex<D>, E> findUniqueDocument(index: KClass<I>, property: E, propertyValue: Any?, forModification: Boolean): D? where E : PropertyNameSupport, E : EqualitySupport {
-        return findUniqueDocumentReference(index, property, propertyValue)?.let { loadDocument(it, forModification) }
+    override fun <D : BaseDocument, I : BaseIndex<D>, E> findUniqueDocument(index: KClass<I>, property: E, propertyValue: Any?, ignoreCache: Boolean): D? where E : PropertyNameSupport, E : EqualitySupport {
+        return findUniqueDocumentReference(index, property, propertyValue)?.let { loadDocument(it, ignoreCache) }
     }
 
     override fun <D : BaseDocument> saveDocument(doc: D, comment: String?) {
@@ -141,7 +141,8 @@ class StorageImpl:Storage{
         val factory:()->D? = {
             if (oldDocument != null) {
                 if(oldObject == null){
-                    oldObject =JsonSerializer.get().deserialize(doc::class as KClass<D>, ByteArrayInputStream(oldDocument.content))
+                    val oldObjectContent  = IoUtils.gunzip(oldDocument.content)
+                    oldObject =JsonSerializer.get().deserialize(doc::class as KClass<D>, ByteArrayInputStream(oldObjectContent))
                 }
                 oldObject
             } else {
@@ -307,20 +308,20 @@ class StorageImpl:Storage{
         }
     }
 
-    override fun <A : BaseAsset> loadAsset(ref: ObjectReference<A>?, forModification: Boolean): A? {
-        return if(ref == null) null else loadAsset(ref.type, ref.uid, forModification)
+    override fun <A : BaseAsset> loadAsset(ref: ObjectReference<A>?, ignoreCache: Boolean): A? {
+        return if(ref == null) null else loadAsset(ref.type, ref.uid, ignoreCache)
     }
 
-    override fun <A : BaseAsset> loadAsset(cls: KClass<A>, uid: String, forModification: Boolean): A? {
-        return loadAsset(cls, uid, StorageRegistry.get().getAdvices(), forModification, 0)
+    override fun <A : BaseAsset> loadAsset(cls: KClass<A>, uid: String, ignoreCache: Boolean): A? {
+        return loadAsset(cls, uid, StorageRegistry.get().getAdvices(), ignoreCache, 0)
     }
 
-    private fun<D : BaseAsset> loadAsset(cls: KClass<D>, uid: String, advices: List<StorageAdvice>,  forModification: Boolean, idx:Int): D?{
+    private fun<D : BaseAsset> loadAsset(cls: KClass<D>, uid: String, advices: List<StorageAdvice>,  ignoreCache: Boolean, idx:Int): D?{
         if(idx == advices.size){
             return Database.get().loadAsset(cls, uid)?.asset
         }
-        return advices[idx].onLoadAsset(cls, uid, forModification) { cls2, uid2,forModification2->
-            loadAsset(cls2, uid2, advices, forModification2, idx+1)
+        return advices[idx].onLoadAsset(cls, uid, ignoreCache) { cls2, uid2,ignoreCache2->
+            loadAsset(cls2, uid2, advices, ignoreCache2, idx+1)
         }
     }
 
@@ -342,11 +343,11 @@ class StorageImpl:Storage{
         }
     }
 
-    override fun <A : BaseAsset,E> findUniqueAsset(index: KClass<A>, property: E, propertyValue: Any, forModification: Boolean): A?  where E:PropertyNameSupport, E : EqualitySupport{
-        return findUniqueAsset(index, property, propertyValue, forModification, StorageRegistry.get().getAdvices(), 0)
+    override fun <A : BaseAsset,E> findUniqueAsset(index: KClass<A>, property: E, propertyValue: Any, ignoreCache: Boolean): A?  where E:PropertyNameSupport, E : EqualitySupport{
+        return findUniqueAsset(index, property, propertyValue, ignoreCache, StorageRegistry.get().getAdvices(), 0)
     }
 
-    private fun<D : BaseAsset,E> findUniqueAsset(index: KClass<D>, property: E, propertyValue: Any?, forModification: Boolean, interceptors: List<StorageAdvice>, idx:Int): D? where E:PropertyNameSupport, E: EqualitySupport {
+    private fun<D : BaseAsset,E> findUniqueAsset(index: KClass<D>, property: E, propertyValue: Any?, ignoreCache: Boolean, interceptors: List<StorageAdvice>, idx:Int): D? where E:PropertyNameSupport, E: EqualitySupport {
         if(idx == interceptors.size){
             val query = searchQuery {
                 select(property)
@@ -365,8 +366,8 @@ class StorageImpl:Storage{
                 else -> throw Exception("найдено несколько записей ${index.qualifiedName} с ${property.name} = $propertyValue")
             }
         }
-        return interceptors[idx].onFindUniqueAsset(index, property, propertyValue,forModification) { index2, property2, propertyValue2, forModification2 ->
-            findUniqueAsset(index2, property2, propertyValue2, forModification2, interceptors, idx+1)
+        return interceptors[idx].onFindUniqueAsset(index, property, propertyValue,ignoreCache) { index2, property2, propertyValue2, ignoreCache2 ->
+            findUniqueAsset(index2, property2, propertyValue2, ignoreCache2, interceptors, idx+1)
         }
     }
 
@@ -474,16 +475,16 @@ class StorageImpl:Storage{
         }
     }
 
-    override fun <A : BaseAsset> searchAssets(cls: KClass<A>, query: SearchQuery, forModification: Boolean): List<A> {
-        return searchAssets(cls, query, forModification, StorageRegistry.get().getAdvices(),   0)
+    override fun <A : BaseAsset> searchAssets(cls: KClass<A>, query: SearchQuery, ignoreCache: Boolean): List<A> {
+        return searchAssets(cls, query, ignoreCache, StorageRegistry.get().getAdvices(),   0)
     }
 
-    private fun<D : BaseAsset> searchAssets(cls: KClass<D>, query: SearchQuery, forModification: Boolean, interceptors: List<StorageAdvice>, idx:Int): List<D> {
+    private fun<D : BaseAsset> searchAssets(cls: KClass<D>, query: SearchQuery, ignoreCache: Boolean, interceptors: List<StorageAdvice>, idx:Int): List<D> {
         if(idx == interceptors.size){
             return Database.get().searchAsset(cls, query)
         }
-        return interceptors[idx].onSearchAssets(cls, query, forModification) { cls2, query2, forModification2 ->
-            searchAssets(cls2, query2, forModification2, interceptors, idx+1)
+        return interceptors[idx].onSearchAssets(cls, query, ignoreCache) { cls2, query2, ignoreCache2 ->
+            searchAssets(cls2, query2, ignoreCache2, interceptors, idx+1)
         }
     }
 

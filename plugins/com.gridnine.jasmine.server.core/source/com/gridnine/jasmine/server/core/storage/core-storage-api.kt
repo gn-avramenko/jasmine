@@ -138,9 +138,9 @@ class VersionMetadata(init: VersionMetadata.() -> Unit) {
 
 interface Storage:Disposable {
 
-    fun <D : BaseDocument> loadDocument(ref: ObjectReference<D>?, forModification:Boolean=false): D?
+    fun <D : BaseDocument> loadDocument(ref: ObjectReference<D>?, ignoreCache:Boolean=false): D?
 
-    fun <D : BaseDocument> loadDocument(cls: KClass<D>, uid:String, forModification:Boolean=false): D?
+    fun <D : BaseDocument> loadDocument(cls: KClass<D>, uid:String, ignoreCache:Boolean=false): D?
 
     fun <D : BaseDocument> loadDocumentVersion(cls: KClass<D>, uid:String, version:Int): D?
 
@@ -150,7 +150,7 @@ interface Storage:Disposable {
             index: KClass<I>, property: E, propertyValue: Any?): ObjectReference<D>? where E:PropertyNameSupport, E: EqualitySupport
 
     fun <D : BaseDocument, I : BaseIndex<D>,E> findUniqueDocument(
-            index: KClass<I>, property: E, propertyValue: Any?, forModification:Boolean=false): D? where E:PropertyNameSupport, E: EqualitySupport
+            index: KClass<I>, property: E, propertyValue: Any?, ignoreCache:Boolean=false): D? where E:PropertyNameSupport, E: EqualitySupport
 
     fun <D : BaseDocument> saveDocument(doc: D, comment:String?=null)
 
@@ -167,14 +167,14 @@ interface Storage:Disposable {
     fun <D : BaseDocument, I : BaseIndex<D>, R:Any> searchDocuments(
             cls: KClass<I>, query: SimpleProjectionQuery): R
 
-    fun <A : BaseAsset> loadAsset(ref: ObjectReference<A>?, forModification:Boolean=false): A?
+    fun <A : BaseAsset> loadAsset(ref: ObjectReference<A>?, ignoreCache:Boolean=false): A?
 
-    fun <A : BaseAsset> loadAsset(cls:KClass<A>, uid:String, forModification:Boolean=false): A?
+    fun <A : BaseAsset> loadAsset(cls:KClass<A>, uid:String, ignoreCache:Boolean=false): A?
 
     fun <A : BaseAsset> loadAssetVersion(cls:KClass<A>, uid:String, version:Int): A?
 
     fun <A : BaseAsset,E> findUniqueAsset(
-            index: KClass<A>, property: E, propertyValue: Any, forModification:Boolean=false): A?where E:PropertyNameSupport, E : EqualitySupport
+            index: KClass<A>, property: E, propertyValue: Any, ignoreCache:Boolean=false): A?where E:PropertyNameSupport, E : EqualitySupport
 
     fun <A : BaseAsset> saveAsset(asset: A, comment:String?=null)
 
@@ -183,7 +183,7 @@ interface Storage:Disposable {
     fun <A : BaseAsset> deleteAsset(ref:ObjectReference<A>)
 
     fun <A : BaseAsset> searchAssets(cls: KClass<A>,
-                                     query: SearchQuery, forModification:Boolean=false): List<A>
+                                     query: SearchQuery, ignoreCache:Boolean=false): List<A>
 
     fun <A : BaseAsset> searchAssets(
             cls: KClass<A>, query: ProjectionQuery): List<Map<String, Any>>
@@ -270,8 +270,8 @@ abstract class BaseAssetInterceptor<A : BaseAsset>(private val assetClass:KClass
 
 
 interface StorageAdvice:HasPriority{
-    fun <D : BaseDocument> onLoadDocument(cls: KClass<D>, uid: String, forModification:Boolean, callback: (cls: KClass<D>, uid: String, forModification:Boolean) -> D?): D? {
-        return callback.invoke(cls, uid,forModification)
+    fun <D : BaseDocument> onLoadDocument(cls: KClass<D>, uid: String, ignoreCache:Boolean, callback: (cls: KClass<D>, uid: String, ignoreCache:Boolean) -> D?): D? {
+        return callback.invoke(cls, uid,ignoreCache)
     }
 
     fun <D : BaseDocument> onLoadDocumentVersion(cls: KClass<D>, uid: String, version:Int, callback: (cls: KClass<D>, uid: String, version:Int) -> D?): D? {
@@ -290,8 +290,8 @@ interface StorageAdvice:HasPriority{
         return callback.invoke(index, property, propertyValue)
     }
 
-    fun <D : BaseAsset> onLoadAsset(cls: KClass<D>, uid: String, forModification:Boolean, callback: (cls: KClass<D>, uid: String, forModification:Boolean) -> D?): D? {
-        return callback.invoke(cls, uid, forModification)
+    fun <D : BaseAsset> onLoadAsset(cls: KClass<D>, uid: String, ignoreCache:Boolean, callback: (cls: KClass<D>, uid: String, ignoreCache:Boolean) -> D?): D? {
+        return callback.invoke(cls, uid, ignoreCache)
     }
     fun <D : BaseAsset> onLoadAssetVersion(cls: KClass<D>, uid: String, version:Int, callback: (cls: KClass<D>, uid: String, version:Int) -> D?): D? {
         return callback.invoke(cls, uid, version)
@@ -314,16 +314,16 @@ interface StorageAdvice:HasPriority{
         callback.invoke(doc)
     }
 
-    fun <A : BaseAsset> onSearchAssets(cls: KClass<A>, query: SearchQuery, forModification:Boolean, callback: (cls: KClass<A>, query: SearchQuery, forModification:Boolean) -> List<A>): List<A> {
-        return callback.invoke(cls, query, forModification)
+    fun <A : BaseAsset> onSearchAssets(cls: KClass<A>, query: SearchQuery, ignoreCache:Boolean, callback: (cls: KClass<A>, query: SearchQuery, ignoreCache:Boolean) -> List<A>): List<A> {
+        return callback.invoke(cls, query, ignoreCache)
     }
 
     fun <A : BaseAsset> onSearchAssets(cls: KClass<A>, query: ProjectionQuery, callback: (cls: KClass<A>, query: ProjectionQuery) -> List<Map<String, Any>>): List<Map<String, Any>> {
         return callback.invoke(cls, query)
     }
 
-    fun <A : BaseAsset,E> onFindUniqueAsset(index: KClass<A>, propertyName: E, propertyValue: Any?, forModification:Boolean, callback: (index: KClass<A>, propertyName: E, propertyValue: Any?, forModification:Boolean) -> A?): A? where E:PropertyNameSupport,E:EqualitySupport {
-        return callback.invoke(index, propertyName, propertyValue, forModification)
+    fun <A : BaseAsset,E> onFindUniqueAsset(index: KClass<A>, propertyName: E, propertyValue: Any?, ignoreCache:Boolean, callback: (index: KClass<A>, propertyName: E, propertyValue: Any?, ignoreCache:Boolean) -> A?): A? where E:PropertyNameSupport,E:EqualitySupport {
+        return callback.invoke(index, propertyName, propertyValue, ignoreCache)
     }
 
     fun <D:BaseIdentity> onGetVersionsMetadata(cls: KClass<D>, uid: String, callback: (cls2: KClass<D>, uid2: String) -> List<VersionMetadata>): List<VersionMetadata>{
@@ -396,7 +396,7 @@ class StorageRegistry:Disposable {
 
     private val indexHandlers = hashMapOf<KClass<*>, MutableList<IndexHandler<*, *>>>()
 
-    fun<D:BaseDocument> register(interceptor:StorageInterceptor) {
+    fun register(interceptor:StorageInterceptor) {
         storageInterceptors.add(interceptor)
         storageInterceptors.sortBy { it.priority }
     }

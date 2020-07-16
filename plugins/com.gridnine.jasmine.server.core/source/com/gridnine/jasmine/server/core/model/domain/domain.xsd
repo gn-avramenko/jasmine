@@ -85,8 +85,7 @@
 							<complexType>
 								<complexContent>
 									<extension base="tns:baseMetaElement" >
-										<attribute name="x-cache-find" type="boolean"
-												   default="false"/>
+										<attribute name="x-cache-find-handler" type="string"/>
 										<attribute name="type" type="tns:dbPropertyType" use="required" />
 										<attribute name="class-name" type="string"/>
 									</extension>

@@ -30,7 +30,7 @@ internal object DomainServerGenerator {
             extendsId = nestedDoc.extendsId
         }
         descr.properties.values.forEach { prop ->
-            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), prop.className, nonNullable = prop.nonNullable, lateinit = false, openSetter = false, override = true))
+            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), prop.className, nonNullable = prop.nonNullable, lateinit = false, openSetter = false, override = true,disallowedSetter = true))
         }
         descr.collections.values.forEach { coll ->
             result.collections.add(GenCollectionDescription(coll.id, getPropertyType(coll.elementType), coll.elementClassName, openGetter = false, readonlyImpl = true))

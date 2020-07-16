@@ -9,6 +9,11 @@ import com.gridnine.jasmine.server.core.app.Environment
 import com.gridnine.jasmine.server.core.storage.Database
 import com.gridnine.jasmine.server.core.storage.Storage
 import com.gridnine.jasmine.server.core.storage.StorageRegistry
+import com.gridnine.jasmine.server.core.storage.cache.CacheConfiguration
+import com.gridnine.jasmine.server.core.storage.cache.CacheManager
+import com.gridnine.jasmine.server.core.storage.cache.CacheStorageAdvice
+import com.gridnine.jasmine.server.core.storage.cache.InvalidateCacheStorageInterceptor
+import com.gridnine.jasmine.server.core.storage.cache.ehcache.EhCacheManager
 import com.gridnine.jasmine.server.core.storage.impl.StorageImpl
 import com.gridnine.jasmine.server.core.storage.impl.jdbc.JdbcDatabase
 import com.gridnine.jasmine.server.core.storage.impl.jdbc.JdbcDialect
@@ -24,13 +29,21 @@ abstract class StorageTestBase:CoreTestBase(){
         startH2Database()
         publishDatabase()
         publishStorage()
-        configureStorageRegisty()
+        configureStorageRegistry()
+        publishCache();
+    }
+
+    protected fun publishCache() {
+        Environment.publish(CacheConfiguration())
+        Environment.publish(CacheManager::class, EhCacheManager())
     }
 
 
-
-    protected fun configureStorageRegisty() {
+    protected open fun configureStorageRegistry() {
         StorageRegistry.get().register(TestDocumentIndexHandler())
+        val advice = CacheStorageAdvice(0.0)
+        StorageRegistry.get().register(advice)
+        StorageRegistry.get().register(InvalidateCacheStorageInterceptor(1.0, advice))
     }
 
     protected fun publishStorage() {

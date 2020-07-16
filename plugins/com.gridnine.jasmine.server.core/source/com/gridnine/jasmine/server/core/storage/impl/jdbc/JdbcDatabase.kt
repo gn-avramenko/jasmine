@@ -6,7 +6,6 @@
 
 package com.gridnine.jasmine.server.core.storage.impl.jdbc
 
-import com.gridnine.jasmine.server.core.app.Disposable
 import com.gridnine.jasmine.server.core.app.Environment
 import com.gridnine.jasmine.server.core.model.common.BaseIdentity
 import com.gridnine.jasmine.server.core.model.common.BaseIntrospectableObject
@@ -26,7 +25,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
 
-class JdbcDatabase : Database, Disposable {
+class JdbcDatabase : Database {
 
     init {
         DatabaseStructureUpdater.updateDbStructure()
@@ -485,6 +484,7 @@ class JdbcDatabase : Database, Disposable {
         if (!statement.isNullOrBlank()) {
             JdbcUtils.execute(statement, commit = false, closeConnection = false)
         }
+        super.dispose()
     }
 
     override fun <A : BaseAsset> loadAssetWrapper(kClass: KClass<A>, uid: String): AssetWrapper<A>? {

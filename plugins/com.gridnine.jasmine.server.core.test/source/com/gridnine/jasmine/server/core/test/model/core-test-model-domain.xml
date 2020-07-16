@@ -30,7 +30,7 @@
 		<property type="STRING" id="name"/>
 	</nested-document>
 	<index document="com.gridnine.jasmine.server.core.test.domain.TestDomainDocument" id="com.gridnine.jasmine.server.core.test.domain.TestDomainDocumentIndex">
-		<property type="STRING" id="stringProperty"/>
+		<property type="STRING" id="stringProperty" x-cache-find-handler="com.gridnine.jasmine.server.core.test.storage.TestDomainDocumentIndexStringPropertyCacheHandler" />
 		<collection element-type="STRING" id="stringCollection"/>
 		<property type="ENUM" id="enumProperty" class-name="com.gridnine.jasmine.server.core.test.domain.TestEnum"/>
 		<property id="entityReference" type="ENTITY_REFERENCE" class-name="com.gridnine.jasmine.server.core.test.domain.TestDomainDocument"/>
@@ -39,7 +39,7 @@
 
 	</index>
 	<asset id="com.gridnine.jasmine.server.core.test.domain.TestDomainAsset" x-cache-resolve="true">
-		<property type="STRING" id="stringProperty" x-cache-find="true"/>
+		<property type="STRING" id="stringProperty" x-cache-find-handler="com.gridnine.jasmine.server.core.test.storage.TestDomainAssetStringPropertyCacheHandler"/>
 		<property id="dateProperty" type="LOCAL_DATE_TIME"/>
 	</asset>
 </domain>

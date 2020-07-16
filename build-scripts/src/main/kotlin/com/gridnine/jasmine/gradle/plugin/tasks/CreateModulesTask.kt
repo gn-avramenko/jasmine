@@ -35,8 +35,9 @@ open class CreateModulesTask() : DefaultTask() {
         if (!rootDir.exists()) {
             rootDir.mkdirs()
         }
-        createModules(projectName)
         createPlugins()
+        createProjectModule(projectName)
+        createModules(projectName)
         createExternals()
     }
 
@@ -153,6 +154,17 @@ open class CreateModulesTask() : DefaultTask() {
             }
             File(project.projectDir, ".idea/modules/${pluginDescr.id}.iml").writeIfDiffers(content)
         }
+    }
+
+    private fun createProjectModule(projectName: String) {
+        val content = xml("module", "version" to "4") {
+            "component"("name" to "NewModuleRootManager") {
+                emptyTag("exclude-output")
+                emptyTag("orderEntry", "type" to "inheritedJdk")
+                emptyTag("orderEntry", "type" to "library", "name" to "spf", "level" to "project")
+            }
+        }
+        File(project.projectDir, ".idea/modules/${projectName}.iml").writeIfDiffers(content)
     }
 
     private fun createModules(projectName: String) {

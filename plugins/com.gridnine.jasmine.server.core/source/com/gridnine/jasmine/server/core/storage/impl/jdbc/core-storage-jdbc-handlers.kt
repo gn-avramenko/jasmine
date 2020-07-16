@@ -184,7 +184,7 @@ internal open class GenericStringTypeCollectionFieldHandler(private val sqlType:
     }
 
     override fun getJdbcCollectionValues(coll: DatabaseCollectionDescription, modelValues: List<Any?>): List<Any?> {
-        return arrayListOf((modelValues as ArrayList<String>).toTypedArray())
+        return arrayListOf((modelValues as Collection<String>).toTypedArray())
     }
 
     override fun getSqlQueryValue(modelValue: Any?): JdbcFieldValue {

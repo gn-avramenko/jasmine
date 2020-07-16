@@ -11,10 +11,12 @@ import com.gridnine.jasmine.server.core.model.common.BaseIdentity
 import com.gridnine.jasmine.server.core.model.domain.CachedObject
 import com.gridnine.jasmine.server.core.model.domain.ObjectReference
 import com.gridnine.jasmine.server.core.model.domain.ReadOnlyArrayList
+import com.gridnine.jasmine.server.core.model.domain._CachedObjectReference
 import com.gridnine.jasmine.server.core.reflection.ReflectionFactory
 import com.gridnine.jasmine.server.core.serialization.JsonSerializer
 import com.gridnine.jasmine.server.core.serialization.ObjectMetadataProvider
 import com.gridnine.jasmine.server.core.serialization.SerializablePropertyType
+import kotlin.reflect.KClass
 
 @Suppress("UNCHECKED_CAST")
 class CachedObjectsConverter: Disposable {
@@ -35,6 +37,13 @@ class CachedObjectsConverter: Disposable {
     }
 
     private fun <T:BaseIdentity> toCachedObject(obj:T, ctx:MutableMap<String, BaseIdentity>):T{
+        if(obj is ObjectReference<*>){
+            val result = _CachedObjectReference<BaseIdentity>()
+            result.uid = obj.uid
+            result.type = obj.type as KClass<BaseIdentity>
+            result.caption = obj.caption
+            return result as T
+        }
         val className = obj::class.java.name
         val idx = className.lastIndexOf(".")
         val cachedClassName = className.substring(0, idx)+"._Cached"+className.substring(idx+1)
