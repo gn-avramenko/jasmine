@@ -38,6 +38,9 @@ class JasminePlugin: Plugin<Project>{
                 SpfPluginType.CORE,SpfPluginType.SERVER_TEST,SpfPluginType.SERVER,SpfPluginType.SPF ->{
                     target.tasks.create(CompileKotlinJVMPluginTask.getTaskName(plugin.id), CompileKotlinJVMPluginTask::class.java, plugin, registry,extension, pluginsToFileMap)
                 }
+                SpfPluginType.WEB ->{
+                    //noops
+                }
                 else ->throw IllegalArgumentException("unsupported plugin type $pluginType" )
             }
         }

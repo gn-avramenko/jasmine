@@ -299,7 +299,6 @@ object JdbcUtils {
             val ctx =  contexts.get()?: kotlin.run {
                 val connection = Environment.getPublished(DataSource::class).connection
                 connection.autoCommit = false
-                log.debug("creating transaction")
                 val ctx2 = JdbcContext(connection, TransactionContext({
                     connection.commit()
                 }))
@@ -329,7 +328,6 @@ object JdbcUtils {
                 if (owner) {
                     contexts.remove()
                     if (closeConnection) {
-                        log.debug("closing transaction")
                         ctx.connection.close()
                     }
                 }

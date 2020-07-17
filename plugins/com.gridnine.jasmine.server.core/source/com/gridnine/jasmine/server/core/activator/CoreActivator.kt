@@ -12,6 +12,8 @@ import com.gridnine.jasmine.server.core.app.IApplicationMetadataProvider
 import com.gridnine.jasmine.server.core.app.IPluginActivator
 import com.gridnine.jasmine.server.core.lock.LockManager
 import com.gridnine.jasmine.server.core.lock.StandardLockManager
+import com.gridnine.jasmine.server.core.model.custom.CustomMetaRegistry
+import com.gridnine.jasmine.server.core.model.custom.CustomMetadataParser
 import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistry
 import com.gridnine.jasmine.server.core.model.domain.DomainMetadataParser
 import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistry
@@ -38,6 +40,10 @@ class CoreActivator:IPluginActivator{
         val restRegistry = RestMetaRegistry()
         registerRestMetadata(restRegistry)
         Environment.publish(restRegistry)
+        val customRegistry = CustomMetaRegistry()
+        registerCustomMetadata(customRegistry)
+        Environment.publish(customRegistry)
+
         Environment.publish(JsonSerializer())
 
         Environment.publish(StorageRegistry())
@@ -76,6 +82,16 @@ class CoreActivator:IPluginActivator{
         }
     }
 
+
+    private fun registerCustomMetadata(result: CustomMetaRegistry) {
+        val extensions = IApplicationMetadataProvider.get()
+                .getExtensions("custom-metadata")
+        for (ext in extensions) {
+            for (location in ext.getParameters("url")) {
+                CustomMetadataParser.updateCustomMetaRegistry(result, location, ext.plugin.classLoader)
+            }
+        }
+    }
 
     override fun activate() {
         publishTomcat()

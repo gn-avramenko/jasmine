@@ -56,10 +56,10 @@ internal object DatabaseStructureAnalyzer {
         val tableMappings = HashMap<String, DatabaseTableDescription>()
         val descriptions = JdbcUtils.getTableDescriptions()
         for (value in descriptions.values) {
-            tableMappings[value.name] = value
+            tableMappings[value.name.toLowerCase()] = value
         }
-        val allTableNames = ArrayList(tableMappings.keys)
-        val existingTableNames = LinkedHashSet(dialect.tableNames)
+        val allTableNames = ArrayList(tableMappings.keys.map { it.toLowerCase() })
+        val existingTableNames = LinkedHashSet(dialect.tableNames.map { it.toLowerCase() })
         tablesToDelete.addAll(disjunction(existingTableNames, allTableNames))
         for (tableName in disjunction(allTableNames,existingTableNames)) {
             val tableData = getTableData(tableMappings[tableName]!!)
@@ -71,16 +71,16 @@ internal object DatabaseStructureAnalyzer {
             val existingIndexes = LinkedHashSet<String>()
             existingIndexes.addAll(dialect.getIndexNames(tableName))
             val tableData = getTableData(tableMappings[tableName]!!)
-            val columnsToDelete = disjunction(existingColumns.keys,tableData.columns.keys)
-            val indexesToDelete = disjunction(existingIndexes,tableData.indexes.keys)
+            val columnsToDelete = disjunction(existingColumns.keys.map { it.toLowerCase() },tableData.columns.keys.map { it.toLowerCase() })
+            val indexesToDelete = disjunction(existingIndexes.map { it.toLowerCase() },tableData.indexes.keys.map { it.toLowerCase() })
             val columnsToCreate = linkedMapOf<String, SqlType>()
             val indexesToCreate = linkedMapOf<String, JdbcIndexDescription>()
-            for (column in disjunction(tableData.columns.keys,existingColumns.keys)) {
+            for (column in disjunction(tableData.columns.keys.map { it.toLowerCase() },existingColumns.keys.map { it.toLowerCase() })) {
                 columnsToCreate[column] = tableData.columns[column]!!
             }
 
-            for (index in disjunction(tableData.indexes.keys,
-                    existingIndexes)) {
+            for (index in disjunction(tableData.indexes.keys.map { it.toLowerCase() },
+                    existingIndexes.map { it.toLowerCase() })) {
                 indexesToCreate[index] = tableData.indexes[index]!!
             }
             if (columnsToCreate.isEmpty() && columnsToDelete.isEmpty()
@@ -127,25 +127,19 @@ internal object DatabaseStructureAnalyzer {
                         .getCollectionIndexes(coll, description))
             }
         }
-        toUpperCase(result.columns)
-        toUpperCase(result.indexes)
+
+        keysToLowerCase(result.columns)
+        keysToLowerCase(result.indexes)
         return result
     }
 
-    private fun <T> toUpperCase(columns: MutableMap<String, T>) {
-        val result = LinkedHashMap<String, T>()
-        for (entry in columns.entries) {
-            val key = entry.key.toUpperCase()
-            var value = entry.value
-            if (value is String) {
-                @Suppress("UNCHECKED_CAST")
-                value = (value as String).toUpperCase() as T
-            }
-            result[key] = value
-        }
+    private fun<T:Any> keysToLowerCase(columns: MutableMap<String, T>) {
+        val result = LinkedHashMap<String,T>()
+        columns.entries.forEach { result[it.key.toLowerCase()] =  it.value }
         columns.clear()
         columns.putAll(result)
     }
+
 
     class TableData {
         internal val columns: MutableMap<String, SqlType> = LinkedHashMap()

@@ -9,13 +9,11 @@ import com.gridnine.jasmine.server.core.storage.cache.CachedValue
 import org.ehcache.spi.serialization.Serializer
 import java.nio.ByteBuffer
 
-class CachedValueSerializer :Serializer<CachedValue<*>>{
-
-    constructor(cl:ClassLoader)
+class CachedValueSerializer(cl: ClassLoader) :Serializer<CachedValue<*>>{
 
     override fun equals(`object`: CachedValue<*>?, binary: ByteBuffer?): Boolean {
         val bv = read(binary)
-        return `object`?.timeStamp == bv?.timeStamp
+        return `object`?.timeStamp == bv.timeStamp
     }
 
     override fun serialize(`object`: CachedValue<*>?): ByteBuffer {

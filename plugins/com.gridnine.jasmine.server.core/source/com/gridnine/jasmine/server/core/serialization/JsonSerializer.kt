@@ -65,7 +65,11 @@ class JsonSerializer : Disposable {
         var provider = providersCache.getOrPut(className, { createProvider(className) }) as ObjectMetadataProvider<T>
         outer@ while (parser.nextToken() != JsonToken.END_OBJECT){
             if(parser.currentToken == JsonToken.START_OBJECT){
-                parser.nextToken()
+                val nextToken = parser.nextToken()
+                if(nextToken == JsonToken.END_OBJECT){
+                    result = ReflectionFactory.get().newInstance<T>(realClassName)
+                    break@outer
+                }
             }
             when(val tagName = parser.currentName){
                 BaseIdentity.uid ->{

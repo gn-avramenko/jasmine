@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rest xmlns="http://xtrip.gridnine.com/jasmine/rest" id="standard">
+    <!-- metadataa -->
+    <enum id="com.gridnine.jasmine.server.standard.model.rest.RestPropertyTypeDT">
+        <enum-item id="STRING"/>
+        <enum-item id="ENUM"/>
+        <enum-item id="ENTITY"/>
+        <enum-item id="LONG"/>
+        <enum-item id="INT"/>
+        <enum-item id="BIG_DECIMAL"/>
+        <enum-item id="ENTITY_REFERENCE"/>
+        <enum-item id="LOCAL_DATE_TIME"/>
+        <enum-item id="LOCAL_DATE"/>
+        <enum-item id="BOOLEAN"/>
+        <enum-item id="BYTE_ARRAY"/>
+    </enum>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.RestPropertyDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="type" type="ENUM" class-name="com.gridnine.jasmine.server.standard.model.rest.RestPropertyTypeDT"/>
+        <property id="className" type="STRING"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.RestCollectionDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="elementType" type="ENUM" class-name="com.gridnine.jasmine.server.standard.model.rest.RestPropertyTypeDT"/>
+        <property id="elementClassName" type="STRING"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.RestEntityDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="abstract" type="BOOLEAN"/>
+        <property id="extends" type="STRING"/>
+        <collection id="properties" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.RestPropertyDescriptionDT"/>
+        <collection id="collections" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.RestCollectionDescriptionDT"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.RestEnumDescriptionDT">
+        <property id="id" type="STRING"/>
+        <collection id="items" element-type="STRING"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.DomainEnumItemDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="displayName" type="STRING"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.DomainEnumDescriptionDT">
+        <property id="id" type="STRING"/>
+        <collection id="items" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.DomainEnumItemDescriptionDT"/>
+    </entity>
+    <enum id="com.gridnine.jasmine.server.standard.model.rest.DatabasePropertyTypeDT">
+        <enum-item id="STRING"/>
+        <enum-item id="TEXT"/>
+        <enum-item id="ENUM"/>
+        <enum-item id="LONG"/>
+        <enum-item id="INT"/>
+        <enum-item id="BIG_DECIMAL"/>
+        <enum-item id="ENTITY_REFERENCE"/>
+        <enum-item id="LOCAL_DATE_TIME"/>
+        <enum-item id="LOCAL_DATE"/>
+        <enum-item id="BOOLEAN"/>
+    </enum>
+    <enum id="com.gridnine.jasmine.server.standard.model.rest.DatabaseCollectionTypeDT">
+        <enum-item id="STRING"/>
+        <enum-item id="ENUM"/>
+        <enum-item id="ENTITY_REFERENCE"/>
+    </enum>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.IndexPropertyDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="type" type="ENUM" class-name="com.gridnine.jasmine.server.standard.model.rest.DatabasePropertyTypeDT"/>
+        <property id="displayName" type="STRING"/>
+        <property id="className" type="STRING"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.IndexCollectionDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="elementType" type="ENUM" class-name="com.gridnine.jasmine.server.standard.model.rest.DatabaseCollectionTypeDT"/>
+        <property id="displayName" type="STRING"/>
+        <property id="elementClassName" type="STRING"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.IndexDescriptionDT">
+        <property id="displayName" type="STRING"/>
+        <property id="document" type="STRING"/>
+        <property id="id" type="STRING"/>
+        <collection id="properties" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.IndexPropertyDescriptionDT"/>
+        <collection id="collections" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.IndexCollectionDescriptionDT"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.AssetDescriptionDT">
+        <property id="displaName" type="STRING"/>
+        <property id="id" type="STRING"/>
+        <collection id="properties" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.IndexPropertyDescriptionDT"/>
+        <collection id="collections" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.IndexCollectionDescriptionDT"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.RestOperationDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="request" type="STRING"/>
+        <property id="response" type="STRING"/>
+    </entity>
+
+
+    <group id="standard">
+        <operation id="meta" handler="com.gridnine.jasmine.server.standard.rest.StandardMetaRestHandler">
+            <request id="com.gridnine.jasmine.server.standard.model.rest.GetMetadataRequest"/>
+            <response id="com.gridnine.jasmine.server.standard.model.rest.GetMetadataResponse">
+                <collection id="restEnums" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.RestEnumDescriptionDT"/>
+                <collection id="restEntities" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.RestEntityDescriptionDT"/>
+                <collection id="domainEnums" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.DomainEnumDescriptionDT"/>
+                <collection id="domainIndexes" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.IndexDescriptionDT"/>
+                <collection id="domainAssets" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.AssetDescriptionDT"/>
+                <collection id="operations" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.RestOperationDescriptionDT"/>
+            </response>
+        </operation>
+    </group>
+
+</rest>
+
+
+

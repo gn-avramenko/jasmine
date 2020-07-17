@@ -24,7 +24,7 @@ class H2dbDialect : JdbcDialect {
     override fun getColumnTypes(tableName: String): Map<String, SqlType> {
         val columns = JdbcUtils.query(String.format(
                 "select COLUMN_NAME, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME = '%s'",
-                tableName), null,  {it, _ -> arrayOf(it.getString(1), it.getString(2), it.getString(3))})
+                tableName.toUpperCase()), null,  {it, _ -> arrayOf(it.getString(1), it.getString(2), it.getString(3))})
         val result = LinkedHashMap<String, SqlType>()
         for (item in columns) {
             result[item[0]] = getType(item[1], item[2])
@@ -35,7 +35,7 @@ class H2dbDialect : JdbcDialect {
     override fun getIndexNames(tableName: String): Set<String> {
                 return JdbcUtils.query(
                 "SELECT index_name from INFORMATION_SCHEMA.INDEXES where TABLE_NAME = ?", {it, _ ->
-            it.setString(1, tableName)
+            it.setString(1, tableName.toUpperCase())
         },{it,_ -> it.getString(1)}).toSet()
     }
 
@@ -86,11 +86,11 @@ class H2dbDialect : JdbcDialect {
     }
 
     override fun createDropIndexQuery(tableName: String, index: String): String {
-        return String.format("DROP INDEX %s", index)
+        return String.format("DROP INDEX %s", index.toUpperCase())
     }
 
     override fun getCreateIndexStatement(tableName: String, indexName:String, description: JdbcIndexDescription): String {
-        return "CREATE INDEX $indexName ON $tableName (${description.field})"
+        return "CREATE INDEX ${indexName.toUpperCase()} ON ${tableName.toUpperCase()} (${description.field.toUpperCase()})"
     }
 
     override fun getBlobHandler(ctx: JdbcContext, rs: ResultSet, idx: Int): JdbcBlobWrapper {
