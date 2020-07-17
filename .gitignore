@@ -1,2 +1,5 @@
 .gradle
 /build
+/plugins/com.gridnine.jasmine.web.core/resources/webapp-core/
+/plugins/com.gridnine.jasmine.server.standard/classes/
+/plugins/com.gridnine.jasmine.server.standard/source-gen/com/gridnine/jasmine/server/standard/model/rest/
