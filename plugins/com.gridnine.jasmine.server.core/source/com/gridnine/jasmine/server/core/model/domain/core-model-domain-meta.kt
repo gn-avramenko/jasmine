@@ -128,6 +128,7 @@ class DomainMetaRegistry:Disposable{
     companion object {
         private val wrapper = PublishableWrapper(DomainMetaRegistry::class)
         fun get() = wrapper.get()
+        const val EXPOSED_IN_REST_KEY = "x-exposed-in-rest"
     }
 }
 

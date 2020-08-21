@@ -6,19 +6,53 @@
 
 package com.gridnine.jasmine.server.standard.rest
 
-import com.gridnine.jasmine.server.core.model.domain.DatabaseCollectionType
-import com.gridnine.jasmine.server.core.model.domain.DatabasePropertyType
-import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistry
+import com.gridnine.jasmine.server.core.model.custom.CustomMetaRegistry
+import com.gridnine.jasmine.server.core.model.custom.CustomType
+import com.gridnine.jasmine.server.core.model.domain.*
 import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistry
 import com.gridnine.jasmine.server.core.model.rest.RestPropertyType
 import com.gridnine.jasmine.server.core.rest.RestHandler
 import com.gridnine.jasmine.server.core.rest.RestOperationContext
+import com.gridnine.jasmine.server.standard.model.custom.*
 import com.gridnine.jasmine.server.standard.model.rest.*
 
 
 class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataResponse> {
     override fun service(request: GetMetadataRequest, ctx:RestOperationContext): GetMetadataResponse {
         val result = GetMetadataResponse()
+        CustomMetaRegistry.get().enums.values.forEach {
+            val enumDescr = CustomEnumDescriptionDT()
+            enumDescr.id = it.id+"JS"
+            it.items.values.forEach { enumItemDescription ->
+                enumDescr.items.add(enumItemDescription.id)
+            }
+            result.customEnums.add(enumDescr)
+        }
+        CustomMetaRegistry.get().entities.values.forEach {
+            val entityDescr = CustomEntityDescriptionDT()
+            entityDescr.id = it.id+"JS"
+            entityDescr.abstract = it.isAbstract
+            entityDescr.extends = it.extendsId?.let { ext -> ext+"JS"}
+
+            it.properties.values.forEach { propertyDescrition ->
+                val property = CustomPropertyDescriptionDT()
+                property.className = getClassName(propertyDescrition.className)
+                property.id = propertyDescrition.id
+                property.type = toRestCollectionType(propertyDescrition.type)
+                property.nonNullable = propertyDescrition.nonNullable
+                property.lateInit = propertyDescrition.lateinit
+                entityDescr.properties.add(property)
+            }
+            it.collections.values.forEach { collectionDescription ->
+                val coll = CustomCollectionDescriptionDT()
+                coll.elementClassName = getClassName(collectionDescription.elementClassName)
+                coll.id = collectionDescription.id
+                coll.elementType = toRestCollectionType(collectionDescription.elementType)
+                entityDescr.collections.add(coll)
+            }
+
+            result.customEntities.add(entityDescr)
+        }
         RestMetaRegistry.get().enums.values.forEach {
             val enumDescr = RestEnumDescriptionDT()
             enumDescr.id = it.id+"JS"
@@ -38,6 +72,8 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                 property.className = getClassName(propertyDescrition.className)
                 property.id = propertyDescrition.id
                 property.type = toRestCollectionType(propertyDescrition.type)
+                property.nonNullable = propertyDescrition.nonNullable
+                property.lateInit = propertyDescrition.lateinit
                 entityDescr.properties.add(property)
             }
             it.collections.values.forEach { collectionDescription ->
@@ -79,6 +115,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                 property.id = propertyDescription.id
                 property.type = toRestCollectionType(propertyDescription.type)
                 property.displayName = propertyDescription.getDisplayName()
+                property.nonNullable = propertyDescription.nonNullable
                 indexDescr.properties.add(property)
             }
             it.collections.values.forEach { collectionDescription ->
@@ -87,6 +124,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                 coll.id = collectionDescription.id
                 coll.elementType = toRestCollectionType(collectionDescription.elementType)
                 coll.displayName = collectionDescription.getDisplayName()
+                coll.unique = collectionDescription.unique
                 indexDescr.collections.add(coll)
             }
             result.domainIndexes.add(indexDescr)
@@ -101,6 +139,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                 property.id = propertyDescription.id
                 property.type = toRestCollectionType(propertyDescription.type)
                 property.displayName = propertyDescription.getDisplayName()
+                property.nonNullable = propertyDescription.nonNullable
                 assetDescription.properties.add(property)
             }
             it.collections.values.forEach { collectionDescription ->
@@ -109,11 +148,45 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                 coll.id = collectionDescription.id
                 coll.elementType = toRestCollectionType(collectionDescription.elementType)
                 coll.displayName = collectionDescription.getDisplayName()
+                coll.unique = collectionDescription.unique
                 assetDescription.collections.add(coll)
             }
             result.domainAssets.add(assetDescription)
         }
+        DomainMetaRegistry.get().documents.values.forEach {
+            if(it.parameters[DomainMetaRegistry.EXPOSED_IN_REST_KEY] == "true"){
+                result.domainDocuments.add(createDocumentDescription(it))
+            }
+        }
+        DomainMetaRegistry.get().nestedDocuments.values.forEach {
+            if(it.parameters[DomainMetaRegistry.EXPOSED_IN_REST_KEY] == "true"){
+                result.domainDocuments.add(createDocumentDescription(it))
+            }
+        }
         return result
+    }
+
+    private fun createDocumentDescription(it: BaseDocumentDescription): DocumentDescriptionDT {
+        val documentDescription = DocumentDescriptionDT()
+        documentDescription.id = it.id+"JS"
+        documentDescription.extendsId = if(it.extendsId ==null) null else "${it.extendsId}JS"
+        documentDescription.isAbstract = it.isAbstract
+        it.properties.values.forEach { propertyDescription ->
+            val property = DocumentPropertyDescriptionDT()
+            property.className = getClassName(propertyDescription.className)
+            property.id = propertyDescription.id
+            property.type = toRestCollectionType(propertyDescription.type)
+            property.nonNullable = propertyDescription.nonNullable
+            documentDescription.properties.add(property)
+        }
+        it.collections.values.forEach { collectionDescription ->
+            val coll = DocumentCollectionDescriptionDT()
+            coll.elementClassName = getClassName(collectionDescription.elementClassName)
+            coll.id = collectionDescription.id
+            coll.elementType = toRestCollectionType(collectionDescription.elementType)
+            documentDescription.collections.add(coll)
+        }
+       return documentDescription
     }
 
     private fun getClassName(className: String?): String? {
@@ -132,13 +205,19 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
         return RestPropertyTypeDT.valueOf(type.name)
 
     }
+    private fun toRestCollectionType(type: CustomType): CustomTypeDT {
+        return CustomTypeDT.valueOf(type.name)
 
+    }
 
     private fun toRestCollectionType(type: DatabasePropertyType): DatabasePropertyTypeDT {
         return DatabasePropertyTypeDT.valueOf(type.name)
 
     }
 
+    private fun toRestCollectionType(type: DocumentPropertyType): DocumentPropertyTypeDT {
+        return DocumentPropertyTypeDT.valueOf(type.name)
 
+    }
 }
 

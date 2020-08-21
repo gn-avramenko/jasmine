@@ -52,7 +52,7 @@ internal enum class GenPropertyType {
 
 internal object GenUtils {
 
-    private fun generateHeader(sb:StringBuilder, className: String, projectName: String){
+    fun generateHeader(sb:StringBuilder, className: String, projectName: String){
         sb.append("""
                 /*****************************************************************
                  * Gridnine AB http://www.gridnine.com
@@ -317,7 +317,7 @@ internal object GenUtils {
 
     }
 
-    private fun classBuilder(sb: StringBuilder, className: String, init: CLASS.() -> Unit) {
+    fun classBuilder(sb: StringBuilder, className: String, init: CLASS.() -> Unit) {
         sb.append("\n${className}{")
         val cls = CLASS(sb)
         cls.init()

@@ -11,5 +11,9 @@ object AuthUtils {
         users.set(user)
     }
 
+    fun resetCurrentUser(){
+        users.remove()
+    }
+
     fun getCurrentUser() = users.get()
 }

@@ -32,13 +32,13 @@ internal open class CustomEntityMetadataProvider(description: CustomEntityDescri
 
     private fun fillCollections(desc: CustomEntityDescription) {
         desc.collections.values.forEach {
-            addCollection(SerializableCollectionDescription(it.id, toSerializableType(it.elementType), toClassName(it.elementType, it.elementClassName), isAbstractClass(it.elementClassName)))
+            addCollection(SerializableCollectionDescription(it.id, toSerializableType(it.elementType), toClassName(it.elementType, it.elementClassName), CommonSerializationUtils.isAbstractClass(it.elementClassName)))
         }
     }
 
     private fun fillProperties(desc: CustomEntityDescription) {
         desc.properties.values.forEach {
-            addProperty(SerializablePropertyDescription(it.id, toSerializableType(it.type), toClassName(it.type, it.className), isAbstractClass(it.className)))
+            addProperty(SerializablePropertyDescription(it.id, toSerializableType(it.type), toClassName(it.type, it.className), CommonSerializationUtils.isAbstractClass(it.className)))
         }
     }
 

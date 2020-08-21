@@ -1,0 +1,4 @@
+<plugin xmlns="http://xtrip.gridnine.com/spf" id="com.gridnine.jasmine.web.easyui">
+    <parameter id="type" value="WEB"/>
+    <parameter id="kotlin-output-dir" value="resources/jasmine-easyui"/>
+</plugin>

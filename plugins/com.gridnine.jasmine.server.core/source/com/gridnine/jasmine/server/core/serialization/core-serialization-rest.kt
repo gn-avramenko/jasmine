@@ -29,13 +29,13 @@ internal open class RestEntityMetadataProvider(description: RestEntityDescriptio
 
     private fun fillCollections(desc: RestEntityDescription) {
         desc.collections.values.forEach {
-            addCollection(SerializableCollectionDescription(it.id, toSerializableType(it.elementType), toClassName(it.elementType, it.elementClassName), isAbstractClass(it.elementClassName)))
+            addCollection(SerializableCollectionDescription(it.id, toSerializableType(it.elementType), toClassName(it.elementType, it.elementClassName), CommonSerializationUtils.isAbstractClass(it.elementClassName)))
         }
     }
 
     private fun fillProperties(desc: RestEntityDescription) {
         desc.properties.values.forEach {
-            addProperty(SerializablePropertyDescription(it.id, toSerializableType(it.type), toClassName(it.type, it.className), isAbstractClass(it.className)))
+            addProperty(SerializablePropertyDescription(it.id, toSerializableType(it.type), toClassName(it.type, it.className), CommonSerializationUtils.isAbstractClass(it.className)))
         }
     }
 

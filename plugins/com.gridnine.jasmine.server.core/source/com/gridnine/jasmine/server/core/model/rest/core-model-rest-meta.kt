@@ -5,7 +5,8 @@
 @file:Suppress("unused")
 package com.gridnine.jasmine.server.core.model.rest
 
-import com.gridnine.jasmine.server.core.app.Environment
+import com.gridnine.jasmine.server.core.app.Disposable
+import com.gridnine.jasmine.server.core.app.PublishableWrapper
 
 
 enum class RestPropertyType {
@@ -62,7 +63,7 @@ class RestEntityDescription(id:String) : BaseRestElementDescription(id) {
 }
 
 
-class RestMetaRegistry{
+class RestMetaRegistry:Disposable{
     val enums = linkedMapOf<String, RestEnumDescription>()
 
     val entities = linkedMapOf<String, RestEntityDescription>()
@@ -73,10 +74,12 @@ class RestMetaRegistry{
 
     val operations = linkedMapOf<String, RestOperationDescription>()
 
+    override fun dispose() {
+        wrapper.dispose()
+    }
     companion object {
-        fun get(): RestMetaRegistry {
-            return Environment.getPublished(RestMetaRegistry::class)
-        }
+        private val wrapper = PublishableWrapper(RestMetaRegistry::class)
+        fun get() = wrapper.get()
     }
 }
 

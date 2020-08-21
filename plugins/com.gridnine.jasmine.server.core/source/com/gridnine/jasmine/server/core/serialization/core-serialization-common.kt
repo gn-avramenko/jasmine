@@ -57,22 +57,24 @@ class SerializablePropertyDescription(val id: String, val type: SerializableProp
 
 class SerializableCollectionDescription(val id: String, val elementType: SerializablePropertyType, val elementClassName: String?, val isAbstract: Boolean)
 
-internal fun isAbstractClass(className:String?):Boolean{
-    if(className == null){
+internal object CommonSerializationUtils{
+    fun isAbstractClass(className:String?):Boolean{
+        if(className == null){
+            return false
+        }
+        val domainDocument = DomainMetaRegistry.get().documents[className]
+        if(domainDocument != null){
+            return domainDocument.isAbstract
+        }
+        val nestedDocument = DomainMetaRegistry.get().nestedDocuments[className]
+        if(nestedDocument != null){
+            return nestedDocument.isAbstract
+        }
+
+        val restEntity = RestMetaRegistry.get().entities[className]
+        if(restEntity != null){
+            return restEntity.isAbstract
+        }
         return false
     }
-    val domainDocument = DomainMetaRegistry.get().documents[className]
-    if(domainDocument != null){
-        return domainDocument.isAbstract
-    }
-    val nestedDocument = DomainMetaRegistry.get().nestedDocuments[className]
-    if(nestedDocument != null){
-        return nestedDocument.isAbstract
-    }
-
-    val restEntity = RestMetaRegistry.get().entities[className]
-    if(restEntity != null){
-        return restEntity.isAbstract
-    }
-    return false
 }

@@ -121,7 +121,8 @@ internal object DomainServerGenerator {
         }
     }
 
-    fun generateDomainClasses(metadataProvider: IApplicationMetadataProvider, generatedFiles: MutableMap<String, MutableList<File>>, pluginsLocation:Map<String,File>, projectName: String) {
+    fun generateDomainClasses(metadataProvider: IApplicationMetadataProvider, generatedFiles: MutableMap<String, MutableList<File>>, pluginsLocation:Map<String,File>, projectName: String):DomainMetaRegistry {
+        val totalRegistry = DomainMetaRegistry()
         val domainData = linkedMapOf<String, MutableList<File>>()
         metadataProvider.getExtensions("domain-metadata").forEach {
             domainData.getOrPut(it.getParameters("dest-server-plugin-id").first(), { arrayListOf() })
@@ -131,6 +132,7 @@ internal object DomainServerGenerator {
         domainData.entries.forEach { (key, value) ->
             val registry = DomainMetaRegistry()
             value.forEach { metaFile -> DomainMetadataParser.updateDomainMetaRegistry(registry, metaFile) }
+            value.forEach { metaFile -> DomainMetadataParser.updateDomainMetaRegistry(totalRegistry, metaFile) }
             val classesData = arrayListOf<BaseGenData>()
             registry.enums.values.forEach {
                 val enumClassData = GenEnumData(it.id)
@@ -187,6 +189,7 @@ internal object DomainServerGenerator {
             }
             GenUtils.generateClasses(classesData, pluginsLocation[key]?: throw Xeption.forDeveloper("unable to find basedir of plugin $key"), projectName,  generatedFiles.getOrPut(key, { arrayListOf()}))
         }
+        return totalRegistry
     }
 
     private fun updateCached(it: BaseDocumentDescription,registry:DomainMetaRegistry, cachedEntities: HashSet<String>) {

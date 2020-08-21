@@ -7,6 +7,8 @@ package com.gridnine.jasmine.server.core.model.rest
 
 import com.gridnine.jasmine.server.core.model.common.ParserUtils
 import com.gridnine.jasmine.server.core.model.common.Xeption
+import com.gridnine.jasmine.server.core.model.domain.BaseDocumentDescription
+import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistry
 import com.gridnine.jasmine.server.core.utils.XmlNode
 import java.io.File
 
@@ -80,9 +82,69 @@ object RestMetadataParser {
                 registry.operations[operationId] = RestOperationDescription(id = operationId, groupId = groupId, handler = handlerId, requestEntity = requestEntityId, responseEntity = responseEntityId)
             }
         }
+        val hierarchy = hashMapOf<String,MutableSet<String>>()
+        DomainMetaRegistry.get().documents.values.forEach{updateHierarchy(hierarchy, it)}
+        DomainMetaRegistry.get().nestedDocuments.values.forEach{updateHierarchy(hierarchy, it)}
+        registry.entities.values.forEach {ett -> ett.extendsId?.let { hierarchy.getOrPut(it, { hashSetOf()}) }?.add(ett.id) }
+        val seen = hashSetOf<String>()
+        registry.entities.values.forEach { updateUsedInRestParameter(it, registry, hierarchy, seen)}
+    }
+
+    private fun updateHierarchy(hierarchy: HashMap<String, MutableSet<String>>, dd: BaseDocumentDescription) {
+        dd.extendsId?.let { hierarchy.getOrPut(it, { hashSetOf()}) }?.add(dd.id)
     }
 
 
+    private fun updateUsedInRestParameter(red: RestEntityDescription,registry: RestMetaRegistry,hierarchy: HashMap<String, MutableSet<String>>, seen:HashSet<String>) {
+        if(!seen.add(red.id)){
+            return
+        }
+        red.properties.values.forEach {prop -> prop.className?.let {updateUsedInRestParameter(it, registry, hierarchy, seen) }}
+        red.collections.values.forEach {prop -> prop.elementClassName?.let {updateUsedInRestParameter(it, registry, hierarchy, seen) }}
+    }
+
+    private fun updateUsedInRestParameter(clsName: String, registry: RestMetaRegistry, hierarchy: HashMap<String, MutableSet<String>>, seen: HashSet<String>) {
+        DomainMetaRegistry.get().documents[clsName]?.let { updateUsedInRestParameter(it, hierarchy, seen)}
+        DomainMetaRegistry.get().nestedDocuments[clsName]?.let { updateUsedInRestParameter(it, hierarchy,seen)}
+        registry.entities[clsName]?.let {
+            updateUsedInRestParameter(it, registry, hierarchy, seen)
+        }
+    }
+
+    private fun updateUsedInRestParameter(dd: BaseDocumentDescription, hierarchy: HashMap<String, MutableSet<String>>, seen: HashSet<String>) {
+        if(seen.contains(dd.id)){
+            return
+        }
+        if(dd.parameters[DomainMetaRegistry.EXPOSED_IN_REST_KEY] == "true"){
+            return
+        }
+        val entities = hashSetOf<BaseDocumentDescription>()
+        collectEntities(entities, dd, hierarchy, seen)
+        entities.forEach{dd2 ->
+            dd2.parameters[DomainMetaRegistry.EXPOSED_IN_REST_KEY] = "true"
+            dd2.properties.values.forEach {prop -> prop.className?.let {updateUsedInRestParameter(it,  hierarchy, seen) }}
+            dd2.collections.values.forEach {prop -> prop.elementClassName?.let {updateUsedInRestParameter(it,  hierarchy, seen) }}
+        }
+    }
+
+    private fun updateUsedInRestParameter(clsName: String, hierarchy: HashMap<String, MutableSet<String>>, seen: HashSet<String>) {
+        DomainMetaRegistry.get().documents[clsName]?.let { updateUsedInRestParameter(it, hierarchy, seen) }
+        DomainMetaRegistry.get().nestedDocuments[clsName]?.let { updateUsedInRestParameter(it, hierarchy, seen) }
+
+    }
+
+    private fun collectEntities(entities: HashSet<BaseDocumentDescription>, dd: BaseDocumentDescription, hierarchy: HashMap<String, MutableSet<String>>, seen: HashSet<String>) {
+        if(!seen.add(dd.id)){
+            return
+        }
+        entities.add(dd)
+        if(dd.isAbstract){
+            hierarchy[dd.id]?.forEach {clsName ->
+                DomainMetaRegistry.get().nestedDocuments[clsName]?.let { collectEntities(entities, it, hierarchy, seen) }
+                DomainMetaRegistry.get().documents[clsName]?.let { collectEntities(entities, it, hierarchy, seen) }
+            }
+        }
+    }
 
 
 }

@@ -27,13 +27,9 @@ enum class CustomTypeJS {
 
 abstract class BaseCustomElementDescriptionJS(val id:String)
 
-class CustomPropertyDescriptionJS(id: String, val type:CustomTypeJS,val lateinit:Boolean,val nonNullable:Boolean):BaseCustomElementDescriptionJS(id){
-    var className: String? = null
-}
+class CustomPropertyDescriptionJS(id: String, val type:CustomTypeJS,val lateinit:Boolean,val nonNullable:Boolean, val className:String? = null):BaseCustomElementDescriptionJS(id)
 
-class CustomCollectionDescriptionJS(id: String, val elementType:CustomTypeJS):BaseCustomElementDescriptionJS(id){
-    var elementClassName: String? = null
-}
+class CustomCollectionDescriptionJS(id: String, val elementType:CustomTypeJS,val elementClassName:String? = null):BaseCustomElementDescriptionJS(id)
 
 class CustomMapDescriptionJS(id: String, val keyClassType:CustomTypeJS, val valueClassType:CustomTypeJS):BaseCustomElementDescriptionJS(id){
     var keyClassName: String? = null
