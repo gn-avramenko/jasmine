@@ -7,28 +7,24 @@
 package com.gridnine.jasmine.web.core.ui
 
 import com.gridnine.jasmine.web.core.application.EnvironmentJS
+import com.gridnine.jasmine.web.core.ui.components.*
 
-import kotlin.js.Promise
-
-interface ErrorHandler{
-    fun showError(msg:String, stacktrace:String)
+interface UiLibraryAdapter{
+    fun showWindow(component: WebComponent)
+    fun createBorderLayout(parent: WebComponent?, configure:WebBorderLayoutConfiguration.()->Unit):WebBorderContainer
+    fun createLabel(parent: WebComponent?):WebLabel
+    fun createAccordionContainer(parent: WebComponent?, configure:WebAccordionPanelConfiguration.()->Unit):WebAccordionContainer
+    fun createTabsContainer(parent: WebComponent?, configure:WebTabsContainerConfiguration.()->Unit):WebTabsContainer
+    fun<E:Any> createDataList(parent: WebComponent?, configure:WebDataListConfiguration.()->Unit):WebDataList<E>
     companion object{
-        fun get() = EnvironmentJS.getPublished(ErrorHandler::class)
-    }
-}
-interface UiAdapter{
-    fun showConfirmDialog(question:String, handler:()->Unit)
-    fun showNotification(message:String ,title:String?=null, timeout: Int=3000)
-    fun showLoader()
-    fun hideLoader()
-    fun showWindow(fragment: WebFragment)
-    companion object{
-        fun get() = EnvironmentJS.getPublished(UiAdapter::class)
+        fun get() = EnvironmentJS.getPublished(UiLibraryAdapter::class)
     }
 
 }
 
-interface WebFragment{
+interface WebComponent{
+    fun getParent():WebComponent?
+    fun getChildren():MutableList<WebComponent>
     fun getHtml():String
     fun decorate()
 }

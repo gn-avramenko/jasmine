@@ -295,6 +295,7 @@ object JdbcUtils {
         }
 
         fun<T> executeInTransaction(commit: Boolean = true, closeConnection:Boolean = true, callback: (JdbcContext) -> T) :T {
+            var hasError = false
             val owner = contexts.get() == null
             val ctx =  contexts.get()?: kotlin.run {
                 val connection = Environment.getPublished(DataSource::class).connection
@@ -320,6 +321,7 @@ object JdbcUtils {
                 return result
             } catch (e: Exception) {
                 log.error("error executing transaction ", e)
+                hasError = true
                 if (owner) {
                     ctx.connection.rollback()
                 }
@@ -327,7 +329,7 @@ object JdbcUtils {
             } finally {
                 if (owner) {
                     contexts.remove()
-                    if (closeConnection) {
+                    if (hasError || closeConnection) {
                         ctx.connection.close()
                     }
                 }

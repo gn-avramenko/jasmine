@@ -15,4 +15,9 @@
         <parameter id="dest-server-plugin-id" value="com.gridnine.jasmine.server.standard"/>
         <parameter id="dest-client-plugin-id" value="com.gridnine.jasmine.web.core"/>
     </extension>
+    <extension point-id="web-messages">
+        <parameter id="relative-path" value="source/com/gridnine/jasmine/server/standard/model/standard-web-messages.xml"/>
+        <parameter id="url" value="com/gridnine/jasmine/server/standard/model/standard-web-messages.xml"/>
+        <parameter id="dest-client-plugin-id" value="com.gridnine.jasmine.web.core"/>
+    </extension>
 </plugin>

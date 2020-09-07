@@ -33,7 +33,7 @@ class StorageBasicTest :StorageTestBase(){
         doc.entityRefCollection.addAll(arrayListOf(EntityUtils.toReference(doc),EntityUtils.toReference(doc)) )
         doc.enumProperty = TestEnum.ITEM1
         Storage.get().saveDocument(doc)
-        doc = Storage.get().loadDocument(TestDomainDocument::class, doc.uid)!!
+        doc = Storage.get().loadDocument(TestDomainDocument::class, doc.uid, true)!!
         Assert.assertEquals("test", doc.stringProperty)
         doc.stringProperty = "test2"
         Storage.get().saveDocument(doc, "version2")
@@ -85,7 +85,7 @@ class StorageBasicTest :StorageTestBase(){
         asset.stringProperty = "test"
         asset.dateProperty  = LocalDateTime.now()
         Storage.get().saveAsset(asset)
-        asset = Storage.get().loadAsset(TestDomainAsset::class, asset.uid)!!
+        asset = Storage.get().loadAsset(TestDomainAsset::class, asset.uid, true)!!
         Assert.assertEquals("test", asset.stringProperty)
         asset.stringProperty = "test2"
         Storage.get().saveAsset(asset, "version2")

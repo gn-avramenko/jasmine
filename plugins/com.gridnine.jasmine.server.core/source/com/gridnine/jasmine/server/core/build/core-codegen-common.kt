@@ -216,14 +216,18 @@ internal object GenUtils {
                 else -> throw Xeption.forDeveloper("unsupported type $it")
             }
             val file = File(baseDir, "source-gen/${getPackageName(it.id).replace(".", File.separator)}/${getSimpleClassName(it.id)}.kt")
-            if (!file.parentFile.exists()) {
-                file.parentFile.mkdirs()
-            }
-            val content = sb.toString().toByteArray()
-            if (!file.exists() || !content.contentEquals(file.readBytes())) {
-                file.writeBytes(content)
-            }
+            writeContent(file, sb)
             generatedFiles.add(file)
+        }
+    }
+
+    fun writeContent(file:File, sb: StringBuilder){
+        if (!file.parentFile.exists()) {
+            file.parentFile.mkdirs()
+        }
+        val content = sb.toString().toByteArray()
+        if (!file.exists() || !content.contentEquals(file.readBytes())) {
+            file.writeBytes(content)
         }
     }
 
@@ -259,11 +263,11 @@ internal object GenUtils {
 
     }
 
-    private fun getPackageName(className: String): String {
+    fun getPackageName(className: String): String {
         return className.substring(0, className.lastIndexOf("."))
     }
 
-    private fun getSimpleClassName(className: String): String {
+    fun getSimpleClassName(className: String): String {
         return className.substring(className.lastIndexOf(".") + 1)
     }
 

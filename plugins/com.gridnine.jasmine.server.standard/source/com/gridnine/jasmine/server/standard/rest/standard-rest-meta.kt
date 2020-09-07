@@ -9,6 +9,7 @@ package com.gridnine.jasmine.server.standard.rest
 import com.gridnine.jasmine.server.core.model.custom.CustomMetaRegistry
 import com.gridnine.jasmine.server.core.model.custom.CustomType
 import com.gridnine.jasmine.server.core.model.domain.*
+import com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistry
 import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistry
 import com.gridnine.jasmine.server.core.model.rest.RestPropertyType
 import com.gridnine.jasmine.server.core.rest.RestHandler
@@ -161,6 +162,17 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
         DomainMetaRegistry.get().nestedDocuments.values.forEach {
             if(it.parameters[DomainMetaRegistry.EXPOSED_IN_REST_KEY] == "true"){
                 result.domainDocuments.add(createDocumentDescription(it))
+            }
+        }
+        L10nMetaRegistry.get().webMessages.values.forEach {
+            val bundle = WebMessagesBundleDT()
+            bundle.id = it.id
+            result.webMessages.add(bundle)
+            it.messages.values.forEach { msg ->
+                val message = WebMessageDT()
+                message.id = msg.id
+                message.displayName = msg.getDisplayName()
+                bundle.messages.add(message)
             }
         }
         return result

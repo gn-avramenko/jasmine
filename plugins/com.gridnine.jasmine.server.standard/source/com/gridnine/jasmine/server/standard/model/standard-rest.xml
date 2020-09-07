@@ -163,6 +163,15 @@
         <property id="response" type="STRING"/>
     </entity>
 
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.WebMessageDT">
+        <property id="id" type="STRING"/>
+        <property id="displayName" type="STRING"/>
+    </entity>
+
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.WebMessagesBundleDT">
+        <property id="id" type="STRING"/>
+        <collection id="messages" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.WebMessageDT"/>
+    </entity>
 
     <group id="standard">
         <operation id="meta" handler="com.gridnine.jasmine.server.standard.rest.StandardMetaRestHandler">
@@ -176,6 +185,7 @@
                 <collection id="domainIndexes" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.IndexDescriptionDT"/>
                 <collection id="domainAssets" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.AssetDescriptionDT"/>
                 <collection id="domainDocuments" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.DocumentDescriptionDT"/>
+                <collection id="webMessages" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.WebMessagesBundleDT"/>
                 <collection id="operations" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.RestOperationDescriptionDT"/>
             </response>
         </operation>

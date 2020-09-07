@@ -8,9 +8,8 @@ package com.gridnine.jasmine.web.core.remote
 import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistryJS
 import com.gridnine.jasmine.web.core.application.EnvironmentJS
 import com.gridnine.jasmine.web.core.serialization.JsonSerializerJS
-import com.gridnine.jasmine.web.core.ui.ErrorHandler
-import com.gridnine.jasmine.web.core.ui.UiAdapter
-import com.gridnine.jasmine.web.core.utils.MistUtilsJS
+import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
+import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.window
 import kotlin.js.Date
@@ -49,7 +48,7 @@ class StandardRpcManager(private val baseRestUrl:String) : RpcManager {
             }
 
             val xhr = XMLHttpRequest()
-            val uuid = MistUtilsJS.createUUID()
+            val uuid = MiscUtilsJS.createUUID()
             requests[uuid] = Date()
             window.setTimeout({
                 updateLoaderState()
@@ -72,7 +71,7 @@ class StandardRpcManager(private val baseRestUrl:String) : RpcManager {
 
     override fun postDynamic(path: String, request: String): Promise<dynamic> {
         return Promise<Any?> { resolve, reject ->
-            val uuid = MistUtilsJS.createUUID()
+            val uuid = MiscUtilsJS.createUUID()
             requests[uuid] = Date()
             val xhr = XMLHttpRequest()
             xhr.open("POST", "$baseRestUrl/${path}")
@@ -88,9 +87,7 @@ class StandardRpcManager(private val baseRestUrl:String) : RpcManager {
                     if(obj is String){
                         obj = JSON.parse(obj)
                     }
-                    if(EnvironmentJS.isPublished(ErrorHandler::class)) {
-                        ErrorHandler.get().showError(obj.asDynamic().message, obj.asDynamic().stacktrace)
-                    }
+                    // ErrorHandler.get().showError(obj.asDynamic().message, obj.asDynamic().stacktrace)
                     reject(RpcError())
                 } else {
                     if (obj is String) {
@@ -109,8 +106,8 @@ class StandardRpcManager(private val baseRestUrl:String) : RpcManager {
         if(loaderActive){
             if(requests.isEmpty()){
                 loaderActive = false
-                if(EnvironmentJS.isPublished(UiAdapter::class)) {
-                    UiAdapter.get().hideLoader()
+                if(EnvironmentJS.isPublished(UiLibraryAdapter::class)) {
+                    //hide loader
                 }
             }
             return
@@ -118,13 +115,13 @@ class StandardRpcManager(private val baseRestUrl:String) : RpcManager {
         var delta = 0
         val currentDate = Date()
         requests.forEach {
-            val delta2 = MistUtilsJS.getDiffInMilliseconds(currentDate, it.value)
+            val delta2 = MiscUtilsJS.getDiffInMilliseconds(currentDate, it.value)
             if(delta2 > delta) delta = delta2
         }
         if(delta > 200){
             loaderActive = true
-            if(EnvironmentJS.isPublished(UiAdapter::class)) {
-                UiAdapter.get().showLoader()
+            if(EnvironmentJS.isPublished(UiLibraryAdapter::class)) {
+                //UiAdapter.get().showLoader()
             }
         }
     }

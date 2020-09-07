@@ -7,7 +7,9 @@ package com.gridnine.jasmine.web.core.activator
 
 import com.gridnine.jasmine.server.core.model.custom.*
 import com.gridnine.jasmine.server.core.model.domain.*
+import com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS
 import com.gridnine.jasmine.server.core.model.rest.*
+import com.gridnine.jasmine.web.core.CoreWebMessagesInitializerJS
 import com.gridnine.jasmine.web.core.DomainReflectionUtilsJS
 import com.gridnine.jasmine.web.core.RestReflectionUtilsJS
 import com.gridnine.jasmine.web.core.application.ActivatorJS
@@ -33,6 +35,8 @@ class CoreActivatorJS: ActivatorJS {
         EnvironmentJS.publish(restRegistry)
         val customRegisty = CustomMetaRegistryJS()
         EnvironmentJS.publish(customRegisty)
+        val l10nRegistry = L10nMetaRegistryJS()
+        EnvironmentJS.publish(l10nRegistry)
         val rpcManager = StandardRpcManager(config[StandardRpcManager.BASE_REST_URL_KEY] as String)
         EnvironmentJS.publish(RpcManager::class, rpcManager)
         EnvironmentJS.publish(JsonSerializerJS())
@@ -43,8 +47,24 @@ class CoreActivatorJS: ActivatorJS {
             RpcManager.get().postDynamic("standard_standard_meta", "{}").then<dynamic>{
                 initDomainRegistry(it)
                 initRestRegistry(it)
+                initCustomRegistry(it)
+                initL10nRegistry(it)
+                CoreWebMessagesInitializerJS.initialize()
                 resolve(Unit)
             }
+        }
+    }
+
+    private fun initL10nRegistry(it: dynamic) {
+        val registry = L10nMetaRegistryJS.get()
+        it.webMessages?.forEach{item:dynamic ->
+            val bundleId = item.id as String
+            val messages = registry.messages.getOrPut(bundleId, { linkedMapOf()}) as MutableMap
+            item.messages?.forEach{message ->
+                messages[message.id] = message.displayName
+                Unit
+            }
+            Unit
         }
     }
 
@@ -116,6 +136,7 @@ class CoreActivatorJS: ActivatorJS {
             customRegistry.entities.put(entity.id, entity)
         }
     }
+
 
     private fun initDomainRegistry(it: dynamic) {
         val domainRegistry = DomainMetaRegistryJS.get()

@@ -25,7 +25,7 @@ object ParserUtils {
         return updateLocalizations(description, localizations, id)
     }
 
-    private fun <T : BaseModelElementDescription> updateLocalizations(description: T, localizations: Map<String, Map<Locale, String>>, id:String) {
+    fun <T : BaseModelElementDescription> updateLocalizations(description: T, localizations: Map<String, Map<Locale, String>>, id:String) {
         localizations[id]?.entries?.forEach {
             description.displayNames[it.key] = it.value
         }

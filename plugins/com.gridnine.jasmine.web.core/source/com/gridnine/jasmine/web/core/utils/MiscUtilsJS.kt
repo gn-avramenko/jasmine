@@ -10,7 +10,7 @@ import kotlin.js.Date
 import kotlin.math.round
 import kotlin.random.Random
 
-object MistUtilsJS {
+object MiscUtilsJS {
     private val random = Random(100)
     fun createUUID(): String {
         // http://www.ietf.org/rfc/rfc4122.txt

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages-bundle xmlns="http://xtrip.gridnine.com/jasmine/web-messages" messages-class="com.gridnine.jasmine.web.core.CoreWebMessagesJS" id = "core">
+    <message id="settings"/>
+</messages-bundle>
+
+
+

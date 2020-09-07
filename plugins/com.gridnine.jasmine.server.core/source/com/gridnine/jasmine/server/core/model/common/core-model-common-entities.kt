@@ -6,7 +6,7 @@
 
 package com.gridnine.jasmine.server.core.model.common
 
-import com.gridnine.jasmine.server.core.model.l10n.L10nMetaregistry
+import com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistry
 import java.util.*
 
 
@@ -69,13 +69,16 @@ abstract class BaseIntrospectableObject {
 }
 
 
-class L10nMessage: BaseIntrospectableObject {
+class ServerMessage: BaseIntrospectableObject {
     lateinit var key:String
+
+    lateinit var bundle:String
     val parameters = arrayListOf<Any>()
 
     constructor()
-    constructor(key:String, vararg parameters:Any){
+    constructor(bundle:String, key:String, vararg parameters:Any){
         this.key = key
+        this.bundle = bundle
         parameters.forEach {this.parameters.add(it)}
     }
 
@@ -90,6 +93,10 @@ class L10nMessage: BaseIntrospectableObject {
         if(Companion.key == propertyName){
             return key
         }
+        if(Companion.bundle == propertyName){
+            return bundle
+        }
+
         return super.getValue(propertyName)
     }
 
@@ -98,16 +105,21 @@ class L10nMessage: BaseIntrospectableObject {
             key = value as String
             return
         }
+        if(Companion.bundle == propertyName){
+            bundle = value as String
+            return
+        }
         super.setValue(propertyName, value)
     }
 
     companion object{
         const val key ="key"
+        const val bundle ="bundle"
         const val parameters = "parameters"
     }
 
     override fun toString(): String {
-        val md = L10nMetaregistry.get().messages[this.key]
+        val md = L10nMetaRegistry.get().serverMessages[bundle]?.messages?.get(this.key)
         var result = md?.getDisplayName()?:this.key
         this.parameters.withIndex().forEach{(idx, value) ->
             result = result.replace("{$idx}", value.toString())
@@ -116,17 +128,17 @@ class L10nMessage: BaseIntrospectableObject {
     }
 }
 
-class Xeption(val type:XeptionType, val userMessage:L10nMessage?, val adminMessage:L10nMessage?, val developerMessage:String?,exception:Exception?) : Exception(getExceptionMessage(userMessage, adminMessage, developerMessage), exception){
+class Xeption(val type:XeptionType, val userMessage:ServerMessage?, val adminMessage:ServerMessage?, val developerMessage:String?, exception:Exception?) : Exception(getExceptionMessage(userMessage, adminMessage, developerMessage), exception){
 
     companion object{
-        private fun getExceptionMessage(userMessage: L10nMessage?, adminMessage: L10nMessage?, developerMessage: String?): String? {
+        private fun getExceptionMessage(userMessage: ServerMessage?, adminMessage: ServerMessage?, developerMessage: String?): String? {
             if(developerMessage != null){
                 return developerMessage
             }
             return null
         }
         fun forDeveloper(message:String, exception: Exception?=null) = Xeption(XeptionType.FOR_DEVELOPER, null, null, message, exception)
-        fun forAdmin(message:L10nMessage, exception: Exception?=null) = Xeption(XeptionType.FOR_ADMIN, null, message, null, exception)
+        fun forAdmin(message:ServerMessage, exception: Exception?=null) = Xeption(XeptionType.FOR_ADMIN, null, message, null, exception)
     }
 }
 

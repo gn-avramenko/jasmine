@@ -9,7 +9,7 @@ import com.gridnine.jasmine.server.core.app.Disposable
 import com.gridnine.jasmine.server.core.app.PublishableWrapper
 import com.gridnine.jasmine.server.core.model.common.BaseModelElementDescription
 
-enum class L10nParameterType {
+enum class ServerMessageParameterType {
     STRING,
     LOCAL_DATE,
     LOCAL_DATE_TIME,
@@ -22,23 +22,35 @@ enum class L10nParameterType {
     INT,
     BIG_DECIMAL
 }
-class L10nParameterDescription(id:String, val type:L10nParameterType) : BaseModelElementDescription(id){
+class ServerMessageParameterDescription(id:String, val type:ServerMessageParameterType) : BaseModelElementDescription(id){
     var className:String?=null
     var collection:Boolean = false
 }
 
-class L10nMessageDescription(id:String) : BaseModelElementDescription(id){
-    val params = linkedMapOf<String, L10nParameterDescription>()
+class ServerMessageDescription(id:String) : BaseModelElementDescription(id){
+    val params = linkedMapOf<String, ServerMessageParameterDescription>()
 }
 
-class L10nMetaregistry:Disposable{
-    val messages = linkedMapOf<String, L10nMessageDescription>()
+class ServerMessagesBundleDescription(val id:String, val factoryClassName:String){
+    val messages = linkedMapOf<String, ServerMessageDescription>()
+}
+
+class WebMessagesBundleDescription(val id:String, val messagesClassName:String){
+    val messages = linkedMapOf<String, WebMessageDescription>()
+}
+
+class WebMessageDescription(id:String) : BaseModelElementDescription(id)
+
+class L10nMetaRegistry:Disposable{
+    val serverMessages = linkedMapOf<String, ServerMessagesBundleDescription>()
+
+    val webMessages = linkedMapOf<String, WebMessagesBundleDescription>()
 
     override fun dispose() {
         wrapper.dispose()
     }
     companion object {
-        private val wrapper = PublishableWrapper(L10nMetaregistry::class)
+        private val wrapper = PublishableWrapper(L10nMetaRegistry::class)
         fun get() = wrapper.get()
     }
 }

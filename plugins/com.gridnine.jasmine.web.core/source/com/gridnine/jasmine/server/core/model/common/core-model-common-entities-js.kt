@@ -6,12 +6,12 @@
 
 package com.gridnine.jasmine.server.core.model.common
 
-import com.gridnine.jasmine.web.core.utils.MistUtilsJS
+import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 
 
 abstract class BaseIdentityJS : BaseIntrospectableObjectJS(){
 
-    open var uid:String =MistUtilsJS.createUUID()
+    open var uid:String =MiscUtilsJS.createUUID()
 
     override fun equals(other: Any?): Boolean {
         if(other is BaseIdentityJS){

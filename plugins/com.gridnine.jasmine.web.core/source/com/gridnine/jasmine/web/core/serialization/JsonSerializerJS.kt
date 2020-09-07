@@ -14,7 +14,7 @@ import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistryJS
 import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistryJS
 import com.gridnine.jasmine.web.core.application.EnvironmentJS
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
-import com.gridnine.jasmine.web.core.utils.MistUtilsJS
+import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import kotlin.js.Date
 
 class JsonSerializerJS {
@@ -31,7 +31,7 @@ class JsonSerializerJS {
     private val providersCache = hashMapOf<String, ObjectMetadataProviderJS<*>>()
 
     private val dateFormatter = { date: Date? ->
-        date?.let { "${it.getFullYear()}-${MistUtilsJS.fillWithZeros(it.getMonth() + 1)}-${MistUtilsJS.fillWithZeros(it.getDate())}" }
+        date?.let { "${it.getFullYear()}-${MiscUtilsJS.fillWithZeros(it.getMonth() + 1)}-${MiscUtilsJS.fillWithZeros(it.getDate())}" }
     }
     private val dateParser = lambda@{ value: String? ->
         if (value.isNullOrBlank()) {
@@ -42,7 +42,7 @@ class JsonSerializerJS {
     }
 
     private val dateTimeFormatter = { date: Date? ->
-        date?.let { "${it.getFullYear()}-${MistUtilsJS.fillWithZeros(it.getMonth() + 1)}-${MistUtilsJS.fillWithZeros(it.getDate())}_${MistUtilsJS.fillWithZeros(it.getHours())}-${MistUtilsJS.fillWithZeros(it.getMinutes())}-${MistUtilsJS.fillWithZeros(it.getSeconds())}-${MistUtilsJS.fillWithZeros(it.getMilliseconds(), 3)}" }
+        date?.let { "${it.getFullYear()}-${MiscUtilsJS.fillWithZeros(it.getMonth() + 1)}-${MiscUtilsJS.fillWithZeros(it.getDate())}_${MiscUtilsJS.fillWithZeros(it.getHours())}-${MiscUtilsJS.fillWithZeros(it.getMinutes())}-${MiscUtilsJS.fillWithZeros(it.getSeconds())}-${MiscUtilsJS.fillWithZeros(it.getMilliseconds(), 3)}" }
     }
 
     private val dateTimeParser = lambda@{ value: String? ->

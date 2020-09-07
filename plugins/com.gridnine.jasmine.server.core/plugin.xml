@@ -28,6 +28,16 @@
         <parameter-def id="relative-path"/>
         <parameter-def id="url"/>
     </extension-point>
+    <extension-point id="server-messages">
+        <parameter-def id="relative-path"/>
+        <parameter-def id="url"/>
+        <parameter-def id="dest-server-plugin-id"/>
+    </extension-point>
+    <extension-point id="web-messages">
+        <parameter-def id="relative-path"/>
+        <parameter-def id="url"/>
+        <parameter-def id="dest-client-plugin-id"/>
+    </extension-point>
     <extension-point id="activator">
         <parameter-def id="class"/>
     </extension-point>
@@ -35,7 +45,13 @@
         <parameter id="relative-path" value="source/com/gridnine/jasmine/server/core/model/custom/core-custom.xml"/>
         <parameter id="url" value="com/gridnine/jasmine/server/core/model/custom/core-custom.xml"/>
     </extension>
+    <extension point-id="server-messages">
+        <parameter id="relative-path" value="source/com/gridnine/jasmine/server/core/model/l10n/core-server-messages.xml"/>
+        <parameter id="url" value="com/gridnine/jasmine/server/core/model/l10n/core-server-messages.xml"/>
+        <parameter id="dest-server-plugin-id" value="com.gridnine.jasmine.server.core"/>
+    </extension>
     <extension point-id="activator">
         <parameter id="class" value="com.gridnine.jasmine.server.core.activator.CoreActivator"/>
     </extension>
+
 </plugin>

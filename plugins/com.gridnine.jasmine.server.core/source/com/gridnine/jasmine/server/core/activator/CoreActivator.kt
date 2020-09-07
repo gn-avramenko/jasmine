@@ -16,6 +16,8 @@ import com.gridnine.jasmine.server.core.model.custom.CustomMetaRegistry
 import com.gridnine.jasmine.server.core.model.custom.CustomMetadataParser
 import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistry
 import com.gridnine.jasmine.server.core.model.domain.DomainMetadataParser
+import com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistry
+import com.gridnine.jasmine.server.core.model.l10n.L10nMetadataParser
 import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistry
 import com.gridnine.jasmine.server.core.model.rest.RestMetadataParser
 import com.gridnine.jasmine.server.core.reflection.ReflectionFactory
@@ -43,12 +45,32 @@ class CoreActivator:IPluginActivator{
         val customRegistry = CustomMetaRegistry()
         registerCustomMetadata(customRegistry)
         Environment.publish(customRegistry)
+        val l10nMetaRegistry = L10nMetaRegistry()
+        registerL10nMetadata(l10nMetaRegistry)
+        Environment.publish(l10nMetaRegistry)
 
         Environment.publish(JsonSerializer())
 
         Environment.publish(StorageRegistry())
         publishCache()
         Environment.publish(WebServerConfig())
+    }
+
+    private fun registerL10nMetadata(l10nMetaregistry: L10nMetaRegistry) {
+        val extensions = IApplicationMetadataProvider.get()
+                .getExtensions("server-messages")
+        for (ext in extensions) {
+            for (location in ext.getParameters("url")) {
+                L10nMetadataParser.updateServerMessages(l10nMetaregistry, location, ext.plugin.classLoader)
+            }
+        }
+        val extensions2 = IApplicationMetadataProvider.get()
+                .getExtensions("web-messages")
+        for (ext in extensions2) {
+            for (location in ext.getParameters("url")) {
+                L10nMetadataParser.updateWebMessages(l10nMetaregistry, location, ext.plugin.classLoader)
+            }
+        }
     }
 
     private fun publishCache() {

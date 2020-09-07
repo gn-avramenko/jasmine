@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema targetNamespace="http://xtrip.gridnine.com/jasmine/l10n"
+<schema targetNamespace="http://xtrip.gridnine.com/jasmine/server-messages"
         elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
-        xmlns:tns="http://xtrip.gridnine.com/jasmine/l10n">
-    <element name="l10n">
+        xmlns:tns="http://xtrip.gridnine.com/jasmine/server-messages">
+    <element name="messages-bundle">
         <complexType>
             <sequence maxOccurs="unbounded" minOccurs="0">
                 <element name="message">
@@ -27,6 +27,8 @@
                     </complexType>
                 </element>
             </sequence>
+            <attribute name="factory-class" type="string" use="required"/>
+            <attribute name="id" type="string" use="required"/>
         </complexType>
     </element>
     <complexType name="baseMetaElement">

@@ -11,7 +11,7 @@ import com.gridnine.jasmine.server.core.lock.LockUtils
 import com.gridnine.jasmine.server.core.model.common.BaseIdentity
 import com.gridnine.jasmine.server.core.model.common.Xeption
 import com.gridnine.jasmine.server.core.model.domain.*
-import com.gridnine.jasmine.server.core.model.l10n.CoreL10nMessagesFactory
+import com.gridnine.jasmine.server.core.model.l10n.CoreServerMessagesFactory
 import com.gridnine.jasmine.server.core.serialization.JsonSerializer
 import com.gridnine.jasmine.server.core.storage.*
 import com.gridnine.jasmine.server.core.storage.search.*
@@ -108,7 +108,7 @@ class StorageImpl:Storage{
             return when (lst.size){
                 0 ->null
                 1 ->lst[0].document
-                else -> throw Xeption.forAdmin(CoreL10nMessagesFactory.FOUND_SEVERAL_RECORDS(index.qualifiedName, property.name, propertyValue?.toString()))
+                else -> throw Xeption.forAdmin(CoreServerMessagesFactory.FOUND_SEVERAL_RECORDS(index.qualifiedName, property.name, propertyValue?.toString()))
             }
         }
         return advices[idx].onFindUniqueDocumentReference(index, property, propertyValue) { index2, property2, propertyValue2 ->

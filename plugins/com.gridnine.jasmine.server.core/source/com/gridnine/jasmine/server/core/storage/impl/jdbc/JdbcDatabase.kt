@@ -41,26 +41,34 @@ class JdbcDatabase : Database {
                 fillObject(JdbcDocumentData(), ctx2, rs, descr, emptySet(), emptySet())
             }
             )
-            result?.let { docData ->
-                DocumentReadData( {
-                    docData.data.inputStreamCallback!!.invoke()
-                },  {
-                    ctx.closeCallbacks.forEach {
-                        it.invoke(ctx.connection)
-                    }
-                    if (owner) {
-                        if (ctx.forceCommit) {
-                            ctx.connection.commit()
+            if(result == null){
+                ctx.closeCallbacks.forEach {
+                    it.invoke(ctx.connection)
+                }
+                if (owner) {
+                    ctx.connection.close()
+                }
+                null
+            } else {
+                    DocumentReadData({
+                        result.data.inputStreamCallback!!.invoke()
+                    }, {
+                        ctx.closeCallbacks.forEach {
+                            it.invoke(ctx.connection)
                         }
-                        ctx.connection.close()
-                    }
-                })
+                        if (owner) {
+                            if (ctx.forceCommit) {
+                                ctx.connection.commit()
+                            }
+                            ctx.connection.close()
+                        }
+                    })
             }
         }
     }
 
     override fun <D : BaseDocument> loadDocumentWrapper(cls: KClass<D>, uid: String): DocumentWrapper<D>? {
-        return JdbcUtils.executeInTransaction(commit = false, closeConnection = false) { ctx ->
+        return JdbcUtils.executeInTransaction(commit = false, closeConnection = true) { ctx ->
             val descr = JdbcUtils.getTableDescription(cls)
             val query = "select ${getColumnNames(descr, emptySet(), emptySet())} " +
                     "from ${descr.name} where ${BaseIdentity.uid} = ?"

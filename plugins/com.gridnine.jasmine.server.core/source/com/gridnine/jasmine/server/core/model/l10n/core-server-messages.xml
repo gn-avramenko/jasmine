@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<l10n xmlns="http://xtrip.gridnine.com/jasmine/l10n" >
+<messages-bundle xmlns="http://xtrip.gridnine.com/jasmine/server-messages" id ="core" factory-class="com.gridnine.jasmine.server.core.model.l10n.CoreServerMessagesFactory">
     <message id="FOUND_SEVERAL_RECORDS">
         <parameter id="objectType" type="STRING"/>
         <parameter id="propertyName" type="STRING"/>
         <parameter id="propertyValue" type="STRING"/>
     </message>
-</l10n>
+</messages-bundle>
