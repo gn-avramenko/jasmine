@@ -5,3 +5,6 @@
     text-align: center;
 }
 
+.icon_core_settings{
+    background:url('images/settings.png') no-repeat center center;
+}

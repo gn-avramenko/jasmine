@@ -39,31 +39,40 @@ class EasyUiWebAccordionContainer(private val parent:WebComponent?, configure: W
         }
     }
 
-    override fun select(idx: Int) {
-        selected = idx
-        if(initialized) {
-            jq!!.accordion("select", idx)
-        }
-    }
-
-    private fun addPanelInternal(panel: WebAccordionPanel) {
-        jq!!.accordion("add", object{
-            val title = panel.title
-            val content = panel.content.getHtml()
-        })
-        panel.content.decorate()
-    }
-
-    override fun removePanel(idx: Int) {
-        panels.removeAt(idx)
-        if(initialized){
-            jq!!.accordion("remove", idx)
+    override fun select(id: String) {
+        val idx = panels.indexOfFirst { it.id == id}
+        if(idx !=-1) {
+            selected = idx
+            if (initialized) {
+                jq!!.accordion("select", idx)
+            }
         }
     }
 
     override fun getPanels(): List<WebAccordionPanel> {
         return panels
     }
+
+    private fun addPanelInternal(panel: WebAccordionPanel) {
+        jq!!.accordion("add", object{
+            val id = panel.id
+            val title = panel.title
+            val content = panel.content.getHtml()
+        })
+        panel.content.decorate()
+    }
+
+    override fun removePanel(id: String) {
+        val panel = panels.find { it.id == id}
+        if(panel != null){
+            val idx = panels.indexOf(panel)
+            panels.removeAt(idx)
+            if(initialized){
+                jq!!.accordion("remove", idx)
+            }
+        }
+    }
+
 
     override fun getParent(): WebComponent? {
         return parent

@@ -6,12 +6,12 @@
 package com.gridnine.jasmine.web.core.ui.components
 
 import com.gridnine.jasmine.web.core.ui.WebComponent
+import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 
 interface WebTabsContainer : WebComponent{
     fun addTab(panel:WebTabPanel)
-    fun removeTab(idx:Int)
-    fun select(idx:Int)
-    fun getPanels():List<WebTabPanel>
+    fun removeTab(id:String)
+    fun select(id:String)
     companion object{
         fun tab(init: WebTabPanel.()->Unit):WebTabPanel{
             val result = WebTabPanel()
@@ -29,6 +29,7 @@ class WebTabsContainerConfiguration{
 }
 
 class WebTabPanel {
+    var id = MiscUtilsJS.createUUID()
     var title:String? = null
     lateinit var content:WebComponent
 }

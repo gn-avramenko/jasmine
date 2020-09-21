@@ -6,11 +6,12 @@
 package com.gridnine.jasmine.web.core.ui.components
 
 import com.gridnine.jasmine.web.core.ui.WebComponent
+import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 
 interface WebAccordionContainer : WebComponent{
     fun addPanel(panel:WebAccordionPanel)
-    fun removePanel(idx:Int)
-    fun select(idx:Int)
+    fun removePanel(id:String)
+    fun select(id:String)
     fun getPanels():List<WebAccordionPanel>
     companion object{
         fun panel(init: WebAccordionPanel.()->Unit):WebAccordionPanel{
@@ -27,7 +28,8 @@ class WebAccordionPanelConfiguration{
     var height:String? = null
 }
 
-class WebAccordionPanel() {
+class WebAccordionPanel {
+    var id = MiscUtilsJS.createUUID()
     var title:String? = null
     lateinit var content:WebComponent
 }

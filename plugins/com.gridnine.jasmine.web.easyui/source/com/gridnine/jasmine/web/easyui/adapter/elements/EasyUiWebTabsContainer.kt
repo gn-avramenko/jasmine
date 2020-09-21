@@ -9,6 +9,7 @@ import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.components.*
 import com.gridnine.jasmine.web.core.utils.HtmlUtilsJS
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
+import com.gridnine.jasmine.web.easyui.adapter.EasyUiUtils
 import com.gridnine.jasmine.web.easyui.adapter.jQuery
 import kotlin.browser.window
 
@@ -40,26 +41,29 @@ class EasyUiWebTabsContainer(private val parent:WebComponent?, configure: WebTab
         }
     }
 
-    override fun removeTab(idx: Int) {
-        tabs.removeAt(idx)
-        if(initialized){
-            jq!!.tabs("close", idx)
+    override fun removeTab(id: String) {
+        val idx = tabs.indexOfFirst { it.id == id }
+        if(idx != -1) {
+            tabs.removeAt(idx)
+            if (initialized) {
+                jq!!.tabs("close", idx)
+            }
         }
     }
 
-    override fun select(idx: Int) {
-        selected = idx
-        if(initialized) {
-            jq!!.tabs("select", idx)
+    override fun select(id: String) {
+        val idx = tabs.indexOfFirst { it.id == id }
+        if(idx != -1) {
+            selected = idx
+            if (initialized) {
+                jq!!.tabs("select", idx)
+            }
         }
-    }
-
-    override fun getPanels(): List<WebTabPanel> {
-        return tabs
     }
 
     private fun addTabInternal(panel: WebTabPanel) {
         jq!!.tabs("add", object{
+            val id = panel.id
             val title = panel.title
             val closable = true
             val content = panel.content.getHtml()
@@ -85,6 +89,10 @@ class EasyUiWebTabsContainer(private val parent:WebComponent?, configure: WebTab
         jq = jQuery("#tabs${uid}")
         jq.tabs(object{
             val fit = this@EasyUiWebTabsContainer.fit
+            val toolPosition = "left"
+            val onClose = {_:String, idx:Int ->
+                tabs.removeAt(idx)
+            }
         })
         tabs.forEach {
             addTabInternal(it)
@@ -115,6 +123,7 @@ class EasyUiWebTabsContainer(private val parent:WebComponent?, configure: WebTab
                     toolElm.menubutton(object{
                         val plain = true
                         val text = tool.title
+                        val iconCls = EasyUiUtils.getIconClass(tool.icon)
                         val menu = "#toolsMenu${index}${uid}"
                     })
                     jQuery("#toolsMenu${index}${uid}").menu(object {
