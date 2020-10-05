@@ -14,6 +14,7 @@ import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistryJS
 import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistryJS
 import com.gridnine.jasmine.web.core.application.EnvironmentJS
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
+import com.gridnine.jasmine.web.core.ui.debugger
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import kotlin.js.Date
 
@@ -49,7 +50,7 @@ class JsonSerializerJS {
         if (value.isNullOrBlank()) {
             return@lambda null
         }
-        val parts = value.split("_")
+        val parts = value.split("T")
         val comps1 = parts[0].split("-")
         val comps2 = parts[1].split("-")
         Date(year = comps1[0].toInt(), month = comps1[1].toInt() - 1, day = comps1[2].toInt(), hour = comps2[0].toInt(), minute = comps2[1].toInt(), second = comps2[2].toInt(), millisecond = comps2[3].toInt())

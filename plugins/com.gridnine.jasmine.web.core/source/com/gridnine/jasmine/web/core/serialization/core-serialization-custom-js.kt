@@ -25,7 +25,7 @@ internal open class CustomEntityMetadataProviderJS(description: CustomEntityDesc
         fillProperties(description)
         fillCollections(description)
         isAbstract = description.isAbstract
-        hasUid= getAllProperties().find{ it.id == BaseIdentityJS.uid} != null
+        hasUid= description.id != ObjectReferenceJS.qualifiedClassName && getAllProperties().find{ it.id == BaseIdentityJS.uid} != null
     }
 
     private fun fillCollections(desc: CustomEntityDescriptionJS) {

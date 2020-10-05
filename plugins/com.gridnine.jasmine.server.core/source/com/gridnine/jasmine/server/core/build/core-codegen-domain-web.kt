@@ -33,7 +33,7 @@ object DomainWebGenerator {
 
     private fun <T : BaseIndexDescription> toGenData(descr: T): GenClassData {
         val extendsId = if (descr is IndexDescription) "${BaseIndex::class.qualifiedName}JS" else "${BaseAsset::class.qualifiedName}JS"
-        val result = GenClassData(descr.id + "JS", extendsId, abstract = false, noEnumProperties = false, open = false)
+        val result = GenClassData(descr.id + "JS", extendsId, abstract = false, noEnumProperties = true, open = false)
         descr.properties.values.forEach { prop ->
             result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.type, prop.className)))
         }

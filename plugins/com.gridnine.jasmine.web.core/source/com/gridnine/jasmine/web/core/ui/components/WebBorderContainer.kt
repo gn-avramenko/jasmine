@@ -33,6 +33,7 @@ class WebBorderLayoutRegion() {
     var showBorder:Boolean = false
     var showSplitLine:Boolean = false
     var collapsible:Boolean = false
+    var collapsed:Boolean =false
     var width:Int? = null
     var height:Int? = null
     lateinit var content:WebComponent

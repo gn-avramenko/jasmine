@@ -173,6 +173,55 @@
         <collection id="messages" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.WebMessageDT"/>
     </entity>
 
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.BaseListFilterValueDT" abstract="true"/>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.ListFilterStringValuesDT" extends="com.gridnine.jasmine.server.standard.model.rest.BaseListFilterValueDT">
+        <collection id="values" element-type="STRING"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.ListFilterEntityValuesDT" extends="com.gridnine.jasmine.server.standard.model.rest.BaseListFilterValueDT">
+        <collection id="values" element-type="ENTITY_REFERENCE" element-class-name="com.gridnine.jasmine.server.core.model.common.BaseIdentity"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.ListFilterDateIntervalValueDT" extends="com.gridnine.jasmine.server.standard.model.rest.BaseListFilterValueDT">
+        <property id="startDate" type="LOCAL_DATE"/>
+        <property id="endDate" type="LOCAL_DATE"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.ListFilterDateTimeIntervalValueDT" extends="com.gridnine.jasmine.server.standard.model.rest.BaseListFilterValueDT">
+        <property id="startDate" type="LOCAL_DATE_TIME"/>
+        <property id="endDate" type="LOCAL_DATE_TIME"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.ListFilterEnumValuesDT" extends="com.gridnine.jasmine.server.standard.model.rest.BaseListFilterValueDT">
+        <collection id="values" element-type="STRING"/>
+        <property id="enumClassName" type="STRING"/>
+    </entity>
+
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.ListFilterFloatIntervalValueDT" extends="com.gridnine.jasmine.server.standard.model.rest.BaseListFilterValueDT">
+        <property id="fromValue" type="BIG_DECIMAL"/>
+        <property id="toValue" type="BIG_DECIMAL"/>
+    </entity>
+
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.ListFilterIntIntervalValueDT" extends="com.gridnine.jasmine.server.standard.model.rest.BaseListFilterValueDT">
+        <property id="fromValue" type="INT"/>
+        <property id="toValue" type="INT"/>
+    </entity>
+
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.ListFilterBooleanValuesDT" extends="com.gridnine.jasmine.server.standard.model.rest.BaseListFilterValueDT">
+        <property id="value" type="BOOLEAN"/>
+    </entity>
+
+    <entity id="com.gridnine.jasmine.server.standard.model.rest.ListFilterDT">
+        <property id="fieldId" type="STRING"/>
+        <property id="value" type="ENTITY" class-name="com.gridnine.jasmine.server.standard.model.rest.BaseListFilterValueDT"/>
+    </entity>
+
+    <entity id="com.gridnine.jasmine.server.standard.model.ui.UiEnumItemDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="displayName" type="STRING"/>
+    </entity>
+
+    <entity id="com.gridnine.jasmine.server.standard.model.ui.UiEnumDescriptionDT">
+        <property id="id" type="STRING"/>
+        <collection id="items" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.ui.UiEnumItemDescriptionDT"/>
+    </entity>
+
     <group id="standard">
         <operation id="meta" handler="com.gridnine.jasmine.server.standard.rest.StandardMetaRestHandler">
             <request id="com.gridnine.jasmine.server.standard.model.rest.GetMetadataRequest"/>
@@ -185,6 +234,7 @@
                 <collection id="domainIndexes" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.IndexDescriptionDT"/>
                 <collection id="domainAssets" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.AssetDescriptionDT"/>
                 <collection id="domainDocuments" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.DocumentDescriptionDT"/>
+                <collection id="uiEnums" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.ui.UiEnumDescriptionDT"/>
                 <collection id="webMessages" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.WebMessagesBundleDT"/>
                 <collection id="operations" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.RestOperationDescriptionDT"/>
             </response>
@@ -193,6 +243,23 @@
             <request id="com.gridnine.jasmine.server.standard.model.rest.GetWorkspaceRequest"/>
             <response id="com.gridnine.jasmine.server.standard.model.rest.GetWorkspaceResponse">
                 <property id="workspace" type="ENTITY" class-name="com.gridnine.jasmine.server.standard.model.domain.Workspace" lateinit="true"/>
+            </response>
+        </operation>
+        <operation id="getList" handler="com.gridnine.jasmine.server.standard.rest.StandardListRestHandler">
+            <request id="com.gridnine.jasmine.server.standard.model.rest.GetListRequest">
+                <property id="listId" type="STRING" lateinit="true"/>
+                <collection id="columns" element-type="STRING"/>
+                <collection id="criterions" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.domain.BaseWorkspaceCriterion"/>
+                <collection id="filters" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.ListFilterDT"/>
+                <property id="sortColumn" type="STRING"/>
+                <property id="desc" type="BOOLEAN"/>
+                <property id="rows" type="INT"/>
+                <property id="page" type="INT"/>
+                <property id="freeText" type="STRING"/>
+            </request>
+            <response id="com.gridnine.jasmine.server.standard.model.rest.GetListResponse">
+                <collection id="items" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.core.model.common.BaseIdentity"/>
+                <property id="totalCount" type="LONG"/>
             </response>
         </operation>
     </group>

@@ -479,8 +479,18 @@ object JdbcUtils {
 
     }
 
-    fun prepareOrderPart(orders: Map<String, SortOrder>): String {
-        return if(orders.entries.isEmpty()) "" else " ORDER BY ${orders.entries.joinToString(", ") { "${it.key} ${it.value.name}" }}"
+    internal fun prepareOrderPart(orders: Map<String, SortOrder>, descr: DatabaseTableDescription): String {
+        return if(orders.entries.isEmpty()) "" else " ORDER BY ${orders.entries.joinToString(", ") { "${getOrderColumn(it.key, descr)} ${it.value.name}" }}"
+    }
+
+    private fun getOrderColumn(key: String, descr: DatabaseTableDescription): String {
+        val prop = descr.properties[key]
+        if(prop != null){
+            if(prop.type == JdbcPropertyType.ENTITY_REFERENCE){
+                return "${key}Caption"
+            }
+        }
+        return key
     }
 
     fun prepareLimitPart(query: SearchQuery): String {

@@ -24,6 +24,12 @@
         <parameter-def id="dest-server-plugin-id"/>
         <parameter-def id="dest-client-plugin-id"/>
     </extension-point>
+    <extension-point id="ui-metadata">
+        <parameter-def id="relative-path"/>
+        <parameter-def id="url"/>
+        <parameter-def id="dest-server-plugin-id"/>
+        <parameter-def id="dest-client-plugin-id"/>
+    </extension-point>
     <extension-point id="custom-metadata">
         <parameter-def id="relative-path"/>
         <parameter-def id="url"/>

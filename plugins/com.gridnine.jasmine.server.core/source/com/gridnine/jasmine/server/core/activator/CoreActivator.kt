@@ -20,6 +20,8 @@ import com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistry
 import com.gridnine.jasmine.server.core.model.l10n.L10nMetadataParser
 import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistry
 import com.gridnine.jasmine.server.core.model.rest.RestMetadataParser
+import com.gridnine.jasmine.server.core.model.ui.UiMetaRegistry
+import com.gridnine.jasmine.server.core.model.ui.UiMetadataParser
 import com.gridnine.jasmine.server.core.reflection.ReflectionFactory
 import com.gridnine.jasmine.server.core.serialization.JsonSerializer
 import com.gridnine.jasmine.server.core.storage.StorageRegistry
@@ -45,6 +47,9 @@ class CoreActivator:IPluginActivator{
         val customRegistry = CustomMetaRegistry()
         registerCustomMetadata(customRegistry)
         Environment.publish(customRegistry)
+        val uiRegistry = UiMetaRegistry()
+        registerUiMetadata(uiRegistry)
+        Environment.publish(uiRegistry)
         val l10nMetaRegistry = L10nMetaRegistry()
         registerL10nMetadata(l10nMetaRegistry)
         Environment.publish(l10nMetaRegistry)
@@ -93,6 +98,16 @@ class CoreActivator:IPluginActivator{
 
     }
 
+    private fun registerUiMetadata(uiRegistry: UiMetaRegistry) {
+        val extensions = IApplicationMetadataProvider.get()
+                .getExtensions("ui-metadata")
+        for (ext in extensions) {
+            for (location in ext.getParameters("url")) {
+                UiMetadataParser.updateUiMetaRegistry(uiRegistry, location, ext.plugin.classLoader)
+            }
+        }
+
+    }
 
     private fun registerDomainMetadata(result: DomainMetaRegistry) {
         val extensions = IApplicationMetadataProvider.get()

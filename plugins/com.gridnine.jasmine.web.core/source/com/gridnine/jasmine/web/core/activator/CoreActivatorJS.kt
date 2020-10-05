@@ -9,9 +9,13 @@ import com.gridnine.jasmine.server.core.model.custom.*
 import com.gridnine.jasmine.server.core.model.domain.*
 import com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS
 import com.gridnine.jasmine.server.core.model.rest.*
+import com.gridnine.jasmine.server.core.model.ui.UiEnumDescriptionJS
+import com.gridnine.jasmine.server.core.model.ui.UiEnumItemDescriptionJS
+import com.gridnine.jasmine.server.core.model.ui.UiMetaRegistryJS
 import com.gridnine.jasmine.web.core.CoreWebMessagesInitializerJS
 import com.gridnine.jasmine.web.core.DomainReflectionUtilsJS
 import com.gridnine.jasmine.web.core.RestReflectionUtilsJS
+import com.gridnine.jasmine.web.core.UiReflectionUtilsJS
 import com.gridnine.jasmine.web.core.application.ActivatorJS
 import com.gridnine.jasmine.web.core.application.EnvironmentJS
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
@@ -29,12 +33,15 @@ class CoreActivatorJS: ActivatorJS {
         ReflectionFactoryJS.get().registerQualifiedName(ObjectReferenceJS::class, ObjectReferenceJS.qualifiedClassName)
         DomainReflectionUtilsJS.registerWebDomainClasses()
         RestReflectionUtilsJS.registerWebRestClasses()
+        UiReflectionUtilsJS.registerWebUiClasses()
         val domainRegisty = DomainMetaRegistryJS()
         EnvironmentJS.publish(domainRegisty)
         val restRegistry = RestMetaRegistryJS()
         EnvironmentJS.publish(restRegistry)
         val customRegisty = CustomMetaRegistryJS()
         EnvironmentJS.publish(customRegisty)
+        val uiRegisty = UiMetaRegistryJS()
+        EnvironmentJS.publish(uiRegisty)
         val l10nRegistry = L10nMetaRegistryJS()
         EnvironmentJS.publish(l10nRegistry)
         val rpcManager = StandardRpcManager(config[StandardRpcManager.BASE_REST_URL_KEY] as String)
@@ -48,10 +55,22 @@ class CoreActivatorJS: ActivatorJS {
                 initDomainRegistry(it)
                 initRestRegistry(it)
                 initCustomRegistry(it)
+                initUiRegistry(it)
                 initL10nRegistry(it)
                 CoreWebMessagesInitializerJS.initialize()
                 resolve(Unit)
             }
+        }
+    }
+
+    private fun initUiRegistry(it: dynamic) {
+        val uiRegistry = UiMetaRegistryJS.get()
+        it.uiEnums?.forEach{ itJs ->
+            val enum = UiEnumDescriptionJS(itJs.id)
+            itJs.items.forEach{ item:dynamic ->
+                enum.items.put(item.id, UiEnumItemDescriptionJS(item.id, item.displayName))
+            }
+            uiRegistry.enums.put(enum.id, enum)
         }
     }
 

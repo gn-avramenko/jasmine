@@ -21,6 +21,10 @@ object HtmlUtilsJS {
         val children = arrayListOf<Element>()
         val attributes = hashMapOf<String, String>()
 
+        fun text(content:String){
+            children.add(TextElement(content))
+        }
+
         protected fun <T : Element> initTag(tag: T, init: T.() -> Unit): T {
             tag.init()
             children.add(tag)
@@ -107,9 +111,7 @@ object HtmlUtilsJS {
             result.dataOptions = data_options
         }
 
-        fun text(content:String){
-            children.add(TextElement(content))
-        }
+
 
         var `class`: String?
             get() = attributes["class"]
@@ -166,11 +168,6 @@ object HtmlUtilsJS {
             a.id = id
         }
 
-
-
-        fun text(content:String){
-            children.add(TextElement(content))
-        }
 
         var style: String?
             get() = attributes["style"]
@@ -374,11 +371,26 @@ object HtmlUtilsJS {
         return html
     }
 
-    fun div(init: Div.() -> Unit): Div {
+    fun div(`class`: String? = null, id: String? = null, region: String? = null, border: Boolean? = null, style: String? = null, data_options: String? = null, init: Div.() -> Unit):Div {
         val div = Div()
+        div.`class` = `class`
+        div.id = id
+        div.region = region
+        div.border = border
+        div.style = style
+        div.dataOptions = data_options
         div.init()
         return div
     }
 
+    fun table(`class`: String? = null, id: String? = null, style: String? = null, data_options: String? = null, init: TABLE.() -> Unit):TABLE {
+        val result = TABLE()
+        result.`class` = `class`
+        result.id = id
+        result.style = style
+        result.dataOptions = data_options
+        result.init()
+        return  result;
+    }
 
 }

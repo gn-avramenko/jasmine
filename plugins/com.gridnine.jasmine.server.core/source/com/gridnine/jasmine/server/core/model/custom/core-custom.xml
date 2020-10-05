@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <custom-entities xmlns="http://xtrip.gridnine.com/jasmine/custom" >
-    <entity id="com.gridnine.jasmine.server.core.model.domain.ObjectReference">
+    <entity id="com.gridnine.jasmine.server.core.model.common.BaseIdentity" abstract="true">
         <property id="uid" type="STRING"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.server.core.model.domain.ObjectReference" extends="com.gridnine.jasmine.server.core.model.common.BaseIdentity">
         <property id="type" type="CLASS"/>
         <property id="caption" type="STRING"/>
     </entity>

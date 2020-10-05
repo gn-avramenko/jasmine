@@ -12,6 +12,7 @@ interface WebTabsContainer : WebComponent{
     fun addTab(panel:WebTabPanel)
     fun removeTab(id:String)
     fun select(id:String)
+    fun getTabs():List<WebTabPanel>
     companion object{
         fun tab(init: WebTabPanel.()->Unit):WebTabPanel{
             val result = WebTabPanel()

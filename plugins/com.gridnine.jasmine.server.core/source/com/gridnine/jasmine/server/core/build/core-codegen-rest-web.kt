@@ -91,7 +91,9 @@ object RestWebGenerator {
             registry.entities.values.forEach {
                 val data = toGenData(it)
                 classesData.add(data)
-                classes.add(it.id + "JS")
+                if(!it.isAbstract) {
+                    classes.add(it.id + "JS")
+                }
             }
             GenUtils.generateClasses(classesData, pluginsLocation[key]?: throw Xeption.forDeveloper("unable to find basedir of plugin $key"), projectName, generatedFiles.getOrPut(key, { arrayListOf() }))
             val sb = StringBuilder()

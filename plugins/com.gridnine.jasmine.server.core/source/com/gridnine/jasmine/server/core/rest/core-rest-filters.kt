@@ -47,7 +47,17 @@ class KotlinFileDevFilter : Filter {
         val httpRequest = request as HttpServletRequest
         val path = httpRequest.requestURI
         if(path != null && path.isNotBlank() && path.endsWith(".kt")){
-            for(file in File("plugins").listFiles()?: emptyArray()){
+            val pluginsFolders = arrayListOf<File>()
+            pluginsFolders.addAll(collectFiles(File(".")))
+            val submodulesFile = File("submodules")
+            if(submodulesFile.exists()){
+                submodulesFile.listFiles()!!.forEach {sf ->
+                    if(sf.exists()){
+                        pluginsFolders.addAll(collectFiles(sf))
+                    }
+                }
+            }
+            pluginsFolders.forEach{file ->
                 if(file.isDirectory){
                     val ktFile = File(file, path)
                     if(ktFile.exists()){
@@ -64,6 +74,14 @@ class KotlinFileDevFilter : Filter {
             }
         }
         chain.doFilter(request,response)
+    }
+
+    private fun collectFiles(file: File): List<File> {
+        val pluginsFolder = File(file, "plugins")
+        if(pluginsFolder.exists()){
+        }
+        return if(pluginsFolder.exists()) pluginsFolder.listFiles()!!.asList() else emptyList()
+
     }
 
     override fun destroy() {

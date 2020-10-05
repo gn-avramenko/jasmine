@@ -10,6 +10,7 @@ import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.components.WebBorderContainer
 import com.gridnine.jasmine.web.core.ui.components.WebBorderLayoutConfiguration
 import com.gridnine.jasmine.web.core.ui.components.WebBorderLayoutRegion
+import com.gridnine.jasmine.web.core.ui.debugger
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import com.gridnine.jasmine.web.easyui.adapter.jQuery
 
@@ -29,8 +30,10 @@ class EasyUiWebBorderContainer(private val parent:WebComponent?, configure: WebB
     private val children = arrayListOf<WebComponent>()
     private val uid = MiscUtilsJS.createUUID()
 
+    private val defferedContent = hashMapOf<String, WebComponent>()
+
     init {
-        parent?.getChildren()?.add(this)
+        (parent?.getChildren() as MutableList<WebComponent>?)?.add(this)
         val configuration = WebBorderLayoutConfiguration()
         configuration.configure()
         fit = configuration.fit
@@ -47,18 +50,26 @@ class EasyUiWebBorderContainer(private val parent:WebComponent?, configure: WebB
         jQuery(getSelector()).layout(object{
             val fit = this@EasyUiWebBorderContainer.fit
         })
-        defferedEastRegion?.let{
+        defferedWestRegion?.let {
+            addRegion(it, "west")
+            defferedWestRegion = null
+        }
+        defferedNorthRegion?.let {
+            addRegion(it, "north")
+            defferedNorthRegion = null
+        }
+        defferedSouthRegion?.let {
+            addRegion(it, "south")
+            defferedSouthRegion = null
+        }
+        defferedCenterRegion?.let {
+            addRegion(it, "center")
+            defferedCenterRegion = null
+        }
+        defferedEastRegion?.let {
             addRegion(it, "east")
             defferedEastRegion = null
         }
-        defferedWestRegion?.let{addRegion(it, "west")
-        defferedWestRegion = null}
-        defferedNorthRegion?.let{addRegion(it, "north")
-        defferedNorthRegion = null}
-        defferedSouthRegion?.let{addRegion(it, "south")
-        defferedSouthRegion = null}
-        defferedCenterRegion?.let{addRegion(it, "center")
-        defferedCenterRegion = null}
         initialized = true
     }
 
@@ -105,12 +116,17 @@ class EasyUiWebBorderContainer(private val parent:WebComponent?, configure: WebB
             var border = it.showBorder
             var split = it.showSplitLine
             var collapsible = it.collapsible
+            var collapsed = it.collapsed
             var content = it.content.getHtml()
             var width:Int? = it.width
             var height:Int? = it.height
             var region = region
         })
         it.content.decorate()
+//        if(it.collapsed){
+//            defferedContent[region] = it.content
+//        } else {
+//        }
     }
 
     override fun getParent(): WebComponent? {

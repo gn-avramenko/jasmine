@@ -23,7 +23,7 @@ class EasyUiWebAccordionContainer(private val parent:WebComponent?, configure: W
     private val height:String?
     private val uid = MiscUtilsJS.createUUID()
     init {
-        parent?.getChildren()?.add(this)
+        (parent?.getChildren() as MutableList<WebComponent>?)?.add(this)
         val configuration = WebAccordionPanelConfiguration()
         configuration.configure()
         fit = configuration.fit
@@ -78,7 +78,7 @@ class EasyUiWebAccordionContainer(private val parent:WebComponent?, configure: W
         return parent
     }
 
-    override fun getChildren(): MutableList<WebComponent> {
+    override fun getChildren(): List<WebComponent> {
         return children
     }
 

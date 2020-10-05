@@ -12,10 +12,13 @@ import com.gridnine.jasmine.server.core.model.domain.*
 import com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistry
 import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistry
 import com.gridnine.jasmine.server.core.model.rest.RestPropertyType
+import com.gridnine.jasmine.server.core.model.ui.UiMetaRegistry
 import com.gridnine.jasmine.server.core.rest.RestHandler
 import com.gridnine.jasmine.server.core.rest.RestOperationContext
 import com.gridnine.jasmine.server.standard.model.custom.*
 import com.gridnine.jasmine.server.standard.model.rest.*
+import com.gridnine.jasmine.server.standard.model.ui.UiEnumDescriptionDT
+import com.gridnine.jasmine.server.standard.model.ui.UiEnumItemDescriptionDT
 
 
 class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataResponse> {
@@ -163,6 +166,17 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
             if(it.parameters[DomainMetaRegistry.EXPOSED_IN_REST_KEY] == "true"){
                 result.domainDocuments.add(createDocumentDescription(it))
             }
+        }
+        UiMetaRegistry.get().enums.values.forEach {
+            val enumDescr = UiEnumDescriptionDT()
+            enumDescr.id = it.id+"JS"
+            it.items.values.forEach { enumItem ->
+                val itemDT = UiEnumItemDescriptionDT()
+                itemDT.id = enumItem.id
+                itemDT.displayName = enumItem.getDisplayName()
+                enumDescr.items.add(itemDT)
+            }
+            result.uiEnums.add(enumDescr)
         }
         L10nMetaRegistry.get().webMessages.values.forEach {
             val bundle = WebMessagesBundleDT()

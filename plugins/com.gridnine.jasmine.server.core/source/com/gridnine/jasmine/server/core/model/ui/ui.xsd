@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://xtrip.gridnine.com/jasmine/ui"
+	elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://xtrip.gridnine.com/jasmine/ui">
+    <element name="ui">
+		<complexType>
+			<sequence>
+				<choice maxOccurs="unbounded" minOccurs="0">
+					<element name="enum" type="tns:enumType"/>
+				</choice>
+			</sequence>
+		</complexType>
+	</element>
+	<complexType name="enumType">
+		<complexContent>
+			<extension base="tns:baseType">
+				<sequence>
+					<element name="enum-item" maxOccurs="unbounded"
+							 minOccurs="0">
+						<complexType>
+							<complexContent>
+								<extension base="tns:baseMetaElement">
+									<sequence>
+										<element name="param" type="tns:paramType"
+												 maxOccurs="unbounded" minOccurs="0">
+										</element>
+									</sequence>
+								</extension>
+							</complexContent>
+						</complexType>
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="baseType">
+		<complexContent>
+			<extension base="tns:baseMetaElement">
+				<sequence>
+					<element name="param" maxOccurs="unbounded" minOccurs="0"
+							 type="tns:paramType">
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="paramType">
+		<attribute use="required" name="name" type="string"/>
+		<attribute use="required" name="value" type="string"/>
+	</complexType>
+	<complexType name="baseMetaElement">
+		<attribute name="id" type="string" use="required" />
+		<attribute name="deprecated" type="boolean"
+				   default="false" />
+	</complexType>
+</schema>

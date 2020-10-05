@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui xmlns="http://xtrip.gridnine.com/jasmine/ui" >
+   <enum id="com.gridnine.jasmine.server.standard.model.ui.YesNoEnum">
+       <enum-item id="YES"/>
+       <enum-item id="NO"/>
+       <enum-item id="NOT_IMPORTANT"/>
+   </enum>
+</ui>
+
+
+

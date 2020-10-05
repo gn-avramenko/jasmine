@@ -518,7 +518,7 @@ class JdbcDatabase : Database {
         val selectSql = "select ${getColumnNames(descr, emptySet(), excludedProperties)} " +
                 "from ${descr.name} " +
                 wherePart.sql +
-                JdbcUtils.prepareOrderPart(query.orders) +
+                JdbcUtils.prepareOrderPart(query.orders, descr) +
                 JdbcUtils.prepareLimitPart(query)
         return JdbcUtils.query(selectSql, createPreparedStatementSetter(wherePart), { rs, ctx ->
             fillObject(cls.primaryConstructor!!.call(), ctx, rs, descr, emptySet(), excludedProperties)

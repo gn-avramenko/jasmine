@@ -26,7 +26,7 @@ class EasyUiWebLabel(private val parent:WebComponent?) :WebLabel{
     private var height:String? = null
 
     init {
-        parent?.getChildren()?.add(this)
+        (parent?.getChildren() as MutableList<WebComponent>?)?.add(this)
     }
 
     override fun getHtml(): String {

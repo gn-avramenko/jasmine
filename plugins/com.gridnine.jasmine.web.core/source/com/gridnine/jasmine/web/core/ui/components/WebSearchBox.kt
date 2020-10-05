@@ -8,16 +8,13 @@ package com.gridnine.jasmine.web.core.ui.components
 import com.gridnine.jasmine.web.core.ui.WebComponent
 
 
-abstract class BaseButtonConfiguration{
-    var title:String? = null
-    var icon:String? = null
+interface  WebSearchBox:WebComponent{
+    fun setSearcher(value: (String?) ->Unit)
+    fun getValue():String?
 }
 
-class WebLinkButtonConfiguration:BaseButtonConfiguration(){
-    var width:String?=null
-    var height:String?=null
-}
-
-interface WebLinkButton: WebComponent {
-    fun setHandler(handler:()-> Unit)
+class WebSearchBoxConfiguration{
+    var width:String? = null
+    var height:String? = null
+    var prompt:String? = null
 }

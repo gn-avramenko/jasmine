@@ -5,6 +5,7 @@
 
 package com.gridnine.jasmine.web.easyui.adapter
 
+import com.gridnine.jasmine.server.core.model.common.BaseIntrospectableObjectJS
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.components.*
@@ -34,6 +35,30 @@ class EasyUiLibraryAdapter:UiLibraryAdapter {
 
     override fun <E : Any> createDataList(parent: WebComponent?, configure: WebDataListConfiguration.() -> Unit): WebDataList<E> {
         return EasyUiWebDataList(parent, configure)
+    }
+
+    override fun createGridLayoutContainer(parent: WebComponent?, configure: WebGridLayoutContainerConfiguration.() -> Unit): WebGridLayoutContainer {
+        return EasyUiWebGridLayoutContainer(parent, configure)
+    }
+
+    override fun <E : BaseIntrospectableObjectJS> createDataGrid(parent: WebComponent?, configure: WebDataGridConfiguration<E>.() -> Unit): WebDataGrid<E> {
+        return EasyUiWebDataGrid(parent, configure)
+    }
+
+    override fun createSearchBox(parent: WebComponent?, configure: WebSearchBoxConfiguration.() -> Unit): WebSearchBox {
+        return EasyUiWebSearchBox(parent, configure)
+    }
+
+    override fun createTextBox(parent: WebComponent?, configure: WebTextBoxConfiguration.() -> Unit): WebTextBox {
+        return EasyUiWebTextBox(parent, configure)
+    }
+
+    override fun createLinkButton(parent: WebComponent?, configure: WebLinkButtonConfiguration.() -> Unit): WebLinkButton {
+        return EasyUiWebLinkButton(parent, configure)
+    }
+
+    override fun createCombobox(parent: WebComponent?, configure: WebComboBoxConfiguration.() -> Unit): WebComboBox {
+        return EasyUiWebComboBox(parent, configure)
     }
 
 

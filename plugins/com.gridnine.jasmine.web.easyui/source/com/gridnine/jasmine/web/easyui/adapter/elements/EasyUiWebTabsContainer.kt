@@ -25,7 +25,7 @@ class EasyUiWebTabsContainer(private val parent:WebComponent?, configure: WebTab
     private val uid = MiscUtilsJS.createUUID()
     private val tools = arrayListOf<BaseButtonConfiguration>()
     init {
-        parent?.getChildren()?.add(this)
+        (parent?.getChildren() as MutableList<WebComponent>?)?.add(this)
         val configuration = WebTabsContainerConfiguration()
         configuration.configure()
         fit = configuration.fit
@@ -59,6 +59,10 @@ class EasyUiWebTabsContainer(private val parent:WebComponent?, configure: WebTab
                 jq!!.tabs("select", idx)
             }
         }
+    }
+
+    override fun getTabs(): List<WebTabPanel> {
+        return tabs
     }
 
     private fun addTabInternal(panel: WebTabPanel) {

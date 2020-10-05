@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages-bundle xmlns="http://xtrip.gridnine.com/jasmine/web-messages" messages-class="com.gridnine.jasmine.web.core.CoreWebMessagesJS" id = "core">
     <message id="settings"/>
+    <message id="YES"/>
+    <message id="NO"/>
+    <message id="reset"/>
+    <message id="apply"/>
+    <message id="filters"/>
+    <message id="from"/>
+    <message id="to"/>
 </messages-bundle>
 
 

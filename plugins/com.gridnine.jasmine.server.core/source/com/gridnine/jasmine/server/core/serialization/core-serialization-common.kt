@@ -7,6 +7,8 @@
 package com.gridnine.jasmine.server.core.serialization
 
 
+import com.gridnine.jasmine.server.core.model.common.BaseIdentity
+import com.gridnine.jasmine.server.core.model.custom.CustomMetaRegistry
 import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistry
 import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistry
 
@@ -74,6 +76,10 @@ internal object CommonSerializationUtils{
         val restEntity = RestMetaRegistry.get().entities[className]
         if(restEntity != null){
             return restEntity.isAbstract
+        }
+        val customEntity = CustomMetaRegistry.get().entities[className]
+        if(customEntity != null){
+            return customEntity.isAbstract
         }
         return false
     }

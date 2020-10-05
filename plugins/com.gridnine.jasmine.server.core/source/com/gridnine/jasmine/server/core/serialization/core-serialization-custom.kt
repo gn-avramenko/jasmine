@@ -27,7 +27,7 @@ internal open class CustomEntityMetadataProvider(description: CustomEntityDescri
         fillProperties(description)
         fillCollections(description)
         isAbstract = description.isAbstract
-        hasUid= getAllProperties().find{ it.id == BaseIdentity.uid} != null
+        hasUid= description.id != ObjectReference::class.qualifiedName &&  getAllProperties().find{ it.id == BaseIdentity.uid} != null
     }
 
     private fun fillCollections(desc: CustomEntityDescription) {
