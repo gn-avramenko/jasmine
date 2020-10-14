@@ -7,7 +7,6 @@ package com.gridnine.jasmine.web.core.ui.widgets
 
 import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistryJS
 import com.gridnine.jasmine.server.core.model.ui.UiMetaRegistryJS
-import com.gridnine.jasmine.web.core.RestReflectionUtilsJS
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.WebComponent
@@ -17,8 +16,8 @@ import com.gridnine.jasmine.web.core.ui.components.WebComboBox
 import com.gridnine.jasmine.web.core.ui.components.WebComboBoxConfiguration
 import kotlin.reflect.KClass
 
-class EnumComboboxWidget<E:Enum<E>>(parent:WebComponent, configure:EnumComboboxWidgetConfiguration<E>.()->Unit
-, private val delegate: WebComboBox = UiLibraryAdapter.get().createCombobox(parent, EnumComboboxWidget.convertConfiguration(configure)) ):WebComponent by delegate{
+class EnumComboBoxWidget<E:Enum<E>>(parent:WebComponent, configure:EnumComboBoxWidgetConfiguration<E>.()->Unit
+                                    , private val delegate: WebComboBox = UiLibraryAdapter.get().createCombobox(parent, EnumComboBoxWidget.convertConfiguration(configure)) ):WebComponent by delegate{
     private val className:String
     fun getValue():E? {
 
@@ -35,7 +34,7 @@ class EnumComboboxWidget<E:Enum<E>>(parent:WebComponent, configure:EnumComboboxW
     }
 
     init {
-        val conf = EnumComboboxWidgetConfiguration<E>();
+        val conf = EnumComboBoxWidgetConfiguration<E>();
         conf.configure()
         className = ReflectionFactoryJS.get().getQualifiedClassName(conf.enumClass)
         val possibleValues = arrayListOf<SelectItemJS>()
@@ -52,8 +51,8 @@ class EnumComboboxWidget<E:Enum<E>>(parent:WebComponent, configure:EnumComboboxW
 
 
     companion object{
-        fun <E:Enum<E>> convertConfiguration(configure: EnumComboboxWidgetConfiguration<E>.() -> Unit): WebComboBoxConfiguration.() -> Unit {
-            val conf = EnumComboboxWidgetConfiguration<E>();
+        fun <E:Enum<E>> convertConfiguration(configure: EnumComboBoxWidgetConfiguration<E>.() -> Unit): WebComboBoxConfiguration.() -> Unit {
+            val conf = EnumComboBoxWidgetConfiguration<E>();
             conf.configure()
             return {
                 width = conf.width
@@ -66,7 +65,7 @@ class EnumComboboxWidget<E:Enum<E>>(parent:WebComponent, configure:EnumComboboxW
     }
 }
 
-class EnumComboboxWidgetConfiguration<E:Enum<E>>{
+class EnumComboBoxWidgetConfiguration<E:Enum<E>>{
     var width:String? = null
     var height:String? = null
     lateinit var enumClass: KClass<E>

@@ -222,6 +222,11 @@
         <collection id="items" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.ui.UiEnumItemDescriptionDT"/>
     </entity>
 
+    <entity id="com.gridnine.jasmine.server.standard.rest.AutocompleteItemDT">
+        <property id="document" type="ENTITY_REFERENCE" class-name="com.gridnine.jasmine.server.core.model.common.BaseIdentity" lateinit="true"/>
+        <property id="searchFieldValue" type="STRING"/>
+    </entity>
+
     <group id="standard">
         <operation id="meta" handler="com.gridnine.jasmine.server.standard.rest.StandardMetaRestHandler">
             <request id="com.gridnine.jasmine.server.standard.model.rest.GetMetadataRequest"/>
@@ -260,6 +265,18 @@
             <response id="com.gridnine.jasmine.server.standard.model.rest.GetListResponse">
                 <collection id="items" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.core.model.common.BaseIdentity"/>
                 <property id="totalCount" type="LONG"/>
+            </response>
+        </operation>
+        <operation id="autocomplete" handler="com.gridnine.jasmine.server.standard.rest.StandardAutocompleteRestHandler">
+            <request id="com.gridnine.jasmine.server.standard.model.rest.AutocompleteRequest">
+                <property id="listId" type="STRING" lateinit="true"/>
+                <property id="autocompleteFieldName" type="STRING" lateinit="true"/>
+                <property id="pattern" type="STRING"/>
+                <collection id="criterions" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.domain.BaseWorkspaceCriterion"/>
+                <property id="limit" type="INT" non-nullable="true"/>
+            </request>
+            <response id="com.gridnine.jasmine.server.standard.model.rest.AutocompletetResponse">
+                <collection id="items" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.rest.AutocompleteItemDT"/>
             </response>
         </operation>
     </group>

@@ -16,11 +16,9 @@ import com.gridnine.jasmine.server.standard.model.rest.ListFilterDTJS
 import com.gridnine.jasmine.web.core.CoreWebMessagesJS
 import com.gridnine.jasmine.web.core.StandardRestClient
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
-import com.gridnine.jasmine.web.core.ui.DefaultUIParameters
-import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
-import com.gridnine.jasmine.web.core.ui.WebComponent
+import com.gridnine.jasmine.web.core.ui.*
 import com.gridnine.jasmine.web.core.ui.components.*
-import com.gridnine.jasmine.web.core.ui.debugger
+import com.gridnine.jasmine.web.core.ui.widgets.EnumMultiValuesWidget
 import com.gridnine.jasmine.web.core.ui.widgets.SearchBoxWidget
 import com.gridnine.jasmine.web.core.ui.widgets.TextBoxWidget
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
@@ -208,6 +206,18 @@ class ListWorkspaceItemHandler : WorkspaceElementHandler<ListWorkspaceItemJS, Un
                         StringFilterHandler()
                     DatabasePropertyTypeJS.BOOLEAN ->
                         BooleanFilterHandler()
+                    DatabasePropertyTypeJS.LOCAL_DATE ->
+                        DateFilterHandler()
+                    DatabasePropertyTypeJS.LOCAL_DATE_TIME ->
+                        DateTimeFilterHandler()
+                    DatabasePropertyTypeJS.BIG_DECIMAL ->
+                        FloatNumberFilterHandler()
+                    DatabasePropertyTypeJS.ENUM ->{
+                        EnumValueFilterHandler(domainDescr.properties[it]!!.className!!)
+                    }
+                    DatabasePropertyTypeJS.ENTITY_REFERENCE ->{
+                        EntityValuesFilterHandler(domainDescr.properties[it]!!.className!!)
+                    }
                     else -> null
                 }
                 if (handler != null) {

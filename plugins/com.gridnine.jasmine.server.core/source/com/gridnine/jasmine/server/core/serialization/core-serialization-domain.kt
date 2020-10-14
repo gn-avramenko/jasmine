@@ -190,7 +190,7 @@ internal open class BaseDomainIndexMetadataProvider(description: BaseIndexDescri
 internal class DomainIndexMetadataProvider(description: IndexDescription) : BaseDomainIndexMetadataProvider(description) {
     init{
         addProperty(SerializablePropertyDescription(BaseIdentity.uid, SerializablePropertyType.STRING, null, false))
-        addProperty(SerializablePropertyDescription(BaseIndex.document, SerializablePropertyType.ENTITY, ObjectReference::class.qualifiedName, false))
+        addProperty(SerializablePropertyDescription(BaseIndex.documentField, SerializablePropertyType.ENTITY, ObjectReference::class.qualifiedName, false))
     }
 }
 

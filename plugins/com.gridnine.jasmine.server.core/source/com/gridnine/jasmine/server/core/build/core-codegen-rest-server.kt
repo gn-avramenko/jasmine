@@ -16,7 +16,7 @@ object RestServerGenerator {
 
     private fun  toGenData(descr: RestEntityDescription): GenClassData {
 
-        val result = GenClassData(descr.id, if(descr.extendsId != null) descr.extendsId else BaseRestEntity::class.qualifiedName, descr.isAbstract, false)
+        val result = GenClassData(descr.id, if(descr.extendsId != null) descr.extendsId else BaseRestEntity::class.qualifiedName, descr.isAbstract, true)
         descr.properties.values.forEach { prop ->
             result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.className),lateinit = prop.lateinit, nonNullable = prop.nonNullable))
         }

@@ -6,8 +6,6 @@
 package com.gridnine.jasmine.server.core.model.domain
 
 import com.gridnine.jasmine.server.core.model.common.BaseIdentity
-import com.gridnine.jasmine.server.core.model.common.Xeption
-import java.time.LocalDateTime
 import kotlin.reflect.KClass
 
 
@@ -128,7 +126,7 @@ abstract class BaseIndex<D : BaseDocument> : BaseIdentity() {
 
 
     override fun getValue(propertyName: String): Any? {
-        if (BaseIndex.document == propertyName) {
+        if (BaseIndex.documentField == propertyName) {
             return document
         }
         return  super.getValue(propertyName)
@@ -137,7 +135,7 @@ abstract class BaseIndex<D : BaseDocument> : BaseIdentity() {
 
     @Suppress("UNCHECKED_CAST")
     override fun setValue(propertyName: String, value: Any?) {
-        if (BaseIndex.document == propertyName) {
+        if (BaseIndex.documentField == propertyName) {
             document = value as ObjectReference<D>
             return
         }
@@ -148,8 +146,8 @@ abstract class BaseIndex<D : BaseDocument> : BaseIdentity() {
 
 
     companion object{
-        const val document= "document"
-        val referenceCaption = _TestDomainDocumentIndexProperty0("documentCaption")
+        const val documentField= "document"
+        val referenceCaptionField = _TestDomainDocumentIndexProperty0("documentCaption")
     }
 }
 abstract class BaseNestedDocument : BaseIdentity()

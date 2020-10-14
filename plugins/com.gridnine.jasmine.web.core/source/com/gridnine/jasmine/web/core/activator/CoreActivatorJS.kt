@@ -22,6 +22,7 @@ import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.remote.RpcManager
 import com.gridnine.jasmine.web.core.remote.StandardRpcManager
 import com.gridnine.jasmine.web.core.serialization.JsonSerializerJS
+import com.gridnine.jasmine.web.core.ui.ClientRegistry
 import kotlin.js.Promise
 
 class CoreActivatorJS: ActivatorJS {
@@ -47,6 +48,7 @@ class CoreActivatorJS: ActivatorJS {
         val rpcManager = StandardRpcManager(config[StandardRpcManager.BASE_REST_URL_KEY] as String)
         EnvironmentJS.publish(RpcManager::class, rpcManager)
         EnvironmentJS.publish(JsonSerializerJS())
+        EnvironmentJS.publish(ClientRegistry())
     }
 
     override fun activate(): Promise<Unit> {
@@ -167,7 +169,7 @@ class CoreActivatorJS: ActivatorJS {
             domainRegistry.enums.put(enum.id, enum)
         }
         it.domainIndexes?.forEach{itJs ->
-            val entity = IndexDescriptionJS(itJs.id, itJs.displayName, it.document)
+            val entity = IndexDescriptionJS(itJs.id, itJs.displayName, itJs.document)
             fillBaseIndexDescription(entity, itJs)
             domainRegistry.indexes[entity.id] = entity
             Unit

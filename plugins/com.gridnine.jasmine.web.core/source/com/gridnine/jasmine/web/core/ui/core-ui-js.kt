@@ -23,6 +23,12 @@ interface UiLibraryAdapter{
     fun createTextBox(parent: WebComponent?, configure:WebTextBoxConfiguration.()->Unit):WebTextBox
     fun createLinkButton(parent: WebComponent?, configure:WebLinkButtonConfiguration.()->Unit):WebLinkButton
     fun createCombobox(parent: WebComponent?, configure:WebComboBoxConfiguration.()->Unit):WebComboBox
+    fun createDateBox(parent: WebComponent?, configure:WebDateBoxConfiguration.()->Unit):WebDateBox
+    fun createDateTimeBox(parent: WebComponent?, configure:WebDateTimeBoxConfiguration.()->Unit):WebDateTimeBox
+    fun createNumberBox(parent: WebComponent?, configure:WebNumberBoxConfiguration.()->Unit):WebNumberBox
+    fun createTagBox(parent: WebComponent?, configure:WebTagBoxConfiguration.()->Unit):WebTagBox
+    fun createSelect(parent: WebComponent, configure: WebSelectConfiguration.() -> Unit): WebSelect
+
     companion object{
         fun get() = EnvironmentJS.getPublished(UiLibraryAdapter::class)
     }
@@ -39,4 +45,32 @@ interface WebComponent{
 object DefaultUIParameters{
     var controlWidth = 200
 }
+
+open class RegistryItemType<T:Any>(val id:String)
+
+interface RegistryItem<T:Any> {
+    val type: RegistryItemType<T>
+    val id: String
+}
+
+class ClientRegistry{
+    private val registry = hashMapOf<String, MutableMap<String, RegistryItem<*>>>()
+
+    fun register(item:RegistryItem<*>){
+        registry.getOrPut(item.type.id, { hashMapOf()})[item.id] = item
+    }
+
+    fun<T:Any> allOf(type: RegistryItemType<T>):List<RegistryItem<T>> = (registry[type.id]?.values?.toList() as List<RegistryItem<T>>?)?: emptyList()
+
+    fun <T:Any> get(type:RegistryItemType<T>, id:String)= registry[type.id]?.get(id) as T?
+
+    companion object{
+        fun get() = EnvironmentJS.getPublished(ClientRegistry::class)
+    }
+}
+
+enum class FakeEnumJS
+
+
+
 external var debugger: dynamic = definedExternally

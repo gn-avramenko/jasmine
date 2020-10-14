@@ -61,7 +61,27 @@ class EasyUiLibraryAdapter:UiLibraryAdapter {
         return EasyUiWebComboBox(parent, configure)
     }
 
+    override fun createDateBox(parent: WebComponent?, configure: WebDateBoxConfiguration.() -> Unit): WebDateBox {
+        return EasyUiWebDateBox(parent, configure)
+    }
+
+    override fun createDateTimeBox(parent: WebComponent?, configure: WebDateTimeBoxConfiguration.() -> Unit): WebDateTimeBox {
+        return EasyUiWebDateTimeBox(parent, configure)
+    }
+
+    override fun createNumberBox(parent: WebComponent?, configure: WebNumberBoxConfiguration.() -> Unit): WebNumberBox {
+        return EasyUiWebNumberBox(parent, configure)
+    }
+
+    override fun createTagBox(parent: WebComponent?, configure: WebTagBoxConfiguration.() -> Unit): WebTagBox {
+        return EasyUiWebTagBox(parent, configure)
+    }
+
+    override fun createSelect(parent: WebComponent, configure: WebSelectConfiguration.() -> Unit): WebSelect {
+        return EasyUiWebSelect(parent, configure)
+    }
+
 
 }
-
+external fun createTestSelect2(id:String)
 external var jQuery: dynamic = definedExternally

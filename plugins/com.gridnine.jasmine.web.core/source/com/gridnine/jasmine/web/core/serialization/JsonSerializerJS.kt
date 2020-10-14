@@ -43,7 +43,7 @@ class JsonSerializerJS {
     }
 
     private val dateTimeFormatter = { date: Date? ->
-        date?.let { "${it.getFullYear()}-${MiscUtilsJS.fillWithZeros(it.getMonth() + 1)}-${MiscUtilsJS.fillWithZeros(it.getDate())}_${MiscUtilsJS.fillWithZeros(it.getHours())}-${MiscUtilsJS.fillWithZeros(it.getMinutes())}-${MiscUtilsJS.fillWithZeros(it.getSeconds())}-${MiscUtilsJS.fillWithZeros(it.getMilliseconds(), 3)}" }
+        date?.let { "${it.getFullYear()}-${MiscUtilsJS.fillWithZeros(it.getMonth() + 1)}-${MiscUtilsJS.fillWithZeros(it.getDate())}T${MiscUtilsJS.fillWithZeros(it.getHours())}-${MiscUtilsJS.fillWithZeros(it.getMinutes())}-${MiscUtilsJS.fillWithZeros(it.getSeconds())}-${MiscUtilsJS.fillWithZeros(it.getMilliseconds(), 3)}" }
     }
 
     private val dateTimeParser = lambda@{ value: String? ->

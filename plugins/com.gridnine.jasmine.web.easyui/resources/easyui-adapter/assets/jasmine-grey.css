@@ -8,3 +8,17 @@
 .icon_core_settings{
     background:url('images/settings.png') no-repeat center center;
 }
+
+.select2-jasmine-regular .select2-choices{
+    border: 1px solid #D3D3D3;
+    border-radius: 5px 5px 5px 5px;
+    height: 28px;
+    min-height: 28px;
+}
+
+.select2-jasmine-regular .select2-choice{
+    border: 1px solid #D3D3D3;
+    border-radius: 5px 5px 5px 5px;
+    height: 28px;
+    min-height: 28px;
+}

@@ -374,7 +374,7 @@ object JdbcUtils {
             val collections = linkedMapOf<String, DatabaseCollectionDescription>()
             fromDomain(item, properties, collections)
             properties[BaseIdentity.uid] = DatabasePropertyDescription(BaseIdentity.uid, JdbcPropertyType.STRING, false, null)
-            properties[BaseIndex.document] = DatabasePropertyDescription(BaseIndex.document, JdbcPropertyType.ENTITY_REFERENCE, true, null)
+            properties[BaseIndex.documentField] = DatabasePropertyDescription(BaseIndex.documentField, JdbcPropertyType.ENTITY_REFERENCE, true, null)
             properties[AGGREGATED_DATA_COLUMN_NAME] = DatabasePropertyDescription(AGGREGATED_DATA_COLUMN_NAME,
                     JdbcPropertyType.TEXT, true, null)
 
