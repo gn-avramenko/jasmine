@@ -78,16 +78,16 @@ class StorageCacheTest:StorageTestBase(){
         doc = Storage.get().loadDocument(TestDomainDocument::class, doc.uid)!!
         Assert.assertTrue(doc is CachedObject)
         Assert.assertEquals(3, loadDocumentCount)
-        var ref = Storage.get().findUniqueDocumentReference(TestDomainDocumentIndex::class, TestDomainDocumentIndex.stringProperty, "test2")
+        var ref = Storage.get().findUniqueDocumentReference(TestDomainDocumentIndex::class, TestDomainDocumentIndex.stringPropertyProperty, "test2")
         Assert.assertNotNull(ref)
         Assert.assertEquals(1, findDocumentCount)
-        ref = Storage.get().findUniqueDocumentReference(TestDomainDocumentIndex::class, TestDomainDocumentIndex.stringProperty, "test2")
+        ref = Storage.get().findUniqueDocumentReference(TestDomainDocumentIndex::class, TestDomainDocumentIndex.stringPropertyProperty, "test2")
         Assert.assertNotNull(ref)
         Assert.assertEquals(1, findDocumentCount)
         doc = Storage.get().loadDocument(TestDomainDocument::class, doc.uid,true)!!
         doc.stringProperty = "test"
         Storage.get().saveDocument(doc)
-        ref = Storage.get().findUniqueDocumentReference(TestDomainDocumentIndex::class, TestDomainDocumentIndex.stringProperty, "test")
+        ref = Storage.get().findUniqueDocumentReference(TestDomainDocumentIndex::class, TestDomainDocumentIndex.stringPropertyProperty, "test")
         Assert.assertNotNull(ref)
         Assert.assertEquals(2, findDocumentCount)
     }

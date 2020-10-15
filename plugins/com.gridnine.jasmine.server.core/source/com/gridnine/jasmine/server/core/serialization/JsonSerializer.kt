@@ -95,6 +95,8 @@ class JsonSerializer : Disposable {
                             if(uid != null && result !is ObjectReference<*>) {
                                 ctx.putIfAbsent(uid, result)
                             }
+                        } else if (result is ObjectReference<*>){
+                            provider.setPropertyValue(result, BaseIdentity.uid, uid)
                         }
                     }
                     val propertyDescription = provider.getProperty(tagName)

@@ -12,35 +12,21 @@ import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistryJS
 interface AutocompleteHandler{
     fun getIndexClassName():String
     fun getAutocompleteFieldName():String
+
     companion object{
-        val TYPE = RegistryItemType<AutocompleteHandler>("autocomplete-handlers")
-    }
-}
+        fun createMetadataBasedAutocompleteHandler(objectId: String):AutocompleteHandler{
+            return object:AutocompleteHandler{
 
-object AutocompleteUtils{
-    private val cache = hashMapOf<String, AutocompleteHandler>()
-    fun getAutocompleteHandler(objectId:String):AutocompleteHandler{
-        val handler = ClientRegistry.get().get(AutocompleteHandler.TYPE, objectId)
-        if(handler != null){
-            return handler
-        }
-        val cachedValue = cache[objectId]
-        if(cachedValue != null){
-            return cachedValue
-        }
-        val metadataBasedHandler = object:AutocompleteHandler{
+                val indexClassName = DomainMetaRegistryJS.get().indexes.values.find { it.document == objectId }!!.id.substringBeforeLast("JS")
+                override fun getIndexClassName(): String {
+                    return indexClassName
+                }
 
-            val indexClassName = DomainMetaRegistryJS.get().indexes.values.find { it.document == objectId }!!.id.substringBeforeLast("JS")
-            override fun getIndexClassName(): String {
-                return indexClassName
+                override fun getAutocompleteFieldName(): String {
+                    return BaseIndexJS.document+"Caption"
+                }
+
             }
-
-            override fun getAutocompleteFieldName(): String {
-                return BaseIndexJS.document+"Caption"
-            }
-
         }
-        cache[objectId] = metadataBasedHandler
-        return metadataBasedHandler
     }
 }

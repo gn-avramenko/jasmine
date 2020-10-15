@@ -40,6 +40,13 @@ object DomainWebGenerator {
         descr.collections.values.forEach { coll ->
             result.collections.add(GenCollectionDescription(coll.id, getPropertyType(coll.elementType), coll.elementClassName))
         }
+        if(descr is IndexDescription) {
+            result.codeInjections.add("""
+            companion object{
+                val objectId = "${descr.document}JS"
+            }
+        """.trimIndent())
+            }
         return result
     }
 

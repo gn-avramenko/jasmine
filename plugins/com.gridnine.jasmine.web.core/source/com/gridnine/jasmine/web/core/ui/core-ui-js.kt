@@ -22,11 +22,9 @@ interface UiLibraryAdapter{
     fun createSearchBox(parent: WebComponent?, configure:WebSearchBoxConfiguration.()->Unit):WebSearchBox
     fun createTextBox(parent: WebComponent?, configure:WebTextBoxConfiguration.()->Unit):WebTextBox
     fun createLinkButton(parent: WebComponent?, configure:WebLinkButtonConfiguration.()->Unit):WebLinkButton
-    fun createCombobox(parent: WebComponent?, configure:WebComboBoxConfiguration.()->Unit):WebComboBox
     fun createDateBox(parent: WebComponent?, configure:WebDateBoxConfiguration.()->Unit):WebDateBox
     fun createDateTimeBox(parent: WebComponent?, configure:WebDateTimeBoxConfiguration.()->Unit):WebDateTimeBox
     fun createNumberBox(parent: WebComponent?, configure:WebNumberBoxConfiguration.()->Unit):WebNumberBox
-    fun createTagBox(parent: WebComponent?, configure:WebTagBoxConfiguration.()->Unit):WebTagBox
     fun createSelect(parent: WebComponent, configure: WebSelectConfiguration.() -> Unit): WebSelect
 
     companion object{
@@ -49,15 +47,43 @@ object DefaultUIParameters{
 open class RegistryItemType<T:Any>(val id:String)
 
 interface RegistryItem<T:Any> {
-    val type: RegistryItemType<T>
-    val id: String
+    fun getType(): RegistryItemType<T>
+    fun getId(): String
+}
+
+interface ObjectHandler:RegistryItem<ObjectHandler>{
+
+    fun getAutocompleteHandler():AutocompleteHandler
+
+    override fun getType(): RegistryItemType<ObjectHandler> {
+        return TYPE
+    }
+    companion object{
+        val TYPE = RegistryItemType<ObjectHandler>("object-handlers")
+    }
+}
+
+abstract class BaseObjectHandler(val objectId:String):ObjectHandler{
+
+    private var cachedHandler:AutocompleteHandler? = null
+
+    abstract fun createAutocompleteHandler():AutocompleteHandler
+
+    override fun getAutocompleteHandler(): AutocompleteHandler {
+        if(cachedHandler == null){
+            cachedHandler = createAutocompleteHandler()
+        }
+        return cachedHandler!!
+    }
+
+
 }
 
 class ClientRegistry{
     private val registry = hashMapOf<String, MutableMap<String, RegistryItem<*>>>()
 
     fun register(item:RegistryItem<*>){
-        registry.getOrPut(item.type.id, { hashMapOf()})[item.id] = item
+        registry.getOrPut(item.getType().id, { hashMapOf()})[item.getId()] = item
     }
 
     fun<T:Any> allOf(type: RegistryItemType<T>):List<RegistryItem<T>> = (registry[type.id]?.values?.toList() as List<RegistryItem<T>>?)?: emptyList()

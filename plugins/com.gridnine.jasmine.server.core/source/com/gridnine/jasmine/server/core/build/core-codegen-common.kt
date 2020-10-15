@@ -148,9 +148,9 @@ internal object GenUtils {
                                 "return super.getCollection(collectionName)"()
                             }
                         }
-                        it.codeInjections.forEach {
+                        it.codeInjections.forEach { str ->
                             blankLine()
-                            it()
+                            str()
                         }
 
                         if (!it.noEnumProperties) {
@@ -193,11 +193,11 @@ internal object GenUtils {
                             "companion object" {
                                 idx = 0
                                 it.properties.forEach { propDescr ->
-                                    "val ${propDescr.id} = _TestDomainDocumentIndexProperty${idx}(\"${propDescr.id}\")"()
+                                    "val ${propDescr.id}Property = _TestDomainDocumentIndexProperty${idx}(\"${propDescr.id}\")"()
                                     idx++
                                 }
                                 it.collections.forEach { collDescr ->
-                                    "val ${collDescr.id} = _TestDomainDocumentIndexProperty${idx}(\"${collDescr.id}\")"()
+                                    "val ${collDescr.id}Collection = _TestDomainDocumentIndexProperty${idx}(\"${collDescr.id}\")"()
                                     idx++
                                 }
                             }

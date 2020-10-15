@@ -6,8 +6,6 @@
 package com.gridnine.jasmine.web.easyui.adapter.elements
 
 import com.gridnine.jasmine.web.core.ui.WebComponent
-import com.gridnine.jasmine.web.core.ui.components.WebDataGridConfiguration
-import com.gridnine.jasmine.web.core.ui.components.WebLabel
 import com.gridnine.jasmine.web.core.ui.components.WebSearchBox
 import com.gridnine.jasmine.web.core.ui.components.WebSearchBoxConfiguration
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS

@@ -8,6 +8,7 @@ package com.gridnine.jasmine.server.core.test.storage
 import com.gridnine.jasmine.server.core.model.domain.EntityUtils
 import com.gridnine.jasmine.server.core.storage.Storage
 import com.gridnine.jasmine.server.core.storage.search.count
+import com.gridnine.jasmine.server.core.storage.search.property
 import com.gridnine.jasmine.server.core.storage.search.searchQuery
 import com.gridnine.jasmine.server.core.storage.search.simpleProjectionQuery
 import com.gridnine.jasmine.server.core.test.domain.TestDomainAsset
@@ -20,19 +21,27 @@ import org.junit.Test
 import java.time.LocalDateTime
 import java.util.*
 
-class StorageBasicTest :StorageTestBase(){
+class StorageBasicTest : StorageTestBase() {
     @Test
-    fun testDocumentCRUD(){
+    fun testDocumentCRUD() {
         AuthUtils.setCurrentUser("system")
         var doc = TestDomainDocument()
         doc.uid = UUID.randomUUID().toString()
         doc.stringProperty = "test"
-        doc.entityReference  = EntityUtils.toReference(doc)
-        doc.stringCollection.addAll(arrayListOf("test1","test2"))
+        doc.entityReference = EntityUtils.toReference(doc)
+        doc.stringCollection.addAll(arrayListOf("test1", "test2"))
         doc.enumCollection.addAll(arrayListOf(TestEnum.ITEM1, TestEnum.ITEM2))
-        doc.entityRefCollection.addAll(arrayListOf(EntityUtils.toReference(doc),EntityUtils.toReference(doc)) )
+        doc.entityRefCollection.addAll(arrayListOf(EntityUtils.toReference(doc), EntityUtils.toReference(doc)))
         doc.enumProperty = TestEnum.ITEM1
         Storage.get().saveDocument(doc)
+        val idxes = Storage.get().searchDocuments(TestDomainDocumentIndex::class,
+                searchQuery {
+                    property(TestDomainDocumentIndex.entityReferenceProperty)
+                    where {
+                        eq(TestDomainDocumentIndex.entityReferenceProperty, doc.entityReference!!)
+                    }
+                }
+        )
         doc = Storage.get().loadDocument(TestDomainDocument::class, doc.uid, true)!!
         Assert.assertEquals("test", doc.stringProperty)
         doc.stringProperty = "test2"
@@ -43,7 +52,7 @@ class StorageBasicTest :StorageTestBase(){
         Assert.assertEquals("test", doc.stringProperty)
         var query = searchQuery {
             where {
-                eq(TestDomainDocumentIndex.stringProperty, "test2")
+                eq(TestDomainDocumentIndex.stringPropertyProperty, "test2")
             }
         }
         var indexes = Storage.get()
@@ -58,18 +67,27 @@ class StorageBasicTest :StorageTestBase(){
                 query)
         Assert.assertEquals(1, indexes.size)
         indexes = Storage.get().searchDocuments(TestDomainDocumentIndex::class,
-                searchQuery {  })
+                searchQuery { })
         Assert.assertEquals(1, indexes.size)
         Assert.assertEquals(2, indexes[0].stringCollection.size)
         Assert.assertEquals(2, indexes[0].enumCollection.size)
         Assert.assertEquals(2, indexes[0].entityRefCollection.size)
+        indexes = Storage.get().searchDocuments(TestDomainDocumentIndex::class,
+                searchQuery {
+                    property(TestDomainDocumentIndex.entityReferenceProperty)
+                    where {
+                        eq(TestDomainDocumentIndex.entityReferenceProperty, doc.entityReference!!)
+                    }
+                }
+        )
+        Assert.assertEquals(1, indexes.size)
 
-        val projectionQuery =  simpleProjectionQuery(count()){
+        val projectionQuery = simpleProjectionQuery(count()) {
             where {
-                eq(TestDomainDocumentIndex.stringProperty, "test2")
+                eq(TestDomainDocumentIndex.stringPropertyProperty, "test2")
             }
         }
-        val result:Int = Storage.get()
+        val result: Int = Storage.get()
                 .searchDocuments(TestDomainDocumentIndex::class, projectionQuery)
         Assert.assertEquals(1, result)
 
@@ -78,12 +96,12 @@ class StorageBasicTest :StorageTestBase(){
     }
 
     @Test
-    fun testAssetCRUD(){
+    fun testAssetCRUD() {
         AuthUtils.setCurrentUser("system")
         var asset = TestDomainAsset()
         asset.uid = UUID.randomUUID().toString()
         asset.stringProperty = "test"
-        asset.dateProperty  = LocalDateTime.now()
+        asset.dateProperty = LocalDateTime.now()
         Storage.get().saveAsset(asset)
         asset = Storage.get().loadAsset(TestDomainAsset::class, asset.uid, true)!!
         Assert.assertEquals("test", asset.stringProperty)
@@ -95,7 +113,7 @@ class StorageBasicTest :StorageTestBase(){
         Assert.assertEquals("test", asset.stringProperty)
         var query = searchQuery {
             where {
-                eq(TestDomainAsset.stringProperty, "test2")
+                eq(TestDomainAsset.stringPropertyProperty, "test2")
             }
         }
         var assets = Storage.get()
@@ -110,15 +128,15 @@ class StorageBasicTest :StorageTestBase(){
                 query)
         Assert.assertEquals(1, assets.size)
         assets = Storage.get().searchAssets(TestDomainAsset::class,
-                searchQuery {  })
+                searchQuery { })
         Assert.assertEquals(1, assets.size)
 
-        val projectionQuery =  simpleProjectionQuery(count()){
+        val projectionQuery = simpleProjectionQuery(count()) {
             where {
-                eq(TestDomainAsset.stringProperty, "test2")
+                eq(TestDomainAsset.stringPropertyProperty, "test2")
             }
         }
-        val result:Int = Storage.get()
+        val result: Int = Storage.get()
                 .searchAssets(TestDomainAsset::class, projectionQuery)
         Assert.assertEquals(1, result)
 

@@ -8,15 +8,11 @@ package com.gridnine.jasmine.web.core.mainframe
 import com.gridnine.jasmine.server.standard.model.rest.*
 import com.gridnine.jasmine.server.standard.model.ui.YesNoEnumJS
 import com.gridnine.jasmine.web.core.CoreWebMessagesJS
-import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
-import com.gridnine.jasmine.web.core.ui.AutocompleteUtils
-import com.gridnine.jasmine.web.core.ui.FakeEnumJS
-import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
-import com.gridnine.jasmine.web.core.ui.WebComponent
+import com.gridnine.jasmine.web.core.ui.*
 import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutCell
 import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutContainer
 import com.gridnine.jasmine.web.core.ui.widgets.*
-import kotlin.reflect.KClass
+import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 
 internal interface ListFilterHandler<V : BaseListFilterValueDTJS, W : WebComponent> {
     fun createEditor(parent: WebComponent): W
@@ -36,7 +32,7 @@ internal class StringFilterHandler : ListFilterHandler<ListFilterStringValuesDTJ
         val value = editor.getValue()
         return value?.let {
             val result = ListFilterStringValuesDTJS()
-            result.values.addAll(it.split(","))
+            result.values.addAll(it.split(",").filter { MiscUtilsJS.isNotBlank(it) }.map { it.trim() })
             result
         }
     }
@@ -50,17 +46,18 @@ internal class StringFilterHandler : ListFilterHandler<ListFilterStringValuesDTJ
     }
 }
 
-internal class BooleanFilterHandler : ListFilterHandler<ListFilterBooleanValuesDTJS, EnumComboBoxWidget<YesNoEnumJS>> {
-    override fun createEditor(parent: WebComponent): EnumComboBoxWidget<YesNoEnumJS> {
-        val widget = EnumComboBoxWidget<YesNoEnumJS>(parent, {
+internal class BooleanFilterHandler : ListFilterHandler<ListFilterBooleanValuesDTJS, EnumValueWidget<YesNoEnumJS>> {
+    override fun createEditor(parent: WebComponent): EnumValueWidget<YesNoEnumJS> {
+        val widget = EnumValueWidget<YesNoEnumJS>(parent, {
             width = "100%"
             enumClass = YesNoEnumJS::class
+            allowNull = false
         })
         widget.setValue(YesNoEnumJS.NOT_IMPORTANT)
         return widget
     }
 
-    override fun getValue(editor: EnumComboBoxWidget<YesNoEnumJS>): ListFilterBooleanValuesDTJS? {
+    override fun getValue(editor: EnumValueWidget<YesNoEnumJS>): ListFilterBooleanValuesDTJS? {
         val value = editor.getValue()
         return value?.let {
             val result = ListFilterBooleanValuesDTJS()
@@ -73,11 +70,11 @@ internal class BooleanFilterHandler : ListFilterHandler<ListFilterBooleanValuesD
         }
     }
 
-    override fun reset(editor: EnumComboBoxWidget<YesNoEnumJS>) {
+    override fun reset(editor: EnumValueWidget<YesNoEnumJS>) {
         editor.setValue(YesNoEnumJS.NOT_IMPORTANT)
     }
 
-    override fun isNotEmpty(comp: EnumComboBoxWidget<YesNoEnumJS>): Boolean {
+    override fun isNotEmpty(comp: EnumValueWidget<YesNoEnumJS>): Boolean {
         return comp.getValue() != YesNoEnumJS.NOT_IMPORTANT
     }
 
@@ -296,29 +293,28 @@ internal class EntityValuesFilterHandler(private val className:String) : ListFil
     override fun createEditor(parent: WebComponent): EntityMultiValuesWidget {
         val widget = EntityMultiValuesWidget(parent, {
             width = "100%"
-            handler = AutocompleteUtils.getAutocompleteHandler(className)
+            handler = ClientRegistry.get().get(ObjectHandler.TYPE, className)!!.getAutocompleteHandler()
             showClearIcon = true
         })
         return widget
     }
 
     override fun getValue(editor: EntityMultiValuesWidget): ListFilterEntityValuesDTJS? {
-        return null
-//        val values = editor.getValues()
-//        if(values.isEmpty()){
-//            return null
-//        }
-//        val result = ListFilterEntityValuesDTJS()
-//        result.values.addAll(values)
-//        return result
+        val values = editor.getValues()
+        if(values.isEmpty()){
+            return null
+        }
+        val result = ListFilterEntityValuesDTJS()
+        result.values.addAll(values)
+        return result
     }
 
     override fun reset(editor: EntityMultiValuesWidget) {
-        //editor.setValues(emptyList())
+        editor.setValues(emptyList())
     }
 
     override fun isNotEmpty(comp: EntityMultiValuesWidget): Boolean {
-        return true//comp.getValues().isNotEmpty()
+        return comp.getValues().isNotEmpty()
     }
 
 

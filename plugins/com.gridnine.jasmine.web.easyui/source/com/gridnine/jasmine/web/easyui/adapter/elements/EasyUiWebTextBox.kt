@@ -78,17 +78,17 @@ class EasyUiWebTextBox(private val parent:WebComponent?, configure: WebTextBoxCo
             val value = this@EasyUiWebTextBox.value
             val icons = icons.toTypedArray()
             val onChange = {newValue:String?,_:String? ->
-                jq.textbox("getIcon",0).css("visibility",if(newValue?.isNotBlank() == false) "hidden" else "visible")
+                jq.textbox("getIcon",0).css("visibility",if(MiscUtilsJS.isBlank(newValue)) "hidden" else "visible")
             }
         })
         val tb = jq.textbox("textbox")
         tb.on("input") {
             if(showClearIcon){
                 val text = jq.textbox("getText") as String?
-                jq.textbox("getIcon",0).css("visibility",if(text?.isNotBlank() == false) "hidden" else "visible")
+                jq.textbox("getIcon",0).css("visibility",if(MiscUtilsJS.isBlank(text)) "hidden" else "visible")
             }
         }
-        if(showClearIcon && (value == null || value!!.isEmpty())){
+        if(showClearIcon && (MiscUtilsJS.isBlank(value))){
             jq.textbox("getIcon",0).css("visibility","hidden")
         }
         initialized = true

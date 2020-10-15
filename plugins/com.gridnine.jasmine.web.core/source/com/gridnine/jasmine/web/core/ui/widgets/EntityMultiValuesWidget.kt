@@ -36,6 +36,14 @@ class EntityMultiValuesWidget(parent:WebComponent, configure:EntityMultiValuesWi
         }
     }
 
+    fun getValues():List<ObjectReferenceJS>{
+        return delegate.getValues().map { toObjectReference(it) }
+    }
+
+    fun setValues(list: List<ObjectReferenceJS>) {
+        delegate.setValues(list.map { toSelectItem(it) })
+    }
+
     companion object{
         fun  convertConfiguration(configure: EntityMultiValuesWidgetConfiguration.() -> Unit): WebSelectConfiguration.() -> Unit {
             val conf = EntityMultiValuesWidgetConfiguration();
@@ -43,7 +51,7 @@ class EntityMultiValuesWidget(parent:WebComponent, configure:EntityMultiValuesWi
             return {
                 width = conf.width
                 height = conf.height
-                mode = ComboboxMode.REMOTE
+                mode = SelectDataType.REMOTE
                 showClearIcon = conf.showClearIcon
                 editable = true
                 multiple = true
@@ -52,6 +60,9 @@ class EntityMultiValuesWidget(parent:WebComponent, configure:EntityMultiValuesWi
         }
         private fun toSelectItem(ref:ObjectReferenceJS):SelectItemJS{
             return SelectItemJS("${ref.type}||${ref.uid}", ref.caption?:"???")
+        }
+        private fun toObjectReference(item:SelectItemJS):ObjectReferenceJS{
+            return ObjectReferenceJS(item.id.substringBefore("||"), item.id.substringAfter("||"), item.text)
         }
     }
 }

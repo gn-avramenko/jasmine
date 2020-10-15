@@ -40,11 +40,11 @@ class EasyUiWebDateTimeBox(private val parent:WebComponent?, configure: WebDateT
     }
 
     private val dateTimeParser = lambda@{ value: String? ->
-        if (value.isNullOrBlank()) {
+        if (MiscUtilsJS.isBlank(value)) {
             return@lambda  null
         }
         try {
-            val parts = value.split(" ")
+            val parts = value!!.split(" ")
             val comps1 = parts[0].split("-")
             val comps2 = parts[1].split(":")
             Date(year = comps1[0].toInt(), month = comps1[1].toInt() - 1, day = comps1[2].toInt(), hour = comps2[0].toInt(), minute = comps2[1].toInt())
@@ -104,7 +104,7 @@ class EasyUiWebDateTimeBox(private val parent:WebComponent?, configure: WebDateT
             }
             val icons = icons.toTypedArray()
             val onChange = {newValue:String?,_:String? ->
-                jq.datetimebox("getIcon",0).css("visibility",if(newValue?.isNotBlank() == false) "hidden" else "visible")
+                jq.datetimebox("getIcon",0).css("visibility",if(MiscUtilsJS.isBlank(newValue)) "hidden" else "visible")
             }
         })
         val tb = jq.datetimebox("textbox")
@@ -117,7 +117,7 @@ class EasyUiWebDateTimeBox(private val parent:WebComponent?, configure: WebDateT
         tb.on("input") {
             if(showClearIcon){
                 val text = jq.datetimebox("getText") as String?
-                jq.datetimebox("getIcon",0).css("visibility",if(text?.isNotBlank() == false) "hidden" else "visible")
+                jq.datetimebox("getIcon",0).css("visibility",if(MiscUtilsJS.isBlank(text)) "hidden" else "visible")
             }
         }
         if(showClearIcon && value == null){

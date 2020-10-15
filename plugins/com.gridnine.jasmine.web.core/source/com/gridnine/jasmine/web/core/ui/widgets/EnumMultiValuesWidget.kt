@@ -11,17 +11,24 @@ import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.components.*
-import kotlin.reflect.KClass
 
 class EnumMultiValuesWidget<E:Enum<E>>(parent:WebComponent, configure:EnumMultiValuesWidgetConfiguration.()->Unit
-                                    , private val delegate: WebTagBox = UiLibraryAdapter.get().createTagBox(parent, convertConfiguration(configure)) ):WebComponent by delegate{
+                                    , private val delegate: WebSelect = UiLibraryAdapter.get().createSelect(parent, convertConfiguration(configure)) ):WebComponent by delegate{
     private val className:String
     fun getValues():List<E> {
-        return delegate.getValues().map { ReflectionFactoryJS.get().getEnum<E>(className, it) }
+        return delegate.getValues().map { ReflectionFactoryJS.get().getEnum<E>(className, it.id) }
     }
 
     fun setValues(values: List<E>) {
-        delegate.setValues(values.map { it.name })
+        delegate.setValues(values.map {
+            val domainDescription = DomainMetaRegistryJS.get().enums[className]
+            if (domainDescription != null) {
+                SelectItemJS(it.name, domainDescription.items[it.name]!!.displayName)
+            } else {
+                val uiDescription = UiMetaRegistryJS.get().enums[className]
+                SelectItemJS(it.name, uiDescription!!.items[it.name]!!.displayName)
+            }
+        })
     }
 
     init {
@@ -42,14 +49,15 @@ class EnumMultiValuesWidget<E:Enum<E>>(parent:WebComponent, configure:EnumMultiV
 
 
     companion object{
-        fun  convertConfiguration(configure: EnumMultiValuesWidgetConfiguration.() -> Unit): WebTagBoxConfiguration.() -> Unit {
+        fun  convertConfiguration(configure: EnumMultiValuesWidgetConfiguration.() -> Unit): WebSelectConfiguration.() -> Unit {
             val conf = EnumMultiValuesWidgetConfiguration();
             conf.configure()
             return {
                 width = conf.width
                 height = conf.height
-                mode = ComboboxMode.LOCAL
+                mode = SelectDataType.LOCAL
                 showClearIcon = conf.showClearIcon
+                multiple = true
             }
         }
 

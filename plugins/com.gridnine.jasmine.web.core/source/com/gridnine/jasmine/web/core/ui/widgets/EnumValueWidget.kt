@@ -10,14 +10,11 @@ import com.gridnine.jasmine.server.core.model.ui.UiMetaRegistryJS
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.WebComponent
-import com.gridnine.jasmine.web.core.ui.components.ComboboxMode
-import com.gridnine.jasmine.web.core.ui.components.SelectItemJS
-import com.gridnine.jasmine.web.core.ui.components.WebComboBox
-import com.gridnine.jasmine.web.core.ui.components.WebComboBoxConfiguration
+import com.gridnine.jasmine.web.core.ui.components.*
 import kotlin.reflect.KClass
 
-class EnumComboBoxWidget<E:Enum<E>>(parent:WebComponent, configure:EnumComboBoxWidgetConfiguration<E>.()->Unit
-                                    , private val delegate: WebComboBox = UiLibraryAdapter.get().createCombobox(parent, EnumComboBoxWidget.convertConfiguration(configure)) ):WebComponent by delegate{
+class EnumValueWidget<E:Enum<E>>(parent:WebComponent, configure:EnumValueWidgetConfiguration<E>.()->Unit
+                                 , private val delegate: WebSelect = UiLibraryAdapter.get().createSelect(parent, convertConfiguration(configure)) ):WebComponent by delegate{
     private val className:String
     fun getValue():E? {
 
@@ -26,15 +23,25 @@ class EnumComboBoxWidget<E:Enum<E>>(parent:WebComponent, configure:EnumComboBoxW
             return null
         }
         val enumId = values[0]
-        return ReflectionFactoryJS.get().getEnum<E>(className, enumId)
+        return ReflectionFactoryJS.get().getEnum<E>(className, enumId.id)
     }
 
     fun setValue(value: E?) {
-        delegate.setValues(value?.let { arrayListOf(value.name) }?: emptyList())
+        val values = arrayListOf<SelectItemJS>()
+        if(value != null){
+            val domainDescription = DomainMetaRegistryJS.get().enums[className]
+            values.add(if (domainDescription != null) {
+                SelectItemJS(value.name, domainDescription.items[value.name]!!.displayName)
+            } else {
+                val uiDescription = UiMetaRegistryJS.get().enums[className]
+                SelectItemJS(value.name, uiDescription!!.items[value.name]!!.displayName)
+            })
+        }
+        delegate.setValues(values)
     }
 
     init {
-        val conf = EnumComboBoxWidgetConfiguration<E>();
+        val conf = EnumValueWidgetConfiguration<E>();
         conf.configure()
         className = ReflectionFactoryJS.get().getQualifiedClassName(conf.enumClass)
         val possibleValues = arrayListOf<SelectItemJS>()
@@ -51,22 +58,25 @@ class EnumComboBoxWidget<E:Enum<E>>(parent:WebComponent, configure:EnumComboBoxW
 
 
     companion object{
-        fun <E:Enum<E>> convertConfiguration(configure: EnumComboBoxWidgetConfiguration<E>.() -> Unit): WebComboBoxConfiguration.() -> Unit {
-            val conf = EnumComboBoxWidgetConfiguration<E>();
+        fun <E:Enum<E>> convertConfiguration(configure: EnumValueWidgetConfiguration<E>.() -> Unit): WebSelectConfiguration.() -> Unit {
+            val conf = EnumValueWidgetConfiguration<E>();
             conf.configure()
             return {
                 width = conf.width
                 height = conf.height
-                mode = ComboboxMode.LOCAL
+                mode = SelectDataType.LOCAL
                 editable = false
+                multiple = false
+                showClearIcon = conf.allowNull
             }
         }
 
     }
 }
 
-class EnumComboBoxWidgetConfiguration<E:Enum<E>>{
+class EnumValueWidgetConfiguration<E:Enum<E>>{
     var width:String? = null
     var height:String? = null
+    var allowNull = true
     lateinit var enumClass: KClass<E>
 }

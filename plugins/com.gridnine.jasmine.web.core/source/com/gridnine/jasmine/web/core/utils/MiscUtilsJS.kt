@@ -36,4 +36,12 @@ object MiscUtilsJS {
     fun getDiffInMilliseconds(date1: Date, date2: Date):Int{
         return date1.asDynamic()-date2.asDynamic()
     }
+
+    fun isBlank(text:String?):Boolean{
+        return text == null || text.isEmpty()
+    }
+
+    fun isNotBlank(text:String?):Boolean{
+        return !isBlank(text)
+    }
 }

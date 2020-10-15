@@ -8,6 +8,7 @@
     <message id="filters"/>
     <message id="from"/>
     <message id="to"/>
+    <message id="selectItem"/>
 </messages-bundle>
 
 

@@ -18,7 +18,7 @@ class TestDomainDocumentIndexStringPropertyCacheHandler:CacheConfiguration.Cache
     }
 
     override fun getPropertyName(): String {
-        return TestDomainDocumentIndex.stringProperty.name
+        return TestDomainDocumentIndex.stringPropertyProperty.name
     }
 
     override fun getIdentityClass(): KClass<TestDomainDocument> {
@@ -30,5 +30,5 @@ class TestDomainDocumentIndexStringPropertyCacheHandler:CacheConfiguration.Cache
     }
 }
 
-class TestDomainAssetStringPropertyCacheHandler:CacheConfiguration.AssetCachedPropertyHandler<TestDomainAsset>(TestDomainAsset::class, TestDomainAsset.stringProperty.name)
+class TestDomainAssetStringPropertyCacheHandler:CacheConfiguration.AssetCachedPropertyHandler<TestDomainAsset>(TestDomainAsset::class, TestDomainAsset.stringPropertyProperty.name)
 
