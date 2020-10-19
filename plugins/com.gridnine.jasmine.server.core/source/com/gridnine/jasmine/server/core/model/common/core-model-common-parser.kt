@@ -14,6 +14,7 @@ import java.io.File
 import java.io.InputStreamReader
 import java.net.URL
 import java.util.*
+import kotlin.reflect.KClass
 
 
 object ParserUtils {
@@ -96,5 +97,17 @@ object ParserUtils {
 
     fun getCaptionAttribute(it: XmlNode): String {
         return it.attributes["caption"]?:throw Xeption.forDeveloper("node ${it.name} has no caption attribute")
+    }
+
+    fun getIntegerAttribute(child: XmlNode, attributeName: String): Int? {
+        return child.attributes[attributeName]?.toInt()
+    }
+
+    fun getBooleanAttribute(child: XmlNode, attributeName: String): Boolean? {
+        return child.attributes[attributeName]?.toBoolean()
+    }
+
+    fun <E:Enum<E>> getEnum(columnElm: XmlNode, attributeName: String, cls: KClass<E>): E? {
+            return columnElm.attributes[attributeName]?.let { att-> cls.java.enumConstants.find { it.name == att } }
     }
 }

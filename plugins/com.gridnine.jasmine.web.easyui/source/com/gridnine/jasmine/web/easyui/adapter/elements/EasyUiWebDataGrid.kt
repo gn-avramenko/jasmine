@@ -22,6 +22,7 @@ class EasyUiWebDataGrid<E:BaseIntrospectableObjectJS>(private val parent:WebComp
     private var jq:dynamic = null
     private val uid = MiscUtilsJS.createUUID()
     private lateinit var loader:(WebDataGridRequest)-> Promise<WebDataGridResponse<E>>
+    private var dblClickListener:((E)-> Unit)? = null
     private val showPagination:Boolean
 
     private val columnsDescriptions:List<WebDataGridColumnConfiguration<E>>
@@ -83,6 +84,11 @@ class EasyUiWebDataGrid<E:BaseIntrospectableObjectJS>(private val parent:WebComp
                     })
                 }
             }
+            val onDblClickRow = {_:dynamic, row:dynamic ->
+                if(this@EasyUiWebDataGrid.dblClickListener != null){
+                    this@EasyUiWebDataGrid.dblClickListener!!.invoke(row)
+                }
+            }
         })
         initialized = true
     }
@@ -93,6 +99,10 @@ class EasyUiWebDataGrid<E:BaseIntrospectableObjectJS>(private val parent:WebComp
 
     override fun reload() {
         jq.datagrid("reload")
+    }
+
+    override fun setRowDblClickListener(listener: (E) -> Unit) {
+        this.dblClickListener = listener
     }
 
 }

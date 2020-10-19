@@ -7,6 +7,7 @@ package com.gridnine.jasmine.web.core.mainframe
 
 import com.gridnine.jasmine.server.core.model.common.BaseIntrospectableObjectJS
 import com.gridnine.jasmine.server.core.model.domain.BaseIndexDescriptionJS
+import com.gridnine.jasmine.server.core.model.domain.BaseIndexJS
 import com.gridnine.jasmine.server.core.model.domain.DatabasePropertyTypeJS
 import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistryJS
 import com.gridnine.jasmine.server.standard.model.domain.ListWorkspaceItemJS
@@ -18,14 +19,12 @@ import com.gridnine.jasmine.web.core.StandardRestClient
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.ui.*
 import com.gridnine.jasmine.web.core.ui.components.*
-import com.gridnine.jasmine.web.core.ui.widgets.EnumMultiValuesWidget
 import com.gridnine.jasmine.web.core.ui.widgets.SearchBoxWidget
-import com.gridnine.jasmine.web.core.ui.widgets.TextBoxWidget
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import kotlin.js.Date
 import kotlin.js.Promise
 
-class ListWorkspaceItemHandler : WorkspaceElementHandler<ListWorkspaceItemJS, Unit> {
+class ListWorkspaceItemHandler : MainFrameTabHandler<ListWorkspaceItemJS, Unit> {
 
 
     private lateinit var grid: WebDataGrid<*>
@@ -119,6 +118,11 @@ class ListWorkspaceItemHandler : WorkspaceElementHandler<ListWorkspaceItemJS, Un
                     val res = WebDataGridResponse(it.totalCount!!, it.items)
                     resolve.invoke(res as WebDataGridResponse<BaseIntrospectableObjectJS>)
                 }
+            }
+        }
+        dataGrid.setRowDblClickListener {
+            if(it is BaseIndexJS){
+                MainFrame.get().openTab(it.document)
             }
         }
         return dataGrid

@@ -279,6 +279,17 @@
                 <collection id="items" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.rest.AutocompleteItemDT"/>
             </response>
         </operation>
+        <operation id="getEditorData" handler="com.gridnine.jasmine.server.standard.rest.StandardGetEditorDataRestHandler">
+            <request id="com.gridnine.jasmine.server.standard.model.rest.GetEditorDataRequest">
+                <property id="objectId" type="STRING" lateinit="true"/>
+                <property id="objectUid" type="STRING"/>
+            </request>
+            <response id="com.gridnine.jasmine.server.standard.model.rest.GetEditorDataResponse">
+                <property id="viewModel" type="ENTITY" class-name="com.gridnine.jasmine.server.core.model.ui.BaseVM" lateinit="true"/>
+                <property id="viewSettings" type="ENTITY" class-name="com.gridnine.jasmine.server.core.model.ui.BaseVS" lateinit="true"/>
+                <property id="title" type="STRING" lateinit="true"/>
+            </response>
+        </operation>
     </group>
 
 </rest>

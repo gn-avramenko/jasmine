@@ -11,6 +11,7 @@ import kotlin.js.Promise
 
 interface WebDataGrid<E:BaseIntrospectableObjectJS>: WebComponent{
     fun setLoader(loader:(WebDataGridRequest)->Promise<WebDataGridResponse<E>>)
+    fun setRowDblClickListener(listener:(E)->Unit)
     fun reload()
 }
 

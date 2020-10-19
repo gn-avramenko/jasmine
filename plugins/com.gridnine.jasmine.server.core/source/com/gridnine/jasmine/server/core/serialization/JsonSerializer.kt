@@ -17,6 +17,7 @@ import com.gridnine.jasmine.server.core.model.custom.CustomMetaRegistry
 import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistry
 import com.gridnine.jasmine.server.core.model.domain.ObjectReference
 import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistry
+import com.gridnine.jasmine.server.core.model.ui.UiMetaRegistry
 import com.gridnine.jasmine.server.core.reflection.ReflectionFactory
 import java.io.InputStream
 import java.io.OutputStream
@@ -304,6 +305,18 @@ class JsonSerializer : Disposable {
             val customEntityDescription = CustomMetaRegistry.get().entities[key]
             if (customEntityDescription != null) {
                 return CustomEntityMetadataProvider(customEntityDescription)
+            }
+            val viewModelEntityDescription = UiMetaRegistry.get().viewModels[key]
+            if (viewModelEntityDescription != null) {
+                return VMEntityMetadataProvider(viewModelEntityDescription)
+            }
+            val viewSettingsEntityDescription = UiMetaRegistry.get().viewSettings[key]
+            if (viewSettingsEntityDescription != null) {
+                return VSEntityMetadataProvider(viewSettingsEntityDescription)
+            }
+            val viewValidationEntityDescription = UiMetaRegistry.get().viewValidations[key]
+            if (viewValidationEntityDescription != null) {
+                return VVEntityMetadataProvider(viewValidationEntityDescription)
             }
             TODO()
         }

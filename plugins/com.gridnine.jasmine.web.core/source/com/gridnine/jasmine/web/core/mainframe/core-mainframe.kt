@@ -5,15 +5,15 @@
 
 package com.gridnine.jasmine.web.core.mainframe
 
+import com.gridnine.jasmine.server.core.model.domain.ObjectReferenceJS
 import com.gridnine.jasmine.server.standard.model.domain.BaseWorkspaceItemJS
 import com.gridnine.jasmine.server.standard.model.domain.ListWorkspaceItemJS
 import com.gridnine.jasmine.server.standard.model.domain.WorkspaceJS
+import com.gridnine.jasmine.web.core.application.EnvironmentJS
 import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.*
-import com.gridnine.jasmine.web.core.ui.debugger
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
-import kotlin.browser.window
 import kotlin.js.Promise
 import kotlin.reflect.KClass
 
@@ -24,6 +24,9 @@ class MainFrame(private val delegate:WebBorderContainer = UiLibraryAdapter.get()
     private val configuration = MainFrameConfiguration()
 
     private val uid = MiscUtilsJS.createUUID()
+
+    private lateinit var  tabsContainer:WebTabsContainer
+
     init {
         configuration.elementsHandlers[ListWorkspaceItemJS::class] = ListWorkspaceItemHandler()
     }
@@ -46,7 +49,7 @@ class MainFrame(private val delegate:WebBorderContainer = UiLibraryAdapter.get()
             width="100%"
         }
         val centerRegion =  UiLibraryAdapter.get().createBorderLayout(this){fit=true}
-        val tabsContainer = UiLibraryAdapter.get().createTabsContainer(centerRegion){
+        tabsContainer = UiLibraryAdapter.get().createTabsContainer(centerRegion){
             fit = true
             width = "100%"
             height = "100%"
@@ -67,32 +70,8 @@ class MainFrame(private val delegate:WebBorderContainer = UiLibraryAdapter.get()
                     }
                     result.setSelectionAllowed(false)
                     result.setClickListener {we ->
-                        val handler = configuration.elementsHandlers[we::class]!! as WorkspaceElementHandler<BaseWorkspaceItemJS, Any>
-                        val tabId = "$uid|${handler.getTabId(we)}"
-                        val existingTab = tabsContainer.getTabs().find { it.id == tabId }
-                        if(existingTab != null){
-                            tabsContainer.select(existingTab.id)
-                            return@setClickListener
-                        }
-                        handler.loadData(we).then {
-
-                            val tabData  = handler.createTabData(we, it, tabsContainer, object:MainFrameTabCallback {
-                                override fun setTitle(title: String) {
-                                    TODO("Not yet implemented")
-                                }
-
-                                override fun close() {
-                                    TODO("Not yet implemented")
-                                }
-
-                            })
-                            tabsContainer.addTab(WebTabsContainer.tab{
-                                id = tabId
-                                title = tabData.title
-                                content = tabData.content
-                            })
-                        }
-//                        window.alert("you select ${it.displayName}")
+                        val handler = configuration.elementsHandlers[we::class]!! as MainFrameTabHandler<BaseWorkspaceItemJS, Any>
+                        openTab(handler, we)
                     }
                     result.setData(group.items)
                     result
@@ -124,6 +103,39 @@ class MainFrame(private val delegate:WebBorderContainer = UiLibraryAdapter.get()
         })
     }
 
+    fun<T:Any> openTab(handler: MainFrameTabHandler<T, Any>, we: T) {
+        val tabId = "$uid|${handler.getTabId(we)}"
+        val existingTab = tabsContainer.getTabs().find { it.id == tabId }
+        if(existingTab != null){
+            tabsContainer.select(existingTab.id)
+            return
+        }
+        handler.loadData(we).then {
+
+            val tabData  = handler.createTabData(we, it, tabsContainer, object:MainFrameTabCallback {
+                override fun setTitle(title: String) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun close() {
+                    TODO("Not yet implemented")
+                }
+
+            })
+            tabsContainer.addTab(WebTabsContainer.tab{
+                id = tabId
+                title = tabData.title
+                content = tabData.content
+            })
+        }
+    }
+
+    fun openTab(ref:ObjectReferenceJS){
+        openTab(ObjectEditorTabHandler() as MainFrameTabHandler<ObjectReferenceJS, Any>, ref)
+    }
+    companion object {
+        fun get() = EnvironmentJS.getPublished(MainFrame::class)
+    }
 }
 
 interface MainFrameTabCallback{
@@ -133,7 +145,7 @@ interface MainFrameTabCallback{
 
 data class MainFrameTabData(var title:String, var content:WebComponent)
 
-interface WorkspaceElementHandler<T:Any,D>{
+interface MainFrameTabHandler<T:Any,D>{
     fun getTabId(obj:T):String
     fun loadData(obj:T):Promise<D>
     fun createTabData(obj:T, data:D, parent:WebComponent, callback: MainFrameTabCallback):MainFrameTabData
@@ -147,7 +159,7 @@ class MainFrameConfiguration{
 
     var logoText = "Jasmine"
 
-    val elementsHandlers = hashMapOf<KClass<*>, WorkspaceElementHandler<*,*>>()
+    val elementsHandlers = hashMapOf<KClass<*>, MainFrameTabHandler<*,*>>()
 
 
 }
