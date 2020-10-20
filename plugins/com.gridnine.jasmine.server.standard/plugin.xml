@@ -26,4 +26,12 @@
         <parameter id="url" value="com/gridnine/jasmine/server/standard/model/standard-web-messages.xml"/>
         <parameter id="dest-client-plugin-id" value="com.gridnine.jasmine.web.core"/>
     </extension>
+    <extension point-id="activator">
+        <parameter id="class" value="com.gridnine.jasmine.server.standard.activator.StandardServerActivator"/>
+    </extension>
+    <extension point-id="server-messages">
+        <parameter id="relative-path" value="source/com/gridnine/jasmine/server/standard/model/standard-server-messages.xml"/>
+        <parameter id="url" value="com/gridnine/jasmine/server/standard/model/standard-server-messages.xml"/>
+        <parameter id="dest-server-plugin-id" value="com.gridnine.jasmine.server.standard"/>
+    </extension>
 </plugin>

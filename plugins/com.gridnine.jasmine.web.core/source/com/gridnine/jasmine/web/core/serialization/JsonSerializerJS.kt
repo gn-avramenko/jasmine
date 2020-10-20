@@ -12,9 +12,9 @@ import com.gridnine.jasmine.server.core.model.common.XeptionJS
 import com.gridnine.jasmine.server.core.model.custom.CustomMetaRegistryJS
 import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistryJS
 import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistryJS
+import com.gridnine.jasmine.server.core.model.ui.UiMetaRegistryJS
 import com.gridnine.jasmine.web.core.application.EnvironmentJS
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
-import com.gridnine.jasmine.web.core.ui.debugger
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import kotlin.js.Date
 
@@ -162,6 +162,24 @@ class JsonSerializerJS {
         val red = RestMetaRegistryJS.get().entities[qualifiedName]
         if(red != null){
             provider = RestEntityMetadataProviderJS(red)
+            providersCache[qualifiedName] = provider
+            return provider
+        }
+        val vmd = UiMetaRegistryJS.get().viewModels[qualifiedName]
+        if(vmd != null){
+            provider = VMEntityMetadataProviderJS(vmd)
+            providersCache[qualifiedName] = provider
+            return provider
+        }
+        val vsd = UiMetaRegistryJS.get().viewSettings[qualifiedName]
+        if(vsd != null){
+            provider = VSEntityMetadataProviderJS(vsd)
+            providersCache[qualifiedName] = provider
+            return provider
+        }
+        val vvd = UiMetaRegistryJS.get().viewValidations[qualifiedName]
+        if(vvd != null){
+            provider = VVEntityMetadataProviderJS(vvd)
             providersCache[qualifiedName] = provider
             return provider
         }

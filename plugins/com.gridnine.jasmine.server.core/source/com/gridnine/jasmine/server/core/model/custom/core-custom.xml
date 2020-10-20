@@ -12,4 +12,7 @@
     </entity>
     <entity id="com.gridnine.jasmine.server.core.model.ui.TextBoxConfiguration" extends="com.gridnine.jasmine.server.core.model.ui.BaseWidgetConfiguration"/>
     <entity id="com.gridnine.jasmine.server.core.model.ui.PasswordBoxConfiguration" extends="com.gridnine.jasmine.server.core.model.ui.BaseWidgetConfiguration"/>
+    <entity id="com.gridnine.jasmine.server.core.model.ui.BaseVM" abstract="true"/>
+    <entity id="com.gridnine.jasmine.server.core.model.ui.BaseVS" abstract="true"/>
+    <entity id="com.gridnine.jasmine.server.core.model.ui.BaseVV" abstract="true"/>
 </custom-entities>

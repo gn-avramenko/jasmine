@@ -178,6 +178,64 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
             }
             result.uiEnums.add(enumDescr)
         }
+        UiMetaRegistry.get().viewModels.values.forEach {ed->
+            val entityDescriptionDT = VMEntityDescriptionDT()
+            entityDescriptionDT.id = ed.id +"JS"
+            ed.properties.values.forEach { pd ->
+               val propertyDescriptionDT = VMPropertyDescriptionDT()
+                propertyDescriptionDT.className = getClassName(pd.className)
+                propertyDescriptionDT.id = pd.id
+                propertyDescriptionDT.nonNullable = pd.nonNullable
+                propertyDescriptionDT.type = VMPropertyTypeDT.valueOf(pd.type.name)
+                entityDescriptionDT.properties.add(propertyDescriptionDT)
+            }
+            ed.collections.values.forEach { cd ->
+                val collectionDescriptionDT = VMCollectionDescriptionDT()
+                collectionDescriptionDT.elementClassName = getClassName(cd.elementClassName)
+                collectionDescriptionDT.id = cd.id
+                collectionDescriptionDT.elementType = VMCollectionTypeDT.valueOf(cd.elementType.name)
+                entityDescriptionDT.collections.add(collectionDescriptionDT)
+            }
+            result.viewModels.add(entityDescriptionDT)
+        }
+        UiMetaRegistry.get().viewSettings.values.forEach {ed->
+            val entityDescriptionDT = VSEntityDescriptionDT()
+            entityDescriptionDT.id = ed.id+"JS"
+            ed.properties.values.forEach { pd ->
+                val propertyDescriptionDT = VSPropertyDescriptionDT()
+                propertyDescriptionDT.className = getClassName(pd.className)
+                propertyDescriptionDT.id = pd.id
+                propertyDescriptionDT.type = VSPropertyTypeDT.valueOf(pd.type.name)
+                entityDescriptionDT.properties.add(propertyDescriptionDT)
+            }
+            ed.collections.values.forEach { cd ->
+                val collectionDescriptionDT = VSCollectionDescriptionDT()
+                collectionDescriptionDT.elementClassName = getClassName(cd.elementClassName)
+                collectionDescriptionDT.id = cd.id
+                collectionDescriptionDT.elementType = VSCollectionTypeDT.valueOf(cd.elementType.name)
+                entityDescriptionDT.collections.add(collectionDescriptionDT)
+            }
+            result.viewSettings.add(entityDescriptionDT)
+        }
+        UiMetaRegistry.get().viewValidations.values.forEach {ed->
+            val entityDescriptionDT = VVEntityDescriptionDT()
+            entityDescriptionDT.id = ed.id+"JS"
+            ed.properties.values.forEach { pd ->
+                val propertyDescriptionDT = VVPropertyDescriptionDT()
+                propertyDescriptionDT.className = getClassName(pd.className)
+                propertyDescriptionDT.id = pd.id
+                propertyDescriptionDT.type = VVPropertyTypeDT.valueOf(pd.type.name)
+                entityDescriptionDT.properties.add(propertyDescriptionDT)
+            }
+            ed.collections.values.forEach { cd ->
+                val collectionDescriptionDT = VVCollectionDescriptionDT()
+                collectionDescriptionDT.elementClassName = getClassName(cd.elementClassName)
+                collectionDescriptionDT.id = cd.id
+                collectionDescriptionDT.elementType = VVCollectionTypeDT.valueOf(cd.elementType.name)
+                entityDescriptionDT.collections.add(collectionDescriptionDT)
+            }
+            result.viewValidations.add(entityDescriptionDT)
+        }
         L10nMetaRegistry.get().webMessages.values.forEach {
             val bundle = WebMessagesBundleDT()
             bundle.id = it.id

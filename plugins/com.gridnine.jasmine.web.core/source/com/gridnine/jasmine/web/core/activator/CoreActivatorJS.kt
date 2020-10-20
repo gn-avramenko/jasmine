@@ -9,9 +9,7 @@ import com.gridnine.jasmine.server.core.model.custom.*
 import com.gridnine.jasmine.server.core.model.domain.*
 import com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS
 import com.gridnine.jasmine.server.core.model.rest.*
-import com.gridnine.jasmine.server.core.model.ui.UiEnumDescriptionJS
-import com.gridnine.jasmine.server.core.model.ui.UiEnumItemDescriptionJS
-import com.gridnine.jasmine.server.core.model.ui.UiMetaRegistryJS
+import com.gridnine.jasmine.server.core.model.ui.*
 import com.gridnine.jasmine.web.core.CoreWebMessagesInitializerJS
 import com.gridnine.jasmine.web.core.DomainReflectionUtilsJS
 import com.gridnine.jasmine.web.core.RestReflectionUtilsJS
@@ -73,6 +71,36 @@ class CoreActivatorJS: ActivatorJS {
                 enum.items.put(item.id, UiEnumItemDescriptionJS(item.id, item.displayName))
             }
             uiRegistry.enums.put(enum.id, enum)
+        }
+        it.viewModels?.forEach{ itJs ->
+            val entityDescription = VMEntityDescriptionJS(itJs.id)
+            itJs.properties?.forEach{ item:dynamic ->
+                entityDescription.properties.put(item.id , VMPropertyDescriptionJS(item.id, VMPropertyTypeJS.valueOf(item.type), item.className, item.nonNullable))
+            }
+            itJs.collections?.forEach{ item:dynamic ->
+                entityDescription.collections.put(item.id , VMCollectionDescriptionJS(item.id, VMCollectionTypeJS.valueOf(item.elementType), item.elementClassName))
+            }
+            uiRegistry.viewModels.put(entityDescription.id, entityDescription)
+        }
+        it.viewSettings?.forEach{ itJs ->
+            val entityDescription = VSEntityDescriptionJS(itJs.id)
+            itJs.properties?.forEach{ item:dynamic ->
+                entityDescription.properties.put(item.id , VSPropertyDescriptionJS(item.id, VSPropertyTypeJS.valueOf(item.type), item.className))
+            }
+            itJs.collections?.forEach{ item:dynamic ->
+                entityDescription.collections.put(item.id , VSCollectionDescriptionJS(item.id, VSCollectionTypeJS.valueOf(item.elementType), item.elementClassName))
+            }
+            uiRegistry.viewSettings.put(entityDescription.id, entityDescription)
+        }
+        it.viewValidations?.forEach{ itJs ->
+            val entityDescription = VVEntityDescriptionJS(itJs.id)
+            itJs.properties?.forEach{ item:dynamic ->
+                entityDescription.properties.put(item.id , VVPropertyDescriptionJS(item.id, VVPropertyTypeJS.valueOf(item.type), item.className))
+            }
+            itJs.collections?.forEach{ item:dynamic ->
+                entityDescription.collections.put(item.id , VVCollectionDescriptionJS(item.id, VVCollectionTypeJS.valueOf(item.elementType), item.elementClassName))
+            }
+            uiRegistry.viewValidations.put(entityDescription.id, entityDescription)
         }
     }
 

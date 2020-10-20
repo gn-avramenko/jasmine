@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages-bundle xmlns="http://xtrip.gridnine.com/jasmine/server-messages" id ="standard" factory-class="com.gridnine.jasmine.server.standard.model.l10n.StandardServerMessagesFactory">
+    <message id="OBJECT_NOT_FOUND">
+        <parameter id="objectId" type="STRING"/>
+        <parameter id="objectUid" type="STRING"/>
+    </message>
+</messages-bundle>

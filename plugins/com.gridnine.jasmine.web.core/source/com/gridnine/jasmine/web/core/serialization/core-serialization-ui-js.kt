@@ -5,227 +5,217 @@
 
 package com.gridnine.jasmine.web.core.serialization
 
+import com.gridnine.jasmine.server.core.model.domain.ObjectReferenceJS
+import com.gridnine.jasmine.server.core.model.ui.*
 
-//
-//internal class VMEntityMetadataProviderJS(description: VMEntityDescriptionJS) : ObjectMetadataProviderJS<BaseVMJS>() {
-//
-//    init {
-//        fillProperties(description)
-//        fillCollections(description)
-//        isAbstract = false
-//    }
-//
-//    private fun fillCollections(desc: VMEntityDescription) {
-//        desc.collections.values.forEach {
-//            addCollection(SerializableCollectionDescription(it.id, toSerializableType(it.elementType), toClassName(it.elementType, it.elementClassName), isAbstractClass(it.elementClassName)))
-//        }
-//    }
-//
-//    private fun toClassName(elementType: VMCollectionType, elementClassName: String?): String? {
-//        return when (elementType) {
-//            VMCollectionType.ENTITY -> elementClassName
-//        }
-//    }
-//
-//    private fun toSerializableType(elementType: VMCollectionType): SerializablePropertyType {
-//        return when (elementType) {
-//            VMCollectionType.ENTITY -> SerializablePropertyType.ENTITY
-//        }
-//    }
-//
-//    private fun fillProperties(desc: VMEntityDescription) {
-//        desc.properties.values.forEach {
-//            addProperty(SerializablePropertyDescription(it.id, toSerializableType(it.type), toClassName(it.type, it.className), isAbstractClass(it.className)))
-//        }
-//    }
-//
-//    private fun isAbstractClass(elementClassName: String?): Boolean {
-//        if (elementClassName == BaseVM::class.qualifiedName) {
-//            return true
-//        }
-//        return false
-//
-//    }
-//
-//    private fun toClassName(elementType: VMPropertyType, elementClassName: String?): String? {
-//        if (elementType == VMPropertyType.ENTITY_REFERENCE) {
-//            return ObjectReference::class.qualifiedName
-//        }
-//        return elementClassName
-//    }
-//
-//    private fun toSerializableType(elementType: VMPropertyType): SerializablePropertyType {
-//        return when (elementType) {
-//            VMPropertyType.LONG -> SerializablePropertyType.LONG
-//            VMPropertyType.LOCAL_DATE_TIME -> SerializablePropertyType.LOCAL_DATE_TIME
-//            VMPropertyType.LOCAL_DATE -> SerializablePropertyType.LOCAL_DATE
-//            VMPropertyType.INT -> SerializablePropertyType.INT
-//            VMPropertyType.ENUM -> SerializablePropertyType.ENUM
-//            VMPropertyType.ENTITY_REFERENCE -> SerializablePropertyType.ENTITY
-//            VMPropertyType.BOOLEAN -> SerializablePropertyType.BOOLEAN
-//            VMPropertyType.BIG_DECIMAL -> SerializablePropertyType.BIG_DECIMAL
-//            VMPropertyType.STRING -> SerializablePropertyType.STRING
-//            VMPropertyType.SELECT -> SerializablePropertyType.ENTITY
-//            VMPropertyType.ENTITY -> SerializablePropertyType.ENTITY
-//        }
-//    }
-//
-//    override fun getPropertyValue(obj: BaseVM, id: String): Any? {
-//        return obj.getValue(id)
-//    }
-//
-//    override fun getCollection(obj: BaseVM, id: String): MutableCollection<Any> {
-//        return obj.getCollection(id)
-//    }
-//
-//    override fun setPropertyValue(obj: BaseVM, id: String, value: Any?) {
-//        obj.setValue(id, value)
-//    }
-//
-//    override fun hasUid(): Boolean {
-//        return false
-//    }
-//}
-//
-//
-//internal class VSEntityMetadataProvider(description: VSEntityDescription) : ObjectMetadataProvider<BaseVS>() {
-//
-//    init {
-//        fillProperties(description)
-//        fillCollections(description)
-//        isAbstract = false
-//    }
-//
-//    private fun fillCollections(desc: VSEntityDescription) {
-//        desc.collections.values.forEach {
-//            addCollection(SerializableCollectionDescription(it.id, toSerializableType(it.elementType), toClassName(it.elementType, it.elementClassName), isAbstractClass(it.elementClassName)))
-//        }
-//    }
-//
-//    private fun toClassName(elementType: VSCollectionType, elementClassName: String?): String? {
-//        return when (elementType) {
-//            VSCollectionType.ENTITY -> elementClassName
-//        }
-//    }
-//
-//    private fun toSerializableType(elementType: VSCollectionType): SerializablePropertyType {
-//        return when (elementType) {
-//            VSCollectionType.ENTITY -> SerializablePropertyType.ENTITY
-//        }
-//    }
-//
-//    private fun fillProperties(desc: VSEntityDescription) {
-//        desc.properties.values.forEach {
-//            addProperty(SerializablePropertyDescription(it.id, toSerializableType(it.type), toClassName(it.type, it.className), isAbstractClass(it.className)))
-//        }
-//    }
-//
-//    private fun isAbstractClass(elementClassName: String?): Boolean {
-//        if (elementClassName == BaseVM::class.qualifiedName) {
-//            return true
-//        }
-//        return false
-//
-//    }
-//
-//    private fun toClassName(elementType: VSPropertyType, elementClassName: String?): String? {
-//        return when(elementType){
-//            VSPropertyType.TEXT_BOX_SETTINGS -> TextBoxConfiguration::class.qualifiedName
-//            VSPropertyType.PASSWORD_BOX_SETTINGS -> PasswordBoxConfiguration::class.qualifiedName
-//        }
-//    }
-//
-//    private fun toSerializableType(elementType: VSPropertyType): SerializablePropertyType {
-//        return when (elementType) {
-//            VSPropertyType.TEXT_BOX_SETTINGS -> SerializablePropertyType.ENTITY
-//            VSPropertyType.PASSWORD_BOX_SETTINGS  -> SerializablePropertyType.ENTITY
-//        }
-//    }
-//
-//    override fun getPropertyValue(obj: BaseVS, id: String): Any? {
-//        return obj.getValue(id)
-//    }
-//
-//    override fun getCollection(obj: BaseVS, id: String): MutableCollection<Any> {
-//        return obj.getCollection(id)
-//    }
-//
-//    override fun setPropertyValue(obj: BaseVS, id: String, value: Any?) {
-//        obj.setValue(id, value)
-//    }
-//
-//    override fun hasUid(): Boolean {
-//        return false
-//    }
-//}
-//
-//internal class VVEntityMetadataProvider(description: VVEntityDescription) : ObjectMetadataProvider<BaseVV>() {
-//
-//    init {
-//        fillProperties(description)
-//        fillCollections(description)
-//        isAbstract = false
-//    }
-//
-//    private fun fillCollections(desc: VVEntityDescription) {
-//        desc.collections.values.forEach {
-//            addCollection(SerializableCollectionDescription(it.id, toSerializableType(it.elementType), toClassName(it.elementType, it.elementClassName), isAbstractClass(it.elementClassName)))
-//        }
-//    }
-//
-//    private fun toClassName(elementType: VVCollectionType, elementClassName: String?): String? {
-//        return when (elementType) {
-//            VVCollectionType.ENTITY -> elementClassName
-//        }
-//    }
-//
-//    private fun toSerializableType(elementType: VVCollectionType): SerializablePropertyType {
-//        return when (elementType) {
-//            VVCollectionType.ENTITY -> SerializablePropertyType.ENTITY
-//        }
-//    }
-//
-//    private fun fillProperties(desc: VVEntityDescription) {
-//        desc.properties.values.forEach {
-//            addProperty(SerializablePropertyDescription(it.id, toSerializableType(it.type), toClassName(it.type, it.className), isAbstractClass(it.className)))
-//        }
-//    }
-//
-//    private fun isAbstractClass(elementClassName: String?): Boolean {
-//        if (elementClassName == BaseVM::class.qualifiedName) {
-//            return true
-//        }
-//        return false
-//
-//    }
-//
-//    private fun toClassName(elementType: VVPropertyType, elementClassName: String?): String? {
-//        return when(elementType){
-//            VVPropertyType.STRING -> null
-//            VVPropertyType.ENTITY -> elementClassName
-//        }
-//    }
-//
-//    private fun toSerializableType(elementType: VVPropertyType): SerializablePropertyType {
-//        return when (elementType) {
-//            VVPropertyType.STRING -> SerializablePropertyType.STRING
-//            VVPropertyType.ENTITY  -> SerializablePropertyType.ENTITY
-//        }
-//    }
-//
-//    override fun getPropertyValue(obj: BaseVV, id: String): Any? {
-//        return obj.getValue(id)
-//    }
-//
-//    override fun getCollection(obj: BaseVV, id: String): MutableCollection<Any> {
-//        return obj.getCollection(id)
-//    }
-//
-//    override fun setPropertyValue(obj: BaseVV, id: String, value: Any?) {
-//        obj.setValue(id, value)
-//    }
-//
-//    override fun hasUid(): Boolean {
-//        return false
-//    }
-//}
+
+internal class VMEntityMetadataProviderJS(description: VMEntityDescriptionJS) : ObjectMetadataProviderJS<BaseVMJS>() {
+
+    init {
+        fillProperties(description)
+        fillCollections(description)
+        isAbstract = false
+    }
+
+    private fun fillCollections(desc: VMEntityDescriptionJS) {
+        desc.collections.values.forEach {
+            addCollection(SerializableCollectionDescriptionJS(it.id, toSerializableType(it.elementType), toClassName(it.elementType, it.elementClassName), isAbstractClass(it.elementClassName)))
+        }
+    }
+
+    private fun toClassName(elementType: VMCollectionTypeJS, elementClassName: String?): String? {
+        return when (elementType) {
+            VMCollectionTypeJS.ENTITY -> elementClassName
+        }
+    }
+
+    private fun toSerializableType(elementType: VMCollectionTypeJS): SerializablePropertyTypeJS {
+        return when (elementType) {
+            VMCollectionTypeJS.ENTITY -> SerializablePropertyTypeJS.ENTITY
+        }
+    }
+
+    private fun fillProperties(desc: VMEntityDescriptionJS) {
+        desc.properties.values.forEach {
+            addProperty(SerializablePropertyDescriptionJS(it.id, toSerializableType(it.type), toClassName(it.type, it.className), isAbstractClass(it.className)))
+        }
+    }
+
+    private fun isAbstractClass(elementClassName: String?): Boolean {
+        return false
+    }
+
+    private fun toClassName(elementType: VMPropertyTypeJS, elementClassName: String?): String? {
+        if (elementType == VMPropertyTypeJS.ENTITY_REFERENCE) {
+            return ObjectReferenceJS.qualifiedClassName
+        }
+        return elementClassName
+    }
+
+    private fun toSerializableType(elementType: VMPropertyTypeJS): SerializablePropertyTypeJS {
+        return when (elementType) {
+            VMPropertyTypeJS.LONG -> SerializablePropertyTypeJS.LONG
+            VMPropertyTypeJS.LOCAL_DATE_TIME -> SerializablePropertyTypeJS.LOCAL_DATE_TIME
+            VMPropertyTypeJS.LOCAL_DATE -> SerializablePropertyTypeJS.LOCAL_DATE
+            VMPropertyTypeJS.INT -> SerializablePropertyTypeJS.INT
+            VMPropertyTypeJS.ENUM -> SerializablePropertyTypeJS.ENUM
+            VMPropertyTypeJS.ENTITY_REFERENCE -> SerializablePropertyTypeJS.ENTITY
+            VMPropertyTypeJS.BOOLEAN -> SerializablePropertyTypeJS.BOOLEAN
+            VMPropertyTypeJS.BIG_DECIMAL -> SerializablePropertyTypeJS.BIG_DECIMAL
+            VMPropertyTypeJS.STRING -> SerializablePropertyTypeJS.STRING
+            VMPropertyTypeJS.SELECT -> SerializablePropertyTypeJS.ENTITY
+            VMPropertyTypeJS.ENTITY -> SerializablePropertyTypeJS.ENTITY
+        }
+    }
+
+    override fun getPropertyValue(obj: BaseVMJS, id: String): Any? {
+        return obj.getValue(id)
+    }
+
+    override fun getCollection(obj: BaseVMJS, id: String): MutableCollection<Any> {
+        return obj.getCollection(id)
+    }
+
+    override fun setPropertyValue(obj: BaseVMJS, id: String, value: Any?) {
+        obj.setValue(id, value)
+    }
+
+    override fun hasUid(): Boolean {
+        return false
+    }
+}
+
+
+internal class VSEntityMetadataProviderJS(description: VSEntityDescriptionJS) : ObjectMetadataProviderJS<BaseVSJS>() {
+
+    init {
+        fillProperties(description)
+        fillCollections(description)
+        isAbstract = false
+    }
+
+    private fun fillCollections(desc: VSEntityDescriptionJS) {
+        desc.collections.values.forEach {
+            addCollection(SerializableCollectionDescriptionJS(it.id, toSerializableType(it.elementType), toClassName(it.elementType, it.elementClassName), isAbstractClass(it.elementClassName)))
+        }
+    }
+
+    private fun toClassName(elementType: VSCollectionTypeJS, elementClassName: String?): String? {
+        return when (elementType) {
+            VSCollectionTypeJS.ENTITY -> elementClassName
+        }
+    }
+
+    private fun toSerializableType(elementType: VSCollectionTypeJS): SerializablePropertyTypeJS {
+        return when (elementType) {
+            VSCollectionTypeJS.ENTITY -> SerializablePropertyTypeJS.ENTITY
+        }
+    }
+
+    private fun fillProperties(desc: VSEntityDescriptionJS) {
+        desc.properties.values.forEach {
+            addProperty(SerializablePropertyDescriptionJS(it.id, toSerializableType(it.type), toClassName(it.type, it.className), isAbstractClass(it.className)))
+        }
+    }
+
+    private fun isAbstractClass(elementClassName: String?): Boolean {
+        return false
+    }
+
+    private fun toClassName(elementType: VSPropertyTypeJS, elementClassName: String?): String? {
+        return when(elementType){
+            VSPropertyTypeJS.TEXT_BOX_SETTINGS -> TextBoxConfigurationJS.qualifiedClassName
+            VSPropertyTypeJS.PASSWORD_BOX_SETTINGS -> PasswordBoxConfigurationJS.qualifiedClassName
+        }
+    }
+
+    private fun toSerializableType(elementType: VSPropertyTypeJS): SerializablePropertyTypeJS {
+        return when (elementType) {
+            VSPropertyTypeJS.TEXT_BOX_SETTINGS -> SerializablePropertyTypeJS.ENTITY
+            VSPropertyTypeJS.PASSWORD_BOX_SETTINGS  -> SerializablePropertyTypeJS.ENTITY
+        }
+    }
+
+    override fun getPropertyValue(obj: BaseVSJS, id: String): Any? {
+        return obj.getValue(id)
+    }
+
+    override fun getCollection(obj: BaseVSJS, id: String): MutableCollection<Any> {
+        return obj.getCollection(id)
+    }
+
+    override fun setPropertyValue(obj: BaseVSJS, id: String, value: Any?) {
+        obj.setValue(id, value)
+    }
+
+    override fun hasUid(): Boolean {
+        return false
+    }
+}
+
+internal class VVEntityMetadataProviderJS(description: VVEntityDescriptionJS) : ObjectMetadataProviderJS<BaseVVJS>() {
+
+    init {
+        fillProperties(description)
+        fillCollections(description)
+        isAbstract = false
+    }
+
+    private fun fillCollections(desc: VVEntityDescriptionJS) {
+        desc.collections.values.forEach {
+            addCollection(SerializableCollectionDescriptionJS(it.id, toSerializableType(it.elementType), toClassName(it.elementType, it.elementClassName), isAbstractClass(it.elementClassName)))
+        }
+    }
+
+    private fun toClassName(elementType: VVCollectionTypeJS, elementClassName: String?): String? {
+        return when (elementType) {
+            VVCollectionTypeJS.ENTITY -> elementClassName
+        }
+    }
+
+    private fun toSerializableType(elementType: VVCollectionTypeJS): SerializablePropertyTypeJS {
+        return when (elementType) {
+            VVCollectionTypeJS.ENTITY -> SerializablePropertyTypeJS.ENTITY
+        }
+    }
+
+    private fun fillProperties(desc: VVEntityDescriptionJS) {
+        desc.properties.values.forEach {
+            addProperty(SerializablePropertyDescriptionJS(it.id, toSerializableType(it.type), toClassName(it.type, it.className), isAbstractClass(it.className)))
+        }
+    }
+
+    private fun isAbstractClass(elementClassName: String?): Boolean {
+        return false
+    }
+
+    private fun toClassName(elementType: VVPropertyTypeJS, elementClassName: String?): String? {
+        return when(elementType){
+            VVPropertyTypeJS.STRING -> null
+            VVPropertyTypeJS.ENTITY -> elementClassName
+        }
+    }
+
+    private fun toSerializableType(elementType: VVPropertyTypeJS): SerializablePropertyTypeJS {
+        return when (elementType) {
+            VVPropertyTypeJS.STRING -> SerializablePropertyTypeJS.STRING
+            VVPropertyTypeJS.ENTITY  -> SerializablePropertyTypeJS.ENTITY
+        }
+    }
+
+    override fun getPropertyValue(obj: BaseVVJS, id: String): Any? {
+        return obj.getValue(id)
+    }
+
+    override fun getCollection(obj: BaseVVJS, id: String): MutableCollection<Any> {
+        return obj.getCollection(id)
+    }
+
+    override fun setPropertyValue(obj: BaseVVJS, id: String, value: Any?) {
+        obj.setValue(id, value)
+    }
+
+    override fun hasUid(): Boolean {
+        return false
+    }
+}

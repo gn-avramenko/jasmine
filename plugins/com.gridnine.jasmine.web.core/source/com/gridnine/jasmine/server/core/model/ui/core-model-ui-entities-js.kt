@@ -31,5 +31,13 @@ abstract class BaseVMJS:BaseIntrospectableObjectJS()
 abstract class BaseVSJS:BaseIntrospectableObjectJS()
 abstract class BaseVVJS:BaseIntrospectableObjectJS()
 
-class TextBoxConfigurationJS : BaseWidgetConfigurationJS()
-class PasswordBoxConfigurationJS : BaseWidgetConfigurationJS()
+class TextBoxConfigurationJS : BaseWidgetConfigurationJS(){
+    companion object{
+        val qualifiedClassName = "com.gridnine.jasmine.server.core.model.ui.TextBoxConfigurationJS"
+    }
+}
+class PasswordBoxConfigurationJS : BaseWidgetConfigurationJS(){
+    companion object{
+        val qualifiedClassName = "com.gridnine.jasmine.server.core.model.ui.PasswordBoxConfigurationJS"
+    }
+}
