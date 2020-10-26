@@ -11,6 +11,7 @@ import com.gridnine.jasmine.web.core.ui.WebComponent
 interface  WebTextBox:WebComponent{
     fun getValue():String?
     fun setValue(value:String?)
+    fun setDisabled(value:Boolean)
 }
 
 class WebTextBoxConfiguration{

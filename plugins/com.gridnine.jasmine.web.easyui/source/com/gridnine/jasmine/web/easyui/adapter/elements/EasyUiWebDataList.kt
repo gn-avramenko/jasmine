@@ -75,6 +75,10 @@ class EasyUiWebDataList<E:Any>(private val parent:WebComponent?, configure: WebD
         initialized = true
     }
 
+    override fun destroy() {
+        //noops
+    }
+
 
     override fun getParent(): WebComponent? {
         return parent

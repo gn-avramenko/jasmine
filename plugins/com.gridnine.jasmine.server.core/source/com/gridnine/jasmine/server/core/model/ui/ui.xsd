@@ -68,8 +68,6 @@
 					</element>
 				</sequence>
 				<attribute name="columns-count" type="int"/>
-				<attribute name="append-additional-expanded-row" type="boolean" default="true"/>
-				<attribute name="append-additional-expanded-column" type="boolean" default="true"/>
 			</extension>
 		</complexContent>
 	</complexType>

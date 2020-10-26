@@ -8,7 +8,6 @@ package com.gridnine.jasmine.web.core.ui.components
 import com.gridnine.jasmine.web.core.ui.WebComponent
 
 interface WebGridLayoutContainer : WebComponent{
-
     fun defineColumn(width:String?=null);
 
     fun addRow(height:String?=null)
@@ -22,4 +21,12 @@ class WebGridLayoutCell(val comp:WebComponent?, val columnSpan:Int =1)
 class WebGridLayoutContainerConfiguration{
     var width:String? = null
     var height:String? = null
+}
+
+class WebGridLayoutColumnConfiguration(val width:String?)
+
+class WebGridLayoutRowConfiguration(val height:String?)
+
+class GridLayoutRow(val config:WebGridLayoutRowConfiguration){
+    val cells = arrayListOf<WebGridLayoutCell>()
 }

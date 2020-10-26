@@ -115,7 +115,7 @@ enum class ViewType{
 
 abstract class BaseViewDescription(val id:String,val viewType:ViewType)
 
-class GridContainerCellDescription(val id:String, val caption:String, val colSpan:Int){
+class GridContainerCellDescription(id:String, val caption:String, val colSpan:Int):BaseModelElementDescription(id){
     lateinit var widget:BaseWidgetDescription
 }
 
@@ -125,7 +125,7 @@ class GridContainerRowDescription(val predefinedHeight: PredefinedRowHeight, val
 
 class GridContainerColumnDescription(val predefinedWidth:PredefinedColumnWidth, val customWidth:String?)
 
-class GridContainerDescription(id:String, val columnsCount:Int?, val appendAdditionalExpandedRow:Boolean?, val appendAdditionalExpandedColumn:Boolean?):BaseViewDescription(id, ViewType.GRID_CONTAINER){
+class GridContainerDescription(id:String, val columnsCount:Int?):BaseViewDescription(id, ViewType.GRID_CONTAINER){
     val columns = arrayListOf<GridContainerColumnDescription>()
     val rows = arrayListOf<GridContainerRowDescription>()
 }

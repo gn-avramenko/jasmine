@@ -18,7 +18,6 @@ class EasyUiWebAccordionContainer(private val parent:WebComponent?, configure: W
     private val panels = arrayListOf<WebAccordionPanel>()
     private var selected:Int = 0
     private var jq:dynamic = null
-    private val children = arrayListOf<WebComponent>()
     private val width:String?
     private val height:String?
     private val uid = MiscUtilsJS.createUUID()
@@ -79,7 +78,7 @@ class EasyUiWebAccordionContainer(private val parent:WebComponent?, configure: W
     }
 
     override fun getChildren(): List<WebComponent> {
-        return children
+        return panels.map { it.content }
     }
 
     override fun getHtml(): String {
@@ -99,6 +98,9 @@ class EasyUiWebAccordionContainer(private val parent:WebComponent?, configure: W
         initialized = true
     }
 
+    override fun destroy() {
+        getChildren().forEach { it.destroy() }
+    }
 
 
 }

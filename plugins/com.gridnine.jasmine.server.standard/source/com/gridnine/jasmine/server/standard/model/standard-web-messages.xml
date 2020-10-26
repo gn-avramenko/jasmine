@@ -9,6 +9,8 @@
     <message id="from"/>
     <message id="to"/>
     <message id="selectItem"/>
+    <message id="view"/>
+    <message id="edit"/>
 </messages-bundle>
 
 

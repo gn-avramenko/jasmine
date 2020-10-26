@@ -19,7 +19,6 @@ class EasyUiWebTabsContainer(private val parent:WebComponent?, configure: WebTab
     private val tabs = arrayListOf<WebTabPanel>()
     private var selected:Int = 0
     private var jq:dynamic = null
-    private val children = arrayListOf<WebComponent>()
     private val width:String?
     private val height:String?
     private val uid = MiscUtilsJS.createUUID()
@@ -32,6 +31,10 @@ class EasyUiWebTabsContainer(private val parent:WebComponent?, configure: WebTab
         width = configuration.width
         height = configuration.height
         tools.addAll(configuration.tools)
+    }
+
+    override fun addTestTab() {
+        //noops
     }
 
     override fun addTab(panel: WebTabPanel) {
@@ -80,8 +83,8 @@ class EasyUiWebTabsContainer(private val parent:WebComponent?, configure: WebTab
         return parent
     }
 
-    override fun getChildren(): MutableList<WebComponent> {
-        return children
+    override fun getChildren(): List<WebComponent> {
+        return tabs.map { it.content }
     }
 
     override fun getHtml(): String {
@@ -95,7 +98,12 @@ class EasyUiWebTabsContainer(private val parent:WebComponent?, configure: WebTab
             val fit = this@EasyUiWebTabsContainer.fit
             val toolPosition = "left"
             val onClose = {_:String, idx:Int ->
-                tabs.removeAt(idx)
+
+            }
+            val onBeforeClose ={ _:String?, idx:Int ->
+                val element = tabs.removeAt(idx)
+                element.content.destroy()
+                true
             }
         })
         tabs.forEach {
@@ -146,6 +154,10 @@ class EasyUiWebTabsContainer(private val parent:WebComponent?, configure: WebTab
         }
         jq!!.tabs("select", selected)
         initialized = true
+    }
+
+    override fun destroy() {
+        //noops
     }
 
 }

@@ -15,8 +15,6 @@ enum class ServerMessageParameterType {
     LOCAL_DATE_TIME,
     ENUM,
     BOOLEAN,
-    BYTE_ARRAY,
-    NESTED_DOCUMENT,
     ENTITY_REFERENCE,
     LONG,
     INT,

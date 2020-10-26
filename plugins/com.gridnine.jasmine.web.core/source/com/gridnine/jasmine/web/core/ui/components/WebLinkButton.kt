@@ -5,6 +5,7 @@
 
 package com.gridnine.jasmine.web.core.ui.components
 
+import com.gridnine.jasmine.web.core.ui.HasVisibility
 import com.gridnine.jasmine.web.core.ui.WebComponent
 
 
@@ -18,6 +19,6 @@ class WebLinkButtonConfiguration:BaseButtonConfiguration(){
     var height:String?=null
 }
 
-interface WebLinkButton: WebComponent {
+interface WebLinkButton: WebComponent,HasVisibility {
     fun setHandler(handler:()-> Unit)
 }

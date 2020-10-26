@@ -20,56 +20,51 @@ import com.gridnine.jasmine.server.core.reflection.ReflectionFactory
 import com.gridnine.jasmine.server.core.rest.RestHandler
 import com.gridnine.jasmine.server.core.rest.RestOperationContext
 import com.gridnine.jasmine.server.core.storage.Storage
+import com.gridnine.jasmine.server.standard.StandardServerMessagesFactory
 import com.gridnine.jasmine.server.standard.model.rest.GetEditorDataRequest
 import com.gridnine.jasmine.server.standard.model.rest.GetEditorDataResponse
 import java.util.*
 import kotlin.reflect.KClass
+import kotlin.reflect.full.createInstance
 
 class StandardGetEditorDataRestHandler:RestHandler<GetEditorDataRequest, GetEditorDataResponse>{
     override fun service(request: GetEditorDataRequest, ctx: RestOperationContext): GetEditorDataResponse {
-        val handlers = ObjectEditorsRegistry.get().getHandlers(request.objectId)
+        val objectId = if(request.objectId.endsWith("JS")) request.objectId.substringBeforeLast("JS") else request.objectId
+        val handlers = ObjectEditorsRegistry.get().getHandlers(objectId)
         if(handlers.isEmpty()){
-            throw Xeption.forDeveloper("no object editor handler found for class ${request.objectId}")
+            throw Xeption.forDeveloper("no object editor handler found for class $objectId")
         }
-//        val ett: BaseIdentity = run {
-//            val assetDescription = DomainMetaRegistry.get().assets[request.objectId]
-//            if (assetDescription != null) {
-//                Storage.get().loadAsset(ReflectionFactory.get().getClass<BaseAsset>(request.objectId), request.objectUid)
-//            } else {
-//                Storage.get().loadDocument(ReflectionFactory.get().getClass<BaseDocument>(request.objectId), request.objectUid)
-//            }
-//        }?:Xeption.forAdmin(Sta)
-//
-//        val vmEntity = ReflectionUtils.newInstance<BaseVMEntity>(view.viewModel)
-//        vmEntity.uid = ett?.uid ?: request.objectUid?: UUID.randomUUID().toString()
-//        val context = hashMapOf<String, Any>()
-//        getHandlers(request.objectId).forEach {
-//            it.read(ett, vmEntity, context)
-//        }
-//        val vsEntity = ReflectionUtils.newInstance<BaseVSEntity>(view.viewSettings)
-//        getHandlers(request.objectId).forEach {
-//            it.fillSettings(ett, vsEntity, vmEntity, context)
-//        }
-//        val result = GetEditorDataResponse()
-//        result.viewModel = vmEntity
-//        result.viewSettings = vsEntity
-//        result.title = "???"
-//        getHandlers(request.objectId).forEach {
-//            val title = it.getTitle(ett, vmEntity, vsEntity, context)
-//            if (title != null) {
-//                result.title = title
-//            }
-//        }
-//        return result
-
+        val ett: BaseIdentity = run {
+            val assetDescription = DomainMetaRegistry.get().assets[objectId]
+            if (assetDescription != null) {
+                Storage.get().loadAsset(ReflectionFactory.get().getClass<BaseAsset>(objectId), request.objectUid)
+            } else {
+                Storage.get().loadDocument(ReflectionFactory.get().getClass<BaseDocument>(objectId), request.objectUid)
+            }
+        }?: throw Xeption.forAdmin(StandardServerMessagesFactory.OBJECT_NOT_FOUND(objectId, request.objectUid))
+        val handler = handlers[0]
+        val vmEntity = handler.getVMClass().createInstance()
+        val context = hashMapOf<String, Any?>()
+        handlers.forEach {
+            it.read(ett, vmEntity, context)
+        }
+        val vsEntity = handler.getVSClass().createInstance()
+        handlers.forEach {
+            it.fillSettings(ett, vsEntity, vmEntity, context)
+        }
         val response = GetEditorDataResponse()
-        response.title = "Test title"
-        response.viewModel = Class.forName("com.gridnine.jasmine.web.demo.DemoUserAccountEditorVM").newInstance() as BaseVM
-        response.viewSettings = Class.forName("com.gridnine.jasmine.web.demo.DemoUserAccountEditorVS").newInstance() as BaseVS
+        response.viewModel = vmEntity
+        response.viewSettings = vsEntity
+        var title:String? = null
+        handlers.forEach {
+            val intTitle = it.getTitle(ett, vmEntity, vsEntity, context)
+            if (intTitle != null) {
+                title = intTitle
+            }
+        }
+        response.title = title?:"???"
         return response
     }
-
-
 }
 
 class ObjectEditorsRegistry:Disposable{
@@ -107,11 +102,11 @@ interface ObjectEditorHandler<E : BaseIdentity, VM : BaseVM, VS : BaseVS, VV : B
         //noops
     }
 
-    fun read(entity: E?, vmEntity: VM, ctx: MutableMap<String, Any?>) {
+    fun read(entity: E, vmEntity: VM, ctx: MutableMap<String, Any?>) {
         //noops
     }
 
-    fun fillSettings(entity: E?, vsEntity: VS, vmEntity: VM, ctx: MutableMap<String, Any?>) {
+    fun fillSettings(entity: E, vsEntity: VS, vmEntity: VM, ctx: MutableMap<String, Any?>) {
         //noops
     }
 
@@ -123,7 +118,7 @@ interface ObjectEditorHandler<E : BaseIdentity, VM : BaseVM, VS : BaseVS, VV : B
         //noops
     }
 
-    fun getTitle(entity: E?, vmEntity: VM, vsEntity: VS, ctx: MutableMap<String, Any?>): String? {
+    fun getTitle(entity: E, vmEntity: VM, vsEntity: VS, ctx: MutableMap<String, Any?>): String? {
         return null
     }
 

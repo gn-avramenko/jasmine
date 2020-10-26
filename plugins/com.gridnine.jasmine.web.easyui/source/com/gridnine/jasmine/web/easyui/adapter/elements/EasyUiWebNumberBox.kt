@@ -97,4 +97,8 @@ class EasyUiWebNumberBox(private val parent:WebComponent?, configure: WebNumberB
         initialized = true
     }
 
+    override fun destroy() {
+        //noops
+    }
+
 }

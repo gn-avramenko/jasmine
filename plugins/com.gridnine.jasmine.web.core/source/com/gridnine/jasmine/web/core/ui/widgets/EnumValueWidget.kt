@@ -13,9 +13,36 @@ import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.components.*
 import kotlin.reflect.KClass
 
-class EnumValueWidget<E:Enum<E>>(parent:WebComponent, configure:EnumValueWidgetConfiguration<E>.()->Unit
-                                 , private val delegate: WebSelect = UiLibraryAdapter.get().createSelect(parent, convertConfiguration(configure)) ):WebComponent by delegate{
+class EnumValueWidget<E:Enum<E>>(aParent:WebComponent, configure:EnumValueWidgetConfiguration<E>.()->Unit):WebComponent{
     private val className:String
+    private val delegate:WebSelect
+    private val parent:WebComponent = aParent
+    private val children = arrayListOf<WebComponent>()
+    init {
+        (parent.getChildren() as MutableList<WebComponent>).add(this)
+        val conf = EnumValueWidgetConfiguration<E>();
+        conf.configure()
+        className = ReflectionFactoryJS.get().getQualifiedClassName(conf.enumClass)
+        delegate = UiLibraryAdapter.get().createSelect(this){
+            width = conf.width
+            height = conf.height
+            mode = SelectDataType.LOCAL
+            editable = false
+            multiple = false
+            showClearIcon = conf.allowNull
+        }
+        val possibleValues = arrayListOf<SelectItemJS>()
+        val domainDescription = DomainMetaRegistryJS.get().enums[className]
+        domainDescription?.items?.values?.forEach {
+            possibleValues.add(SelectItemJS(it.id, it.displayName))
+        }
+        val uiDescription = UiMetaRegistryJS.get().enums[className]
+        uiDescription?.items?.values?.forEach {
+            possibleValues.add(SelectItemJS(it.id, it.displayName))
+        }
+        delegate.setPossibleValues(possibleValues)
+    }
+
     fun getValue():E? {
 
         val values = delegate.getValues()
@@ -40,37 +67,25 @@ class EnumValueWidget<E:Enum<E>>(parent:WebComponent, configure:EnumValueWidgetC
         delegate.setValues(values)
     }
 
-    init {
-        val conf = EnumValueWidgetConfiguration<E>();
-        conf.configure()
-        className = ReflectionFactoryJS.get().getQualifiedClassName(conf.enumClass)
-        val possibleValues = arrayListOf<SelectItemJS>()
-        val domainDescription = DomainMetaRegistryJS.get().enums[className]
-        domainDescription?.items?.values?.forEach {
-            possibleValues.add(SelectItemJS(it.id, it.displayName))
-        }
-        val uiDescription = UiMetaRegistryJS.get().enums[className]
-        uiDescription?.items?.values?.forEach {
-            possibleValues.add(SelectItemJS(it.id, it.displayName))
-        }
-        delegate.setPossibleValues(possibleValues)
+    override fun getParent(): WebComponent? {
+        return parent
+    }
+
+    override fun getChildren(): List<WebComponent> {
+        return children
+    }
+
+    override fun getHtml(): String {
+        return delegate.getHtml()
+    }
+
+    override fun decorate() {
+        delegate.decorate()
     }
 
 
-    companion object{
-        fun <E:Enum<E>> convertConfiguration(configure: EnumValueWidgetConfiguration<E>.() -> Unit): WebSelectConfiguration.() -> Unit {
-            val conf = EnumValueWidgetConfiguration<E>();
-            conf.configure()
-            return {
-                width = conf.width
-                height = conf.height
-                mode = SelectDataType.LOCAL
-                editable = false
-                multiple = false
-                showClearIcon = conf.allowNull
-            }
-        }
-
+    override fun destroy() {
+        delegate.destroy()
     }
 }
 

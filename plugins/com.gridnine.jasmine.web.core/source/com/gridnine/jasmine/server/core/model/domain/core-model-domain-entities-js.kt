@@ -77,6 +77,9 @@ open class ObjectReferenceJS():BaseIdentityJS() {
     override fun setValue(propertyName: String, value: Any?) {
         if(ObjectReferenceJS.type == propertyName){
             type = value as String
+            if(!type.endsWith("JS")){
+                type += "JS"
+            }
             return
         }
         if(ObjectReferenceJS.caption == propertyName){

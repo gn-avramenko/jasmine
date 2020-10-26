@@ -70,6 +70,8 @@ class MainFrame(private val delegate:WebBorderContainer = UiLibraryAdapter.get()
                     }
                     result.setSelectionAllowed(false)
                     result.setClickListener {we ->
+                        //openTestTab()
+
                         val handler = configuration.elementsHandlers[we::class]!! as MainFrameTabHandler<BaseWorkspaceItemJS, Any>
                         openTab(handler, we)
                     }
@@ -102,7 +104,9 @@ class MainFrame(private val delegate:WebBorderContainer = UiLibraryAdapter.get()
             content = centerRegion
         })
     }
-
+    fun openTestTab() {
+        tabsContainer.addTestTab()
+    }
     fun<T:Any> openTab(handler: MainFrameTabHandler<T, Any>, we: T) {
         val tabId = "$uid|${handler.getTabId(we)}"
         val existingTab = tabsContainer.getTabs().find { it.id == tabId }

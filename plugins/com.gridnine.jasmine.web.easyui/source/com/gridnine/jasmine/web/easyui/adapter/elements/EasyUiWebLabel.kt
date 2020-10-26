@@ -53,6 +53,10 @@ class EasyUiWebLabel(private val parent:WebComponent?) :WebLabel{
         initialized = true
     }
 
+    override fun destroy() {
+        //noops
+    }
+
     override fun addClass(className: String) {
         classes.add(className)
         if(initialized){

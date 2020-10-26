@@ -30,8 +30,6 @@ class EasyUiWebBorderContainer(private val parent:WebComponent?, configure: WebB
     private val children = arrayListOf<WebComponent>()
     private val uid = MiscUtilsJS.createUUID()
 
-    private val defferedContent = hashMapOf<String, WebComponent>()
-
     init {
         (parent?.getChildren() as MutableList<WebComponent>?)?.add(this)
         val configuration = WebBorderLayoutConfiguration()
@@ -123,6 +121,7 @@ class EasyUiWebBorderContainer(private val parent:WebComponent?, configure: WebB
             var region = region
         })
         it.content.decorate()
+        children.add(it.content)
 //        if(it.collapsed){
 //            defferedContent[region] = it.content
 //        } else {
@@ -135,6 +134,10 @@ class EasyUiWebBorderContainer(private val parent:WebComponent?, configure: WebB
 
     override fun getChildren(): MutableList<WebComponent> {
         return children
+    }
+
+    override fun destroy() {
+       children.forEach { it.destroy() }
     }
 
 }

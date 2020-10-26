@@ -121,4 +121,8 @@ class EasyUiWebDateBox(private val parent:WebComponent?, configure: WebDateBoxCo
         initialized = true
     }
 
+    override fun destroy() {
+        //noops
+    }
+
 }

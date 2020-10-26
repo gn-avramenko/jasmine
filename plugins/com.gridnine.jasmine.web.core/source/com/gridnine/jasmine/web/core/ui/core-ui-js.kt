@@ -7,8 +7,12 @@
 package com.gridnine.jasmine.web.core.ui
 
 import com.gridnine.jasmine.server.core.model.common.BaseIntrospectableObjectJS
+import com.gridnine.jasmine.server.core.model.ui.BaseVMJS
+import com.gridnine.jasmine.server.core.model.ui.BaseVSJS
+import com.gridnine.jasmine.server.core.model.ui.BaseVVJS
 import com.gridnine.jasmine.web.core.application.EnvironmentJS
 import com.gridnine.jasmine.web.core.ui.components.*
+import org.w3c.dom.DOMMatrixReadOnly
 
 interface UiLibraryAdapter{
     fun showWindow(component: WebComponent)
@@ -38,10 +42,20 @@ interface WebComponent{
     fun getChildren():List<WebComponent>
     fun getHtml():String
     fun decorate()
+    fun destroy()
+}
+
+interface HasVisibility{
+    fun setVisible(value:Boolean)
+}
+interface WebEditor<VM:BaseVMJS, VS:BaseVSJS, VV:BaseVVJS>:WebComponent{
+    fun readData(vm:VM, vs:VS)
+    fun setReadonly(value:Boolean)
 }
 
 object DefaultUIParameters{
     var controlWidth = 200
+    var controlWidthAsString = "200px"
 }
 
 open class RegistryItemType<T:Any>(val id:String)
@@ -54,6 +68,8 @@ interface RegistryItem<T:Any> {
 interface ObjectHandler:RegistryItem<ObjectHandler>{
 
     fun getAutocompleteHandler():AutocompleteHandler
+
+    fun createWebEditor(parent:WebComponent):WebEditor<*,*,*>
 
     override fun getType(): RegistryItemType<ObjectHandler> {
         return TYPE
@@ -98,5 +114,10 @@ class ClientRegistry{
 enum class FakeEnumJS
 
 
+interface EditorButtonHandler<W:WebEditor<*,*,*>>{
+    fun isApplicable(editor:W):Boolean
+    fun isEnabled(editor: W, readOnly: Boolean):Boolean
+    fun onClick(editor:W):Boolean
+}
 
 external var debugger: dynamic = definedExternally

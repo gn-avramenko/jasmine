@@ -40,7 +40,7 @@ object L10nMetadataParser {
             val descr = ServerMessageDescription(messageId)
             bundleDescription.messages[messageId] = descr
             messageNode.children("parameter").forEach { paramNode ->
-               val param = ServerMessageParameterDescription(ParserUtils.getIdAttribute(messageNode), ServerMessageParameterType.valueOf(paramNode.attributes["type"]!!))
+               val param = ServerMessageParameterDescription(ParserUtils.getIdAttribute(paramNode), ServerMessageParameterType.valueOf(paramNode.attributes["type"]!!))
                 descr.params[param.id] = param
                 param.className = paramNode.attributes["class-name"]
                 param.collection = "true" == paramNode.attributes["collection"]

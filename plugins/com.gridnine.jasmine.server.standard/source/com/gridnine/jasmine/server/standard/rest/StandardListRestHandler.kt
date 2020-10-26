@@ -312,8 +312,8 @@ class StandardListRestHandler: RestHandler<GetListRequest, GetListResponse>{
                     }
                 }
                 DatabasePropertyType.BOOLEAN -> {
-                    val values = filter.value as ListFilterBooleanValuesDT
-                    if(values.value == null){
+                    val values = filter.value as ListFilterBooleanValuesDT?
+                    if(values == null || values.value == null){
                         arrayListOf(CheckCriterion(filter.fieldId!!, CheckCriterion.Check.IS_NULL))
                     } else {
                         arrayListOf(SimpleCriterion(filter.fieldId!!, SimpleCriterion.Operation.EQ, values.value!!))

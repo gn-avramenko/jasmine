@@ -22,6 +22,7 @@ object JasmineCodeGen{
         RestWebGenerator.generateRestClasses(metadataProvider, generatedFiles, pluginsLocations, projectName)
         UiWebGenerator.generateUiClasses(metadataProvider, generatedFiles, pluginsLocations, projectName)
         L10nWebGenerator.generateWebClasses(metadataProvider, generatedFiles, pluginsLocations, projectName)
+        L10nServerGenerator.generateServerClasses(metadataProvider, generatedFiles, pluginsLocations, projectName)
         generatedFiles.forEach { (t, u) ->
             GenUtils.deleteFiles(File(pluginsLocations[t], "source-gen"), u)
         }

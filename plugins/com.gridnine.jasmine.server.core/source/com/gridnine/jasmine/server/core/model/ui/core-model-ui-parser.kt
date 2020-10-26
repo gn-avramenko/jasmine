@@ -44,9 +44,7 @@ object UiMetadataParser {
             val id = ParserUtils.getIdAttribute(child)
             val gridContainer = registry.views.getOrPut(id, {
                 GridContainerDescription(id,
-                        ParserUtils.getIntegerAttribute(child, "columns-count"),
-                        ParserUtils.getBooleanAttribute(child, "append-additional-expanded-row"),
-                        ParserUtils.getBooleanAttribute(child, "append-additional-expanded-column"))
+                        ParserUtils.getIntegerAttribute(child, "columns-count"))
             }) as GridContainerDescription
             val viewModelId = "${id}VM"
             val viewModelEntity = registry.viewModels.getOrPut(viewModelId, {VMEntityDescription(viewModelId)})
@@ -68,6 +66,7 @@ object UiMetadataParser {
                 rowElm.children("cell").forEach { cellElm ->
                     val cell = GridContainerCellDescription(ParserUtils.getIdAttribute(cellElm),
                             ParserUtils.getCaptionAttribute(cellElm), ParserUtils.getIntegerAttribute(cellElm, "col-span")?:1)
+                    ParserUtils.updateLocalizations(cell, localizations, cell.caption)
                     row.cells.add(cell)
                     val widgetData = parseWidgetData(cellElm.children[0], cell.id)
                     cell.widget = widgetData.widget

@@ -12,7 +12,9 @@ import com.gridnine.jasmine.server.core.model.domain.*
 import com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistry
 import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistry
 import com.gridnine.jasmine.server.core.model.rest.RestPropertyType
+import com.gridnine.jasmine.server.core.model.ui.GridContainerDescription
 import com.gridnine.jasmine.server.core.model.ui.UiMetaRegistry
+import com.gridnine.jasmine.server.core.model.ui.ViewType
 import com.gridnine.jasmine.server.core.rest.RestHandler
 import com.gridnine.jasmine.server.core.rest.RestOperationContext
 import com.gridnine.jasmine.server.standard.model.custom.*
@@ -235,6 +237,24 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                 entityDescriptionDT.collections.add(collectionDescriptionDT)
             }
             result.viewValidations.add(entityDescriptionDT)
+        }
+        UiMetaRegistry.get().views.values.forEach {vd->
+            val bundle = WebMessagesBundleDT()
+            bundle.id = vd.id
+            result.webMessages.add(bundle)
+            when(vd.viewType){
+                ViewType.GRID_CONTAINER ->{
+                    val descr = vd as GridContainerDescription
+                    vd.rows.forEach {row ->
+                        row.cells.forEach{cell ->
+                            val message = WebMessageDT()
+                            message.id = cell.id
+                            message.displayName = cell.getDisplayName()
+                            bundle.messages.add(message)
+                        }
+                    }
+                }
+            }
         }
         L10nMetaRegistry.get().webMessages.values.forEach {
             val bundle = WebMessagesBundleDT()

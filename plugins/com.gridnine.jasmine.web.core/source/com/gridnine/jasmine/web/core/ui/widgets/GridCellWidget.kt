@@ -7,29 +7,33 @@ package com.gridnine.jasmine.web.core.ui.widgets
 
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.WebComponent
+import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutCell
+import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutContainer
 import com.gridnine.jasmine.web.core.ui.components.WebNumberBox
-import com.gridnine.jasmine.web.core.ui.components.WebNumberBoxConfiguration
-import com.gridnine.jasmine.web.core.ui.components.WebSelect
-import kotlin.js.Date
 
-class FloatNumberBoxWidget(aParent:WebComponent, configure:FloatNumberBoxWidgetConfiguration.()->Unit):WebComponent{
-    private val delegate: WebNumberBox
+class GridCellWidget<W:WebComponent>(private val aParent:WebComponent, private val caption:String?, private val widgetFactory:(par:WebComponent)->W) : WebComponent {
+
+    private val delegate: WebGridLayoutContainer
     private val parent:WebComponent = aParent
     private val children = arrayListOf<WebComponent>()
+
+    val widget:W
+
     init {
         (parent.getChildren() as MutableList<WebComponent>).add(this)
-        val conf = FloatNumberBoxWidgetConfiguration();
-        conf.configure()
-        delegate = UiLibraryAdapter.get().createNumberBox(this){
-            width = conf.width
-            height = conf.height
-            showClearIcon = conf.showClearIcon
-            precision = conf.precision
+        delegate = UiLibraryAdapter.get().createGridLayoutContainer(this){
+            width = "100%"
         }
+        widget = widgetFactory.invoke(this)
+        val label = UiLibraryAdapter.get().createLabel(this)
+        label.setText(caption)
+        delegate.defineColumn("100%")
+        delegate.addRow()
+        delegate.addCell(WebGridLayoutCell(label))
+        delegate.addRow("100%")
+        delegate.addCell(WebGridLayoutCell(widget))
     }
-    fun setValue(value:Double?) = delegate.setValue(value)
 
-    fun getValue() = delegate.getValue()
     override fun getParent(): WebComponent? {
         return parent
     }
@@ -43,21 +47,11 @@ class FloatNumberBoxWidget(aParent:WebComponent, configure:FloatNumberBoxWidgetC
     }
 
     override fun decorate() {
-        delegate.decorate()
+        return delegate.decorate()
     }
 
     override fun destroy() {
-        delegate.destroy()
+        widget.destroy()
     }
-}
 
-
-
-
-
-class FloatNumberBoxWidgetConfiguration{
-    var width:String? = null
-    var height:String? = null
-    var showClearIcon = true
-    var precision = 2
 }

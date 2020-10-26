@@ -9,6 +9,7 @@ import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 
 interface WebTabsContainer : WebComponent{
+    fun addTestTab()
     fun addTab(panel:WebTabPanel)
     fun removeTab(id:String)
     fun select(id:String)

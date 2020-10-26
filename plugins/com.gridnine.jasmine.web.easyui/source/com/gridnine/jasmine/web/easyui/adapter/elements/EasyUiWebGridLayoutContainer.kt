@@ -95,12 +95,10 @@ class EasyUiWebGridLayoutContainer(private val parent:WebComponent?, configure:W
         rows.forEach { row -> row.cells.forEach { cell -> cell.comp?.decorate() } }
     }
 
+    override fun destroy() {
+        rows.forEach { row -> row.cells.forEach { cell -> cell.comp?.destroy()} }
+    }
+
 }
 
-class WebGridLayoutColumnConfiguration(val width:String?)
 
-class WebGridLayoutRowConfiguration(val height:String?)
-
-class GridLayoutRow(val config:WebGridLayoutRowConfiguration){
-    val cells = arrayListOf<WebGridLayoutCell>()
-}

@@ -23,6 +23,8 @@ class EasyUiWebTextBox(private val parent:WebComponent?, configure: WebTextBoxCo
     private var showClearIcon = false
 
     private var value:String? = null
+
+    private var disabled = false
     init {
         (parent?.getChildren() as MutableList<WebComponent>?)?.add(this)
         val configuration = WebTextBoxConfiguration()
@@ -52,6 +54,29 @@ class EasyUiWebTextBox(private val parent:WebComponent?, configure: WebTextBoxCo
         return jq.textbox("setValue", value)
     }
 
+    override fun setDisabled(value: Boolean) {
+        disabled = value
+        if(initialized) {
+            if (value) {
+                jq.textbox("disable")
+            } else {
+                jq.textbox("enable")
+            }
+            updateShowClearIconVisibility()
+        }
+    }
+
+    private fun updateShowClearIconVisibility() {
+        if(!initialized || !showClearIcon){
+            return
+        }
+        if(!MiscUtilsJS.isBlank(value) && !disabled){
+            jq.textbox("getIcon",0).css("visibility","visible")
+        } else {
+            jq.textbox("getIcon",0).css("visibility","hidden")
+        }
+    }
+
     override fun getParent(): WebComponent? {
         return parent
     }
@@ -69,7 +94,6 @@ class EasyUiWebTextBox(private val parent:WebComponent?, configure: WebTextBoxCo
                 val iconCls = "icon-clear"
                 val handler = {_:dynamic ->
                     jq.textbox("setValue", null)
-                    jq.textbox("getIcon",0).css("visibility","hidden")
                 }
             })
         }
@@ -77,21 +101,23 @@ class EasyUiWebTextBox(private val parent:WebComponent?, configure: WebTextBoxCo
             val prompt = this@EasyUiWebTextBox.prompt
             val value = this@EasyUiWebTextBox.value
             val icons = icons.toTypedArray()
+            val disabled = this@EasyUiWebTextBox.disabled
             val onChange = {newValue:String?,_:String? ->
-                jq.textbox("getIcon",0).css("visibility",if(MiscUtilsJS.isBlank(newValue)) "hidden" else "visible")
+                this@EasyUiWebTextBox.value = newValue
+                updateShowClearIconVisibility()
             }
         })
         val tb = jq.textbox("textbox")
         tb.on("input") {
-            if(showClearIcon){
-                val text = jq.textbox("getText") as String?
-                jq.textbox("getIcon",0).css("visibility",if(MiscUtilsJS.isBlank(text)) "hidden" else "visible")
-            }
-        }
-        if(showClearIcon && (MiscUtilsJS.isBlank(value))){
-            jq.textbox("getIcon",0).css("visibility","hidden")
+            this@EasyUiWebTextBox.value = jq.textbox("getText") as String?
+            updateShowClearIconVisibility()
         }
         initialized = true
+        updateShowClearIconVisibility()
+    }
+
+    override fun destroy() {
+        //noops
     }
 
 }

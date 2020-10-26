@@ -54,7 +54,7 @@
     <extension point-id="server-messages">
         <parameter id="relative-path" value="source/com/gridnine/jasmine/server/core/model/l10n/core-server-messages.xml"/>
         <parameter id="url" value="com/gridnine/jasmine/server/core/model/l10n/core-server-messages.xml"/>
-        <parameter id="dest-server-plugin-id" value="com.gridnine.jasmine.server.core"/>
+<!--        <parameter id="dest-server-plugin-id" value="com.gridnine.jasmine.server.core"/>-->
     </extension>
     <extension point-id="activator">
         <parameter id="class" value="com.gridnine.jasmine.server.core.activator.CoreActivator"/>

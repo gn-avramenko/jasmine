@@ -14,19 +14,29 @@ import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.components.*
 import kotlin.js.Promise
 
-class EntityMultiValuesWidget(parent:WebComponent, configure:EntityMultiValuesWidgetConfiguration.()->Unit
-                                    , private val delegate: WebSelect = UiLibraryAdapter.get().createSelect(parent, convertConfiguration(configure)) ):WebComponent by delegate{
-    private val handler:AutocompleteHandler
+class EntityMultiValuesWidget(aParent:WebComponent, configure:EntityMultiValuesWidgetConfiguration.()->Unit):WebComponent {
+    private val delegate:WebSelect
+    private val parent:WebComponent = aParent
+    private val children = arrayListOf<WebComponent>()
 
     init {
+        (parent.getChildren() as MutableList<WebComponent>).add(this)
         val conf = EntityMultiValuesWidgetConfiguration();
         conf.configure()
-        handler = conf.handler
+        delegate =UiLibraryAdapter.get().createSelect(this){
+            width = conf.width
+            height = conf.height
+            mode = SelectDataType.REMOTE
+            showClearIcon = conf.showClearIcon
+            editable = true
+            multiple = true
+            hasDownArrow = false
+        }
         delegate.setLoader { value ->
             Promise{ resolve, _ ->
                 val request = AutocompleteRequestJS()
-                request.autocompleteFieldName = handler.getAutocompleteFieldName()
-                request.listId = handler.getIndexClassName()
+                request.autocompleteFieldName = conf.handler.getAutocompleteFieldName()
+                request.listId = conf.handler.getIndexClassName()
                 request.limit = 10
                 request.pattern=value
                 StandardRestClient.standard_standard_autocomplete(request).then{
@@ -44,26 +54,31 @@ class EntityMultiValuesWidget(parent:WebComponent, configure:EntityMultiValuesWi
         delegate.setValues(list.map { toSelectItem(it) })
     }
 
-    companion object{
-        fun  convertConfiguration(configure: EntityMultiValuesWidgetConfiguration.() -> Unit): WebSelectConfiguration.() -> Unit {
-            val conf = EntityMultiValuesWidgetConfiguration();
-            conf.configure()
-            return {
-                width = conf.width
-                height = conf.height
-                mode = SelectDataType.REMOTE
-                showClearIcon = conf.showClearIcon
-                editable = true
-                multiple = true
-                hasDownArrow = false
-            }
-        }
-        private fun toSelectItem(ref:ObjectReferenceJS):SelectItemJS{
-            return SelectItemJS("${ref.type}||${ref.uid}", ref.caption?:"???")
-        }
-        private fun toObjectReference(item:SelectItemJS):ObjectReferenceJS{
-            return ObjectReferenceJS(item.id.substringBefore("||"), item.id.substringAfter("||"), item.text)
-        }
+    override fun getParent(): WebComponent? {
+        return parent
+    }
+
+    override fun getChildren(): List<WebComponent> {
+        return children
+    }
+
+    override fun getHtml(): String {
+        return delegate.getHtml()
+    }
+
+    override fun decorate() {
+        delegate.decorate()
+    }
+
+    override fun destroy() {
+        delegate.destroy()
+    }
+
+    private fun toSelectItem(ref:ObjectReferenceJS):SelectItemJS{
+        return SelectItemJS("${ref.type}||${ref.uid}", ref.caption?:"???")
+    }
+    private fun toObjectReference(item:SelectItemJS):ObjectReferenceJS{
+        return ObjectReferenceJS(item.id.substringBefore("||"), item.id.substringAfter("||"), item.text)
     }
 }
 

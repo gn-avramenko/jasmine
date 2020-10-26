@@ -93,6 +93,10 @@ class EasyUiWebDataGrid<E:BaseIntrospectableObjectJS>(private val parent:WebComp
         initialized = true
     }
 
+    override fun destroy() {
+        //noops
+    }
+
     override fun setLoader(loader: (WebDataGridRequest) -> Promise<WebDataGridResponse<E>>) {
         this.loader = loader
     }

@@ -24,7 +24,8 @@ class EasyUiWebLinkButton(private val parent:WebComponent?, configure: WebLinkBu
 
     private var width:String? = null
     private var height:String? = null
-
+    private var visible=true
+    private  var jq:dynamic = null
     private lateinit var handler:()->Unit
     init {
         (parent?.getChildren() as MutableList<WebComponent>?)?.add(this)
@@ -42,7 +43,7 @@ class EasyUiWebLinkButton(private val parent:WebComponent?, configure: WebLinkBu
 
 
     override fun decorate() {
-        val jq = jQuery("#linkButton${uid}")
+       jq = jQuery("#linkButton${uid}")
         jq.linkbutton(object{
             val text   = title
             val iconCls = EasyUiUtils.getIconClass(icon)
@@ -51,6 +52,27 @@ class EasyUiWebLinkButton(private val parent:WebComponent?, configure: WebLinkBu
             }
         })
         initialized = true
+        updateVisibility()
+    }
+
+    override fun destroy() {
+        //noops
+    }
+
+    override fun setVisible(value: Boolean) {
+        visible = value
+        if(initialized) {
+            updateVisibility()
+        }
+    }
+
+    private fun updateVisibility() {
+        if(visible){
+            jq.show()
+        } else {
+            jq.hide()
+        }
+
     }
 
     override fun setHandler(handler: () -> Unit) {

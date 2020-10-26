@@ -150,4 +150,8 @@ class EasyUiWebSelect(private val parent: WebComponent?, configure: WebSelectCon
         setValues(ArrayList(selectedValues))
     }
 
+    override fun destroy() {
+        jq.select2("destroy")
+    }
+
 }

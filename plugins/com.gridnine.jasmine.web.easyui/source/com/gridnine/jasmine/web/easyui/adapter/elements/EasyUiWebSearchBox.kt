@@ -65,4 +65,8 @@ class EasyUiWebSearchBox(private val parent:WebComponent?, configure: WebSearchB
         initialized = true
     }
 
+    override fun destroy() {
+        //noops
+    }
+
 }
