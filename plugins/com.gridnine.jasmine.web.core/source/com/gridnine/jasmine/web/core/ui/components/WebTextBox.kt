@@ -12,6 +12,8 @@ interface  WebTextBox:WebComponent{
     fun getValue():String?
     fun setValue(value:String?)
     fun setDisabled(value:Boolean)
+    fun resetValidation()
+    fun showValidation(value: String)
 }
 
 class WebTextBoxConfiguration{

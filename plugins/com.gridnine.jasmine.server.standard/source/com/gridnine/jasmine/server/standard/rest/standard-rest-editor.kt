@@ -15,14 +15,16 @@ import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistry
 import com.gridnine.jasmine.server.core.model.ui.BaseVM
 import com.gridnine.jasmine.server.core.model.ui.BaseVS
 import com.gridnine.jasmine.server.core.model.ui.BaseVV
-import com.gridnine.jasmine.server.core.model.ui.UiMetaRegistry
 import com.gridnine.jasmine.server.core.reflection.ReflectionFactory
 import com.gridnine.jasmine.server.core.rest.RestHandler
 import com.gridnine.jasmine.server.core.rest.RestOperationContext
 import com.gridnine.jasmine.server.core.storage.Storage
+import com.gridnine.jasmine.server.core.utils.ValidationUtils
 import com.gridnine.jasmine.server.standard.StandardServerMessagesFactory
 import com.gridnine.jasmine.server.standard.model.rest.GetEditorDataRequest
 import com.gridnine.jasmine.server.standard.model.rest.GetEditorDataResponse
+import com.gridnine.jasmine.server.standard.model.rest.SaveEditorDataRequest
+import com.gridnine.jasmine.server.standard.model.rest.SaveEditorDataResponse
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
@@ -30,21 +32,28 @@ import kotlin.reflect.full.createInstance
 class StandardGetEditorDataRestHandler:RestHandler<GetEditorDataRequest, GetEditorDataResponse>{
     override fun service(request: GetEditorDataRequest, ctx: RestOperationContext): GetEditorDataResponse {
         val objectId = if(request.objectId.endsWith("JS")) request.objectId.substringBeforeLast("JS") else request.objectId
+        val objectUid = request.objectUid
         val handlers = ObjectEditorsRegistry.get().getHandlers(objectId)
         if(handlers.isEmpty()){
             throw Xeption.forDeveloper("no object editor handler found for class $objectId")
         }
-        val ett: BaseIdentity = run {
-            val assetDescription = DomainMetaRegistry.get().assets[objectId]
-            if (assetDescription != null) {
-                Storage.get().loadAsset(ReflectionFactory.get().getClass<BaseAsset>(objectId), request.objectUid)
-            } else {
-                Storage.get().loadDocument(ReflectionFactory.get().getClass<BaseDocument>(objectId), request.objectUid)
-            }
-        }?: throw Xeption.forAdmin(StandardServerMessagesFactory.OBJECT_NOT_FOUND(objectId, request.objectUid))
         val handler = handlers[0]
-        val vmEntity = handler.getVMClass().createInstance()
         val context = hashMapOf<String, Any?>()
+        val ett: BaseIdentity = if(objectUid == null){
+            val newEtt = handler.getObjectClass().createInstance()
+            handlers.forEach{
+                it.fillNewEntity(newEtt,context)
+            }
+            newEtt
+        } else {
+                val assetDescription = DomainMetaRegistry.get().assets[objectId]
+                if (assetDescription != null) {
+                    Storage.get().loadAsset(ReflectionFactory.get().getClass<BaseAsset>(objectId), objectUid)
+                } else {
+                    Storage.get().loadDocument(ReflectionFactory.get().getClass<BaseDocument>(objectId), objectUid)
+                }?: throw Xeption.forAdmin(StandardServerMessagesFactory.OBJECT_NOT_FOUND(objectId, objectUid))
+        }
+        val vmEntity = handler.getVMClass().createInstance()
         handlers.forEach {
             it.read(ett, vmEntity, context)
         }
@@ -65,6 +74,68 @@ class StandardGetEditorDataRestHandler:RestHandler<GetEditorDataRequest, GetEdit
         response.title = title?:"???"
         return response
     }
+}
+
+class StandardSaveEditorDataRestHandler : RestHandler<SaveEditorDataRequest, SaveEditorDataResponse> {
+    override fun service(request: SaveEditorDataRequest,ctx: RestOperationContext): SaveEditorDataResponse {
+        val objectId = if(request.objectId.endsWith("JS")) request.objectId.substringBeforeLast("JS") else request.objectId
+        val handlers = ObjectEditorsRegistry.get().getHandlers(objectId)
+        if(handlers.isEmpty()){
+            throw Xeption.forDeveloper("no object editor handler found for class $objectId")
+
+        }
+        val handler = handlers[0]
+        val asset = DomainMetaRegistry.get().assets[objectId] != null
+        val objUid = request.objectUid
+        val ett =
+                if(objUid == null){
+                    val res  = ReflectionFactory.get().newInstance<BaseIdentity>(objectId)
+                    res.uid = UUID.randomUUID().toString()
+                    res
+                } else {
+                    if (asset) {
+                        Storage.get().loadAsset(ReflectionFactory.get().getClass(objectId), objUid, ignoreCache = true)
+                    } else {
+                        Storage.get().loadDocument(ReflectionFactory.get().getClass(objectId), objUid, ignoreCache = true)
+                    }?: throw Xeption.forAdmin(StandardServerMessagesFactory.OBJECT_NOT_FOUND(objectId, objUid))
+                }
+
+
+        val vvEntity =  handler.getVVClass().createInstance()
+        val context = hashMapOf<String, Any?>()
+        handlers.forEach {
+            it.validate(request.viewModel, vvEntity, context)
+        }
+        if (ValidationUtils.hasValidationErrors(vvEntity)) {
+            val response = SaveEditorDataResponse()
+            response.viewValidation = vvEntity
+            return response
+        }
+        handlers.forEach {
+            it.write(ett, request.viewModel, context)
+        }
+        if (asset) {
+            Storage.get().saveAsset(ett as BaseAsset)
+        } else {
+            Storage.get().saveDocument(ett as BaseDocument)
+        }
+        val vmEntity = handler.getVMClass().createInstance()
+        handlers.forEach {
+            it.read(ett, vmEntity, context)
+        }
+        val vsEntity = handler.getVSClass().createInstance()
+        val result = SaveEditorDataResponse()
+        result.newUid = if(objUid == null) ett.uid else null
+        result.viewModel = vmEntity
+        result.viewSettings = vsEntity
+        handlers.forEach {
+            it.fillSettings(ett, vsEntity, vmEntity, context)
+        }
+        result.title = handlers.mapNotNull { it.getTitle(ett, vmEntity, vsEntity, context) }.lastOrNull()?:"???"
+        return result
+    }
+
+
 }
 
 class ObjectEditorsRegistry:Disposable{

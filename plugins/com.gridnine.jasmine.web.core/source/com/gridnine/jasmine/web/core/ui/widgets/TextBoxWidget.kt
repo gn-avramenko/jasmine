@@ -53,6 +53,14 @@ class TextBoxWidget(aParent:WebComponent, configure:TextBoxWidgetConfiguration.(
         delegate.destroy()
     }
 
+    fun showValidationError(value: String) {
+        delegate.showValidation(value)
+    }
+
+    fun resetValidation(){
+        delegate.resetValidation()
+    }
+
 }
 
 

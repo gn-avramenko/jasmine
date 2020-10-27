@@ -66,6 +66,20 @@ class EasyUiWebTextBox(private val parent:WebComponent?, configure: WebTextBoxCo
         }
     }
 
+    override fun resetValidation() {
+        val tb =jq.textbox("textbox")
+        val spanElm = tb.parent()
+        spanElm.css("border-color", "")
+        spanElm.removeAttr("title")
+    }
+
+    override fun showValidation(value: String) {
+        val tb =jq.textbox("textbox")
+        val spanElm = tb.parent()
+        spanElm.css("border-color", "#d9534f")
+        spanElm.attr("title", value)
+    }
+
     private fun updateShowClearIconVisibility() {
         if(!initialized || !showClearIcon){
             return
@@ -110,6 +124,9 @@ class EasyUiWebTextBox(private val parent:WebComponent?, configure: WebTextBoxCo
         val tb = jq.textbox("textbox")
         tb.on("input") {
             this@EasyUiWebTextBox.value = jq.textbox("getText") as String?
+            val spanElm = tb.parent()
+            spanElm.css("border-color", "")
+            spanElm.removeAttr("title")
             updateShowClearIconVisibility()
         }
         initialized = true

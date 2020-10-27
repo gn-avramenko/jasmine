@@ -118,7 +118,7 @@ class MainFrame(private val delegate:WebBorderContainer = UiLibraryAdapter.get()
 
             val tabData  = handler.createTabData(we, it, tabsContainer, object:MainFrameTabCallback {
                 override fun setTitle(title: String) {
-                    TODO("Not yet implemented")
+                    tabsContainer.setTitle(tabId, title)
                 }
 
                 override fun close() {
@@ -135,7 +135,7 @@ class MainFrame(private val delegate:WebBorderContainer = UiLibraryAdapter.get()
     }
 
     fun openTab(ref:ObjectReferenceJS){
-        openTab(ObjectEditorTabHandler() as MainFrameTabHandler<ObjectReferenceJS, Any>, ref)
+        openTab(ObjectEditorTabHandler() as MainFrameTabHandler<ObjectEditorTabData, Any>, ref.let { ObjectEditorTabData(it.type, it.uid) })
     }
     companion object {
         fun get() = EnvironmentJS.getPublished(MainFrame::class)

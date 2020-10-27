@@ -21,4 +21,5 @@ class WebLinkButtonConfiguration:BaseButtonConfiguration(){
 
 interface WebLinkButton: WebComponent,HasVisibility {
     fun setHandler(handler:()-> Unit)
+    fun setEnabled(value:Boolean)
 }

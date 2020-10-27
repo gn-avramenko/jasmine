@@ -14,6 +14,8 @@ interface WebTabsContainer : WebComponent{
     fun removeTab(id:String)
     fun select(id:String)
     fun getTabs():List<WebTabPanel>
+    fun setTitle(tabId: String, title: String)
+
     companion object{
         fun tab(init: WebTabPanel.()->Unit):WebTabPanel{
             val result = WebTabPanel()

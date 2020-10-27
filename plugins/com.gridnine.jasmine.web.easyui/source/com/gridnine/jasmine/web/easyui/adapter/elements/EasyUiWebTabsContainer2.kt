@@ -47,6 +47,10 @@ class EasyUiWebTabsContainer2(private val parent:WebComponent?, configure: WebTa
         return emptyList()
     }
 
+    override fun setTitle(tabId: String, title: String) {
+        TODO("Not yet implemented")
+    }
+
     override fun getParent(): WebComponent? {
         return null
     }

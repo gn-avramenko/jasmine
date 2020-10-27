@@ -68,6 +68,20 @@ class EasyUiWebTabsContainer(private val parent:WebComponent?, configure: WebTab
         return tabs
     }
 
+    override fun setTitle(tabId: String, title: String) {
+        val idx = tabs.indexOfFirst { it.id == tabId }
+        if(idx != -1){
+            val tab = jq.tabs("getTab", idx)
+            jq.tabs("update", object {
+                val tab = tab
+                val type = "header"
+                val options = object {
+                    val title = title
+                }
+            })
+        }
+    }
+
     private fun addTabInternal(panel: WebTabPanel) {
         jq!!.tabs("add", object{
             val id = panel.id

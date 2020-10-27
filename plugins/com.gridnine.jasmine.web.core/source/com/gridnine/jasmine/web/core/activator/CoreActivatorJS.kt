@@ -16,6 +16,8 @@ import com.gridnine.jasmine.web.core.RestReflectionUtilsJS
 import com.gridnine.jasmine.web.core.UiReflectionUtilsJS
 import com.gridnine.jasmine.web.core.application.ActivatorJS
 import com.gridnine.jasmine.web.core.application.EnvironmentJS
+import com.gridnine.jasmine.web.core.mainframe.ObjectsHandlersCache
+import com.gridnine.jasmine.web.core.mainframe.SaveObjectButtonHandler
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.remote.RpcManager
 import com.gridnine.jasmine.web.core.remote.StandardRpcManager
@@ -47,6 +49,8 @@ class CoreActivatorJS: ActivatorJS {
         EnvironmentJS.publish(RpcManager::class, rpcManager)
         EnvironmentJS.publish(JsonSerializerJS())
         EnvironmentJS.publish(ClientRegistry())
+        EnvironmentJS.publish(ObjectsHandlersCache())
+        ClientRegistry.get().register(SaveObjectButtonHandler())
     }
 
     override fun activate(): Promise<Unit> {

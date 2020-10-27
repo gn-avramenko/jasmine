@@ -25,6 +25,7 @@ class EasyUiWebLinkButton(private val parent:WebComponent?, configure: WebLinkBu
     private var width:String? = null
     private var height:String? = null
     private var visible=true
+    private var enabled=true
     private  var jq:dynamic = null
     private lateinit var handler:()->Unit
     init {
@@ -69,6 +70,8 @@ class EasyUiWebLinkButton(private val parent:WebComponent?, configure: WebLinkBu
     private fun updateVisibility() {
         if(visible){
             jq.show()
+            val function = if(enabled) "enable" else "disable"
+            jq.linkbutton(function)
         } else {
             jq.hide()
         }
@@ -77,6 +80,14 @@ class EasyUiWebLinkButton(private val parent:WebComponent?, configure: WebLinkBu
 
     override fun setHandler(handler: () -> Unit) {
         this.handler = handler
+    }
+
+    override fun setEnabled(value: Boolean) {
+        enabled = value
+        if(initialized){
+            val function = if(value) "enable" else "disable"
+            jq.linkbutton(function)
+        }
     }
 
     override fun getParent(): WebComponent? {

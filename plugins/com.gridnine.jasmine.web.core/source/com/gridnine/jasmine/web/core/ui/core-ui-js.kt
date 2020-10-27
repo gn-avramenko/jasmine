@@ -11,6 +11,7 @@ import com.gridnine.jasmine.server.core.model.ui.BaseVMJS
 import com.gridnine.jasmine.server.core.model.ui.BaseVSJS
 import com.gridnine.jasmine.server.core.model.ui.BaseVVJS
 import com.gridnine.jasmine.web.core.application.EnvironmentJS
+import com.gridnine.jasmine.web.core.mainframe.ObjectEditor
 import com.gridnine.jasmine.web.core.ui.components.*
 import org.w3c.dom.DOMMatrixReadOnly
 
@@ -49,8 +50,10 @@ interface HasVisibility{
     fun setVisible(value:Boolean)
 }
 interface WebEditor<VM:BaseVMJS, VS:BaseVSJS, VV:BaseVVJS>:WebComponent{
+    fun getData():VM
     fun readData(vm:VM, vs:VS)
     fun setReadonly(value:Boolean)
+    fun showValidation(validation: VV)
 }
 
 object DefaultUIParameters{
@@ -102,7 +105,7 @@ class ClientRegistry{
         registry.getOrPut(item.getType().id, { hashMapOf()})[item.getId()] = item
     }
 
-    fun<T:Any> allOf(type: RegistryItemType<T>):List<RegistryItem<T>> = (registry[type.id]?.values?.toList() as List<RegistryItem<T>>?)?: emptyList()
+    fun<T:Any> allOf(type: RegistryItemType<T>):List<T> = (registry[type.id]?.values?.toList() as List<T>?)?: emptyList()
 
     fun <T:Any> get(type:RegistryItemType<T>, id:String)= registry[type.id]?.get(id) as T?
 
@@ -114,10 +117,19 @@ class ClientRegistry{
 enum class FakeEnumJS
 
 
-interface EditorButtonHandler<W:WebEditor<*,*,*>>{
-    fun isApplicable(editor:W):Boolean
-    fun isEnabled(editor: W, readOnly: Boolean):Boolean
-    fun onClick(editor:W):Boolean
+interface ObjectEditorButton<W:WebEditor<*,*,*>>:RegistryItem<ObjectEditorButton<WebEditor<*,*,*>>>{
+    fun isApplicable(objectId:String):Boolean
+    fun isEnabled(value: ObjectEditor<W>):Boolean
+    fun onClick(value: ObjectEditor<W>)
+    fun getIcon():String?
+    fun getDisplayName():String
+    fun getWeight():Double
+    override fun getType(): RegistryItemType<ObjectEditorButton<WebEditor<*,*,*>>>{
+        return TYPE
+    }
+    companion object{
+        val TYPE = RegistryItemType<ObjectEditorButton<WebEditor<*,*,*>>>("editor-button-handlers")
+    }
 }
 
 external var debugger: dynamic = definedExternally
