@@ -109,6 +109,7 @@ class StandardSaveEditorDataRestHandler : RestHandler<SaveEditorDataRequest, Sav
         if (ValidationUtils.hasValidationErrors(vvEntity)) {
             val response = SaveEditorDataResponse()
             response.viewValidation = vvEntity
+            response.title=""
             return response
         }
         handlers.forEach {

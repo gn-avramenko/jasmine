@@ -4,4 +4,5 @@
         <parameter id="objectId" type="STRING"/>
         <parameter id="objectUid" type="STRING"/>
     </message>
+    <message id="EMPTY_FIELD"/>
 </messages-bundle>

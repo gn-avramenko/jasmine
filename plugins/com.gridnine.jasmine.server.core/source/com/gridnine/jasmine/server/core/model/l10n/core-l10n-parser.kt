@@ -45,7 +45,7 @@ object L10nMetadataParser {
                 param.className = paramNode.attributes["class-name"]
                 param.collection = "true" == paramNode.attributes["collection"]
             }
-            ParserUtils.updateLocalizations(descr, null, localizations)
+            ParserUtils.updateLocalizationsForId(descr, descr.id, localizations)
         }
     }
 

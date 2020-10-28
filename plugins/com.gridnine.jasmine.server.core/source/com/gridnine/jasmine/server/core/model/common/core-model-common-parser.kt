@@ -21,6 +21,10 @@ object ParserUtils {
 
     private val locales = arrayListOf(LocaleUtils.EN_LOCALE, LocaleUtils.RU_LOCALE)
 
+    fun <T : BaseModelElementDescription> updateLocalizationsForId(description: T, id:String,  localizations: Map<String, Map<Locale, String>>) {
+        return updateLocalizations(description, localizations, id)
+    }
+
     fun <T : BaseModelElementDescription> updateLocalizations(description: T, parentId:String?, localizations: Map<String, Map<Locale, String>>) {
         val id = if (parentId != null) "${parentId}.${description.id}.name" else "${description.id}.name"
         return updateLocalizations(description, localizations, id)

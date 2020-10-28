@@ -32,6 +32,10 @@ class CoreActivatorJS: ActivatorJS {
         EnvironmentJS.publish(reflectionFactory)
         ReflectionFactoryJS.get().registerClass(ObjectReferenceJS.qualifiedClassName){ObjectReferenceJS()}
         ReflectionFactoryJS.get().registerQualifiedName(ObjectReferenceJS::class, ObjectReferenceJS.qualifiedClassName)
+        ReflectionFactoryJS.get().registerClass(TextBoxConfigurationJS.qualifiedClassName){TextBoxConfigurationJS()}
+        ReflectionFactoryJS.get().registerQualifiedName(TextBoxConfigurationJS::class, TextBoxConfigurationJS.qualifiedClassName)
+        ReflectionFactoryJS.get().registerClass(PasswordBoxConfigurationJS.qualifiedClassName){PasswordBoxConfigurationJS()}
+        ReflectionFactoryJS.get().registerQualifiedName(PasswordBoxConfigurationJS::class, PasswordBoxConfigurationJS.qualifiedClassName)
         DomainReflectionUtilsJS.registerWebDomainClasses()
         RestReflectionUtilsJS.registerWebRestClasses()
         UiReflectionUtilsJS.registerWebUiClasses()

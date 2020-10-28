@@ -12,6 +12,7 @@
     <message id="view"/>
     <message id="edit"/>
     <message id="save"/>
+    <message id="close"/>
 </messages-bundle>
 
 

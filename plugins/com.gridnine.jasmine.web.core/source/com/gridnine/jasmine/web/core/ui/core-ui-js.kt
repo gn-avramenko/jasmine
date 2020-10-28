@@ -26,6 +26,7 @@ interface UiLibraryAdapter{
     fun<E:BaseIntrospectableObjectJS> createDataGrid(parent: WebComponent?, configure:WebDataGridConfiguration<E>.()->Unit):WebDataGrid<E>
     fun createSearchBox(parent: WebComponent?, configure:WebSearchBoxConfiguration.()->Unit):WebSearchBox
     fun createTextBox(parent: WebComponent?, configure:WebTextBoxConfiguration.()->Unit):WebTextBox
+    fun createPasswordBox(parent: WebComponent?, configure:WebPasswordBoxConfiguration.()->Unit):WebPasswordBox
     fun createLinkButton(parent: WebComponent?, configure:WebLinkButtonConfiguration.()->Unit):WebLinkButton
     fun createDateBox(parent: WebComponent?, configure:WebDateBoxConfiguration.()->Unit):WebDateBox
     fun createDateTimeBox(parent: WebComponent?, configure:WebDateTimeBoxConfiguration.()->Unit):WebDateTimeBox
@@ -45,10 +46,16 @@ interface WebComponent{
     fun decorate()
     fun destroy()
 }
+interface HasDivId{
+    fun getId():String
+}
+
+interface WebPopupContainer:HasDivId
 
 interface HasVisibility{
     fun setVisible(value:Boolean)
 }
+
 interface WebEditor<VM:BaseVMJS, VS:BaseVSJS, VV:BaseVVJS>:WebComponent{
     fun getData():VM
     fun readData(vm:VM, vs:VS)
@@ -131,5 +138,35 @@ interface ObjectEditorButton<W:WebEditor<*,*,*>>:RegistryItem<ObjectEditorButton
         val TYPE = RegistryItemType<ObjectEditorButton<WebEditor<*,*,*>>>("editor-button-handlers")
     }
 }
+
+
+
+interface WebDialog<W:WebEditor<*,*,*>>{
+    fun close()
+    fun getEditor():W
+}
+enum class DialogButtonPosition{
+    RIGHT,
+    LEFT
+}
+
+class DialogButtonConfiguration<W:WebEditor<*,*,*>>{
+    lateinit var displayName:String
+    var position:DialogButtonPosition = DialogButtonPosition.RIGHT
+    lateinit var handler:(WebDialog<W>)  ->Unit
+}
+
+class DialogConfiguration<W:WebEditor<*,*,*>>{
+    lateinit var title:String
+    lateinit var editor: W
+    val buttons = arrayListOf<DialogButtonConfiguration<W>>()
+    fun button(conf:DialogButtonConfiguration<W>.()->Unit){
+        val button = DialogButtonConfiguration<W>()
+        button.conf()
+        buttons.add(button)
+    }
+}
+
+
 
 external var debugger: dynamic = definedExternally

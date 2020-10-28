@@ -140,4 +140,8 @@ class EasyUiWebBorderContainer(private val parent:WebComponent?, configure: WebB
        children.forEach { it.destroy() }
     }
 
+    override fun getId(): String {
+        return "borderLayout$uid"
+    }
+
 }

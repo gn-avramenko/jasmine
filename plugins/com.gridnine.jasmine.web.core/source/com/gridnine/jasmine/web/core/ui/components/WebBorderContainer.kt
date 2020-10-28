@@ -5,9 +5,10 @@
 
 package com.gridnine.jasmine.web.core.ui.components
 
+import com.gridnine.jasmine.web.core.ui.HasDivId
 import com.gridnine.jasmine.web.core.ui.WebComponent
 
-interface WebBorderContainer : WebComponent{
+interface WebBorderContainer : WebComponent,HasDivId{
     fun setNorthRegion(region:WebBorderLayoutRegion?)
     fun setWestRegion(region:WebBorderLayoutRegion?)
     fun setEastRegion(region:WebBorderLayoutRegion?)

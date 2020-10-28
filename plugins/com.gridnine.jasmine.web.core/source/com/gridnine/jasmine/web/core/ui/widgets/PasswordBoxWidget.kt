@@ -5,29 +5,32 @@
 
 package com.gridnine.jasmine.web.core.ui.widgets
 
+import com.gridnine.jasmine.server.core.model.ui.PasswordBoxConfigurationJS
 import com.gridnine.jasmine.server.core.model.ui.TextBoxConfigurationJS
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.components.WebDateTimeBox
+import com.gridnine.jasmine.web.core.ui.components.WebPasswordBox
 import com.gridnine.jasmine.web.core.ui.components.WebTextBox
 import com.gridnine.jasmine.web.core.ui.components.WebTextBoxConfiguration
 
-class TextBoxWidget(aParent:WebComponent, configure:TextBoxWidgetConfiguration.()->Unit):WebComponent{
+class PasswordBoxWidget(aParent:WebComponent, configure:PasswordWidgetConfiguration.()->Unit):WebComponent{
 
-    private val delegate: WebTextBox
+    private val delegate: WebPasswordBox
     private val parent:WebComponent = aParent
     private val children = arrayListOf<WebComponent>()
-    private var config:TextBoxConfigurationJS? = null
+    private var config:PasswordBoxConfigurationJS? = null
     private var readonly = false
     init {
         (parent.getChildren() as MutableList<WebComponent>).add(this)
-        val conf = TextBoxWidgetConfiguration();
+        val conf = PasswordWidgetConfiguration();
         conf.configure()
-        delegate = UiLibraryAdapter.get().createTextBox(this) {
+        delegate = UiLibraryAdapter.get().createPasswordBox(this) {
             width = conf.width
             height = conf.height
             prompt = conf.prompt
             showClearIcon = conf.showClearIcon
+            showEye = true
         }
     }
 
@@ -72,7 +75,7 @@ class TextBoxWidget(aParent:WebComponent, configure:TextBoxWidgetConfiguration.(
         delegate.resetValidation()
     }
 
-    fun configure(config: TextBoxConfigurationJS) {
+    fun configure(config: PasswordBoxConfigurationJS) {
         this.config = config
         updateDisabledMode()
     }
@@ -80,7 +83,7 @@ class TextBoxWidget(aParent:WebComponent, configure:TextBoxWidgetConfiguration.(
 }
 
 
-class TextBoxWidgetConfiguration{
+class PasswordWidgetConfiguration{
     var width:String? = null
     var height:String? = null
     var prompt:String? = null

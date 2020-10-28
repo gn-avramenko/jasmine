@@ -53,6 +53,10 @@ class EasyUiLibraryAdapter:UiLibraryAdapter {
         return EasyUiWebTextBox(parent, configure)
     }
 
+    override fun createPasswordBox(parent: WebComponent?, configure: WebPasswordBoxConfiguration.() -> Unit): WebPasswordBox {
+        return EasyUiWebPasswordBox(parent,configure)
+    }
+
     override fun createLinkButton(parent: WebComponent?, configure: WebLinkButtonConfiguration.() -> Unit): WebLinkButton {
         return EasyUiWebLinkButton(parent, configure)
     }

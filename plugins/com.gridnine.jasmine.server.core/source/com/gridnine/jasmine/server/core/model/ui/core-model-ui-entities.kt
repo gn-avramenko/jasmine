@@ -31,6 +31,14 @@ abstract class BaseWidgetConfiguration: BaseIntrospectableObject(){
 
 }
 
-class TextBoxConfiguration : BaseWidgetConfiguration()
+class TextBoxConfiguration() : BaseWidgetConfiguration(){
+    constructor(configure:TextBoxConfiguration.()->Unit):this(){
+        configure.invoke(this)
+    }
+}
 
-class PasswordBoxConfiguration : BaseWidgetConfiguration()
+class PasswordBoxConfiguration() : BaseWidgetConfiguration(){
+    constructor(configure:PasswordBoxConfiguration.()->Unit):this(){
+        configure.invoke(this)
+    }
+}

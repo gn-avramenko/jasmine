@@ -43,7 +43,7 @@ internal object L10nServerGenerator {
                         "const val bundle = \"${bundle.id}\""()
                         blankLine()
                         bundle.messages.values.forEach { message ->
-                            "fun ${message.id}(${message.params.map { getParameterWithType(it.value) }.joinToString() }) = ${ServerMessage::class.qualifiedName}(bundle, \"${message.id}\", ${message.params.map { "${it.key}?:\"???\"" }.joinToString()})"()
+                            "fun ${message.id}(${message.params.map { getParameterWithType(it.value) }.joinToString() }) = ${ServerMessage::class.qualifiedName}(bundle, \"${message.id}\" ${if(message.params.isEmpty())"" else ","} ${message.params.map { "${it.key}?:\"???\"" }.joinToString()})"()
                         }
                     }
                     val file = File(pluginsLocation[key]

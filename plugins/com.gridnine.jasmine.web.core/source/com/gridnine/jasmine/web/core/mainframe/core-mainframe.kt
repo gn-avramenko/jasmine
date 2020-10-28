@@ -115,22 +115,32 @@ class MainFrame(private val delegate:WebBorderContainer = UiLibraryAdapter.get()
             return
         }
         handler.loadData(we).then {
-
-            val tabData  = handler.createTabData(we, it, tabsContainer, object:MainFrameTabCallback {
+            val callback = object:MainFrameTabCallback {
+                private var currentTitle:String? = null
                 override fun setTitle(title: String) {
-                    tabsContainer.setTitle(tabId, title)
+                    if(currentTitle == null){
+                        currentTitle = title
+                        return
+                    }
+                    if(currentTitle != title){
+                        currentTitle = title
+                        tabsContainer.setTitle(tabId, title)
+                        return
+                    }
                 }
 
                 override fun close() {
                     TODO("Not yet implemented")
                 }
 
-            })
+            }
+            val tabData  = handler.createTabData(we, it, tabsContainer, callback)
             tabsContainer.addTab(WebTabsContainer.tab{
                 id = tabId
                 title = tabData.title
                 content = tabData.content
             })
+            callback.setTitle(tabData.title)
         }
     }
 

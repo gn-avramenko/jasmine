@@ -36,7 +36,7 @@ class ObjectEditorTabHandler:MainFrameTabHandler<ObjectEditorTabData, GetEditorD
 
 class ObjectEditorTabData(val objectType:String, var objectUid:String?)
 
-class ObjectEditor<W:WebEditor<*,*,*>>(aParent: WebComponent, val obj: ObjectEditorTabData, data: GetEditorDataResponseJS, private val callback: MainFrameTabCallback):WebComponent{
+class ObjectEditor<W:WebEditor<*,*,*>>(aParent: WebComponent, val obj: ObjectEditorTabData, data: GetEditorDataResponseJS, private val callback: MainFrameTabCallback):WebComponent,WebPopupContainer{
     private val delegate:WebBorderContainer
     private val viewButton:WebLinkButton
     private val editButton:WebLinkButton
@@ -135,6 +135,10 @@ class ObjectEditor<W:WebEditor<*,*,*>>(aParent: WebComponent, val obj: ObjectEdi
 
     fun updateTitle(value:String){
         callback.setTitle(value)
+    }
+
+    override fun getId(): String {
+        return delegate.getId()
     }
 }
 
