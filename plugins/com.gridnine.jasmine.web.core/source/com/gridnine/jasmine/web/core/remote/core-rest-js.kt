@@ -107,7 +107,7 @@ class StandardRpcManager(private val baseRestUrl:String) : RpcManager {
             if(requests.isEmpty()){
                 loaderActive = false
                 if(EnvironmentJS.isPublished(UiLibraryAdapter::class)) {
-                    //hide loader
+                    UiLibraryAdapter.get().hideLoader()
                 }
             }
             return
@@ -121,7 +121,7 @@ class StandardRpcManager(private val baseRestUrl:String) : RpcManager {
         if(delta > 200){
             loaderActive = true
             if(EnvironmentJS.isPublished(UiLibraryAdapter::class)) {
-                //UiAdapter.get().showLoader()
+                UiLibraryAdapter.get().showLoader()
             }
         }
     }

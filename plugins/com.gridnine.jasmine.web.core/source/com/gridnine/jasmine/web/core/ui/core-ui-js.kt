@@ -10,6 +10,7 @@ import com.gridnine.jasmine.server.core.model.common.BaseIntrospectableObjectJS
 import com.gridnine.jasmine.server.core.model.ui.BaseVMJS
 import com.gridnine.jasmine.server.core.model.ui.BaseVSJS
 import com.gridnine.jasmine.server.core.model.ui.BaseVVJS
+import com.gridnine.jasmine.web.core.CoreWebMessagesJS
 import com.gridnine.jasmine.web.core.application.EnvironmentJS
 import com.gridnine.jasmine.web.core.mainframe.ObjectEditor
 import com.gridnine.jasmine.web.core.ui.components.*
@@ -32,6 +33,12 @@ interface UiLibraryAdapter{
     fun createDateTimeBox(parent: WebComponent?, configure:WebDateTimeBoxConfiguration.()->Unit):WebDateTimeBox
     fun createNumberBox(parent: WebComponent?, configure:WebNumberBoxConfiguration.()->Unit):WebNumberBox
     fun createSelect(parent: WebComponent, configure: WebSelectConfiguration.() -> Unit): WebSelect
+    fun<W> showDialog(popupChild:WebComponent, configure:DialogConfiguration<W>.()->Unit):WebDialog<W>  where W:WebEditor<*,*,*>, W:HasDivId
+    fun createMenuButton(parent: WebComponent?, configure:WebMenuButtonConfiguration.()->Unit):WebMenuButton
+    fun showLoader()
+    fun hideLoader()
+    fun showNotification(message:String, timeout:Int)
+
 
     companion object{
         fun get() = EnvironmentJS.getPublished(UiLibraryAdapter::class)
@@ -50,7 +57,7 @@ interface HasDivId{
     fun getId():String
 }
 
-interface WebPopupContainer:HasDivId
+interface WebPopupContainer:HasDivId,WebComponent
 
 interface HasVisibility{
     fun setVisible(value:Boolean)
@@ -141,28 +148,37 @@ interface ObjectEditorButton<W:WebEditor<*,*,*>>:RegistryItem<ObjectEditorButton
 
 
 
-interface WebDialog<W:WebEditor<*,*,*>>{
+interface WebDialog<W> where W:WebEditor<*,*,*>, W:HasDivId{
     fun close()
     fun getEditor():W
 }
-enum class DialogButtonPosition{
-    RIGHT,
-    LEFT
-}
 
-class DialogButtonConfiguration<W:WebEditor<*,*,*>>{
+class DialogButtonConfiguration<W> where W:WebEditor<*,*,*>, W:HasDivId{
     lateinit var displayName:String
-    var position:DialogButtonPosition = DialogButtonPosition.RIGHT
     lateinit var handler:(WebDialog<W>)  ->Unit
 }
 
-class DialogConfiguration<W:WebEditor<*,*,*>>{
+class DialogConfiguration<W>  where W:WebEditor<*,*,*>, W:HasDivId{
+    constructor(conf:DialogConfiguration<W>.()->Unit){
+        this.conf()
+    }
+    var expandToMainFrame = false
     lateinit var title:String
     lateinit var editor: W
     val buttons = arrayListOf<DialogButtonConfiguration<W>>()
     fun button(conf:DialogButtonConfiguration<W>.()->Unit){
         val button = DialogButtonConfiguration<W>()
         button.conf()
+        buttons.add(button)
+    }
+    fun cancelButton(){
+        val button = DialogButtonConfiguration<W>()
+        button.displayName = CoreWebMessagesJS.cancel
+        button.handler = {
+            it.getEditor().destroy()
+
+            it.close()
+        }
         buttons.add(button)
     }
 }

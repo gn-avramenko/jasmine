@@ -302,6 +302,17 @@
         <property id="searchFieldValue" type="STRING"/>
     </entity>
 
+    <enum id="com.gridnine.jasmine.server.standard.rest.MessageType">
+        <enum-item id="MESSAGE"/>
+        <enum-item id="WARNING"/>
+        <enum-item id="ERROR"/>
+    </enum>
+
+    <entity id="com.gridnine.jasmine.server.standard.rest.Message">
+        <property id="type" type="ENUM" class-name="com.gridnine.jasmine.server.standard.rest.MessageType" lateinit="true"/>
+        <property id="message" type="STRING" lateinit="true"/>
+    </entity>
+
     <group id="standard">
         <operation id="meta" handler="com.gridnine.jasmine.server.standard.rest.StandardMetaRestHandler">
             <request id="com.gridnine.jasmine.server.standard.model.rest.GetMetadataRequest"/>

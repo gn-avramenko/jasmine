@@ -13,6 +13,8 @@
     <message id="edit"/>
     <message id="save"/>
     <message id="close"/>
+    <message id="cancel"/>
+    <message id="ok"/>
 </messages-bundle>
 
 

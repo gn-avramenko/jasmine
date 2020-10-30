@@ -103,13 +103,13 @@ class EasyUiWebPasswordBox(private val parent:WebComponent?, configure: WebPassw
 
 
     override fun decorate() {
-        jq = jQuery("#textBox$uid")
+        jq = jQuery("#passwordBox$uid")
         var icons = arrayListOf<Any>()
         if(showClearIcon){
             icons.add(object{
                 val iconCls = "icon-clear"
                 val handler = {_:dynamic ->
-                    jq.passwordbox("setValue", null)
+                    jq.passwordbox("reset")
                 }
             })
         }
@@ -137,7 +137,7 @@ class EasyUiWebPasswordBox(private val parent:WebComponent?, configure: WebPassw
     }
 
     override fun destroy() {
-        //noops
+        jq.passwordbox("destroy")
     }
 
 }

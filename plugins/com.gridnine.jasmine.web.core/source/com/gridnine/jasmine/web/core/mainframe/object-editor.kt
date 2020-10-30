@@ -15,6 +15,7 @@ import com.gridnine.jasmine.web.core.StandardRestClient
 import com.gridnine.jasmine.web.core.application.EnvironmentJS
 import com.gridnine.jasmine.web.core.ui.*
 import com.gridnine.jasmine.web.core.ui.components.*
+import kotlin.browser.window
 import kotlin.js.Promise
 
 class ObjectEditorTabHandler:MainFrameTabHandler<ObjectEditorTabData, GetEditorDataResponseJS>{
@@ -60,6 +61,7 @@ class ObjectEditor<W:WebEditor<*,*,*>>(aParent: WebComponent, val obj: ObjectEdi
         ObjectsHandlersCache.get().getObjectEditorButtonHandlers(obj.objectType).forEach {
             toolBar.defineColumn("auto")
         }
+        toolBar.defineColumn("auto")
         toolBar.defineColumn("100%")
         toolBar.defineColumn("auto")
         toolBar.defineColumn("auto")
@@ -75,6 +77,23 @@ class ObjectEditor<W:WebEditor<*,*,*>>(aParent: WebComponent, val obj: ObjectEdi
             }
             toolBar.addCell(WebGridLayoutCell(button))
         }
+        val menuButton = UiLibraryAdapter.get().createMenuButton(toolBar){
+            title = "Дополнительно"
+            items.add(WebMenuItemConfiguration("item1"){
+                title = "Пункт1"
+            })
+            items.add(WebMenuItemConfiguration("item2"){
+                title = "Пункт2"
+            })
+        }
+        menuButton.setEnabled("item2", false)
+        menuButton.setHandler("item1") {
+            window.alert("item1")
+        }
+        menuButton.setHandler("item2") {
+            window.alert("item2")
+        }
+        toolBar.addCell(WebGridLayoutCell(menuButton))
         toolBar.addCell(WebGridLayoutCell(null))
         viewButton = UiLibraryAdapter.get().createLinkButton(toolBar){
             title = CoreWebMessagesJS.view

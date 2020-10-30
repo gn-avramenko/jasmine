@@ -22,3 +22,15 @@
     height: 28px;
     min-height: 28px;
 }
+
+.notification-message{
+    color: green;
+}
+
+.notification-warning{
+    color: yellow;
+}
+
+.notification-error{
+    color: red;
+}

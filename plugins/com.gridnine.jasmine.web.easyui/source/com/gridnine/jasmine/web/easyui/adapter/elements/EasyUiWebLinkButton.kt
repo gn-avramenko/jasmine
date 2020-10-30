@@ -46,7 +46,7 @@ class EasyUiWebLinkButton(private val parent:WebComponent?, configure: WebLinkBu
     override fun decorate() {
        jq = jQuery("#linkButton${uid}")
         jq.linkbutton(object{
-            val text   = title
+            val text   = if(title?.contains(" ") == true) "<nobr>$title</nobr>" else title
             val iconCls = EasyUiUtils.getIconClass(icon)
             val onClick = {
                 handler.invoke()
@@ -57,13 +57,17 @@ class EasyUiWebLinkButton(private val parent:WebComponent?, configure: WebLinkBu
     }
 
     override fun destroy() {
-        //noops
+//        if(initialized){
+//            jq.linkbutton("destroy")
+//        }
     }
 
     override fun setVisible(value: Boolean) {
-        visible = value
-        if(initialized) {
-            updateVisibility()
+        if(visible != value) {
+            visible = value
+            if (initialized) {
+                updateVisibility()
+            }
         }
     }
 

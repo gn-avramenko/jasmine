@@ -27,6 +27,8 @@ class EasyUiWebBorderContainer(private val parent:WebComponent?, configure: WebB
     private var defferedEastRegion:WebBorderLayoutRegion?  = null
     private var defferedWestRegion:WebBorderLayoutRegion?  = null
     private var defferedCenterRegion:WebBorderLayoutRegion?  = null
+
+
     private val children = arrayListOf<WebComponent>()
     private val uid = MiscUtilsJS.createUUID()
 
@@ -133,11 +135,13 @@ class EasyUiWebBorderContainer(private val parent:WebComponent?, configure: WebB
     }
 
     override fun getChildren(): MutableList<WebComponent> {
-        return children
+        return ArrayList(children)
     }
 
     override fun destroy() {
-       children.forEach { it.destroy() }
+       children.forEach {
+           it.destroy()
+       }
     }
 
     override fun getId(): String {

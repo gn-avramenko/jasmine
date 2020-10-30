@@ -96,9 +96,14 @@ class EasyUiWebGridLayoutContainer(private val parent:WebComponent?, configure:W
     }
 
     override fun destroy() {
-        rows.forEach { row -> row.cells.forEach { cell -> cell.comp?.destroy()} }
+        rows.forEach { row ->
+            row.cells.forEach { cell -> cell.comp?.destroy()}
+        }
     }
 
+    override fun getId(): String {
+        return "gridLayout${uid}"
+    }
 }
 
 

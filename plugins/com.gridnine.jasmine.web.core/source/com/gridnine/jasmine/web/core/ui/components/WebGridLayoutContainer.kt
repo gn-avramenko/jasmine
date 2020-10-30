@@ -5,9 +5,10 @@
 
 package com.gridnine.jasmine.web.core.ui.components
 
+import com.gridnine.jasmine.web.core.ui.HasDivId
 import com.gridnine.jasmine.web.core.ui.WebComponent
 
-interface WebGridLayoutContainer : WebComponent{
+interface WebGridLayoutContainer : WebComponent,HasDivId{
     fun defineColumn(width:String?=null);
 
     fun addRow(height:String?=null)

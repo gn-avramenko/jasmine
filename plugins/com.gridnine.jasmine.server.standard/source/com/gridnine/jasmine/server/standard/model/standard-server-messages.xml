@@ -5,4 +5,6 @@
         <parameter id="objectUid" type="STRING"/>
     </message>
     <message id="EMPTY_FIELD"/>
+    <message id="VALIDATION_ERRORS_EXIST"/>
+    <message id="OPERATION_COMPLETED"/>
 </messages-bundle>
