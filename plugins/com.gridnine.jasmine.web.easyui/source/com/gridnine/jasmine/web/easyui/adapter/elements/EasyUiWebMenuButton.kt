@@ -112,6 +112,10 @@ class EasyUiWebMenuButton(private val parent:WebComponent?, configure: WebMenuBu
 
     override fun setEnabled(id: String, value: Boolean) {
          itemsState[id]!!.disabled = !value
+         if(initialized){
+             val elm = jQuery("#${itemsState[id]!!.elementId}")
+             jq2.menu(if(value) "enableItem" else "disableItem", elm)
+         }
     }
 
 

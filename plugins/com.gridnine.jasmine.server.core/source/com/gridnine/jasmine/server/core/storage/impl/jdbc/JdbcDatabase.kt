@@ -103,7 +103,7 @@ class JdbcDatabase : Database {
     }
 
     private fun <D:BaseIdentity> loadObjectVersion(cls: KClass<D>, uid: String, version: Int): VersionReadData {
-        val owner = JdbcUtils.contexts.get() != null
+        val owner = JdbcUtils.contexts.get() == null
         return JdbcUtils.executeInTransaction(commit = false, closeConnection = false) { ctx ->
             loadVersion(cls, uid, version, ctx).let { res ->
                 VersionReadData({ res.data.inputStreamCallback!!.invoke() },  {

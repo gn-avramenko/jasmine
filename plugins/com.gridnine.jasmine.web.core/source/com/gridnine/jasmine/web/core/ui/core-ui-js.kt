@@ -14,7 +14,6 @@ import com.gridnine.jasmine.web.core.CoreWebMessagesJS
 import com.gridnine.jasmine.web.core.application.EnvironmentJS
 import com.gridnine.jasmine.web.core.mainframe.ObjectEditor
 import com.gridnine.jasmine.web.core.ui.components.*
-import org.w3c.dom.DOMMatrixReadOnly
 
 interface UiLibraryAdapter{
     fun showWindow(component: WebComponent)
@@ -33,7 +32,7 @@ interface UiLibraryAdapter{
     fun createDateTimeBox(parent: WebComponent?, configure:WebDateTimeBoxConfiguration.()->Unit):WebDateTimeBox
     fun createNumberBox(parent: WebComponent?, configure:WebNumberBoxConfiguration.()->Unit):WebNumberBox
     fun createSelect(parent: WebComponent, configure: WebSelectConfiguration.() -> Unit): WebSelect
-    fun<W> showDialog(popupChild:WebComponent, configure:DialogConfiguration<W>.()->Unit):WebDialog<W>  where W:WebEditor<*,*,*>, W:HasDivId
+    fun<W> showDialog(popupChild:WebComponent, configure:DialogConfiguration<W>.()->Unit):WebDialog<W>  where W:WebComponent, W:HasDivId
     fun createMenuButton(parent: WebComponent?, configure:WebMenuButtonConfiguration.()->Unit):WebMenuButton
     fun showLoader()
     fun hideLoader()
@@ -130,14 +129,16 @@ class ClientRegistry{
 
 enum class FakeEnumJS
 
+interface HasWeight{
+    fun getWeight():Double
+}
 
-interface ObjectEditorButton<W:WebEditor<*,*,*>>:RegistryItem<ObjectEditorButton<WebEditor<*,*,*>>>{
+interface ObjectEditorButton<W:WebEditor<*,*,*>>:RegistryItem<ObjectEditorButton<WebEditor<*,*,*>>>,HasWeight{
     fun isApplicable(objectId:String):Boolean
     fun isEnabled(value: ObjectEditor<W>):Boolean
     fun onClick(value: ObjectEditor<W>)
     fun getIcon():String?
     fun getDisplayName():String
-    fun getWeight():Double
     override fun getType(): RegistryItemType<ObjectEditorButton<WebEditor<*,*,*>>>{
         return TYPE
     }
@@ -146,19 +147,44 @@ interface ObjectEditorButton<W:WebEditor<*,*,*>>:RegistryItem<ObjectEditorButton
     }
 }
 
-
-
-interface WebDialog<W> where W:WebEditor<*,*,*>, W:HasDivId{
-    fun close()
-    fun getEditor():W
+interface MenuButton:RegistryItem<MenuButton>,HasWeight{
+    fun getIcon():String?
+    fun getDisplayName():String
+    override fun getType(): RegistryItemType<MenuButton>{
+        return TYPE
+    }
+    companion object{
+        val TYPE = RegistryItemType<MenuButton>("menu-buttons-handlers")
+    }
 }
 
-class DialogButtonConfiguration<W> where W:WebEditor<*,*,*>, W:HasDivId{
+
+interface ObjectEditorMenuItem<W:WebEditor<*,*,*>>:RegistryItem<ObjectEditorMenuItem<WebEditor<*,*,*>>>,HasWeight{
+    fun isApplicable(objectId:String):Boolean
+    fun isEnabled(value: ObjectEditor<W>):Boolean
+    fun onClick(value: ObjectEditor<W>)
+    fun getIcon():String?
+    fun getDisplayName():String
+    fun getMenuButtonId():String
+    override fun getType(): RegistryItemType<ObjectEditorMenuItem<WebEditor<*,*,*>>>{
+        return TYPE
+    }
+    companion object{
+        val TYPE = RegistryItemType<ObjectEditorMenuItem<WebEditor<*,*,*>>>("editor-menu-item-handlers")
+    }
+}
+
+interface WebDialog<W> where W:WebComponent, W:HasDivId{
+    fun close()
+    fun getContent():W
+}
+
+class DialogButtonConfiguration<W> where W:WebComponent, W:HasDivId{
     lateinit var displayName:String
     lateinit var handler:(WebDialog<W>)  ->Unit
 }
 
-class DialogConfiguration<W>  where W:WebEditor<*,*,*>, W:HasDivId{
+class DialogConfiguration<W>  where W:WebComponent, W:HasDivId{
     constructor(conf:DialogConfiguration<W>.()->Unit){
         this.conf()
     }
@@ -175,7 +201,7 @@ class DialogConfiguration<W>  where W:WebEditor<*,*,*>, W:HasDivId{
         val button = DialogButtonConfiguration<W>()
         button.displayName = CoreWebMessagesJS.cancel
         button.handler = {
-            it.getEditor().destroy()
+            it.getContent().destroy()
 
             it.close()
         }

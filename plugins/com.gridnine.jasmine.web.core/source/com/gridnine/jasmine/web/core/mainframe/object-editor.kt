@@ -44,6 +44,7 @@ class ObjectEditor<W:WebEditor<*,*,*>>(aParent: WebComponent, val obj: ObjectEdi
     private val parent:WebComponent = aParent
     val rootWebEditor:W
     private val editorButtonsMap = hashMapOf<WebLinkButton, ObjectEditorButton<WebEditor<*,*,*>>>()
+    private val menuItemsMap = hashMapOf<WebMenuButton, MutableMap<String, ObjectEditorMenuItem<WebEditor<*,*,*>>>>()
     var readOnly:Boolean = true
 
     init {
@@ -66,34 +67,41 @@ class ObjectEditor<W:WebEditor<*,*,*>>(aParent: WebComponent, val obj: ObjectEdi
         toolBar.defineColumn("auto")
         toolBar.defineColumn("auto")
         toolBar.addRow()
-        ObjectsHandlersCache.get().getObjectEditorButtonHandlers(obj.objectType).forEach {oeb ->
-            val button = UiLibraryAdapter.get().createLinkButton(toolBar){
-                title = oeb.getDisplayName()
-                icon  = oeb.getIcon()
+        ObjectsHandlersCache.get().getObjectEditorButtonHandlers(obj.objectType).forEach {ti ->
+            if(ti is ObjectEditorButton<*>){
+                val oeb = ti as ObjectEditorButton<WebEditor<*, *, *>>
+                val button = UiLibraryAdapter.get().createLinkButton(toolBar){
+                    title = oeb.getDisplayName()
+                    icon  = oeb.getIcon()
+                }
+                editorButtonsMap[button] = oeb
+                button.setHandler {
+                    ti.onClick(ObjectEditor@this as ObjectEditor<WebEditor<*, *, *>>)
+                }
+                toolBar.addCell(WebGridLayoutCell(button))
+            } else {
+                val mb = ti as MenuButton
+                val menuButton = UiLibraryAdapter.get().createMenuButton(toolBar){
+                    title = mb.getDisplayName()
+
+                    ObjectsHandlersCache.get().getObjectEditorMenuItems(obj.objectType, mb.getId()).forEach { mi ->
+                        items.add(WebMenuItemConfiguration(mi.getId()){
+                            title = mi.getDisplayName()
+                        })
+                    }
+                }
+                val itemsMap = hashMapOf<String, ObjectEditorMenuItem<WebEditor<*, *, *>>>()
+                menuItemsMap[menuButton] = itemsMap
+                ObjectsHandlersCache.get().getObjectEditorMenuItems(obj.objectType, mb.getId()).forEach { mi ->
+                    menuButton.setHandler(mi.getId()) {
+                        mi.onClick(ObjectEditor@this as ObjectEditor<WebEditor<*, *, *>>)
+                    }
+                    itemsMap[mi.getId()] = mi
+                }
+                toolBar.addCell(WebGridLayoutCell(menuButton))
             }
-            editorButtonsMap[button] = oeb
-            button.setHandler {
-                oeb.onClick(ObjectEditor@this as ObjectEditor<WebEditor<*, *, *>>)
-            }
-            toolBar.addCell(WebGridLayoutCell(button))
         }
-        val menuButton = UiLibraryAdapter.get().createMenuButton(toolBar){
-            title = "Дополнительно"
-            items.add(WebMenuItemConfiguration("item1"){
-                title = "Пункт1"
-            })
-            items.add(WebMenuItemConfiguration("item2"){
-                title = "Пункт2"
-            })
-        }
-        menuButton.setEnabled("item2", false)
-        menuButton.setHandler("item1") {
-            window.alert("item1")
-        }
-        menuButton.setHandler("item2") {
-            window.alert("item2")
-        }
-        toolBar.addCell(WebGridLayoutCell(menuButton))
+
         toolBar.addCell(WebGridLayoutCell(null))
         viewButton = UiLibraryAdapter.get().createLinkButton(toolBar){
             title = CoreWebMessagesJS.view
@@ -130,6 +138,10 @@ class ObjectEditor<W:WebEditor<*,*,*>>(aParent: WebComponent, val obj: ObjectEdi
 
     fun updateButtonsState() {
         editorButtonsMap.entries.forEach { it.key.setEnabled(it.value.isEnabled(ObjectEditor@this as ObjectEditor<WebEditor<*, *, *>>)) }
+        menuItemsMap.entries.forEach { mbEntry ->
+            mbEntry.value.entries.forEach {miEntry ->
+                mbEntry.key.setEnabled(miEntry.key, miEntry.value.isEnabled(ObjectEditor@this as ObjectEditor<WebEditor<*, *, *>>))
+        } }
     }
 
     override fun getParent(): WebComponent? {
@@ -163,14 +175,41 @@ class ObjectEditor<W:WebEditor<*,*,*>>(aParent: WebComponent, val obj: ObjectEdi
 
 class ObjectsHandlersCache{
 
-    fun getObjectEditorButtonHandlers(objectId:String):List<ObjectEditorButton<WebEditor<*,*,*>>>{
-        return objectEditorButtonHandlersCache.getOrPut(objectId, {
-            ClientRegistry.get().allOf(ObjectEditorButton.TYPE).filter { it.isApplicable(objectId) }.sortedBy { it.getWeight() }
-        })
+    fun getObjectEditorButtonHandlers(objectId:String):List<Any>{
+        if(!objectEditorButtonHandlersCache.containsKey(objectId)){
+            updateObjectsButtonsCaches(objectId)
+        }
+        return objectEditorButtonHandlersCache[objectId]!!
+    }
+
+    private fun updateObjectsButtonsCaches(objectId: String) {
+        val list1 = ClientRegistry.get().allOf(ObjectEditorButton.TYPE).filter { it.isApplicable(objectId) }
+        val list2 = ClientRegistry.get().allOf(ObjectEditorMenuItem.TYPE).filter { it.isApplicable(objectId) }
+        val editorButtons = arrayListOf<HasWeight>()
+        editorButtons.addAll(list1)
+        val list3 = list2.mapNotNull { ClientRegistry.get().get(MenuButton.TYPE, it.getMenuButtonId()) }.distinct()
+        editorButtons.addAll(list3)
+        editorButtons.sortBy { it.getWeight() }
+        objectEditorButtonHandlersCache[objectId] = editorButtons
+        objectEditorMenuItemsCache[objectId] = hashMapOf()
+        list3.forEach {mb ->
+            val list = arrayListOf<ObjectEditorMenuItem<WebEditor<*,*,*>>>()
+            list.addAll(list2.filter { it.getMenuButtonId() == mb.getId() })
+            list.sortBy { it.getWeight() }
+            objectEditorMenuItemsCache[objectId]!![mb.getId()] = list
+        }
+    }
+
+    fun getObjectEditorMenuItems(objectId:String, buttonId:String): List<ObjectEditorMenuItem<WebEditor<*,*,*>>>{
+        if(!objectEditorMenuItemsCache.containsKey(objectId)){
+            updateObjectsButtonsCaches(objectId)
+        }
+        return objectEditorMenuItemsCache[objectId]!![buttonId]!!
     }
 
     companion object{
-        private val objectEditorButtonHandlersCache = hashMapOf<String, List<ObjectEditorButton<WebEditor<*,*,*>>>>()
+        private val objectEditorButtonHandlersCache = hashMapOf<String, List<HasWeight>>()
+        private val objectEditorMenuItemsCache = hashMapOf<String, MutableMap<String, List<ObjectEditorMenuItem<WebEditor<*,*,*>>>>>()
         fun get() = EnvironmentJS.getPublished(ObjectsHandlersCache::class)
     }
 }

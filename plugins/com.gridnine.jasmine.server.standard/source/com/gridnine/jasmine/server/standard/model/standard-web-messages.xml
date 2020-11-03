@@ -15,6 +15,14 @@
     <message id="close"/>
     <message id="cancel"/>
     <message id="ok"/>
+    <message id="more"/>
+    <message id="showVersions"/>
+    <message id="version"/>
+    <message id="modifiedBy"/>
+    <message id="modified"/>
+    <message id="comment"/>
+    <message id="openVersion"/>
+    <message id="restoreVersion"/>
 </messages-bundle>
 
 

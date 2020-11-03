@@ -107,7 +107,7 @@ class MainFrame(private val delegate:WebBorderContainer = UiLibraryAdapter.get()
     fun openTestTab() {
         tabsContainer.addTestTab()
     }
-    fun<T:Any> openTab(handler: MainFrameTabHandler<T, Any>, we: T) {
+    fun<T:Any, P:Any> openTab(handler: MainFrameTabHandler<T, P>, we: T) {
         val tabId = "$uid|${handler.getTabId(we)}"
         val existingTab = tabsContainer.getTabs().find { it.id == tabId }
         if(existingTab != null){

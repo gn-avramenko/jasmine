@@ -24,8 +24,10 @@ class EasyUiWebDataGrid<E:BaseIntrospectableObjectJS>(private val parent:WebComp
     private lateinit var loader:(WebDataGridRequest)-> Promise<WebDataGridResponse<E>>
     private var dblClickListener:((E)-> Unit)? = null
     private val showPagination:Boolean
-
+    private var localData:List<E>? = null
     private val columnsDescriptions:List<WebDataGridColumnConfiguration<E>>
+    private val dataType:DataGridDataType
+    private val fitColumns:Boolean
     init {
         (parent?.getChildren() as MutableList<WebComponent>?)?.add(this)
         val configuration = WebDataGridConfiguration<E>()
@@ -35,6 +37,8 @@ class EasyUiWebDataGrid<E:BaseIntrospectableObjectJS>(private val parent:WebComp
         height = configuration.height
         columnsDescriptions = configuration.columns
         showPagination = configuration.showPagination
+        dataType = configuration.dataType
+        fitColumns = configuration.fitColumns
     }
     override fun getParent(): WebComponent? {
         return parent
@@ -62,39 +66,52 @@ class EasyUiWebDataGrid<E:BaseIntrospectableObjectJS>(private val parent:WebComp
                     WebDataHorizontalAlignment.CENTER -> "center"
                     null -> "left"
                 }
+                val width = cd.width
                 val resizable = cd.resizable
                 val formatter = cd.formatter
             })
         }
-        jq.datagrid(object {
+        val options = object {
             val fit = this@EasyUiWebDataGrid.fit
             val columns = arrayOf(colls.toTypedArray())
             val pagination = showPagination
-            val loader = { params: dynamic, success: dynamic, _: dynamic ->
+            val fitColumns = this@EasyUiWebDataGrid.fitColumns
+            val singleSelect = true
+            val onDblClickRow = {_:dynamic, row:dynamic ->
+                if(this@EasyUiWebDataGrid.dblClickListener != null){
+                    this@EasyUiWebDataGrid.dblClickListener!!.invoke(row)
+                }
+            }
+        }.asDynamic()
+        if(dataType == DataGridDataType.REMOTE) {
+            options.loader = { params: dynamic, success: dynamic, _: dynamic ->
 
                 val request = WebDataGridRequest()
                 request.sortColumn = params.sort
                 request.desc = "desc" == params.order
                 request.rows = params.rows
                 request.page = params.page
-                this@EasyUiWebDataGrid.loader.invoke(request).then {response ->
-                    success(object{
+                this@EasyUiWebDataGrid.loader.invoke(request).then { response ->
+                    success(object {
                         val rows = response.data.toTypedArray()
                         val total = response.count
                     })
                 }
             }
-            val onDblClickRow = {_:dynamic, row:dynamic ->
-                if(this@EasyUiWebDataGrid.dblClickListener != null){
-                    this@EasyUiWebDataGrid.dblClickListener!!.invoke(row)
-                }
-            }
-        })
+        }
+        jq.datagrid(options)
         initialized = true
+        if(dataType == DataGridDataType.LOCAL){
+            setLocalDataInternal()
+        }
     }
 
     override fun destroy() {
         //noops
+    }
+
+    override fun getId(): String {
+        return "dataGrid${uid}"
     }
 
     override fun setLoader(loader: (WebDataGridRequest) -> Promise<WebDataGridResponse<E>>) {
@@ -107,6 +124,24 @@ class EasyUiWebDataGrid<E:BaseIntrospectableObjectJS>(private val parent:WebComp
 
     override fun setRowDblClickListener(listener: (E) -> Unit) {
         this.dblClickListener = listener
+    }
+
+    override fun getSelected(): List<E> {
+        val array = jq.datagrid("getSelections") as Array<E>
+        return array.toList()
+    }
+
+    override fun setLocalData(data: List<E>) {
+        localData = data
+        if(initialized){
+            setLocalDataInternal()
+        }
+    }
+
+    private fun setLocalDataInternal(){
+        if(localData != null){
+            jq.datagrid("loadData", localData!!.toTypedArray())
+        }
     }
 
 }

@@ -312,7 +312,12 @@
         <property id="type" type="ENUM" class-name="com.gridnine.jasmine.server.standard.rest.MessageType" lateinit="true"/>
         <property id="message" type="STRING" lateinit="true"/>
     </entity>
-
+    <entity id="com.gridnine.jasmine.server.standard.rest.ObjectVersionMetaData">
+        <property id="version" type="INT" non-nullable="true"/>
+        <property id="modifiedBy" type="STRING" lateinit="true"/>
+        <property id="modified" type="LOCAL_DATE_TIME" lateinit="true"/>
+        <property id="comment" type="STRING"/>
+    </entity>
     <group id="standard">
         <operation id="meta" handler="com.gridnine.jasmine.server.standard.rest.StandardMetaRestHandler">
             <request id="com.gridnine.jasmine.server.standard.model.rest.GetMetadataRequest"/>
@@ -379,6 +384,18 @@
                 <property id="title" type="STRING" lateinit="true"/>
             </response>
         </operation>
+        <operation id="getVersionEditorData" handler="com.gridnine.jasmine.server.standard.rest.StandardGetVersionEditorDataRestHandler">
+            <request id="com.gridnine.jasmine.server.standard.model.rest.GetVersionEditorDataRequest">
+                <property id="objectId" type="STRING" lateinit="true"/>
+                <property id="objectUid" type="STRING" lateinit="true"/>
+                <property id="version" type="INT" non-nullable="true"/>
+            </request>
+            <response id="com.gridnine.jasmine.server.standard.model.rest.GetVersionEditorDataResponse">
+                <property id="viewModel" type="ENTITY" class-name="com.gridnine.jasmine.server.core.model.ui.BaseVM" lateinit="true"/>
+                <property id="viewSettings" type="ENTITY" class-name="com.gridnine.jasmine.server.core.model.ui.BaseVS" lateinit="true"/>
+                <property id="title" type="STRING" lateinit="true"/>
+            </response>
+        </operation>
         <operation id="saveEditorData" handler="com.gridnine.jasmine.server.standard.rest.StandardSaveEditorDataRestHandler">
             <request id="com.gridnine.jasmine.server.standard.model.rest.SaveEditorDataRequest">
                 <property id="objectId" type="STRING" lateinit="true"/>
@@ -391,6 +408,15 @@
                 <property id="viewSettings" type="ENTITY" class-name="com.gridnine.jasmine.server.core.model.ui.BaseVS"/>
                 <property id="viewValidation" type="ENTITY" class-name="com.gridnine.jasmine.server.core.model.ui.BaseVV"/>
                 <property id="title" type="STRING" lateinit="true"/>
+            </response>
+        </operation>
+        <operation id="getVersionsMetadata" handler="com.gridnine.jasmine.server.standard.rest.StandardRestGetVersionsMetadataHandler">
+            <request id="com.gridnine.jasmine.server.standard.model.rest.GetVersionsMetadataRequest">
+                <property id="objectId" type="STRING" lateinit="true"/>
+                <property id="objectUid" type="STRING" lateinit="true"/>
+            </request>
+            <response id="com.gridnine.jasmine.server.standard.model.rest.GetVersionsMetaResponse">
+                <collection id="versions" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.rest.ObjectVersionMetaData"/>
             </response>
         </operation>
     </group>
