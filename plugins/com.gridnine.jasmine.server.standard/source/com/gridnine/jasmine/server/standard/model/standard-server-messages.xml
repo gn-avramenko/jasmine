@@ -4,10 +4,6 @@
         <parameter id="objectId" type="STRING"/>
         <parameter id="objectUid" type="STRING"/>
     </message>
-    <message id="VERSION_TITLE">
-        <parameter id="title" type="STRING"/>
-        <parameter id="version" type="INT"/>
-    </message>
     <message id="EMPTY_FIELD"/>
     <message id="VALIDATION_ERRORS_EXIST"/>
     <message id="OPERATION_COMPLETED"/>

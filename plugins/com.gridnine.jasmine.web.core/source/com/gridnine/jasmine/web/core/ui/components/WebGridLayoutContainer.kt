@@ -7,6 +7,7 @@ package com.gridnine.jasmine.web.core.ui.components
 
 import com.gridnine.jasmine.web.core.ui.HasDivId
 import com.gridnine.jasmine.web.core.ui.WebComponent
+import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 
 interface WebGridLayoutContainer : WebComponent,HasDivId{
     fun defineColumn(width:String?=null);
@@ -20,6 +21,7 @@ interface WebGridLayoutContainer : WebComponent,HasDivId{
 class WebGridLayoutCell(val comp:WebComponent?, val columnSpan:Int =1)
 
 class WebGridLayoutContainerConfiguration{
+    var uid = MiscUtilsJS.createUUID()
     var width:String? = null
     var height:String? = null
 }

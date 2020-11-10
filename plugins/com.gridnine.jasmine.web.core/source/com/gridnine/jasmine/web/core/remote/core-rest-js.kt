@@ -96,6 +96,11 @@ class StandardRpcManager(private val baseRestUrl:String) : RpcManager {
                     resolve(obj)
                 }
             })
+            xhr.addEventListener("error", {
+                requests.remove(uuid)
+                updateLoaderState()
+                    reject(RpcError())
+            })
             xhr.send(request)
         }
 

@@ -31,13 +31,13 @@ class ObjectEditorTabHandler(private val forEdit:Boolean):MainFrameTabHandler<Ob
     }
 
     override fun createTabData(obj: ObjectEditorTabData, data: GetEditorDataResponseJS, parent: WebComponent, callback: MainFrameTabCallback): MainFrameTabData {
-        return MainFrameTabData(data.title, ObjectEditor<WebEditor<BaseVMJS,BaseVSJS,BaseVVJS>>(parent, obj, data,callback))
+        return MainFrameTabData(data.title, ObjectEditor<WebEditor<BaseVMJS,BaseVSJS,BaseVVJS>>(parent, obj, data, data.title, forEdit, callback))
     }
 }
 
 class ObjectEditorTabData(val objectType:String, var objectUid:String?)
 
-class ObjectEditor<W:WebEditor<*,*,*>>(aParent: WebComponent, val obj: ObjectEditorTabData, data: GetEditorDataResponseJS, private val callback: MainFrameTabCallback):WebComponent,WebPopupContainer{
+class ObjectEditor<W:WebEditor<*,*,*>>(aParent: WebComponent, val obj: ObjectEditorTabData, data: GetEditorDataResponseJS, initTitle:String, forEdit:Boolean, private val callback: MainFrameTabCallback):WebComponent,WebPopupContainer,EventsSubscriber{
     private val delegate:WebBorderContainer
     private val viewButton:WebLinkButton
     private val editButton:WebLinkButton
@@ -46,8 +46,10 @@ class ObjectEditor<W:WebEditor<*,*,*>>(aParent: WebComponent, val obj: ObjectEdi
     private val editorButtonsMap = hashMapOf<WebLinkButton, ObjectEditorButton<WebEditor<*,*,*>>>()
     private val menuItemsMap = hashMapOf<WebMenuButton, MutableMap<String, ObjectEditorMenuItem<WebEditor<*,*,*>>>>()
     var readOnly:Boolean = true
+    var title = "???"
 
     init {
+        title= initTitle
         delegate = UiLibraryAdapter.get().createBorderLayout(this){
             fit=true
         }
@@ -62,7 +64,6 @@ class ObjectEditor<W:WebEditor<*,*,*>>(aParent: WebComponent, val obj: ObjectEdi
         ObjectsHandlersCache.get().getObjectEditorButtonHandlers(obj.objectType).forEach {
             toolBar.defineColumn("auto")
         }
-        toolBar.defineColumn("auto")
         toolBar.defineColumn("100%")
         toolBar.defineColumn("auto")
         toolBar.defineColumn("auto")
@@ -167,11 +168,31 @@ class ObjectEditor<W:WebEditor<*,*,*>>(aParent: WebComponent, val obj: ObjectEdi
     }
 
     fun updateTitle(value:String){
+        title = value
         callback.setTitle(value)
     }
 
     override fun getId(): String {
         return delegate.getId()
+    }
+
+    override fun receiveEvent(event: Any) {
+        if(event is ObjectModificationEvent){
+            if(event.objectType == obj.objectType && event.objectUid == obj.objectUid){
+                val request = GetEditorDataRequestJS()
+                request.objectId = obj.objectType
+                request.objectUid = obj.objectUid
+                StandardRestClient.standard_standard_getEditorData(request).then {
+                    (rootWebEditor as WebEditor<BaseVMJS, BaseVSJS,BaseVVJS>).readData(it.viewModel, it.viewSettings)
+                    callback.setTitle(it.title)
+                }
+            }
+        }
+        if(event is ObjectDeleteEvent){
+            if(event.objectType == obj.objectType && event.objectUid == obj.objectUid){
+                callback.close()
+            }
+        }
     }
 }
 

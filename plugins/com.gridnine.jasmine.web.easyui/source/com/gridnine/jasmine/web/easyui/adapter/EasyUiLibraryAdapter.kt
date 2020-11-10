@@ -80,10 +80,10 @@ class EasyUiLibraryAdapter:UiLibraryAdapter {
         return EasyUiWebSelect(parent, configure)
     }
 
-    override fun <W : WebComponent> showDialog(popupChild: WebComponent, configure: DialogConfiguration<W>.() -> Unit): WebDialog<W> where W : HasDivId {
+    override fun <W : WebComponent> showDialog(popupChild: WebComponent?, configure: DialogConfiguration<W>.() -> Unit): WebDialog<W> where W : HasDivId {
         val conf = DialogConfiguration<W>(configure)
-        val comp = UiUtils.findParent(popupChild,WebPopupContainer::class)?:throw XeptionJS.forDeveloper("unable to find popup container")
-        jQuery("#${comp.getId()}").append(conf.editor.getHtml())
+        val compJq = if(popupChild == null) jQuery("body") else jQuery("#"+(UiUtils.findParent(popupChild,WebPopupContainer::class)?.getId()?:throw XeptionJS.forDeveloper("unable to find popup container")))
+        compJq.append(conf.editor.getHtml())
         val jq = jQuery("#${conf.editor.getId()}")
         val result = object:WebDialog<W>{
             override fun close() {
@@ -118,6 +118,13 @@ class EasyUiLibraryAdapter:UiLibraryAdapter {
         }
         jq.dialog(dialogConfig);
         conf.editor.decorate()
+        if(!conf.expandToMainFrame){
+            jq.dialog("resize",object{
+                val width = jq.width()+20
+                val height = "auto"
+            });
+        }
+
         return result
     }
 

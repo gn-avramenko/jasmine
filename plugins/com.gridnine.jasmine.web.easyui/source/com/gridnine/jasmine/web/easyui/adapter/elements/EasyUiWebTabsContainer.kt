@@ -47,9 +47,10 @@ class EasyUiWebTabsContainer(private val parent:WebComponent?, configure: WebTab
     override fun removeTab(id: String) {
         val idx = tabs.indexOfFirst { it.id == id }
         if(idx != -1) {
-            tabs.removeAt(idx)
             if (initialized) {
                 jq!!.tabs("close", idx)
+            } else {
+                tabs.removeAt(idx)
             }
         }
     }

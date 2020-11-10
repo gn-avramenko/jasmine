@@ -32,7 +32,7 @@ interface UiLibraryAdapter{
     fun createDateTimeBox(parent: WebComponent?, configure:WebDateTimeBoxConfiguration.()->Unit):WebDateTimeBox
     fun createNumberBox(parent: WebComponent?, configure:WebNumberBoxConfiguration.()->Unit):WebNumberBox
     fun createSelect(parent: WebComponent, configure: WebSelectConfiguration.() -> Unit): WebSelect
-    fun<W> showDialog(popupChild:WebComponent, configure:DialogConfiguration<W>.()->Unit):WebDialog<W>  where W:WebComponent, W:HasDivId
+    fun<W> showDialog(popupChild:WebComponent?, configure:DialogConfiguration<W>.()->Unit):WebDialog<W>  where W:WebComponent, W:HasDivId
     fun createMenuButton(parent: WebComponent?, configure:WebMenuButtonConfiguration.()->Unit):WebMenuButton
     fun showLoader()
     fun hideLoader()
@@ -173,6 +173,24 @@ interface ObjectEditorMenuItem<W:WebEditor<*,*,*>>:RegistryItem<ObjectEditorMenu
         val TYPE = RegistryItemType<ObjectEditorMenuItem<WebEditor<*,*,*>>>("editor-menu-item-handlers")
     }
 }
+
+interface ObjectsList<E:BaseIntrospectableObjectJS>{
+    fun getDataGrid():WebDataGrid<E>
+}
+interface ListButtonHandler<E:BaseIntrospectableObjectJS>:RegistryItem<ListButtonHandler<*>>,HasWeight{
+    fun isApplicable(objectId:String):Boolean
+    fun isEnabled(value: ObjectsList<E>):Boolean
+    fun onClick(value: ObjectsList<E>)
+    fun getIcon():String?
+    fun getDisplayName():String
+    override fun getType(): RegistryItemType<ListButtonHandler<*>>{
+        return TYPE
+    }
+    companion object{
+        val TYPE = RegistryItemType<ListButtonHandler<*>>("list-button-handlers")
+    }
+}
+
 
 interface WebDialog<W> where W:WebComponent, W:HasDivId{
     fun close()

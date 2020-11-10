@@ -16,6 +16,7 @@ import com.gridnine.jasmine.server.standard.model.rest.GetListRequestJS
 import com.gridnine.jasmine.server.standard.model.rest.ListFilterDTJS
 import com.gridnine.jasmine.web.core.CoreWebMessagesJS
 import com.gridnine.jasmine.web.core.StandardRestClient
+import com.gridnine.jasmine.web.core.application.EnvironmentJS
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.ui.*
 import com.gridnine.jasmine.web.core.ui.components.*
@@ -27,8 +28,6 @@ import kotlin.js.Promise
 
 class ListWorkspaceItemHandler : MainFrameTabHandler<ListWorkspaceItemJS, Unit> {
 
-
-    private lateinit var grid: WebDataGrid<*>
 
     override fun loadData(obj: ListWorkspaceItemJS): Promise<Unit> {
         return Promise { resolve, reject ->
@@ -372,3 +371,23 @@ class ListWorkspaceItemHandler : MainFrameTabHandler<ListWorkspaceItemJS, Unit> 
     internal class FilterData(val fieldId: String, val comp: WebComponent, val handler: ListFilterHandler<BaseListFilterValueDTJS, WebComponent>)
 }
 
+class ListButtonHandlersCache{
+
+    fun getListButtonHandlers(objectId:String):List<ListButtonHandler<BaseIntrospectableObjectJS>>{
+        if(!listButtonHandlersCache.containsKey(objectId)){
+            updateObjectsButtonsCaches(objectId)
+        }
+        return listButtonHandlersCache[objectId]!!
+    }
+
+    private fun updateObjectsButtonsCaches(objectId: String) {
+        val list = ClientRegistry.get().allOf(ListButtonHandler.TYPE).filter { it.isApplicable(objectId) }.sortedBy { it.getWeight() }
+        listButtonHandlersCache[objectId] = list as List<ListButtonHandler<BaseIntrospectableObjectJS>>
+    }
+
+
+    companion object{
+        private val listButtonHandlersCache = hashMapOf<String, List<ListButtonHandler<BaseIntrospectableObjectJS>>>()
+        fun get() = EnvironmentJS.getPublished(ListButtonHandlersCache::class)
+    }
+}

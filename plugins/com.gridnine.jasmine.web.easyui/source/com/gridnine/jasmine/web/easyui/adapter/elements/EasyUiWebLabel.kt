@@ -75,6 +75,10 @@ class EasyUiWebLabel(private val parent:WebComponent?) :WebLabel{
         }
     }
 
+    override fun getId(): String {
+        return "label$uid"
+    }
+
     override fun setWidth(value: String) {
         width = value
         if(initialized){

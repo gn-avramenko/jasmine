@@ -397,7 +397,6 @@
             <response id="com.gridnine.jasmine.server.standard.model.rest.GetVersionEditorDataResponse">
                 <property id="viewModel" type="ENTITY" class-name="com.gridnine.jasmine.server.core.model.ui.BaseVM" lateinit="true"/>
                 <property id="viewSettings" type="ENTITY" class-name="com.gridnine.jasmine.server.core.model.ui.BaseVS" lateinit="true"/>
-                <property id="title" type="STRING" lateinit="true"/>
             </response>
         </operation>
         <operation id="saveEditorData" handler="com.gridnine.jasmine.server.standard.rest.StandardSaveEditorDataRestHandler">
@@ -422,6 +421,14 @@
             <response id="com.gridnine.jasmine.server.standard.model.rest.GetVersionsMetaResponse">
                 <collection id="versions" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.rest.ObjectVersionMetaData"/>
             </response>
+        </operation>
+        <operation id="restoreVersion" handler="com.gridnine.jasmine.server.standard.rest.StandardRestRestoreVersionHandler">
+            <request id="com.gridnine.jasmine.server.standard.model.rest.RestoreVersionRequest">
+                <property id="objectId" type="STRING" lateinit="true"/>
+                <property id="objectUid" type="STRING" lateinit="true"/>
+                <property id="version" type="INT" non-nullable="true"/>
+            </request>
+            <response id="com.gridnine.jasmine.server.standard.model.rest.RestoreVersionResponse"/>
         </operation>
         <operation id="delete" handler="com.gridnine.jasmine.server.standard.rest.StandardRestDeleteObjectsHandler">
             <request id="com.gridnine.jasmine.server.standard.model.rest.DeleteObjectsRequest">

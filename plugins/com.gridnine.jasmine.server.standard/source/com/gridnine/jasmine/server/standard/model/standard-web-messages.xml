@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<messages-bundle xmlns="http://xtrip.gridnine.com/jasmine/web-messages" messages-class="com.gridnine.jasmine.web.core.CoreWebMessagesJS" id = "core">
+<messages-bundle xmlns="http://xtrip.gridnine.com/jasmine/web-messages"  id = "core" messages-class="com.gridnine.jasmine.web.core.CoreWebMessagesJS">
     <message id="settings"/>
     <message id="YES"/>
     <message id="NO"/>
@@ -23,6 +23,11 @@
     <message id="comment"/>
     <message id="openVersion"/>
     <message id="restoreVersion"/>
+    <message id="versionRestored"/>
+    <message id="delete"/>
+    <message id="areYouSureToDelete"/>
+    <message id="question"/>
+    <message id="objectsDeleted"/>
 </messages-bundle>
 
 

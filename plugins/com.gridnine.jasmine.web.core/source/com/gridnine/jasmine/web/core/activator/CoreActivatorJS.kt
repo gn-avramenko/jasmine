@@ -16,10 +16,7 @@ import com.gridnine.jasmine.web.core.RestReflectionUtilsJS
 import com.gridnine.jasmine.web.core.UiReflectionUtilsJS
 import com.gridnine.jasmine.web.core.application.ActivatorJS
 import com.gridnine.jasmine.web.core.application.EnvironmentJS
-import com.gridnine.jasmine.web.core.mainframe.AdditionalMenuButton
-import com.gridnine.jasmine.web.core.mainframe.ObjectsHandlersCache
-import com.gridnine.jasmine.web.core.mainframe.SaveObjectButtonHandler
-import com.gridnine.jasmine.web.core.mainframe.ShowVersionsMenuItem
+import com.gridnine.jasmine.web.core.mainframe.*
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.remote.RpcManager
 import com.gridnine.jasmine.web.core.remote.StandardRpcManager
@@ -56,9 +53,11 @@ class CoreActivatorJS: ActivatorJS {
         EnvironmentJS.publish(JsonSerializerJS())
         EnvironmentJS.publish(ClientRegistry())
         EnvironmentJS.publish(ObjectsHandlersCache())
+        EnvironmentJS.publish(ListButtonHandlersCache())
         ClientRegistry.get().register(SaveObjectButtonHandler())
         ClientRegistry.get().register(AdditionalMenuButton())
         ClientRegistry.get().register(ShowVersionsMenuItem())
+        ClientRegistry.get().register(DeleteListButtonHandler())
     }
 
     override fun activate(): Promise<Unit> {

@@ -25,7 +25,7 @@ class EasyUiWebGridLayoutContainer(private val parent:WebComponent?, configure:W
 
     private var height:String? = null
 
-    private val uid = MiscUtilsJS.createUUID()
+    private val uid:String
 
     init {
         (parent?.getChildren() as MutableList<WebComponent>?)?.add(this)
@@ -33,6 +33,7 @@ class EasyUiWebGridLayoutContainer(private val parent:WebComponent?, configure:W
         config.configure()
         width = config.width
         height = config.height
+        uid = config.uid
 
     }
 

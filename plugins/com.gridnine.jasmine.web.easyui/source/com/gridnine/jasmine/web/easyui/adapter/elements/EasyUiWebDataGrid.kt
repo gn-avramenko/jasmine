@@ -28,6 +28,7 @@ class EasyUiWebDataGrid<E:BaseIntrospectableObjectJS>(private val parent:WebComp
     private val columnsDescriptions:List<WebDataGridColumnConfiguration<E>>
     private val dataType:DataGridDataType
     private val fitColumns:Boolean
+    private var selectionChangeListener:(()->Unit)? = null
     init {
         (parent?.getChildren() as MutableList<WebComponent>?)?.add(this)
         val configuration = WebDataGridConfiguration<E>()
@@ -82,6 +83,12 @@ class EasyUiWebDataGrid<E:BaseIntrospectableObjectJS>(private val parent:WebComp
                     this@EasyUiWebDataGrid.dblClickListener!!.invoke(row)
                 }
             }
+            val onSelect = {_:dynamic, _:dynamic ->
+                selectionChangeListener?.invoke()
+            }
+            val onUnselect = {_:dynamic, _:dynamic ->
+                selectionChangeListener?.invoke()
+            }
         }.asDynamic()
         if(dataType == DataGridDataType.REMOTE) {
             options.loader = { params: dynamic, success: dynamic, _: dynamic ->
@@ -127,6 +134,9 @@ class EasyUiWebDataGrid<E:BaseIntrospectableObjectJS>(private val parent:WebComp
     }
 
     override fun getSelected(): List<E> {
+        if(!initialized){
+            return emptyList()
+        }
         val array = jq.datagrid("getSelections") as Array<E>
         return array.toList()
     }
@@ -142,6 +152,10 @@ class EasyUiWebDataGrid<E:BaseIntrospectableObjectJS>(private val parent:WebComp
         if(localData != null){
             jq.datagrid("loadData", localData!!.toTypedArray())
         }
+    }
+
+    override fun setSelectionChangeListener(value: () -> Unit) {
+        selectionChangeListener = value
     }
 
 }

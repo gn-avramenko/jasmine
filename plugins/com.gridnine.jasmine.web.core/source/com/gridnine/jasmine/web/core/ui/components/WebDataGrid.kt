@@ -14,6 +14,7 @@ interface WebDataGrid<E:BaseIntrospectableObjectJS>: WebComponent,HasDivId{
     fun setLoader(loader:(WebDataGridRequest)->Promise<WebDataGridResponse<E>>)
     fun setLocalData(data:List<E>)
     fun getSelected():List<E>
+    fun setSelectionChangeListener(value:()->Unit)
     fun setRowDblClickListener(listener:(E)->Unit)
     fun reload()
 }

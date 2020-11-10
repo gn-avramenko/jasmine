@@ -132,8 +132,11 @@ class StorageImpl:Storage{
 
     private fun<D:BaseDocument> getUpdateDocumentContext(doc:D, ctx:TransactionContext):UpdateDocumentContext<D>{
         val oldDocument= Database.get().loadDocumentWrapper(doc::class as KClass<D>, doc.uid)
-        val docRevision = doc.getValue(BaseDocument.revision) as Int?
-        if(oldDocument != null && docRevision != null && docRevision != oldDocument.revision){
+        var docRevision = doc.getValue(BaseDocument.revision) as Int
+        if(docRevision == -1){
+            docRevision = oldDocument!!.revision
+        }
+        if(oldDocument != null  && docRevision != oldDocument.revision){
             throw Xeption.forDeveloper("revision conflict with document ${doc::class} ${doc.uid}, " +
                     "db revision = ${oldDocument.revision}, operation revision ${doc.getValue(BaseDocument.revision)}")
         }
@@ -376,8 +379,11 @@ class StorageImpl:Storage{
     private fun<A : BaseAsset> getUpdateAssetContext(asset:A, ctx:TransactionContext):UpdateAssetContext<A>{
         val oldAssetWrapperData= Database.get().loadAssetWrapper(asset::class as KClass<A>, asset.uid)
         val oldAsset = oldAssetWrapperData?.asset
-        val revision = asset.getValue(BaseDocument.revision) as Int?
-        if(oldAsset != null && revision != null && revision != oldAsset.getValue(BaseAsset.revision)){
+        var revision = asset.getValue(BaseAsset.revision) as Int
+        if(revision == -1){
+            revision = oldAsset!!.getValue(BaseAsset.revision) as Int
+        }
+        if(oldAsset != null && revision != oldAsset.getValue(BaseAsset.revision)){
             throw Xeption.forDeveloper("revision conflict with document ${asset::class} ${asset.uid}, " +
                     "db revision = ${oldAsset.getValue(BaseAsset.revision)}, operation revision $revision")
         }

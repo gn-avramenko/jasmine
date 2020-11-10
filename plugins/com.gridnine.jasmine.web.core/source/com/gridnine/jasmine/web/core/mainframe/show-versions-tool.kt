@@ -12,9 +12,11 @@ import com.gridnine.jasmine.server.standard.model.rest.*
 import com.gridnine.jasmine.server.standard.rest.ObjectVersionMetaDataJS
 import com.gridnine.jasmine.web.core.CoreWebMessagesJS
 import com.gridnine.jasmine.web.core.StandardRestClient
+import com.gridnine.jasmine.web.core.remote.RpcManager
 import com.gridnine.jasmine.web.core.ui.*
 import com.gridnine.jasmine.web.core.ui.components.*
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
+import com.gridnine.jasmine.web.core.utils.UiUtils
 import kotlin.browser.window
 import kotlin.js.Date
 import kotlin.js.Promise
@@ -37,7 +39,7 @@ class ShowVersionsMenuItem :ObjectEditorMenuItem<WebEditor<BaseVMJS,BaseVSJS,Bas
         request.objectId = value.obj.objectType.substringBeforeLast("JS")
         request.objectUid = value.obj.objectUid!!
         StandardRestClient.standard_standard_getVersionsMetadata(request).then {
-            val ed = ShowVersionsDialogContent(value.obj.objectType, value.obj.objectUid!!, it.versions)
+            val ed = ShowVersionsDialogContent(value.obj.objectType, value.obj.objectUid!!, value.title, it.versions)
             val dialog = UiLibraryAdapter.get().showDialog<ShowVersionsDialogContent>(value.rootWebEditor){
                 title = CoreWebMessagesJS.showVersions
                 editor =ed
@@ -46,7 +48,7 @@ class ShowVersionsMenuItem :ObjectEditorMenuItem<WebEditor<BaseVMJS,BaseVSJS,Bas
                     handler = {
                         val version = it.getContent().getSelectedVersion()
                         if(version != null) {
-                            openVersion(value.obj.objectType, value.obj.objectUid!!, version)
+                            openVersion(value.obj.objectType, value.obj.objectUid!!, value.title, version)
                             it.close()
                         }
                     }
@@ -75,10 +77,10 @@ class ShowVersionsMenuItem :ObjectEditorMenuItem<WebEditor<BaseVMJS,BaseVSJS,Bas
 
 }
 
-private fun openVersion(objectId: String, objectUid:String, version:Int){
-    MainFrame.get().openTab(ObjectVersionEditorTabHandler(), ObjectVersionEditorTabData(objectId, objectUid, version))
+private fun openVersion(objectId: String, objectUid:String, title:String, version:Int){
+    MainFrame.get().openTab(ObjectVersionEditorTabHandler(), ObjectVersionEditorTabData(objectId, objectUid, title, version))
 }
-class ShowVersionsDialogContent(objectId: String, objectUid: String, versions:List<ObjectVersionMetaDataJS>):WebComponent,HasDivId{
+class ShowVersionsDialogContent(objectId: String, objectUid: String, aTitle:String, versions:List<ObjectVersionMetaDataJS>):WebComponent,HasDivId{
 
     private val delegate:WebGridLayoutContainer
     private val dataGrid:WebDataGrid<ObjectVersionMetaDataJS>
@@ -122,7 +124,7 @@ class ShowVersionsDialogContent(objectId: String, objectUid: String, versions:Li
         }
         dataGrid.setLocalData(versions.sortedBy { -it.version })
         dataGrid.setRowDblClickListener {
-            openVersion(objectId, objectUid, it.version)
+            openVersion(objectId, objectUid, aTitle, it.version)
             closeCallbalck.invoke()
         }
         delegate.addRow("100%")
@@ -174,11 +176,11 @@ class ObjectVersionEditorTabHandler:MainFrameTabHandler<ObjectVersionEditorTabDa
     }
 
     override fun createTabData(obj: ObjectVersionEditorTabData, data: GetVersionEditorDataResponseJS, parent: WebComponent, callback: MainFrameTabCallback): MainFrameTabData {
-        return MainFrameTabData(data.title, ObjectVersionEditor<WebEditor<BaseVMJS,BaseVSJS,BaseVVJS>>(parent, obj, data,callback))
+        return MainFrameTabData("${obj.title} (${CoreWebMessagesJS.version} ${obj.version})", ObjectVersionEditor<WebEditor<BaseVMJS,BaseVSJS,BaseVVJS>>(parent, obj, data,callback))
     }
 }
 
-class ObjectVersionEditorTabData(val objectType:String, var objectUid:String, val version:Int)
+class ObjectVersionEditorTabData(val objectType:String, var objectUid:String, val title:String, val version:Int)
 
 class ObjectVersionEditor<W:WebEditor<*,*,*>>(aParent: WebComponent, val obj: ObjectVersionEditorTabData, data: GetVersionEditorDataResponseJS, private val callback: MainFrameTabCallback):WebComponent,WebPopupContainer{
     private val delegate:WebBorderContainer
@@ -205,7 +207,16 @@ class ObjectVersionEditor<W:WebEditor<*,*,*>>(aParent: WebComponent, val obj: Ob
             title = CoreWebMessagesJS.restoreVersion
         }
         restoreButton.setHandler {
-            window.alert("restoring version ${obj.objectType} ${obj.objectUid} ${obj.version}" )
+            callback.close()
+            val request = RestoreVersionRequestJS()
+            request.objectId = obj.objectType.substringBeforeLast("JS")
+            request.objectUid = obj.objectUid
+            request.version = obj.version-1
+            StandardRestClient.standard_standard_restoreVersion(request).then {
+                callback.close()
+                MainFrame.get().publishEvent(ObjectModificationEvent(obj.objectType, obj.objectUid))
+                UiUtils.showMessage(CoreWebMessagesJS.versionRestored.replace("{0}", "${request.version+1}"))
+            }
         }
         toolBar.addCell(WebGridLayoutCell(restoreButton))
         delegate.setNorthRegion(WebBorderContainer.region {

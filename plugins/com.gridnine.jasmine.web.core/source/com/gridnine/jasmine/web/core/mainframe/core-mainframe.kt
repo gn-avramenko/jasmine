@@ -35,6 +35,10 @@ class MainFrame(private val delegate:WebBorderContainer = UiLibraryAdapter.get()
         configuration.configurator()
     }
 
+    fun publishEvent(event:Any){
+        tabsContainer.getTabs().filter { it.content is EventsSubscriber }.forEach { (it.content as EventsSubscriber).receiveEvent(event) }
+    }
+
     fun build(workspace: WorkspaceJS) {
         val westRegion = UiLibraryAdapter.get().createBorderLayout(this){fit=true}
         val logoLabel = UiLibraryAdapter.get().createLabel(westRegion)
@@ -104,9 +108,7 @@ class MainFrame(private val delegate:WebBorderContainer = UiLibraryAdapter.get()
             content = centerRegion
         })
     }
-    fun openTestTab() {
-        tabsContainer.addTestTab()
-    }
+
     fun<T:Any, P:Any> openTab(handler: MainFrameTabHandler<T, P>, we: T) {
         val tabId = "$uid|${handler.getTabId(we)}"
         val existingTab = tabsContainer.getTabs().find { it.id == tabId }
@@ -130,7 +132,7 @@ class MainFrame(private val delegate:WebBorderContainer = UiLibraryAdapter.get()
                 }
 
                 override fun close() {
-                    TODO("Not yet implemented")
+                    tabsContainer.removeTab(tabId)
                 }
 
             }
@@ -164,6 +166,14 @@ interface MainFrameTabHandler<T:Any,D>{
     fun loadData(obj:T):Promise<D>
     fun createTabData(obj:T, data:D, parent:WebComponent, callback: MainFrameTabCallback):MainFrameTabData
 }
+
+interface EventsSubscriber{
+    fun receiveEvent(event:Any)
+}
+
+data class ObjectModificationEvent(val objectType: String, val objectUid:String)
+
+data class ObjectDeleteEvent(val objectType: String, val objectUid:String)
 
 class MainFrameConfiguration{
 

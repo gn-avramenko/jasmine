@@ -7,8 +7,12 @@ package com.gridnine.jasmine.web.core.utils
 
 import com.gridnine.jasmine.server.standard.rest.MessageJS
 import com.gridnine.jasmine.server.standard.rest.MessageTypeJS
+import com.gridnine.jasmine.web.core.CoreWebMessagesJS
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.WebComponent
+import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutCell
+import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutContainer
+import com.gridnine.jasmine.web.core.ui.components.WebLabel
 import kotlin.reflect.KClass
 
 object UiUtils {
@@ -32,5 +36,44 @@ object UiUtils {
             MessageTypeJS.ERROR -> "<div class=\"notification-error\">${message.message}</div>"
         }
         UiLibraryAdapter.get().showNotification(formatedMessage, 3000)
+    }
+
+    fun showMessage(message: String){
+        val msg = MessageJS()
+        msg.type = MessageTypeJS.MESSAGE
+        msg.message = message
+        showMessage(msg)
+    }
+
+    fun replaceMessageParameters(message:String, vararg params:Any?):String{
+        var result = message
+        params.withIndex().forEach{(idx, value) ->
+            result = result.replace("{$idx}", value.toString())
+        }
+        return result
+    }
+
+    fun confirm(question:String, aTitle:String = CoreWebMessagesJS.question, action:()->Unit){
+        val layout = UiLibraryAdapter.get().createGridLayoutContainer(null){
+            uid = "confirmDialog"
+        }
+        layout.defineColumn("auto")
+        layout.addRow()
+        val label = UiLibraryAdapter.get().createLabel(layout)
+        label.setText(question)
+        layout.addCell(WebGridLayoutCell(label))
+
+        UiLibraryAdapter.get().showDialog<WebGridLayoutContainer>(null){
+            title = aTitle
+            editor = layout
+            button {
+                displayName = CoreWebMessagesJS.YES
+                handler = {
+                    it.close()
+                    action.invoke()
+                }
+            }
+            cancelButton()
+        }
     }
 }
