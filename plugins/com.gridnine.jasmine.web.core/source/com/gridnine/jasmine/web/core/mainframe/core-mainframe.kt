@@ -144,8 +144,8 @@ class MainFrame(private val delegate:WebBorderContainer = UiLibraryAdapter.get()
         }
     }
 
-    fun openTab(ref:ObjectReferenceJS){
-        openTab(ObjectEditorTabHandler() as MainFrameTabHandler<ObjectEditorTabData, Any>, ref.let { ObjectEditorTabData(it.type, it.uid) })
+    fun openTab(ref:ObjectReferenceJS, forEdit:Boolean = false){
+        openTab(ObjectEditorTabHandler(forEdit) as MainFrameTabHandler<ObjectEditorTabData, Any>, ref.let { ObjectEditorTabData(it.type, it.uid) })
     }
     companion object {
         fun get() = EnvironmentJS.getPublished(MainFrame::class)

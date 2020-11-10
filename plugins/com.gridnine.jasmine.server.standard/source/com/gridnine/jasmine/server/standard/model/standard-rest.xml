@@ -318,6 +318,10 @@
         <property id="modified" type="LOCAL_DATE_TIME" lateinit="true"/>
         <property id="comment" type="STRING"/>
     </entity>
+    <entity id="com.gridnine.jasmine.server.standard.rest.DeletedObjectReference">
+        <property id="objectType" type="STRING" lateinit="true"/>
+        <property id="objectUid" type="STRING" lateinit="true"/>
+    </entity>
     <group id="standard">
         <operation id="meta" handler="com.gridnine.jasmine.server.standard.rest.StandardMetaRestHandler">
             <request id="com.gridnine.jasmine.server.standard.model.rest.GetMetadataRequest"/>
@@ -418,6 +422,12 @@
             <response id="com.gridnine.jasmine.server.standard.model.rest.GetVersionsMetaResponse">
                 <collection id="versions" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.rest.ObjectVersionMetaData"/>
             </response>
+        </operation>
+        <operation id="delete" handler="com.gridnine.jasmine.server.standard.rest.StandardRestDeleteObjectsHandler">
+            <request id="com.gridnine.jasmine.server.standard.model.rest.DeleteObjectsRequest">
+                <collection id="objects" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.rest.DeletedObjectReference"/>
+            </request>
+            <response id="com.gridnine.jasmine.server.standard.model.rest.DeleteObjectsResponse"/>
         </operation>
     </group>
 

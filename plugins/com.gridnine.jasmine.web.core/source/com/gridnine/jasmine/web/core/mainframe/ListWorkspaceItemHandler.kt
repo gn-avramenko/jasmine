@@ -21,6 +21,7 @@ import com.gridnine.jasmine.web.core.ui.*
 import com.gridnine.jasmine.web.core.ui.components.*
 import com.gridnine.jasmine.web.core.ui.widgets.SearchBoxWidget
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
+import kotlin.browser.window
 import kotlin.js.Date
 import kotlin.js.Promise
 
@@ -35,98 +36,185 @@ class ListWorkspaceItemHandler : MainFrameTabHandler<ListWorkspaceItemJS, Unit> 
         }
     }
 
+    class ListPanel:WebComponent, EventsSubscriber, WebPopupContainer{
+        private val par: WebComponent
+        private val borderLayout:WebBorderContainer
+        private lateinit var grid:WebDataGrid<*>
+        private val objectTypes = arrayListOf<String>()
+        private val objectlist :ObjectsList<BaseIntrospectableObjectJS>
+        private val listButtonsMap= hashMapOf<WebLinkButton, ListButtonHandler<BaseIntrospectableObjectJS>>()
+        constructor(we: ListWorkspaceItemJS,parent: WebComponent, callback: MainFrameTabCallback){
+            DomainMetaRegistryJS.get().indexes[we.listId+"JS"]?.let { objectTypes.add(it.document) }
+            DomainMetaRegistryJS.get().assets[we.listId+"JS"]?.let { objectTypes.add(it.id) }
+            par = parent
+            borderLayout = UiLibraryAdapter.get().createBorderLayout(parent) {
+                fit = true
+            }
+
+            val filterPanel = FilterPanel(we, borderLayout, {
+                grid.reload()
+            })
+            borderLayout.setEastRegion(WebBorderContainer.region {
+                width = DefaultUIParameters.controlWidth + 10
+                showSplitLine = true
+                collapsible = true
+                collapsed = true
+                title = CoreWebMessagesJS.filters
+                content = filterPanel
+            })
+            val searchBox = SearchBoxWidget(parent) {
+                width = "${DefaultUIParameters.controlWidth}px"
+            }
+            grid = createGrid(we, this, searchBox, filterPanel)
+            borderLayout.setCenterRegion(WebBorderContainer.region {
+                content = grid
+            })
+            objectlist = object : ObjectsList<BaseIntrospectableObjectJS> {
+                override fun getDataGrid(): WebDataGrid<BaseIntrospectableObjectJS> {
+                    return grid as WebDataGrid<BaseIntrospectableObjectJS>
+                }
+            }
+            val container = UiLibraryAdapter.get().createGridLayoutContainer(borderLayout) {
+                width = "100%"
+            }
+            val listHandlers = ListButtonHandlersCache.get().getListButtonHandlers(we.listId!!)
+            listHandlers.forEach { lh ->
+                container.defineColumn("auto")
+            }
+            container.defineColumn("100%")
+            container.defineColumn("auto")
+            container.addRow()
+            listHandlers.forEach {lH ->
+                val button = UiLibraryAdapter.get().createLinkButton(container){
+                    title = lH.getDisplayName()
+                }
+                button.setHandler {
+                    lH.onClick(objectlist)
+                }
+                button.setEnabled(lH.isEnabled(objectlist))
+                listButtonsMap[button] = lH
+                container.addCell(WebGridLayoutCell(button, 1))
+            }
+            container.addCell(WebGridLayoutCell(null, 1))
+            grid.setSelectionChangeListener {
+                updateButtonsVisibility()
+            }
+
+            container.addCell(WebGridLayoutCell(searchBox, 1))
+            borderLayout.setNorthRegion(WebBorderContainer.region {
+                content = container
+            })
+            searchBox.setSearcher {
+                grid.reload()
+            }
+        }
+
+        private fun updateButtonsVisibility() {
+            listButtonsMap.entries.forEach {
+                it.key.setEnabled(it.value.isEnabled(objectlist))
+            }
+        }
+
+        private fun createGrid(we: ListWorkspaceItemJS, parent: WebComponent, searchBox: SearchBoxWidget, filterPanel: FilterPanel): WebDataGrid<*> {
+            val listId = "${we.listId}JS"
+            val domainDescr: BaseIndexDescriptionJS =
+                    DomainMetaRegistryJS.get().indexes[listId] ?: DomainMetaRegistryJS.get().assets[listId]
+                    ?: throw IllegalArgumentException("no description found for $listId")
+
+
+            val dataGrid = UiLibraryAdapter.get().createDataGrid<BaseIntrospectableObjectJS>(parent) {
+                fit = true
+                showPagination = true
+                we.columns.forEach { col ->
+                    val propertyDescr = domainDescr.properties[col]
+                    val collectionDescr = domainDescr.collections[col]
+                    if (propertyDescr == null && collectionDescr == null) {
+                        throw IllegalArgumentException("no field description found for id $col")
+                    }
+                    val type = propertyDescr?.type
+                    val number = type == DatabasePropertyTypeJS.BIG_DECIMAL || type == DatabasePropertyTypeJS.LONG || type == DatabasePropertyTypeJS.INT
+
+                    column {
+                        fieldId = col
+                        title = propertyDescr?.displayName ?: collectionDescr!!.displayName
+                        sortable = propertyDescr != null
+                        horizontalAlignment = if (number) WebDataHorizontalAlignment.RIGHT else WebDataHorizontalAlignment.LEFT
+                        resizable = true
+                        formatter = ListWorkspaceItemHandler.createFormatter(type)
+                    }
+                }
+            }
+            dataGrid.setLoader { request ->
+                Promise { resolve, _ ->
+                    val req = GetListRequestJS()
+                    req.columns.addAll(we.columns)
+                    req.criterions.addAll(we.criterions)
+                    req.desc = request.desc
+                    req.listId = we.listId!!
+                    req.page = request.page
+                    req.rows = request.rows
+                    req.sortColumn = request.sortColumn
+                    req.freeText = searchBox.getValue()
+                    req.filters.addAll(filterPanel.getFiltersValues())
+                    StandardRestClient.standard_standard_getList(req).then {
+                        val res = WebDataGridResponse(it.totalCount!!, it.items)
+                        resolve.invoke(res as WebDataGridResponse<BaseIntrospectableObjectJS>)
+                        window.setTimeout(ListWorkspaceItemHandler@this::updateButtonsVisibility, 100)
+                    }
+                }
+            }
+            dataGrid.setRowDblClickListener {
+                if(it is BaseIndexJS){
+                    MainFrame.get().openTab(it.document)
+                }
+            }
+            return dataGrid
+        }
+
+        override fun getId(): String {
+            return borderLayout.getId()
+        }
+
+        override fun getParent(): WebComponent? {
+            return par
+        }
+
+        override fun getChildren(): List<WebComponent> {
+            return borderLayout.getChildren()
+        }
+
+        override fun getHtml(): String {
+            return borderLayout.getHtml()
+        }
+
+        override fun decorate() {
+            borderLayout.decorate()
+        }
+
+        override fun destroy() {
+            borderLayout.destroy()
+        }
+
+        override fun receiveEvent(event: Any) {
+            if(event is ObjectDeleteEvent){
+                if(objectTypes.contains(event.objectType)){
+                    grid.reload()
+                }
+            }
+            if(event is ObjectModificationEvent){
+                if(objectTypes.contains(event.objectType)){
+                    grid.reload()
+                }
+            }
+        }
+
+    }
     override fun createTabData(we: ListWorkspaceItemJS, data: Unit, parent: WebComponent, callback: MainFrameTabCallback): MainFrameTabData {
-        val borderLayout = UiLibraryAdapter.get().createBorderLayout(parent) {
-            fit = true
-        }
-        val container = UiLibraryAdapter.get().createGridLayoutContainer(borderLayout) {
-            width = "100%"
-        }
-        container.defineColumn("100%")
-        container.defineColumn("auto")
-        container.addRow()
-        container.addCell(WebGridLayoutCell(null, 1))
-        val searchBox = SearchBoxWidget(parent,{
-            width = "${DefaultUIParameters.controlWidth}px"
-        })
-        container.addCell(WebGridLayoutCell(searchBox, 1))
-        borderLayout.setNorthRegion(WebBorderContainer.region {
-            content = container
-        })
-        val filterPanel = FilterPanel(we, borderLayout, {grid.reload()})
-        borderLayout.setEastRegion(WebBorderContainer.region {
-            width = DefaultUIParameters.controlWidth + 10
-            showSplitLine = true
-            collapsible = true
-            collapsed = true
-            title = CoreWebMessagesJS.filters
-            content = filterPanel
-        })
-        grid = createGrid(we, parent, searchBox, filterPanel)
-        borderLayout.setCenterRegion(WebBorderContainer.region {
-            content = grid
-        })
-        searchBox.setSearcher {
-            grid.reload()
-        }
-        return MainFrameTabData(we.displayName ?: "???", borderLayout)
+        return MainFrameTabData(we.displayName ?: "???", ListPanel(we, parent, callback))
     }
 
 
-    private fun createGrid(we: ListWorkspaceItemJS, parent: WebComponent, searchBox: SearchBoxWidget, filterPanel: FilterPanel): WebDataGrid<*> {
-        val listId = "${we.listId}JS"
-        val domainDescr: BaseIndexDescriptionJS =
-                DomainMetaRegistryJS.get().indexes[listId] ?: DomainMetaRegistryJS.get().assets[listId]
-                ?: throw IllegalArgumentException("no description found for $listId")
 
-
-        val dataGrid = UiLibraryAdapter.get().createDataGrid<BaseIntrospectableObjectJS>(parent) {
-            fit = true
-            showPagination = true
-            we.columns.forEach { col ->
-                val propertyDescr = domainDescr.properties[col]
-                val collectionDescr = domainDescr.collections[col]
-                if (propertyDescr == null && collectionDescr == null) {
-                    throw IllegalArgumentException("no field description found for id $col")
-                }
-                val type = propertyDescr?.type
-                val number = type == DatabasePropertyTypeJS.BIG_DECIMAL || type == DatabasePropertyTypeJS.LONG || type == DatabasePropertyTypeJS.INT
-
-                column {
-                    fieldId = col
-                    title = propertyDescr?.displayName ?: collectionDescr!!.displayName
-                    sortable = propertyDescr != null
-                    horizontalAlignment = if (number) WebDataHorizontalAlignment.RIGHT else WebDataHorizontalAlignment.LEFT
-                    resizable = true
-                    formatter = ListWorkspaceItemHandler.createFormatter(type)
-                }
-            }
-        }
-        dataGrid.setLoader { request ->
-            Promise { resolve, _ ->
-                val req = GetListRequestJS()
-                req.columns.addAll(we.columns)
-                req.criterions.addAll(we.criterions)
-                req.desc = request.desc
-                req.listId = we.listId!!
-                req.page = request.page
-                req.rows = request.rows
-                req.sortColumn = request.sortColumn
-                req.freeText = searchBox.getValue()
-                req.filters.addAll(filterPanel.getFiltersValues())
-                StandardRestClient.standard_standard_getList(req).then {
-                    val res = WebDataGridResponse(it.totalCount!!, it.items)
-                    resolve.invoke(res as WebDataGridResponse<BaseIntrospectableObjectJS>)
-                }
-            }
-        }
-        dataGrid.setRowDblClickListener {
-            if(it is BaseIndexJS){
-                MainFrame.get().openTab(it.document)
-            }
-        }
-        return dataGrid
-    }
 
     override fun getTabId(obj: ListWorkspaceItemJS): String {
         return "list${obj.uid}"

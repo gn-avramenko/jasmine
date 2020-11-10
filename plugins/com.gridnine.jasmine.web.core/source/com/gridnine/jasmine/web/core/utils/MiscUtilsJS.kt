@@ -45,6 +45,10 @@ object MiscUtilsJS {
         return !isBlank(text)
     }
 
+    fun toServerClassName(name:String):String{
+        return name.substringBeforeLast("JS")
+    }
+
     fun formatDateTime(value:Date?) : String? {
         return value?.let{"${it.getFullYear()}-${fillWithZeros(it.getMonth() + 1)}-${fillWithZeros(it.getDate())} ${fillWithZeros(it.getHours())}:${fillWithZeros(it.getMinutes())}:${fillWithZeros(it.getSeconds())}"}
     }

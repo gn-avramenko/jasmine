@@ -58,7 +58,7 @@ class InvalidateCacheStorageInterceptor(override val priority: Double, private v
         }
         CacheConfiguration.get().getCachedPropertyHandlers(obj::class as KClass<A>).forEach { handler  ->
             context.globalContext.transactionContext.postCommitCallbacks.add{
-                advice.invalidateFindCache(handler.getIdentityClass(), handler.getPropertyName(), handler.getValue(obj))
+                advice.invalidateFindCache(handler.getIndexClass(), handler.getPropertyName(), handler.getValue(obj))
             }
         }
     }

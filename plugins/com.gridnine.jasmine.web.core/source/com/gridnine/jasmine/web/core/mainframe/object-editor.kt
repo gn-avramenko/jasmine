@@ -18,7 +18,7 @@ import com.gridnine.jasmine.web.core.ui.components.*
 import kotlin.browser.window
 import kotlin.js.Promise
 
-class ObjectEditorTabHandler:MainFrameTabHandler<ObjectEditorTabData, GetEditorDataResponseJS>{
+class ObjectEditorTabHandler(private val forEdit:Boolean):MainFrameTabHandler<ObjectEditorTabData, GetEditorDataResponseJS>{
     override fun getTabId(obj: ObjectEditorTabData): String {
         return "${obj.objectType}||${obj.objectUid}"
     }
@@ -107,11 +107,12 @@ class ObjectEditor<W:WebEditor<*,*,*>>(aParent: WebComponent, val obj: ObjectEdi
             title = CoreWebMessagesJS.view
         }
 
-        viewButton.setVisible(false)
+        viewButton.setVisible(forEdit)
         toolBar.addCell(WebGridLayoutCell(viewButton))
         editButton = UiLibraryAdapter.get().createLinkButton(toolBar){
             title = CoreWebMessagesJS.edit
         }
+        editButton.setVisible(!forEdit)
 
         toolBar.addCell(WebGridLayoutCell(editButton))
         delegate.setNorthRegion(WebBorderContainer.region {
@@ -132,7 +133,8 @@ class ObjectEditor<W:WebEditor<*,*,*>>(aParent: WebComponent, val obj: ObjectEdi
             updateButtonsState()
         }
         (rootWebEditor as WebEditor<BaseVMJS, BaseVSJS,BaseVVJS>).readData(data.viewModel, data.viewSettings)
-        rootWebEditor.setReadonly(true)
+        readOnly = !forEdit
+        rootWebEditor.setReadonly(!forEdit)
         updateButtonsState()
     }
 

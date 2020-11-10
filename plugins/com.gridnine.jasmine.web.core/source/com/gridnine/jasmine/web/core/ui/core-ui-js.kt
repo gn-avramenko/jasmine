@@ -201,8 +201,6 @@ class DialogConfiguration<W>  where W:WebComponent, W:HasDivId{
         val button = DialogButtonConfiguration<W>()
         button.displayName = CoreWebMessagesJS.cancel
         button.handler = {
-            it.getContent().destroy()
-
             it.close()
         }
         buttons.add(button)

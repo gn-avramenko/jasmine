@@ -44,6 +44,7 @@ object DomainWebGenerator {
             result.codeInjections.add("""
             companion object{
                 val objectId = "${descr.document}JS"
+                val indexId = "${descr.id}JS"
             }
         """.trimIndent())
             }

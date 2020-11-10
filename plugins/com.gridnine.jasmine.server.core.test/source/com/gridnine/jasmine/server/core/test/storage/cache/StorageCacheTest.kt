@@ -90,6 +90,9 @@ class StorageCacheTest:StorageTestBase(){
         ref = Storage.get().findUniqueDocumentReference(TestDomainDocumentIndex::class, TestDomainDocumentIndex.stringPropertyProperty, "test")
         Assert.assertNotNull(ref)
         Assert.assertEquals(2, findDocumentCount)
+        Storage.get().deleteDocument(doc)
+        ref = Storage.get().findUniqueDocumentReference(TestDomainDocumentIndex::class, TestDomainDocumentIndex.stringPropertyProperty, "test")
+        Assert.assertNull(ref)
     }
 
 }

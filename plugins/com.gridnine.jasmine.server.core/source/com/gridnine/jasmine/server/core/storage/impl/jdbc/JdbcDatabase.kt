@@ -187,7 +187,7 @@ class JdbcDatabase : Database {
     override fun <D : BaseDocument> deleteDocument(readData: DocumentWrapper<D>) {
         JdbcUtils.executeInTransaction(commit = true, closeConnection = true) { ctx ->
             readData.oid?.let { JdbcDialect.get().deleteBlob(ctx, it) }
-            deleteObject(readData::class.java.name, readData.uid)
+            deleteObject(readData.cls.java.name, readData.uid)
         }
     }
 

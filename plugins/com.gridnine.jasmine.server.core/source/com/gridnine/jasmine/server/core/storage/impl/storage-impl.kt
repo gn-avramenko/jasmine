@@ -246,7 +246,7 @@ class StorageImpl:Storage{
     }
 
     override fun <D : BaseDocument> deleteDocument(ref: ObjectReference<D>) {
-        loadDocument(ref)?.let { deleteDocument(it) }
+        loadDocument(ref,ignoreCache = true)?.let { deleteDocument(it) }
     }
 
     private fun<D : BaseDocument> deleteDocument(doc:D, advices: List<StorageAdvice>, ctx:TransactionContext, idx:Int){

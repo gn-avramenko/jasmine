@@ -32,7 +32,7 @@ class CacheStorageAdvice(override val priority: Double) : StorageAdvice{
             return callback.invoke(index,property,propertyValue)
         }
         val propValueStr = toString(propertyValue)
-        val cache = CacheManager.get().getOrCreateFindCache<D>(index::class, property.name)
+        val cache = CacheManager.get().getOrCreateFindCache<D>(index, property.name)
         val oldValue = cache.get(propValueStr)
         if(oldValue?.value != null){
             return if(oldValue.value == nullObject) null else oldValue.value
@@ -93,6 +93,7 @@ class CacheStorageAdvice(override val priority: Double) : StorageAdvice{
     fun  invalidateFindCache(kClass: KClass<*>, propertyName: String, value: Any?) {
         CacheManager.get().getOrCreateFindCache<BaseIdentity>(kClass, propertyName).put(toString(value), CachedValue(System.currentTimeMillis(), null))
     }
+
 
     companion object{
         private val nullObject:Any = object {}
