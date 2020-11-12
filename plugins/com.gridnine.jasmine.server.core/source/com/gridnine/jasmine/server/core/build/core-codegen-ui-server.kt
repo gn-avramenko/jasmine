@@ -48,7 +48,7 @@ internal object UiServerGenerator {
     private fun toGenData(descr: VVEntityDescription): BaseGenData {
         val result = GenClassData(descr.id, BaseVV::class.qualifiedName, false, true)
         descr.properties.values.forEach { prop ->
-            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.type, prop.className),lateinit = false, nonNullable = false))
+            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.type, prop.className),lateinit = prop.lateInit, nonNullable = false))
         }
         descr.collections.values.forEach { coll ->
             result.collections.add(GenCollectionDescription(coll.id, getPropertyType(coll.elementType), getClassName(coll.elementType, coll.elementClassName)))
@@ -85,7 +85,7 @@ internal object UiServerGenerator {
     private fun toGenData(descr: VSEntityDescription): BaseGenData {
         val result = GenClassData(descr.id, BaseVS::class.qualifiedName, false, true)
         descr.properties.values.forEach { prop ->
-            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.type, prop.className),lateinit = false, nonNullable = false))
+            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.type, prop.className),lateinit = prop.lateInit, nonNullable = false))
         }
         descr.collections.values.forEach { coll ->
             result.collections.add(GenCollectionDescription(coll.id, getPropertyType(coll.elementType), getClassName(coll.elementType, coll.elementClassName)))
@@ -109,6 +109,7 @@ internal object UiServerGenerator {
         return when(type){
             VSPropertyType.TEXT_BOX_SETTINGS-> TextBoxConfiguration::class.qualifiedName
             VSPropertyType.PASSWORD_BOX_SETTINGS-> PasswordBoxConfiguration::class.qualifiedName
+            VSPropertyType.ENTITY-> className
         }
     }
 
@@ -116,13 +117,14 @@ internal object UiServerGenerator {
         return when(type){
             VSPropertyType.TEXT_BOX_SETTINGS-> GenPropertyType.ENTITY
             VSPropertyType.PASSWORD_BOX_SETTINGS-> GenPropertyType.ENTITY
+            VSPropertyType.ENTITY -> GenPropertyType.ENTITY
         }
     }
 
     private fun toGenData(descr: VMEntityDescription): BaseGenData {
         val result = GenClassData(descr.id, BaseVM::class.qualifiedName, false, true)
         descr.properties.values.forEach { prop ->
-            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.className),lateinit = false, nonNullable = prop.nonNullable))
+            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.className),lateinit = prop.lateInit, nonNullable = prop.nonNullable))
         }
         descr.collections.values.forEach { coll ->
             result.collections.add(GenCollectionDescription(coll.id, getPropertyType(coll.elementType), getClassName(coll.elementClassName)))

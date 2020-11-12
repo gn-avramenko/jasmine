@@ -185,6 +185,7 @@
         <property id="type" type="ENUM" class-name="com.gridnine.jasmine.server.standard.model.rest.VMPropertyTypeDT"/>
         <property id="className" type="STRING"/>
         <property id="nonNullable" type="BOOLEAN"/>
+        <property id="lateInit" type="BOOLEAN"/>
     </entity>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.VMCollectionDescriptionDT" extends="com.gridnine.jasmine.server.standard.model.rest.BaseUIElementDT">
         <property id="elementType" type="ENUM" class-name="com.gridnine.jasmine.server.standard.model.rest.VMCollectionTypeDT"/>
@@ -199,6 +200,7 @@
     <enum id="com.gridnine.jasmine.server.standard.model.rest.VSPropertyTypeDT">
         <enum-item id="TEXT_BOX_SETTINGS"/>
         <enum-item id="PASSWORD_BOX_SETTINGS"/>
+        <enum-item id="ENTITY"/>
     </enum>
     <enum id="com.gridnine.jasmine.server.standard.model.rest.VSCollectionTypeDT">
         <enum-item id="ENTITY"/>
@@ -207,6 +209,7 @@
         <property id="type" type="ENUM" class-name="com.gridnine.jasmine.server.standard.model.rest.VSPropertyTypeDT"/>
         <property id="className" type="STRING"/>
         <property id="nonNullable" type="BOOLEAN"/>
+        <property id="lateInit" type="BOOLEAN"/>
     </entity>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.VSCollectionDescriptionDT" extends="com.gridnine.jasmine.server.standard.model.rest.BaseUIElementDT">
         <property id="elementType" type="ENUM" class-name="com.gridnine.jasmine.server.standard.model.rest.VSCollectionTypeDT"/>
@@ -228,6 +231,7 @@
         <property id="type" type="ENUM" class-name="com.gridnine.jasmine.server.standard.model.rest.VVPropertyTypeDT"/>
         <property id="className" type="STRING"/>
         <property id="nonNullable" type="BOOLEAN"/>
+        <property id="lateInit" type="BOOLEAN"/>
     </entity>
     <entity id="com.gridnine.jasmine.server.standard.model.rest.VVCollectionDescriptionDT" extends="com.gridnine.jasmine.server.standard.model.rest.BaseUIElementDT">
         <property id="elementType" type="ENUM" class-name="com.gridnine.jasmine.server.standard.model.rest.VVCollectionTypeDT"/>

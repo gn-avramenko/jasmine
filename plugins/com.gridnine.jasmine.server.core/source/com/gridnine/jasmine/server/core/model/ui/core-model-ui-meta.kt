@@ -40,7 +40,7 @@ enum class VMCollectionType {
 
 class VMCollectionDescription(id:String, val elementType:VMCollectionType, val elementClassName:String?) : BaseUiElementDescription(id)
 
-class VMPropertyDescription(id:String, val type:VMPropertyType, val className:String?,val nonNullable: Boolean) : BaseUiElementDescription( id)
+class VMPropertyDescription(id:String, val type:VMPropertyType, val className:String?,val nonNullable: Boolean, val lateInit:Boolean) : BaseUiElementDescription( id)
 
 
 class VMEntityDescription(id: String) : BaseUiElementDescription(id) {
@@ -51,6 +51,7 @@ class VMEntityDescription(id: String) : BaseUiElementDescription(id) {
 }
 
 enum class VSPropertyType {
+    ENTITY,
     TEXT_BOX_SETTINGS,
     PASSWORD_BOX_SETTINGS
 }
@@ -60,7 +61,7 @@ enum class VSCollectionType {
 }
 
 class VSCollectionDescription(id:String, val elementType:VSCollectionType, val elementClassName:String?) : BaseUiElementDescription( id)
-class VSPropertyDescription(id:String, val type:VSPropertyType, val className:String?) : BaseUiElementDescription(id)
+class VSPropertyDescription(id:String, val type:VSPropertyType, val className:String?, val lateInit:Boolean) : BaseUiElementDescription(id)
 class VSEntityDescription(id: String) : BaseUiElementDescription(id) {
 
     val properties = linkedMapOf<String, VSPropertyDescription>()
@@ -79,7 +80,7 @@ enum class VVCollectionType {
 }
 
 class VVCollectionDescription(id:String, val elementType:VVCollectionType, val elementClassName:String?) : BaseUiElementDescription( id)
-class VVPropertyDescription(id:String, val type:VVPropertyType, val className:String?) : BaseUiElementDescription(id)
+class VVPropertyDescription(id:String, val type:VVPropertyType, val className:String?, val lateInit:Boolean) : BaseUiElementDescription(id)
 class VVEntityDescription(id: String) : BaseUiElementDescription(id) {
 
     val properties = linkedMapOf<String, VVPropertyDescription>()
@@ -110,7 +111,8 @@ enum class WidgetType{
 abstract class BaseWidgetDescription(val notEditable:Boolean, val widgetType:WidgetType)
 
 enum class ViewType{
-    GRID_CONTAINER
+    GRID_CONTAINER,
+    TILE_SPACE
 }
 
 abstract class BaseViewDescription(val id:String,val viewType:ViewType)
@@ -129,6 +131,12 @@ class GridContainerDescription(id:String, val columnsCount:Int?):BaseViewDescrip
     val columns = arrayListOf<GridContainerColumnDescription>()
     val rows = arrayListOf<GridContainerRowDescription>()
 }
+
+class TileSpaceOverviewDescription(val viewId:String):BaseModelElementDescription("overview")
+
+class TileDescription(id:String, val fullViewId:String):BaseModelElementDescription(id)
+
+class TileSpaceDescription(id:String, val overviewDescription: TileSpaceOverviewDescription?,  val tiles:MutableList<TileDescription> = arrayListOf()):BaseViewDescription(id, ViewType.TILE_SPACE)
 
 class UiMetaRegistry:Disposable{
     val enums = linkedMapOf<String, UiEnumDescription>()

@@ -126,6 +126,7 @@ internal class VSEntityMetadataProviderJS(description: VSEntityDescriptionJS) : 
         return when(elementType){
             VSPropertyTypeJS.TEXT_BOX_SETTINGS -> TextBoxConfigurationJS.qualifiedClassName
             VSPropertyTypeJS.PASSWORD_BOX_SETTINGS -> PasswordBoxConfigurationJS.qualifiedClassName
+            VSPropertyTypeJS.ENTITY -> elementClassName
         }
     }
 
@@ -133,6 +134,7 @@ internal class VSEntityMetadataProviderJS(description: VSEntityDescriptionJS) : 
         return when (elementType) {
             VSPropertyTypeJS.TEXT_BOX_SETTINGS -> SerializablePropertyTypeJS.ENTITY
             VSPropertyTypeJS.PASSWORD_BOX_SETTINGS  -> SerializablePropertyTypeJS.ENTITY
+            VSPropertyTypeJS.ENTITY  -> SerializablePropertyTypeJS.ENTITY
         }
     }
 

@@ -13,6 +13,7 @@ import com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistry
 import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistry
 import com.gridnine.jasmine.server.core.model.rest.RestPropertyType
 import com.gridnine.jasmine.server.core.model.ui.GridContainerDescription
+import com.gridnine.jasmine.server.core.model.ui.TileSpaceDescription
 import com.gridnine.jasmine.server.core.model.ui.UiMetaRegistry
 import com.gridnine.jasmine.server.core.model.ui.ViewType
 import com.gridnine.jasmine.server.core.rest.RestHandler
@@ -208,6 +209,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                 propertyDescriptionDT.className = getClassName(pd.className)
                 propertyDescriptionDT.id = pd.id
                 propertyDescriptionDT.type = VSPropertyTypeDT.valueOf(pd.type.name)
+                propertyDescriptionDT.lateInit = pd.lateInit
                 entityDescriptionDT.properties.add(propertyDescriptionDT)
             }
             ed.collections.values.forEach { cd ->
@@ -227,6 +229,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                 propertyDescriptionDT.className = getClassName(pd.className)
                 propertyDescriptionDT.id = pd.id
                 propertyDescriptionDT.type = VVPropertyTypeDT.valueOf(pd.type.name)
+                propertyDescriptionDT.lateInit = pd.lateInit
                 entityDescriptionDT.properties.add(propertyDescriptionDT)
             }
             ed.collections.values.forEach { cd ->
@@ -252,6 +255,15 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                             message.displayName = cell.getDisplayName()
                             bundle.messages.add(message)
                         }
+                    }
+                }
+                ViewType.TILE_SPACE ->{
+                    vd as TileSpaceDescription
+                    vd.overviewDescription?.let {
+                        val message = WebMessageDT()
+                        message.id = "overview"
+                        message.displayName = it.getDisplayName()
+                        bundle.messages.add(message)
                     }
                 }
             }

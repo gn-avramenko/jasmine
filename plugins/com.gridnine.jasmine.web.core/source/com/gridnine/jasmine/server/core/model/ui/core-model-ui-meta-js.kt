@@ -52,7 +52,8 @@ class VMEntityDescriptionJS(id: String) : BaseMetaElementDescriptionJS(id) {
 
 enum class VSPropertyTypeJS {
     TEXT_BOX_SETTINGS,
-    PASSWORD_BOX_SETTINGS
+    PASSWORD_BOX_SETTINGS,
+    ENTITY
 }
 
 enum class VSCollectionTypeJS {

@@ -134,6 +134,7 @@ internal class VSEntityMetadataProvider(description: VSEntityDescription) : Obje
         return when(elementType){
             VSPropertyType.TEXT_BOX_SETTINGS -> TextBoxConfiguration::class.qualifiedName
             VSPropertyType.PASSWORD_BOX_SETTINGS -> PasswordBoxConfiguration::class.qualifiedName
+            VSPropertyType.ENTITY -> elementClassName
         }
     }
 
@@ -141,6 +142,7 @@ internal class VSEntityMetadataProvider(description: VSEntityDescription) : Obje
         return when (elementType) {
             VSPropertyType.TEXT_BOX_SETTINGS -> SerializablePropertyType.ENTITY
             VSPropertyType.PASSWORD_BOX_SETTINGS  -> SerializablePropertyType.ENTITY
+            VSPropertyType.ENTITY -> SerializablePropertyType.ENTITY
         }
     }
 
