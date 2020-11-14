@@ -110,6 +110,13 @@ internal object UiServerGenerator {
             VSPropertyType.TEXT_BOX_SETTINGS-> TextBoxConfiguration::class.qualifiedName
             VSPropertyType.PASSWORD_BOX_SETTINGS-> PasswordBoxConfiguration::class.qualifiedName
             VSPropertyType.ENTITY-> className
+            VSPropertyType.FLOAT_NUMBER_BOX_SETTINGS -> FloatNumberBoxConfiguration::class.qualifiedName
+            VSPropertyType.INTEGER_NUMBER_BOX_SETTINGS -> IntegerNumberBoxConfiguration::class.qualifiedName
+            VSPropertyType.BOOLEAN_BOX_SETTINGS -> BooleanBoxConfiguration::class.qualifiedName
+            VSPropertyType.ENTITY_SELECT_BOX_SETTINGS -> EntitySelectBoxConfiguration::class.qualifiedName
+            VSPropertyType.ENUM_SELECT_BOX_SETTINGS -> EnumSelectBoxConfiguration::class.qualifiedName
+            VSPropertyType.DATE_BOX_SETTINGS -> DateBoxConfiguration::class.qualifiedName
+            VSPropertyType.DATE_TIME_BOX_SETTINGS -> DateTimeBoxConfiguration::class.qualifiedName
         }
     }
 
@@ -118,6 +125,13 @@ internal object UiServerGenerator {
             VSPropertyType.TEXT_BOX_SETTINGS-> GenPropertyType.ENTITY
             VSPropertyType.PASSWORD_BOX_SETTINGS-> GenPropertyType.ENTITY
             VSPropertyType.ENTITY -> GenPropertyType.ENTITY
+            VSPropertyType.FLOAT_NUMBER_BOX_SETTINGS ->  GenPropertyType.ENTITY
+            VSPropertyType.INTEGER_NUMBER_BOX_SETTINGS ->  GenPropertyType.ENTITY
+            VSPropertyType.BOOLEAN_BOX_SETTINGS ->  GenPropertyType.ENTITY
+            VSPropertyType.ENTITY_SELECT_BOX_SETTINGS ->  GenPropertyType.ENTITY
+            VSPropertyType.ENUM_SELECT_BOX_SETTINGS ->  GenPropertyType.ENTITY
+            VSPropertyType.DATE_BOX_SETTINGS ->  GenPropertyType.ENTITY
+            VSPropertyType.DATE_TIME_BOX_SETTINGS ->  GenPropertyType.ENTITY
         }
     }
 

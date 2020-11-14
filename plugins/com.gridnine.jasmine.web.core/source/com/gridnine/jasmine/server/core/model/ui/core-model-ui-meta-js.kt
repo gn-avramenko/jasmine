@@ -53,7 +53,14 @@ class VMEntityDescriptionJS(id: String) : BaseMetaElementDescriptionJS(id) {
 enum class VSPropertyTypeJS {
     TEXT_BOX_SETTINGS,
     PASSWORD_BOX_SETTINGS,
-    ENTITY
+    ENTITY,
+    FLOAT_NUMBER_BOX_SETTINGS,
+    INTEGER_NUMBER_BOX_SETTINGS,
+    BOOLEAN_BOX_SETTINGS,
+    ENTITY_SELECT_BOX_SETTINGS,
+    ENUM_SELECT_BOX_SETTINGS,
+    DATE_BOX_SETTINGS,
+    DATE_TIME_BOX_SETTINGS
 }
 
 enum class VSCollectionTypeJS {

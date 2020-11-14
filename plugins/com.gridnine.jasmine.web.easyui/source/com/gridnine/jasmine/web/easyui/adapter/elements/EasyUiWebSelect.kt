@@ -32,6 +32,7 @@ class EasyUiWebSelect(private val parent: WebComponent?, configure: WebSelectCon
     private val selectedValues = arrayListOf<SelectItemJS>()
     private val localData = arrayListOf<SelectItemJS>()
     private var loader: ((String) -> Promise<List<SelectItemJS>>)? = null
+    private var validationMessage:String? = null
 
     init {
         (parent?.getChildren() as MutableList<WebComponent>?)?.add(this)
@@ -142,12 +143,33 @@ class EasyUiWebSelect(private val parent: WebComponent?, configure: WebSelectCon
             options.data = localData.map {toItem(it)}.toTypedArray()
         }
         jq.select2(options)
-        jq.parent().find(".select2-container").addClass("select2-jasmine-regular")
-//        jq.parent().find(".select2-container").tooltip(object{
-//            val content = "This is the tooltip message"
-//        })
+        showValidationInternal()
         initialized = true
         setValues(ArrayList(selectedValues))
+    }
+
+    override fun showValidation(value: String?) {
+        if(value != validationMessage){
+            validationMessage = value
+            if(initialized){
+                showValidationInternal()
+            }
+        }
+    }
+
+    private fun showValidationInternal() {
+        val par = jq.parent().find(".select2-container")
+        par.removeClass("select2-jasmine-regular")
+        par.removeClass("select2-jasmine-error")
+        if(validationMessage != null){
+            par.addClass("select2-jasmine-error")
+            par.tooltip(object{
+                val content = validationMessage
+            })
+            return
+        }
+        par.addClass("select2-jasmine-regular")
+        par.tooltip("destroy")
     }
 
     override fun destroy() {

@@ -79,6 +79,13 @@ object UiWebGenerator {
             VSPropertyType.TEXT_BOX_SETTINGS-> "${TextBoxConfiguration::class.qualifiedName}JS"
             VSPropertyType.PASSWORD_BOX_SETTINGS->"${PasswordBoxConfiguration::class.qualifiedName}JS"
             VSPropertyType.ENTITY -> "${className}JS"
+            VSPropertyType.FLOAT_NUMBER_BOX_SETTINGS -> "${FloatNumberBoxConfiguration::class.qualifiedName}JS"
+            VSPropertyType.INTEGER_NUMBER_BOX_SETTINGS ->"${IntegerNumberBoxConfiguration::class.qualifiedName}JS"
+            VSPropertyType.BOOLEAN_BOX_SETTINGS -> "${BooleanBoxConfiguration::class.qualifiedName}JS"
+            VSPropertyType.ENTITY_SELECT_BOX_SETTINGS ->"${EntitySelectBoxConfiguration::class.qualifiedName}JS"
+            VSPropertyType.ENUM_SELECT_BOX_SETTINGS -> "${EnumSelectBoxConfiguration::class.qualifiedName}JS"
+            VSPropertyType.DATE_BOX_SETTINGS -> "${DateBoxConfiguration::class.qualifiedName}JS"
+            VSPropertyType.DATE_TIME_BOX_SETTINGS -> "${DateTimeBoxConfiguration::class.qualifiedName}JS"
         }
     }
 
@@ -87,13 +94,20 @@ object UiWebGenerator {
             VSPropertyType.TEXT_BOX_SETTINGS-> GenPropertyType.ENTITY
             VSPropertyType.PASSWORD_BOX_SETTINGS-> GenPropertyType.ENTITY
             VSPropertyType.ENTITY -> GenPropertyType.ENTITY
+            VSPropertyType.FLOAT_NUMBER_BOX_SETTINGS -> GenPropertyType.ENTITY
+            VSPropertyType.INTEGER_NUMBER_BOX_SETTINGS-> GenPropertyType.ENTITY
+            VSPropertyType.BOOLEAN_BOX_SETTINGS -> GenPropertyType.ENTITY
+            VSPropertyType.ENTITY_SELECT_BOX_SETTINGS -> GenPropertyType.ENTITY
+            VSPropertyType.ENUM_SELECT_BOX_SETTINGS -> GenPropertyType.ENTITY
+            VSPropertyType.DATE_BOX_SETTINGS -> GenPropertyType.ENTITY
+            VSPropertyType.DATE_TIME_BOX_SETTINGS -> GenPropertyType.ENTITY
         }
     }
 
     private fun toGenData(descr: VMEntityDescription): BaseGenData {
         val result = GenClassData(descr.id+"JS", BaseVM::class.qualifiedName+"JS", false, true)
         descr.properties.values.forEach { prop ->
-            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.className),lateinit = prop.lateInit, nonNullable = prop.nonNullable))
+            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.type, prop.className),lateinit = prop.lateInit, nonNullable = prop.nonNullable))
         }
         descr.collections.values.forEach { coll ->
             result.collections.add(GenCollectionDescription(coll.id, getPropertyType(coll.elementType), getClassName(coll.elementClassName)))
@@ -104,6 +118,22 @@ object UiWebGenerator {
     private fun getPropertyType(type: VMCollectionType): GenPropertyType {
         return when(type){
             VMCollectionType.ENTITY -> GenPropertyType.ENTITY
+        }
+    }
+
+    private fun getClassName(type:VMPropertyType, className: String?): String? {
+        return when(type){
+            VMPropertyType.STRING -> null
+            VMPropertyType.ENUM -> getClassName(className)
+            VMPropertyType.SELECT -> getClassName(className)
+            VMPropertyType.LONG -> null
+            VMPropertyType.INT -> null
+            VMPropertyType.BIG_DECIMAL -> null
+            VMPropertyType.ENTITY_REFERENCE -> getClassName(ObjectReference::class.qualifiedName)
+            VMPropertyType.LOCAL_DATE_TIME -> "kotlin.js.Date"
+            VMPropertyType.LOCAL_DATE ->  "kotlin.js.Date"
+            VMPropertyType.ENTITY -> getClassName(className)
+            VMPropertyType.BOOLEAN -> null
         }
     }
 
@@ -118,10 +148,10 @@ object UiWebGenerator {
             VMPropertyType.SELECT  -> GenPropertyType.ENTITY
             VMPropertyType.LONG  -> GenPropertyType.LONG
             VMPropertyType.INT  -> GenPropertyType.INT
-            VMPropertyType.BIG_DECIMAL  -> GenPropertyType.BIG_DECIMAL
-            VMPropertyType.ENTITY_REFERENCE  -> GenPropertyType.ENTITY_REFERENCE
-            VMPropertyType.LOCAL_DATE_TIME  -> GenPropertyType.LOCAL_DATE_TIME
-            VMPropertyType.LOCAL_DATE  -> GenPropertyType.LOCAL_DATE
+            VMPropertyType.BIG_DECIMAL  -> GenPropertyType.DOUBLE
+            VMPropertyType.ENTITY_REFERENCE   -> GenPropertyType.ENTITY
+            VMPropertyType.LOCAL_DATE_TIME  -> GenPropertyType.ENTITY
+            VMPropertyType.LOCAL_DATE   -> GenPropertyType.ENTITY
             VMPropertyType.ENTITY  -> GenPropertyType.ENTITY
             VMPropertyType.BOOLEAN  -> GenPropertyType.BOOLEAN
         }

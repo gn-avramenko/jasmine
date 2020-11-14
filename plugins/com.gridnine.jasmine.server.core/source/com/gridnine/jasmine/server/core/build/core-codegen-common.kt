@@ -46,7 +46,8 @@ internal enum class GenPropertyType {
     LOCAL_DATE_TIME,
     LOCAL_DATE,
     BOOLEAN,
-    BYTE_ARRAY
+    BYTE_ARRAY,
+    DATE
 
 }
 
@@ -258,6 +259,7 @@ internal object GenUtils {
             GenPropertyType.BYTE_ARRAY -> "ByteArray"
             GenPropertyType.STRING -> "String"
             GenPropertyType.BOOLEAN -> "Boolean"
+            GenPropertyType.DATE -> "Date"
             else -> className ?: throw Xeption.forDeveloper("classname is null")
         }
 

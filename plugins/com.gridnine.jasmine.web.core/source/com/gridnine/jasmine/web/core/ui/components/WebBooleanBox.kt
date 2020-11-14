@@ -6,19 +6,17 @@
 package com.gridnine.jasmine.web.core.ui.components
 
 import com.gridnine.jasmine.web.core.ui.WebComponent
-import kotlin.js.Date
 
 
-interface WebNumberBox:WebComponent{
-    fun getValue():Double?
-    fun setValue(value:Double?)
+interface WebBooleanBox:WebComponent{
+    fun getValue():Boolean
+    fun setValue(value:Boolean)
     fun setEnabled(value:Boolean)
-    fun showValidation(value:String?)
 }
 
-class WebNumberBoxConfiguration{
+class WebBooleanBoxConfiguration{
     var width:String? = null
     var height:String? = null
-    var showClearIcon = false
-    var precision = 2
+    lateinit var onText:String
+    lateinit var offText:String
 }

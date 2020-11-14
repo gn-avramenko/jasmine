@@ -111,6 +111,65 @@
     </complexType>
     <group name="widget">
         <choice>
+            <element name="date-time-box">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:baseWidget">
+                        </extension>
+                    </complexContent>
+                </complexType>
+            </element>
+            <element name="date-box">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:baseWidget">
+                        </extension>
+                    </complexContent>
+                </complexType>
+            </element>
+            <element name="enum-select-box">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:baseWidget">
+                            <attribute name="enumId" use="required"/>
+                        </extension>
+                    </complexContent>
+                </complexType>
+            </element>
+            <element name="entity-select-box">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:baseWidget">
+                            <attribute name="objectId" use="required"/>
+                        </extension>
+                    </complexContent>
+                </complexType>
+            </element>
+            <element name="boolean-box">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:baseWidget">
+                        </extension>
+                    </complexContent>
+                </complexType>
+            </element>
+            <element name="integer-number-box">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:baseWidget">
+                            <attribute name="non-nullable" type="boolean" default="false"/>
+                        </extension>
+                    </complexContent>
+                </complexType>
+            </element>
+            <element name="float-number-box">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:baseWidget">
+                        </extension>
+                    </complexContent>
+                </complexType>
+            </element>
             <element name="text-box">
                 <complexType>
                     <complexContent>
@@ -162,7 +221,6 @@
         <attribute name="id" type="string" use="required"/>
     </complexType>
     <complexType name="baseWidget">
-
         <attribute name="not-editable" type="boolean" default="false"/>
     </complexType>
 </schema>

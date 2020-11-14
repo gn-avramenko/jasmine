@@ -201,6 +201,13 @@
         <enum-item id="TEXT_BOX_SETTINGS"/>
         <enum-item id="PASSWORD_BOX_SETTINGS"/>
         <enum-item id="ENTITY"/>
+        <enum-item id="FLOAT_NUMBER_BOX_SETTINGS"/>
+        <enum-item id="INTEGER_NUMBER_BOX_SETTINGS"/>
+        <enum-item id="BOOLEAN_BOX_SETTINGS"/>
+        <enum-item id="ENTITY_SELECT_BOX_SETTINGS"/>
+        <enum-item id="ENUM_SELECT_BOX_SETTINGS"/>
+        <enum-item id="DATE_BOX_SETTINGS"/>
+        <enum-item id="DATE_TIME_BOX_SETTINGS"/>
     </enum>
     <enum id="com.gridnine.jasmine.server.standard.model.rest.VSCollectionTypeDT">
         <enum-item id="ENTITY"/>

@@ -265,6 +265,12 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                         message.displayName = it.getDisplayName()
                         bundle.messages.add(message)
                     }
+                    vd.tiles.forEach {
+                        val message = WebMessageDT()
+                        message.id = it.id
+                        message.displayName = it.getDisplayName()
+                        bundle.messages.add(message)
+                    }
                 }
             }
         }

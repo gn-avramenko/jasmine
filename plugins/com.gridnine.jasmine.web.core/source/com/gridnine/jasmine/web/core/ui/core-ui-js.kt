@@ -34,6 +34,10 @@ interface UiLibraryAdapter{
     fun createSelect(parent: WebComponent, configure: WebSelectConfiguration.() -> Unit): WebSelect
     fun<W> showDialog(popupChild:WebComponent?, configure:DialogConfiguration<W>.()->Unit):WebDialog<W>  where W:WebComponent, W:HasDivId
     fun createMenuButton(parent: WebComponent?, configure:WebMenuButtonConfiguration.()->Unit):WebMenuButton
+    fun createPanel(parent: WebComponent?, configure:WebPanelConfiguration.()->Unit):WebPanel
+    fun createTilesContainer(parent: WebComponent?, configure:WebTilesContainerConfiguration.()->Unit):WebTilesContainer
+    fun createDivsContainer(parent:WebComponent?, configure:WebDivsContainerConfiguration.()->Unit):WebDivsContainer
+    fun createBooleanBox(parent:WebComponent?, configure:WebBooleanBoxConfiguration.()->Unit):WebBooleanBox
     fun showLoader()
     fun hideLoader()
     fun showNotification(message:String, timeout:Int)

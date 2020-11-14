@@ -41,3 +41,44 @@ class PasswordBoxConfigurationJS : BaseWidgetConfigurationJS(){
         val qualifiedClassName = "com.gridnine.jasmine.server.core.model.ui.PasswordBoxConfigurationJS"
     }
 }
+
+
+class DateTimeBoxConfigurationJS : BaseWidgetConfigurationJS(){
+    companion object{
+        val qualifiedClassName = "com.gridnine.jasmine.server.core.model.ui.DateTimeBoxConfigurationJS"
+    }
+}
+
+class DateBoxConfigurationJS : BaseWidgetConfigurationJS(){
+    companion object{
+        val qualifiedClassName = "com.gridnine.jasmine.server.core.model.ui.DateBoxConfigurationJS"
+    }
+}
+
+class EntitySelectBoxConfigurationJS : BaseWidgetConfigurationJS(){
+    companion object{
+        val qualifiedClassName = "com.gridnine.jasmine.server.core.model.ui.EntitySelectBoxConfigurationJS"
+    }
+}
+
+class EnumSelectBoxConfigurationJS : BaseWidgetConfigurationJS(){
+    companion object{
+        val qualifiedClassName = "com.gridnine.jasmine.server.core.model.ui.EnumSelectBoxConfigurationJS"
+    }
+}
+class FloatNumberBoxConfigurationJS : BaseWidgetConfigurationJS(){
+    companion object{
+        val qualifiedClassName = "com.gridnine.jasmine.server.core.model.ui.FloatNumberBoxConfigurationJS"
+    }
+}
+class IntegerNumberBoxConfigurationJS : BaseWidgetConfigurationJS(){
+    companion object{
+        val qualifiedClassName = "com.gridnine.jasmine.server.core.model.ui.IntegerNumberBoxConfigurationJS"
+    }
+}
+
+class BooleanBoxConfigurationJS : BaseWidgetConfigurationJS(){
+    companion object{
+        val qualifiedClassName = "com.gridnine.jasmine.server.core.model.ui.BooleanBoxConfigurationJS"
+    }
+}

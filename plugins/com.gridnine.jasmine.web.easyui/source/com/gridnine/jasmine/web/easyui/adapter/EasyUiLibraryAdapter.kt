@@ -132,6 +132,22 @@ class EasyUiLibraryAdapter:UiLibraryAdapter {
         return EasyUiWebMenuButton(parent, configure)
     }
 
+    override fun createPanel(parent: WebComponent?, configure: WebPanelConfiguration.() -> Unit): WebPanel {
+        return EasyUiWebPanel(parent, configure)
+    }
+
+    override fun createTilesContainer(parent: WebComponent?, configure: WebTilesContainerConfiguration.() -> Unit): WebTilesContainer {
+        return EasyUiWebTilesContainer(parent, configure)
+    }
+
+    override fun createDivsContainer(parent: WebComponent?, configure: WebDivsContainerConfiguration.() -> Unit): WebDivsContainer {
+        return EasyUiWebDivsContainer(parent, configure)
+    }
+
+    override fun createBooleanBox(parent: WebComponent?, configure: WebBooleanBoxConfiguration.() -> Unit): WebBooleanBox {
+        return EasyUiWebBooleanBox(parent, configure)
+    }
+
     override fun showLoader() {
         jQuery.messager.progress()
 

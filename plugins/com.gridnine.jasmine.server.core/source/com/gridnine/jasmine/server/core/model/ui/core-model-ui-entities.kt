@@ -42,3 +42,46 @@ class PasswordBoxConfiguration() : BaseWidgetConfiguration(){
         configure.invoke(this)
     }
 }
+
+
+class FloatNumberBoxConfiguration() : BaseWidgetConfiguration(){
+    constructor(configure:FloatNumberBoxConfiguration.()->Unit):this(){
+        configure.invoke(this)
+    }
+}
+
+class IntegerNumberBoxConfiguration() : BaseWidgetConfiguration(){
+    constructor(configure:IntegerNumberBoxConfiguration.()->Unit):this(){
+        configure.invoke(this)
+    }
+}
+
+class BooleanBoxConfiguration() : BaseWidgetConfiguration(){
+    constructor(configure:BooleanBoxConfiguration.()->Unit):this(){
+        configure.invoke(this)
+    }
+}
+
+class EntitySelectBoxConfiguration() : BaseWidgetConfiguration(){
+    constructor(configure:EntitySelectBoxConfiguration.()->Unit):this(){
+        configure.invoke(this)
+    }
+}
+
+class EnumSelectBoxConfiguration() : BaseWidgetConfiguration(){
+    constructor(configure:EnumSelectBoxConfiguration.()->Unit):this(){
+        configure.invoke(this)
+    }
+}
+
+class DateBoxConfiguration() : BaseWidgetConfiguration(){
+    constructor(configure:DateBoxConfiguration.()->Unit):this(){
+        configure.invoke(this)
+    }
+}
+
+class DateTimeBoxConfiguration() : BaseWidgetConfiguration(){
+    constructor(configure:DateTimeBoxConfiguration.()->Unit):this(){
+        configure.invoke(this)
+    }
+}

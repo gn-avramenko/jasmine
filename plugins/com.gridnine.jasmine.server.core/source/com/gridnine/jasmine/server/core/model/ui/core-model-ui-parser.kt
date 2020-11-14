@@ -152,6 +152,62 @@ object UiMetadataParser {
                 val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
                 WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription)
             }
+            "float-number-box" -> {
+                val widget = FloatNumberBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
+                        ?: false)
+                val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.BIG_DECIMAL, null, false,false)
+                val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.FLOAT_NUMBER_BOX_SETTINGS, null, false)
+                val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
+                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription)
+            }
+            "integer-number-box" -> {
+                val widget = IntegerNumberBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
+                        ?: false, ParserUtils.getBooleanAttribute(xmlNode, "non-nullable")?: false)
+                val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.INT, null, false,false)
+                val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.INTEGER_NUMBER_BOX_SETTINGS, null, false)
+                val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
+                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription)
+            }
+            "boolean-box" -> {
+                val widget = BooleanBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
+                        ?: false)
+                val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.BOOLEAN, null, true,false)
+                val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.BOOLEAN_BOX_SETTINGS, null, false)
+                val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
+                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription)
+            }
+            "entity-select-box" -> {
+                val widget = EntitySelectBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
+                        ?: false, xmlNode.attributes["objectId"]!!)
+                val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.ENTITY_REFERENCE, widget.objectId, false,false)
+                val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.ENTITY_SELECT_BOX_SETTINGS, null, false)
+                val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
+                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription)
+            }
+            "enum-select-box" -> {
+                val widget = EnumSelectBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
+                        ?: false, xmlNode.attributes["enumId"]!!)
+                val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.ENUM, widget.enumId, false,false)
+                val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.ENUM_SELECT_BOX_SETTINGS, null, false)
+                val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
+                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription)
+            }
+            "date-box" -> {
+                val widget = DateBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
+                        ?: false)
+                val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.LOCAL_DATE, null, false,false)
+                val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.DATE_BOX_SETTINGS, null, false)
+                val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
+                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription)
+            }
+            "date-time-box" -> {
+                val widget = DateTimeBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
+                        ?: false)
+                val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.LOCAL_DATE_TIME, null, false,false)
+                val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.DATE_TIME_BOX_SETTINGS, null, false)
+                val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
+                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription)
+            }
             else -> throw IllegalArgumentException("unsupported element name ${xmlNode.name}")
         }
     }

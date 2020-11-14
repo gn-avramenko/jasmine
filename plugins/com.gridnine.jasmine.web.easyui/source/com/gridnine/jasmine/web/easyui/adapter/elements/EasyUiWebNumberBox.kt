@@ -22,6 +22,8 @@ class EasyUiWebNumberBox(private val parent:WebComponent?, configure: WebNumberB
     private var jq:dynamic = null
     private var showClearIcon = false
     private var precision = 2
+    private var enabled = true
+    private var validationMessage:String? = null
 
     private var value:Double? = null
     init {
@@ -56,6 +58,27 @@ class EasyUiWebNumberBox(private val parent:WebComponent?, configure: WebNumberB
         jq.numberbox("setValue", value)
     }
 
+    override fun setEnabled(value: Boolean) {
+        if(value != enabled){
+            enabled = value
+            if(initialized){
+                if(enabled){
+                    jq.numberbox("enable")
+                } else{
+                    jq.numberbox("disable")
+                }
+            }
+        }
+
+    }
+
+    override fun showValidation(value: String?) {
+        validationMessage = value
+        if(initialized){
+            showValidationInternal(value)
+        }
+    }
+
     override fun getParent(): WebComponent? {
         return parent
     }
@@ -83,6 +106,7 @@ class EasyUiWebNumberBox(private val parent:WebComponent?, configure: WebNumberB
             val onChange = {newValue:Double?,_:Double? ->
                 jq.numberbox("getIcon",0).css("visibility",if(newValue == null) "hidden" else "visible")
             }
+            val disabled = !enabled
         })
         val tb = jq.numberbox("textbox")
         tb.on("input") {
@@ -94,7 +118,22 @@ class EasyUiWebNumberBox(private val parent:WebComponent?, configure: WebNumberB
         if(showClearIcon && value == null){
             jq.numberbox("getIcon",0).css("visibility","hidden")
         }
+        showValidationInternal(validationMessage)
         initialized = true
+    }
+
+    private fun showValidationInternal(validationMessage: String?) {
+        if(validationMessage != null){
+            val tb =jq.textbox("textbox")
+            val spanElm = tb.parent()
+            spanElm.css("border-color", "#d9534f")
+            spanElm.attr("title", validationMessage)
+            return
+        }
+        val tb =jq.textbox("textbox")
+        val spanElm = tb.parent()
+        spanElm.css("border-color", "")
+        spanElm.removeAttr("title")
     }
 
     override fun destroy() {

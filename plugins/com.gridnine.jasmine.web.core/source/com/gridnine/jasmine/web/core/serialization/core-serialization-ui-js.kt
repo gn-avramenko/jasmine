@@ -127,6 +127,13 @@ internal class VSEntityMetadataProviderJS(description: VSEntityDescriptionJS) : 
             VSPropertyTypeJS.TEXT_BOX_SETTINGS -> TextBoxConfigurationJS.qualifiedClassName
             VSPropertyTypeJS.PASSWORD_BOX_SETTINGS -> PasswordBoxConfigurationJS.qualifiedClassName
             VSPropertyTypeJS.ENTITY -> elementClassName
+            VSPropertyTypeJS.FLOAT_NUMBER_BOX_SETTINGS -> FloatNumberBoxConfigurationJS.qualifiedClassName
+            VSPropertyTypeJS.INTEGER_NUMBER_BOX_SETTINGS -> IntegerNumberBoxConfigurationJS.qualifiedClassName
+            VSPropertyTypeJS.BOOLEAN_BOX_SETTINGS -> BooleanBoxConfigurationJS.qualifiedClassName
+            VSPropertyTypeJS.ENTITY_SELECT_BOX_SETTINGS -> EntitySelectBoxConfigurationJS.qualifiedClassName
+            VSPropertyTypeJS.ENUM_SELECT_BOX_SETTINGS -> EnumSelectBoxConfigurationJS.qualifiedClassName
+            VSPropertyTypeJS.DATE_BOX_SETTINGS -> DateBoxConfigurationJS.qualifiedClassName
+            VSPropertyTypeJS.DATE_TIME_BOX_SETTINGS -> DateTimeBoxConfigurationJS.qualifiedClassName
         }
     }
 
@@ -135,6 +142,13 @@ internal class VSEntityMetadataProviderJS(description: VSEntityDescriptionJS) : 
             VSPropertyTypeJS.TEXT_BOX_SETTINGS -> SerializablePropertyTypeJS.ENTITY
             VSPropertyTypeJS.PASSWORD_BOX_SETTINGS  -> SerializablePropertyTypeJS.ENTITY
             VSPropertyTypeJS.ENTITY  -> SerializablePropertyTypeJS.ENTITY
+            VSPropertyTypeJS.FLOAT_NUMBER_BOX_SETTINGS -> SerializablePropertyTypeJS.ENTITY
+            VSPropertyTypeJS.INTEGER_NUMBER_BOX_SETTINGS -> SerializablePropertyTypeJS.ENTITY
+            VSPropertyTypeJS.BOOLEAN_BOX_SETTINGS -> SerializablePropertyTypeJS.ENTITY
+            VSPropertyTypeJS.ENTITY_SELECT_BOX_SETTINGS -> SerializablePropertyTypeJS.ENTITY
+            VSPropertyTypeJS.ENUM_SELECT_BOX_SETTINGS -> SerializablePropertyTypeJS.ENTITY
+            VSPropertyTypeJS.DATE_BOX_SETTINGS ->SerializablePropertyTypeJS.ENTITY
+            VSPropertyTypeJS.DATE_TIME_BOX_SETTINGS -> SerializablePropertyTypeJS.ENTITY
         }
     }
 

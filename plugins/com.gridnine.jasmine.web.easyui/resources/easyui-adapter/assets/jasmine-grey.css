@@ -23,6 +23,13 @@
     min-height: 28px;
 }
 
+.select2-jasmine-error .select2-choice{
+    border: 1px solid red;
+    border-radius: 5px 5px 5px 5px;
+    height: 28px;
+    min-height: 28px;
+}
+
 .notification-message{
     color: green;
 }
@@ -33,4 +40,42 @@
 
 .notification-error{
     color: red;
+}
+
+.jasmine-web-tile{
+    display: inline-block;
+    padding: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #575765;
+    line-height: 20px;
+    background: url('images/blank.gif') no-repeat;
+    vertical-align:top;
+    border-color: #D3D3D3;
+    border-width: 1px;
+    border-style: solid;
+    background-color: #f3f3f3;
+    background: -webkit-linear-gradient(top,#F8F8F8 0,#eeeeee 100%);
+    background: -moz-linear-gradient(top,#F8F8F8 0,#eeeeee 100%);
+    background: -o-linear-gradient(top,#F8F8F8 0,#eeeeee 100%);
+    background: linear-gradient(to bottom,#F8F8F8 0,#eeeeee 100%);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#F8F8F8,endColorstr=#eeeeee,GradientType=0);
+}
+.jasmine-tile-caption{
+    display: inline-block;
+    vertical-align: center;
+}
+.jasmine-tile-expand{
+    display: inline-block;
+    float: right;
+    vertical-align: center;
+    cursor: pointer;
+    width: 20px;
+    height: 15px;
+    background: url('images/panel_tools.png') no-repeat -32px 0px;
+}
+
+.icon_core_close{
+    background: url('images/panel_tools.png') no-repeat -32px -16px;
 }

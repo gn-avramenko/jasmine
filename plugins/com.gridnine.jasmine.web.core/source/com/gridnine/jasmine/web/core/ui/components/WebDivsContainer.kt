@@ -5,20 +5,19 @@
 
 package com.gridnine.jasmine.web.core.ui.components
 
+import com.gridnine.jasmine.web.core.ui.HasDivId
 import com.gridnine.jasmine.web.core.ui.WebComponent
-import kotlin.js.Date
 
-
-interface WebNumberBox:WebComponent{
-    fun getValue():Double?
-    fun setValue(value:Double?)
-    fun setEnabled(value:Boolean)
-    fun showValidation(value:String?)
+interface WebDivsContainer : WebComponent,HasDivId{
+    fun addDiv(id:String, content:WebComponent)
+    fun show(id:String)
+    fun removeDiv(id:String)
+    fun getDiv(id:String):WebComponent?
 }
 
-class WebNumberBoxConfiguration{
+class WebDivsContainerConfiguration{
     var width:String? = null
     var height:String? = null
-    var showClearIcon = false
-    var precision = 2
 }
+
+

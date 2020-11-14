@@ -53,7 +53,15 @@ class VMEntityDescription(id: String) : BaseUiElementDescription(id) {
 enum class VSPropertyType {
     ENTITY,
     TEXT_BOX_SETTINGS,
-    PASSWORD_BOX_SETTINGS
+    PASSWORD_BOX_SETTINGS,
+    FLOAT_NUMBER_BOX_SETTINGS,
+    INTEGER_NUMBER_BOX_SETTINGS,
+    BOOLEAN_BOX_SETTINGS,
+    ENTITY_SELECT_BOX_SETTINGS,
+    ENUM_SELECT_BOX_SETTINGS,
+    DATE_BOX_SETTINGS,
+    DATE_TIME_BOX_SETTINGS
+
 }
 
 enum class VSCollectionType {
@@ -104,9 +112,30 @@ class PasswordBoxWidgetDescription(notEditable:Boolean):BaseWidgetDescription(no
 
 class TextBoxWidgetDescription(notEditable:Boolean):BaseWidgetDescription(notEditable, WidgetType.TEXT_BOX)
 
+class FloatNumberBoxWidgetDescription(notEditable:Boolean):BaseWidgetDescription(notEditable, WidgetType.FLOAT_NUMBER_BOX)
+
+class IntegerNumberBoxWidgetDescription(notEditable:Boolean, val nonNullable: Boolean):BaseWidgetDescription(notEditable, WidgetType.INTEGER_NUMBER_BOX)
+
+class BooleanBoxWidgetDescription(notEditable:Boolean):BaseWidgetDescription(notEditable, WidgetType.BOOLEAN_BOX)
+
+class EntitySelectBoxWidgetDescription(notEditable:Boolean, val objectId:String):BaseWidgetDescription(notEditable, WidgetType.ENTITY_SELECT_BOX)
+
+class EnumSelectBoxWidgetDescription(notEditable:Boolean, val enumId:String):BaseWidgetDescription(notEditable, WidgetType.ENUM_SELECT_BOX)
+
+class DateBoxWidgetDescription(notEditable:Boolean):BaseWidgetDescription(notEditable, WidgetType.DATE_BOX)
+
+class DateTimeBoxWidgetDescription(notEditable:Boolean):BaseWidgetDescription(notEditable, WidgetType.DATE_TIME_BOX)
+
 enum class WidgetType{
     TEXT_BOX,
-    PASSWORD_BOX
+    PASSWORD_BOX,
+    FLOAT_NUMBER_BOX,
+    INTEGER_NUMBER_BOX,
+    BOOLEAN_BOX,
+    ENTITY_SELECT_BOX,
+    ENUM_SELECT_BOX,
+    DATE_BOX,
+    DATE_TIME_BOX
 }
 abstract class BaseWidgetDescription(val notEditable:Boolean, val widgetType:WidgetType)
 
