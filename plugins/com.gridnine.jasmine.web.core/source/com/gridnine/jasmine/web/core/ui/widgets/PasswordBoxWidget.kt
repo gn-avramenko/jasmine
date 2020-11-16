@@ -67,12 +67,8 @@ class PasswordBoxWidget(aParent:WebComponent, configure:PasswordWidgetConfigurat
         delegate.destroy()
     }
 
-    fun showValidationError(value: String) {
-        delegate.showValidation(value)
-    }
-
-    fun resetValidation(){
-        delegate.resetValidation()
+    fun showValidation(value:String?){
+        if(value != null) delegate.showValidation(value) else delegate.resetValidation()
     }
 
     fun configure(config: PasswordBoxConfigurationJS) {

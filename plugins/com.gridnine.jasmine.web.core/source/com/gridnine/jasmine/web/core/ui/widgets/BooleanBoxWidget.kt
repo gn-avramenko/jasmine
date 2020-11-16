@@ -48,6 +48,10 @@ class BooleanBoxWidget(private val parent:WebComponent, configure:BooleanBoxWidg
         delegate.destroy()
     }
 
+    fun setReadonly(value:Boolean) {
+        delegate.setEnabled(!value)
+    }
+
     fun configure(config:BooleanBoxConfigurationJS?){
         config?.let {
             delegate.setEnabled(!config.notEditable)
@@ -55,9 +59,6 @@ class BooleanBoxWidget(private val parent:WebComponent, configure:BooleanBoxWidg
     }
 
 }
-
-
-
 
 
 class BooleanBoxWidgetConfiguration{

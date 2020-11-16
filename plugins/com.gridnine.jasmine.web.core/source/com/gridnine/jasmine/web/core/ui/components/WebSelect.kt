@@ -15,6 +15,7 @@ interface WebSelect:WebComponent{
     fun setValues(map: List<SelectItemJS>)
     fun setPossibleValues(values: List<SelectItemJS>)
     fun showValidation(value:String?)
+    fun setEnabled(value:Boolean)
 }
 
 data class SelectItemJS(val id:String, val text:String)

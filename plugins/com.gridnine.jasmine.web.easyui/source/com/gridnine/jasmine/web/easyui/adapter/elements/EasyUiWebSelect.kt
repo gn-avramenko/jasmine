@@ -33,7 +33,7 @@ class EasyUiWebSelect(private val parent: WebComponent?, configure: WebSelectCon
     private val localData = arrayListOf<SelectItemJS>()
     private var loader: ((String) -> Promise<List<SelectItemJS>>)? = null
     private var validationMessage:String? = null
-
+    private var enabled = true
     init {
         (parent?.getChildren() as MutableList<WebComponent>?)?.add(this)
         val configuration = WebSelectConfiguration()
@@ -143,10 +143,13 @@ class EasyUiWebSelect(private val parent: WebComponent?, configure: WebSelectCon
             options.data = localData.map {toItem(it)}.toTypedArray()
         }
         jq.select2(options)
+        enableInternal()
         showValidationInternal()
         initialized = true
         setValues(ArrayList(selectedValues))
     }
+
+
 
     override fun showValidation(value: String?) {
         if(value != validationMessage){
@@ -170,6 +173,19 @@ class EasyUiWebSelect(private val parent: WebComponent?, configure: WebSelectCon
         }
         par.addClass("select2-jasmine-regular")
         par.tooltip("destroy")
+    }
+
+    override fun setEnabled(value: Boolean) {
+        if(enabled != value){
+            enabled = value
+            if(initialized) {
+                enableInternal()
+            }
+        }
+    }
+
+    private fun enableInternal() {
+        jq.prop("disabled", !enabled)
     }
 
     override fun destroy() {

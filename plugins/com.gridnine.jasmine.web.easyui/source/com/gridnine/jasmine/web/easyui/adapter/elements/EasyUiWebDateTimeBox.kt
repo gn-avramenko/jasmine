@@ -23,8 +23,10 @@ class EasyUiWebDateTimeBox(private val parent:WebComponent?, configure: WebDateT
     private var jq:dynamic = null
     private var showClearIcon = false
     private var showSeconds = false
+    private var enabled = true
+    private var validationMessage:String? = null
 
-    private var value:Date? = null
+    private var storedValue:Date? = null
     init {
         (parent?.getChildren() as MutableList<WebComponent>?)?.add(this)
         val configuration = WebDateTimeBoxConfiguration()
@@ -59,7 +61,7 @@ class EasyUiWebDateTimeBox(private val parent:WebComponent?, configure: WebDateT
 
     override fun getValue(): Date? {
         if(!initialized){
-            return value
+            return storedValue
         }
         val value = jq.datetimebox("getText") as String?
         return dateTimeParser(value)
@@ -67,7 +69,7 @@ class EasyUiWebDateTimeBox(private val parent:WebComponent?, configure: WebDateT
 
     override fun setValue(value: Date?){
         if(!initialized){
-            this.value = value
+            this.storedValue = value
             return
         }
         jq.datetimebox("setValue", dateTimeFormatter(value))
@@ -99,13 +101,16 @@ class EasyUiWebDateTimeBox(private val parent:WebComponent?, configure: WebDateT
             val currentText = "Сегодня"
             val formatter = dateTimeFormatter
             val showSeconds = showClearIcon
+            val value = dateTimeFormatter.invoke(storedValue)
             val parser = { value:String? ->
                 dateTimeParser(value)?:Date()
             }
             val icons = icons.toTypedArray()
             val onChange = {newValue:String?,_:String? ->
                 jq.datetimebox("getIcon",0).css("visibility",if(MiscUtilsJS.isBlank(newValue)) "hidden" else "visible")
+                storedValue = dateTimeParser.invoke(newValue)
             }
+            val disabled = !enabled
         })
         val tb = jq.datetimebox("textbox")
         val c = jq.datetimebox("calendar")
@@ -120,12 +125,44 @@ class EasyUiWebDateTimeBox(private val parent:WebComponent?, configure: WebDateT
                 jq.datetimebox("getIcon",0).css("visibility",if(MiscUtilsJS.isBlank(text)) "hidden" else "visible")
             }
         }
-        if(showClearIcon && value == null){
+        if(showClearIcon && (storedValue == null  || !enabled)){
             jq.datetimebox("getIcon",0).css("visibility","hidden")
         }
+        showValidationInternal()
         initialized = true
     }
 
+    override fun setEnabled(value: Boolean) {
+        if (enabled != value) {
+            enabled = value
+            if (initialized) {
+                jq.datetimebox(if (enabled) "enable" else "disable")
+                if(showClearIcon ){
+                    jq.datetimebox("getIcon",0).css("visibility", if(storedValue == null  || !enabled) "hidden" else "visible")
+                }
+            }
+        }
+    }
+
+    override fun showValidation(value: String?) {
+        validationMessage = value
+        if(initialized){
+            showValidationInternal()
+        }
+    }
+    private fun showValidationInternal() {
+        if(validationMessage != null){
+            val tb =jq.datetimebox("textbox")
+            val spanElm = tb.parent()
+            spanElm.css("border-color", "#d9534f")
+            spanElm.attr("title", validationMessage)
+            return
+        }
+        val tb =jq.datetimebox("textbox")
+        val spanElm = tb.parent()
+        spanElm.css("border-color", "")
+        spanElm.removeAttr("title")
+    }
     override fun destroy() {
         //noops
     }

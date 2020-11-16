@@ -23,6 +23,8 @@ class EasyUiWebSearchBox(private val parent:WebComponent?, configure: WebSearchB
     private var jq:dynamic = null
     private lateinit var searcher:(String?) ->Unit
 
+    private var enabled = true
+
     init {
         (parent?.getChildren() as MutableList<WebComponent>?)?.add(this)
         val configuration = WebSearchBoxConfiguration()
@@ -61,8 +63,18 @@ class EasyUiWebSearchBox(private val parent:WebComponent?, configure: WebSearchB
             val searcher = {value:String?,_:String? ->
                 this@EasyUiWebSearchBox.searcher.invoke(value)
             }
+            val disabled = !enabled
         })
         initialized = true
+    }
+
+    override fun setEnabled(value: Boolean) {
+        if(enabled != value){
+            enabled = value
+            if(initialized){
+                jq.searchbox(if (enabled) "enable" else "disable")
+            }
+        }
     }
 
     override fun destroy() {

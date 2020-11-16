@@ -11,6 +11,7 @@ import com.gridnine.jasmine.web.core.ui.WebComponent
 interface  WebSearchBox:WebComponent{
     fun setSearcher(value: (String?) ->Unit)
     fun getValue():String?
+    fun setEnabled(value:Boolean)
 }
 
 class WebSearchBoxConfiguration{

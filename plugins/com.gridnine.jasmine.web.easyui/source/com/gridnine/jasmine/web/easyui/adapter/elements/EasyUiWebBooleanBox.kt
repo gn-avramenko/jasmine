@@ -33,7 +33,7 @@ class EasyUiWebBooleanBox(private val parent:WebComponent?, configure: WebBoolea
     override fun setValue(value: Boolean){
         if(storedValue != value){
             storedValue =  value
-            if(!initialized){
+            if(initialized){
                 if(storedValue){
                     jq.switchbutton("check")
                 } else {

@@ -5,6 +5,9 @@
 
 package com.gridnine.jasmine.web.core.ui.widgets
 
+import com.gridnine.jasmine.server.core.model.ui.BooleanBoxConfigurationJS
+import com.gridnine.jasmine.server.core.model.ui.FloatNumberBoxConfigurationJS
+import com.gridnine.jasmine.server.core.model.ui.IntegerNumberBoxConfigurationJS
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.components.WebNumberBox
@@ -48,6 +51,20 @@ class FloatNumberBoxWidget(aParent:WebComponent, configure:FloatNumberBoxWidgetC
 
     override fun destroy() {
         delegate.destroy()
+    }
+
+    fun setReadonly(value:Boolean) {
+        delegate.setEnabled(!value)
+    }
+
+    fun configure(config: FloatNumberBoxConfigurationJS?){
+        config?.let {
+            delegate.setEnabled(!config.notEditable)
+        }
+    }
+
+    fun showValidation(value:String?){
+        delegate.showValidation(value)
     }
 }
 

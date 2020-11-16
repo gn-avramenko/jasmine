@@ -5,6 +5,7 @@
 
 package com.gridnine.jasmine.web.core.ui.widgets
 
+import com.gridnine.jasmine.server.core.model.ui.BooleanBoxConfigurationJS
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.components.WebDateTimeBox
@@ -51,6 +52,15 @@ class SearchBoxWidget(aParent:WebComponent, configure:SearchBoxWidgetConfigurati
         delegate.destroy()
     }
 
+    fun setReadonly(value:Boolean) {
+        delegate.setEnabled(!value)
+    }
+
+    fun configure(config: BooleanBoxConfigurationJS?){
+        config?.let {
+            delegate.setEnabled(!config.notEditable)
+        }
+    }
 }
 
 

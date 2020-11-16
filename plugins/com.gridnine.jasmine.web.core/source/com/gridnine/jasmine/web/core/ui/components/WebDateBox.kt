@@ -12,6 +12,8 @@ import kotlin.js.Date
 interface WebDateBox:WebComponent{
     fun getValue():Date?
     fun setValue(value:Date?)
+    fun setEnabled(value:Boolean)
+    fun showValidation(value:String?)
 }
 
 class WebDateBoxConfiguration{

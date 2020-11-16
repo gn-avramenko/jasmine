@@ -5,12 +5,11 @@
 
 package com.gridnine.jasmine.web.core.ui.widgets
 
+import com.gridnine.jasmine.server.core.model.ui.BooleanBoxConfigurationJS
+import com.gridnine.jasmine.server.core.model.ui.DateTimeBoxConfigurationJS
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.WebComponent
-import com.gridnine.jasmine.web.core.ui.components.WebDateBox
-import com.gridnine.jasmine.web.core.ui.components.WebDateBoxConfiguration
 import com.gridnine.jasmine.web.core.ui.components.WebDateTimeBox
-import com.gridnine.jasmine.web.core.ui.components.WebDateTimeBoxConfiguration
 import kotlin.js.Date
 
 class DateTimeBoxWidget(aParent:WebComponent, configure:DateTimeBoxWidgetConfiguration.()->Unit):WebComponent{
@@ -53,6 +52,19 @@ class DateTimeBoxWidget(aParent:WebComponent, configure:DateTimeBoxWidgetConfigu
         delegate.destroy()
     }
 
+    fun setReadonly(value:Boolean) {
+        delegate.setEnabled(!value)
+    }
+
+    fun configure(config: DateTimeBoxConfigurationJS?){
+        config?.let {
+            delegate.setEnabled(!config.notEditable)
+        }
+    }
+
+    fun showValidation(value:String?){
+        delegate.showValidation(value)
+    }
 }
 
 

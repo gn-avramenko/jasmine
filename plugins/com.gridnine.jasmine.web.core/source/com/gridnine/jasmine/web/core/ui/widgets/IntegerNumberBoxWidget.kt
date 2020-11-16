@@ -5,6 +5,7 @@
 
 package com.gridnine.jasmine.web.core.ui.widgets
 
+import com.gridnine.jasmine.server.core.model.ui.BooleanBoxConfigurationJS
 import com.gridnine.jasmine.server.core.model.ui.IntegerNumberBoxConfigurationJS
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.WebComponent
@@ -21,7 +22,7 @@ class IntegerNumberBoxWidget(private val parent:WebComponent, configure:IntegerN
         delegate = UiLibraryAdapter.get().createNumberBox(this){
             width = conf.width
             height = conf.height
-            showClearIcon = !conf.nullable && conf.showClearIcon
+            showClearIcon = conf.nullable && conf.showClearIcon
             precision = 0
         }
     }
@@ -48,7 +49,11 @@ class IntegerNumberBoxWidget(private val parent:WebComponent, configure:IntegerN
         delegate.destroy()
     }
 
-    fun configure(config:IntegerNumberBoxConfigurationJS?){
+    fun setReadonly(value:Boolean) {
+        delegate.setEnabled(!value)
+    }
+
+    fun configure(config: IntegerNumberBoxConfigurationJS?){
         config?.let {
             delegate.setEnabled(!config.notEditable)
         }

@@ -9,7 +9,6 @@ import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.components.*
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import com.gridnine.jasmine.web.easyui.adapter.jQuery
-import kotlin.js.Date
 
 class EasyUiWebNumberBox(private val parent:WebComponent?, configure: WebNumberBoxConfiguration.()->Unit) :WebNumberBox{
 
@@ -25,7 +24,7 @@ class EasyUiWebNumberBox(private val parent:WebComponent?, configure: WebNumberB
     private var enabled = true
     private var validationMessage:String? = null
 
-    private var value:Double? = null
+    private var storedValue:Double? = null
     init {
         (parent?.getChildren() as MutableList<WebComponent>?)?.add(this)
         val configuration = WebNumberBoxConfiguration()
@@ -44,7 +43,7 @@ class EasyUiWebNumberBox(private val parent:WebComponent?, configure: WebNumberB
 
     override fun getValue(): Double? {
         if(!initialized){
-            return value
+            return storedValue
         }
         val value = jq.numberbox("getText") as String?
         return if (value.isNullOrBlank()) null else value.toDouble()
@@ -52,7 +51,7 @@ class EasyUiWebNumberBox(private val parent:WebComponent?, configure: WebNumberB
 
     override fun setValue(value: Double?){
         if(!initialized){
-            this.value = value
+            this.storedValue = value
             return
         }
         jq.numberbox("setValue", value)
@@ -66,6 +65,9 @@ class EasyUiWebNumberBox(private val parent:WebComponent?, configure: WebNumberB
                     jq.numberbox("enable")
                 } else{
                     jq.numberbox("disable")
+                }
+                if(showClearIcon ){
+                    jq.numberbox("getIcon",0).css("visibility", if(storedValue == null  || !enabled) "hidden" else "visible")
                 }
             }
         }
@@ -105,8 +107,10 @@ class EasyUiWebNumberBox(private val parent:WebComponent?, configure: WebNumberB
             val icons = icons.toTypedArray()
             val onChange = {newValue:Double?,_:Double? ->
                 jq.numberbox("getIcon",0).css("visibility",if(newValue == null) "hidden" else "visible")
+                storedValue = newValue
             }
             val disabled = !enabled
+            val value = storedValue
         })
         val tb = jq.numberbox("textbox")
         tb.on("input") {
@@ -115,7 +119,7 @@ class EasyUiWebNumberBox(private val parent:WebComponent?, configure: WebNumberB
                 jq.numberbox("getIcon",0).css("visibility",if(text?.isNotBlank() == false) "hidden" else "visible")
             }
         }
-        if(showClearIcon && value == null){
+        if(showClearIcon && (storedValue == null  || !enabled)){
             jq.numberbox("getIcon",0).css("visibility","hidden")
         }
         showValidationInternal(validationMessage)

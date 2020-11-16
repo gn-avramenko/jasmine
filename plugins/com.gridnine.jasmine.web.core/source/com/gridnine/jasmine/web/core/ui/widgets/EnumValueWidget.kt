@@ -6,6 +6,9 @@
 package com.gridnine.jasmine.web.core.ui.widgets
 
 import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistryJS
+import com.gridnine.jasmine.server.core.model.ui.BooleanBoxConfigurationJS
+import com.gridnine.jasmine.server.core.model.ui.DateBoxConfigurationJS
+import com.gridnine.jasmine.server.core.model.ui.EnumSelectBoxConfigurationJS
 import com.gridnine.jasmine.server.core.model.ui.UiMetaRegistryJS
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
@@ -83,6 +86,19 @@ class EnumValueWidget<E:Enum<E>>(aParent:WebComponent, configure:EnumValueWidget
         delegate.decorate()
     }
 
+    fun setReadonly(value:Boolean) {
+        delegate.setEnabled(!value)
+    }
+
+    fun configure(config: EnumSelectBoxConfigurationJS?){
+        config?.let {
+            delegate.setEnabled(!config.notEditable)
+        }
+    }
+
+    fun showValidation(value:String?){
+        delegate.showValidation(value)
+    }
 
     override fun destroy() {
         delegate.destroy()
