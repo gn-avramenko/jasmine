@@ -15,7 +15,7 @@ object UiWebGenerator {
 
 
     private fun toGenData(descr: VVEntityDescription): BaseGenData {
-        val result = GenClassData(descr.id+"JS", "${BaseVV::class.qualifiedName}JS", false, true)
+        val result = GenClassData(descr.id+"JS", (descr.extendsId?:BaseVV::class.qualifiedName)+"JS", false, true)
         descr.properties.values.forEach { prop ->
             result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.type, prop.className),lateinit = false, nonNullable = false))
         }
@@ -52,7 +52,7 @@ object UiWebGenerator {
     }
 
     private fun toGenData(descr: VSEntityDescription): BaseGenData {
-        val result = GenClassData(descr.id+"JS", "${BaseVS::class.qualifiedName}JS", false, true)
+        val result = GenClassData(descr.id+"JS", (descr.extendsId?:BaseVS::class.qualifiedName)+"JS", false, true)
         descr.properties.values.forEach { prop ->
             result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.type, prop.className),lateinit = prop.lateInit, nonNullable = false))
         }
@@ -105,7 +105,7 @@ object UiWebGenerator {
     }
 
     private fun toGenData(descr: VMEntityDescription): BaseGenData {
-        val result = GenClassData(descr.id+"JS", BaseVM::class.qualifiedName+"JS", false, true)
+        val result = GenClassData(descr.id+"JS", (descr.extendsId?:BaseVM::class.qualifiedName)+"JS", false, true)
         descr.properties.values.forEach { prop ->
             result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.type, prop.className),lateinit = prop.lateInit, nonNullable = prop.nonNullable))
         }

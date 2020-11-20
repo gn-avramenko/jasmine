@@ -184,6 +184,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
         UiMetaRegistry.get().viewModels.values.forEach {ed->
             val entityDescriptionDT = VMEntityDescriptionDT()
             entityDescriptionDT.id = ed.id +"JS"
+            entityDescriptionDT.extendsId = ed.extendsId?.let { it+"JS" }
             ed.properties.values.forEach { pd ->
                val propertyDescriptionDT = VMPropertyDescriptionDT()
                 propertyDescriptionDT.className = getClassName(pd.className)
@@ -204,6 +205,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
         UiMetaRegistry.get().viewSettings.values.forEach {ed->
             val entityDescriptionDT = VSEntityDescriptionDT()
             entityDescriptionDT.id = ed.id+"JS"
+            entityDescriptionDT.extendsId = ed.extendsId?.let { it+"JS" }
             ed.properties.values.forEach { pd ->
                 val propertyDescriptionDT = VSPropertyDescriptionDT()
                 propertyDescriptionDT.className = getClassName(pd.className)
@@ -224,6 +226,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
         UiMetaRegistry.get().viewValidations.values.forEach {ed->
             val entityDescriptionDT = VVEntityDescriptionDT()
             entityDescriptionDT.id = ed.id+"JS"
+            entityDescriptionDT.extendsId = ed.extendsId?.let { it+"JS" }
             ed.properties.values.forEach { pd ->
                 val propertyDescriptionDT = VVPropertyDescriptionDT()
                 propertyDescriptionDT.className = getClassName(pd.className)

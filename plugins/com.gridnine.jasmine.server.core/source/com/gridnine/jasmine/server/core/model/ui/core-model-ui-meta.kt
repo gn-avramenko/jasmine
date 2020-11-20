@@ -44,6 +44,7 @@ class VMPropertyDescription(id:String, val type:VMPropertyType, val className:St
 
 
 class VMEntityDescription(id: String) : BaseUiElementDescription(id) {
+    var extendsId:String? = null
 
     val properties = linkedMapOf<String, VMPropertyDescription>()
 
@@ -72,6 +73,8 @@ class VSCollectionDescription(id:String, val elementType:VSCollectionType, val e
 class VSPropertyDescription(id:String, val type:VSPropertyType, val className:String?, val lateInit:Boolean) : BaseUiElementDescription(id)
 class VSEntityDescription(id: String) : BaseUiElementDescription(id) {
 
+    var extendsId:String? = null
+
     val properties = linkedMapOf<String, VSPropertyDescription>()
 
     val collections = linkedMapOf<String, VSCollectionDescription>()
@@ -90,6 +93,8 @@ enum class VVCollectionType {
 class VVCollectionDescription(id:String, val elementType:VVCollectionType, val elementClassName:String?) : BaseUiElementDescription( id)
 class VVPropertyDescription(id:String, val type:VVPropertyType, val className:String?, val lateInit:Boolean) : BaseUiElementDescription(id)
 class VVEntityDescription(id: String) : BaseUiElementDescription(id) {
+
+    var extendsId:String? = null
 
     val properties = linkedMapOf<String, VVPropertyDescription>()
 
@@ -141,7 +146,8 @@ abstract class BaseWidgetDescription(val notEditable:Boolean, val widgetType:Wid
 
 enum class ViewType{
     GRID_CONTAINER,
-    TILE_SPACE
+    TILE_SPACE,
+    NAVIGATOR
 }
 
 abstract class BaseViewDescription(val id:String,val viewType:ViewType)
@@ -166,6 +172,10 @@ class TileSpaceOverviewDescription(val viewId:String):BaseModelElementDescriptio
 class TileDescription(id:String, val fullViewId:String):BaseModelElementDescription(id)
 
 class TileSpaceDescription(id:String, val overviewDescription: TileSpaceOverviewDescription?,  val tiles:MutableList<TileDescription> = arrayListOf()):BaseViewDescription(id, ViewType.TILE_SPACE)
+
+class NavigatorVariantDescription(val modelId:String, val viewId: String)
+
+class NavigatorDescription(id:String, val variants:MutableList<NavigatorVariantDescription> = arrayListOf()):BaseViewDescription(id, ViewType.NAVIGATOR)
 
 class UiMetaRegistry:Disposable{
     val enums = linkedMapOf<String, UiEnumDescription>()

@@ -22,4 +22,14 @@
     <entity id="com.gridnine.jasmine.server.core.model.ui.BaseVM" abstract="true"/>
     <entity id="com.gridnine.jasmine.server.core.model.ui.BaseVS" abstract="true"/>
     <entity id="com.gridnine.jasmine.server.core.model.ui.BaseVV" abstract="true"/>
+    <entity id="com.gridnine.jasmine.server.core.model.ui.BaseNavigatorVariantVM" abstract="true" extends="com.gridnine.jasmine.server.core.model.ui.BaseVM">
+        <property id="uid" type="STRING" lateinit="true"/>
+        <property id="title" type="STRING" lateinit="true"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.server.core.model.ui.BaseNavigatorVariantVS" abstract="true" extends="com.gridnine.jasmine.server.core.model.ui.BaseVS">
+        <property id="uid" type="STRING" lateinit="true"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.server.core.model.ui.BaseNavigatorVariantVV" abstract="true" extends="com.gridnine.jasmine.server.core.model.ui.BaseVV">
+        <property id="uid" type="STRING" lateinit="true"/>
+    </entity>
 </custom-entities>

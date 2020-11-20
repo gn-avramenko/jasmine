@@ -16,6 +16,7 @@ interface WebSelect:WebComponent{
     fun setPossibleValues(values: List<SelectItemJS>)
     fun showValidation(value:String?)
     fun setEnabled(value:Boolean)
+    fun setChangeListener(value:((List<SelectItemJS>) ->Unit)?)
 }
 
 data class SelectItemJS(val id:String, val text:String)

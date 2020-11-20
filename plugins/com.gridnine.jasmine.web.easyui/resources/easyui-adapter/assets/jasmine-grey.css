@@ -9,6 +9,10 @@
     background:url('images/settings.png') no-repeat center center;
 }
 
+.icon_core_link{
+    background: url('images/panel_tools.png') no-repeat 0px -16px;
+}
+
 .select2-jasmine-regular .select2-choices{
     border: 1px solid #D3D3D3;
     border-radius: 5px 5px 5px 5px;
@@ -45,6 +49,7 @@
 .jasmine-web-tile{
     display: inline-block;
     padding: 5px;
+    margin:5px;
     font-size: 14px;
     font-weight: bold;
     color: #575765;
@@ -78,4 +83,12 @@
 
 .icon_core_close{
     background: url('images/panel_tools.png') no-repeat -32px -16px;
+}
+
+.icon_core_plus{
+    background: url('images/datagrid_icons.png') no-repeat -32px center;
+}
+
+.icon_core_minus{
+    background: url('images/datagrid_icons.png') no-repeat -48px center;
 }

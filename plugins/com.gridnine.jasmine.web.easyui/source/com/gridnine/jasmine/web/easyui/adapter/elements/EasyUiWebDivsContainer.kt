@@ -36,9 +36,11 @@ class EasyUiWebDivsContainer(private val parent:WebComponent?, configure:WebDivs
     }
 
     private fun showInternal(id: String) {
-        val compData = divsMap[activeComponentId!!]!!
-        if(compData.jq != null){
-            compData.jq.hide()
+        if(activeComponentId != null) {
+            val compData = divsMap[activeComponentId!!]!!
+            if (compData.jq != null) {
+                compData.jq.hide()
+            }
         }
         val divData = divsMap[id]?:throw XeptionJS.forDeveloper("div with id $id does not exist")
         if(divData.jq == null){
@@ -56,10 +58,13 @@ class EasyUiWebDivsContainer(private val parent:WebComponent?, configure:WebDivs
 
     override fun removeDiv(id: String) {
         divsMap[id]?.let {
+            it.jq.hide()
             if(it.jq != null){
                 it.content.destroy()
                 it.jq.remove()
             }
+            divsMap.remove(id)
+            activeComponentId = null
         }
     }
 

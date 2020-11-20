@@ -85,3 +85,65 @@ class DateTimeBoxConfiguration() : BaseWidgetConfiguration(){
         configure.invoke(this)
     }
 }
+
+abstract class BaseNavigatorVariantVM:BaseVM(){
+    lateinit var uid:String
+    lateinit var title:String
+    override fun getValue(propertyName: String): Any? {
+        if("uid" == propertyName){
+            return uid
+        }
+        if("title" == propertyName){
+            return title
+        }
+        return super.getValue(propertyName)
+    }
+
+    override fun setValue(propertyName: String, value: Any?) {
+        if("uid" == propertyName){
+            uid = value as String
+            return
+        }
+        if("title" == propertyName){
+            title = value as String
+            return
+        }
+        super.setValue(propertyName, value)
+    }
+}
+
+abstract class BaseNavigatorVariantVS:BaseVS(){
+    lateinit var uid:String
+    override fun getValue(propertyName: String): Any? {
+        if("uid" == propertyName){
+            return uid
+        }
+        return super.getValue(propertyName)
+    }
+
+    override fun setValue(propertyName: String, value: Any?) {
+        if("uid" == propertyName){
+            uid = value as String
+            return
+        }
+        super.setValue(propertyName, value)
+    }
+}
+
+abstract class BaseNavigatorVariantVV:BaseVV(){
+    lateinit var uid:String
+    override fun getValue(propertyName: String): Any? {
+        if("uid" == propertyName){
+            return uid
+        }
+        return super.getValue(propertyName)
+    }
+
+    override fun setValue(propertyName: String, value: Any?) {
+        if("uid" == propertyName){
+            uid = value as String
+            return
+        }
+        super.setValue(propertyName, value)
+    }
+}

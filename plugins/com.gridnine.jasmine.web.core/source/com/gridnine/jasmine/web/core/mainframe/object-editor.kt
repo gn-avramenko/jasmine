@@ -18,7 +18,7 @@ import com.gridnine.jasmine.web.core.ui.components.*
 import kotlin.browser.window
 import kotlin.js.Promise
 
-class ObjectEditorTabHandler(private val forEdit:Boolean):MainFrameTabHandler<ObjectEditorTabData, GetEditorDataResponseJS>{
+class ObjectEditorTabHandler(private val forEdit:Boolean, private val navigationKey:String?):MainFrameTabHandler<ObjectEditorTabData, GetEditorDataResponseJS>{
     override fun getTabId(obj: ObjectEditorTabData): String {
         return "${obj.objectType}||${obj.objectUid}"
     }
@@ -31,13 +31,13 @@ class ObjectEditorTabHandler(private val forEdit:Boolean):MainFrameTabHandler<Ob
     }
 
     override fun createTabData(obj: ObjectEditorTabData, data: GetEditorDataResponseJS, parent: WebComponent, callback: MainFrameTabCallback): MainFrameTabData {
-        return MainFrameTabData(data.title, ObjectEditor<WebEditor<BaseVMJS,BaseVSJS,BaseVVJS>>(parent, obj, data, data.title, forEdit, callback))
+        return MainFrameTabData(data.title, ObjectEditor<WebEditor<BaseVMJS,BaseVSJS,BaseVVJS>>(parent, obj, data, data.title, forEdit, navigationKey, callback))
     }
 }
 
 class ObjectEditorTabData(val objectType:String, var objectUid:String?)
 
-class ObjectEditor<W:WebEditor<*,*,*>>(aParent: WebComponent, val obj: ObjectEditorTabData, data: GetEditorDataResponseJS, initTitle:String, forEdit:Boolean, private val callback: MainFrameTabCallback):WebComponent,WebPopupContainer,EventsSubscriber{
+class ObjectEditor<W:WebEditor<*,*,*>>(aParent: WebComponent, val obj: ObjectEditorTabData, data: GetEditorDataResponseJS, initTitle:String, forEdit:Boolean, private val navigationKey:String?, private val callback: MainFrameTabCallback):WebComponent,WebPopupContainer,EventsSubscriber{
     private val delegate:WebBorderContainer
     private val viewButton:WebLinkButton
     private val editButton:WebLinkButton
@@ -55,6 +55,7 @@ class ObjectEditor<W:WebEditor<*,*,*>>(aParent: WebComponent, val obj: ObjectEdi
         }
         val handler = ClientRegistry.get().get(ObjectHandler.TYPE, obj.objectType)!!
         rootWebEditor = handler.createWebEditor(delegate) as W
+
         delegate.setCenterRegion(WebBorderContainer.region {
             content = rootWebEditor
         })
@@ -136,6 +137,7 @@ class ObjectEditor<W:WebEditor<*,*,*>>(aParent: WebComponent, val obj: ObjectEdi
         (rootWebEditor as WebEditor<BaseVMJS, BaseVSJS,BaseVVJS>).readData(data.viewModel, data.viewSettings)
         readOnly = !forEdit
         rootWebEditor.setReadonly(!forEdit)
+        navigationKey?.let {rootWebEditor.navigate(it)}
         updateButtonsState()
     }
 

@@ -66,6 +66,12 @@ class EnumSelectBoxConfigurationJS : BaseWidgetConfigurationJS(){
         val qualifiedClassName = "com.gridnine.jasmine.server.core.model.ui.EnumSelectBoxConfigurationJS"
     }
 }
+class GeneralSelectBoxConfigurationJS : BaseWidgetConfigurationJS(){
+    companion object{
+        val qualifiedClassName = "com.gridnine.jasmine.server.core.model.ui.GeneralSelectBoxConfigurationJS"
+    }
+}
+
 class FloatNumberBoxConfigurationJS : BaseWidgetConfigurationJS(){
     companion object{
         val qualifiedClassName = "com.gridnine.jasmine.server.core.model.ui.FloatNumberBoxConfigurationJS"
@@ -80,5 +86,67 @@ class IntegerNumberBoxConfigurationJS : BaseWidgetConfigurationJS(){
 class BooleanBoxConfigurationJS : BaseWidgetConfigurationJS(){
     companion object{
         val qualifiedClassName = "com.gridnine.jasmine.server.core.model.ui.BooleanBoxConfigurationJS"
+    }
+}
+
+abstract class BaseNavigatorVariantVMJS:BaseVMJS(){
+    lateinit var uid:String
+    lateinit var title:String
+    override fun getValue(propertyName: String): Any? {
+        if("uid" == propertyName){
+            return uid
+        }
+        if("title" == propertyName){
+            return title
+        }
+        return super.getValue(propertyName)
+    }
+
+    override fun setValue(propertyName: String, value: Any?) {
+        if("uid" == propertyName){
+            uid = value as String
+            return
+        }
+        if("title" == propertyName){
+            title = value as String
+            return
+        }
+        super.setValue(propertyName, value)
+    }
+}
+
+abstract class BaseNavigatorVariantVSJS:BaseVSJS(){
+    lateinit var uid:String
+    override fun getValue(propertyName: String): Any? {
+        if("uid" == propertyName){
+            return uid
+        }
+        return super.getValue(propertyName)
+    }
+
+    override fun setValue(propertyName: String, value: Any?) {
+        if("uid" == propertyName){
+            uid = value as String
+            return
+        }
+        super.setValue(propertyName, value)
+    }
+}
+
+abstract class BaseNavigatorVariantVVJS:BaseVVJS(){
+    lateinit var uid:String
+    override fun getValue(propertyName: String): Any? {
+        if("uid" == propertyName){
+            return uid
+        }
+        return super.getValue(propertyName)
+    }
+
+    override fun setValue(propertyName: String, value: Any?) {
+        if("uid" == propertyName){
+            uid = value as String
+            return
+        }
+        super.setValue(propertyName, value)
     }
 }

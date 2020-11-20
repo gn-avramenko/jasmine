@@ -193,6 +193,7 @@
     </entity>
 
     <entity id="com.gridnine.jasmine.server.standard.model.rest.VMEntityDescriptionDT" extends="com.gridnine.jasmine.server.standard.model.rest.BaseUIElementDT">
+        <property id="extendsId" type="STRING"/>
         <collection id="properties" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.VMPropertyDescriptionDT"/>
         <collection id="collections" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.VMCollectionDescriptionDT"/>
     </entity>
@@ -224,6 +225,7 @@
     </entity>
 
     <entity id="com.gridnine.jasmine.server.standard.model.rest.VSEntityDescriptionDT" extends="com.gridnine.jasmine.server.standard.model.rest.BaseUIElementDT">
+        <property id="extendsId" type="STRING"/>
         <collection id="properties" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.VSPropertyDescriptionDT"/>
         <collection id="collections" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.VSCollectionDescriptionDT"/>
     </entity>
@@ -246,6 +248,7 @@
     </entity>
 
     <entity id="com.gridnine.jasmine.server.standard.model.rest.VVEntityDescriptionDT" extends="com.gridnine.jasmine.server.standard.model.rest.BaseUIElementDT">
+        <property id="extendsId" type="STRING"/>
         <collection id="properties" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.VVPropertyDescriptionDT"/>
         <collection id="collections" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.VVCollectionDescriptionDT"/>
     </entity>

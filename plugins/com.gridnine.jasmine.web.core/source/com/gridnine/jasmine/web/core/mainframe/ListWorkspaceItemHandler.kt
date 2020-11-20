@@ -164,7 +164,7 @@ class ListWorkspaceItemHandler : MainFrameTabHandler<ListWorkspaceItemJS, Unit> 
             }
             dataGrid.setRowDblClickListener {
                 if(it is BaseIndexJS){
-                    MainFrame.get().openTab(it.document)
+                    MainFrame.get().openTab(it.document, navigationKey = it.uid)
                 }
             }
             return dataGrid

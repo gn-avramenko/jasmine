@@ -86,6 +86,9 @@ open class TileSpaceWidget<VM:BaseVMJS, VS:BaseVSJS, VV:BaseVVJS>(aParent:WebCom
         }
     }
 
+    override fun navigate(id: String): Boolean {
+        return tilesEditors.entries.find { it.value.navigate(id) }?.let { delegate.show(it.key) } != null
+    }
 }
 
 class TileSpaceWidgetConfiguration<VM:BaseVMJS>{
@@ -169,6 +172,10 @@ class TilePanel(private val parent:WebComponent, private val collapseHandler:()-
 
     override fun showValidation(validation: BaseVVJS) {
         (tileConfig.editor as WebEditor<BaseVMJS,BaseVSJS,BaseVVJS>).showValidation(validation)
+    }
+
+    override fun navigate(id: String): Boolean {
+        return  (tileConfig.editor as WebEditor<BaseVMJS,BaseVSJS,BaseVVJS>).navigate(id)
     }
 
 

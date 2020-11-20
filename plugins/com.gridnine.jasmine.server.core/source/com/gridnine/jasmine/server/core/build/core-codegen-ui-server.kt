@@ -46,7 +46,7 @@ internal object UiServerGenerator {
         }
     }
     private fun toGenData(descr: VVEntityDescription): BaseGenData {
-        val result = GenClassData(descr.id, BaseVV::class.qualifiedName, false, true)
+        val result = GenClassData(descr.id, descr.extendsId?:BaseVV::class.qualifiedName, false, true)
         descr.properties.values.forEach { prop ->
             result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.type, prop.className),lateinit = prop.lateInit, nonNullable = false))
         }
@@ -83,7 +83,7 @@ internal object UiServerGenerator {
     }
 
     private fun toGenData(descr: VSEntityDescription): BaseGenData {
-        val result = GenClassData(descr.id, BaseVS::class.qualifiedName, false, true)
+        val result = GenClassData(descr.id, descr.extendsId?:BaseVS::class.qualifiedName, false, true)
         descr.properties.values.forEach { prop ->
             result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.type, prop.className),lateinit = prop.lateInit, nonNullable = false))
         }
@@ -136,7 +136,7 @@ internal object UiServerGenerator {
     }
 
     private fun toGenData(descr: VMEntityDescription): BaseGenData {
-        val result = GenClassData(descr.id, BaseVM::class.qualifiedName, false, true)
+        val result = GenClassData(descr.id, descr.extendsId?:BaseVM::class.qualifiedName, false, true)
         descr.properties.values.forEach { prop ->
             result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.className),lateinit = prop.lateInit, nonNullable = prop.nonNullable))
         }

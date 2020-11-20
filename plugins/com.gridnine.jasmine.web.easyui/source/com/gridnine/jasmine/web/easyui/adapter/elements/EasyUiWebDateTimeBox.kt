@@ -164,7 +164,9 @@ class EasyUiWebDateTimeBox(private val parent:WebComponent?, configure: WebDateT
         spanElm.removeAttr("title")
     }
     override fun destroy() {
-        //noops
+        if(initialized){
+            jq.datebox("destroy")
+        }
     }
 
 }

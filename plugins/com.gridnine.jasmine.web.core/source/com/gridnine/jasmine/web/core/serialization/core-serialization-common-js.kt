@@ -7,7 +7,9 @@
 package com.gridnine.jasmine.web.core.serialization
 
 import com.gridnine.jasmine.server.core.model.custom.CustomMetaRegistryJS
+import com.gridnine.jasmine.server.core.model.custom.CustomTypeJS
 import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistryJS
+import com.gridnine.jasmine.server.core.model.domain.ObjectReferenceJS
 import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistryJS
 
 
@@ -77,5 +79,29 @@ internal object CommonSerializationUtilsJS{
             return customEntity.isAbstract
         }
         return false
+    }
+
+    fun toSerializableType(type: CustomTypeJS): SerializablePropertyTypeJS {
+        return when (type){
+            CustomTypeJS.STRING -> SerializablePropertyTypeJS.STRING
+            CustomTypeJS.ENUM -> SerializablePropertyTypeJS.ENUM
+            CustomTypeJS.ENTITY -> SerializablePropertyTypeJS.ENTITY
+            CustomTypeJS.LONG -> SerializablePropertyTypeJS.LONG
+            CustomTypeJS.CLASS -> SerializablePropertyTypeJS.CLASS
+            CustomTypeJS.INT -> SerializablePropertyTypeJS.INT
+            CustomTypeJS.BIG_DECIMAL -> SerializablePropertyTypeJS.BIG_DECIMAL
+            CustomTypeJS.ENTITY_REFERENCE -> SerializablePropertyTypeJS.ENTITY
+            CustomTypeJS.LOCAL_DATE_TIME -> SerializablePropertyTypeJS.LOCAL_DATE_TIME
+            CustomTypeJS.LOCAL_DATE -> SerializablePropertyTypeJS.LOCAL_DATE
+            CustomTypeJS.BOOLEAN -> SerializablePropertyTypeJS.BOOLEAN
+            CustomTypeJS.BYTE_ARRAY -> SerializablePropertyTypeJS.BYTE_ARRAY
+        }
+    }
+
+    fun toClassName(elementType: CustomTypeJS, elementClassName: String?): String? {
+        if (elementType == CustomTypeJS.ENTITY_REFERENCE) {
+            return ObjectReferenceJS.qualifiedClassName
+        }
+        return elementClassName
     }
 }

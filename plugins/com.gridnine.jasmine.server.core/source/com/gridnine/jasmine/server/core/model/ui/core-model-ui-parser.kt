@@ -40,12 +40,12 @@ object UiMetadataParser {
                 ParserUtils.updateLocalizations(enumItem, enumId, localizations)
             }
         }
-        processContainers(registry, node, localizations)
+        processContainers(registry, node, null, localizations)
 
 
     }
 
-    private fun processContainers(registry: UiMetaRegistry, node: XmlNode, localizations: Map<String, Map<Locale, String>>): List<String> {
+    private fun processContainers(registry: UiMetaRegistry, node: XmlNode, baseExtendsId:String?, localizations: Map<String, Map<Locale, String>>): List<String> {
         val result = arrayListOf<String>()
         node.children("grid-container").forEach { child ->
             val id = ParserUtils.getIdAttribute(child)
@@ -56,10 +56,13 @@ object UiMetadataParser {
             }) as GridContainerDescription
             val viewModelId = "${id}VM"
             val viewModelEntity = registry.viewModels.getOrPut(viewModelId, { VMEntityDescription(viewModelId) })
+            baseExtendsId?.let { viewModelEntity.extendsId = it+"VM"}
             val viewSettigsId = "${id}VS"
             val viewSettingsEntity = registry.viewSettings.getOrPut(viewSettigsId, { VSEntityDescription(viewSettigsId) })
+            baseExtendsId?.let { viewSettingsEntity.extendsId = it+"VS"}
             val viewValidationId = "${id}VV"
             val viewValidationEntity = registry.viewValidations.getOrPut(viewValidationId, { VVEntityDescription(viewValidationId) })
+            baseExtendsId?.let { viewValidationEntity.extendsId = it+"VV"}
             child.children("columns").forEach { columnsElm ->
                 columnsElm.children("column").forEach { columnElm ->
                     val col = GridContainerColumnDescription(ParserUtils.getEnum(columnElm, "width",
@@ -99,7 +102,7 @@ object UiMetadataParser {
                 val descr = if (overviewElm.attributes.containsKey("container-ref")) {
                     TileSpaceOverviewDescription(overviewElm.attributes["container-ref"]!!)
                 } else {
-                    val containerId = processContainers(registry, overviewElm, localizations)[0]
+                    val containerId = processContainers(registry, overviewElm, null, localizations)[0]
                     TileSpaceOverviewDescription(containerId)
                 }
                 ParserUtils.updateLocalizations(descr, localizations, ParserUtils.getCaptionAttribute(overviewElm))
@@ -120,7 +123,7 @@ object UiMetadataParser {
                 val descr = if (fullViewElm.attributes.containsKey("container-ref")) {
                     TileDescription(tileId, fullViewElm.attributes["container-ref"]!!)
                 } else {
-                    val containerId = processContainers(registry, fullViewElm, localizations)[0]
+                    val containerId = processContainers(registry, fullViewElm, null, localizations)[0]
                     TileDescription(tileId, containerId)
                 }
                 ParserUtils.updateLocalizations(descr, localizations, ParserUtils.getCaptionAttribute(tileElm))
@@ -128,7 +131,41 @@ object UiMetadataParser {
                 viewModelEntity.properties[tileId] = VMPropertyDescription(tileId, VMPropertyType.ENTITY, "${descr.fullViewId}VM", false, true)
                 viewSettingsEntity.properties[tileId] = VSPropertyDescription(tileId, VSPropertyType.ENTITY, "${descr.fullViewId}VS", true)
                 viewValidationEntity.properties[tileId] = VVPropertyDescription(tileId, VVPropertyType.ENTITY, "${descr.fullViewId}VV", true)
-
+            }
+        }
+        node.children("navigator").forEach { child ->
+            val id = ParserUtils.getIdAttribute(child)
+            result.add(id)
+            val viewModelId = "${id}VM"
+            registry.viewModels.computeIfAbsent(viewModelId){
+                val ett = VMEntityDescription(viewModelId)
+                ett.collections["values"] = VMCollectionDescription("values", VMCollectionType.ENTITY, BaseNavigatorVariantVM::class.qualifiedName)
+                ett
+            }
+            val viewSettigsId = "${id}VS"
+            registry.viewSettings.computeIfAbsent(viewSettigsId){
+                val ett = VSEntityDescription(viewSettigsId)
+                ett.collections["values"] = VSCollectionDescription("values", VSCollectionType.ENTITY,  BaseNavigatorVariantVS::class.qualifiedName)
+                ett
+            }
+            val viewValidationId = "${id}VV"
+            registry.viewValidations.computeIfAbsent(viewValidationId){
+                val ett = VVEntityDescription(viewValidationId)
+                ett.collections["values"] = VVCollectionDescription("values", VVCollectionType.ENTITY,  BaseNavigatorVariantVV::class.qualifiedName)
+                ett
+            }
+            val res = registry.views.getOrPut(id, {
+                NavigatorDescription(id)
+            }) as NavigatorDescription
+            child.children("variant").forEach { navigatorElm ->
+                val containerRef = navigatorElm.attributes["container-ref"]
+                val descr = if (containerRef != null) {
+                    NavigatorVariantDescription("${containerRef}VM", containerRef)
+                } else {
+                    val containerId = processContainers(registry, navigatorElm, BaseNavigatorVariantVM::class.qualifiedName?.substringBeforeLast("VM"), localizations)[0]
+                    NavigatorVariantDescription("${containerId}VM", containerId)
+                }
+                res.variants.add(descr)
             }
         }
         return result
@@ -163,7 +200,7 @@ object UiMetadataParser {
             "integer-number-box" -> {
                 val widget = IntegerNumberBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
                         ?: false, ParserUtils.getBooleanAttribute(xmlNode, "non-nullable")?: false)
-                val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.INT, null, false,false)
+                val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.INT, null, widget.nonNullable,false)
                 val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.INTEGER_NUMBER_BOX_SETTINGS, null, false)
                 val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
                 WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription)

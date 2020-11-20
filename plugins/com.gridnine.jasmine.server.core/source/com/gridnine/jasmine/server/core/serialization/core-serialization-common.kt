@@ -9,7 +9,9 @@ package com.gridnine.jasmine.server.core.serialization
 
 import com.gridnine.jasmine.server.core.model.common.BaseIdentity
 import com.gridnine.jasmine.server.core.model.custom.CustomMetaRegistry
+import com.gridnine.jasmine.server.core.model.custom.CustomType
 import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistry
+import com.gridnine.jasmine.server.core.model.domain.ObjectReference
 import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistry
 
 
@@ -82,5 +84,29 @@ internal object CommonSerializationUtils{
             return customEntity.isAbstract
         }
         return false
+    }
+
+    fun toSerializableType(type: CustomType): SerializablePropertyType {
+        return when (type){
+            CustomType.STRING -> SerializablePropertyType.STRING
+            CustomType.ENUM -> SerializablePropertyType.ENUM
+            CustomType.ENTITY -> SerializablePropertyType.ENTITY
+            CustomType.LONG -> SerializablePropertyType.LONG
+            CustomType.CLASS -> SerializablePropertyType.CLASS
+            CustomType.INT -> SerializablePropertyType.INT
+            CustomType.BIG_DECIMAL -> SerializablePropertyType.BIG_DECIMAL
+            CustomType.ENTITY_REFERENCE -> SerializablePropertyType.ENTITY
+            CustomType.LOCAL_DATE_TIME -> SerializablePropertyType.LOCAL_DATE_TIME
+            CustomType.LOCAL_DATE -> SerializablePropertyType.LOCAL_DATE
+            CustomType.BOOLEAN -> SerializablePropertyType.BOOLEAN
+            CustomType.BYTE_ARRAY -> SerializablePropertyType.BYTE_ARRAY
+        }
+    }
+
+    fun toClassName(elementType: CustomType, elementClassName: String?): String? {
+        if (elementType == CustomType.ENTITY_REFERENCE) {
+            return ObjectReference::class.qualifiedName
+        }
+        return elementClassName
     }
 }

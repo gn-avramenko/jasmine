@@ -87,7 +87,7 @@ class StandardSaveEditorDataRestHandler : RestHandler<SaveEditorDataRequest, Sav
         val handler = handlers[0]
         val asset = DomainMetaRegistry.get().assets[objectId] != null
         val objUid = request.objectUid
-        val ett =
+        val ett:BaseIdentity =
                 if(objUid == null){
                     val res  = ReflectionFactory.get().newInstance<BaseIdentity>(objectId)
                     res.uid = UUID.randomUUID().toString()

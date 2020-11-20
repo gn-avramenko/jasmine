@@ -85,6 +85,7 @@ class CoreActivatorJS: ActivatorJS {
         }
         it.viewModels?.forEach{ itJs ->
             val entityDescription = VMEntityDescriptionJS(itJs.id)
+            entityDescription.extendsId = itJs.extendsId
             itJs.properties?.forEach{ item:dynamic ->
                 entityDescription.properties.put(item.id , VMPropertyDescriptionJS(item.id, VMPropertyTypeJS.valueOf(item.type), item.className, item.nonNullable))
             }
@@ -95,6 +96,7 @@ class CoreActivatorJS: ActivatorJS {
         }
         it.viewSettings?.forEach{ itJs ->
             val entityDescription = VSEntityDescriptionJS(itJs.id)
+            entityDescription.extendsId = itJs.extendsId
             itJs.properties?.forEach{ item:dynamic ->
                 entityDescription.properties.put(item.id , VSPropertyDescriptionJS(item.id, VSPropertyTypeJS.valueOf(item.type), item.className))
             }
@@ -105,6 +107,7 @@ class CoreActivatorJS: ActivatorJS {
         }
         it.viewValidations?.forEach{ itJs ->
             val entityDescription = VVEntityDescriptionJS(itJs.id)
+            entityDescription.extendsId = itJs.extendsId
             itJs.properties?.forEach{ item:dynamic ->
                 entityDescription.properties.put(item.id , VVPropertyDescriptionJS(item.id, VVPropertyTypeJS.valueOf(item.type), item.className))
             }

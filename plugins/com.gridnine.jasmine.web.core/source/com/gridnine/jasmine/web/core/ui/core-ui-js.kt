@@ -67,10 +67,15 @@ interface HasVisibility{
 }
 
 interface WebEditor<VM:BaseVMJS, VS:BaseVSJS, VV:BaseVVJS>:WebComponent{
+    fun navigate(id:String):Boolean{return false}
     fun getData():VM
     fun readData(vm:VM, vs:VS)
     fun setReadonly(value:Boolean)
     fun showValidation(validation: VV)
+}
+
+interface WebEditorInterceptor<E:WebEditor<*,*,*>>{
+    fun onInit(editor:E){}
 }
 
 object DefaultUIParameters{

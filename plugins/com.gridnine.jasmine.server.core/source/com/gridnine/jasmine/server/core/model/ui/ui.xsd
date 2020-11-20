@@ -14,6 +14,7 @@
     </element>
     <group name="container">
         <choice>
+            <element name="navigator" type="tns:navigator"/>
             <element name="grid-container" type="tns:gridContainerType"/>
             <element name="tile-space" type="tns:tileSpace"/>
         </choice>
@@ -51,7 +52,7 @@
                             <attribute name="container-ref" type="string"/>
                         </complexType>
                     </element>
-                    <element name="tile" minOccurs="0">
+                    <element name="tile" minOccurs="0" maxOccurs="unbounded">
                         <complexType>
                             <complexContent>
                                 <extension base="tns:baseMetaElement">
@@ -106,6 +107,22 @@
                     </element>
                 </sequence>
                 <attribute name="columns-count" type="int"/>
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType name="navigator">
+        <complexContent>
+            <extension base="tns:baseType">
+                <sequence>
+                    <sequence>
+                        <element name="variant" minOccurs="0" maxOccurs="unbounded">
+                            <complexType>
+                                <group ref="tns:container" minOccurs="0"/>
+                                <attribute name="container-ref" type="string"/>
+                            </complexType>
+                        </element>
+                    </sequence>
+                </sequence>
             </extension>
         </complexContent>
     </complexType>

@@ -44,6 +44,7 @@ class VMPropertyDescriptionJS(id:String, val type:VMPropertyTypeJS, val classNam
 
 
 class VMEntityDescriptionJS(id: String) : BaseMetaElementDescriptionJS(id) {
+    var extendsId:String? = null
 
     val properties = linkedMapOf<String, VMPropertyDescriptionJS>()
 
@@ -71,6 +72,8 @@ class VSCollectionDescriptionJS(id:String, val elementType:VSCollectionTypeJS, v
 class VSPropertyDescriptionJS(id:String, val type:VSPropertyTypeJS, val className:String?) : BaseMetaElementDescriptionJS(id)
 class VSEntityDescriptionJS(id: String) : BaseMetaElementDescriptionJS(id) {
 
+    var extendsId:String? = null
+
     val properties = linkedMapOf<String, VSPropertyDescriptionJS>()
 
     val collections = linkedMapOf<String, VSCollectionDescriptionJS>()
@@ -89,6 +92,8 @@ enum class VVCollectionTypeJS {
 class VVCollectionDescriptionJS(id:String, val elementType:VVCollectionTypeJS, val elementClassName:String?) : BaseMetaElementDescriptionJS( id)
 class VVPropertyDescriptionJS(id:String, val type:VVPropertyTypeJS, val className:String?) : BaseMetaElementDescriptionJS(id)
 class VVEntityDescriptionJS(id: String) : BaseMetaElementDescriptionJS(id) {
+
+    var extendsId:String? = null
 
     val properties = linkedMapOf<String, VVPropertyDescriptionJS>()
 

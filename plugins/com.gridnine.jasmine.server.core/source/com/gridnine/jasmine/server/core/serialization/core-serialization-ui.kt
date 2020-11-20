@@ -5,13 +5,33 @@
 
 package com.gridnine.jasmine.server.core.serialization
 
+import com.gridnine.jasmine.server.core.model.custom.CustomEntityDescription
+import com.gridnine.jasmine.server.core.model.custom.CustomMetaRegistry
+import com.gridnine.jasmine.server.core.model.custom.CustomType
+import com.gridnine.jasmine.server.core.model.domain.DocumentPropertyType
 import com.gridnine.jasmine.server.core.model.domain.ObjectReference
+import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistry
 import com.gridnine.jasmine.server.core.model.ui.*
 
 
 internal class VMEntityMetadataProvider(description: VMEntityDescription) : ObjectMetadataProvider<BaseVM>() {
 
     init {
+        var extendsId = description.extendsId
+        while (extendsId != null) {
+            val parentDescr = UiMetaRegistry.get().viewModels[extendsId]
+            if(parentDescr != null){
+                fillProperties(parentDescr)
+                fillCollections(parentDescr)
+                extendsId = parentDescr.extendsId
+            } else {
+                val customDescr = CustomMetaRegistry.get().entities[extendsId]!!
+                fillProperties(customDescr)
+                fillCollections(customDescr)
+                extendsId = customDescr.extendsId
+            }
+        }
+
         fillProperties(description)
         fillCollections(description)
         isAbstract = false
@@ -35,6 +55,20 @@ internal class VMEntityMetadataProvider(description: VMEntityDescription) : Obje
         }
     }
 
+    private fun fillProperties(desc: CustomEntityDescription) {
+        desc.properties.values.forEach {
+            addProperty(SerializablePropertyDescription(it.id, CommonSerializationUtils.toSerializableType(it.type), CommonSerializationUtils.toClassName(it.type, it.className), false))
+        }
+    }
+
+    private fun fillCollections(desc: CustomEntityDescription) {
+        desc.collections.values.forEach {
+            addCollection(SerializableCollectionDescription(it.id, CommonSerializationUtils.toSerializableType(it.elementType), CommonSerializationUtils.toClassName(it.elementType, it.elementClassName), false))
+        }
+    }
+
+
+
     private fun fillProperties(desc: VMEntityDescription) {
         desc.properties.values.forEach {
             addProperty(SerializablePropertyDescription(it.id, toSerializableType(it.type), toClassName(it.type, it.className), isAbstractClass(it.className)))
@@ -42,8 +76,11 @@ internal class VMEntityMetadataProvider(description: VMEntityDescription) : Obje
     }
 
     private fun isAbstractClass(elementClassName: String?): Boolean {
-        if (elementClassName == BaseVM::class.qualifiedName) {
-            return true
+        if(elementClassName != null){
+            val ett = CustomMetaRegistry.get().entities[elementClassName]
+            if(ett != null){
+                return ett.isAbstract
+            }
         }
         return false
 
@@ -93,9 +130,35 @@ internal class VMEntityMetadataProvider(description: VMEntityDescription) : Obje
 internal class VSEntityMetadataProvider(description: VSEntityDescription) : ObjectMetadataProvider<BaseVS>() {
 
     init {
+        var extendsId = description.extendsId
+        while (extendsId != null) {
+            val parentDescr = UiMetaRegistry.get().viewSettings[extendsId]
+            extendsId = if(parentDescr != null){
+                fillProperties(parentDescr)
+                fillCollections(parentDescr)
+                parentDescr.extendsId
+            } else {
+                val customDescr = CustomMetaRegistry.get().entities[extendsId]!!
+                fillProperties(customDescr)
+                fillCollections(customDescr)
+                customDescr.extendsId
+            }
+        }
         fillProperties(description)
         fillCollections(description)
         isAbstract = false
+    }
+
+    private fun fillProperties(desc: CustomEntityDescription) {
+        desc.properties.values.forEach {
+            addProperty(SerializablePropertyDescription(it.id, CommonSerializationUtils.toSerializableType(it.type), CommonSerializationUtils.toClassName(it.type, it.className), false))
+        }
+    }
+
+    private fun fillCollections(desc: CustomEntityDescription) {
+        desc.collections.values.forEach {
+            addCollection(SerializableCollectionDescription(it.id, CommonSerializationUtils.toSerializableType(it.elementType), CommonSerializationUtils.toClassName(it.elementType, it.elementClassName), false))
+        }
     }
 
     private fun fillCollections(desc: VSEntityDescription) {
@@ -123,11 +186,13 @@ internal class VSEntityMetadataProvider(description: VSEntityDescription) : Obje
     }
 
     private fun isAbstractClass(elementClassName: String?): Boolean {
-        if (elementClassName == BaseVM::class.qualifiedName) {
-            return true
+        if(elementClassName != null){
+            val ett = CustomMetaRegistry.get().entities[elementClassName]
+            if(ett != null){
+                return ett.isAbstract
+            }
         }
         return false
-
     }
 
     private fun toClassName(elementType: VSPropertyType, elementClassName: String?): String? {
@@ -180,9 +245,35 @@ internal class VSEntityMetadataProvider(description: VSEntityDescription) : Obje
 internal class VVEntityMetadataProvider(description: VVEntityDescription) : ObjectMetadataProvider<BaseVV>() {
 
     init {
+        var extendsId = description.extendsId
+        while (extendsId != null) {
+            val parentDescr = UiMetaRegistry.get().viewValidations[extendsId]
+            extendsId = if(parentDescr != null){
+                fillProperties(parentDescr)
+                fillCollections(parentDescr)
+                parentDescr.extendsId
+            } else {
+                val customDescr = CustomMetaRegistry.get().entities[extendsId]!!
+                fillProperties(customDescr)
+                fillCollections(customDescr)
+                customDescr.extendsId
+            }
+        }
         fillProperties(description)
         fillCollections(description)
         isAbstract = false
+    }
+
+    private fun fillProperties(desc: CustomEntityDescription) {
+        desc.properties.values.forEach {
+            addProperty(SerializablePropertyDescription(it.id, CommonSerializationUtils.toSerializableType(it.type), CommonSerializationUtils.toClassName(it.type, it.className), false))
+        }
+    }
+
+    private fun fillCollections(desc: CustomEntityDescription) {
+        desc.collections.values.forEach {
+            addCollection(SerializableCollectionDescription(it.id, CommonSerializationUtils.toSerializableType(it.elementType), CommonSerializationUtils.toClassName(it.elementType, it.elementClassName), false))
+        }
     }
 
     private fun fillCollections(desc: VVEntityDescription) {
@@ -210,8 +301,11 @@ internal class VVEntityMetadataProvider(description: VVEntityDescription) : Obje
     }
 
     private fun isAbstractClass(elementClassName: String?): Boolean {
-        if (elementClassName == BaseVM::class.qualifiedName) {
-            return true
+        if(elementClassName != null){
+            val ett = CustomMetaRegistry.get().entities[elementClassName]
+            if(ett != null){
+                return ett.isAbstract
+            }
         }
         return false
 

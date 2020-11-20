@@ -5,6 +5,8 @@
 
 package com.gridnine.jasmine.web.core.serialization
 
+import com.gridnine.jasmine.server.core.model.custom.CustomEntityDescriptionJS
+import com.gridnine.jasmine.server.core.model.custom.CustomMetaRegistryJS
 import com.gridnine.jasmine.server.core.model.domain.ObjectReferenceJS
 import com.gridnine.jasmine.server.core.model.ui.*
 
@@ -12,9 +14,37 @@ import com.gridnine.jasmine.server.core.model.ui.*
 internal class VMEntityMetadataProviderJS(description: VMEntityDescriptionJS) : ObjectMetadataProviderJS<BaseVMJS>() {
 
     init {
+        var extendsId = description.extendsId
+        while (extendsId != null) {
+            val parentDescr = UiMetaRegistryJS.get().viewModels[extendsId]
+            extendsId = if(parentDescr != null){
+                fillProperties(parentDescr)
+                fillCollections(parentDescr)
+                parentDescr.extendsId
+            } else {
+                val customDescr = CustomMetaRegistryJS.get().entities[extendsId]!!
+                fillProperties(customDescr)
+                fillCollections(customDescr)
+                customDescr.extendsId
+            }
+        }
         fillProperties(description)
         fillCollections(description)
         isAbstract = false
+    }
+
+    private fun fillProperties(desc: CustomEntityDescriptionJS) {
+        desc.properties.values.forEach {
+            addProperty(SerializablePropertyDescriptionJS(it.id, CommonSerializationUtilsJS.toSerializableType(it.type),
+                    CommonSerializationUtilsJS.toClassName(it.type, it.className), false))
+        }
+    }
+
+    private fun fillCollections(desc: CustomEntityDescriptionJS) {
+        desc.collections.values.forEach {
+            addCollection(SerializableCollectionDescriptionJS(it.id, CommonSerializationUtilsJS.toSerializableType(it.elementType),
+                    CommonSerializationUtilsJS.toClassName(it.elementType, it.elementClassName), false))
+        }
     }
 
     private fun fillCollections(desc: VMEntityDescriptionJS) {
@@ -89,9 +119,37 @@ internal class VMEntityMetadataProviderJS(description: VMEntityDescriptionJS) : 
 internal class VSEntityMetadataProviderJS(description: VSEntityDescriptionJS) : ObjectMetadataProviderJS<BaseVSJS>() {
 
     init {
+        var extendsId = description.extendsId
+        while (extendsId != null) {
+            val parentDescr = UiMetaRegistryJS.get().viewSettings[extendsId]
+            extendsId = if(parentDescr != null){
+                fillProperties(parentDescr)
+                fillCollections(parentDescr)
+                parentDescr.extendsId
+            } else {
+                val customDescr = CustomMetaRegistryJS.get().entities[extendsId]!!
+                fillProperties(customDescr)
+                fillCollections(customDescr)
+                customDescr.extendsId
+            }
+        }
         fillProperties(description)
         fillCollections(description)
         isAbstract = false
+    }
+
+    private fun fillProperties(desc: CustomEntityDescriptionJS) {
+        desc.properties.values.forEach {
+            addProperty(SerializablePropertyDescriptionJS(it.id, CommonSerializationUtilsJS.toSerializableType(it.type),
+                    CommonSerializationUtilsJS.toClassName(it.type, it.className), false))
+        }
+    }
+
+    private fun fillCollections(desc: CustomEntityDescriptionJS) {
+        desc.collections.values.forEach {
+            addCollection(SerializableCollectionDescriptionJS(it.id, CommonSerializationUtilsJS.toSerializableType(it.elementType),
+                    CommonSerializationUtilsJS.toClassName(it.elementType, it.elementClassName), false))
+        }
     }
 
     private fun fillCollections(desc: VSEntityDescriptionJS) {
@@ -172,9 +230,37 @@ internal class VSEntityMetadataProviderJS(description: VSEntityDescriptionJS) : 
 internal class VVEntityMetadataProviderJS(description: VVEntityDescriptionJS) : ObjectMetadataProviderJS<BaseVVJS>() {
 
     init {
+        var extendsId = description.extendsId
+        while (extendsId != null) {
+            val parentDescr = UiMetaRegistryJS.get().viewValidations[extendsId]
+            extendsId = if(parentDescr != null){
+                fillProperties(parentDescr)
+                fillCollections(parentDescr)
+                parentDescr.extendsId
+            } else {
+                val customDescr = CustomMetaRegistryJS.get().entities[extendsId]!!
+                fillProperties(customDescr)
+                fillCollections(customDescr)
+                customDescr.extendsId
+            }
+        }
         fillProperties(description)
         fillCollections(description)
         isAbstract = false
+    }
+
+    private fun fillProperties(desc: CustomEntityDescriptionJS) {
+        desc.properties.values.forEach {
+            addProperty(SerializablePropertyDescriptionJS(it.id, CommonSerializationUtilsJS.toSerializableType(it.type),
+                    CommonSerializationUtilsJS.toClassName(it.type, it.className), false))
+        }
+    }
+
+    private fun fillCollections(desc: CustomEntityDescriptionJS) {
+        desc.collections.values.forEach {
+            addCollection(SerializableCollectionDescriptionJS(it.id, CommonSerializationUtilsJS.toSerializableType(it.elementType),
+                    CommonSerializationUtilsJS.toClassName(it.elementType, it.elementClassName), false))
+        }
     }
 
     private fun fillCollections(desc: VVEntityDescriptionJS) {
