@@ -8,11 +8,14 @@ package com.gridnine.jasmine.web.core.utils
 import com.gridnine.jasmine.server.standard.rest.MessageJS
 import com.gridnine.jasmine.server.standard.rest.MessageTypeJS
 import com.gridnine.jasmine.web.core.CoreWebMessagesJS
+import com.gridnine.jasmine.web.core.ui.DefaultUIParameters
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutCell
 import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutContainer
 import com.gridnine.jasmine.web.core.ui.components.WebLabel
+import com.gridnine.jasmine.web.core.ui.widgets.EnumValueWidget
+import com.gridnine.jasmine.web.core.ui.widgets.GridCellWidget
 import kotlin.reflect.KClass
 
 object UiUtils {
@@ -71,6 +74,33 @@ object UiUtils {
                 handler = {
                     it.close()
                     action.invoke()
+                }
+            }
+            cancelButton()
+        }
+    }
+
+    fun<E:Enum<E>> choseVariant(cls:KClass<E>, aTitle:String = CoreWebMessagesJS.ChoseVariant, action: (E)->Unit){
+        val layout = UiLibraryAdapter.get().createGridLayoutContainer(null){
+            uid = "choseDialog"
+        }
+        layout.defineColumn("auto")
+        layout.addRow()
+        val widget = EnumValueWidget<E>(layout){
+            width = DefaultUIParameters.controlWidthAsString
+            allowNull = false
+            enumClass = cls
+        }
+        layout.addCell(WebGridLayoutCell(widget))
+        UiLibraryAdapter.get().showDialog<WebGridLayoutContainer>(null){
+            title = aTitle
+            editor = layout
+            button {
+                displayName = CoreWebMessagesJS.YES
+                handler = {
+                    val selectedValue = widget.getValue()!!
+                    it.close()
+                    action.invoke(selectedValue)
                 }
             }
             cancelButton()

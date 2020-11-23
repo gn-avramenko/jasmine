@@ -90,7 +90,7 @@ class JsonSerializerJS {
                     SerializablePropertyTypeJS.BYTE_ARRAY -> result[prop.id] = value as String
                     SerializablePropertyTypeJS.LOCAL_DATE_TIME -> result[prop.id] = dateTimeFormatter(value as Date)
                     SerializablePropertyTypeJS.LOCAL_DATE -> result[prop.id] = dateFormatter(value as Date)
-                    SerializablePropertyTypeJS.CLASS -> result[prop.id] = value as String
+                    SerializablePropertyTypeJS.CLASS -> result[prop.id] = clearClassName(value as String)
                 }
             }
         }
@@ -102,7 +102,7 @@ class JsonSerializerJS {
                 colls.withIndex().forEach { (idx, elm) ->
                     when (coll.elementType) {
                         SerializablePropertyTypeJS.STRING -> array[idx] = elm as String
-                        SerializablePropertyTypeJS.CLASS -> array[idx] = elm as String
+                        SerializablePropertyTypeJS.CLASS -> array[idx] = clearClassName(elm as String)
                         SerializablePropertyTypeJS.ENUM -> array[idx] = (elm as Enum<*>).name
                         SerializablePropertyTypeJS.ENTITY -> {
                             val ett = serialize(elm, coll.isAbstract, uids)

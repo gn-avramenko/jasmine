@@ -109,9 +109,9 @@ object UiMetadataParser {
                 descr
             }.firstOrNull()?.let {
                 val view = registry.views[it.viewId]!!
-                viewModelEntity.properties["overview"] = VMPropertyDescription("overview", VMPropertyType.ENTITY, "${it.viewId}VM", false, true)
-                viewSettingsEntity.properties["overview"] = VSPropertyDescription("overview", VSPropertyType.ENTITY, "${it.viewId}VS", true)
-                viewValidationEntity.properties["overview"] = VVPropertyDescription("overview", VVPropertyType.ENTITY, "${it.viewId}VV", true)
+                viewModelEntity.properties["overview"] = VMPropertyDescription("overview", VMPropertyType.ENTITY, "${it.viewId}VM", false, false)
+                viewSettingsEntity.properties["overview"] = VSPropertyDescription("overview", VSPropertyType.ENTITY, "${it.viewId}VS", false)
+                viewValidationEntity.properties["overview"] = VVPropertyDescription("overview", VVPropertyType.ENTITY, "${it.viewId}VV", false)
                 it
             }
             val res = registry.views.getOrPut(id, {

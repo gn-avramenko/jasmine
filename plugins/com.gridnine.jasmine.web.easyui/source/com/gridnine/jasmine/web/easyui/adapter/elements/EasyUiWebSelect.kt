@@ -64,11 +64,11 @@ class EasyUiWebSelect(private val parent: WebComponent?, configure: WebSelectCon
         if (!initialized) {
             return selectedValues
         }
-        val data = jq.select2("data")
+        val data = jq.select2("val")
         return if (multiple) {
-            (data as Array<*>).map { it.asDynamic() }.map { toSelectItem(it.id) }
+            (data as Array<*>).map {  toSelectItem(it as String) }
         } else {
-            if (data == null) emptyList() else arrayListOf(toSelectItem(data.id))
+            if (data == null) emptyList() else arrayListOf(toSelectItem(data))
         }
     }
 

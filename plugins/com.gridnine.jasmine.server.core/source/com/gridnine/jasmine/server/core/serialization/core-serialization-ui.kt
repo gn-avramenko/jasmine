@@ -5,6 +5,7 @@
 
 package com.gridnine.jasmine.server.core.serialization
 
+import com.gridnine.jasmine.server.core.model.common.BaseIdentity
 import com.gridnine.jasmine.server.core.model.custom.CustomEntityDescription
 import com.gridnine.jasmine.server.core.model.custom.CustomMetaRegistry
 import com.gridnine.jasmine.server.core.model.custom.CustomType
@@ -128,6 +129,7 @@ internal class VMEntityMetadataProvider(description: VMEntityDescription) : Obje
 
 
 internal class VSEntityMetadataProvider(description: VSEntityDescription) : ObjectMetadataProvider<BaseVS>() {
+
 
     init {
         var extendsId = description.extendsId

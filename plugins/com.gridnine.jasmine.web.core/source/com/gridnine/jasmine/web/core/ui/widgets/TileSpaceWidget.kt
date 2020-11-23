@@ -13,7 +13,6 @@ import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.WebEditor
 import com.gridnine.jasmine.web.core.ui.components.*
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
-import kotlin.browser.window
 
 open class TileSpaceWidget<VM:BaseVMJS, VS:BaseVSJS, VV:BaseVVJS>(aParent:WebComponent?, configure:TileSpaceWidgetConfiguration<VM>.(widget:TileSpaceWidget<VM, VS, VV>)->Unit) :WebEditor<VM,VS,VV>{
     private val parent = aParent
@@ -60,6 +59,7 @@ open class TileSpaceWidget<VM:BaseVMJS, VS:BaseVSJS, VV:BaseVVJS>(aParent:WebCom
 
     override fun getData(): VM {
         val vm = configuration.vmFactory.invoke()
+
         tilesEditors.entries.forEach {
             vm.setValue(it.key, it.value.getData())
         }

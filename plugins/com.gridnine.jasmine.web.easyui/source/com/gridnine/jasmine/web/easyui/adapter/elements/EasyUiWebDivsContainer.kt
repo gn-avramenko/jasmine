@@ -58,7 +58,6 @@ class EasyUiWebDivsContainer(private val parent:WebComponent?, configure:WebDivs
 
     override fun removeDiv(id: String) {
         divsMap[id]?.let {
-            it.jq.hide()
             if(it.jq != null){
                 it.content.destroy()
                 it.jq.remove()

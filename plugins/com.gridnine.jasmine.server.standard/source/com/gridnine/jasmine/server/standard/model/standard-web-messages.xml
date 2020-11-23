@@ -28,6 +28,7 @@
     <message id="areYouSureToDelete"/>
     <message id="question"/>
     <message id="objectsDeleted"/>
+    <message id="ChoseVariant"/>
 </messages-bundle>
 
 

@@ -76,7 +76,7 @@ class JsonSerializer : Disposable {
                 BaseIdentity.uid ->{
                     parser.nextToken()
                     uid = parser.text
-                    if(ObjectReference::class.qualifiedName != realClassName){
+                    if(provider.hasUid() && ObjectReference::class.qualifiedName != realClassName){
                         val existingObject = ctx[uid]
                         if(existingObject != null && existingObject !is ObjectReference<*>){
                             return existingObject as T
@@ -96,7 +96,7 @@ class JsonSerializer : Disposable {
                             if(uid != null && result !is ObjectReference<*>) {
                                 ctx.putIfAbsent(uid, result)
                             }
-                        } else if (result is ObjectReference<*>){
+                        } else if (uid != null){
                             provider.setPropertyValue(result, BaseIdentity.uid, uid)
                         }
                     }
@@ -211,7 +211,6 @@ class JsonSerializer : Disposable {
             key = key.substring(0, key.lastIndexOf("."))+"."+key.substringAfterLast("_Cached")
         }
         val provider = providersCache.getOrPut(key, { createProvider(key) }) as ObjectMetadataProvider<T>
-        generator.writeStartObject()
         if (provider.hasUid()) {
             val uid = provider.getPropertyValue(obj, "uid") as String?
             if (uid != null && obj !is ObjectReference<*>) {
@@ -222,6 +221,7 @@ class JsonSerializer : Disposable {
                 uids.add(uid)
             }
         }
+        generator.writeStartObject()
         if (isAbstract) {
             generator.writeStringField(CLASS_NAME_PROPERTY, key)
         }

@@ -68,6 +68,13 @@ open class NavigatorWidget<VM: BaseVMJS, VS: BaseVSJS, VV: BaseVVJS>(private val
                 }
             }
         }
+        addButton.setHandler {
+            addHandler?.let {handler ->
+                select.getValue()?.id?.let{
+                    handler.invoke()
+                }
+            }
+        }
     }
 
     fun removeTab(id:String){
@@ -81,6 +88,17 @@ open class NavigatorWidget<VM: BaseVMJS, VS: BaseVSJS, VV: BaseVVJS>(private val
                 select.setValue(pv)
             }
         }
+    }
+
+    fun<VM:BaseNavigatorVariantVMJS, VS:BaseNavigatorVariantVSJS> addTab(vm:VM, vs:VS){
+        val itemEditor = config.factories[vm::class]!!.invoke().unsafeCast<WebEditor<VM,VS,*>>()
+        divsContainer.addDiv(vm.uid, itemEditor)
+        itemEditor.readData(vm, vs)
+        val newValue = SelectItemJS(vm.uid, vm.title)
+        possibleValues.add(newValue)
+        divsContainer.show(vm.uid)
+        select.setPossibleValues(possibleValues)
+        select.setValue(newValue)
     }
 
     override fun getParent(): WebComponent? {
@@ -115,6 +133,10 @@ open class NavigatorWidget<VM: BaseVMJS, VS: BaseVSJS, VV: BaseVVJS>(private val
     fun setRemoveHandler(value:((WebEditor<*,*,*>) ->Unit)? ){
         removeHandler = value
     }
+    fun setAddHandler(value:(() ->Unit)? ){
+        addHandler = value
+    }
+
 
     override fun readData(vm: VM, vs: VS) {
         val vsColls = vs.getCollection("values") as Collection<BaseNavigatorVariantVSJS>
@@ -140,7 +162,10 @@ open class NavigatorWidget<VM: BaseVMJS, VS: BaseVSJS, VV: BaseVVJS>(private val
         }
         possibleValues.clear()
         possibleValues.addAll(selectValues)
-        val navigateValue = select.getValue()?:(if(possibleValues.isNotEmpty()) possibleValues[0] else null)
+        val previouslySelectedValue = select.getValue()
+        val navigateValue = if(previouslySelectedValue != null && possibleValues.contains(previouslySelectedValue)) previouslySelectedValue
+        else if(possibleValues.isNotEmpty()) possibleValues[0]
+        else null
         navigateValue?.let { divsContainer.show(it.id) }
         select.setPossibleValues(possibleValues)
         select.setValue(navigateValue)

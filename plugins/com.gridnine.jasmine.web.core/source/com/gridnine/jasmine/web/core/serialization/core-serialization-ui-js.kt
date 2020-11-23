@@ -36,16 +36,18 @@ internal class VMEntityMetadataProviderJS(description: VMEntityDescriptionJS) : 
     private fun fillProperties(desc: CustomEntityDescriptionJS) {
         desc.properties.values.forEach {
             addProperty(SerializablePropertyDescriptionJS(it.id, CommonSerializationUtilsJS.toSerializableType(it.type),
-                    CommonSerializationUtilsJS.toClassName(it.type, it.className), false))
+                    CommonSerializationUtilsJS.toClassName(it.type, it.className), isAbstractClass(it.className)))
         }
     }
 
     private fun fillCollections(desc: CustomEntityDescriptionJS) {
         desc.collections.values.forEach {
             addCollection(SerializableCollectionDescriptionJS(it.id, CommonSerializationUtilsJS.toSerializableType(it.elementType),
-                    CommonSerializationUtilsJS.toClassName(it.elementType, it.elementClassName), false))
+                    CommonSerializationUtilsJS.toClassName(it.elementType, it.elementClassName), isAbstractClass(it.elementClassName)))
         }
     }
+
+
 
     private fun fillCollections(desc: VMEntityDescriptionJS) {
         desc.collections.values.forEach {
@@ -72,6 +74,12 @@ internal class VMEntityMetadataProviderJS(description: VMEntityDescriptionJS) : 
     }
 
     private fun isAbstractClass(elementClassName: String?): Boolean {
+        if(elementClassName != null){
+            val ett = CustomMetaRegistryJS.get().entities[elementClassName]
+            if(ett != null){
+                return ett.isAbstract
+            }
+        }
         return false
     }
 
@@ -117,7 +125,6 @@ internal class VMEntityMetadataProviderJS(description: VMEntityDescriptionJS) : 
 
 
 internal class VSEntityMetadataProviderJS(description: VSEntityDescriptionJS) : ObjectMetadataProviderJS<BaseVSJS>() {
-
     init {
         var extendsId = description.extendsId
         while (extendsId != null) {
@@ -228,7 +235,6 @@ internal class VSEntityMetadataProviderJS(description: VSEntityDescriptionJS) : 
 }
 
 internal class VVEntityMetadataProviderJS(description: VVEntityDescriptionJS) : ObjectMetadataProviderJS<BaseVVJS>() {
-
     init {
         var extendsId = description.extendsId
         while (extendsId != null) {

@@ -19,7 +19,15 @@ interface WebSelect:WebComponent{
     fun setChangeListener(value:((List<SelectItemJS>) ->Unit)?)
 }
 
-data class SelectItemJS(val id:String, val text:String)
+data class SelectItemJS(val id:String, val text:String){
+    override fun equals(other: Any?): Boolean {
+        return other is SelectItemJS && other.id == id
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+}
 
 enum class SelectDataType{
     LOCAL,
