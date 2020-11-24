@@ -96,7 +96,7 @@
                                     <complexType>
                                         <group ref="tns:widget"/>
                                         <attribute name="col-span" type="int" default="1"/>
-                                        <attribute name="caption" type="string" use="required"/>
+                                        <attribute name="caption" type="string"/>
                                         <attribute name="id" type="string" use="required"/>
                                     </complexType>
                                 </element>
@@ -199,6 +199,27 @@
                 <complexType>
                     <complexContent>
                         <extension base="tns:baseWidget">
+                        </extension>
+                    </complexContent>
+                </complexType>
+            </element>
+            <element name="table-box">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:baseWidget">
+                            <sequence>
+                                <element name="column" minOccurs="1" maxOccurs="unbounded">
+                                    <complexType>
+                                        <sequence>
+                                            <group ref="tns:widget"/>
+                                        </sequence>
+                                        <attribute name="caption" type="string"/>
+                                        <attribute name="pref-width" type="string"/>
+                                        <attribute name="id" use="required"/>
+                                    </complexType>
+                                </element>
+                            </sequence>
+                            <attribute name="id" use="required"/>
                         </extension>
                     </complexContent>
                 </complexType>

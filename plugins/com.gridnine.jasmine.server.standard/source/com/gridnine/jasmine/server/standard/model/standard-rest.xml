@@ -199,6 +199,7 @@
     </entity>
 
     <enum id="com.gridnine.jasmine.server.standard.model.rest.VSPropertyTypeDT">
+        <enum-item id="STRING"/>
         <enum-item id="TEXT_BOX_SETTINGS"/>
         <enum-item id="PASSWORD_BOX_SETTINGS"/>
         <enum-item id="ENTITY"/>

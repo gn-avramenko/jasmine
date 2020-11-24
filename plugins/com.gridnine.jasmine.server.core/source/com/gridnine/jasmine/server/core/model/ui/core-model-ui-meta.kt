@@ -52,6 +52,7 @@ class VMEntityDescription(id: String) : BaseUiElementDescription(id) {
 }
 
 enum class VSPropertyType {
+    STRING,
     ENTITY,
     TEXT_BOX_SETTINGS,
     PASSWORD_BOX_SETTINGS,
@@ -131,6 +132,12 @@ class DateBoxWidgetDescription(notEditable:Boolean):BaseWidgetDescription(notEdi
 
 class DateTimeBoxWidgetDescription(notEditable:Boolean):BaseWidgetDescription(notEditable, WidgetType.DATE_TIME_BOX)
 
+class TableColumnDescription(id:String, val prefWidth:String?, val widget:BaseWidgetDescription ):BaseModelElementDescription(id)
+
+class TableBoxWidgetDescription(val id:String, notEditable: Boolean):BaseWidgetDescription(notEditable, WidgetType.TABLE_BOX){
+    val columns = arrayListOf<TableColumnDescription>()
+}
+
 enum class WidgetType{
     TEXT_BOX,
     PASSWORD_BOX,
@@ -140,7 +147,8 @@ enum class WidgetType{
     ENTITY_SELECT_BOX,
     ENUM_SELECT_BOX,
     DATE_BOX,
-    DATE_TIME_BOX
+    DATE_TIME_BOX,
+    TABLE_BOX
 }
 abstract class BaseWidgetDescription(val notEditable:Boolean, val widgetType:WidgetType)
 
@@ -152,7 +160,7 @@ enum class ViewType{
 
 abstract class BaseViewDescription(val id:String,val viewType:ViewType)
 
-class GridContainerCellDescription(id:String, val caption:String, val colSpan:Int):BaseModelElementDescription(id){
+class GridContainerCellDescription(id:String, val caption:String?, val colSpan:Int):BaseModelElementDescription(id){
     lateinit var widget:BaseWidgetDescription
 }
 

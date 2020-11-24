@@ -7,6 +7,7 @@
 package com.gridnine.jasmine.server.core.model.ui
 
 
+import com.gridnine.jasmine.server.core.model.common.BaseIdentity
 import com.gridnine.jasmine.server.core.model.common.ParserUtils
 import com.gridnine.jasmine.server.core.model.common.Xeption
 import com.gridnine.jasmine.server.core.utils.XmlNode
@@ -77,15 +78,19 @@ object UiMetadataParser {
                 gridContainer.rows.add(row)
                 rowElm.children("cell").forEach { cellElm ->
                     val cell = GridContainerCellDescription(ParserUtils.getIdAttribute(cellElm),
-                            ParserUtils.getCaptionAttribute(cellElm), ParserUtils.getIntegerAttribute(cellElm, "col-span")
+                            cellElm.attributes["caption"], ParserUtils.getIntegerAttribute(cellElm, "col-span")
                             ?: 1)
-                    ParserUtils.updateLocalizations(cell, localizations, cell.caption)
+                    cell.caption?.let {  ParserUtils.updateLocalizations(cell, localizations, it)}
                     row.cells.add(cell)
-                    val widgetData = parseWidgetData(cellElm.children[0], cell.id)
+                    val widgetData = parseWidgetData(cellElm.children[0], cell.id, registry, localizations)
                     cell.widget = widgetData.widget
-                    viewModelEntity.properties[widgetData.vmPropertyDescription.id] = widgetData.vmPropertyDescription
-                    viewSettingsEntity.properties[widgetData.vsPropertyDescription.id] = widgetData.vsPropertyDescription
-                    viewValidationEntity.properties[widgetData.vvPropertyDescription.id] = widgetData.vvPropertyDescription
+                    widgetData.vmPropertyDescription?.let{viewModelEntity.properties[it.id] = it}
+                    widgetData.vsPropertyDescription?.let{viewSettingsEntity.properties[it.id] = it}
+                    widgetData.vvPropertyDescription?.let{viewValidationEntity.properties[it.id] = it}
+                    widgetData.vmCollectionDescription?.let{viewModelEntity.collections[it.id] = it}
+                    widgetData.vsCollectionDescription?.let{viewSettingsEntity.collections[it.id] = it}
+                    widgetData.vvCollectionDescription?.let{viewValidationEntity.collections[it.id] = it}
+
                 }
             }
         }
@@ -172,14 +177,14 @@ object UiMetadataParser {
     }
 
 
-    private fun parseWidgetData(xmlNode: XmlNode, id: String): WidgetParsingData {
+    private fun parseWidgetData(xmlNode: XmlNode, id: String, registry: UiMetaRegistry, localizations: Map<String, Map<Locale, String>>): WidgetParsingData {
         return when (xmlNode.name) {
             "text-box" -> {
                 val widget = TextBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable") ?: false)
                 val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.STRING, null, false, false)
                 val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.TEXT_BOX_SETTINGS, null, false)
                 val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
-                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription)
+                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription, null, null, null)
             }
             "password-box" -> {
                 val widget = PasswordBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
@@ -187,7 +192,7 @@ object UiMetadataParser {
                 val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.STRING, null, false,false)
                 val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.PASSWORD_BOX_SETTINGS, null, false)
                 val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
-                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription)
+                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription, null, null, null)
             }
             "float-number-box" -> {
                 val widget = FloatNumberBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
@@ -195,7 +200,7 @@ object UiMetadataParser {
                 val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.BIG_DECIMAL, null, false,false)
                 val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.FLOAT_NUMBER_BOX_SETTINGS, null, false)
                 val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
-                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription)
+                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription, null, null, null)
             }
             "integer-number-box" -> {
                 val widget = IntegerNumberBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
@@ -203,7 +208,7 @@ object UiMetadataParser {
                 val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.INT, null, widget.nonNullable,false)
                 val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.INTEGER_NUMBER_BOX_SETTINGS, null, false)
                 val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
-                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription)
+                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription, null, null, null)
             }
             "boolean-box" -> {
                 val widget = BooleanBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
@@ -211,7 +216,7 @@ object UiMetadataParser {
                 val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.BOOLEAN, null, true,false)
                 val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.BOOLEAN_BOX_SETTINGS, null, false)
                 val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
-                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription)
+                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription, null, null, null)
             }
             "entity-select-box" -> {
                 val widget = EntitySelectBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
@@ -219,7 +224,7 @@ object UiMetadataParser {
                 val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.ENTITY_REFERENCE, widget.objectId, false,false)
                 val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.ENTITY_SELECT_BOX_SETTINGS, null, false)
                 val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
-                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription)
+                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription, null, null, null)
             }
             "enum-select-box" -> {
                 val widget = EnumSelectBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
@@ -227,7 +232,7 @@ object UiMetadataParser {
                 val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.ENUM, widget.enumId, false,false)
                 val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.ENUM_SELECT_BOX_SETTINGS, null, false)
                 val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
-                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription)
+                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription, null, null, null)
             }
             "date-box" -> {
                 val widget = DateBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
@@ -235,7 +240,7 @@ object UiMetadataParser {
                 val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.LOCAL_DATE, null, false,false)
                 val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.DATE_BOX_SETTINGS, null, false)
                 val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
-                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription)
+                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription, null, null, null)
             }
             "date-time-box" -> {
                 val widget = DateTimeBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
@@ -243,11 +248,42 @@ object UiMetadataParser {
                 val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.LOCAL_DATE_TIME, null, false,false)
                 val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.DATE_TIME_BOX_SETTINGS, null, false)
                 val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
-                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription)
+                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription, null, null, null)
+            }
+            "table-box" -> {
+                val widget = TableBoxWidgetDescription(ParserUtils.getIdAttribute(xmlNode), ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
+                        ?: false)
+                val viewModelId = "${widget.id}VM"
+                val viewModelEntity = registry.viewModels.getOrPut(viewModelId, { VMEntityDescription(viewModelId) })
+                val viewSettigsId = "${widget.id}VS"
+                val viewSettingsEntity = registry.viewSettings.getOrPut(viewSettigsId, { VSEntityDescription(viewSettigsId) })
+                val viewValidationId = "${widget.id}VV"
+                val viewValidationEntity = registry.viewValidations.getOrPut(viewValidationId, { VVEntityDescription(viewValidationId) })
+                viewModelEntity.properties[BaseIdentity.uid] = VMPropertyDescription(BaseIdentity.uid, VMPropertyType.STRING, null, false, true)
+                viewSettingsEntity.properties[BaseIdentity.uid] = VSPropertyDescription(BaseIdentity.uid, VSPropertyType.STRING, null, true)
+                viewValidationEntity.properties[BaseIdentity.uid] = VVPropertyDescription(BaseIdentity.uid, VVPropertyType.STRING, null, true)
+                xmlNode.children("column").forEach { columnElm ->
+                    val columnId =  ParserUtils.getIdAttribute(columnElm)
+                    val widgetData = parseWidgetData(columnElm.children[0], columnId, registry, localizations)
+                    widgetData.vmPropertyDescription?.let{viewModelEntity.properties[it.id] = it}
+                    widgetData.vsPropertyDescription?.let{viewSettingsEntity.properties[it.id] = it}
+                    widgetData.vvPropertyDescription?.let{viewValidationEntity.properties[it.id] = it}
+                    widgetData.vmCollectionDescription?.let{viewModelEntity.collections[it.id] = it}
+                    widgetData.vsCollectionDescription?.let{viewSettingsEntity.collections[it.id] = it}
+                    widgetData.vvCollectionDescription?.let{viewValidationEntity.collections[it.id] = it}
+                    val columnDescription = TableColumnDescription(columnId, columnElm.attributes["pref-width"], widgetData.widget)
+                    ParserUtils.updateLocalizations(columnDescription, localizations, ParserUtils.getCaptionAttribute(columnElm))
+                    widget.columns.add(columnDescription)
+                }
+                val vmCollectionDescription = VMCollectionDescription(id, VMCollectionType.ENTITY, "${widget.id}VM")
+                val vsCollectionDescription = VSCollectionDescription(id, VSCollectionType.ENTITY, "${widget.id}VS")
+                val vvCollectionDescription = VVCollectionDescription(id, VVCollectionType.ENTITY, "${widget.id}VV")
+                WidgetParsingData(widget, null, null, null, vmCollectionDescription,vsCollectionDescription, vvCollectionDescription)
             }
             else -> throw IllegalArgumentException("unsupported element name ${xmlNode.name}")
         }
     }
 
-    data class WidgetParsingData(val widget: BaseWidgetDescription, val vmPropertyDescription: VMPropertyDescription, val vsPropertyDescription: VSPropertyDescription, val vvPropertyDescription: VVPropertyDescription)
+    data class WidgetParsingData(val widget: BaseWidgetDescription, val vmPropertyDescription: VMPropertyDescription?, val vsPropertyDescription: VSPropertyDescription?, val vvPropertyDescription: VVPropertyDescription?
+                                 , val vmCollectionDescription: VMCollectionDescription?, val vsCollectionDescription: VSCollectionDescription?, val vvCollectionDescription: VVCollectionDescription?)
 }

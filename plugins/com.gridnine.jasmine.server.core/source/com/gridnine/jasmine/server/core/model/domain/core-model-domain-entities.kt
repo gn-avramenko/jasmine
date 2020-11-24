@@ -6,6 +6,7 @@
 package com.gridnine.jasmine.server.core.model.domain
 
 import com.gridnine.jasmine.server.core.model.common.BaseIdentity
+import com.gridnine.jasmine.server.core.model.common.BaseIntrospectableObject
 import kotlin.reflect.KClass
 
 

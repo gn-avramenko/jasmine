@@ -86,6 +86,7 @@ object UiWebGenerator {
             VSPropertyType.ENUM_SELECT_BOX_SETTINGS -> "${EnumSelectBoxConfiguration::class.qualifiedName}JS"
             VSPropertyType.DATE_BOX_SETTINGS -> "${DateBoxConfiguration::class.qualifiedName}JS"
             VSPropertyType.DATE_TIME_BOX_SETTINGS -> "${DateTimeBoxConfiguration::class.qualifiedName}JS"
+            VSPropertyType.STRING -> null
         }
     }
 
@@ -101,6 +102,7 @@ object UiWebGenerator {
             VSPropertyType.ENUM_SELECT_BOX_SETTINGS -> GenPropertyType.ENTITY
             VSPropertyType.DATE_BOX_SETTINGS -> GenPropertyType.ENTITY
             VSPropertyType.DATE_TIME_BOX_SETTINGS -> GenPropertyType.ENTITY
+            VSPropertyType.STRING -> GenPropertyType.STRING
         }
     }
 

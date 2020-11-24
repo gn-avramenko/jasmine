@@ -12,10 +12,7 @@ import com.gridnine.jasmine.server.core.model.domain.*
 import com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistry
 import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistry
 import com.gridnine.jasmine.server.core.model.rest.RestPropertyType
-import com.gridnine.jasmine.server.core.model.ui.GridContainerDescription
-import com.gridnine.jasmine.server.core.model.ui.TileSpaceDescription
-import com.gridnine.jasmine.server.core.model.ui.UiMetaRegistry
-import com.gridnine.jasmine.server.core.model.ui.ViewType
+import com.gridnine.jasmine.server.core.model.ui.*
 import com.gridnine.jasmine.server.core.rest.RestHandler
 import com.gridnine.jasmine.server.core.rest.RestOperationContext
 import com.gridnine.jasmine.server.standard.model.custom.*
@@ -257,6 +254,18 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
                             message.id = cell.id
                             message.displayName = cell.getDisplayName()
                             bundle.messages.add(message)
+                            val widget = cell.widget
+                            if(widget is TableBoxWidgetDescription){
+                                val bundle2 = WebMessagesBundleDT()
+                                bundle2.id = widget.id
+                                result.webMessages.add(bundle2)
+                                widget.columns.forEach{column ->
+                                    val message2 = WebMessageDT()
+                                    message2.id = column.id
+                                    message2.displayName = column.getDisplayName()
+                                    bundle2.messages.add(message2)
+                                }
+                            }
                         }
                     }
                 }
