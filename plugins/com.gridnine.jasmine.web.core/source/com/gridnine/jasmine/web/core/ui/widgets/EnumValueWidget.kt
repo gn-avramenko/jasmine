@@ -25,7 +25,7 @@ class EnumValueWidget<E:Enum<E>>(aParent:WebComponent, configure:EnumValueWidget
         (parent.getChildren() as MutableList<WebComponent>).add(this)
         val conf = EnumValueWidgetConfiguration<E>();
         conf.configure()
-        className = ReflectionFactoryJS.get().getQualifiedClassName(conf.enumClass)
+        className = conf.enumClassName?:ReflectionFactoryJS.get().getQualifiedClassName(conf.enumClass)
         delegate = UiLibraryAdapter.get().createSelect(this){
             width = conf.width
             height = conf.height
@@ -110,4 +110,5 @@ class EnumValueWidgetConfiguration<E:Enum<E>>{
     var height:String? = null
     var allowNull = true
     lateinit var enumClass: KClass<E>
+    var enumClassName:String? = null
 }

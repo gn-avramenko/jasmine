@@ -148,6 +148,10 @@ class EasyUiLibraryAdapter:UiLibraryAdapter {
         return EasyUiWebBooleanBox(parent, configure)
     }
 
+    override fun createTableBox(parent: WebComponent?, configure: WebTableBoxConfiguration.() -> Unit): WebTableBox {
+        return EasyUiWebTableBox(parent, configure)
+    }
+
     override fun showLoader() {
         jQuery.messager.progress()
 

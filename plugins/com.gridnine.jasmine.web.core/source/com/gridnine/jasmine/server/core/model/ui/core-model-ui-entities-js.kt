@@ -150,3 +150,57 @@ abstract class BaseNavigatorVariantVVJS:BaseVVJS(){
         super.setValue(propertyName, value)
     }
 }
+
+abstract class BaseTableBoxVMJS:BaseVMJS(){
+    lateinit var uid:String
+    override fun getValue(propertyName: String): Any? {
+        if("uid" == propertyName){
+            return uid
+        }
+        return super.getValue(propertyName)
+    }
+
+    override fun setValue(propertyName: String, value: Any?) {
+        if("uid" == propertyName){
+            uid = value as String
+            return
+        }
+        super.setValue(propertyName, value)
+    }
+}
+
+abstract class BaseTableBoxVSJS:BaseVSJS(){
+    lateinit var uid:String
+    override fun getValue(propertyName: String): Any? {
+        if("uid" == propertyName){
+            return uid
+        }
+        return super.getValue(propertyName)
+    }
+
+    override fun setValue(propertyName: String, value: Any?) {
+        if("uid" == propertyName){
+            uid = value as String
+            return
+        }
+        super.setValue(propertyName, value)
+    }
+}
+
+abstract class BaseTableBoxVVJS:BaseVVJS(){
+    lateinit var uid:String
+    override fun getValue(propertyName: String): Any? {
+        if("uid" == propertyName){
+            return uid
+        }
+        return super.getValue(propertyName)
+    }
+
+    override fun setValue(propertyName: String, value: Any?) {
+        if("uid" == propertyName){
+            uid = value as String
+            return
+        }
+        super.setValue(propertyName, value)
+    }
+}

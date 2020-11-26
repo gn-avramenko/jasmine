@@ -38,6 +38,7 @@ interface UiLibraryAdapter{
     fun createTilesContainer(parent: WebComponent?, configure:WebTilesContainerConfiguration.()->Unit):WebTilesContainer
     fun createDivsContainer(parent:WebComponent?, configure:WebDivsContainerConfiguration.()->Unit):WebDivsContainer
     fun createBooleanBox(parent:WebComponent?, configure:WebBooleanBoxConfiguration.()->Unit):WebBooleanBox
+    fun createTableBox(parent:WebComponent?, configure:WebTableBoxConfiguration.()->Unit):WebTableBox
     fun showLoader()
     fun hideLoader()
     fun showNotification(message:String, timeout:Int)
@@ -233,6 +234,7 @@ class DialogConfiguration<W>  where W:WebComponent, W:HasDivId{
         buttons.add(button)
     }
 }
+
 
 
 

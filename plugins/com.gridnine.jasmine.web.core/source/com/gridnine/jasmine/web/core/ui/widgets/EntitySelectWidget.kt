@@ -25,7 +25,7 @@ class EntitySelectWidget(private val parent:WebComponent, configure:EntitySelect
         delegate = UiLibraryAdapter.get().createGridLayoutContainer(this){
             width = conf.width
             height = conf.height
-
+            noPadding = true
         }
         delegate.defineColumn("100%")
         delegate.defineColumn("auto")

@@ -24,6 +24,7 @@ class WebGridLayoutContainerConfiguration{
     var uid = MiscUtilsJS.createUUID()
     var width:String? = null
     var height:String? = null
+    var noPadding = false
 }
 
 class WebGridLayoutColumnConfiguration(val width:String?)

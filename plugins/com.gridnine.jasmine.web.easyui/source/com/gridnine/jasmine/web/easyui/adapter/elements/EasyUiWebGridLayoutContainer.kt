@@ -27,12 +27,15 @@ class EasyUiWebGridLayoutContainer(private val parent:WebComponent?, configure:W
 
     private val uid:String
 
+    private val noPadding:Boolean
+
     init {
         (parent?.getChildren() as MutableList<WebComponent>?)?.add(this)
         val config = WebGridLayoutContainerConfiguration()
         config.configure()
         width = config.width
         height = config.height
+        noPadding = config.noPadding
         uid = config.uid
 
     }
@@ -73,23 +76,28 @@ class EasyUiWebGridLayoutContainer(private val parent:WebComponent?, configure:W
     }
 
     override fun getHtml(): String {
-        return HtmlUtilsJS.table(id ="gridLayout${uid}",style="${if(width != null) "width:$width" else ""};${if(height != null) "height:$height" else ""};") {
+        val table = HtmlUtilsJS.table(id ="gridLayout${uid}",style="${if(width != null) "width:$width" else ""};${if(height != null) "height:$height" else ""};") {
             tr {
                 columns.forEach {
-                    td (style="${if(it.width != null) "width:${it.width}" else ""};"){}
+                    td (`class` = "jasmine-grid-layout-td", style="${if(it.width != null) "width:${it.width}" else ""};"){}
                 }
             }
             rows.forEach {row ->
                 tr(style = if(row.config.height!=null) "height:${row.config.height}" else ""){
                     row.cells.forEach { cell ->
-                        td(hSpan = cell.columnSpan){
+                        td(`class` = "jasmine-grid-layout-td", hSpan = cell.columnSpan){
                             cell.comp?.let { text(it.getHtml())}
                         }
                     }
                 }
             }
-        }.toString()
-
+        }
+        if(noPadding) {
+            table.attributes["cellspacing"] = "0"
+            table.attributes["cellpadding"] = "0"
+            table.attributes["border"] = "0"
+        }
+        return table.toString()
     }
 
     override fun decorate() {

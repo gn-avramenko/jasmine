@@ -254,14 +254,23 @@ object UiMetadataParser {
                 val widget = TableBoxWidgetDescription(ParserUtils.getIdAttribute(xmlNode), ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
                         ?: false)
                 val viewModelId = "${widget.id}VM"
-                val viewModelEntity = registry.viewModels.getOrPut(viewModelId, { VMEntityDescription(viewModelId) })
+                val viewModelEntity = registry.viewModels.getOrPut(viewModelId, {
+                    val ett = VMEntityDescription(viewModelId)
+                    ett.extendsId = BaseTableBoxVM::class.qualifiedName
+                    ett
+                })
                 val viewSettigsId = "${widget.id}VS"
-                val viewSettingsEntity = registry.viewSettings.getOrPut(viewSettigsId, { VSEntityDescription(viewSettigsId) })
+                val viewSettingsEntity = registry.viewSettings.getOrPut(viewSettigsId, {
+                    val ett = VSEntityDescription(viewSettigsId)
+                    ett.extendsId = BaseTableBoxVS::class.qualifiedName
+                    ett
+                })
                 val viewValidationId = "${widget.id}VV"
-                val viewValidationEntity = registry.viewValidations.getOrPut(viewValidationId, { VVEntityDescription(viewValidationId) })
-                viewModelEntity.properties[BaseIdentity.uid] = VMPropertyDescription(BaseIdentity.uid, VMPropertyType.STRING, null, false, true)
-                viewSettingsEntity.properties[BaseIdentity.uid] = VSPropertyDescription(BaseIdentity.uid, VSPropertyType.STRING, null, true)
-                viewValidationEntity.properties[BaseIdentity.uid] = VVPropertyDescription(BaseIdentity.uid, VVPropertyType.STRING, null, true)
+                val viewValidationEntity = registry.viewValidations.getOrPut(viewValidationId, {
+                    val ett = VVEntityDescription(viewValidationId)
+                    ett.extendsId = BaseTableBoxVV::class.qualifiedName
+                    ett
+                })
                 xmlNode.children("column").forEach { columnElm ->
                     val columnId =  ParserUtils.getIdAttribute(columnElm)
                     val widgetData = parseWidgetData(columnElm.children[0], columnId, registry, localizations)
