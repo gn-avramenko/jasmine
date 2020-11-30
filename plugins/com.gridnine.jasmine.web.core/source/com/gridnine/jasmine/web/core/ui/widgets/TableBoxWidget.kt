@@ -9,28 +9,54 @@ import com.gridnine.jasmine.server.core.model.common.XeptionJS
 import com.gridnine.jasmine.server.core.model.domain.ObjectReferenceJS
 import com.gridnine.jasmine.server.core.model.ui.*
 import com.gridnine.jasmine.web.core.ui.*
-import com.gridnine.jasmine.web.core.ui.components.WebTableBox
-import com.gridnine.jasmine.web.core.ui.components.WebTableBoxRow
+import com.gridnine.jasmine.web.core.ui.components.*
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import kotlin.js.Date
 
 class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJS>(private val parent: WebComponent, configure:TableBoxWidgetConfiguration<VM,VS>.()->Unit):WebComponent{
-    private val delegate:WebTableBox
-    private val rowsAdditionalData = arrayListOf<TableBoxWidgetRowAdditionalData>()
+    internal val delegate:WebTableBox
+    internal val rowsAdditionalData = arrayListOf<TableBoxWidgetRowAdditionalData>()
     private val config = TableBoxWidgetConfiguration<VM,VS>()
+    private lateinit var createButton:WebLinkButton
     init {
         config.configure()
         delegate = UiLibraryAdapter.get().createTableBox(parent){
             width = config.width
             height = config.height
-            showHeader = true
-            showToolsColumn = config.showToolsColumn
-            toolsColumnMaxWidth = config.toolsColumnMaxWidth
-            config.columns.forEach { cell ->
-                headerCellsTitles.add(cell.title)
-                headerCellsWidths.add(cell.width)
+            config.columns.forEach {
+                val label = UiLibraryAdapter.get().createLabel(this@TableBoxWidget)
+                label.setWidth("100%")
+                label.setText(it.title)
+                headerComponents.add(label)
+                columnWidths.add(WebTableBoxColumnWidth(null,it.width?:100, null))
             }
+            createButton = UiLibraryAdapter.get().createLinkButton(this@TableBoxWidget){
+                icon="core:plus"
+            }
+            createButton.setHandler {
+                addRow(0)
+            }
+            headerComponents.add(createButton)
+            columnWidths.add(WebTableBoxColumnWidth(null,100, null))
         }
+    }
+
+    internal fun addRow(idx:Int){
+        val uuid = MiscUtilsJS.createUUID()
+        val rowId = MiscUtilsJS.createUUID()
+        val vm = config.vmFactory.invoke()
+        vm.uid = uuid
+        val vs = config.vsFactory.invoke()
+        vs.uid= uuid
+        val components = arrayListOf<WebComponent?>()
+        config.columns.withIndex().forEach {(collIdx, coll) ->
+            val comp = createWebComponent(coll.widgetDescription)
+            components.add(comp)
+        }
+        components.add(TableBoxWidgetToolsPanel(delegate, this@TableBoxWidget, rowId))
+        delegate.addRow(idx, components)
+        rowsAdditionalData.add(idx, TableBoxWidgetRowAdditionalData(uuid, rowId))
+        updateToolsVisibility()
     }
     override fun getParent(): WebComponent? {
         return parent
@@ -65,19 +91,39 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
         vm.withIndex().forEach{(idx, value) ->
             if(rowsAdditionalData.size> idx){
                 rowsAdditionalData[idx].uid = value.uid
-                val row = existingRows[idx]
-                row.components.withIndex().forEach { (compIdx, comp) ->
-                    setValue(comp, compIdx, value)
+                val components = existingRows[idx]
+                val size = components.size
+                components.withIndex().forEach { (compIdx, comp) ->
+                    if(compIdx < size -1) {
+                        setValue(comp!!, compIdx, value)
+                    }
                 }
             } else {
-                val components = arrayListOf<WebComponent>()
+                val components = arrayListOf<WebComponent?>()
                 config.columns.withIndex().forEach {(collIdx, coll) ->
                     val comp = createWebComponent(coll.widgetDescription)
                     setValue(comp, collIdx, value)
                     components.add(comp)
                 }
-                delegate.addRow(null, WebTableBoxRow(components, null))
-                rowsAdditionalData.add(TableBoxWidgetRowAdditionalData(value.uid, MiscUtilsJS.createUUID()))
+                val rowId = MiscUtilsJS.createUUID()
+                components.add(TableBoxWidgetToolsPanel(delegate, this@TableBoxWidget, rowId))
+                delegate.addRow(null, components)
+                rowsAdditionalData.add(TableBoxWidgetRowAdditionalData(value.uid, rowId))
+            }
+        }
+        updateToolsVisibility()
+    }
+
+    internal fun updateToolsVisibility(){
+        val rows = delegate.getRows()
+        val size = rows.size
+        rows.withIndex().forEach { (idx, row) ->
+            val comp = row.last()
+            if(comp is TableBoxWidgetToolsPanel){
+                comp.downButton.setEnabled(idx<size-1)
+                comp.upButton.setEnabled(idx>0)
+                comp.plusButton.setEnabled(true)
+                comp.minusButton.setEnabled(true)
             }
         }
     }
@@ -152,10 +198,9 @@ class TableBoxWidgetConfiguration<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS>{
     var height:String? = null
     val columns = arrayListOf<TableBoxWidgetColumnDescription>()
     var showToolsColumn = true
-    var toolsColumnMaxWidth:String? = null
     lateinit var vmFactory:()->VM
     lateinit var vsFactory:()->VS
-    fun column(id:String, widgetDescription:BaseWidgetDescriptionJS, title:String, width:String? = null){
+    fun column(id:String, widgetDescription:BaseWidgetDescriptionJS, title:String, width:Int? = null){
         val cell = TableBoxWidgetColumnDescription()
         cell.width = width
         cell.title = title
@@ -169,11 +214,88 @@ internal data class TableBoxWidgetRowAdditionalData(var uid:String, val id:Strin
 
 class TableBoxWidgetColumnDescription{
     lateinit var widgetDescription: BaseWidgetDescriptionJS
-    var width:String? = null
+    var width:Int? = null
     lateinit var title:String
     lateinit var id:String
 }
 
+class TableBoxWidgetToolsPanel(private val parent:WebComponent, private val tableBox:TableBoxWidget<*,*,*>, private val rowId:String): WebComponent{
+    internal val delegate:WebGridLayoutContainer
+    internal val upButton:WebLinkButton
+    internal val downButton:WebLinkButton
+    internal val plusButton:WebLinkButton
+    internal val minusButton:WebLinkButton
+    init {
+        delegate = UiLibraryAdapter.get().createGridLayoutContainer(this){
+            noPadding = true
+        }
+        delegate.defineColumn()
+        delegate.defineColumn()
+        delegate.defineColumn()
+        delegate.defineColumn()
+        delegate.addRow()
+        upButton = UiLibraryAdapter.get().createLinkButton(delegate){
+            icon = "core:up"
+        }
+        upButton.setHandler {
+            val idx = tableBox.rowsAdditionalData.indexOfFirst { rowId == it.id }!!
+            val item = tableBox.rowsAdditionalData.removeAt(idx)
+            tableBox.rowsAdditionalData.add(idx-1, item)
+            tableBox.delegate.moveRow(idx, idx-1)
+            tableBox.updateToolsVisibility()
+        }
+        delegate.addCell(WebGridLayoutCell(upButton))
+        downButton = UiLibraryAdapter.get().createLinkButton(delegate){
+            icon = "core:down"
+        }
+        downButton.setHandler {
+            val idx = tableBox.rowsAdditionalData.indexOfFirst { rowId == it.id }!!
+            val item = tableBox.rowsAdditionalData.removeAt(idx)
+            tableBox.rowsAdditionalData.add(idx+1, item)
+            tableBox.delegate.moveRow(idx, idx+1)
+            tableBox.updateToolsVisibility()
+        }
+        delegate.addCell(WebGridLayoutCell(downButton))
+        plusButton = UiLibraryAdapter.get().createLinkButton(delegate){
+            icon = "core:plus"
+        }
+        plusButton.setHandler {
+            val idx = tableBox.rowsAdditionalData.indexOfFirst { rowId == it.id }!!
+            tableBox.addRow(idx+1)
+        }
+        delegate.addCell(WebGridLayoutCell(plusButton))
+        minusButton = UiLibraryAdapter.get().createLinkButton(delegate){
+            icon = "core:minus"
+        }
+        minusButton.setHandler {
+            val idx = tableBox.rowsAdditionalData.indexOfFirst { rowId == it.id }!!
+            tableBox.rowsAdditionalData.removeAt(idx)
+            tableBox.delegate.removeRow(idx)
+            tableBox.updateToolsVisibility()
+        }
+        delegate.addCell(WebGridLayoutCell(minusButton))
+    }
+    override fun getParent(): WebComponent? {
+        return parent
+    }
+
+    override fun getChildren(): List<WebComponent> {
+        return arrayListOf(delegate)
+    }
+
+    override fun getHtml(): String {
+        return delegate.getHtml()
+    }
+
+    override fun decorate() {
+        delegate.decorate()
+    }
+
+    override fun destroy() {
+        delegate.destroy()
+    }
+
+}
 
 
 

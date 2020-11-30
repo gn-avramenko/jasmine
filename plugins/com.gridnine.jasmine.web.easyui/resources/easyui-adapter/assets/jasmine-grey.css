@@ -131,3 +131,11 @@ table-layout:fixed;
 .icon_core_minus{
     background: url('images/datagrid_icons.png') no-repeat -48px center;
 }
+
+.icon_core_up{
+    background: url('images/datagrid_icons.png') no-repeat 0px 0px;
+}
+
+.icon_core_down{
+    background: url('images/datagrid_icons.png') no-repeat -16px center;
+}
