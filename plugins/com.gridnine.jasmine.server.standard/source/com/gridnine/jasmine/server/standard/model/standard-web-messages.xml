@@ -29,6 +29,7 @@
     <message id="question"/>
     <message id="objectsDeleted"/>
     <message id="ChoseVariant"/>
+    <message id="Workspace"/>
 </messages-bundle>
 
 

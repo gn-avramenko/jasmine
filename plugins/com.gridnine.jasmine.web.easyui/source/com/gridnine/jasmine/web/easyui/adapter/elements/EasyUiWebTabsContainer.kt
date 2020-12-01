@@ -136,7 +136,7 @@ class EasyUiWebTabsContainer(private val parent:WebComponent?, configure: WebTab
                 if(tool is MenuButtonConfiguration){
                     val content = HtmlUtilsJS.div {
                         id = "toolsMenu${index}${uid}"
-                        style ="width:150px"
+                        //style ="width:200px"
                         tool.elements.withIndex().forEach {(index2, elm) ->
                             if(elm is StandardMenuItem){
                                 div(id = "toolsMenu${index}${uid}-$index2") {

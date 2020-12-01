@@ -18,6 +18,7 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
     internal val rowsAdditionalData = arrayListOf<TableBoxWidgetRowAdditionalData>()
     private val config = TableBoxWidgetConfiguration<VM,VS>()
     private lateinit var createButton:WebLinkButton
+    private var readonly = false
     init {
         config.configure()
         delegate = UiLibraryAdapter.get().createTableBox(parent){
@@ -79,7 +80,32 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
     }
 
     fun getData(): List<VM> {
-        return arrayListOf()
+        val result = arrayListOf<VM>()
+        val rows = delegate.getRows()
+        rows.withIndex().forEach {(rowIdx, row) ->
+            val vm = config.vmFactory.invoke()
+            vm.uid = rowsAdditionalData[rowIdx].uid
+            val size = row.size
+            row.withIndex().forEach { (idx, comp) ->
+                if (idx < size - 1) {
+                    val column = config.columns[idx]
+                    when (column.widgetDescription.widgetType) {
+                        WidgetTypeJS.TEXT_BOX -> vm.setValue(column.id, (comp as TextBoxWidget).getValue())
+                        WidgetTypeJS.PASSWORD_BOX -> vm.setValue(column.id, (comp as PasswordBoxWidget).getValue())
+                        WidgetTypeJS.FLOAT_NUMBER_BOX -> vm.setValue(column.id, (comp as FloatNumberBoxWidget).getValue())
+                        WidgetTypeJS.INTEGER_NUMBER_BOX -> vm.setValue(column.id, (comp as IntegerNumberBoxWidget).getValue())
+                        WidgetTypeJS.BOOLEAN_BOX -> vm.setValue(column.id, (comp as BooleanBoxWidget).getValue())
+                        WidgetTypeJS.ENTITY_SELECT_BOX -> vm.setValue(column.id, (comp as EntitySelectWidget).getValue())
+                        WidgetTypeJS.ENUM_SELECT_BOX -> vm.setValue(column.id, (comp as EnumValueWidget<FakeEnumJS>).getValue())
+                        WidgetTypeJS.DATE_BOX -> vm.setValue(column.id, (comp as DateBoxWidget).getValue())
+                        WidgetTypeJS.DATE_TIME_BOX -> vm.setValue(column.id, (comp as DateTimeBoxWidget).getValue())
+                        WidgetTypeJS.TABLE_BOX -> throw XeptionJS.forDeveloper("unsupported type : TABLE_BOX")
+                    }
+                }
+            }
+            result.add(vm)
+        }
+        return result
     }
 
     fun readData(vm: List<VM>, vs: List<VS>) {
@@ -115,15 +141,16 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
     }
 
     internal fun updateToolsVisibility(){
+        createButton?.let { it.setEnabled(!readonly) }
         val rows = delegate.getRows()
         val size = rows.size
         rows.withIndex().forEach { (idx, row) ->
             val comp = row.last()
             if(comp is TableBoxWidgetToolsPanel){
-                comp.downButton.setEnabled(idx<size-1)
-                comp.upButton.setEnabled(idx>0)
-                comp.plusButton.setEnabled(true)
-                comp.minusButton.setEnabled(true)
+                comp.downButton.setEnabled(!readonly && idx<size-1)
+                comp.upButton.setEnabled(!readonly && idx>0)
+                comp.plusButton.setEnabled(!readonly)
+                comp.minusButton.setEnabled(!readonly)
             }
         }
     }
@@ -185,11 +212,54 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
     }
 
     fun setReadonly(value: Boolean) {
-        //noops
+        readonly = value
+        val rows = delegate.getRows()
+        rows.forEach { row ->
+            val size = row.size
+            row.withIndex().forEach {(idx, comp) ->
+                if(idx < size -1) {
+                    when (config.columns[idx].widgetDescription.widgetType) {
+                        WidgetTypeJS.TEXT_BOX -> (comp as TextBoxWidget).setReadonly(value)
+                        WidgetTypeJS.PASSWORD_BOX -> (comp as PasswordBoxWidget).setReadonly(value)
+                        WidgetTypeJS.FLOAT_NUMBER_BOX -> (comp as FloatNumberBoxWidget).setReadonly(value)
+                        WidgetTypeJS.INTEGER_NUMBER_BOX -> (comp as IntegerNumberBoxWidget).setReadonly(value)
+                        WidgetTypeJS.BOOLEAN_BOX -> (comp as BooleanBoxWidget).setReadonly(value)
+                        WidgetTypeJS.ENTITY_SELECT_BOX -> (comp as EntitySelectWidget).setReadonly(value)
+                        WidgetTypeJS.ENUM_SELECT_BOX -> (comp as EnumValueWidget<*>).setReadonly(value)
+                        WidgetTypeJS.DATE_BOX -> (comp as DateBoxWidget).setReadonly(value)
+                        WidgetTypeJS.DATE_TIME_BOX -> (comp as DateTimeBoxWidget).setReadonly(value)
+                        WidgetTypeJS.TABLE_BOX -> throw XeptionJS.forDeveloper("unsupported type : TABLE_BOX")
+                    }
+                }
+            }
+        }
+        updateToolsVisibility()
     }
 
     fun showValidation(vv: List<VV>) {
-        //noops
+        val rows = delegate.getRows()
+        rows.withIndex().forEach { (rowIdx, row) ->
+            val validation = vv[rowIdx]
+            val size = row.size
+            row.withIndex().forEach { (colIdx, comp) ->
+                if (colIdx < size - 1) {
+                    val column = config.columns[colIdx]
+                    when (column.widgetDescription.widgetType) {
+                        WidgetTypeJS.TEXT_BOX -> (comp as TextBoxWidget).showValidation(validation.getValue(column.id) as String?)
+                        WidgetTypeJS.PASSWORD_BOX -> (comp as PasswordBoxWidget).showValidation(validation.getValue(column.id) as String?)
+                        WidgetTypeJS.FLOAT_NUMBER_BOX -> (comp as FloatNumberBoxWidget).showValidation(validation.getValue(column.id) as String?)
+                        WidgetTypeJS.INTEGER_NUMBER_BOX -> (comp as IntegerNumberBoxWidget).showValidation(validation.getValue(column.id) as String?)
+                        WidgetTypeJS.BOOLEAN_BOX -> {
+                        }
+                        WidgetTypeJS.ENTITY_SELECT_BOX -> (comp as EntitySelectWidget).showValidation(validation.getValue(column.id) as String?)
+                        WidgetTypeJS.ENUM_SELECT_BOX -> (comp as EnumValueWidget<*>).showValidation(validation.getValue(column.id) as String?)
+                        WidgetTypeJS.DATE_BOX -> (comp as DateBoxWidget).showValidation(validation.getValue(column.id) as String?)
+                        WidgetTypeJS.DATE_TIME_BOX -> (comp as DateTimeBoxWidget).showValidation(validation.getValue(column.id) as String?)
+                        WidgetTypeJS.TABLE_BOX -> throw XeptionJS.forDeveloper("unsupported type : TABLE_BOX")
+                    }
+                }
+            }
+        }
     }
 
 }

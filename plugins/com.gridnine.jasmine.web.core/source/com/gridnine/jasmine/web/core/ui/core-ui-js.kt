@@ -39,6 +39,7 @@ interface UiLibraryAdapter{
     fun createDivsContainer(parent:WebComponent?, configure:WebDivsContainerConfiguration.()->Unit):WebDivsContainer
     fun createBooleanBox(parent:WebComponent?, configure:WebBooleanBoxConfiguration.()->Unit):WebBooleanBox
     fun createTableBox(parent:WebComponent?, configure:WebTableBoxConfiguration.()->Unit):WebTableBox
+    fun createTree(parent:WebComponent?, configure:WebTreeConfiguration.()->Unit):WebTree
     fun showLoader()
     fun hideLoader()
     fun showNotification(message:String, timeout:Int)

@@ -152,6 +152,10 @@ class EasyUiLibraryAdapter:UiLibraryAdapter {
         return EasyUiWebTableBox(parent, configure)
     }
 
+    override fun createTree(parent: WebComponent?, configure: WebTreeConfiguration.() -> Unit): WebTree {
+        return EasyUiWebTree(parent, configure)
+    }
+
     override fun showLoader() {
         jQuery.messager.progress()
 
