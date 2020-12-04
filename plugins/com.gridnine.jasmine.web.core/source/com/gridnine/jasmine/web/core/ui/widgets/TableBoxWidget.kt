@@ -5,6 +5,7 @@
 
 package com.gridnine.jasmine.web.core.ui.widgets
 
+import com.gridnine.jasmine.server.core.model.common.SelectItemJS
 import com.gridnine.jasmine.server.core.model.common.XeptionJS
 import com.gridnine.jasmine.server.core.model.domain.ObjectReferenceJS
 import com.gridnine.jasmine.server.core.model.ui.*
@@ -100,6 +101,7 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
                         WidgetTypeJS.DATE_BOX -> vm.setValue(column.id, (comp as DateBoxWidget).getValue())
                         WidgetTypeJS.DATE_TIME_BOX -> vm.setValue(column.id, (comp as DateTimeBoxWidget).getValue())
                         WidgetTypeJS.TABLE_BOX -> throw XeptionJS.forDeveloper("unsupported type : TABLE_BOX")
+                        WidgetTypeJS.GENERAL_SELECT_BOX -> vm.setValue(column.id, (comp as GeneralSelectWidget).getValue())
                     }
                 }
             }
@@ -122,6 +124,7 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
                 components.withIndex().forEach { (compIdx, comp) ->
                     if(compIdx < size -1) {
                         setValue(comp!!, compIdx, value)
+                        configure(comp!!, compIdx, vs[idx])
                     }
                 }
             } else {
@@ -129,6 +132,7 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
                 config.columns.withIndex().forEach {(collIdx, coll) ->
                     val comp = createWebComponent(coll.widgetDescription)
                     setValue(comp, collIdx, value)
+                    configure(comp!!, collIdx, vs[idx])
                     components.add(comp)
                 }
                 val rowId = MiscUtilsJS.createUUID()
@@ -191,6 +195,9 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
             WidgetTypeJS.DATE_TIME_BOX ->  DateTimeBoxWidget(delegate) {
                 width = "100%"
             }
+            WidgetTypeJS.GENERAL_SELECT_BOX ->  GeneralSelectWidget(delegate) {
+                width = "100%"
+            }
             WidgetTypeJS.TABLE_BOX -> throw XeptionJS.forDeveloper("unsupported type : TABLE_BOX")
         }
     }
@@ -208,6 +215,25 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
             WidgetTypeJS.DATE_BOX -> (comp as DateBoxWidget).setValue(value.getValue(column.id) as Date?)
             WidgetTypeJS.DATE_TIME_BOX  -> (comp as DateTimeBoxWidget).setValue(value.getValue(column.id) as Date?)
             WidgetTypeJS.TABLE_BOX -> throw XeptionJS.forDeveloper("unsupported type : TABLE_BOX")
+            WidgetTypeJS.GENERAL_SELECT_BOX -> (comp as GeneralSelectWidget).setValue(value.getValue(column.id) as SelectItemJS?)
+        }
+    }
+
+    private fun configure(comp: WebComponent, compIdx: Int, value: VS) {
+        val column = config.columns[compIdx]
+        val vsValue = value.getValue(column.id) ?: return
+        when(column.widgetDescription.widgetType){
+            WidgetTypeJS.TEXT_BOX -> (comp as TextBoxWidget).configure(vsValue as TextBoxConfigurationJS)
+            WidgetTypeJS.PASSWORD_BOX -> (comp as PasswordBoxWidget).configure(vsValue as PasswordBoxConfigurationJS)
+            WidgetTypeJS.FLOAT_NUMBER_BOX -> (comp as FloatNumberBoxWidget).configure(vsValue as FloatNumberBoxConfigurationJS)
+            WidgetTypeJS.INTEGER_NUMBER_BOX -> (comp as IntegerNumberBoxWidget).configure(vsValue as IntegerNumberBoxConfigurationJS)
+            WidgetTypeJS.BOOLEAN_BOX -> (comp as BooleanBoxWidget).configure(vsValue as BooleanBoxConfigurationJS)
+            WidgetTypeJS.ENTITY_SELECT_BOX -> (comp as EntitySelectWidget).configure(vsValue as EntitySelectBoxConfigurationJS)
+            WidgetTypeJS.ENUM_SELECT_BOX -> (comp as EnumValueWidget<*>).configure(vsValue as EnumSelectBoxConfigurationJS)
+            WidgetTypeJS.DATE_BOX ->(comp as DateBoxWidget).configure(vsValue as DateBoxConfigurationJS)
+            WidgetTypeJS.DATE_TIME_BOX  -> (comp as DateTimeBoxWidget).configure(vsValue as DateTimeBoxConfigurationJS)
+            WidgetTypeJS.TABLE_BOX -> throw XeptionJS.forDeveloper("unsupported type : TABLE_BOX")
+            WidgetTypeJS.GENERAL_SELECT_BOX -> (comp as GeneralSelectWidget).configure(vsValue as GeneralSelectBoxConfigurationJS)
         }
     }
 
@@ -229,6 +255,7 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
                         WidgetTypeJS.DATE_BOX -> (comp as DateBoxWidget).setReadonly(value)
                         WidgetTypeJS.DATE_TIME_BOX -> (comp as DateTimeBoxWidget).setReadonly(value)
                         WidgetTypeJS.TABLE_BOX -> throw XeptionJS.forDeveloper("unsupported type : TABLE_BOX")
+                        WidgetTypeJS.GENERAL_SELECT_BOX  -> (comp as GeneralSelectWidget).setReadonly(value)
                     }
                 }
             }
@@ -256,6 +283,7 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
                         WidgetTypeJS.DATE_BOX -> (comp as DateBoxWidget).showValidation(validation.getValue(column.id) as String?)
                         WidgetTypeJS.DATE_TIME_BOX -> (comp as DateTimeBoxWidget).showValidation(validation.getValue(column.id) as String?)
                         WidgetTypeJS.TABLE_BOX -> throw XeptionJS.forDeveloper("unsupported type : TABLE_BOX")
+                        WidgetTypeJS.GENERAL_SELECT_BOX -> (comp as GeneralSelectWidget).showValidation(validation.getValue(column.id) as String?)
                     }
                 }
             }

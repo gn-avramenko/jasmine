@@ -5,6 +5,7 @@
 
 package com.gridnine.jasmine.web.core.ui.widgets
 
+import com.gridnine.jasmine.server.core.model.common.SelectItemJS
 import com.gridnine.jasmine.server.core.model.domain.ObjectReferenceJS
 import com.gridnine.jasmine.server.standard.model.rest.AutocompleteRequestJS
 import com.gridnine.jasmine.web.core.StandardRestClient
@@ -74,10 +75,10 @@ class EntityMultiValuesWidget(aParent:WebComponent, configure:EntityMultiValuesW
         delegate.destroy()
     }
 
-    private fun toSelectItem(ref:ObjectReferenceJS):SelectItemJS{
+    private fun toSelectItem(ref:ObjectReferenceJS): SelectItemJS {
         return SelectItemJS("${ref.type}||${ref.uid}", ref.caption?:"???")
     }
-    private fun toObjectReference(item:SelectItemJS):ObjectReferenceJS{
+    private fun toObjectReference(item: SelectItemJS):ObjectReferenceJS{
         return ObjectReferenceJS(item.id.substringBefore("||"), item.id.substringAfter("||"), item.text)
     }
 }

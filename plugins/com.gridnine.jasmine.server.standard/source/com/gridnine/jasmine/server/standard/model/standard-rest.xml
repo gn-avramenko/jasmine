@@ -207,6 +207,7 @@
         <enum-item id="INTEGER_NUMBER_BOX_SETTINGS"/>
         <enum-item id="BOOLEAN_BOX_SETTINGS"/>
         <enum-item id="ENTITY_SELECT_BOX_SETTINGS"/>
+        <enum-item id="GENERAL_SELECT_BOX_SETTINGS"/>
         <enum-item id="ENUM_SELECT_BOX_SETTINGS"/>
         <enum-item id="DATE_BOX_SETTINGS"/>
         <enum-item id="DATE_TIME_BOX_SETTINGS"/>

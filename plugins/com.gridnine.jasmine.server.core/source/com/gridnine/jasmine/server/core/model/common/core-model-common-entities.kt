@@ -68,6 +68,42 @@ abstract class BaseIntrospectableObject {
 
 }
 
+data class SelectItem(var id:String, var text:String):BaseIntrospectableObject(){
+    override fun equals(other: Any?): Boolean {
+        return other is SelectItem && other.id == id
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+
+    override fun getValue(propertyName: String): Any? {
+        if(idProperty == propertyName){
+            return id
+        }
+        if(textProperty == propertyName){
+            return text
+        }
+        return super.getValue(propertyName)
+    }
+
+    override fun setValue(propertyName: String, value: Any?) {
+        if(idProperty == propertyName){
+            id = value as String
+            return
+        }
+        if(textProperty == propertyName){
+            text = value as String
+            return
+        }
+        super.setValue(propertyName, value)
+    }
+    companion object{
+        const val idProperty = "id"
+        const val textProperty = "text"
+    }
+}
+
 
 class ServerMessage: BaseIntrospectableObject {
     lateinit var key:String

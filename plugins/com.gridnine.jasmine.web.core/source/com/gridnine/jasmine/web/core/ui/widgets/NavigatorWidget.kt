@@ -5,12 +5,12 @@
 
 package com.gridnine.jasmine.web.core.ui.widgets
 
+import com.gridnine.jasmine.server.core.model.common.SelectItemJS
 import com.gridnine.jasmine.server.core.model.ui.*
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.WebEditor
 import com.gridnine.jasmine.web.core.ui.components.*
-import com.gridnine.jasmine.web.core.utils.UiUtils
 import kotlin.reflect.KClass
 
 open class NavigatorWidget<VM: BaseVMJS, VS: BaseVSJS, VV: BaseVVJS>(private val parent: WebComponent?, configure:NavigatorWidgetConfiguration<VM>.(widget:NavigatorWidget<VM, VS, VV>)->Unit) : WebEditor<VM, VS, VV> {

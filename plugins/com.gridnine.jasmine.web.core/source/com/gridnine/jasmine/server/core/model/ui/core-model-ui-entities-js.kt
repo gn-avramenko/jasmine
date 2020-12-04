@@ -6,6 +6,7 @@
 package com.gridnine.jasmine.server.core.model.ui
 
 import com.gridnine.jasmine.server.core.model.common.BaseIntrospectableObjectJS
+import com.gridnine.jasmine.server.core.model.common.SelectItemJS
 
 abstract class BaseWidgetConfigurationJS: BaseIntrospectableObjectJS(){
     var notEditable = false
@@ -67,6 +68,7 @@ class EnumSelectBoxConfigurationJS : BaseWidgetConfigurationJS(){
     }
 }
 class GeneralSelectBoxConfigurationJS : BaseWidgetConfigurationJS(){
+    val possibleValues = arrayListOf<SelectItemJS>()
     companion object{
         val qualifiedClassName = "com.gridnine.jasmine.server.core.model.ui.GeneralSelectBoxConfigurationJS"
     }
@@ -88,6 +90,8 @@ class BooleanBoxConfigurationJS : BaseWidgetConfigurationJS(){
         val qualifiedClassName = "com.gridnine.jasmine.server.core.model.ui.BooleanBoxConfigurationJS"
     }
 }
+
+
 
 abstract class BaseNavigatorVariantVMJS:BaseVMJS(){
     lateinit var uid:String

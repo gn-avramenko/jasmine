@@ -87,6 +87,7 @@ object UiWebGenerator {
             VSPropertyType.DATE_BOX_SETTINGS -> "${DateBoxConfiguration::class.qualifiedName}JS"
             VSPropertyType.DATE_TIME_BOX_SETTINGS -> "${DateTimeBoxConfiguration::class.qualifiedName}JS"
             VSPropertyType.STRING -> null
+            VSPropertyType.GENERAL_SELECT_BOX_SETTINGS -> "${GeneralSelectBoxConfiguration::class.qualifiedName}JS"
         }
     }
 
@@ -103,6 +104,7 @@ object UiWebGenerator {
             VSPropertyType.DATE_BOX_SETTINGS -> GenPropertyType.ENTITY
             VSPropertyType.DATE_TIME_BOX_SETTINGS -> GenPropertyType.ENTITY
             VSPropertyType.STRING -> GenPropertyType.STRING
+            VSPropertyType.GENERAL_SELECT_BOX_SETTINGS -> GenPropertyType.ENTITY
         }
     }
 

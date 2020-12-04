@@ -92,7 +92,7 @@
                     <element name="row" maxOccurs="unbounded">
                         <complexType>
                             <sequence>
-                                <element name="cell">
+                                <element name="cell" maxOccurs="unbounded">
                                     <complexType>
                                         <group ref="tns:widget"/>
                                         <attribute name="col-span" type="int" default="1"/>
@@ -153,6 +153,7 @@
                     </complexContent>
                 </complexType>
             </element>
+            <element name="general-select-box" type="tns:baseWidget"/>
             <element name="entity-select-box">
                 <complexType>
                     <complexContent>
@@ -160,6 +161,11 @@
                             <attribute name="objectId" use="required"/>
                         </extension>
                     </complexContent>
+                </complexType>
+            </element>
+            <element name="hidden">
+                <complexType>
+                    <attribute name="object-id" use="required"/>
                 </complexType>
             </element>
             <element name="boolean-box">

@@ -210,6 +210,7 @@ internal class VSEntityMetadataProvider(description: VSEntityDescription) : Obje
             VSPropertyType.DATE_BOX_SETTINGS -> DateBoxConfiguration::class.qualifiedName
             VSPropertyType.DATE_TIME_BOX_SETTINGS -> DateTimeBoxConfiguration::class.qualifiedName
             VSPropertyType.STRING -> null
+            VSPropertyType.GENERAL_SELECT_BOX_SETTINGS ->  GeneralSelectBoxConfiguration::class.qualifiedName
         }
     }
 
@@ -226,6 +227,7 @@ internal class VSEntityMetadataProvider(description: VSEntityDescription) : Obje
             VSPropertyType.DATE_BOX_SETTINGS -> SerializablePropertyType.ENTITY
             VSPropertyType.DATE_TIME_BOX_SETTINGS -> SerializablePropertyType.ENTITY
             VSPropertyType.STRING -> SerializablePropertyType.STRING
+            VSPropertyType.GENERAL_SELECT_BOX_SETTINGS -> SerializablePropertyType.ENTITY
         }
     }
 

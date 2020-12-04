@@ -5,7 +5,51 @@
        <enum-item id="NO"/>
        <enum-item id="NOT_IMPORTANT"/>
    </enum>
-
+    <grid-container id="com.gridnine.jasmine.web.core.workspace.WorkspaceGroupEditor">
+        <row>
+            <cell id="name" caption="name">
+                <text-box/>
+            </cell>
+            <cell id="uid">
+                <hidden object-id="String"/>
+            </cell>
+        </row>
+    </grid-container>
+    <grid-container id="com.gridnine.jasmine.web.core.workspace.WorkspaceListGeneralParametersEditor" columns-count="2">
+        <row>
+            <cell id="name" caption="name">
+                <text-box/>
+            </cell>
+            <cell id="list" caption="list">
+                <general-select-box/>
+            </cell>
+            <cell id="uid">
+                <hidden object-id="String"/>
+            </cell>
+        </row>
+    </grid-container>
+    <grid-container id="com.gridnine.jasmine.web.core.workspace.WorkspaceListColumnsEditor" columns-count="1">
+        <row>
+            <cell id="columns">
+                <table-box id="com.gridnine.jasmine.web.core.workspace.WorkspaceListColumnsTable">
+                    <column id="columnName" caption="name" pref-width="200">
+                        <general-select-box/>
+                    </column>
+                </table-box>
+            </cell>
+        </row>
+    </grid-container>
+    <grid-container id="com.gridnine.jasmine.web.core.workspace.WorkspaceListFiltersEditor" columns-count="1">
+        <row>
+            <cell id="filters">
+                <table-box id="com.gridnine.jasmine.web.core.workspace.WorkspaceListFiltersTable">
+                    <column id="filterName" caption="name" pref-width="200">
+                        <general-select-box/>
+                    </column>
+                </table-box>
+            </cell>
+        </row>
+    </grid-container>
 </ui>
 
 

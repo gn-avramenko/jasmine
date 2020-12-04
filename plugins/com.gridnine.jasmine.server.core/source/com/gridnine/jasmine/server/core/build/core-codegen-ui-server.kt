@@ -118,6 +118,7 @@ internal object UiServerGenerator {
             VSPropertyType.DATE_BOX_SETTINGS -> DateBoxConfiguration::class.qualifiedName
             VSPropertyType.DATE_TIME_BOX_SETTINGS -> DateTimeBoxConfiguration::class.qualifiedName
             VSPropertyType.STRING -> null
+            VSPropertyType.GENERAL_SELECT_BOX_SETTINGS -> GeneralSelectBoxConfiguration::class.qualifiedName
         }
     }
 
@@ -134,6 +135,7 @@ internal object UiServerGenerator {
             VSPropertyType.DATE_BOX_SETTINGS ->  GenPropertyType.ENTITY
             VSPropertyType.DATE_TIME_BOX_SETTINGS ->  GenPropertyType.ENTITY
             VSPropertyType.STRING -> GenPropertyType.STRING
+            VSPropertyType.GENERAL_SELECT_BOX_SETTINGS -> GenPropertyType.ENTITY
         }
     }
 

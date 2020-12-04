@@ -21,6 +21,7 @@ class EasyUiWebTree(private val parent:WebComponent?, configure: WebTreeConfigur
     private var initialized = false
     private var treeJq : dynamic = null
     private val preloadedData = arrayListOf<WebTreeNode>()
+    private var selectionListener: ((item: WebTreeNode) -> Unit)? = null
     init {
         config.configure()
     }
@@ -34,6 +35,48 @@ class EasyUiWebTree(private val parent:WebComponent?, configure: WebTreeConfigur
                 toTreeItem(it)
             }.toTypedArray())
         }
+    }
+
+    override fun setSelectListener(listener: ((item: WebTreeNode) -> Unit)?) {
+        selectionListener = listener
+    }
+
+    override fun findNode(id: String): WebTreeNode? {
+        val node = treeJq.tree("find", id)
+        return if(node == null) null else toWebTreeNode(node)
+    }
+
+    override fun select(id: String) {
+        val node = treeJq.tree("find", id)
+        if(node != null){
+            treeJq.tree("select", node.target)
+        }
+    }
+
+    override fun updateText(id: String, text: String) {
+        val node = treeJq.tree("find", id)
+        if(node != null) {
+            treeJq.tree("update", object {
+                val target = node.target
+                val text = text
+            })
+        }
+    }
+
+    override fun updateUserData(id: String, data: Any?) {
+        val node = treeJq.tree("find", id)
+        if(node != null){
+            node.attributes.userData = data
+        }
+    }
+
+    override fun getData(): List<WebTreeNode> {
+        val roots = treeJq.tree("getRoots")
+        val result = arrayListOf<WebTreeNode>()
+        roots.forEach{ nodeElm ->
+            result.add(toWebTreeNode(nodeElm))
+        }
+        return result
     }
 
     private fun toTreeItem(it: WebTreeNode): dynamic {
@@ -63,12 +106,26 @@ class EasyUiWebTree(private val parent:WebComponent?, configure: WebTreeConfigur
 
     override fun decorate() {
         treeJq = jQuery("#tree${uid}")
-        treeJq.tree(object{
+        treeJq.tree(object {
             val dnd = config.enableDnd
             val fit = config.fit
+            val onSelect = onSelect@{ node: dynamic ->
+                if (node == null) {
+                    return@onSelect
+                }
+                selectionListener?.invoke(toWebTreeNode(node))
+            }
         })
         initialized = true
         setData(ArrayList(preloadedData))
+    }
+
+    private fun toWebTreeNode(node: dynamic): WebTreeNode {
+        val result = WebTreeNode(node.id, node.text, node.attributes.userData)
+        node.children?.forEach{ it ->
+            result.children.add(toWebTreeNode(it))
+        }
+        return result
     }
 
     override fun destroy() {

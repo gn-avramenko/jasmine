@@ -60,6 +60,7 @@ enum class VSPropertyType {
     INTEGER_NUMBER_BOX_SETTINGS,
     BOOLEAN_BOX_SETTINGS,
     ENTITY_SELECT_BOX_SETTINGS,
+    GENERAL_SELECT_BOX_SETTINGS,
     ENUM_SELECT_BOX_SETTINGS,
     DATE_BOX_SETTINGS,
     DATE_TIME_BOX_SETTINGS
@@ -126,6 +127,10 @@ class BooleanBoxWidgetDescription(notEditable:Boolean):BaseWidgetDescription(not
 
 class EntitySelectBoxWidgetDescription(notEditable:Boolean, val objectId:String):BaseWidgetDescription(notEditable, WidgetType.ENTITY_SELECT_BOX)
 
+class GeneralSelectBoxWidgetDescription(notEditable:Boolean):BaseWidgetDescription(notEditable, WidgetType.GENERAL_SELECT_BOX)
+
+class HiddenWidgetDescription(val objectId:String):BaseWidgetDescription(false, WidgetType.HIDDEN)
+
 class EnumSelectBoxWidgetDescription(notEditable:Boolean, val enumId:String):BaseWidgetDescription(notEditable, WidgetType.ENUM_SELECT_BOX)
 
 class DateBoxWidgetDescription(notEditable:Boolean):BaseWidgetDescription(notEditable, WidgetType.DATE_BOX)
@@ -145,9 +150,11 @@ enum class WidgetType{
     INTEGER_NUMBER_BOX,
     BOOLEAN_BOX,
     ENTITY_SELECT_BOX,
+    GENERAL_SELECT_BOX,
     ENUM_SELECT_BOX,
     DATE_BOX,
     DATE_TIME_BOX,
+    HIDDEN,
     TABLE_BOX
 }
 abstract class BaseWidgetDescription(val notEditable:Boolean, val widgetType:WidgetType)

@@ -8,11 +8,10 @@ package com.gridnine.jasmine.web.easyui.adapter.elements
 import com.gridnine.jasmine.web.core.CoreWebMessagesJS
 import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.components.SelectDataType
-import com.gridnine.jasmine.web.core.ui.components.SelectItemJS
+import com.gridnine.jasmine.server.core.model.common.SelectItemJS
 import com.gridnine.jasmine.web.core.ui.components.WebSelect
 import com.gridnine.jasmine.web.core.ui.components.WebSelectConfiguration
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
-import com.gridnine.jasmine.web.easyui.adapter.createSelect2Option
 import com.gridnine.jasmine.web.easyui.adapter.jQuery
 import kotlin.js.Promise
 
@@ -109,7 +108,6 @@ class EasyUiWebSelect(private val parent: WebComponent?, configure: WebSelectCon
         localData.addAll(values)
         if (initialized) {
             destroy()
-            jq.html(getHtml())
             decorate()
         }
     }

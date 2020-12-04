@@ -6,6 +6,7 @@
 package com.gridnine.jasmine.server.core.model.ui
 
 import com.gridnine.jasmine.server.core.model.common.BaseIntrospectableObject
+import com.gridnine.jasmine.server.core.model.common.SelectItem
 
 abstract class BaseVM:BaseIntrospectableObject()
 abstract class BaseVS:BaseIntrospectableObject()
@@ -82,6 +83,13 @@ class DateBoxConfiguration() : BaseWidgetConfiguration(){
 
 class DateTimeBoxConfiguration() : BaseWidgetConfiguration(){
     constructor(configure:DateTimeBoxConfiguration.()->Unit):this(){
+        configure.invoke(this)
+    }
+}
+
+class GeneralSelectBoxConfiguration() : BaseWidgetConfiguration(){
+    val possibleValues = arrayListOf<SelectItem>()
+    constructor(configure:GeneralSelectBoxConfiguration.()->Unit):this(){
         configure.invoke(this)
     }
 }

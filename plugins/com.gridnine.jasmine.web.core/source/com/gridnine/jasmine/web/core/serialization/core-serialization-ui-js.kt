@@ -200,6 +200,7 @@ internal class VSEntityMetadataProviderJS(description: VSEntityDescriptionJS) : 
             VSPropertyTypeJS.DATE_BOX_SETTINGS -> DateBoxConfigurationJS.qualifiedClassName
             VSPropertyTypeJS.DATE_TIME_BOX_SETTINGS -> DateTimeBoxConfigurationJS.qualifiedClassName
             VSPropertyTypeJS.STRING -> null
+            VSPropertyTypeJS.GENERAL_SELECT_BOX_SETTINGS -> GeneralSelectBoxConfigurationJS.qualifiedClassName
         }
     }
 
@@ -216,6 +217,7 @@ internal class VSEntityMetadataProviderJS(description: VSEntityDescriptionJS) : 
             VSPropertyTypeJS.DATE_BOX_SETTINGS ->SerializablePropertyTypeJS.ENTITY
             VSPropertyTypeJS.DATE_TIME_BOX_SETTINGS -> SerializablePropertyTypeJS.ENTITY
             VSPropertyTypeJS.STRING -> SerializablePropertyTypeJS.STRING
+            VSPropertyTypeJS.GENERAL_SELECT_BOX_SETTINGS -> SerializablePropertyTypeJS.ENTITY
         }
     }
 

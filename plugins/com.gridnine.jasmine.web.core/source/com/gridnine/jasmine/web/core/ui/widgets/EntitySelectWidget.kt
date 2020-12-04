@@ -5,8 +5,8 @@
 
 package com.gridnine.jasmine.web.core.ui.widgets
 
+import com.gridnine.jasmine.server.core.model.common.SelectItemJS
 import com.gridnine.jasmine.server.core.model.domain.ObjectReferenceJS
-import com.gridnine.jasmine.server.core.model.ui.DateTimeBoxConfigurationJS
 import com.gridnine.jasmine.server.core.model.ui.EntitySelectBoxConfigurationJS
 import com.gridnine.jasmine.server.standard.model.rest.AutocompleteRequestJS
 import com.gridnine.jasmine.web.core.StandardRestClient
@@ -105,10 +105,10 @@ class EntitySelectWidget(private val parent:WebComponent, configure:EntitySelect
     fun setReadonly(value:Boolean){
         webSelect.setEnabled(!value)
     }
-    private fun toSelectItem(ref:ObjectReferenceJS):SelectItemJS{
+    private fun toSelectItem(ref:ObjectReferenceJS): SelectItemJS {
         return SelectItemJS("${ref.type}||${ref.uid}", ref.caption?:"???")
     }
-    private fun toObjectReference(item:SelectItemJS):ObjectReferenceJS{
+    private fun toObjectReference(item: SelectItemJS):ObjectReferenceJS{
         return ObjectReferenceJS(item.id.substringBefore("||"), item.id.substringAfter("||"), item.text)
     }
 

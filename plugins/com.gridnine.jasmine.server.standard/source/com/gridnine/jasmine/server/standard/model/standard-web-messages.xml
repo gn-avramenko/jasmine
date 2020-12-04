@@ -30,6 +30,8 @@
     <message id="objectsDeleted"/>
     <message id="ChoseVariant"/>
     <message id="Workspace"/>
+    <message id="Filters"/>
+    <message id="Columns"/>
 </messages-bundle>
 
 

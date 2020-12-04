@@ -9,6 +9,7 @@ package com.gridnine.jasmine.server.core.model.ui
 
 import com.gridnine.jasmine.server.core.model.common.BaseIdentity
 import com.gridnine.jasmine.server.core.model.common.ParserUtils
+import com.gridnine.jasmine.server.core.model.common.SelectItem
 import com.gridnine.jasmine.server.core.model.common.Xeption
 import com.gridnine.jasmine.server.core.utils.XmlNode
 import java.io.File
@@ -234,6 +235,14 @@ object UiMetadataParser {
                 val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
                 WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription, null, null, null)
             }
+            "general-select-box" -> {
+                val widget = GeneralSelectBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
+                        ?: false)
+                val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.ENTITY, SelectItem::class.qualifiedName, false,false)
+                val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.GENERAL_SELECT_BOX_SETTINGS, null, false)
+                val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
+                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription, null, null, null)
+            }
             "date-box" -> {
                 val widget = DateBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
                         ?: false)
@@ -249,6 +258,14 @@ object UiMetadataParser {
                 val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.DATE_TIME_BOX_SETTINGS, null, false)
                 val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
                 WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription, null, null, null)
+            }
+            "hidden" -> {
+                val widget = HiddenWidgetDescription(xmlNode.attributes["object-id"]!!)
+                val vmPropertyDescription = when(widget.objectId){
+                    "String" ->VMPropertyDescription(id, VMPropertyType.STRING, null, false,false)
+                    else -> TODO()
+                }
+                WidgetParsingData(widget, vmPropertyDescription, null, null, null, null, null)
             }
             "table-box" -> {
                 val widget = TableBoxWidgetDescription(ParserUtils.getIdAttribute(xmlNode), ParserUtils.getBooleanAttribute(xmlNode, "not-editable")

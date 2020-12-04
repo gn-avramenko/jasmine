@@ -9,7 +9,7 @@ import com.gridnine.jasmine.server.core.model.ui.GeneralSelectBoxConfigurationJS
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.components.SelectDataType
-import com.gridnine.jasmine.web.core.ui.components.SelectItemJS
+import com.gridnine.jasmine.server.core.model.common.SelectItemJS
 import com.gridnine.jasmine.web.core.ui.components.WebSelect
 
 class GeneralSelectWidget(private val parent:WebComponent, configure:GeneralSelectWidgetConfiguration.()->Unit):WebComponent{
@@ -36,7 +36,7 @@ class GeneralSelectWidget(private val parent:WebComponent, configure:GeneralSele
         delegate.setPossibleValues(values)
     }
 
-    fun getValue():SelectItemJS? {
+    fun getValue(): SelectItemJS? {
         val values = delegate.getValues()
         return if(values.isEmpty()) null else values[0]
     }
@@ -72,6 +72,7 @@ class GeneralSelectWidget(private val parent:WebComponent, configure:GeneralSele
     fun configure(config: GeneralSelectBoxConfigurationJS?){
         config?.let {
             delegate.setEnabled(!config.notEditable)
+            delegate.setPossibleValues(config.possibleValues)
         }
     }
 

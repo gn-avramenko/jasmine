@@ -7,6 +7,10 @@
         <property id="type" type="CLASS"/>
         <property id="caption" type="STRING"/>
     </entity>
+    <entity id="com.gridnine.jasmine.server.core.model.common.SelectItem">
+        <property id="id" type="STRING"/>
+        <property id="text" type="STRING"/>
+    </entity>
     <entity id="com.gridnine.jasmine.server.core.model.ui.BaseWidgetConfiguration" abstract="true">
         <property id="notEditable" type="BOOLEAN"/>
     </entity>
@@ -19,6 +23,9 @@
     <entity id="com.gridnine.jasmine.server.core.model.ui.EnumSelectBoxConfiguration" extends="com.gridnine.jasmine.server.core.model.ui.BaseWidgetConfiguration"/>
     <entity id="com.gridnine.jasmine.server.core.model.ui.DateBoxConfiguration" extends="com.gridnine.jasmine.server.core.model.ui.BaseWidgetConfiguration"/>
     <entity id="com.gridnine.jasmine.server.core.model.ui.DateTimeBoxConfiguration" extends="com.gridnine.jasmine.server.core.model.ui.BaseWidgetConfiguration"/>
+    <entity id="com.gridnine.jasmine.server.core.model.ui.GeneralSelectBoxConfiguration" extends="com.gridnine.jasmine.server.core.model.ui.BaseWidgetConfiguration">
+        <collection id="possibleValues" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.core.model.common.SelectItem"/>
+    </entity>
     <entity id="com.gridnine.jasmine.server.core.model.ui.BaseVM" abstract="true"/>
     <entity id="com.gridnine.jasmine.server.core.model.ui.BaseVS" abstract="true"/>
     <entity id="com.gridnine.jasmine.server.core.model.ui.BaseVV" abstract="true"/>

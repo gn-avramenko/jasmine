@@ -21,6 +21,7 @@ enum class WidgetTypeJS{
     INTEGER_NUMBER_BOX,
     BOOLEAN_BOX,
     ENTITY_SELECT_BOX,
+    GENERAL_SELECT_BOX,
     ENUM_SELECT_BOX,
     DATE_BOX,
     DATE_TIME_BOX,
@@ -40,6 +41,8 @@ class IntegerNumberBoxWidgetDescriptionJS(notEditable:Boolean, val nonNullable: 
 class BooleanBoxWidgetDescriptionJS(notEditable:Boolean):BaseWidgetDescriptionJS(notEditable, WidgetTypeJS.BOOLEAN_BOX)
 
 class EntitySelectBoxWidgetDescriptionJS(notEditable:Boolean, val objectId:String):BaseWidgetDescriptionJS(notEditable, WidgetTypeJS.ENTITY_SELECT_BOX)
+
+class GeneralSelectBoxWidgetDescriptionJS(notEditable:Boolean):BaseWidgetDescriptionJS(notEditable, WidgetTypeJS.GENERAL_SELECT_BOX)
 
 class EnumSelectBoxWidgetDescriptionJS(notEditable:Boolean, val enumId:String):BaseWidgetDescriptionJS(notEditable, WidgetTypeJS.ENUM_SELECT_BOX)
 
@@ -92,6 +95,7 @@ enum class VSPropertyTypeJS {
     INTEGER_NUMBER_BOX_SETTINGS,
     BOOLEAN_BOX_SETTINGS,
     ENTITY_SELECT_BOX_SETTINGS,
+    GENERAL_SELECT_BOX_SETTINGS,
     ENUM_SELECT_BOX_SETTINGS,
     DATE_BOX_SETTINGS,
     DATE_TIME_BOX_SETTINGS

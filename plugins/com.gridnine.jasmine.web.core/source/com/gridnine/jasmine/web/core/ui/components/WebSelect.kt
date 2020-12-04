@@ -5,6 +5,7 @@
 
 package com.gridnine.jasmine.web.core.ui.components
 
+import com.gridnine.jasmine.server.core.model.common.SelectItemJS
 import com.gridnine.jasmine.web.core.ui.WebComponent
 import kotlin.js.Promise
 
@@ -17,16 +18,6 @@ interface WebSelect:WebComponent{
     fun showValidation(value:String?)
     fun setEnabled(value:Boolean)
     fun setChangeListener(value:((List<SelectItemJS>) ->Unit)?)
-}
-
-data class SelectItemJS(val id:String, val text:String){
-    override fun equals(other: Any?): Boolean {
-        return other is SelectItemJS && other.id == id
-    }
-
-    override fun hashCode(): Int {
-        return id.hashCode()
-    }
 }
 
 enum class SelectDataType{

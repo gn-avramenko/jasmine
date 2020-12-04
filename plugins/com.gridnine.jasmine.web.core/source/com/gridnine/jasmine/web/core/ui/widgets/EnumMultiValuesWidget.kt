@@ -5,6 +5,7 @@
 
 package com.gridnine.jasmine.web.core.ui.widgets
 
+import com.gridnine.jasmine.server.core.model.common.SelectItemJS
 import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistryJS
 import com.gridnine.jasmine.server.core.model.ui.UiMetaRegistryJS
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
