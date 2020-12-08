@@ -39,7 +39,7 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
                 addRow(0)
             }
             headerComponents.add(createButton)
-            columnWidths.add(WebTableBoxColumnWidth(null,100, null))
+            columnWidths.add(WebTableBoxColumnWidth(130,130, 130))
         }
     }
 

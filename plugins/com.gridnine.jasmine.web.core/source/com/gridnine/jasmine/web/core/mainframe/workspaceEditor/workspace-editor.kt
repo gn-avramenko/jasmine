@@ -5,6 +5,7 @@
 
 package com.gridnine.jasmine.web.core.mainframe.workspaceEditor
 
+import com.gridnine.jasmine.server.standard.model.domain.ListWorkspaceItemJS
 import com.gridnine.jasmine.server.standard.model.domain.WorkspaceGroupJS
 import com.gridnine.jasmine.server.standard.model.domain.WorkspaceJS
 import com.gridnine.jasmine.server.standard.model.rest.GetWorkspaceRequestJS
@@ -18,6 +19,7 @@ import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.WebPopupContainer
 import com.gridnine.jasmine.web.core.ui.components.*
+import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import com.gridnine.jasmine.web.core.utils.UiUtils
 import kotlin.js.Promise
 
@@ -84,6 +86,42 @@ class WorkspaceEditor(private val parent: WebComponent, private val workspace:Wo
             collapsible = false
         })
         tree.setSelectListener { showEditor(it)}
+        val onBeforeDropListener = lst@{target:WebTreeNode, source:WebTreeNode, point:WebTreeInsertNodePoint ->
+            if(source.userData is WorkspaceGroupJS){
+                if(target.userData !is WorkspaceGroupJS){
+                    return@lst false
+                }
+            } else {
+                if(target.userData is WorkspaceGroupJS && point != WebTreeInsertNodePoint.APPEND){
+                    return@lst false
+                }
+            }
+            true
+        }
+        tree.setOnBeforeDropListener(onBeforeDropListener)
+        tree.setOnDragEnterListener{target:WebTreeNode, source:WebTreeNode ->
+            onBeforeDropListener.invoke(target,source,WebTreeInsertNodePoint.APPEND)
+        }
+        tree.setOnDropListener { target, source, point ->
+            tree.remove(source.id)
+            if(source.userData is ListWorkspaceItemJS && target.userData is WorkspaceGroupJS ){
+                val node = WebTreeNode(MiscUtilsJS.createUUID(), source.text, source.userData)
+                node.children.addAll(source.children)
+                if(target.children.isEmpty()){
+                    tree.append(node, target.id)
+                } else {
+                    tree.insertBefore(node, target.children[0].id)
+                }
+            } else if (point == WebTreeInsertNodePoint.APPEND || point == WebTreeInsertNodePoint.BOTTOM) {
+                val node = WebTreeNode(MiscUtilsJS.createUUID(), source.text, source.userData)
+                node.children.addAll(source.children)
+                tree.insertAfter(node, target.id)
+            } else {
+                val node = WebTreeNode(MiscUtilsJS.createUUID(), source.text, source.userData)
+                node.children.addAll(source.children)
+                tree.insertBefore(node, target.id)
+            }
+        }
         tree.setData(workspace.groups.map {
             val node = WebTreeNode(it.uid, it.displayName?:"???",it)
             node.children.addAll(it.items.map {
