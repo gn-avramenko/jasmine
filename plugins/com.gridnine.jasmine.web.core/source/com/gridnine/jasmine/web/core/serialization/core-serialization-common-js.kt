@@ -14,10 +14,10 @@ import com.gridnine.jasmine.server.core.model.rest.RestMetaRegistryJS
 
 
 internal abstract class ObjectMetadataProviderJS<T:Any> {
-    private val propertiesMap = linkedMapOf<String, SerializablePropertyDescriptionJS>()
-    private var collectionsMap = linkedMapOf<String, SerializableCollectionDescriptionJS>()
-    private val properties = arrayListOf<SerializablePropertyDescriptionJS>()
-    private var collections = arrayListOf<SerializableCollectionDescriptionJS>()
+    internal val propertiesMap = linkedMapOf<String, SerializablePropertyDescriptionJS>()
+    internal var collectionsMap = linkedMapOf<String, SerializableCollectionDescriptionJS>()
+    internal val properties = arrayListOf<SerializablePropertyDescriptionJS>()
+    internal var collections = arrayListOf<SerializableCollectionDescriptionJS>()
     var isAbstract:Boolean = false
     fun getProperty(id: String) = propertiesMap[id]
     fun getCollection(id: String) = collectionsMap[id]

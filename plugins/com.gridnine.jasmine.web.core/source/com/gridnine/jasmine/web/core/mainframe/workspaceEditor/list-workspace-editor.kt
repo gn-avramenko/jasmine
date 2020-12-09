@@ -52,7 +52,10 @@ class WorkspaceListEditorHandler:WorkspaceElementEditorHandler<WorkspaceListEdit
         }
         editor.generalEditor.readData(gpVM, gpVS)
 
-        val indexDescription = DomainMetaRegistryJS.get().indexes[listId]?:DomainMetaRegistryJS.get().assets[listId]!!
+        val indexDescription = DomainMetaRegistryJS.get().indexes[listId]?:DomainMetaRegistryJS.get().assets[listId]
+        if(indexDescription == null){
+            return
+        }
         val columns = indexDescription.properties.values.map {  SelectItemJS(it.id, it.displayName)}.toMutableList()
         columns.addAll(indexDescription.collections.values.map {  SelectItemJS(it.id, it.displayName)})
         columns.sortBy { it.text }

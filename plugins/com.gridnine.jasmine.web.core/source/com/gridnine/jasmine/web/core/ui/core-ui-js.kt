@@ -40,6 +40,7 @@ interface UiLibraryAdapter{
     fun createBooleanBox(parent:WebComponent?, configure:WebBooleanBoxConfiguration.()->Unit):WebBooleanBox
     fun createTableBox(parent:WebComponent?, configure:WebTableBoxConfiguration.()->Unit):WebTableBox
     fun createTree(parent:WebComponent?, configure:WebTreeConfiguration.()->Unit):WebTree
+    fun showContextMenu(popupChild: WebComponent?, items:List<WebContextMenuItem>, pageX:Int, pageY:Int)
     fun showLoader()
     fun hideLoader()
     fun showNotification(message:String, timeout:Int)

@@ -14,6 +14,7 @@ interface WebTree: WebComponent,HasDivId{
     fun setOnBeforeDropListener(listener:((target:WebTreeNode, source:WebTreeNode, point:WebTreeInsertNodePoint) ->Boolean)?)
     fun setOnDragEnterListener(listener:((target:WebTreeNode, source:WebTreeNode) ->Boolean)?)
     fun setOnDropListener(listener:((target:WebTreeNode, source:WebTreeNode, point:WebTreeInsertNodePoint) ->Unit)?)
+    fun setOnContextMenuListener(listener:((node:WebTreeNode, event:WebTreeContextMenuEvent) ->Unit)?)
     fun findNode(id:String):WebTreeNode?
     fun select(id:String)
     fun updateText(id:String, text:String)
@@ -39,3 +40,5 @@ enum class WebTreeInsertNodePoint{
     TOP,
     BOTTOM
 }
+
+class WebTreeContextMenuEvent(val pageX:Int, val pageY:Int)

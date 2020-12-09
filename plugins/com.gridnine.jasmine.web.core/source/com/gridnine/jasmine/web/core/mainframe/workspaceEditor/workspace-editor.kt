@@ -15,12 +15,14 @@ import com.gridnine.jasmine.web.core.StandardRestClient
 import com.gridnine.jasmine.web.core.mainframe.MainFrameTabCallback
 import com.gridnine.jasmine.web.core.mainframe.MainFrameTabData
 import com.gridnine.jasmine.web.core.mainframe.MainFrameTabHandler
+import com.gridnine.jasmine.web.core.serialization.JsonSerializerJS
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.WebPopupContainer
 import com.gridnine.jasmine.web.core.ui.components.*
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import com.gridnine.jasmine.web.core.utils.UiUtils
+import kotlin.browser.window
 import kotlin.js.Promise
 
 
@@ -120,6 +122,66 @@ class WorkspaceEditor(private val parent: WebComponent, private val workspace:Wo
                 val node = WebTreeNode(MiscUtilsJS.createUUID(), source.text, source.userData)
                 node.children.addAll(source.children)
                 tree.insertBefore(node, target.id)
+            }
+        }
+        tree.setOnContextMenuListener { node, event ->
+            node.userData.let { userData ->
+                if(userData is WorkspaceGroupJS){
+                    val items = arrayListOf<WebContextMenuItem>()
+                    items.add(WebContextMenuStandardItem("Добавить группу выше", null, false ){
+                        val uuid = MiscUtilsJS.createUUID()
+                        val userData = WorkspaceGroupJS()
+                        userData.uid = uuid
+                        userData.displayName = "Новая группа"
+                        tree.insertBefore(WebTreeNode(uuid, userData.displayName!!, userData), node.id)
+                        tree.select(uuid)
+                    })
+                    items.add(WebContextMenuStandardItem("Добавить группу ниже", null, false ){
+                        val uuid = MiscUtilsJS.createUUID()
+                        val userData = WorkspaceGroupJS()
+                        userData.uid = uuid
+                        userData.displayName = "Новая группа"
+                        tree.insertAfter(WebTreeNode(uuid, userData.displayName!!, userData), node.id)
+                        tree.select(uuid)
+                    })
+                    items.add(WebContextMenuStandardItem("Добавить список", null, false ){
+                        val uuid = MiscUtilsJS.createUUID()
+                        val userData = ListWorkspaceItemJS()
+                        userData.uid = uuid
+                        userData.displayName = "Новый список"
+                        tree.append(WebTreeNode(uuid, userData.displayName!!, userData), node.id)
+                        tree.select(uuid)
+                    })
+                    items.add(WebContextMenuStandardItem("Удалить группу", null, false ){
+                        tree.remove(node.id)
+                        tree.select(tree.getData()[0].id)
+                    })
+                    UiLibraryAdapter.get().showContextMenu(WorkspaceEditor@this, items, event.pageX, event.pageY)
+                }
+                if(userData is ListWorkspaceItemJS){
+                    val items = arrayListOf<WebContextMenuItem>()
+                    items.add(WebContextMenuStandardItem("Добавить список", null, false ){
+                        val uuid = MiscUtilsJS.createUUID()
+                        val userData = ListWorkspaceItemJS()
+                        userData.uid = uuid
+                        userData.displayName = "Новый список"
+                        tree.insertAfter(WebTreeNode(uuid, userData.displayName!!, userData), node.id)
+                        tree.select(uuid)
+                    })
+                    items.add(WebContextMenuStandardItem("Копировать список", null, false ){
+                        val uuid = MiscUtilsJS.createUUID()
+                        val userData = JsonSerializerJS.get().clone(node.userData as ListWorkspaceItemJS, true)
+                        userData.uid = uuid
+                        userData.displayName = "${node.text}-Копия"
+                        tree.insertAfter(WebTreeNode(uuid, userData.displayName!!, userData), node.id)
+                        tree.select(uuid)
+                    })
+                    items.add(WebContextMenuStandardItem("Удалить список", null, false ){
+                        tree.remove(node.id)
+                        tree.select(tree.getData()[0].id)
+                    })
+                    UiLibraryAdapter.get().showContextMenu(WorkspaceEditor@this, items, event.pageX, event.pageY)
+                }
             }
         }
         tree.setData(workspace.groups.map {
