@@ -9,15 +9,15 @@ import com.gridnine.jasmine.server.core.model.common.SelectItemJS
 import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistryJS
 import com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS
 import com.gridnine.jasmine.server.core.model.ui.*
+import com.gridnine.jasmine.server.standard.model.domain.BaseWorkspaceCriterionJS
 import com.gridnine.jasmine.server.standard.model.domain.ListWorkspaceItemJS
+import com.gridnine.jasmine.server.standard.model.domain.SortOrderJS
 import com.gridnine.jasmine.web.core.CoreWebMessagesJS
 import com.gridnine.jasmine.web.core.ui.DefaultUIParameters
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.WebEditor
-import com.gridnine.jasmine.web.core.ui.components.WebAccordionContainer
-import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutCell
-import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutContainer
+import com.gridnine.jasmine.web.core.ui.components.*
 import com.gridnine.jasmine.web.core.ui.widgets.GeneralSelectWidget
 import com.gridnine.jasmine.web.core.ui.widgets.GridCellWidget
 import com.gridnine.jasmine.web.core.ui.widgets.TableBoxWidget
@@ -91,6 +91,25 @@ class WorkspaceListEditorHandler:WorkspaceElementEditorHandler<WorkspaceListEdit
             filtersVS.filters.add(filterVS)
         }
         editor.filtersEditor.readData(filtersVM,filtersVS)
+
+        val sortOrdersVM = WorkspaceListSortOrdersEditorVMJS()
+        val sortOrdersVS = WorkspaceListSortOrdersEditorVSJS()
+        data.sortOrders.withIndex().forEach { (idx, col) ->
+            val sortOrderVM = WorkspaceListSortOrdersTableVMJS()
+            sortOrderVM.uid = "sortOrder$idx"
+            sortOrderVM.columnName = columns.find { it.id == col.field }
+            sortOrderVM.sortOrder = col.orderType
+            sortOrdersVM.sortOrders.add(sortOrderVM)
+            val sortOrderVS = WorkspaceListSortOrdersTableVSJS()
+            sortOrderVS.uid = "sortOrder$idx"
+            sortOrderVS.columnName = GeneralSelectBoxConfigurationJS().let {
+                it.possibleValues.addAll(columns)
+                it
+            }
+            sortOrdersVS.sortOrders.add(sortOrderVS)
+        }
+        editor.sortOrdersEditor.readData(sortOrdersVM,sortOrdersVS)
+
     }
 
     override fun getData(editor: WorkspaceListEditor): ListWorkspaceItemJS {
@@ -101,6 +120,13 @@ class WorkspaceListEditorHandler:WorkspaceElementEditorHandler<WorkspaceListEdit
         result.displayName = generalData.name
         result.columns.addAll(editor.columnsEditor.getData().columns.map { it.columnName!!.id })
         result.filters.addAll(editor.filtersEditor.getData().filters.map { it.filterName!!.id })
+        result.sortOrders.addAll(editor.sortOrdersEditor.getData().sortOrders.map {
+            val res = SortOrderJS()
+            res.field = it.columnName?.id
+            res.orderType = it.sortOrder
+            res
+        })
+        result.criterions.addAll(editor.criterionsEditor.getData())
         return result
     }
 
@@ -129,6 +155,10 @@ class WorkspaceListEditor(private val parent:WebComponent):WebComponent{
     val filtersEditor:WorkspaceListFiltersEditor
 
     val columnsEditor:WorkspaceListColumnsEditor
+
+    val sortOrdersEditor:WorkspaceListSortOrdersEditor
+
+    val criterionsEditor:WorkspaceListCriterionsEditor
     init {
         delegate = UiLibraryAdapter.get().createGridLayoutContainer(this) {
             width ="100%"
@@ -155,11 +185,24 @@ class WorkspaceListEditor(private val parent:WebComponent):WebComponent{
             title = CoreWebMessagesJS.Filters
             content = filtersEditor
         })
-        delegate.addCell(WebGridLayoutCell(accordion))
+        sortOrdersEditor = WorkspaceListSortOrdersEditor(accordion)
+        accordion.addPanel(WebAccordionContainer.panel {
+            id = "sortOrdersEditor"
+            title = "Сортировка"
+            content = sortOrdersEditor
+        })
+        criterionsEditor = WorkspaceListCriterionsEditor(accordion)
+        accordion.addPanel(WebAccordionContainer.panel {
+            id = "criterions"
+            title = "Критерии"
+            content = criterionsEditor
+        })
         accordion.select("columns")
+        delegate.addCell(WebGridLayoutCell(accordion))
         generalEditor.listWidget.changeListener = {
             columnsEditor.readData( WorkspaceListColumnsEditorVMJS(), WorkspaceListColumnsEditorVSJS())
             filtersEditor.readData( WorkspaceListFiltersEditorVMJS(), WorkspaceListFiltersEditorVSJS())
+            criterionsEditor.readData(arrayListOf<BaseWorkspaceCriterionJS>())
         }
     }
     override fun getParent(): WebComponent? {
@@ -406,6 +449,144 @@ class WorkspaceListFiltersEditor(private val parent:WebComponent): WebEditor<Wor
 
     override fun showValidation(validation: WorkspaceListFiltersEditorVVJS) {
         tableWidget.showValidation(validation.filters)
+    }
+
+
+}
+
+class WorkspaceListSortOrdersEditor(private val parent:WebComponent): WebEditor<WorkspaceListSortOrdersEditorVMJS, WorkspaceListSortOrdersEditorVSJS, WorkspaceListSortOrdersEditorVVJS> {
+
+    private val delegate:WebGridLayoutContainer = UiLibraryAdapter.get().createGridLayoutContainer(this) {}
+
+    private val tableWidget: TableBoxWidget<WorkspaceListSortOrdersTableVMJS, WorkspaceListSortOrdersTableVSJS, WorkspaceListSortOrdersTableVVJS>
+
+    init {
+        delegate.defineColumn("100%")
+        delegate.addRow()
+        tableWidget = TableBoxWidget(parent){
+            width = "100%"
+            column("columnName", GeneralSelectBoxWidgetDescriptionJS(false ), L10nMetaRegistryJS.get().messages["com.gridnine.jasmine.web.core.workspace.WorkspaceListSortOrdersTable"]!!["columnName"] ?: error(""), 200)
+            column("sortOrder", EnumSelectBoxWidgetDescriptionJS(false , "com.gridnine.jasmine.server.standard.model.domain.SortOrderTypeJS"), L10nMetaRegistryJS.get().messages["com.gridnine.jasmine.web.core.workspace.WorkspaceListSortOrdersTable"]!!["sortOrder"] ?: error(""), 100)
+            showToolsColumn = true
+            vmFactory = {WorkspaceListSortOrdersTableVMJS()}
+            vsFactory = {
+                val listId = UiUtils.findParent(this@WorkspaceListSortOrdersEditor,  WorkspaceListEditor::class)!!.generalEditor.listWidget.getValue()!!.id
+                val indexDescription = DomainMetaRegistryJS.get().indexes[listId]?:DomainMetaRegistryJS.get().assets[listId]!!
+                val columns = indexDescription.properties.values.map {  SelectItemJS(it.id, it.displayName)}.toMutableList()
+                columns.addAll(indexDescription.collections.values.map {  SelectItemJS(it.id, it.displayName)})
+                columns.sortBy { it.text }
+                val result = WorkspaceListSortOrdersTableVSJS()
+                result.uid =MiscUtilsJS.createUUID()
+                result.columnName = GeneralSelectBoxConfigurationJS().let {
+                    it.possibleValues.addAll(columns)
+                    it
+                }
+                result
+            }
+        }
+        delegate.addCell(WebGridLayoutCell(tableWidget))
+
+    }
+
+    override fun getParent(): WebComponent? {
+        return parent
+    }
+
+    override fun getChildren(): List<WebComponent> {
+        return arrayListOf(delegate)
+    }
+
+    override fun getHtml(): String {
+        return delegate.getHtml()
+    }
+
+    override fun decorate() {
+        delegate.decorate()
+    }
+
+    override fun destroy() {
+        delegate.destroy()
+    }
+
+    override fun getData(): WorkspaceListSortOrdersEditorVMJS {
+        val result = WorkspaceListSortOrdersEditorVMJS()
+        result.sortOrders.addAll(tableWidget.getData())
+        return result
+    }
+
+    override fun readData(vm: WorkspaceListSortOrdersEditorVMJS, vs: WorkspaceListSortOrdersEditorVSJS) {
+        tableWidget.readData(vm.sortOrders, vs.sortOrders)
+    }
+
+    override fun setReadonly(value: Boolean) {
+        tableWidget.setReadonly(value)
+    }
+
+    override fun showValidation(validation: WorkspaceListSortOrdersEditorVVJS) {
+        tableWidget.showValidation(validation.sortOrders)
+    }
+
+
+}
+
+
+class WorkspaceListCriterionsEditor(private val parent:WebComponent): WebComponent {
+
+    private val delegate:WebGridLayoutContainer = UiLibraryAdapter.get().createGridLayoutContainer(this) {}
+
+    private val tableBox: WebTableBox
+
+    init {
+        delegate.defineColumn("100%")
+        delegate.addRow()
+        tableBox = UiLibraryAdapter.get().createTableBox(delegate){
+            width = "100%"
+            columnWidths.add(WebTableBoxColumnWidth(300, 300, 300))
+            columnWidths.add(WebTableBoxColumnWidth(200, 200, 200))
+            columnWidths.add(WebTableBoxColumnWidth(null, 300, null))
+            columnWidths.add(WebTableBoxColumnWidth(130, 130, 130))
+            val fieldLabel = UiLibraryAdapter.get().createLabel(delegate)
+            fieldLabel.setText("Поле")
+            headerComponents.add(fieldLabel)
+            val conditionLabel = UiLibraryAdapter.get().createLabel(delegate)
+            conditionLabel.setText("Условие")
+            headerComponents.add(conditionLabel)
+            val valueLabel = UiLibraryAdapter.get().createLabel(delegate)
+            valueLabel.setText("Значение")
+            headerComponents.add(valueLabel)
+            headerComponents.add(null)
+        }
+        delegate.addCell(WebGridLayoutCell(tableBox))
+
+    }
+
+    override fun getParent(): WebComponent? {
+        return parent
+    }
+
+    override fun getChildren(): List<WebComponent> {
+        return arrayListOf(delegate)
+    }
+
+    override fun getHtml(): String {
+        return delegate.getHtml()
+    }
+
+    override fun decorate() {
+        delegate.decorate()
+    }
+
+    override fun destroy() {
+        delegate.destroy()
+    }
+
+    fun readData(criterions: List<BaseWorkspaceCriterionJS>) {
+
+        //noops
+    }
+
+    fun getData(): List<BaseWorkspaceCriterionJS> {
+        return arrayListOf()
     }
 
 

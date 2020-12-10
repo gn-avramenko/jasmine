@@ -7,6 +7,7 @@ package com.gridnine.jasmine.web.easyui.adapter.elements
 
 import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.components.WebTableBox
+import com.gridnine.jasmine.web.core.ui.components.WebTableBoxCell
 import com.gridnine.jasmine.web.core.ui.components.WebTableBoxColumnWidth
 import com.gridnine.jasmine.web.core.ui.components.WebTableBoxConfiguration
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
@@ -15,7 +16,7 @@ import com.gridnine.jasmine.web.easyui.adapter.jQuery
 class EasyUiWebTableBox(private val parent: WebComponent?, configure: WebTableBoxConfiguration.() -> Unit) : WebTableBox {
     private val uid = MiscUtilsJS.createUUID()
     private val config: WebTableBoxConfiguration = WebTableBoxConfiguration()
-    private val rows = arrayListOf<List<WebComponent?>>()
+    private val rows = arrayListOf<List<WebTableBoxCell>>()
     private var initialized = false
     private var tableJQ: dynamic = null
     private var tableBodyJQ: dynamic = null
@@ -24,7 +25,7 @@ class EasyUiWebTableBox(private val parent: WebComponent?, configure: WebTableBo
         config.configure()
     }
 
-    override fun addRow(position: Int?, components: List<WebComponent?>) {
+    override fun addRow(position: Int?, components: List<WebTableBoxCell>) {
         val idx = position ?: rows.size
         rows.add(idx, components)
         if (initialized) {
@@ -33,20 +34,18 @@ class EasyUiWebTableBox(private val parent: WebComponent?, configure: WebTableBo
             } else {
                 tableBodyJQ.children("tr").eq(idx - 1).after(getRowContent(components))
             }
-            components.forEach { it?.decorate() }
+            components.forEach { it?.component?.decorate() }
         }
     }
 
-    private fun decorate(comps: List<WebComponent?>) {
-        comps.forEach { it?.decorate() }
-    }
 
-    private fun getRowContent(components: List<WebComponent?>): String {
+
+    private fun getRowContent(components: List<WebTableBoxCell>): String {
         val content = """
             <tr>
             ${
             components.joinToString("\n") {
-                """<td>${it?.getHtml() ?: ""}</td>"""
+                """<td colspan="${it.colspan}">${it?.component?.getHtml() ?: ""}</td>"""
             }
         }
         </tr>
@@ -56,7 +55,7 @@ class EasyUiWebTableBox(private val parent: WebComponent?, configure: WebTableBo
 
     override fun removeRow(position: Int) {
         val row = rows.removeAt(position)
-        row.forEach { it?.destroy() }
+        row.forEach { it?.component?.destroy() }
         if (initialized) {
             tableBodyJQ.children("tr").eq(position).remove()
         }
@@ -75,7 +74,7 @@ class EasyUiWebTableBox(private val parent: WebComponent?, configure: WebTableBo
     }
 
     override fun getRows(): List<List<WebComponent?>> {
-        return rows
+        return rows.map { it.map { it.component } }
     }
 
     override fun getParent(): WebComponent? {
@@ -83,10 +82,7 @@ class EasyUiWebTableBox(private val parent: WebComponent?, configure: WebTableBo
     }
 
     override fun getChildren(): List<WebComponent> {
-        val result = arrayListOf<WebComponent>()
-        rows.forEach {
-            result.addAll(it.filterNotNull())
-        }
+        val result = rows.flatMap { it.map { it.component }.filterNotNull() }.toMutableList()
         config.headerComponents.forEach { wc ->
             wc?.let { result.add(it) }
         }
@@ -131,7 +127,7 @@ class EasyUiWebTableBox(private val parent: WebComponent?, configure: WebTableBo
         config.headerComponents.forEach { it?.decorate() }
         rows.forEach { row ->
             tableBodyJQ.append(getRowContent(row))
-            decorate(row)
+            row.forEach { it?.component?.decorate() }
         }
         val calculatedWidths = config.columnWidths.map { ColumnWidthData(null, it) }
         val totalWidth = tableJQ.width() as Int

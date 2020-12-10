@@ -50,6 +50,20 @@
             </cell>
         </row>
     </grid-container>
+    <grid-container id="com.gridnine.jasmine.web.core.workspace.WorkspaceListSortOrdersEditor" columns-count="1">
+        <row>
+            <cell id="sortOrders">
+                <table-box id="com.gridnine.jasmine.web.core.workspace.WorkspaceListSortOrdersTable">
+                    <column id="columnName" caption="name" pref-width="200">
+                        <general-select-box/>
+                    </column>
+                    <column id="sortOrder" caption="sortOrder" pref-width="100">
+                        <enum-select-box enumId="com.gridnine.jasmine.server.standard.model.domain.SortOrderType"/>
+                    </column>
+                </table-box>
+            </cell>
+        </row>
+    </grid-container>
 </ui>
 
 

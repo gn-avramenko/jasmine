@@ -8,7 +8,7 @@ package com.gridnine.jasmine.web.core.ui.components
 import com.gridnine.jasmine.web.core.ui.WebComponent
 
 interface WebTableBox : WebComponent{
-    fun addRow(position:Int?, components:List<WebComponent?>)
+    fun addRow(position:Int?, components:List<WebTableBoxCell>)
     fun removeRow(position: Int)
     fun moveRow(fromPosition:Int, toPosition:Int)
     fun getRows():List<List<WebComponent?>>
@@ -22,3 +22,5 @@ class WebTableBoxConfiguration{
 }
 
 class WebTableBoxColumnWidth(val min:Int?, val pref:Int?, val max:Int?)
+
+class WebTableBoxCell(val component:WebComponent? , val colspan:Int =1)

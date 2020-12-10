@@ -50,12 +50,14 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
         vm.uid = uuid
         val vs = config.vsFactory.invoke()
         vs.uid= uuid
-        val components = arrayListOf<WebComponent?>()
+        val components = arrayListOf<WebTableBoxCell>()
+        val configuration = config.vsFactory.invoke()
         config.columns.withIndex().forEach {(collIdx, coll) ->
             val comp = createWebComponent(coll.widgetDescription)
-            components.add(comp)
+            configure(comp, collIdx, configuration)
+            components.add(WebTableBoxCell(comp))
         }
-        components.add(TableBoxWidgetToolsPanel(delegate, this@TableBoxWidget, rowId))
+        components.add(WebTableBoxCell(TableBoxWidgetToolsPanel(delegate, this@TableBoxWidget, rowId)))
         delegate.addRow(idx, components)
         rowsAdditionalData.add(idx, TableBoxWidgetRowAdditionalData(uuid, rowId))
         updateToolsVisibility()
@@ -111,9 +113,10 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
     }
 
     fun readData(vm: List<VM>, vs: List<VS>) {
-        for( n in rowsAdditionalData.size downTo vm.size){
-            rowsAdditionalData.removeAt(vm.size-1)
-            delegate.removeRow(vm.size-1)
+        val size = vm.size
+        for( n in rowsAdditionalData.size-1 downTo  size){
+            rowsAdditionalData.removeAt(if(size > 0) size-1 else 0)
+            delegate.removeRow(if(size > 0) size-1 else 0)
         }
         val existingRows = delegate.getRows()
         vm.withIndex().forEach{(idx, value) ->
@@ -128,15 +131,15 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
                     }
                 }
             } else {
-                val components = arrayListOf<WebComponent?>()
+                val components = arrayListOf<WebTableBoxCell>()
                 config.columns.withIndex().forEach {(collIdx, coll) ->
                     val comp = createWebComponent(coll.widgetDescription)
                     setValue(comp, collIdx, value)
                     configure(comp!!, collIdx, vs[idx])
-                    components.add(comp)
+                    components.add(WebTableBoxCell(comp))
                 }
                 val rowId = MiscUtilsJS.createUUID()
-                components.add(TableBoxWidgetToolsPanel(delegate, this@TableBoxWidget, rowId))
+                components.add(WebTableBoxCell(TableBoxWidgetToolsPanel(delegate, this@TableBoxWidget, rowId)))
                 delegate.addRow(null, components)
                 rowsAdditionalData.add(TableBoxWidgetRowAdditionalData(value.uid, rowId))
             }
