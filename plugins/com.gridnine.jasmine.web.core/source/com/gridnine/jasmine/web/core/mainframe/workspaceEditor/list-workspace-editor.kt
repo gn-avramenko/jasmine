@@ -109,6 +109,7 @@ class WorkspaceListEditorHandler:WorkspaceElementEditorHandler<WorkspaceListEdit
             sortOrdersVS.sortOrders.add(sortOrderVS)
         }
         editor.sortOrdersEditor.readData(sortOrdersVM,sortOrdersVS)
+        editor.criterionsEditor.readData(data.criterions)
 
     }
 
@@ -536,6 +537,8 @@ class WorkspaceListCriterionsEditor(private val parent:WebComponent): WebCompone
 
     private val tableBox: WebTableBox
 
+    private var criterionsListEditor:CriterionsListEditor
+
     init {
         delegate.defineColumn("100%")
         delegate.addRow()
@@ -544,7 +547,7 @@ class WorkspaceListCriterionsEditor(private val parent:WebComponent): WebCompone
             columnWidths.add(WebTableBoxColumnWidth(300, 300, 300))
             columnWidths.add(WebTableBoxColumnWidth(200, 200, 200))
             columnWidths.add(WebTableBoxColumnWidth(null, 300, null))
-            columnWidths.add(WebTableBoxColumnWidth(130, 130, 130))
+            columnWidths.add(WebTableBoxColumnWidth(140, 140, 140))
             val fieldLabel = UiLibraryAdapter.get().createLabel(delegate)
             fieldLabel.setText("Поле")
             headerComponents.add(fieldLabel)
@@ -557,6 +560,7 @@ class WorkspaceListCriterionsEditor(private val parent:WebComponent): WebCompone
             headerComponents.add(null)
         }
         delegate.addCell(WebGridLayoutCell(tableBox))
+        criterionsListEditor = CriterionsListEditor(tableBox, 0)
 
     }
 
@@ -581,8 +585,7 @@ class WorkspaceListCriterionsEditor(private val parent:WebComponent): WebCompone
     }
 
     fun readData(criterions: List<BaseWorkspaceCriterionJS>) {
-
-        //noops
+        criterionsListEditor.readData(criterions)
     }
 
     fun getData(): List<BaseWorkspaceCriterionJS> {
@@ -590,4 +593,6 @@ class WorkspaceListCriterionsEditor(private val parent:WebComponent): WebCompone
     }
 
 
+
 }
+

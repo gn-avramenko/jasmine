@@ -123,18 +123,18 @@ class EasyUiWebTableBox(private val parent: WebComponent?, configure: WebTableBo
                 $thead
                 <tbody id ="tableBody${uid}"/>
         """.trimIndent())
-        tableBodyJQ = jQuery("#tableBody${uid}")
-        config.headerComponents.forEach { it?.decorate() }
-        rows.forEach { row ->
-            tableBodyJQ.append(getRowContent(row))
-            row.forEach { it?.component?.decorate() }
-        }
         val calculatedWidths = config.columnWidths.map { ColumnWidthData(null, it) }
         val totalWidth = tableJQ.width() as Int
         calculateWidth(calculatedWidths, totalWidth)
         val children = tableJQ.find("colgroup col")
         calculatedWidths.withIndex().forEach { (idx, width)  ->
             children.eq(idx).attr("width", "${width.calculatedWidth}px")
+        }
+        tableBodyJQ = jQuery("#tableBody${uid}")
+        config.headerComponents.forEach { it?.decorate() }
+        rows.forEach { row ->
+            tableBodyJQ.append(getRowContent(row))
+            row.forEach { it?.component?.decorate() }
         }
         initialized = true
     }
