@@ -5,9 +5,7 @@
 
 package com.gridnine.jasmine.web.core.mainframe.workspaceEditor
 
-import com.gridnine.jasmine.server.standard.model.domain.AndWorkspaceCriterionJS
-import com.gridnine.jasmine.server.standard.model.domain.BaseComplexWorkspaceCriterionJS
-import com.gridnine.jasmine.server.standard.model.domain.SimpleWorkspaceCriterionJS
+import com.gridnine.jasmine.server.standard.model.domain.*
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutCell
 import com.gridnine.jasmine.web.core.ui.components.WebTableBox
@@ -15,7 +13,7 @@ import com.gridnine.jasmine.web.core.ui.components.WebTableBoxCell
 import com.gridnine.jasmine.web.core.ui.components.WebTableBoxColumnWidth
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 
-abstract class BaseCompoundCriterionHandler<C:BaseComplexWorkspaceCriterionJS>(private val tableBox: WebTableBox, private val indent:Int, private val initData:C?) :CriterionHandler<C>{
+abstract class BaseCompoundCriterionHandler<C:BaseComplexWorkspaceCriterionJS>(private val tableBox: WebTableBox, private val indent:Int, private val listId:String, private val initData:C?) :CriterionHandler<C>{
     private val uuid = MiscUtilsJS.createUUID()
 
     override fun getComponents(): MutableList<WebTableBoxCell> {
@@ -37,7 +35,7 @@ abstract class BaseCompoundCriterionHandler<C:BaseComplexWorkspaceCriterionJS>(p
             columnWidths.add(WebTableBoxColumnWidth(140, 140, 140))
         }
         val criterionsList = CriterionsListEditor(valueTableBox, indent+1)
-        criterionsList.readData(emptyList())
+        criterionsList.readData(listId, emptyList())
         components.add(WebTableBoxCell(valueTableBox))
         table.addRow(0, components)
         result.add(WebTableBoxCell(table, 3))
@@ -52,9 +50,20 @@ abstract class BaseCompoundCriterionHandler<C:BaseComplexWorkspaceCriterionJS>(p
 
 }
 
-class AndCriterionHandler(tableBox: WebTableBox, indent:Int,  initData:AndWorkspaceCriterionJS?):BaseCompoundCriterionHandler<AndWorkspaceCriterionJS>(tableBox,indent,initData){
+class AndCriterionHandler(tableBox: WebTableBox, indent:Int, listId: String, initData:AndWorkspaceCriterionJS?):BaseCompoundCriterionHandler<AndWorkspaceCriterionJS>(tableBox,indent,listId,initData){
     override fun getOperationName(): String? {
         return "И"
     }
+}
 
+class OrCriterionHandler(tableBox: WebTableBox, indent:Int,  listId: String,initData:OrWorkspaceCriterionJS?):BaseCompoundCriterionHandler<OrWorkspaceCriterionJS>(tableBox,indent,listId,initData){
+    override fun getOperationName(): String? {
+        return "ИЛИ"
+    }
+}
+
+class NotCriterionHandler(tableBox: WebTableBox, indent:Int, listId: String, initData:NotWorkspaceCriterionJS?):BaseCompoundCriterionHandler<NotWorkspaceCriterionJS>(tableBox,indent,listId, initData){
+    override fun getOperationName(): String? {
+        return "НЕ"
+    }
 }

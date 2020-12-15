@@ -109,7 +109,7 @@ class WorkspaceListEditorHandler:WorkspaceElementEditorHandler<WorkspaceListEdit
             sortOrdersVS.sortOrders.add(sortOrderVS)
         }
         editor.sortOrdersEditor.readData(sortOrdersVM,sortOrdersVS)
-        editor.criterionsEditor.readData(data.criterions)
+        editor.criterionsEditor.readData(listId, data.criterions)
 
     }
 
@@ -203,7 +203,7 @@ class WorkspaceListEditor(private val parent:WebComponent):WebComponent{
         generalEditor.listWidget.changeListener = {
             columnsEditor.readData( WorkspaceListColumnsEditorVMJS(), WorkspaceListColumnsEditorVSJS())
             filtersEditor.readData( WorkspaceListFiltersEditorVMJS(), WorkspaceListFiltersEditorVSJS())
-            criterionsEditor.readData(arrayListOf<BaseWorkspaceCriterionJS>())
+            criterionsEditor.readData(it!!.id, arrayListOf<BaseWorkspaceCriterionJS>())
         }
     }
     override fun getParent(): WebComponent? {
@@ -584,8 +584,8 @@ class WorkspaceListCriterionsEditor(private val parent:WebComponent): WebCompone
         delegate.destroy()
     }
 
-    fun readData(criterions: List<BaseWorkspaceCriterionJS>) {
-        criterionsListEditor.readData(criterions)
+    fun readData(listId:String, criterions: List<BaseWorkspaceCriterionJS>) {
+        criterionsListEditor.readData(listId, criterions)
     }
 
     fun getData(): List<BaseWorkspaceCriterionJS> {

@@ -9,10 +9,10 @@ import com.gridnine.jasmine.server.standard.model.domain.BaseWorkspaceCriterionJ
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.components.*
-import kotlinx.browser.window
 
 class CriterionsListEditor(internal val tableBox: WebTableBox, private val indent:Int) {
 
+    lateinit var listId:String
     internal val handlers = arrayListOf<CriterionHandler<*>>()
     fun clearData(){
         tableBox.getRows().indices.forEach {
@@ -30,17 +30,19 @@ class CriterionsListEditor(internal val tableBox: WebTableBox, private val inden
         }
         createMenuButton.setHandler("simple-restriction"){
             tableBox.removeRow(0)
-            addRow(0, SimpleCriterionHandler(tableBox, null))
+            addRow(0, SimpleCriterionHandler(tableBox, listId, null))
         }
         createMenuButton.setHandler("and-restriction"){
             tableBox.removeRow(0)
-            addRow(0, AndCriterionHandler(tableBox, indent, null))
+            addRow(0, AndCriterionHandler(tableBox, indent, listId, null))
         }
         createMenuButton.setHandler("or-restriction"){
-            window.alert("Or")
+            tableBox.removeRow(0)
+            addRow(0, OrCriterionHandler(tableBox, indent, listId, null))
         }
         createMenuButton.setHandler("not-restriction"){
-            window.alert("Not")
+            tableBox.removeRow(0)
+            addRow(0, NotCriterionHandler(tableBox, indent, listId, null))
         }
         tableBox.addRow(0, arrayListOf(WebTableBoxCell(null, 3), WebTableBoxCell(createMenuButton, 1)))
     }
@@ -48,11 +50,12 @@ class CriterionsListEditor(internal val tableBox: WebTableBox, private val inden
     internal fun addRow(i: Int, handler: CriterionHandler<*>) {
         handlers.add(i, handler)
         val components = handler.getComponents()
-        components.add(WebTableBoxCell(ToolsPanel(this, indent, handler.getId())))
+        components.add(WebTableBoxCell(ToolsPanel(this, indent, listId, handler.getId())))
         tableBox.addRow(i, components)
     }
 
-    fun readData(criterions: List<BaseWorkspaceCriterionJS>) {
+    fun readData(listId:String, criterions: List<BaseWorkspaceCriterionJS>) {
+        this.listId = listId
         clearData()
         if(criterions.isEmpty()){
             addEmptyRow()
@@ -74,7 +77,7 @@ class CriterionsListEditor(internal val tableBox: WebTableBox, private val inden
     }
 }
 
-class ToolsPanel(private val listEditor: CriterionsListEditor, private val indent:Int, private val rowId:String): WebComponent {
+class ToolsPanel(private val listEditor: CriterionsListEditor, private val indent:Int, private val listId: String, private val rowId:String): WebComponent {
     internal val delegate: WebGridLayoutContainer
     internal val upButton: WebLinkButton
     internal val downButton: WebLinkButton
@@ -120,17 +123,19 @@ class ToolsPanel(private val listEditor: CriterionsListEditor, private val inden
         }
         plusButton.setHandler("simple-restriction"){
             val idx = listEditor.handlers.indexOfFirst { rowId == it.getId() }!!
-            listEditor.addRow(idx+1, SimpleCriterionHandler(listEditor.tableBox, null))
+            listEditor.addRow(idx+1, SimpleCriterionHandler(listEditor.tableBox, listId,null))
         }
         plusButton.setHandler("and-restriction"){
             val idx = listEditor.handlers.indexOfFirst { rowId == it.getId() }!!
-            listEditor.addRow(idx+1, AndCriterionHandler(listEditor.tableBox, indent, null))
+            listEditor.addRow(idx+1, AndCriterionHandler(listEditor.tableBox, indent,  listId,null))
         }
         plusButton.setHandler("or-restriction"){
-            window.alert("Or")
+            val idx = listEditor.handlers.indexOfFirst { rowId == it.getId() }!!
+            listEditor.addRow(idx+1, OrCriterionHandler(listEditor.tableBox, indent,  listId,null))
         }
         plusButton.setHandler("not-restriction"){
-            window.alert("Not")
+            val idx = listEditor.handlers.indexOfFirst { rowId == it.getId() }!!
+            listEditor.addRow(idx+1, NotCriterionHandler(listEditor.tableBox, indent,  listId,null))
         }
         delegate.addCell(WebGridLayoutCell(plusButton))
         minusButton = UiLibraryAdapter.get().createLinkButton(delegate){
