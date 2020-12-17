@@ -546,7 +546,7 @@ class WorkspaceListCriterionsEditor(private val parent:WebComponent): WebCompone
             width = "100%"
             columnWidths.add(WebTableBoxColumnWidth(300, 300, 300))
             columnWidths.add(WebTableBoxColumnWidth(200, 200, 200))
-            columnWidths.add(WebTableBoxColumnWidth(null, 300, null))
+            columnWidths.add(WebTableBoxColumnWidth(200, 200, null))
             columnWidths.add(WebTableBoxColumnWidth(140, 140, 140))
             val fieldLabel = UiLibraryAdapter.get().createLabel(delegate)
             fieldLabel.setText("Поле")
@@ -589,7 +589,7 @@ class WorkspaceListCriterionsEditor(private val parent:WebComponent): WebCompone
     }
 
     fun getData(): List<BaseWorkspaceCriterionJS> {
-        return arrayListOf()
+        return criterionsListEditor.getData()
     }
 
 

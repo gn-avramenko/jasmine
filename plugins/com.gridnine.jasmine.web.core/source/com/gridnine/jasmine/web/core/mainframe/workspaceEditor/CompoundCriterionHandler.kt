@@ -15,6 +15,7 @@ import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 
 abstract class BaseCompoundCriterionHandler<C:BaseComplexWorkspaceCriterionJS>(private val tableBox: WebTableBox, private val indent:Int, private val listId:String, private val initData:C?) :CriterionHandler<C>{
     private val uuid = MiscUtilsJS.createUUID()
+    private  lateinit var criterionsList:CriterionsListEditor
 
     override fun getComponents(): MutableList<WebTableBoxCell> {
         val result = arrayListOf<WebTableBoxCell>()
@@ -34,13 +35,26 @@ abstract class BaseCompoundCriterionHandler<C:BaseComplexWorkspaceCriterionJS>(p
             columnWidths.add(WebTableBoxColumnWidth(null, 300, null))
             columnWidths.add(WebTableBoxColumnWidth(140, 140, 140))
         }
-        val criterionsList = CriterionsListEditor(valueTableBox, indent+1)
-        criterionsList.readData(listId, emptyList())
+        criterionsList = CriterionsListEditor(valueTableBox, indent+1)
+        criterionsList.readData(listId, initData?.criterions?: emptyList())
         components.add(WebTableBoxCell(valueTableBox))
         table.addRow(0, components)
         result.add(WebTableBoxCell(table, 3))
         return result
     }
+
+    override fun getData(): C? {
+        val data = criterionsList.getData()
+        if(data.isEmpty()){
+            return null
+        }
+        val result = createCriterion()
+        result.uid = initData?.uid?:MiscUtilsJS.createUUID()
+        result.criterions.addAll(data)
+        return result
+    }
+
+    abstract fun createCriterion(): C
 
     abstract fun getOperationName(): String?
 
@@ -54,16 +68,28 @@ class AndCriterionHandler(tableBox: WebTableBox, indent:Int, listId: String, ini
     override fun getOperationName(): String? {
         return "И"
     }
+
+    override fun createCriterion(): AndWorkspaceCriterionJS {
+        return AndWorkspaceCriterionJS()
+    }
 }
 
 class OrCriterionHandler(tableBox: WebTableBox, indent:Int,  listId: String,initData:OrWorkspaceCriterionJS?):BaseCompoundCriterionHandler<OrWorkspaceCriterionJS>(tableBox,indent,listId,initData){
     override fun getOperationName(): String? {
         return "ИЛИ"
     }
+
+    override fun createCriterion(): OrWorkspaceCriterionJS {
+        return OrWorkspaceCriterionJS()
+    }
 }
 
 class NotCriterionHandler(tableBox: WebTableBox, indent:Int, listId: String, initData:NotWorkspaceCriterionJS?):BaseCompoundCriterionHandler<NotWorkspaceCriterionJS>(tableBox,indent,listId, initData){
     override fun getOperationName(): String? {
         return "НЕ"
+    }
+
+    override fun createCriterion(): NotWorkspaceCriterionJS {
+        return NotWorkspaceCriterionJS()
     }
 }

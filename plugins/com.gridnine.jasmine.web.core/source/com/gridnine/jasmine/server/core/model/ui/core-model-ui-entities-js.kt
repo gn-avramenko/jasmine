@@ -85,6 +85,12 @@ class IntegerNumberBoxConfigurationJS : BaseWidgetConfigurationJS(){
     }
 }
 
+class LongNumberBoxConfigurationJS : BaseWidgetConfigurationJS(){
+    companion object{
+        val qualifiedClassName = "com.gridnine.jasmine.server.core.model.ui.LongNumberBoxConfigurationJS"
+    }
+}
+
 class BooleanBoxConfigurationJS : BaseWidgetConfigurationJS(){
     companion object{
         val qualifiedClassName = "com.gridnine.jasmine.server.core.model.ui.BooleanBoxConfigurationJS"

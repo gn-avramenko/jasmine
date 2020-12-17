@@ -25,6 +25,8 @@
         <enum-item id="CONTAINS"/>
         <enum-item id="NOT_CONTAINS"/>
         <enum-item id="WITHIN_PERIOD"/>
+        <enum-item id="YES"/>
+        <enum-item id="NO"/>
     </enum>
     <nested-document id="com.gridnine.jasmine.server.standard.model.domain.WorkspaceSimpleCriterionStringValues" extends="com.gridnine.jasmine.server.standard.model.domain.BaseWorkspaceSimpleCriterionValue">
         <collection id="values" element-type="STRING"/>
@@ -55,6 +57,9 @@
     </nested-document>
     <nested-document id="com.gridnine.jasmine.server.standard.model.domain.WorkspaceSimpleCriterionIntValue" extends="com.gridnine.jasmine.server.standard.model.domain.BaseWorkspaceSimpleCriterionValue">
         <property id="value" type="INT"/>
+    </nested-document>
+    <nested-document id="com.gridnine.jasmine.server.standard.model.domain.WorkspaceSimpleCriterionLongValue" extends="com.gridnine.jasmine.server.standard.model.domain.BaseWorkspaceSimpleCriterionValue">
+        <property id="value" type="LONG"/>
     </nested-document>
     <nested-document id="com.gridnine.jasmine.server.standard.model.domain.BaseWorkspaceCriterion" abstract="true"/>
 

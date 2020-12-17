@@ -126,6 +126,10 @@ class EasyUiWebTableBox(private val parent: WebComponent?, configure: WebTableBo
         val calculatedWidths = config.columnWidths.map { ColumnWidthData(null, it) }
         val totalWidth = tableJQ.width() as Int
         calculateWidth(calculatedWidths, totalWidth)
+        val width = calculatedWidths.map { it.calculatedWidth!! }.reduce { a,b -> a+b}
+        if(width < totalWidth-5){
+            tableJQ.width(width)
+        }
         val children = tableJQ.find("colgroup col")
         calculatedWidths.withIndex().forEach { (idx, width)  ->
             children.eq(idx).attr("width", "${width.calculatedWidth}px")

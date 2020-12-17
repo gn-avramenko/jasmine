@@ -57,6 +57,12 @@ class IntegerNumberBoxConfiguration() : BaseWidgetConfiguration(){
     }
 }
 
+class LongNumberBoxConfiguration() : BaseWidgetConfiguration(){
+    constructor(configure:LongNumberBoxConfiguration.()->Unit):this(){
+        configure.invoke(this)
+    }
+}
+
 class BooleanBoxConfiguration() : BaseWidgetConfiguration(){
     constructor(configure:BooleanBoxConfiguration.()->Unit):this(){
         configure.invoke(this)

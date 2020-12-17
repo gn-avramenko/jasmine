@@ -5,7 +5,8 @@
 
 package com.gridnine.jasmine.web.core.mainframe.workspaceEditor
 
-import com.gridnine.jasmine.server.standard.model.domain.BaseWorkspaceCriterionJS
+import com.gridnine.jasmine.server.core.model.common.XeptionJS
+import com.gridnine.jasmine.server.standard.model.domain.*
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.components.*
@@ -18,6 +19,7 @@ class CriterionsListEditor(internal val tableBox: WebTableBox, private val inden
         tableBox.getRows().indices.forEach {
             tableBox.removeRow(0)
         }
+        handlers.clear()
     }
 
     fun addEmptyRow(){
@@ -61,7 +63,16 @@ class CriterionsListEditor(internal val tableBox: WebTableBox, private val inden
             addEmptyRow()
             return
         }
-
+        criterions.forEach {
+            val handler = when(it){
+                is SimpleWorkspaceCriterionJS ->SimpleCriterionHandler(tableBox, listId, it)
+                is OrWorkspaceCriterionJS -> OrCriterionHandler(tableBox, indent, listId, it)
+                is AndWorkspaceCriterionJS -> AndCriterionHandler(tableBox, indent, listId, it)
+                is NotWorkspaceCriterionJS -> NotCriterionHandler(tableBox, indent, listId, it)
+                else -> throw XeptionJS.forDeveloper("unsupported criterion type ${it::class}" )
+            }
+            addRow(handlers.size, handler)
+        }
     }
 
     fun updateToolsVisibility() {
@@ -74,6 +85,10 @@ class CriterionsListEditor(internal val tableBox: WebTableBox, private val inden
                 panel.downButton.setEnabled(idx < size-1)
             }
         }
+    }
+
+    fun getData(): List<BaseWorkspaceCriterionJS> {
+        return handlers.mapNotNull {it.getData()}
     }
 }
 
@@ -177,6 +192,6 @@ class ToolsPanel(private val listEditor: CriterionsListEditor, private val inden
 interface CriterionHandler<T:BaseWorkspaceCriterionJS>{
     fun getComponents(): MutableList<WebTableBoxCell>
     fun getId(): String
-
+    fun getData(): T?
 }
 
