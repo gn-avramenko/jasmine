@@ -57,11 +57,12 @@ class DocumentPropertyDescriptionJS(id: String, val type:DocumentPropertyTypeJS,
 
 class DocumentCollectionDescriptionJS(id: String,val elementType: DocumentPropertyTypeJS, val elementClassName: String?) : BaseMetaElementDescriptionJS(id)
 
-class DocumentDescriptionJS(id:String, val isAbstract:Boolean, val extendsId:String?) : BaseMetaElementDescriptionJS(id) {
+class DocumentDescriptionJS(id:String, val isAbstract:Boolean, val extendsId:String?, val root:Boolean) : BaseMetaElementDescriptionJS(id) {
 
     val properties = linkedMapOf<String, DocumentPropertyDescriptionJS>()
 
     val collections = linkedMapOf<String, DocumentCollectionDescriptionJS>()
+
 
 }
 

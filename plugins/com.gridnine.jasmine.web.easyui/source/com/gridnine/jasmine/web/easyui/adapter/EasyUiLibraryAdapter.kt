@@ -12,6 +12,7 @@ import com.gridnine.jasmine.web.core.ui.components.*
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import com.gridnine.jasmine.web.core.utils.UiUtils
 import com.gridnine.jasmine.web.easyui.adapter.elements.*
+import kotlin.browser.window
 
 class EasyUiLibraryAdapter:UiLibraryAdapter {
     override fun showWindow(component: WebComponent) {
@@ -159,7 +160,13 @@ class EasyUiLibraryAdapter:UiLibraryAdapter {
 
     override fun showContextMenu(popupChild: WebComponent?, items: List<WebContextMenuItem>, pageX:Int, pageY:Int) {
         val compJq = if(popupChild == null) jQuery("body") else jQuery("#"+(UiUtils.findParent(popupChild,WebPopupContainer::class)?.getId()?:throw XeptionJS.forDeveloper("unable to find popup container")))
-        jQuery("#contextMenu").remove()
+        //val compJq = jQuery("body")
+        val menuQ = jQuery("#contextMenu")
+        val size = menuQ.length as Int
+        if(size >0){
+            menuQ.menu("destroy")
+            menuQ.remove()
+        }
         val itemsMap = hashMapOf<WebContextMenuItem, String>()
         val itemsReverseMap = hashMapOf<String,WebContextMenuItem>()
         fillItemsMap(itemsMap, items)
@@ -182,8 +189,10 @@ class EasyUiLibraryAdapter:UiLibraryAdapter {
                 }
             }
             val onHide = {
-//                menuJQ.menu("destroy")
-//                menuJQ.remove()
+                window.setTimeout({
+                    menuJQ.menu("destroy")
+                    menuJQ.remove()
+                }, 50)
             }
 
         });

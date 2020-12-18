@@ -22,13 +22,14 @@ interface WorkspaceProvider{
     }
 }
 
-//class StandardSaveWorkspaceRestHandler:RestHandler<SaveWorkspaceRequest, SaveWorkspaceResponse>{
-//    override fun service(request: SaveWorkspaceRequest, ctx:RestOperationContext): SaveWorkspaceResponse {
-//        val result = SaveWorkspaceResponse()
-//        result.workspace = WorkspaceProvider.get().saveWorkspace(request.workspace)
-//        return result
-//    }
-//}
+class StandardSaveWorkspaceRestHandler:RestHandler<SaveWorkspaceRequest, SaveWorkspaceResponse>{
+    override fun service(request: SaveWorkspaceRequest, ctx:RestOperationContext): SaveWorkspaceResponse {
+        val result = SaveWorkspaceResponse()
+        WorkspaceProvider.get().saveWorkspace(request.workspace)
+        result.workspace = request.workspace
+        return result
+    }
+}
 
 class StandardGetWorkspaceRestHandler:RestHandler<GetWorkspaceRequest, GetWorkspaceResponse>{
     override fun service(request: GetWorkspaceRequest, ctx:RestOperationContext): GetWorkspaceResponse {

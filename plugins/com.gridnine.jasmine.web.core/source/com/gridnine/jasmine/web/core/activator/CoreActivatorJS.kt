@@ -223,7 +223,7 @@ class CoreActivatorJS: ActivatorJS {
             Unit
         }
         it.domainDocuments?.forEach{itJs ->
-            val entity = DocumentDescriptionJS(itJs.id, itJs.isAbstract, itJs.extendsId)
+            val entity = DocumentDescriptionJS(itJs.id, itJs.isAbstract, itJs.extendsId, itJs.root)
             itJs.properties?.forEach{ prop:dynamic ->
                 val id = DocumentPropertyDescriptionJS(id = prop.id,type = DocumentPropertyTypeJS.valueOf(prop.type),
                         className = prop.className, nonNullable = prop.nonNullable)

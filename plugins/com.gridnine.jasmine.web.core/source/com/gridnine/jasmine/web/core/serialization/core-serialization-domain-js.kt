@@ -14,6 +14,9 @@ internal open class DomainDocumentMetadataProvider(description: DocumentDescript
 
     init {
         addProperty(SerializablePropertyDescriptionJS(BaseIdentityJS.uid, SerializablePropertyTypeJS.STRING, null, false))
+        if(description.root) {
+            addProperty(SerializablePropertyDescriptionJS(BaseDocumentJS.revision, SerializablePropertyTypeJS.INT, null, false))
+        }
         var extendsId = description.extendsId
         while (extendsId != null) {
             val parentDescr = DomainMetaRegistryJS.get().documents[extendsId]?: throw XeptionJS.forDeveloper("no document found for id $extendsId")

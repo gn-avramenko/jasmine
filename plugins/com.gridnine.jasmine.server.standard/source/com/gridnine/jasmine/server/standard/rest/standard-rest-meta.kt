@@ -302,6 +302,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
 
     private fun createDocumentDescription(it: BaseDocumentDescription): DocumentDescriptionDT {
         val documentDescription = DocumentDescriptionDT()
+        documentDescription.root = it is DocumentDescription
         documentDescription.id = it.id+"JS"
         documentDescription.extendsId = if(it.extendsId ==null) null else "${it.extendsId}JS"
         documentDescription.isAbstract = it.isAbstract
@@ -320,6 +321,7 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
             coll.elementType = toRestCollectionType(collectionDescription.elementType)
             documentDescription.collections.add(coll)
         }
+
        return documentDescription
     }
 

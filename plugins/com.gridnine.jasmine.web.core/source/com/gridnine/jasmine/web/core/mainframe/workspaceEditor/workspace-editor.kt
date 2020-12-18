@@ -5,13 +5,17 @@
 
 package com.gridnine.jasmine.web.core.mainframe.workspaceEditor
 
+import com.gridnine.jasmine.server.core.model.domain.BaseDocumentJS
+import com.gridnine.jasmine.server.standard.model.domain.BaseWorkspaceItemJS
 import com.gridnine.jasmine.server.standard.model.domain.ListWorkspaceItemJS
 import com.gridnine.jasmine.server.standard.model.domain.WorkspaceGroupJS
 import com.gridnine.jasmine.server.standard.model.domain.WorkspaceJS
 import com.gridnine.jasmine.server.standard.model.rest.GetWorkspaceRequestJS
 import com.gridnine.jasmine.server.standard.model.rest.GetWorkspaceResponseJS
+import com.gridnine.jasmine.server.standard.model.rest.SaveWorkspaceRequestJS
 import com.gridnine.jasmine.web.core.CoreWebMessagesJS
 import com.gridnine.jasmine.web.core.StandardRestClient
+import com.gridnine.jasmine.web.core.mainframe.MainFrame
 import com.gridnine.jasmine.web.core.mainframe.MainFrameTabCallback
 import com.gridnine.jasmine.web.core.mainframe.MainFrameTabData
 import com.gridnine.jasmine.web.core.mainframe.MainFrameTabHandler
@@ -48,7 +52,9 @@ class WorkspaceEditor(private val parent: WebComponent, private val workspace:Wo
     private var lastNodeId:String? = null
     private val tree:WebTree
     private var lastEditor: WorkspaceElementEditorHandler<*,*>? = null
+    private var revision:Int
     init {
+        revision = workspace.getValue(BaseDocumentJS.revision) as Int
         delegate = UiLibraryAdapter.get().createBorderLayout(this){
             fit=true
         }
@@ -192,6 +198,28 @@ class WorkspaceEditor(private val parent: WebComponent, private val workspace:Wo
             })
             node
         })
+
+        saveButton.setHandler {
+            saveData()
+            val result = WorkspaceJS()
+            result.uid = workspace.uid
+            result.setValue("revision", revision)
+            tree.getData().forEach {
+                val group = it.userData as WorkspaceGroupJS
+                group.displayName = it.text
+                result.groups.add(group)
+                group.items.clear()
+                it.children.forEach { child ->
+                    group.items.add(child.userData as BaseWorkspaceItemJS)
+                }
+            }
+            val request = SaveWorkspaceRequestJS()
+            request.workspace = result
+            StandardRestClient.standard_standard_saveWorkspace(request).then {ws ->
+                revision = ws.workspace.getValue(BaseDocumentJS.revision) as Int
+                MainFrame.get().updateWorkspace(result)
+            }
+        }
     }
 
     private fun showEditor(node: WebTreeNode) {

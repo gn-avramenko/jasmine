@@ -27,6 +27,7 @@ class MainFrame(private val delegate:WebBorderContainer = UiLibraryAdapter.get()
 
     private lateinit var  tabsContainer:WebTabsContainer
 
+    private lateinit var westRegion:WebBorderContainer
     init {
         configuration.elementsHandlers[ListWorkspaceItemJS::class] = ListWorkspaceItemHandler()
     }
@@ -39,27 +40,11 @@ class MainFrame(private val delegate:WebBorderContainer = UiLibraryAdapter.get()
         tabsContainer.getTabs().filter { it.content is EventsSubscriber }.forEach { (it.content as EventsSubscriber).receiveEvent(event) }
     }
 
-    fun build(workspace: WorkspaceJS) {
-        val westRegion = UiLibraryAdapter.get().createBorderLayout(this){fit=true}
-        val logoLabel = UiLibraryAdapter.get().createLabel(westRegion)
-        logoLabel.setWidth("100%")
-        logoLabel.addClass("jasmine-logo")
-        logoLabel.setText(configuration.logoText)
-        westRegion.setNorthRegion(WebBorderContainer.region {
-            content = logoLabel
-        })
+    fun updateWorkspace(workspace: WorkspaceJS){
         val westAccordion = UiLibraryAdapter.get().createAccordionContainer(westRegion){
             fit=false
             width="100%"
         }
-        val centerRegion =  UiLibraryAdapter.get().createBorderLayout(this){fit=true}
-        tabsContainer = UiLibraryAdapter.get().createTabsContainer(centerRegion){
-            fit = true
-            width = "100%"
-            height = "100%"
-            tools.addAll(configuration.tools)
-        }
-
         workspace.groups.forEach {group ->
             westAccordion.addPanel(WebAccordionContainer.panel {
                 title = group.displayName
@@ -88,6 +73,27 @@ class MainFrame(private val delegate:WebBorderContainer = UiLibraryAdapter.get()
         westRegion.setCenterRegion(WebBorderContainer.region {
             content = westAccordion
         })
+    }
+
+    fun build(workspace: WorkspaceJS) {
+        westRegion = UiLibraryAdapter.get().createBorderLayout(this){fit=true}
+        val logoLabel = UiLibraryAdapter.get().createLabel(westRegion)
+        logoLabel.setWidth("100%")
+        logoLabel.addClass("jasmine-logo")
+        logoLabel.setText(configuration.logoText)
+        westRegion.setNorthRegion(WebBorderContainer.region {
+            content = logoLabel
+        })
+
+        val centerRegion =  UiLibraryAdapter.get().createBorderLayout(this){fit=true}
+        tabsContainer = UiLibraryAdapter.get().createTabsContainer(centerRegion){
+            fit = true
+            width = "100%"
+            height = "100%"
+            tools.addAll(configuration.tools)
+        }
+        updateWorkspace(workspace)
+
         setWestRegion(WebBorderContainer.region {
             collapsible = true
             showBorder = false

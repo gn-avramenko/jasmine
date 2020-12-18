@@ -38,7 +38,6 @@ class EasyUiWebDataList<E:Any>(private val parent:WebComponent?, configure: WebD
     private var clickListener:((E) ->Unit)? = null
 
     init {
-        (parent?.getChildren() as MutableList<WebComponent>?)?.add(this)
         val configuration = WebDataListConfiguration()
         configuration.configure()
         fit = configuration.fit

@@ -154,6 +154,7 @@
         <property id="id" type="STRING"/>
         <property id="isAbstract" type="BOOLEAN" non-nullable="true"/>
         <property id="extendsId" type="STRING"/>
+        <property id="root" type="BOOLEAN"/>
         <collection id="properties" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.DocumentPropertyDescriptionDT"/>
         <collection id="collections" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.model.rest.DocumentCollectionDescriptionDT"/>
     </entity>
@@ -361,6 +362,14 @@
         <operation id="getWorkspace" handler="com.gridnine.jasmine.server.standard.rest.StandardGetWorkspaceRestHandler">
             <request id="com.gridnine.jasmine.server.standard.model.rest.GetWorkspaceRequest"/>
             <response id="com.gridnine.jasmine.server.standard.model.rest.GetWorkspaceResponse">
+                <property id="workspace" type="ENTITY" class-name="com.gridnine.jasmine.server.standard.model.domain.Workspace" lateinit="true"/>
+            </response>
+        </operation>
+        <operation id="saveWorkspace" handler="com.gridnine.jasmine.server.standard.rest.StandardSaveWorkspaceRestHandler">
+            <request id="com.gridnine.jasmine.server.standard.model.rest.SaveWorkspaceRequest">
+                <property id="workspace" type="ENTITY" class-name="com.gridnine.jasmine.server.standard.model.domain.Workspace" lateinit="true"/>
+            </request>
+            <response id="com.gridnine.jasmine.server.standard.model.rest.SaveWorkspaceResponse">
                 <property id="workspace" type="ENTITY" class-name="com.gridnine.jasmine.server.standard.model.domain.Workspace" lateinit="true"/>
             </response>
         </operation>
