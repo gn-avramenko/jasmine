@@ -447,4 +447,4 @@ class VersionReadData(val streamProvider: () -> InputStream, private val closeCa
     }
 }
 
-data class DocumentWrapper<D:BaseIdentity>(val uid:String, val content:ByteArray,val metadata:VersionMetadata,val revision:Int,val oid:Int?,val cls:KClass<D>)
+data class DocumentWrapper<D:BaseIdentity>(val uid:String, val content:ByteArray,val metadata:VersionMetadata,val revision:Int,val oid:Long?,val cls:KClass<D>)

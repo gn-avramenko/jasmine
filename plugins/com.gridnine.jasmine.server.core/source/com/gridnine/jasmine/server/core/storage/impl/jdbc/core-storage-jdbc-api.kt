@@ -35,7 +35,7 @@ class JdbcBlobWrapper(){
     constructor(init:JdbcBlobWrapper.()->Unit):this(){
         init(this)
     }
-    var oid:Int? = null
+    var oid:Long? = null
     var data:ByteArray? = null
     var inputStreamCallback: (()->InputStream)? ={throw IllegalArgumentException("unsupported operation")}
 }
@@ -68,7 +68,7 @@ interface JdbcDialect:Disposable {
         wrapper.dispose()
     }
 
-    fun deleteBlob(ctx: JdbcContext, oid: Int)
+    fun deleteBlob(ctx: JdbcContext, oid: Long)
 
     companion object {
         private val wrapper = PublishableWrapper(JdbcDialect::class)

@@ -108,7 +108,7 @@ class H2dbDialect : JdbcDialect {
        ps.setBinaryStream(idx, ByteArrayInputStream(jdbcBlobHandler.data))
     }
 
-    override fun deleteBlob(ctx: JdbcContext, oid: Int) {
+    override fun deleteBlob(ctx: JdbcContext, oid: Long) {
         //noops
     }
 

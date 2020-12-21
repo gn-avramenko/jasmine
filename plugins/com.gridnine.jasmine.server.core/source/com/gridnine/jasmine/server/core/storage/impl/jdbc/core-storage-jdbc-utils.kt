@@ -240,12 +240,12 @@ object JdbcUtils {
         fun <T : Any> loadEntityWithBlob(sql: String, ctx:JdbcContext, pss: ((ps: PreparedStatement, ctx: JdbcContext) -> Unit)?, rm: (rs: ResultSet, ctx: JdbcContext) -> T): T? {
             val statement = contexts.get().connection.prepareStatement(sql)
             pss?.invoke(statement, contexts.get())
-            ctx.closeCallbacks.add {
-                statement.close()
-            }
             val rs = statement.executeQuery()
             ctx.closeCallbacks.add {
                 rs.close()
+            }
+            ctx.closeCallbacks.add {
+                statement.close()
             }
             return if(rs.next()) rm.invoke(rs, ctx) else null
         }
@@ -255,13 +255,11 @@ object JdbcUtils {
             executeInTransaction(false) { ctx->
                 withStatement(sql) {
                     pss?.invoke(it, ctx)
-                    val rs = it.executeQuery()
-                    while (rs.next()) {
-                        val row = rm.invoke(rs, ctx)
-                        result.add(row)
-                    }
-                    ctx.closeCallbacks.add{
-                        rs.close()
+                    it.executeQuery().use { rs ->
+                        while (rs.next()) {
+                            val row = rm.invoke(rs, ctx)
+                            result.add(row)
+                        }
                     }
                 }
             }

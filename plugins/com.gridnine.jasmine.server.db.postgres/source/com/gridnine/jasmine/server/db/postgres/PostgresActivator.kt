@@ -3,7 +3,7 @@
  * Project: Jasmine
  *****************************************************************/
 
-package com.gridnine.jasmine.server.db.h2
+package com.gridnine.jasmine.server.db.postgres
 
 import com.gridnine.jasmine.server.core.app.Environment
 import com.gridnine.jasmine.server.core.app.IPluginActivator
@@ -16,22 +16,19 @@ import java.io.File
 import java.util.*
 import javax.sql.DataSource
 
-
-class H2dbActivator:IPluginActivator{
-
+class PostgresActivator :IPluginActivator{
     override fun configure(config: Properties) {
         val prop = config.getProperty("db-dialect")
-        if(prop != null && prop != "h2"){
+        if(prop == null && prop != "postgres"){
             return
         }
         val file = File(Environment.rootFolder, "data/db")
         if (!file.exists()) {
             file.mkdirs()
         }
-        Environment.publish(DataSource::class, H2DataSource.createDataSource("jdbc:h2:${file.absolutePath}/jasmine"))
-        Environment.publish(JdbcDialect::class, H2dbDialect())
+        Environment.publish(DataSource::class, PostgresDataSource.createDataSource(connectionUrl = config.getProperty("db-connection-url"), user = config.getProperty("db-user"), password = config.getProperty("db-password")));
+        Environment.publish(JdbcDialect::class, PostgresDbDialect())
         Environment.publish(Database::class, JdbcDatabase())
-        Environment.publish(Storage::class,StorageImpl())
+        Environment.publish(Storage::class, StorageImpl())
     }
-
 }
