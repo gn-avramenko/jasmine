@@ -7,7 +7,6 @@
 package com.gridnine.jasmine.server.core.model.ui
 
 
-import com.gridnine.jasmine.server.core.model.common.BaseIdentity
 import com.gridnine.jasmine.server.core.model.common.ParserUtils
 import com.gridnine.jasmine.server.core.model.common.SelectItem
 import com.gridnine.jasmine.server.core.model.common.Xeption
@@ -56,6 +55,7 @@ object UiMetadataParser {
                 GridContainerDescription(id,
                         ParserUtils.getIntegerAttribute(child, "columns-count"))
             }) as GridContainerDescription
+            gridContainer.interceptors.addAll(child.children("interceptor").mapNotNull { it.value })
             val viewModelId = "${id}VM"
             val viewModelEntity = registry.viewModels.getOrPut(viewModelId, { VMEntityDescription(viewModelId) })
             baseExtendsId?.let { viewModelEntity.extendsId = it+"VM"}
@@ -123,6 +123,7 @@ object UiMetadataParser {
             val res = registry.views.getOrPut(id, {
                 TileSpaceDescription(id, overviewDescription)
             }) as TileSpaceDescription
+            res.interceptors.addAll(child.children("interceptor").mapNotNull { it.value })
             child.children("tile").forEach { tileElm ->
                 val tileId = ParserUtils.getIdAttribute(tileElm)
                 val fullViewElm = tileElm.children("full-view")[0]
@@ -163,12 +164,22 @@ object UiMetadataParser {
             val res = registry.views.getOrPut(id, {
                 NavigatorDescription(id)
             }) as NavigatorDescription
+            res.interceptors.addAll(child.children("interceptor").mapNotNull { it.value })
             child.children("variant").forEach { navigatorElm ->
                 val containerRef = navigatorElm.attributes["container-ref"]
                 val descr = if (containerRef != null) {
                     NavigatorVariantDescription("${containerRef}VM", containerRef)
                 } else {
                     val containerId = processContainers(registry, navigatorElm, BaseNavigatorVariantVM::class.qualifiedName?.substringBeforeLast("VM"), localizations)[0]
+                    val cont = registry.views[containerId]
+                    if(cont is GridContainerDescription){
+                        val uidCell = GridContainerCellDescription("uid", "", 1)
+                        uidCell.widget = HiddenWidgetDescription("String", true)
+                        cont.rows[0].cells.add(uidCell)
+                        val titleCell = GridContainerCellDescription("title", "", 1)
+                        titleCell.widget = HiddenWidgetDescription("String", true)
+                        cont.rows[0].cells.add(titleCell)
+                    }
                     NavigatorVariantDescription("${containerId}VM", containerId)
                 }
                 res.variants.add(descr)
@@ -260,7 +271,7 @@ object UiMetadataParser {
                 WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription, null, null, null)
             }
             "hidden" -> {
-                val widget = HiddenWidgetDescription(xmlNode.attributes["object-id"]!!)
+                val widget = HiddenWidgetDescription(xmlNode.attributes["object-id"]!!,"true" == xmlNode.attributes["non-nullable"])
                 val vmPropertyDescription = when(widget.objectId){
                     "String" ->VMPropertyDescription(id, VMPropertyType.STRING, null, false,false)
                     else -> TODO()

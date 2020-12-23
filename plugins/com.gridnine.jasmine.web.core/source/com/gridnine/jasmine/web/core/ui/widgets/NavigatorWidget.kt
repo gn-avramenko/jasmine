@@ -10,7 +10,11 @@ import com.gridnine.jasmine.server.core.model.ui.*
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.WebEditor
-import com.gridnine.jasmine.web.core.ui.components.*
+import com.gridnine.jasmine.web.core.ui.WebEditorInterceptor
+import com.gridnine.jasmine.web.core.ui.components.WebDivsContainer
+import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutCell
+import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutContainer
+import com.gridnine.jasmine.web.core.ui.components.WebLinkButton
 import kotlin.reflect.KClass
 
 open class NavigatorWidget<VM: BaseVMJS, VS: BaseVSJS, VV: BaseVVJS>(private val parent: WebComponent?, configure:NavigatorWidgetConfiguration<VM>.(widget:NavigatorWidget<VM, VS, VV>)->Unit) : WebEditor<VM, VS, VV> {
@@ -74,6 +78,9 @@ open class NavigatorWidget<VM: BaseVMJS, VS: BaseVSJS, VV: BaseVVJS>(private val
                     handler.invoke()
                 }
             }
+        }
+        config.interceptors.forEach {
+            (it as WebEditorInterceptor<NavigatorWidget<VM,VS,VV>>).onInit(this)
         }
     }
 
@@ -196,6 +203,7 @@ open class NavigatorWidget<VM: BaseVMJS, VS: BaseVSJS, VV: BaseVVJS>(private val
 class NavigatorWidgetConfiguration<VM:BaseVMJS> {
     var width:String? = null
     var height:String? = null
+    val interceptors = arrayListOf<WebEditorInterceptor<*>>()
     lateinit var vmFactory:()->VM
     internal val factories = hashMapOf<KClass<*>, ()->WebEditor<*,*,*>>()
     fun<VM1:BaseNavigatorVariantVMJS, VS1:BaseNavigatorVariantVSJS, VV1:BaseNavigatorVariantVVJS> factory(cls:KClass<VM1>, fac:()->WebEditor<VM1,VS1,VV1>){

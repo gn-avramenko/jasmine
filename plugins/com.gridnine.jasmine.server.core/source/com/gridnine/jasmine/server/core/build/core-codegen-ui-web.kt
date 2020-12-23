@@ -228,6 +228,13 @@ object UiWebGenerator {
                 file.writeBytes(content)
             }
             generatedFiles.getOrPut(key) { arrayListOf() }.add(file)
+            registry.views.values.forEach {
+                when(it){
+                    is GridContainerDescription ->GridWebEditorGenerator.generateEditor(it,pluginsLocation[key]?: throw Xeption.forDeveloper("unable to find basedir of plugin $key"), projectName, generatedFiles.getOrPut(key, { arrayListOf() }) )
+                    is NavigatorDescription ->NavigatorWebEditorGenerator.generateEditor(it,pluginsLocation[key]?: throw Xeption.forDeveloper("unable to find basedir of plugin $key"), projectName, generatedFiles.getOrPut(key, { arrayListOf() }) )
+                    is TileSpaceDescription ->TileSpaceWebEditorGenerator.generateEditor(it,pluginsLocation[key]?: throw Xeption.forDeveloper("unable to find basedir of plugin $key"), projectName, generatedFiles.getOrPut(key, { arrayListOf() }) )
+                }
+            }
         }
     }
 

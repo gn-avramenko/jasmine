@@ -43,7 +43,7 @@
     </complexType>
     <complexType name="tileSpace">
         <complexContent>
-            <extension base="tns:baseType">
+            <extension base="tns:baseView">
                 <sequence>
                     <element name="overview" minOccurs="0">
                         <complexType>
@@ -75,7 +75,7 @@
     </complexType>
     <complexType name="gridContainerType">
         <complexContent>
-            <extension base="tns:baseType">
+            <extension base="tns:baseView">
                 <sequence>
                     <element name="columns" minOccurs="0">
                         <complexType>
@@ -112,7 +112,7 @@
     </complexType>
     <complexType name="navigator">
         <complexContent>
-            <extension base="tns:baseType">
+            <extension base="tns:baseView">
                 <sequence>
                     <sequence>
                         <element name="variant" minOccurs="0" maxOccurs="unbounded">
@@ -246,6 +246,15 @@
             <enumeration value="CUSTOM"/>
         </restriction>
     </simpleType>
+    <complexType name="baseView">
+        <complexContent>
+            <extension base="tns:baseType">
+                <sequence>
+                    <element name="interceptor" maxOccurs="unbounded" minOccurs="0" type="string"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
     <complexType name="baseType">
         <complexContent>
             <extension base="tns:baseMetaElement">

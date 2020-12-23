@@ -58,6 +58,9 @@ class BooleanBoxWidget(private val parent:WebComponent, configure:BooleanBoxWidg
         }
     }
 
+    fun showValidation(value:String?){
+        //noops
+    }
 }
 
 

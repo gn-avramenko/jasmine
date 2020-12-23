@@ -129,7 +129,7 @@ class EntitySelectBoxWidgetDescription(notEditable:Boolean, val objectId:String)
 
 class GeneralSelectBoxWidgetDescription(notEditable:Boolean):BaseWidgetDescription(notEditable, WidgetType.GENERAL_SELECT_BOX)
 
-class HiddenWidgetDescription(val objectId:String):BaseWidgetDescription(false, WidgetType.HIDDEN)
+class HiddenWidgetDescription(val objectId:String, val nonNullable: Boolean):BaseWidgetDescription(false, WidgetType.HIDDEN)
 
 class EnumSelectBoxWidgetDescription(notEditable:Boolean, val enumId:String):BaseWidgetDescription(notEditable, WidgetType.ENUM_SELECT_BOX)
 
@@ -165,7 +165,9 @@ enum class ViewType{
     NAVIGATOR
 }
 
-abstract class BaseViewDescription(val id:String,val viewType:ViewType)
+abstract class BaseViewDescription(val id:String,val viewType:ViewType){
+    val interceptors = arrayListOf<String>()
+}
 
 class GridContainerCellDescription(id:String, val caption:String?, val colSpan:Int):BaseModelElementDescription(id){
     lateinit var widget:BaseWidgetDescription

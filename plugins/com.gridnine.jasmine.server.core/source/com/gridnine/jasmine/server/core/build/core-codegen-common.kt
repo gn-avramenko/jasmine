@@ -305,6 +305,20 @@ internal object GenUtils {
             sb.append("}")
         }
 
+        operator fun String.invoke(lambdaParamName:String, init: (UNIT.() -> Unit)? = null) {
+
+            val unit = UNIT(sb, indent + 1)
+            sb.append("\n")
+            indent(indent, sb)
+            sb.append("$this{ $lambdaParamName ->")
+            if (init != null) {
+                unit.apply(init)
+            }
+            sb.append("\n")
+            indent(indent, sb)
+            sb.append("}")
+        }
+
         fun blankLine() {
             sb.append("\n")
         }
