@@ -6,3 +6,4 @@
 /plugins/com.gridnine.jasmine.server.standard/source-gen/
 /plugins/com.gridnine.jasmine.web.core/resources/jasmine-core/
 /plugins/com.gridnine.jasmine.web.easyui/resources/jasmine-easyui/
+/build-scripts/out/production/classes/
