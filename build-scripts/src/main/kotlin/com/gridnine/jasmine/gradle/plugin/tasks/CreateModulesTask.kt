@@ -42,38 +42,56 @@ open class CreateModulesTask() : DefaultTask() {
     }
 
     private fun createExternals() {
-        val sb = StringBuilder()
+        val externals = linkedSetOf<String>()
+        val externalsTest = linkedSetOf<String>()
         registry.plugins.forEach { plugin ->
             val baseDir = pluginsToFileMap[plugin.id]?:throw IllegalArgumentException("no file mapping found for plugin ${plugin.id}")
             val pluginType = SpfPluginType.valueOf(plugin.parameters.find { par -> "type" == par.id }?.value
                     ?: throw IllegalArgumentException("plugin ${plugin.id} has no type attribute"))
             when (pluginType) {
                 SpfPluginType.CORE, SpfPluginType.SERVER, SpfPluginType.SPF -> {
-                    sb.append("\n${baseDir.absolutePath}/")
+                    externals.add("${baseDir.absolutePath}/")
                     val classesDir = File(baseDir, "classes")
                     if (classesDir.exists()) {
-                        sb.append("\n${classesDir.absolutePath}/")
+                        externals.add("${classesDir.absolutePath}/")
                     }
                     val resourcesDir = File(baseDir, "resources")
                     if (resourcesDir.exists()) {
-                        sb.append("\n${resourcesDir.absolutePath}/")
+                        externals.add("${resourcesDir.absolutePath}/")
                     }
                 }
                 SpfPluginType.WEB -> {
                     val resourcesDir = File(baseDir, "resources")
                     if (resourcesDir.exists()) {
-                        sb.append("\n${resourcesDir.absolutePath}/")
+                        externals.add("${resourcesDir.absolutePath}/")
+                    }
+                }
+                SpfPluginType.SERVER_TEST -> {
+                    externalsTest.add("${baseDir.absolutePath}/")
+                    val classesDir = File(baseDir, "classes")
+                    if (classesDir.exists()) {
+                        externalsTest.add("${classesDir.absolutePath}/")
+                    }
+                    val resourcesDir = File(baseDir, "resources")
+                    if (resourcesDir.exists()) {
+                        externalsTest.add("${resourcesDir.absolutePath}/")
                     }
                 }
                 else -> {
                 }
             }
         }
-        val config = project.configurations.getByName("server")
+        val config = project.configurations.getByName(KotlinUtils.SERVER_CONFIGURATION_NAME)
         config.forEach{
-            sb.append("\n${it.absolutePath}")
+            externals.add("${it.absolutePath}")
         }
-        File(project.projectDir, "lib/externals.txt").writeIfDiffers(sb.substring(1))
+        File(project.projectDir, "lib/externals.txt").writeIfDiffers(externals.joinToString("\n"))
+        val testConfig = project.configurations.getByName(KotlinUtils.SERVER_TEST_CONFIGURATION_NAME)
+        testConfig.forEach{
+            externalsTest.add("${it.absolutePath}")
+        }
+        externals.addAll(externalsTest)
+        File(project.projectDir, "lib/externals-test.txt").writeIfDiffers(externals.joinToString("\n"))
     }
 
     private fun createPlugins() {

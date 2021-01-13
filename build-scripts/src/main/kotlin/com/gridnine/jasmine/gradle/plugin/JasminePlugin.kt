@@ -29,6 +29,10 @@ class JasminePlugin: Plugin<Project>{
         target.configurations.maybeCreate(KotlinUtils.COMPILER_CLASSPATH_CONFIGURATION_NAME).defaultDependencies {
             it.add(target.dependencies.create("${KotlinUtils.KOTLIN_MODULE_GROUP}:${KotlinUtils.KOTLIN_COMPILER_EMBEDDABLE}:${extension.kotlinVersion}"))
         }
+        target.extensions.configure("node") { it: com.moowork.gradle.node.NodeExtension ->
+            it.download = true
+        }
+
         target.tasks.create(CreateArtifactsTask.TASK_NAME, CreateArtifactsTask::class.java, extension)
         target.tasks.create(CreateLibrariesTask.TASK_NAME, CreateLibrariesTask::class.java, extension)
         target.tasks.create(CreateModulesTask.TASK_NAME, CreateModulesTask::class.java,registry, extension, pluginsToFileMap)
@@ -41,11 +45,23 @@ class JasminePlugin: Plugin<Project>{
                 SpfPluginType.WEB ->{
                     //noops
                 }
+                SpfPluginType.WEB_TEST ->{
+                    if(plugin.parameters.any{ param -> param.id == "individual-test-launcher" }) {
+                        target.tasks.create(StartTestServerInIDETask.getTaskName(plugin.id), StartTestServerInIDETask::class.java, registry, plugin)
+                        target.tasks.create(StopTestServerInIDETask.getTaskName(plugin.id), StopTestServerInIDETask::class.java, registry, plugin)
+                        target.tasks.create(StartIndividualJSTestInIDETask.getTaskName(plugin.id), StartIndividualJSTestInIDETask::class.java, plugin)
+                    }
+                }
                 else ->throw IllegalArgumentException("unsupported plugin type $pluginType" )
             }
         }
         target.tasks.create(CodeGenPluginTask.TASK_NAME, CodeGenPluginTask::class.java,registry, extension, pluginsToFileMap)
         target.tasks.create(BuildTask.TASK_NAME, BuildTask::class.java, registry)
+        target.tasks.create(NodeJsInstallMochaTask.taskName, NodeJsInstallMochaTask::class.java)
+        target.tasks.create(NodeJsInstalReporterTask.taskName, NodeJsInstalReporterTask::class.java)
+        target.tasks.create(NodeJsInstallXmlHttpRequestTask.taskName, NodeJsInstallXmlHttpRequestTask::class.java)
+        target.tasks.create(SetupNodeTask.taskName, SetupNodeTask::class.java)
+
     }
 
 }
