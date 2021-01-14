@@ -20,6 +20,14 @@ open class StopTestServerInIDETask() : BaseStartServerTask() {
         jvmArgs = arrayListOf("-Dspf.mode=stop", "-Dspf.applicationClass=$launcherClassName")
         main = "com.gridnine.spf.app.SpfBoot"
         classpath = StartTestServerInIDETask.getClassPath(project)
+        val individualLauncher = plugin.parameters.find{ param -> param.id == "individual-test-launcher" }?.value
+        if(individualLauncher != null){
+            shouldRunAfter(NodeJsStartTestInIDETask.getTaskName(individualLauncher, plugin.id, false),NodeJsStartTestInIDETask.getTaskName(individualLauncher, plugin.id, true))
+        }
+        val suitelLauncher = plugin.parameters.find{ param -> param.id == "test-suite-launcher" }?.value
+        if(suitelLauncher != null){
+            shouldRunAfter(NodeJsStartTestInIDETask.getTaskName(suitelLauncher, plugin.id, false), NodeJsStartTestInIDETask.getTaskName(suitelLauncher, plugin.id, true))
+        }
     }
 
     companion object{

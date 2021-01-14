@@ -46,10 +46,17 @@ class JasminePlugin: Plugin<Project>{
                     //noops
                 }
                 SpfPluginType.WEB_TEST ->{
-                    if(plugin.parameters.any{ param -> param.id == "individual-test-launcher" }) {
+                    val individualLauncher = plugin.parameters.find{ param -> param.id == "individual-test-launcher" }?.value
+                    val suitelLauncher = plugin.parameters.find{ param -> param.id == "test-suite-launcher" }?.value
+                    if(individualLauncher != null || suitelLauncher != null) {
                         target.tasks.create(StartTestServerInIDETask.getTaskName(plugin.id), StartTestServerInIDETask::class.java, registry, plugin)
                         target.tasks.create(StopTestServerInIDETask.getTaskName(plugin.id), StopTestServerInIDETask::class.java, registry, plugin)
-                        target.tasks.create(StartIndividualJSTestInIDETask.getTaskName(plugin.id), StartIndividualJSTestInIDETask::class.java, plugin)
+                    }
+                    if(individualLauncher != null){
+                        target.tasks.create(NodeJsStartTestInIDETask.getTaskName(individualLauncher, plugin.id, false), NodeJsStartTestInIDETask::class.java, individualLauncher, plugin.id, false)
+                        target.tasks.create(NodeJsStartTestInIDETask.getTaskName(individualLauncher, plugin.id, true), NodeJsStartTestInIDETask::class.java, individualLauncher, plugin.id, true)
+                        target.tasks.create(StartIndividualJSTestInIDETask.getTaskName(plugin.id, false), StartIndividualJSTestInIDETask::class.java, plugin, false)
+                        target.tasks.create(StartIndividualJSTestInIDETask.getTaskName(plugin.id, true), StartIndividualJSTestInIDETask::class.java, plugin, true)
                     }
                 }
                 else ->throw IllegalArgumentException("unsupported plugin type $pluginType" )
@@ -61,7 +68,7 @@ class JasminePlugin: Plugin<Project>{
         target.tasks.create(NodeJsInstalReporterTask.taskName, NodeJsInstalReporterTask::class.java)
         target.tasks.create(NodeJsInstallXmlHttpRequestTask.taskName, NodeJsInstallXmlHttpRequestTask::class.java)
         target.tasks.create(SetupNodeTask.taskName, SetupNodeTask::class.java)
-
+        target.tasks.create(NodeJsCopyJsFilesTask.taskName, NodeJsCopyJsFilesTask::class.java, registry, pluginsToFileMap)
     }
 
 }

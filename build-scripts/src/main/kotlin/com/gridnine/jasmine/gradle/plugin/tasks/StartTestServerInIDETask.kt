@@ -27,6 +27,7 @@ open class StartTestServerInIDETask() : BaseStartServerTask() {
                 Thread.sleep(1000L)
             }
         }
+        shouldRunAfter(NodeJsCopyJsFilesTask.taskName)
     }
 
     companion object{

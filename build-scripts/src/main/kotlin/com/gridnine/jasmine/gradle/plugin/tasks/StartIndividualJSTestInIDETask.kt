@@ -14,12 +14,13 @@ import javax.inject.Inject
 open class StartIndividualJSTestInIDETask() :DefaultTask(){
 
     @Inject
-    constructor(plugin: SpfPlugin):this(){
+    constructor(plugin: SpfPlugin, debug:Boolean):this(){
         group = "individual-js-tests"
-        dependsOn(StartTestServerInIDETask.getTaskName(plugin.id),StopTestServerInIDETask.getTaskName(plugin.id))
+        val individualLauncher = plugin.parameters.find{ param -> param.id == "individual-test-launcher" }!!.value
+        dependsOn(StartTestServerInIDETask.getTaskName(plugin.id),StopTestServerInIDETask.getTaskName(plugin.id), NodeJsCopyJsFilesTask.taskName, NodeJsStartTestInIDETask.getTaskName(individualLauncher, plugin.id, debug))
     }
 
     companion object{
-        fun getTaskName(pluginId: String) = "${pluginId}-Individual-js-test"
+        fun getTaskName(pluginId: String, debug:Boolean) = "${if(debug) "debug-" else ""}${pluginId}-Individual-js-test"
     }
 }
