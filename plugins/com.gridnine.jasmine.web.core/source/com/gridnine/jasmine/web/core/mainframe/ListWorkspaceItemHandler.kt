@@ -207,6 +207,13 @@ class ListWorkspaceItemHandler : MainFrameTabHandler<ListWorkspaceItemJS, Unit> 
             }
         }
 
+        fun simulateButtonClick(buttonId:String):Promise<Any>{
+            val handler = listButtonsMap.values.find { it.getId() == buttonId }
+            handler as TestableListButtonHandler<BaseIntrospectableObjectJS, Any>
+            return handler.onTestClick(objectlist)
+        }
+
+
     }
     override fun createTabData(we: ListWorkspaceItemJS, data: Unit, parent: WebComponent, callback: MainFrameTabCallback): MainFrameTabData {
         return MainFrameTabData(we.displayName ?: "???", ListPanel(we, parent, callback))

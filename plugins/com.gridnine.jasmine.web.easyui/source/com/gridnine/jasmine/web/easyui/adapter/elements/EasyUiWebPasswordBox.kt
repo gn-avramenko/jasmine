@@ -76,6 +76,9 @@ class EasyUiWebPasswordBox(private val parent:WebComponent?, configure: WebPassw
     }
 
     override fun showValidation(value: String) {
+        if(!initialized){
+            return
+        }
         val tb =jq.passwordbox("textbox")
         val spanElm = tb.parent()
         spanElm.css("border-color", "#d9534f")

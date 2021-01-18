@@ -12,7 +12,7 @@ interface WebTabsContainer : WebComponent{
     fun addTestTab()
     fun addTab(panel:WebTabPanel)
     fun removeTab(id:String)
-    fun select(id:String)
+    fun select(id:String):WebComponent?
     fun getTabs():List<WebTabPanel>
     fun setTitle(tabId: String, title: String)
 

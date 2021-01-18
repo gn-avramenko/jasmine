@@ -7,15 +7,20 @@ package com.gridnine.jasmine.web.easyui.adapter
 
 import com.gridnine.jasmine.server.core.model.common.BaseIntrospectableObjectJS
 import com.gridnine.jasmine.server.core.model.common.XeptionJS
+import com.gridnine.jasmine.web.core.application.EnvironmentJS
 import com.gridnine.jasmine.web.core.ui.*
 import com.gridnine.jasmine.web.core.ui.components.*
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import com.gridnine.jasmine.web.core.utils.UiUtils
 import com.gridnine.jasmine.web.easyui.adapter.elements.*
 import kotlin.browser.window
+import kotlin.js.Promise
 
 class EasyUiLibraryAdapter:UiLibraryAdapter {
     override fun showWindow(component: WebComponent) {
+        if(EnvironmentJS.test){
+            return
+        }
         jQuery("body").html(component.getHtml())
         component.decorate()
     }
@@ -84,6 +89,21 @@ class EasyUiLibraryAdapter:UiLibraryAdapter {
 
     override fun <W : WebComponent> showDialog(popupChild: WebComponent?, configure: DialogConfiguration<W>.() -> Unit): WebDialog<W> where W : HasDivId {
         val conf = DialogConfiguration<W>(configure)
+        if(EnvironmentJS.test){
+            return object:TestableWebDialog<W>{
+                override fun close() {
+                    //noops
+                }
+
+                override fun getContent(): W {
+                    return conf.editor
+                }
+
+                override fun simulateButtonClick(idx: Int):Promise<Any> {
+                    return conf.buttons[idx].testableHandler!!.invoke(this)
+                }
+            }
+        }
         val compJq = if(popupChild == null) jQuery("body") else jQuery("#"+(UiUtils.findParent(popupChild,WebPopupContainer::class)?.getId()?:throw XeptionJS.forDeveloper("unable to find popup container")))
         compJq.append(conf.editor.getHtml())
         val jq = jQuery("#${conf.editor.getId()}")

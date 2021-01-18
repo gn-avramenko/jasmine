@@ -14,6 +14,7 @@ import com.gridnine.jasmine.web.core.CoreWebMessagesJS
 import com.gridnine.jasmine.web.core.application.EnvironmentJS
 import com.gridnine.jasmine.web.core.mainframe.ObjectEditor
 import com.gridnine.jasmine.web.core.ui.components.*
+import kotlin.js.Promise
 
 interface UiLibraryAdapter{
     fun showWindow(component: WebComponent)
@@ -203,15 +204,34 @@ interface ListButtonHandler<E:BaseIntrospectableObjectJS>:RegistryItem<ListButto
     }
 }
 
+abstract class TestableListButtonHandler<E:BaseIntrospectableObjectJS, T>:ListButtonHandler<E>{
+
+    abstract fun onTestClick(value: ObjectsList<E>): Promise<T>
+
+    override fun onClick(value: ObjectsList<E>) {
+        onTestClick(value)
+    }
+}
 
 interface WebDialog<W> where W:WebComponent, W:HasDivId{
     fun close()
     fun getContent():W
 }
 
+interface TestableWebDialog<W>:WebDialog<W> where W:WebComponent, W:HasDivId{
+    fun simulateButtonClick(idx:Int):Promise<Any>
+}
+
 class DialogButtonConfiguration<W> where W:WebComponent, W:HasDivId{
     lateinit var displayName:String
     lateinit var handler:(WebDialog<W>)  ->Unit
+    var testableHandler: ((WebDialog<W>)  ->Promise<Any>)? = null
+    set(value) {
+        field = value
+        handler = {
+            value!!.invoke(it)
+        }
+    }
 }
 
 class DialogConfiguration<W>  where W:WebComponent, W:HasDivId{

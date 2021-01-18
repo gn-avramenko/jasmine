@@ -13,6 +13,7 @@ import com.gridnine.jasmine.web.core.application.EnvironmentJS
 import com.gridnine.jasmine.web.core.ui.WebComponent
 import com.gridnine.jasmine.web.core.ui.UiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.*
+import com.gridnine.jasmine.web.core.ui.debugger
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import kotlin.js.Promise
 import kotlin.reflect.KClass
@@ -115,45 +116,55 @@ class MainFrame(private val delegate:WebBorderContainer = UiLibraryAdapter.get()
         })
     }
 
-    fun<T:Any, P:Any> openTab(handler: MainFrameTabHandler<T, P>, we: T) {
+    fun<T:Any, P:Any> openTab(handler: MainFrameTabHandler<T, P>, we: T):Promise<WebComponent?> {
         val tabId = "$uid|${handler.getTabId(we)}"
         val existingTab = tabsContainer.getTabs().find { it.id == tabId }
         if(existingTab != null){
-            tabsContainer.select(existingTab.id)
-            return
-        }
-        handler.loadData(we).then {
-            val callback = object:MainFrameTabCallback {
-                private var currentTitle:String? = null
-                override fun setTitle(title: String) {
-                    if(currentTitle == null){
-                        currentTitle = title
-                        return
-                    }
-                    if(currentTitle != title){
-                        currentTitle = title
-                        tabsContainer.setTitle(tabId, title)
-                        return
-                    }
-                }
-
-                override fun close() {
-                    tabsContainer.removeTab(tabId)
-                }
-
+            return Promise{ resolve, reject ->
+                resolve(tabsContainer.select(existingTab.id))
             }
-            val tabData  = handler.createTabData(we, it, tabsContainer, callback)
-            tabsContainer.addTab(WebTabsContainer.tab{
-                id = tabId
-                title = tabData.title
-                content = tabData.content
-            })
-            callback.setTitle(tabData.title)
         }
+        return Promise{resolve, reject ->
+            handler.loadData(we).then {
+                val callback = object:MainFrameTabCallback {
+                    private var currentTitle:String? = null
+                    override fun setTitle(title: String) {
+                        if(currentTitle == null){
+                            currentTitle = title
+                            return
+                        }
+                        if(currentTitle != title){
+                            currentTitle = title
+                            tabsContainer.setTitle(tabId, title)
+                            return
+                        }
+                    }
+
+                    override fun close() {
+                        tabsContainer.removeTab(tabId)
+                    }
+
+                }
+                try {
+                    val tabData = handler.createTabData(we, it, tabsContainer, callback)
+                    tabsContainer.addTab(WebTabsContainer.tab {
+                        id = tabId
+                        title = tabData.title
+                        content = tabData.content
+                    })
+                    callback.setTitle(tabData.title)
+                    resolve(tabData.content)
+                } catch (e:Exception){
+                    console.error(e)
+                    reject(e)
+                }
+            }
+        }
+
     }
 
-    fun openTab(ref:ObjectReferenceJS, forEdit:Boolean = false, navigationKey:String? = null){
-        openTab(ObjectEditorTabHandler(forEdit, navigationKey) as MainFrameTabHandler<ObjectEditorTabData, Any>, ref.let { ObjectEditorTabData(it.type, it.uid) })
+    fun openTab(ref:ObjectReferenceJS, forEdit:Boolean = false, navigationKey:String? = null):Promise<WebComponent?>{
+        return openTab(ObjectEditorTabHandler(forEdit, navigationKey) as MainFrameTabHandler<ObjectEditorTabData, Any>, ref.let { ObjectEditorTabData(it.type, it.uid) })
     }
     companion object {
         fun get() = EnvironmentJS.getPublished(MainFrame::class)

@@ -7,6 +7,7 @@ package com.gridnine.jasmine.web.core.ui.components
 
 import com.gridnine.jasmine.web.core.ui.HasVisibility
 import com.gridnine.jasmine.web.core.ui.WebComponent
+import kotlin.js.Promise
 
 
 abstract class BaseButtonConfiguration{
@@ -22,6 +23,11 @@ interface WebLinkButton: WebComponent,HasVisibility {
     fun setHandler(handler:()-> Unit)
     fun setEnabled(value:Boolean)
 }
+
+interface TestableLinkButton<T> {
+    fun simulateClick():Promise<T>
+}
+
 class WebMenuItemConfiguration(val id:String, conf:WebMenuItemConfiguration.()->Unit):BaseButtonConfiguration(){
     init {
         this.conf()

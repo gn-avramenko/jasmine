@@ -8,6 +8,9 @@ package com.gridnine.jasmine.web.core.application
 import kotlin.reflect.KClass
 
 object EnvironmentJS{
+
+    var test = false
+
     private val publishedObjects = linkedMapOf<KClass<*>, Any>()
 
     fun<T:Any> publish(obj:T){

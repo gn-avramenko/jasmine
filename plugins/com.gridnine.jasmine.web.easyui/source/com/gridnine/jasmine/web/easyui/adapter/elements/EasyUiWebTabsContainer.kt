@@ -55,14 +55,16 @@ class EasyUiWebTabsContainer(private val parent:WebComponent?, configure: WebTab
         }
     }
 
-    override fun select(id: String) {
+    override fun select(id: String):WebComponent? {
         val idx = tabs.indexOfFirst { it.id == id }
         if(idx != -1) {
             selected = idx
             if (initialized) {
                 jq!!.tabs("select", idx)
             }
+            return tabs[idx].content
         }
+        return null
     }
 
     override fun getTabs(): List<WebTabPanel> {
@@ -70,6 +72,9 @@ class EasyUiWebTabsContainer(private val parent:WebComponent?, configure: WebTab
     }
 
     override fun setTitle(tabId: String, title: String) {
+        if(!initialized){
+            return
+        }
         val idx = tabs.indexOfFirst { it.id == tabId }
         if(idx != -1){
             val tab = jq.tabs("getTab", idx)
