@@ -41,6 +41,10 @@ open class CompileKotlinJVMPluginTask() :DefaultTask(){
         plugin.pluginsDependencies.forEach {dep ->
             dependsOn(getTaskName(dep.pluginId))
         }
+        if(KotlinUtils.getType(plugin) != SpfPluginType.CORE && KotlinUtils.getType(plugin) != SpfPluginType.SPF){
+            dependsOn(CodeGenPluginTask.TASK_NAME)
+        }
+        mustRunAfter(CleanupTask.TASK_NAME)
     }
 
     @TaskAction

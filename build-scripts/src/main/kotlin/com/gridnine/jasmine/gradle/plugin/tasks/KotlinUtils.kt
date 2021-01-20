@@ -20,6 +20,7 @@ object KotlinUtils{
     internal const val COMPILER_CLASS_JS = "org.jetbrains.kotlin.cli.js.K2JSCompiler"
     const val SERVER_CONFIGURATION_NAME = "server"
     const val SERVER_TEST_CONFIGURATION_NAME = "server_test"
+    const val WEB_CONFIGURATION_NAME = "web_js"
 
     fun getType(plugin:SpfPlugin) : SpfPluginType{
         return SpfPluginType.valueOf(plugin.parameters.first { it.id == "type" }.value)
@@ -37,6 +38,11 @@ object KotlinUtils{
             }
         }
 
+    }
+
+    fun getSpfFile(registry:SpfPluginsRegistry, filesMap:Map<String, File>):File{
+        val jasmineDir = filesMap[registry.plugins.find { KotlinUtils.getType(it) == SpfPluginType.SERVER }!!.id]!!.parentFile.parentFile
+        return File(jasmineDir, "lib/spf-1.0.jar")
     }
 }
 
@@ -61,6 +67,26 @@ fun File.writeIfDiffers(content:String){
     }
 }
 
+fun File.emptyDir(){
+    if(this.exists()){
+        this.listFiles()?.forEach {
+            it.deleteRecursively()
+        }
+    }
+}
+
+fun File.ensureDirExists(){
+    if(this.exists()){
+        return
+    }
+    if(this.isFile && !this.parentFile.exists()){
+        this.parentFile.mkdirs()
+        return
+    }
+    this.mkdirs()
+
+}
+
 enum class ExitCode(val code: Int) {
     OK(0), COMPILATION_ERROR(1), INTERNAL_ERROR(2), SCRIPT_EXECUTION_ERROR(3);
 
@@ -72,5 +98,6 @@ enum class SpfPluginType{
     SERVER_TEST,
     SPF,
     WEB,
+    WEB_CORE,
     WEB_TEST
 }

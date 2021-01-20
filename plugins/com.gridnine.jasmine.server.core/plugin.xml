@@ -2,8 +2,8 @@
     <parameter id="type" value="CORE"/>
     <dependencies>
         <lib-dependency group="ch.qos.logback" name="logback-classic" version="1.2.3"/>
-        <lib-dependency group="org.jetbrains.kotlin" name="kotlin-stdlib-jdk8" version="1.3.71"/>
-        <lib-dependency group="org.jetbrains.kotlin" name="kotlin-reflect" version="1.3.71"/>
+        <lib-dependency group="org.jetbrains.kotlin" name="kotlin-stdlib-jdk8" version="1.4.10"/>
+        <lib-dependency group="org.jetbrains.kotlin" name="kotlin-reflect" version="1.4.10"/>
         <lib-dependency group="com.mchange" name="c3p0" version="0.9.5.5"/>
         <lib-dependency group="org.apache.tomcat.embed" name="tomcat-embed-core" version="9.0.30"/>
         <lib-dependency group="org.apache.tomcat.embed" name="tomcat-embed-jasper" version="9.0.30"/>

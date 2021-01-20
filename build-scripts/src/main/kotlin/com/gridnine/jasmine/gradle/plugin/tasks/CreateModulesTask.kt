@@ -60,7 +60,7 @@ open class CreateModulesTask() : DefaultTask() {
                         externals.add("${resourcesDir.absolutePath}/")
                     }
                 }
-                SpfPluginType.WEB -> {
+                SpfPluginType.WEB,SpfPluginType.WEB_CORE -> {
                     val resourcesDir = File(baseDir, "resources")
                     if (resourcesDir.exists()) {
                         externals.add("${resourcesDir.absolutePath}/")
@@ -119,7 +119,7 @@ open class CreateModulesTask() : DefaultTask() {
                                 }
                             }
                         }
-                        SpfPluginType.WEB,SpfPluginType.WEB_TEST -> {
+                        SpfPluginType.WEB,SpfPluginType.WEB_CORE, SpfPluginType.WEB_TEST -> {
                             val outputDir = "file://\$MODULE_DIR\$/../../$pluginRelativePath/${pluginDescr.parameters.find { param -> param.id == "kotlin-output-dir" }?.value}"
                             emptyTag("output", "url" to outputDir)
                             emptyTag("output-test", "url" to outputDir)
@@ -156,7 +156,7 @@ open class CreateModulesTask() : DefaultTask() {
                             emptyTag("orderEntry", "type" to "library", "name" to "server", "level" to "project")
                             emptyTag("orderEntry", "type" to "library", "name" to "spf", "level" to "project")
                         }
-                        SpfPluginType.WEB -> {
+                        SpfPluginType.WEB , SpfPluginType.WEB_CORE -> {
                             emptyTag("orderEntry", "type" to "sourceFolder", "forTests" to "false")
                             emptyTag("orderEntry", "type" to "library", "name" to "web_js", "level" to "project")
                         }

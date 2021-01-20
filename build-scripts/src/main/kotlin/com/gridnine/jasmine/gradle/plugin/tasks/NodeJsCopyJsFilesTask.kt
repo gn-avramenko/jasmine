@@ -32,7 +32,7 @@ open class NodeJsCopyJsFilesTask :DefaultTask{
         val files = hashSetOf<File>()
         registry.plugins.forEach { spfPlugin ->
             when (val pluginType = KotlinUtils.getType(spfPlugin)) {
-                SpfPluginType.WEB, SpfPluginType.WEB_TEST -> {
+                SpfPluginType.WEB, SpfPluginType.WEB_CORE, SpfPluginType.WEB_TEST -> {
                     val baseDir = pluginsToFileMap[spfPlugin.id]?:throw IllegalArgumentException("no file mapping found for plugin ${spfPlugin.id}")
                     val kotlinDir = File(baseDir, spfPlugin.parameters.find { it.id == "kotlin-output-dir" }!!.value)
                     kotlinDir.listFiles()?.forEach { file ->

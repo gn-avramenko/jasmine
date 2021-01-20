@@ -15,6 +15,7 @@ import java.net.URL
 @Suppress("unused")
 class JasminePlugin: Plugin<Project>{
     override fun apply(target: Project) {
+        println("""java version is ${System.getProperty("java.version")}""")
         val extension = target.extensions.getByName("jasmine") as JasmineConfigExtension
         val pluginsURLs = arrayListOf<URL>()
         val pluginsToFileMap = hashMapOf<String,File>()
@@ -26,6 +27,8 @@ class JasminePlugin: Plugin<Project>{
         registry.initRegistry(pluginsURLs)
         KotlinUtils.createConfiguration(KotlinUtils.SERVER_CONFIGURATION_NAME, registry, target, SpfPluginType.CORE, SpfPluginType.SERVER)
         KotlinUtils.createConfiguration(KotlinUtils.SERVER_TEST_CONFIGURATION_NAME, registry, target, SpfPluginType.SERVER_TEST)
+        KotlinUtils.createConfiguration(KotlinUtils.WEB_CONFIGURATION_NAME, registry, target, SpfPluginType.WEB, SpfPluginType.WEB_CORE)
+        target.dependencies.add(KotlinUtils.WEB_CONFIGURATION_NAME, "org.jetbrains.kotlin:kotlin-stdlib-js:${extension.kotlinVersion}")
         target.configurations.maybeCreate(KotlinUtils.COMPILER_CLASSPATH_CONFIGURATION_NAME).defaultDependencies {
             it.add(target.dependencies.create("${KotlinUtils.KOTLIN_MODULE_GROUP}:${KotlinUtils.KOTLIN_COMPILER_EMBEDDABLE}:${extension.kotlinVersion}"))
         }
@@ -38,14 +41,19 @@ class JasminePlugin: Plugin<Project>{
         target.tasks.create(CreateModulesTask.TASK_NAME, CreateModulesTask::class.java,registry, extension, pluginsToFileMap)
         target.tasks.create(MakeProjectTask.TASK_NAME, MakeProjectTask::class.java)
         registry.plugins.forEach { plugin ->
+            CreateWarTasksFactory.createTasks(plugin, pluginsToFileMap, target)
             when(val pluginType = KotlinUtils.getType(plugin)){
                 SpfPluginType.CORE,SpfPluginType.SERVER_TEST,SpfPluginType.SERVER,SpfPluginType.SPF ->{
                     target.tasks.create(CompileKotlinJVMPluginTask.getTaskName(plugin.id), CompileKotlinJVMPluginTask::class.java, plugin, registry,extension, pluginsToFileMap)
+                    if(pluginType != SpfPluginType.SERVER_TEST){
+                        target.tasks.create(CreateJarForJvmPluginTask.getTaskName(plugin.id), CreateJarForJvmPluginTask::class.java, plugin)
+                    }
                 }
-                SpfPluginType.WEB ->{
-                    //noops
+                SpfPluginType.WEB,SpfPluginType.WEB_CORE ->{
+                    target.tasks.create(CompileKotlinJSPluginTask.getTaskName(plugin.id), CompileKotlinJSPluginTask::class.java, plugin, registry,extension, pluginsToFileMap)
                 }
                 SpfPluginType.WEB_TEST ->{
+                    target.tasks.create(CompileKotlinJSPluginTask.getTaskName(plugin.id), CompileKotlinJSPluginTask::class.java, plugin, registry,extension, pluginsToFileMap)
                     val individualLauncher = plugin.parameters.find{ param -> param.id == "individual-test-launcher" }?.value
                     val suitelLauncher = plugin.parameters.find{ param -> param.id == "test-suite-launcher" }?.value
                     if(individualLauncher != null || suitelLauncher != null) {
@@ -63,12 +71,14 @@ class JasminePlugin: Plugin<Project>{
             }
         }
         target.tasks.create(CodeGenPluginTask.TASK_NAME, CodeGenPluginTask::class.java,registry, extension, pluginsToFileMap)
-        target.tasks.create(BuildTask.TASK_NAME, BuildTask::class.java, registry)
+        target.tasks.create(CompileProjectTask.TASK_NAME, CompileProjectTask::class.java, registry)
         target.tasks.create(NodeJsInstallMochaTask.taskName, NodeJsInstallMochaTask::class.java)
         target.tasks.create(NodeJsInstalReporterTask.taskName, NodeJsInstalReporterTask::class.java)
         target.tasks.create(NodeJsInstallXmlHttpRequestTask.taskName, NodeJsInstallXmlHttpRequestTask::class.java)
         target.tasks.create(SetupNodeTask.taskName, SetupNodeTask::class.java)
         target.tasks.create(NodeJsCopyJsFilesTask.taskName, NodeJsCopyJsFilesTask::class.java, registry, pluginsToFileMap)
+        target.tasks.create(MakeDistTask.TASK_NAME, MakeDistTask::class.java, registry, pluginsToFileMap)
+        target.tasks.create(CleanupTask.TASK_NAME, CleanupTask::class.java)
     }
 
 }

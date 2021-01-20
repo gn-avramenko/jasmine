@@ -31,7 +31,7 @@ open class StartTestServerInIDETask() : BaseStartServerTask() {
     }
 
     companion object{
-        fun getTaskName(pluginId: String) = "_${pluginId}-jsTestStartServerInIDE"
+        fun getTaskName(pluginId: String) = "_jsTestStartServerInIDE_${pluginId}"
         fun getClassPath(project:Project): FileCollection {
             var file = project.file("lib/spf-1.0.jar")
             if(!file.exists()){

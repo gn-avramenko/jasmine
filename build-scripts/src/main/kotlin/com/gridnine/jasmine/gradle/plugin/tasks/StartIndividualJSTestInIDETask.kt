@@ -21,6 +21,6 @@ open class StartIndividualJSTestInIDETask() :DefaultTask(){
     }
 
     companion object{
-        fun getTaskName(pluginId: String, debug:Boolean) = "${if(debug) "debug-" else ""}${pluginId}-Individual-js-test"
+        fun getTaskName(pluginId: String, debug:Boolean) = "individual-js-test_${if(debug) "debug-" else ""}${pluginId}"
     }
 }

@@ -31,7 +31,7 @@ open class StopTestServerInIDETask() : BaseStartServerTask() {
     }
 
     companion object{
-        fun getTaskName(pluginId: String) = "_${pluginId}-jsTestStopServerInIDE"
+        fun getTaskName(pluginId: String) = "_jsTestStopServerInIDE_${pluginId}"
     }
 
 }
