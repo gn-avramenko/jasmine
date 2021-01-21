@@ -36,10 +36,15 @@ open class MakeDistTask() :DefaultTask(){
             }
             val file = project.file("build/dist/bin/run.sh")
             file.parentFile.ensureDirExists()
+//            file.writeText("""
+//                    cd ..
+//                    java -Xms128M -Xmx256M -Dspf.mode=shell -Dlogback.configurationFile=config/logback.xml -Dspf.applicationClass=com.gridnine.jasmine.server.spf.SpfApplicationImpl -jar lib/spf.jar > logs/init.log 2>&1 &
+//                """.trimIndent())
             file.writeText("""
                     cd ..
-                    java -Xms128M -Xmx256M -Dspf.mode=shell -Dlogback.configurationFile=config/logback.xml -Dspf.applicationClass=com.gridnine.jasmine.server.spf.SpfApplicationImpl -jar lib/spf.jar > logs/init.log 2>&1 &
+                    java -Xms128M -Xmx256M -Dspf.mode=start -Dlogback.configurationFile=config/logback.xml -Dspf.applicationClass=com.gridnine.jasmine.server.spf.SpfApplicationImpl -jar lib/spf.jar 
                 """.trimIndent())
+
             file.setExecutable(true)
             val file2 = project.file("build/dist/bin/stop.sh")
             file2.writeText("""

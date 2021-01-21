@@ -44,9 +44,10 @@ class JasminePlugin: Plugin<Project>{
             CreateWarTasksFactory.createTasks(plugin, pluginsToFileMap, target)
             when(val pluginType = KotlinUtils.getType(plugin)){
                 SpfPluginType.CORE,SpfPluginType.SERVER_TEST,SpfPluginType.SERVER,SpfPluginType.SPF ->{
+                    target.tasks.create(CopyJvmResourcesTask.getTaskName(plugin.id), CopyJvmResourcesTask::class.java, plugin, pluginsToFileMap)
                     target.tasks.create(CompileKotlinJVMPluginTask.getTaskName(plugin.id), CompileKotlinJVMPluginTask::class.java, plugin, registry,extension, pluginsToFileMap)
                     if(pluginType != SpfPluginType.SERVER_TEST){
-                        target.tasks.create(CreateJarForJvmPluginTask.getTaskName(plugin.id), CreateJarForJvmPluginTask::class.java, plugin)
+                        target.tasks.create(CreateJarForJvmPluginTask.getTaskName(plugin.id), CreateJarForJvmPluginTask::class.java, plugin, pluginsToFileMap)
                     }
                 }
                 SpfPluginType.WEB,SpfPluginType.WEB_CORE ->{

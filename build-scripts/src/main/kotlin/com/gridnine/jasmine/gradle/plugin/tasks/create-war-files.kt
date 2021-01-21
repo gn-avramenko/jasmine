@@ -32,7 +32,7 @@ object CreateWarTasksFactory{
                     if (KotlinUtils.getType(plugin) == SpfPluginType.WEB_CORE) {
                         task.from(task.project.file("build/tmp/lib-js"))
                     }
-                    task.include("**/*.js", "**/*.map", "**/*.css", "**/*.png", "**/*.gif")
+                    task.include("**/*.js","**/*.xml", "**/*.map", "**/*.css", "**/*.png", "**/*.gif")
                     task.includeEmptyDirs = false
                     task.archiveFileName.set("${kotlinOutputDir}.war")
                 }
@@ -42,7 +42,7 @@ object CreateWarTasksFactory{
                     project.tasks.create(getTaskName(it.name), Jar::class.java) { task ->
                         task.destinationDirectory.set(File("build/dist/lib"))
                         task.from(it.absolutePath)
-                        task.include("**/*.js", "**/*.html", "**/*.map", "**/*.css", "**/*.png", "**/*.gif")
+                        task.include("**/*.js", "**/*.xml","**/*.html", "**/*.map", "**/*.css", "**/*.png", "**/*.gif")
                         task.includeEmptyDirs = false
                         task.archiveFileName.set("${it.name}.war")
                         task.mustRunAfter(CleanupTask.TASK_NAME)

@@ -7,10 +7,7 @@
 
 package com.gridnine.jasmine.gradle.plugin.tasks
 
-import com.gridnine.jasmine.gradle.plugin.CompileKotlinJSPluginTask
 import com.gridnine.spf.meta.SpfPlugin
-import com.gridnine.spf.meta.SpfPluginsRegistry
-import org.gradle.api.DefaultTask
 import org.gradle.jvm.tasks.Jar
 import java.io.File
 import javax.inject.Inject
@@ -19,11 +16,13 @@ import javax.inject.Inject
 open class CreateJarForJvmPluginTask() :Jar(){
 
     @Inject
-    constructor(plugin: SpfPlugin):this(){
+    constructor(plugin: SpfPlugin, filesMap:Map<String, File>):this(){
         group = "other"
-        dependsOn(CompileKotlinJVMPluginTask.getTaskName(plugin.id))
+        dependsOn(CompileKotlinJVMPluginTask.getTaskName(plugin.id),CopyJvmResourcesTask.getTaskName(plugin.id))
         destinationDirectory.set(project.file("build/dist/lib"))
         from(project.file("build/plugins/${plugin.id}/classes"))
+        from(File(filesMap[plugin.id], "plugin.xml"))
+
         archiveFileName.set("${plugin.id}.jar")
     }
 

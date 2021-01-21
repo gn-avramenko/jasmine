@@ -58,6 +58,14 @@ class SpfApplicationImpl: SpfApplication {
         val urls = this::javaClass.javaClass.classLoader.getResources("plugin.xml").toList()
         val registry = SpfPluginsRegistry()
         registry.initRegistry(urls)
+//        println("plugins")
+//        registry.plugins.forEach {
+//            println(it.id)
+//        }
+//        println("activators")
+//        registry.getExtensions("activator").forEach {
+//            println(it.pluginId)
+//        }
         Environment.publish(IApplicationMetadataProvider::class, SpfApplicationMetadataProvider(registry))
         val activators =IApplicationMetadataProvider.get().getExtensions("activator").map { ep ->ep.plugin.classLoader.loadClass(ep.getParameters("class").first()).constructors.first().newInstance() as IPluginActivator }.toList()
         activators.forEach { a ->a.configure(config) }
