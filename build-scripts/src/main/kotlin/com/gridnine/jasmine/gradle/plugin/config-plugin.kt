@@ -24,6 +24,7 @@ open class JasmineConfigExtension(private val project:Project){
     var languageLevel = "JDK_1_8"
     var libRelativePath = "lib"
     val pluginsFiles = arrayListOf<File>()
+    var indexWar = ""
     fun plugins(submodulePath: String, configure:JasminePluginConfigurator.()->Unit) {
         JasminePluginConfigurator(submodulePath, this, project).configure()
     }

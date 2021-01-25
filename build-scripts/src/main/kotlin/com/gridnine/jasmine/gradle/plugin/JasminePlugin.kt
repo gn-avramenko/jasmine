@@ -78,7 +78,7 @@ class JasminePlugin: Plugin<Project>{
         target.tasks.create(NodeJsInstallXmlHttpRequestTask.taskName, NodeJsInstallXmlHttpRequestTask::class.java)
         target.tasks.create(SetupNodeTask.taskName, SetupNodeTask::class.java)
         target.tasks.create(NodeJsCopyJsFilesTask.taskName, NodeJsCopyJsFilesTask::class.java, registry, pluginsToFileMap)
-        target.tasks.create(MakeDistTask.TASK_NAME, MakeDistTask::class.java, registry, pluginsToFileMap)
+        target.tasks.create(MakeDistTask.TASK_NAME, MakeDistTask::class.java, registry, extension, pluginsToFileMap)
         target.tasks.create(CleanupTask.TASK_NAME, CleanupTask::class.java)
     }
 
