@@ -48,6 +48,8 @@ class JasminePlugin: Plugin<Project>{
                     target.tasks.create(CompileKotlinJVMPluginTask.getTaskName(plugin.id), CompileKotlinJVMPluginTask::class.java, plugin, registry,extension, pluginsToFileMap)
                     if(pluginType != SpfPluginType.SERVER_TEST){
                         target.tasks.create(CreateJarForJvmPluginTask.getTaskName(plugin.id), CreateJarForJvmPluginTask::class.java, plugin, pluginsToFileMap)
+                    } else{
+                        target.tasks.create(TestJvmPluginTask.getTaskName(plugin.id), TestJvmPluginTask::class.java, plugin, registry, extension)
                     }
                 }
                 SpfPluginType.WEB,SpfPluginType.WEB_CORE ->{
@@ -56,16 +58,19 @@ class JasminePlugin: Plugin<Project>{
                 SpfPluginType.WEB_TEST ->{
                     target.tasks.create(CompileKotlinJSPluginTask.getTaskName(plugin.id), CompileKotlinJSPluginTask::class.java, plugin, registry,extension, pluginsToFileMap)
                     val individualLauncher = plugin.parameters.find{ param -> param.id == "individual-test-launcher" }?.value
-                    val suitelLauncher = plugin.parameters.find{ param -> param.id == "test-suite-launcher" }?.value
-                    if(individualLauncher != null || suitelLauncher != null) {
-                        target.tasks.create(StartTestServerInIDETask.getTaskName(plugin.id), StartTestServerInIDETask::class.java, registry, plugin)
-                        target.tasks.create(StopTestServerInIDETask.getTaskName(plugin.id), StopTestServerInIDETask::class.java, registry, plugin)
-                    }
                     if(individualLauncher != null){
-                        target.tasks.create(NodeJsStartTestInIDETask.getTaskName(individualLauncher, plugin.id, false), NodeJsStartTestInIDETask::class.java, individualLauncher, plugin.id, false)
-                        target.tasks.create(NodeJsStartTestInIDETask.getTaskName(individualLauncher, plugin.id, true), NodeJsStartTestInIDETask::class.java, individualLauncher, plugin.id, true)
-                        target.tasks.create(StartIndividualJSTestInIDETask.getTaskName(plugin.id, false), StartIndividualJSTestInIDETask::class.java, plugin, false)
-                        target.tasks.create(StartIndividualJSTestInIDETask.getTaskName(plugin.id, true), StartIndividualJSTestInIDETask::class.java, plugin, true)
+                            target.tasks.create(StartTestServerInIDETask.getTaskName(plugin.id), StartTestServerInIDETask::class.java, registry, plugin)
+                            target.tasks.create(StopTestServerInIDETask.getTaskName(plugin.id), StopTestServerInIDETask::class.java, registry, plugin)
+                            target.tasks.create(NodeJsStartTestInIDETask.getTaskName(individualLauncher, plugin.id, false), NodeJsStartTestInIDETask::class.java, individualLauncher, plugin.id, false)
+                            target.tasks.create(NodeJsStartTestInIDETask.getTaskName(individualLauncher, plugin.id, true), NodeJsStartTestInIDETask::class.java, individualLauncher, plugin.id, true)
+                            target.tasks.create(StartIndividualJSTestInIDETask.getTaskName(plugin.id, false), StartIndividualJSTestInIDETask::class.java, plugin, false)
+                            target.tasks.create(StartIndividualJSTestInIDETask.getTaskName(plugin.id, true), StartIndividualJSTestInIDETask::class.java, plugin, true)
+                    }
+                    val suiteLauncher = plugin.parameters.find{ param -> param.id == "test-suite-launcher" }?.value
+                    if(suiteLauncher != null){
+                        target.tasks.create(StartTestServerInBuildTask.getTaskName(plugin.id), StartTestServerInBuildTask::class.java, registry, plugin, extension,pluginsToFileMap)
+                        target.tasks.create(StopTestServerInBuildTask.getTaskName(plugin.id), StopTestServerInBuildTask::class.java, registry, plugin, extension,pluginsToFileMap)
+                        target.tasks.create(TestJsPluginTask.getTaskName(plugin.id), TestJsPluginTask::class.java,  plugin)
                     }
                 }
                 else ->throw IllegalArgumentException("unsupported plugin type $pluginType" )
@@ -80,6 +85,8 @@ class JasminePlugin: Plugin<Project>{
         target.tasks.create(NodeJsCopyJsFilesTask.taskName, NodeJsCopyJsFilesTask::class.java, registry, pluginsToFileMap)
         target.tasks.create(MakeDistTask.TASK_NAME, MakeDistTask::class.java, registry, extension, pluginsToFileMap)
         target.tasks.create(CleanupTask.TASK_NAME, CleanupTask::class.java)
+
+        target.tasks.create(TestProjectTask.TASK_NAME, TestProjectTask::class.java, registry)
     }
 
 }

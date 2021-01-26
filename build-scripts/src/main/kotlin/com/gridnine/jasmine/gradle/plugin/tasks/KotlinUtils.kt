@@ -10,7 +10,7 @@ import com.gridnine.spf.meta.SpfPlugin
 import com.gridnine.spf.meta.SpfPluginsRegistry
 import org.gradle.api.Project
 import java.io.File
-import java.lang.IllegalArgumentException
+import java.util.*
 
 object KotlinUtils{
     internal const val COMPILER_CLASSPATH_CONFIGURATION_NAME = "kotlinCompilerClasspath"
@@ -22,11 +22,24 @@ object KotlinUtils{
     const val SERVER_TEST_CONFIGURATION_NAME = "server_test"
     const val WEB_CONFIGURATION_NAME = "web_js"
 
-    fun getType(plugin:SpfPlugin) : SpfPluginType{
+    fun getDependentPlugins(plugin: SpfPlugin, registry: SpfPluginsRegistry):List<SpfPlugin>{
+        val plug1Depths: MutableSet<String> = HashSet()
+        collectDependencies(plug1Depths, plugin, registry)
+        return registry.plugins.filter { plug1Depths.contains(it.id) }.toList()
+    }
+
+    private fun collectDependencies(depth: MutableSet<String>, plug: SpfPlugin, registry: SpfPluginsRegistry) {
+        plug.pluginsDependencies.forEach{ dep->
+            if (depth.add(dep.pluginId)) {
+                collectDependencies(depth, registry.plugins.find{ dep.pluginId == it.id }!!, registry)
+            }
+        }
+    }
+    fun getType(plugin: SpfPlugin) : SpfPluginType{
         return SpfPluginType.valueOf(plugin.parameters.first { it.id == "type" }.value)
     }
 
-    fun getPlugin(pluginId:String, registry:SpfPluginsRegistry) : SpfPlugin{
+    fun getPlugin(pluginId: String, registry: SpfPluginsRegistry) : SpfPlugin{
         return registry.plugins.find { it.id == pluginId }?:throw IllegalArgumentException("unable to find plugin with id $pluginId")
     }
 
@@ -40,13 +53,13 @@ object KotlinUtils{
 
     }
 
-    fun getSpfFile(registry:SpfPluginsRegistry, filesMap:Map<String, File>):File{
+    fun getSpfFile(registry: SpfPluginsRegistry, filesMap: Map<String, File>):File{
         val jasmineDir = filesMap[registry.plugins.find { KotlinUtils.getType(it) == SpfPluginType.SERVER }!!.id]!!.parentFile.parentFile
         return File(jasmineDir, "lib/spf-1.0.jar")
     }
 }
 
-fun File.writeIfDiffers(content:ByteArray){
+fun File.writeIfDiffers(content: ByteArray){
     if(this.exists() && this.readBytes().contentEquals(content)){
         return
     }
@@ -54,7 +67,7 @@ fun File.writeIfDiffers(content:ByteArray){
     println("content of $this was changed")
 }
 
-fun File.writeIfDiffers(content:String){
+fun File.writeIfDiffers(content: String){
     if(this.exists() && this.readText() == content){
         return
     }
@@ -62,8 +75,8 @@ fun File.writeIfDiffers(content:String){
     if(originalContent != content) {
         this.writeText(content, Charsets.UTF_8)
         println("content of $this was changed")
-        println ("old content\n$originalContent")
-        println ("new content\n$content")
+        println("old content\n$originalContent")
+        println("new content\n$content")
     }
 }
 

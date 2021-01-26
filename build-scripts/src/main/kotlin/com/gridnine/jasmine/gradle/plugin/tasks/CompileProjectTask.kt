@@ -22,6 +22,7 @@ open class CompileProjectTask() :DefaultTask(){
             when(KotlinUtils.getType(it)){
                 SpfPluginType.CORE,SpfPluginType.SERVER,SpfPluginType.SPF,SpfPluginType.SERVER_TEST ->{
                     dependsOn(CompileKotlinJVMPluginTask.getTaskName(it.id))
+                    dependsOn(CopyJvmResourcesTask.getTaskName(it.id))
                 }
                 SpfPluginType.WEB, SpfPluginType.WEB_CORE,SpfPluginType.WEB_TEST ->{
                     dependsOn(CompileKotlinJSPluginTask.getTaskName(it.id))
