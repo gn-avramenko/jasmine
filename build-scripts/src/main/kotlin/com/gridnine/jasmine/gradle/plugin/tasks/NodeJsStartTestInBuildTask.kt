@@ -15,7 +15,7 @@ abstract class NodeJsStartTestInBuildTask : NodeTask {
         group="other"
         setIgnoreExitValue(true)
         dependsOn(NodeJsCopyJsFilesInBuildTask.taskName)
-        dependsOn(StartTestServerInIDETask.getTaskName(pluginId))
+        dependsOn(StartTestServerInBuildTask.getTaskName(pluginId))
         script = File(project.projectDir, "node_modules/mocha/bin/mocha")
         setArgs(arrayListOf("--timeout", "10000", "--reporter", "mocha-jenkins-reporter", "--reporter-option", "junit_report_name=Tests,junit_report_path=build/junit-reports/${pluginId}-junit.xml,junit_report_stack=1", "node_modules/$launcherName"))
     }
