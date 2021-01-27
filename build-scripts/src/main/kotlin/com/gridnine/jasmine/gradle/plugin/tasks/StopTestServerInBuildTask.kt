@@ -22,7 +22,8 @@ open class StopTestServerInBuildTask() : BaseStartServerTask() {
         jvmArgs = arrayListOf("-Dspf.mode=stop", "-Dspf.applicationClass=$launcherClassName")
         main = "com.gridnine.spf.app.SpfBoot"
         classpath = StartTestServerInBuildTask.getClassPath(project, registry, config,filesMap)
-
+        val suiteLauncher = plugin.parameters.find{ param -> param.id == "test-suite-launcher" }!!.value
+        dependsOn(NodeJsStartTestInBuildTask.getTaskName(suiteLauncher, plugin.id))
     }
 
     companion object{

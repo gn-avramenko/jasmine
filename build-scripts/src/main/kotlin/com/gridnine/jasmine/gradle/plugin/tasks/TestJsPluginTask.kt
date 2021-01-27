@@ -16,10 +16,17 @@ import javax.inject.Inject
 open class TestJsPluginTask() :DefaultTask(){
 
     @Inject
-    constructor(plugin:SpfPlugin):this(){
+    constructor(plugin:SpfPlugin, registry: SpfPluginsRegistry):this(){
         group = "other"
-        dependsOn(StopTestServerInBuildTask.getTaskName(plugin.id))
-        dependsOn(StopTestServerInBuildTask.getTaskName(plugin.id))
+        val suiteLauncher = plugin.parameters.find{ param -> param.id == "test-suite-launcher" }!!.value
+        dependsOn(StartTestServerInBuildTask.getTaskName(plugin.id),StopTestServerInBuildTask.getTaskName(plugin.id), NodeJsCopyJsFilesInBuildTask.taskName, NodeJsStartTestInBuildTask.getTaskName(suiteLauncher, plugin.id))
+        KotlinUtils.getDependentPlugins(plugin, registry).forEach {
+            if(KotlinUtils.getType(it) == SpfPluginType.WEB_TEST){
+                if(it.parameters.find{ param -> param.id == "test-suite-launcher" } != null){
+                    dependsOn(getTaskName(it.id))
+                }
+            }
+        }
     }
 
     companion object{

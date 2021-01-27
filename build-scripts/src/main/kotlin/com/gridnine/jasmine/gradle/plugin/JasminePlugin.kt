@@ -70,7 +70,9 @@ class JasminePlugin: Plugin<Project>{
                     if(suiteLauncher != null){
                         target.tasks.create(StartTestServerInBuildTask.getTaskName(plugin.id), StartTestServerInBuildTask::class.java, registry, plugin, extension,pluginsToFileMap)
                         target.tasks.create(StopTestServerInBuildTask.getTaskName(plugin.id), StopTestServerInBuildTask::class.java, registry, plugin, extension,pluginsToFileMap)
-                        target.tasks.create(TestJsPluginTask.getTaskName(plugin.id), TestJsPluginTask::class.java,  plugin)
+                        target.tasks.create(TestJsPluginTask.getTaskName(plugin.id), TestJsPluginTask::class.java,  plugin,registry)
+                        target.tasks.create(NodeJsStartTestInBuildTask.getTaskName(suiteLauncher, plugin.id), NodeJsStartTestInBuildTask::class.java,  suiteLauncher, plugin.id)
+
                     }
                 }
                 else ->throw IllegalArgumentException("unsupported plugin type $pluginType" )
@@ -85,6 +87,7 @@ class JasminePlugin: Plugin<Project>{
         target.tasks.create(NodeJsCopyJsFilesTask.taskName, NodeJsCopyJsFilesTask::class.java, registry, pluginsToFileMap)
         target.tasks.create(MakeDistTask.TASK_NAME, MakeDistTask::class.java, registry, extension, pluginsToFileMap)
         target.tasks.create(CleanupTask.TASK_NAME, CleanupTask::class.java)
+        target.tasks.create(NodeJsCopyJsFilesInBuildTask.taskName, NodeJsCopyJsFilesInBuildTask::class.java, registry, pluginsToFileMap)
 
         target.tasks.create(TestProjectTask.TASK_NAME, TestProjectTask::class.java, registry)
     }
