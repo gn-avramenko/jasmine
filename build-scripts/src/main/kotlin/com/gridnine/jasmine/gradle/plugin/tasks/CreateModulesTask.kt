@@ -58,7 +58,13 @@ open class CreateModulesTask() : DefaultTask() {
                     val resourcesDir = File(baseDir, "resources")
                     if (resourcesDir.exists()) {
                         externals.add("${resourcesDir.absolutePath}/")
+                        resourcesDir.listFiles()?.forEach {
+                            if(it.isFile){
+                              externals.add(it.absolutePath)
+                            }
+                        }
                     }
+
                 }
                 SpfPluginType.WEB,SpfPluginType.WEB_CORE -> {
                     val resourcesDir = File(baseDir, "resources")

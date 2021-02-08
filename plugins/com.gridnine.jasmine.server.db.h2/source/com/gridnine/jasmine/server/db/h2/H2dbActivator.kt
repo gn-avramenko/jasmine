@@ -21,7 +21,7 @@ class H2dbActivator:IPluginActivator{
 
     override fun configure(config: Properties) {
         val prop = config.getProperty("db-dialect")
-        if(prop != null && prop != "h2"){
+        if(prop == null || prop != "h2"){
             return
         }
         val file = File(Environment.rootFolder, "data/db")

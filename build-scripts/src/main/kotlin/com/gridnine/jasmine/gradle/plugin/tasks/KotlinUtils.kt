@@ -43,11 +43,19 @@ object KotlinUtils{
         return registry.plugins.find { it.id == pluginId }?:throw IllegalArgumentException("unable to find plugin with id $pluginId")
     }
 
-    fun createConfiguration(configurationName: String, registry: SpfPluginsRegistry, project: Project, vararg types: SpfPluginType) {
+    fun createConfiguration(configurationName: String, registry: SpfPluginsRegistry, project: Project, filesMap: Map<String, File>, vararg types: SpfPluginType) {
         project.configurations.create(configurationName)
         registry.plugins.filter { p -> types.contains(getType(p)) }.forEach { plugin ->
             plugin.libsDependencies.forEach {
                 project.dependencies.add(configurationName, "${it.group}:${it.name}:${it.version}")
+            }
+            var resourcesFile = File(filesMap[plugin.id], "resources")
+            if(resourcesFile.exists()){
+                resourcesFile.listFiles()?.forEach {file ->
+                    if(file.isFile && file.name.endsWith(".jar")){
+                        project.dependencies.add(configurationName, project.files(file.absolutePath))
+                    }
+                }
             }
         }
 

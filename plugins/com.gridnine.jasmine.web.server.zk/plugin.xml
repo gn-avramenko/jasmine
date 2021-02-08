@@ -1,0 +1,9 @@
+<plugin xmlns="http://xtrip.gridnine.com/spf" id="com.gridnine.jasmine.web.server.zk">
+    <parameter id="type" value="SERVER"/>
+    <dependencies>
+        <lib-dependency group="org.zkoss.zk" name="zk" version="9.5.0.2"/>
+        <lib-dependency group="org.zkoss.zk" name="zul" version="9.5.0.2"/>
+        <lib-dependency group="org.zkoss.theme" name="silvertail" version="9.5.0.2"/>
+        <plugin-dependency plugin-id="com.gridnine.jasmine.web.server"/>
+    </dependencies>
+</plugin>

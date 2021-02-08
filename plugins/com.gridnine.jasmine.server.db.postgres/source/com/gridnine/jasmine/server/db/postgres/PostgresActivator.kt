@@ -19,7 +19,7 @@ import javax.sql.DataSource
 class PostgresActivator :IPluginActivator{
     override fun configure(config: Properties) {
         val prop = config.getProperty("db-dialect")
-        if(prop == null && prop != "postgres"){
+        if(prop == null || prop != "postgres"){
             return
         }
         val file = File(Environment.rootFolder, "data/db")

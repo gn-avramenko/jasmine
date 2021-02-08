@@ -25,9 +25,9 @@ class JasminePlugin: Plugin<Project>{
         }
         val registry = SpfPluginsRegistry()
         registry.initRegistry(pluginsURLs)
-        KotlinUtils.createConfiguration(KotlinUtils.SERVER_CONFIGURATION_NAME, registry, target, SpfPluginType.CORE, SpfPluginType.SERVER)
-        KotlinUtils.createConfiguration(KotlinUtils.SERVER_TEST_CONFIGURATION_NAME, registry, target, SpfPluginType.SERVER_TEST)
-        KotlinUtils.createConfiguration(KotlinUtils.WEB_CONFIGURATION_NAME, registry, target, SpfPluginType.WEB, SpfPluginType.WEB_CORE)
+        KotlinUtils.createConfiguration(KotlinUtils.SERVER_CONFIGURATION_NAME, registry, target, pluginsToFileMap, SpfPluginType.CORE, SpfPluginType.SERVER)
+        KotlinUtils.createConfiguration(KotlinUtils.SERVER_TEST_CONFIGURATION_NAME, registry, target,pluginsToFileMap, SpfPluginType.SERVER_TEST)
+        KotlinUtils.createConfiguration(KotlinUtils.WEB_CONFIGURATION_NAME, registry, target, pluginsToFileMap,SpfPluginType.WEB, SpfPluginType.WEB_CORE)
         target.dependencies.add(KotlinUtils.WEB_CONFIGURATION_NAME, "org.jetbrains.kotlin:kotlin-stdlib-js:${extension.kotlinVersion}")
         target.configurations.maybeCreate(KotlinUtils.COMPILER_CLASSPATH_CONFIGURATION_NAME).defaultDependencies {
             it.add(target.dependencies.create("${KotlinUtils.KOTLIN_MODULE_GROUP}:${KotlinUtils.KOTLIN_COMPILER_EMBEDDABLE}:${extension.kotlinVersion}"))

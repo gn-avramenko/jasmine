@@ -1,0 +1,3 @@
+<plugin xmlns="http://xtrip.gridnine.com/spf" id="com.gridnine.jasmine.web.server">
+    <parameter id="type" value="SERVER"/>
+</plugin>
