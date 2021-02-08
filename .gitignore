@@ -8,3 +8,5 @@
 /plugins/com.gridnine.jasmine.web.easyui/resources/jasmine-easyui/
 /build-scripts/out/production/classes/
 /plugins/com.gridnine.jasmine.web.core.test/resources/webapp-core-test/
+/plugins/com.gridnine.jasmine.web.server/classes/
+/plugins/com.gridnine.jasmine.web.server.zk/classes/
