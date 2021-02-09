@@ -6,20 +6,40 @@
 package com.gridnine.jasmine.web.server.zk.richlet.pg
 
 interface DataGridComponent<E:Any> {
+    fun setLoader(loader: (DataGridRequest) -> DataGridResponse<E>)
+    fun setFormatter(formatter: (item:E, fieldId:String)->String?)
+    fun setDoubleClickListener(listener: ((item:E)->Unit)?)
     fun updateData()
     fun getSelected():List<E>
 }
 
-data class DataGridRequest(var page: Int = 0, var rows: Int = 0, var desc:Boolean? = false, var sortColumn: String? = null)
+data class DataGridRequest(var offSet: Int = 0, var limit: Int = 0, var desc:Boolean? = false, var sortColumn: String? = null)
 
-class DataGridResponse<E:Any>(val count:Int, val data:List<E>)
+data class DataGridResponse<E:Any>(val count:Int, val data:List<E>)
 
-data class DataGridComponentConfiguration<E:Any>(val columns:List<Triple<String, String, Boolean>>, val loader: (DataGridRequest) -> DataGridResponse<E>,
-                                                 var renderer: (row:E, fieldId:String) -> String?
-                                                 , var dblClickListener:((E) ->Unit)?,
-                                                 val selectable:Boolean = false,
-                                                 val initSortingColumn:String? = null,
-                                                 val initSortingOrderAsc:Boolean = true,
-                                                 val hFlex:String? = null,
-                                                 val vFlex:String? = null
-            )
+class DataGridComponentConfiguration{
+    var span = false
+    var initSortingColumn:String? = null
+    var initSortingOrderAsc = false
+    var selectable = false
+    var width:String? = null
+    var height:String? = null
+    val columns = arrayListOf<DataGridColumnConfiguration>()
+}
+
+class DataGridColumnConfiguration{
+    lateinit var fieldId:String
+    lateinit var title:String
+    var width:String? = null
+    var sortable = true
+    var horizontalAlignment:ComponentHorizontalAlignment? = null
+}
+
+
+enum class ComponentHorizontalAlignment {
+    LEFT,
+    RIGHT,
+    CENTER
+}
+
+

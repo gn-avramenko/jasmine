@@ -5,8 +5,8 @@
 
 package com.gridnine.jasmine.web.server.zk.richlet.pg
 
+import org.zkoss.zk.ui.event.Events
 import org.zkoss.zul.*
-import org.zkoss.zul.impl.LabelImageElement
 
 class ListPanel : Vlayout(){
     init{
@@ -22,10 +22,87 @@ class ListPanel : Vlayout(){
         searchBox.width = "200px"
         l1.appendChild(searchBox)
         appendChild(l1)
-        val grid = Grid()
-        grid.vflex ="1"
-        grid.hflex = "1"
 
-        appendChild(grid)
+        val config = DataGridComponentConfiguration()
+        config.width = "100%"
+        config.height = "100%"
+        config.initSortingColumn = ListPanelItem.stringField1Name
+        config.initSortingOrderAsc = true
+        config.selectable = true
+        config.span = true
+        run{
+            val column = DataGridColumnConfiguration()
+            column.horizontalAlignment = ComponentHorizontalAlignment.LEFT
+            column.fieldId = ListPanelItem.stringField1Name
+            column.title = "Поле 1"
+            column.width= "200px"
+            column.sortable = true
+            config.columns.add(column)
+        }
+        run{
+            val column = DataGridColumnConfiguration()
+            column.horizontalAlignment = ComponentHorizontalAlignment.RIGHT
+            column.fieldId = ListPanelItem.stringField2Name
+            column.title = "Поле 2"
+            column.width= "200px"
+            column.sortable = true
+            config.columns.add(column)
+        }
+        val grid = ZkDataGridComponent<ListPanelItem>(config)
+        grid.setFormatter{ item, fieldId ->
+            when(fieldId){
+                ListPanelItem.stringField1Name -> item.stringField1
+                ListPanelItem.stringField2Name -> item.stringField2
+                else -> TODO()
+            }
+        }
+        grid.setDoubleClickListener {
+            println("selected ${it.stringField1}")
+        }
+        grid.setLoader{
+            val result = arrayListOf<ListPanelItem>()
+            for(n in 1..100){
+                val item = ListPanelItem()
+                item.stringField1 = "поле 1 - $n"
+                item.stringField2 = "поле 2 - $n"
+                result.add(item)
+            }
+            if(it.sortColumn != null){
+                if(it.desc == true){
+                    result.sortByDescending {item ->
+                        when(it.sortColumn){
+                            ListPanelItem.stringField1Name -> item.stringField1
+                            ListPanelItem.stringField2Name -> item.stringField2
+                            else -> null
+                        }
+                    }
+                } else if(it.desc == false){
+                    result.sortBy {item ->
+                        when(it.sortColumn){
+                            ListPanelItem.stringField1Name -> item.stringField1
+                            ListPanelItem.stringField2Name -> item.stringField2
+                            else -> null
+                        }
+                    }
+                }
+
+            }
+            DataGridResponse(result.size, result.subList(it.offSet, if (it.offSet+it.limit > result.size) result.size else (it.offSet+it.limit)))
+        }
+        button.addEventListener(Events.ON_CLICK){
+            println("selected: ${ grid.getSelected().map { it.stringField1 }.joinToString (",") }}")
+        }
+        appendChild(grid.getComponent())
+    }
+}
+
+
+
+class ListPanelItem{
+    var stringField1:String? = null
+    var stringField2:String? = null
+    companion object{
+        const val stringField1Name = "stringField1"
+        const val stringField2Name = "stringField2"
     }
 }

@@ -17,45 +17,68 @@ import org.zkoss.zul.ext.Sortable
 import java.util.*
 
 
-class ZkDataGridComponent<E : Any>(private val configuration: DataGridComponentConfiguration<E>) :DataGridComponent<E>{
+class ZkDataGridComponent<E : Any>(private val configuration: DataGridComponentConfiguration) : DataGridComponent<E> {
 
     private var initialized = false
-    private lateinit var component:Grid
+    private lateinit var component: Grid
 
-    private lateinit var model:GridTableModel<E>
+    private lateinit var model: GridTableModel<E>
 
-    fun getComponent():AbstractComponent{
-        if(!initialized) {
+    private lateinit var loader: (DataGridRequest) -> DataGridResponse<E>
+
+    private lateinit var formatter: (item: E, fieldId: String) -> String?
+
+    private var doubleClickListener: ((item: E) -> Unit)? = null
+
+    fun getComponent(): AbstractComponent {
+        if (!initialized) {
             component = Grid()
             component.mold = "paging"
             component.isAutopaging = true
-            component.vflex = configuration.vFlex
-            component.hflex = configuration.hFlex
+            component.isSpan = configuration.span
+            val width = configuration.width
+            if (width == "100%") {
+                component.hflex = "1"
+            } else {
+                component.width = width
+            }
+            val height = configuration.height
+            if (height == "100%") {
+                component.vflex = "1"
+            } else {
+                component.height = height
+            }
+
             val columns = Columns()
             columns.parent = component
             if (configuration.selectable) {
                 val column = Column()
                 column.label = ""
+                column.width = "20px"
                 column.parent = columns
             }
             configuration.columns.forEach {
                 val column = Column()
-                if (it.first == configuration.initSortingColumn) {
+                if (it.fieldId == configuration.initSortingColumn) {
                     column.sortDirection = if (configuration.initSortingOrderAsc) "ascending" else "descending"
                 }
-                column.label = it.second
-                if (it.third) {
-                    val sorter = GridComparatorWrapper<E>(it.first)
+                column.label = it.title
+                column.width = it.width
+                if (it.sortable) {
+                    val sorter = GridComparatorWrapper<E>(it.fieldId)
                     column.sortAscending = sorter
                     column.sortDescending = sorter
                 }
                 column.parent = columns
             }
-            model = GridTableModel(configuration.loader, { component.paginal.activePage }, { component.paginal.totalSize })
+            model = GridTableModel({ this.loader.invoke(it) },  { component.paginal.pageSize }, configuration.initSortingColumn, configuration.initSortingOrderAsc)
             component.setModel(model)
-            component.setRowRenderer(TableRowRenderer(configuration.columns.map { it.first }, configuration.selectable,
-                    configuration.dblClickListener, configuration.renderer))
+            component.setRowRenderer(TableRowRenderer(configuration.columns, configuration.selectable,
+                    { this.doubleClickListener?.invoke(it) }, { item: E, fieldId -> this.formatter.invoke(item, fieldId) }))
             component.addEventListener(ZulEvents.ON_PAGING, PagingEventListener(model))
+            component.addEventListener("onPagingInitRender"
+            ) { event -> event.stopPropagation() }
+            model.updateData()
             initialized = true
         }
         return component
@@ -66,17 +89,33 @@ class ZkDataGridComponent<E : Any>(private val configuration: DataGridComponentC
     }
 
     override fun getSelected(): List<E> {
-        if(!configuration.selectable){
+        if (!configuration.selectable) {
             return emptyList()
         }
         val result = arrayListOf<E>()
-        component.rows.groups[0].items.forEach {
-            val checkbox = it.firstChild as Checkbox
-            if(checkbox.isChecked){
-                result.add(it.getValue())
+        component.rows.getChildren<Row>().forEach {
+            val children = it.getChildren<Checkbox>()
+            if(children.isNotEmpty() && children[0] is Checkbox) {
+                val checkbox = children[0]
+                if (checkbox.isChecked) {
+                    result.add(it.getValue())
+                }
             }
         }
         return result
+    }
+
+    override fun setLoader(loader: (DataGridRequest) -> DataGridResponse<E>) {
+        this.loader = loader
+    }
+
+    override fun setFormatter(formatter: (item: E, fieldId: String) -> String?) {
+        this.formatter = formatter
+    }
+
+
+    override fun setDoubleClickListener(listener: ((item: E) -> Unit)?) {
+        this.doubleClickListener = listener
     }
 
 }
@@ -89,12 +128,12 @@ internal class PagingEventListener<E : Any>(
     }
 }
 
-internal class TableRowRenderer<E : Any>(private val fieldsIds: List<String>, private val selectable: Boolean,
+internal class TableRowRenderer<E : Any>(private val columns: List<DataGridColumnConfiguration>, private val selectable: Boolean,
                                          private val dblClickListener: ((E) -> Unit)?, private val renderer: (row: E, fieldId: String) -> String?) : RowRenderer<E> {
 
     override fun render(row: Row, data: E, index: Int) {
         if (dblClickListener != null) {
-            if(!row.getEventListeners(Events.ON_DOUBLE_CLICK).iterator().hasNext()) {
+            if (!row.getEventListeners(Events.ON_DOUBLE_CLICK).iterator().hasNext()) {
                 row.addEventListener(Events.ON_DOUBLE_CLICK) { event ->
                     if (event is MouseEvent) {
                         dblClickListener.invoke(data)
@@ -102,44 +141,63 @@ internal class TableRowRenderer<E : Any>(private val fieldsIds: List<String>, pr
                 }
             }
         }
-        if(selectable) {
-            val selectedBox=Checkbox()
+        if (selectable) {
+            val selectedBox = Checkbox()
             selectedBox.parent = row
         }
-        for(fieldId in fieldsIds) {
-            val str = renderer.invoke(data, fieldId)?:""
-            Label(str).parent = row
+        for (column in columns) {
+            val labelStr = renderer.invoke(data, column.fieldId)?:""
+            val label = Label(labelStr)
+            label.setClass(
+                    when (column.horizontalAlignment) {
+                        ComponentHorizontalAlignment.RIGHT -> "text-alignment-right"
+                        ComponentHorizontalAlignment.CENTER -> "text-alignment-center"
+                        else -> "text-alignment-left"
+                    }
+            )
+            label.hflex = "1"
+            label.parent = row
         }
         row.setValue(data)
     }
 }
 
-internal class GridTableModel<E : Any>(private val loader: (DataGridRequest) -> DataGridResponse<E>, private val currentPageProvider: () -> Int,
-                                       private val limitProvider: () -> Int) : AbstractListModel<E>(), Sortable<E> {
-    private var _data: List<E> = emptyList()
-    private var _offset = 0
-    private var _size = 0
-    private var _sortingComparator: Comparator<E>? = null
-    private var _ascending = false
+internal class GridTableModel<E : Any>(private val loader: (DataGridRequest) -> DataGridResponse<E>,
+                                       private val limitProvider: () -> Int, initSortingColumn:String?, initSortingOrderAsc:Boolean?) : AbstractListModel<E>(), Sortable<E> {
+    private var _data  = hashMapOf<Int, E>()
+    private var _size:Int? = null
+    private var _sortingComparator: Comparator<E>? = initSortingColumn?.let{GridComparatorWrapper(it)}
+    private var _ascending = initSortingOrderAsc?:true
 
     override fun getElementAt(index: Int): E? {
-        val idx = index - _offset
-        return if (idx < 0 || idx >= _data.size) null else _data[idx]
+        val item = _data[index]
+        if(item == null){
+            fillData(index)
+        }
+        return _data[index]!!
     }
 
-    fun updateData() {
-        _offset = currentPageProvider.invoke() * limitProvider.invoke()
+    private fun fillData(idx:Int){
         var sortingColumn:String? = null
         if(_sortingComparator is GridComparatorWrapper<*>){
             sortingColumn = (_sortingComparator as GridComparatorWrapper<*>).propertyName
         }
-        val result = loader.invoke(DataGridRequest(currentPageProvider.invoke(), limitProvider.invoke(), _ascending, sortingColumn))
-        _size = result.count
-        _data  = result.data
+        val limit = limitProvider.invoke()
+        val request = DataGridRequest(idx, limit, !_ascending, sortingColumn)
+        val response =loader.invoke(request)
+        _size = response.count
+        response.data.withIndex().forEach {
+            _data[idx+it.index] = it.value
+        }
+    }
+    fun updateData() {
         fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1)
     }
 
     override fun sort(cmpr: Comparator<E>, ascending: Boolean) {
+        if(!Objects.equals(cmpr, _sortingComparator) || ascending != _ascending){
+            _data.clear()
+        }
         _sortingComparator = cmpr
         _ascending = ascending
         updateData()
@@ -152,10 +210,14 @@ internal class GridTableModel<E : Any>(private val loader: (DataGridRequest) -> 
     }
 
     override fun getSize(): Int {
-        return _size
+        if(_size == null){
+            fillData(0)
+        }
+        return _size!!
     }
 
 }
+
 internal class GridComparatorWrapper<E>(val propertyName: String) : Comparator<E> {
 
     override fun compare(o1: E, o2: E): Int {
