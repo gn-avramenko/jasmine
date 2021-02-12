@@ -71,6 +71,38 @@ class MainFrame:Borderlayout {
             panels.appendChild(tabbPanel)
 
         }
+        run{
+            val tab = Tab("")
+            tab.isClosable = true
+            tab.id = "GridLayout"
+            tab.label = "Grid Layout"
+            tabs.appendChild(tab)
+
+
+            val tabbPanel = Tabpanel()
+            tabbPanel.vflex = "1"
+            tabbPanel.hflex = "1"
+            val panel = GridLayoutPanel()
+            tabbPanel.appendChild(panel.createComponent())
+            panels.appendChild(tabbPanel)
+
+        }
+        run{
+            val tab = Tab("")
+            tab.isClosable = true
+            tab.id = "Table"
+            tab.label = "Table"
+            tabs.appendChild(tab)
+
+
+            val tabbPanel = Tabpanel()
+            tabbPanel.vflex = "1"
+            tabbPanel.hflex = "1"
+            val panel = TablePanel()
+            tabbPanel.appendChild(panel.createComponent())
+            panels.appendChild(tabbPanel)
+
+        }
         cc.appendChild(tabbox)
         appendChild(cc)
 

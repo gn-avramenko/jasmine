@@ -147,16 +147,16 @@ internal class TableRowRenderer<E : Any>(private val columns: List<DataGridColum
         }
         for (column in columns) {
             val labelStr = renderer.invoke(data, column.fieldId)?:""
+            val div = Div()
+            div.hflex = "1"
             val label = Label(labelStr)
-            label.setClass(
-                    when (column.horizontalAlignment) {
-                        ComponentHorizontalAlignment.RIGHT -> "text-alignment-right"
-                        ComponentHorizontalAlignment.CENTER -> "text-alignment-center"
-                        else -> "text-alignment-left"
+            div.style = when (column.horizontalAlignment) {
+                        ComponentHorizontalAlignment.RIGHT -> "text-align: right"
+                        ComponentHorizontalAlignment.CENTER -> "text-align: center"
+                        else -> "text-align: left"
                     }
-            )
-            label.hflex = "1"
-            label.parent = row
+            label.parent = div
+            div.parent = row
         }
         row.setValue(data)
     }

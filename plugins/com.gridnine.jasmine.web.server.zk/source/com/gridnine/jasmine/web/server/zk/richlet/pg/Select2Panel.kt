@@ -42,6 +42,10 @@ class Select2Panel :Vbox{
 //        }
         //select2.selectedValues = arrayListOf(Select2Option("1", "Вариант1"),Select2Option("2", "Вариант2"))
         appendChild(select3)
+        val textbox = Textbox()
+        textbox.width = "200px"
+        textbox.setWidgetListener("onChanging", "console.log(event)")
+        appendChild(textbox)
         val button = Button()
         button.width = "200px"
         button.label = "delete"
