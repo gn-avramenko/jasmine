@@ -30,10 +30,13 @@ interface ServerUiTable : ServerUiComponent{
 class ServerUiTableConfiguration{
     var width:String? = null
     var height:String? = null
+    var noHeader  = false
     val columns = arrayListOf<ServerUiTableColumnDescription>()
 }
 
-class ServerUiTableColumnDescription(val label:String?, val fixedWidth:Int? = 0)
+class ServerUiTableColumnDescription(val label:String?, val minWidth:Int?,  val prefWidth:Int?, val maxWidth:Int?)
+
+
 
 class ServerUiTableCell(val component:ServerUiComponent? , val colspan:Int =1)
 

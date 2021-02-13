@@ -9,15 +9,15 @@ import org.zkoss.zk.ui.HtmlBasedComponent
 import org.zkoss.zk.ui.event.Events
 import org.zkoss.zul.*
 
-open class ZkServerUiTable(private val config : ServerUiTableConfiguration) : ServerUiTable, ZkServerUiComponent(){
+open class ZkServerUiTable(private val config: ServerUiTableConfiguration) : ServerUiTable, ZkServerUiComponent() {
 
     private val rows = arrayListOf<List<ServerUiTableCell>>()
 
     private var component: Grid? = null
     override fun addRow(position: Int?, components: List<ServerUiTableCell>) {
-        val pos = position?:rows.size
+        val pos = position ?: rows.size
         rows.add(pos, components)
-        if(component != null){
+        if (component != null) {
             addRowInternal(pos, components)
         }
     }
@@ -25,20 +25,20 @@ open class ZkServerUiTable(private val config : ServerUiTableConfiguration) : Se
     private fun addRowInternal(pos: Int, components: List<ServerUiTableCell>) {
         val comp = component!!
         val row = Row()
-        components.forEach {comp ->
+        components.forEach { comp ->
             val cell = Cell()
             cell.style = "padding:0px"
             cell.parent = row
             cell.colspan = comp.colspan
             val cellComp = comp.component
-            if(cellComp is ZkServerUiComponent){
-                cellComp.parent =   ZkServerUiTable@this
+            if (cellComp is ZkServerUiComponent) {
+                cellComp.parent = ZkServerUiTable@ this
                 cellComp.createComponent().parent = cell
             }
         }
         val children = comp.rows.getChildren<Row>()
-        if(children.size > pos){
-             comp.rows.insertBefore(row, children[pos])
+        if (children.size > pos) {
+            comp.rows.insertBefore(row, children[pos])
         } else {
             row.parent = comp.rows
         }
@@ -46,7 +46,7 @@ open class ZkServerUiTable(private val config : ServerUiTableConfiguration) : Se
 
     override fun removeRow(position: Int) {
         rows.removeAt(position)
-        if(component != null){
+        if (component != null) {
             removeRowInternal(position)
         }
     }
@@ -54,7 +54,7 @@ open class ZkServerUiTable(private val config : ServerUiTableConfiguration) : Se
     private fun removeRowInternal(position: Int) {
         val comp = component!!
         val children = comp.rows.getChildren<Row>()
-        if(position <children.size){
+        if (position < children.size) {
             comp.rows.removeChild(children[position])
         }
     }
@@ -62,7 +62,7 @@ open class ZkServerUiTable(private val config : ServerUiTableConfiguration) : Se
     override fun moveRow(fromPosition: Int, toPosition: Int) {
         val row = rows.removeAt(fromPosition)
         rows.add(toPosition, row)
-        if(component != null){
+        if (component != null) {
             moveRowInternal(fromPosition, toPosition)
         }
     }
@@ -71,9 +71,9 @@ open class ZkServerUiTable(private val config : ServerUiTableConfiguration) : Se
         val comp = component!!
         val children = comp.rows.getChildren<Row>()
         val child = children[fromPosition]
-        val toChild = if(children.size -1 > toPosition) children[toPosition+1] else null
+        val toChild = if (children.size - 1 > toPosition) children[toPosition + 1] else null
         comp.rows.removeChild(child)
-        if(toChild != null){
+        if (toChild != null) {
             comp.rows.insertBefore(child, toChild)
         } else {
             child.parent = comp.rows
@@ -88,33 +88,40 @@ open class ZkServerUiTable(private val config : ServerUiTableConfiguration) : Se
         val comp = Grid()
         component = comp
         comp.isSpan = true
-        if(config.width == "100%"){
+        if (config.width == "100%") {
             comp.hflex = "1"
-        } else if(config.width != null){
+        } else if (config.width != null) {
             comp.width = config.width
         }
-        if(config.height == "100%"){
+        if (config.height == "100%") {
             comp.vflex = "1"
-        } else if(config.height != null){
+        } else if (config.height != null) {
             comp.height = config.height
         }
-        val columns = Columns()
-        columns.parent = comp
-        config.columns.forEach {
-            val column = Column()
-            column.label = it.label?:""
-            if(it.fixedWidth != null){
-                column.width = "${it.fixedWidth}px"
-            } else {
-                column.width = "100%"
+        if (!config.noHeader) {
+            val columns = Columns()
+            columns.parent = comp
+            config.columns.forEach {
+                val column = Column()
+                column.label = it.label ?: ""
+                if (it.prefWidth != null) {
+                    column.width = "${it.prefWidth}px"
+                } else {
+                    column.width = "100%"
+                }
+                column.parent = columns
             }
-            column.parent = columns
         }
         val rows = Rows()
         rows.parent = comp
-        this.rows.withIndex().forEach {(idx,value) ->
+        this.rows.withIndex().forEach { (idx, value) ->
             addRowInternal(idx, value)
         }
+        comp.setClientDataAttribute("columns", "[" + config.columns.joinToString(",") {
+            """{"minWidth":${it.minWidth}, "prefWidth":${it.prefWidth}, "maxWidth":${it.maxWidth} }"""
+        } + "]")
+        comp.setWidgetListener("onAfterSize", "jasmineUpdateTableColumnsWidths($(this._node))")
+
 //        addRowInt(rows)
 //        comp.setWidgetListener("onAfterSize", """
 //            var tableNode = $(this._node)
