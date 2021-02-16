@@ -83,7 +83,7 @@ class MainFrame:Borderlayout {
             tabbPanel.vflex = "1"
             tabbPanel.hflex = "1"
             val panel = GridLayoutPanel()
-            tabbPanel.appendChild(panel.createComponent())
+            tabbPanel.appendChild(panel.getComponent())
             panels.appendChild(tabbPanel)
 
         }
@@ -99,7 +99,39 @@ class MainFrame:Borderlayout {
             tabbPanel.vflex = "1"
             tabbPanel.hflex = "1"
             val panel = TablePanel()
-            tabbPanel.appendChild(panel.createComponent())
+            tabbPanel.appendChild(panel.getComponent())
+            panels.appendChild(tabbPanel)
+
+        }
+        run{
+            val tab = Tab("")
+            tab.isClosable = true
+            tab.id = "Tree"
+            tab.label = "Tree"
+            tabs.appendChild(tab)
+
+
+            val tabbPanel = Tabpanel()
+            tabbPanel.vflex = "1"
+            tabbPanel.hflex = "1"
+            val panel = TreePanel()
+            tabbPanel.appendChild(panel.getComponent())
+            panels.appendChild(tabbPanel)
+
+        }
+        run{
+            val tab = Tab("")
+            tab.isClosable = true
+            tab.id = "Accordion"
+            tab.label = "Accordion"
+            tabs.appendChild(tab)
+
+
+            val tabbPanel = Tabpanel()
+            tabbPanel.vflex = "1"
+            tabbPanel.hflex = "1"
+            val panel = AccordionPanel()
+            tabbPanel.appendChild(panel.getComponent())
             panels.appendChild(tabbPanel)
 
         }

@@ -34,7 +34,10 @@ class ZkServerUiLinkButton(private val config:ServerUiLinkButtonConfiguration) :
         comp.isDisabled = !enabled
     }
 
-    override fun createComponent(): HtmlBasedComponent {
+    override fun getComponent(): HtmlBasedComponent {
+        if(component!= null){
+            return component!!
+        }
         val comp = Button()
         component = comp
         comp.label = config.title

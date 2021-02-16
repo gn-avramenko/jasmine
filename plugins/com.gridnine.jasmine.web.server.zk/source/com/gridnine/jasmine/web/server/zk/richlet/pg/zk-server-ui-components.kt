@@ -9,5 +9,5 @@ import org.zkoss.zk.ui.HtmlBasedComponent
 
 abstract class ZkServerUiComponent:ServerUiComponent{
     var parent:ZkServerUiComponent? = null
-    abstract fun createComponent():HtmlBasedComponent
+    abstract fun getComponent():HtmlBasedComponent
 }

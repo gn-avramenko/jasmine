@@ -45,7 +45,10 @@ open class ZkServerUiGridLayoutContainer(private val configuration:ServerUiGridL
         }
     }
 
-    override fun createComponent(): HtmlBasedComponent {
+    override fun getComponent(): HtmlBasedComponent {
+        if(component != null){
+            return component!!
+        }
         val comp = Div()
         comp.style = createContainerStyle()
         val width = configuration.width
@@ -80,7 +83,7 @@ open class ZkServerUiGridLayoutContainer(private val configuration:ServerUiGridL
             cell.comp?.let {
                 it as ZkServerUiComponent
                 it.parent = this
-                val divComp = it.createComponent()
+                val divComp = it.getComponent()
                 divComp.parent = cellDiv
             }
             cellDiv.parent = cont

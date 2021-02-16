@@ -28,7 +28,10 @@ class ZkServerUiTextBox(private val config : ServerUiTextBoxConfiguration) : Ser
         }
     }
 
-    override fun createComponent(): HtmlBasedComponent {
+    override fun getComponent(): HtmlBasedComponent {
+        if(component != null){
+            return component!!
+        }
         val comp = Textbox()
         if(config.width == "100%"){
             comp.hflex = "1"

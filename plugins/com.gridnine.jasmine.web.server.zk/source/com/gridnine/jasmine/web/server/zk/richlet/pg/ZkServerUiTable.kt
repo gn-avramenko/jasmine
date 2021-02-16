@@ -33,7 +33,7 @@ open class ZkServerUiTable(private val config: ServerUiTableConfiguration) : Ser
             val cellComp = comp.component
             if (cellComp is ZkServerUiComponent) {
                 cellComp.parent = ZkServerUiTable@ this
-                cellComp.createComponent().parent = cell
+                cellComp.getComponent().parent = cell
             }
         }
         val children = comp.rows.getChildren<Row>()
@@ -84,7 +84,10 @@ open class ZkServerUiTable(private val config: ServerUiTableConfiguration) : Ser
         return rows.map { row -> row.map { it.component } }
     }
 
-    override fun createComponent(): HtmlBasedComponent {
+    override fun getComponent(): HtmlBasedComponent {
+        if(component != null){
+            return component!!
+        }
         val comp = Grid()
         component = comp
         comp.isSpan = true
@@ -121,18 +124,6 @@ open class ZkServerUiTable(private val config: ServerUiTableConfiguration) : Ser
             """{"minWidth":${it.minWidth}, "prefWidth":${it.prefWidth}, "maxWidth":${it.maxWidth} }"""
         } + "]")
         comp.setWidgetListener("onAfterSize", "jasmineUpdateTableColumnsWidths($(this._node))")
-
-//        addRowInt(rows)
-//        comp.setWidgetListener("onAfterSize", """
-//            var tableNode = $(this._node)
-//            console.log("table width = " + tableNode.width())
-//            var lastColumn = tableNode.find("colgroup").eq(0).children().eq(2)
-//            console.log(lastColumn)
-//            console.log("last column width " + lastColumn.css("width"))
-//            lastColumn.css("width", "20px")
-//            console.log("new last column width " + lastColumn.css("width"))
-//            """.trimMargin())
-
         return comp
     }
 
