@@ -5,6 +5,9 @@
 
 package com.gridnine.jasmine.web.server.zk.richlet.pg
 
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiLinkButtonConfiguration
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiLinkButton
+
 class TablePanel : ZkServerUiTable(createConfiguration()){
 
 

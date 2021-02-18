@@ -158,6 +158,38 @@ class MainFrame:Div() {
                 panels.appendChild(tabbPanel)
 
             }
+            run{
+                val tab = Tab("")
+                tab.isClosable = true
+                tab.id = "DivsContainer"
+                tab.label = "DivsContainer"
+                tabs.appendChild(tab)
+
+
+                val tabbPanel = Tabpanel()
+                tabbPanel.vflex = "1"
+                tabbPanel.hflex = "1"
+                val panel = DivsContainerPanel()
+                tabbPanel.appendChild(panel.getComponent())
+                panels.appendChild(tabbPanel)
+
+            }
+            run{
+                val tab = Tab("")
+                tab.isClosable = true
+                tab.id = "Panel"
+                tab.label = "Panel"
+                tabs.appendChild(tab)
+
+
+                val tabbPanel = Tabpanel()
+                tabbPanel.vflex = "1"
+                tabbPanel.hflex = "1"
+                val panel = Panel()
+                tabbPanel.appendChild(panel.getComponent())
+                panels.appendChild(tabbPanel)
+
+            }
             return tabbox
         }
 

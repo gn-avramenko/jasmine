@@ -17,6 +17,13 @@ open class ZkServerUiGridLayoutContainer(private val configuration:ServerUiGridL
     private var columnIndex = 0
 
     override fun addRow(height: String?) {
+        if(rows.size > 0){
+            val row = rows.last()
+            val span = row.cells.map{it.columnSpan}.reduce{ i1, i2 ->  i1+i2}
+            if(span < configuration.columns.size){
+                row.cells.add(ServerUiGridLayoutCell(null, configuration.columns.size-span))
+            }
+        }
         rows.add(ServerUiGridLayoutRow(ServerUiGridLayoutRowConfiguration(height)))
         component?.let{
             it.style = createContainerStyle()
@@ -77,7 +84,7 @@ open class ZkServerUiGridLayoutContainer(private val configuration:ServerUiGridL
             val cellDiv = Div()
             cellDiv.style = """grid-row: ${rowIndex+1};grid-column: ${columnIndex+1}/${columnIndex+1+cell.columnSpan};padding: ${if(configuration.noPadding) "0px" else "5px"}"""
             columnIndex+=cell.columnSpan
-            if(columnIndex >= configuration.columns.size -1){
+            if(columnIndex >= configuration.columns.size ){
                 columnIndex = 0
             }
             cell.comp?.let {

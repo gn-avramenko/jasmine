@@ -39,19 +39,6 @@ class ServerUiTableColumnDescription(val label:String?, val minWidth:Int?,  val 
 
 class ServerUiTableCell(val component:ServerUiComponent? , val colspan:Int =1)
 
-abstract class BaseServerUiButtonConfiguration{
-    var title:String? = null
-}
-
-class ServerUiLinkButtonConfiguration:BaseServerUiButtonConfiguration(){
-    var width:String?=null
-    var height:String?=null
-}
-
-interface ServerUiLinkButton: ServerUiComponent {
-    fun setHandler(handler:()-> Unit)
-    fun setEnabled(value:Boolean)
-}
 
 class ServerUiTreeItem(val id:String, var text:String, var userData:Any?){
     val children:MutableList<ServerUiTreeItem> = arrayListOf()

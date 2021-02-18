@@ -7,15 +7,15 @@ package com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk
 
 import com.gridnine.jasmine.web.server.zk.richlet.pg.ServerUiComponent
 import com.gridnine.jasmine.web.server.zk.richlet.pg.ZkServerUiComponent
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiDateBox
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiDateBoxConfiguration
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiDateTimeBox
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiDateTimeBoxConfiguration
 import org.zkoss.zk.ui.HtmlBasedComponent
 import org.zkoss.zul.Datebox
-import java.time.LocalDate
+import java.time.LocalDateTime
 
-class ZkServerUiDateBox (private val config:ServerUiDateBoxConfiguration) : ServerUiDateBox, ZkServerUiComponent(){
+class ZkServerUiDateTimeBox (private val config:ServerUiDateTimeBoxConfiguration) : ServerUiDateTimeBox, ZkServerUiComponent(){
 
-    private var value : LocalDate? = null
+    private var value : LocalDateTime? = null
 
     private var component:Datebox? = null
 
@@ -23,17 +23,17 @@ class ZkServerUiDateBox (private val config:ServerUiDateBoxConfiguration) : Serv
 
     private var validation:String? = null
 
-    override fun getValue(): LocalDate? {
+    override fun getValue(): LocalDateTime? {
         if(component == null){
             return value
         }
-        return component!!.valueInLocalDate
+        return component!!.valueInLocalDateTime
     }
 
-    override fun setValue(value: LocalDate?) {
+    override fun setValue(value: LocalDateTime?) {
         this.value = value
         if(component!= null){
-            component!!.valueInLocalDate = value
+            component!!.valueInLocalDateTime = value
         }
     }
 
@@ -67,8 +67,8 @@ class ZkServerUiDateBox (private val config:ServerUiDateBoxConfiguration) : Serv
         } else if(config.height != null){
             component!!.height = config.height
         }
-        component!!.format = "yyyy-MM-dd"
-        component!!.valueInLocalDate = value
+        component!!.format = "yyyy-MM-dd HH:mm"
+        component!!.valueInLocalDateTime = value
         component!!.isDisabled = !enabled
         component!!.setClass(if(validation != null) "jasmine-error" else "jasmine-normal")
         component!!.tooltip = validation

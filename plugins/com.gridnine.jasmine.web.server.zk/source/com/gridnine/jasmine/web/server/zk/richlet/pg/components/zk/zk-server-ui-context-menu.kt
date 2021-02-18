@@ -33,6 +33,7 @@ private fun createPopup(items: List<ServerUiContextMenuItem>): Menupopup {
         if(it is ServerUiContextMenuSeparator){
             val separator = Menuseparator()
             separator.parent = menu
+            return@forEach
         }
         if(it is ServerUiContextMenuGroupItem){
             if(it.children.isNotEmpty()){

@@ -5,12 +5,8 @@
 
 package com.gridnine.jasmine.web.server.zk.richlet.pg
 
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiBooleanBoxConfiguration
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiContextMenuStandardItem
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiDateBoxConfiguration
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiBooleanBox
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiDateBox
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.showMenu
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.*
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.*
 import com.gridnine.jasmine.zk.select2.Select2
 import com.gridnine.jasmine.zk.select2.Select2DataSourceType
 import com.gridnine.jasmine.zk.select2.Select2Option
@@ -81,12 +77,52 @@ class Select2Panel :Vbox{
             result
         }
 
+        val dateTimeBox = run{
+            val dateBoxConfig = ServerUiDateTimeBoxConfiguration()
+            dateBoxConfig.width = "200px"
+            val result = ZkServerUiDateTimeBox(dateBoxConfig)
+            appendChild(result.getComponent())
+            result
+        }
+
+        val numberBox = run{
+            val numberBoxConfig = ServerUiNumberBoxConfiguration()
+            numberBoxConfig.width = "200px"
+            val result = ZkServerUiNumberBox(numberBoxConfig)
+            appendChild(result.getComponent())
+            result
+        }
+
+        val menuButton = run{
+            val menuButtonConfig = ServerUiMenuButtonConfiguration()
+            menuButtonConfig.title = "menu button"
+            menuButtonConfig.width = "200px"
+            menuButtonConfig.items.add(ServerUiMenuButtonStandardItem("1","menu 1", null, false){
+                Clients.alert("Menu 1")
+            })
+            menuButtonConfig.items.add(ServerUiMenuButtonSeparator())
+            menuButtonConfig.items.add(ServerUiMenuButtonStandardItem("2","menu 2", null, false){
+                Clients.alert("Menu 2")
+            })
+            val result = ZkServerUiMenuButton(menuButtonConfig)
+            appendChild(result.getComponent())
+            result
+        }
+
+        val label = run{
+            val result = ZkServerUiLabel()
+            result.setText("test label")
+            appendChild(result.getComponent())
+            result
+        }
+
         val button = Button()
         button.width = "200px"
         button.label = "delete"
         button.addEventListener(Events.ON_CLICK) {
             select3.validation ="Поле должно быть заполнено"
             dateBox.showValidation("Поле должно быть заполнено")
+            dateTimeBox.showValidation("Поле должно быть заполнено")
         }
         appendChild(button)
         val button2 = Button()
@@ -95,6 +131,8 @@ class Select2Panel :Vbox{
         button2.addEventListener(Events.ON_CLICK) {
             select3.validation = null
             dateBox.showValidation(null)
+            dateTimeBox.showValidation(null)
+
         }
         appendChild(button2)
     }

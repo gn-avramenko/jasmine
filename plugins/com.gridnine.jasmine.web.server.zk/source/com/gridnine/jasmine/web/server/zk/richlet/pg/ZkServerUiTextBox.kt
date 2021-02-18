@@ -43,7 +43,9 @@ class ZkServerUiTextBox(private val config : ServerUiTextBoxConfiguration) : Ser
         }else if(config.height != null) {
             comp.height = config.height
         }
+        comp.text = value
         component = comp
+
         return comp
     }
 

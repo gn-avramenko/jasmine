@@ -3,8 +3,12 @@
  * Project: Jasmine
  *****************************************************************/
 
-package com.gridnine.jasmine.web.server.zk.richlet.pg
+package com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk
 
+import com.gridnine.jasmine.web.server.zk.richlet.pg.ServerUiComponent
+import com.gridnine.jasmine.web.server.zk.richlet.pg.ZkServerUiComponent
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiLinkButton
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiLinkButtonConfiguration
 import org.zkoss.zk.ui.HtmlBasedComponent
 import org.zkoss.zk.ui.event.Events
 import org.zkoss.zul.Button
@@ -20,7 +24,6 @@ class ZkServerUiLinkButton(private val config:ServerUiLinkButtonConfiguration) :
     override fun setHandler(handler: () -> Unit) {
         this.handler = handler
     }
-
 
     override fun setEnabled(value: Boolean) {
         enabled = value
