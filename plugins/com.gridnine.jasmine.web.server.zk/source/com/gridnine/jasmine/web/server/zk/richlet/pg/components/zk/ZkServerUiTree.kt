@@ -3,8 +3,14 @@
  * Project: Jasmine
  *****************************************************************/
 
-package com.gridnine.jasmine.web.server.zk.richlet.pg
+package com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk
 
+import com.gridnine.jasmine.web.server.zk.richlet.pg.ServerUiComponent
+import com.gridnine.jasmine.web.server.zk.richlet.pg.ZkServerUiComponent
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiTree
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiTreeConfiguration
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiTreeContextMenuEvent
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiTreeItem
 import org.zkoss.zk.ui.HtmlBasedComponent
 import org.zkoss.zk.ui.event.DropEvent
 import org.zkoss.zk.ui.event.Events

@@ -3,8 +3,12 @@
  * Project: Jasmine
  *****************************************************************/
 
-package com.gridnine.jasmine.web.server.zk.richlet.pg
+package com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk
 
+import com.gridnine.jasmine.web.server.zk.richlet.pg.ServerUiComponent
+import com.gridnine.jasmine.web.server.zk.richlet.pg.ZkServerUiComponent
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiTextBox
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiTextBoxConfiguration
 import org.zkoss.zk.ui.HtmlBasedComponent
 import org.zkoss.zul.Textbox
 
@@ -13,6 +17,8 @@ class ZkServerUiTextBox(private val config : ServerUiTextBoxConfiguration) : Ser
     private var value:String? = null
 
     private var component:Textbox? = null
+
+    private var validation:String? = null
 
     override fun getValue(): String? {
         if(component != null){
@@ -28,6 +34,13 @@ class ZkServerUiTextBox(private val config : ServerUiTextBoxConfiguration) : Ser
         }
     }
 
+    override fun showValidation(value: String?) {
+       this.validation = value
+        if(component != null){
+            component!!.setClass(if(validation != null) "jasmine-error" else "jasmine-normal")
+        }
+    }
+
     override fun getComponent(): HtmlBasedComponent {
         if(component != null){
             return component!!
@@ -36,7 +49,7 @@ class ZkServerUiTextBox(private val config : ServerUiTextBoxConfiguration) : Ser
         if(config.width == "100%"){
             comp.hflex = "1"
         } else if(config.width != null){
-            comp.width = "width"
+            comp.width = config.width
         }
         if(config.height == "100%"){
             comp.vflex = "1"
@@ -44,6 +57,7 @@ class ZkServerUiTextBox(private val config : ServerUiTextBoxConfiguration) : Ser
             comp.height = config.height
         }
         comp.text = value
+        comp.setClass(if(validation != null) "jasmine-error" else "jasmine-normal")
         component = comp
 
         return comp

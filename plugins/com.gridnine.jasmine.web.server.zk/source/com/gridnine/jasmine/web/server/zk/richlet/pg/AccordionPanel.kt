@@ -7,7 +7,9 @@ package com.gridnine.jasmine.web.server.zk.richlet.pg
 
 import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiAccordionContainerConfiguration
 import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiAccordionPanel
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiTextBoxConfiguration
 import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiAccordionContainer
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiTextBox
 
 class AccordionPanel : ZkServerUiAccordionContainer(createConfiguration()){
     init {

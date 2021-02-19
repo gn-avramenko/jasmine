@@ -3,10 +3,14 @@
  * Project: Jasmine
  *****************************************************************/
 
-package com.gridnine.jasmine.web.server.zk.richlet.pg
+package com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk
 
+import com.gridnine.jasmine.web.server.zk.richlet.pg.ServerUiComponent
+import com.gridnine.jasmine.web.server.zk.richlet.pg.ZkServerUiComponent
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiTable
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiTableCell
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiTableConfiguration
 import org.zkoss.zk.ui.HtmlBasedComponent
-import org.zkoss.zk.ui.event.Events
 import org.zkoss.zul.*
 
 open class ZkServerUiTable(private val config: ServerUiTableConfiguration) : ServerUiTable, ZkServerUiComponent() {
@@ -25,14 +29,14 @@ open class ZkServerUiTable(private val config: ServerUiTableConfiguration) : Ser
     private fun addRowInternal(pos: Int, components: List<ServerUiTableCell>) {
         val comp = component!!
         val row = Row()
-        components.forEach { comp ->
+        components.forEach { component ->
             val cell = Cell()
             cell.style = "padding:0px"
             cell.parent = row
-            cell.colspan = comp.colspan
-            val cellComp = comp.component
+            cell.colspan = component.colspan
+            val cellComp = component.component
             if (cellComp is ZkServerUiComponent) {
-                cellComp.parent = ZkServerUiTable@ this
+                cellComp.parent = this
                 cellComp.getComponent().parent = cell
             }
         }

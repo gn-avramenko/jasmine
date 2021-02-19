@@ -7,13 +7,11 @@ package com.gridnine.jasmine.web.server.zk.richlet.pg
 
 import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiBorderContainerConfiguration
 import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiBorderContainerRegion
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiTreeConfiguration
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiTreeItem
 import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiBorderContainer
-import com.gridnine.jasmine.zk.select2.Select2
-import com.gridnine.jasmine.zk.select2.Select2ChangeEvent
-import com.gridnine.jasmine.zk.select2.Select2DataSourceType
-import com.gridnine.jasmine.zk.select2.Select2Option
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiTree
 import org.zkoss.zk.ui.HtmlBasedComponent
-import org.zkoss.zk.ui.event.Events
 import org.zkoss.zul.*
 
 class MainFrame:Div() {

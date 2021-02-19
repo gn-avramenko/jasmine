@@ -5,6 +5,10 @@
 
 package com.gridnine.jasmine.web.server.zk.richlet.pg
 
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiTreeConfiguration
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiTreeItem
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiTree
+
 class TreePanel : ZkServerUiTree(createConfiguration()){
     init {
         val group1 = createGroup("group1", "Группа 1")

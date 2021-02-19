@@ -5,8 +5,10 @@
 
 package com.gridnine.jasmine.web.server.zk.richlet.pg
 
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiLinkButtonConfiguration
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.*
 import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiLinkButton
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiTable
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiTextBox
 
 class TablePanel : ZkServerUiTable(createConfiguration()){
 

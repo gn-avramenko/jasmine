@@ -5,15 +5,14 @@
 
 package com.gridnine.jasmine.web.server.zk.richlet.pg
 
-import com.gridnine.jasmine.zk.select2.Select2
-import com.gridnine.jasmine.zk.select2.Select2DataSourceType
-import com.gridnine.jasmine.zk.select2.Select2Option
-import org.zkoss.zk.ui.event.Events
-import org.zkoss.zul.Button
-import org.zkoss.zul.Textbox
-import org.zkoss.zul.Vbox
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiGridLayoutCell
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiGridLayoutColumnConfiguration
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiGridLayoutContainerConfiguration
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiTextBoxConfiguration
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiGridLayoutContainer
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiTextBox
 
-class GridLayoutPanel :ZkServerUiGridLayoutContainer(createConfiguration()){
+class GridLayoutPanel : ZkServerUiGridLayoutContainer(createConfiguration()){
 
     init {
         addRow("auto")
@@ -30,7 +29,7 @@ class GridLayoutPanel :ZkServerUiGridLayoutContainer(createConfiguration()){
     }
 
     companion object{
-        private fun createConfiguration():ServerUiGridLayoutContainerConfiguration{
+        private fun createConfiguration(): ServerUiGridLayoutContainerConfiguration {
             val result = ServerUiGridLayoutContainerConfiguration()
             result.height = "100%"
             result.width = "100%"

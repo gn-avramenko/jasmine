@@ -3,9 +3,13 @@
  * Project: Jasmine
  *****************************************************************/
 
-package com.gridnine.jasmine.web.server.zk.richlet.pg
+package com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk
 
-import org.zkoss.zk.ui.AbstractComponent
+import com.gridnine.jasmine.web.server.zk.richlet.pg.ServerUiComponent
+import com.gridnine.jasmine.web.server.zk.richlet.pg.ServerUiComponentHorizontalAlignment
+import com.gridnine.jasmine.web.server.zk.richlet.pg.ZkServerUiComponent
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.*
+import org.zkoss.zk.ui.HtmlBasedComponent
 import org.zkoss.zk.ui.event.EventListener
 import org.zkoss.zk.ui.event.Events
 import org.zkoss.zk.ui.event.MouseEvent
@@ -17,20 +21,20 @@ import org.zkoss.zul.ext.Sortable
 import java.util.*
 
 
-class ZkDataGridComponent<E : Any>(private val configuration: DataGridComponentConfiguration) : DataGridComponent<E> {
+class ZkDataGridComponent<E : Any>(private val configuration: ServerUiDataGridComponentConfiguration) : ServerUiDataGridComponent<E>, ZkServerUiComponent() {
 
     private var initialized = false
     private lateinit var component: Grid
 
     private lateinit var model: GridTableModel<E>
 
-    private lateinit var loader: (DataGridRequest) -> DataGridResponse<E>
+    private lateinit var loader: (ServerUiDataGridRequest) -> ServerUiDataGridResponse<E>
 
     private lateinit var formatter: (item: E, fieldId: String) -> String?
 
     private var doubleClickListener: ((item: E) -> Unit)? = null
 
-    fun getComponent(): AbstractComponent {
+    override fun getComponent(): HtmlBasedComponent {
         if (!initialized) {
             component = Grid()
             component.mold = "paging"
@@ -105,7 +109,11 @@ class ZkDataGridComponent<E : Any>(private val configuration: DataGridComponentC
         return result
     }
 
-    override fun setLoader(loader: (DataGridRequest) -> DataGridResponse<E>) {
+    override fun getParent(): ServerUiComponent? {
+        return parent
+    }
+
+    override fun setLoader(loader: (ServerUiDataGridRequest) -> ServerUiDataGridResponse<E>) {
         this.loader = loader
     }
 
@@ -128,7 +136,7 @@ internal class PagingEventListener<E : Any>(
     }
 }
 
-internal class TableRowRenderer<E : Any>(private val columns: List<DataGridColumnConfiguration>, private val selectable: Boolean,
+internal class TableRowRenderer<E : Any>(private val columns: List<ServerUiDataGridColumnConfiguration>, private val selectable: Boolean,
                                          private val dblClickListener: ((E) -> Unit)?, private val renderer: (row: E, fieldId: String) -> String?) : RowRenderer<E> {
 
     override fun render(row: Row, data: E, index: Int) {
@@ -151,8 +159,8 @@ internal class TableRowRenderer<E : Any>(private val columns: List<DataGridColum
             div.hflex = "1"
             val label = Label(labelStr)
             div.style = when (column.horizontalAlignment) {
-                        ComponentHorizontalAlignment.RIGHT -> "text-align: right"
-                        ComponentHorizontalAlignment.CENTER -> "text-align: center"
+                        ServerUiComponentHorizontalAlignment.RIGHT -> "text-align: right"
+                ServerUiComponentHorizontalAlignment.CENTER -> "text-align: center"
                         else -> "text-align: left"
                     }
             label.parent = div
@@ -162,11 +170,11 @@ internal class TableRowRenderer<E : Any>(private val columns: List<DataGridColum
     }
 }
 
-internal class GridTableModel<E : Any>(private val loader: (DataGridRequest) -> DataGridResponse<E>,
+internal class GridTableModel<E : Any>(private val loader: (ServerUiDataGridRequest) -> ServerUiDataGridResponse<E>,
                                        private val limitProvider: () -> Int, initSortingColumn:String?, initSortingOrderAsc:Boolean?) : AbstractListModel<E>(), Sortable<E> {
     private var _data  = hashMapOf<Int, E>()
     private var _size:Int? = null
-    private var _sortingComparator: Comparator<E>? = initSortingColumn?.let{GridComparatorWrapper(it)}
+    private var _sortingComparator: Comparator<E>? = initSortingColumn?.let{ GridComparatorWrapper(it) }
     private var _ascending = initSortingOrderAsc?:true
 
     override fun getElementAt(index: Int): E? {
@@ -183,7 +191,7 @@ internal class GridTableModel<E : Any>(private val loader: (DataGridRequest) -> 
             sortingColumn = (_sortingComparator as GridComparatorWrapper<*>).propertyName
         }
         val limit = limitProvider.invoke()
-        val request = DataGridRequest(idx, limit, !_ascending, sortingColumn)
+        val request = ServerUiDataGridRequest(idx, limit, !_ascending, sortingColumn)
         val response =loader.invoke(request)
         _size = response.count
         response.data.withIndex().forEach {

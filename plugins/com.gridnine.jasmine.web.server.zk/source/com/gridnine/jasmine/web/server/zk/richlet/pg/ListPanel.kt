@@ -5,6 +5,11 @@
 
 package com.gridnine.jasmine.web.server.zk.richlet.pg
 
+import com.gridnine.jasmine.web.server.zk.richlet.pg.ServerUiComponentHorizontalAlignment.*
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiDataGridColumnConfiguration
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiDataGridComponentConfiguration
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiDataGridResponse
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkDataGridComponent
 import org.zkoss.zk.ui.event.Events
 import org.zkoss.zul.*
 
@@ -23,7 +28,7 @@ class ListPanel : Vlayout(){
         l1.appendChild(searchBox)
         appendChild(l1)
 
-        val config = DataGridComponentConfiguration()
+        val config = ServerUiDataGridComponentConfiguration()
         config.width = "100%"
         config.height = "100%"
         config.initSortingColumn = ListPanelItem.stringField1Name
@@ -31,8 +36,8 @@ class ListPanel : Vlayout(){
         config.selectable = true
         config.span = true
         run{
-            val column = DataGridColumnConfiguration()
-            column.horizontalAlignment = ComponentHorizontalAlignment.LEFT
+            val column = ServerUiDataGridColumnConfiguration()
+            column.horizontalAlignment = LEFT
             column.fieldId = ListPanelItem.stringField1Name
             column.title = "Поле 1"
             column.width= "200px"
@@ -40,8 +45,8 @@ class ListPanel : Vlayout(){
             config.columns.add(column)
         }
         run{
-            val column = DataGridColumnConfiguration()
-            column.horizontalAlignment = ComponentHorizontalAlignment.RIGHT
+            val column = ServerUiDataGridColumnConfiguration()
+            column.horizontalAlignment = RIGHT
             column.fieldId = ListPanelItem.stringField2Name
             column.title = "Поле 2"
             column.width= "200px"
@@ -87,7 +92,7 @@ class ListPanel : Vlayout(){
                 }
 
             }
-            DataGridResponse(result.size, result.subList(it.offSet, if (it.offSet+it.limit > result.size) result.size else (it.offSet+it.limit)))
+            ServerUiDataGridResponse(result.size, result.subList(it.offSet, if (it.offSet+it.limit > result.size) result.size else (it.offSet+it.limit)))
         }
         button.addEventListener(Events.ON_CLICK){
             println("selected: ${ grid.getSelected().map { it.stringField1 }.joinToString (",") }}")

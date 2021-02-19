@@ -3,17 +3,19 @@
  * Project: Jasmine
  *****************************************************************/
 
-package com.gridnine.jasmine.web.server.zk.richlet.pg
+package com.gridnine.jasmine.web.server.zk.richlet.pg.components
+
+import com.gridnine.jasmine.web.server.zk.richlet.pg.ServerUiComponent
 
 interface ServerUiGridLayoutContainer: ServerUiComponent {
 
     fun addRow(height:String?=null)
 
-    fun addCell(cell:ServerUiGridLayoutCell)
+    fun addCell(cell: ServerUiGridLayoutCell)
 }
 
 
-class ServerUiGridLayoutCell(val comp:ServerUiComponent?, val columnSpan:Int =1)
+class ServerUiGridLayoutCell(val comp: ServerUiComponent?, val columnSpan:Int =1)
 
 class ServerUiGridLayoutContainerConfiguration{
     val columns = arrayListOf<ServerUiGridLayoutColumnConfiguration>()
@@ -26,6 +28,6 @@ class ServerUiGridLayoutColumnConfiguration(val width:String?)
 
 class ServerUiGridLayoutRowConfiguration(val height:String?)
 
-class ServerUiGridLayoutRow(val config:ServerUiGridLayoutRowConfiguration){
+class ServerUiGridLayoutRow(val config: ServerUiGridLayoutRowConfiguration){
     val cells = arrayListOf<ServerUiGridLayoutCell>()
 }

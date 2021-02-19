@@ -6,7 +6,9 @@
 package com.gridnine.jasmine.web.server.zk.richlet.pg
 
 import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiPanelConfiguration
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiTextBoxConfiguration
 import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiPanel
+import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiTextBox
 import com.gridnine.jasmine.zk.select2.Select2
 import com.gridnine.jasmine.zk.select2.Select2DataSourceType
 import com.gridnine.jasmine.zk.select2.Select2Option
