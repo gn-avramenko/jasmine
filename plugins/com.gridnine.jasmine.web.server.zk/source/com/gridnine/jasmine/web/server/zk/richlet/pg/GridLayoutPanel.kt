@@ -5,12 +5,12 @@
 
 package com.gridnine.jasmine.web.server.zk.richlet.pg
 
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiGridLayoutCell
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiGridLayoutColumnConfiguration
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiGridLayoutContainerConfiguration
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiTextBoxConfiguration
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiGridLayoutContainer
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiTextBox
+import com.gridnine.jasmine.web.server.components.ServerUiGridLayoutCell
+import com.gridnine.jasmine.web.server.components.ServerUiGridLayoutColumnConfiguration
+import com.gridnine.jasmine.web.server.components.ServerUiGridLayoutContainerConfiguration
+import com.gridnine.jasmine.web.server.components.ServerUiTextBoxConfiguration
+import com.gridnine.jasmine.web.server.zk.components.ZkServerUiGridLayoutContainer
+import com.gridnine.jasmine.web.server.zk.components.ZkServerUiTextBox
 
 class GridLayoutPanel : ZkServerUiGridLayoutContainer(createConfiguration()){
 

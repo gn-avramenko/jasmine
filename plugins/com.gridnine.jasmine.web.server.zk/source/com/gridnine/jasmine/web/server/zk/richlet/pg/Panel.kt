@@ -5,20 +5,13 @@
 
 package com.gridnine.jasmine.web.server.zk.richlet.pg
 
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiPanelConfiguration
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiTextBoxConfiguration
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiPanel
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiTextBox
-import com.gridnine.jasmine.zk.select2.Select2
-import com.gridnine.jasmine.zk.select2.Select2DataSourceType
-import com.gridnine.jasmine.zk.select2.Select2Option
-import org.zkoss.zk.ui.event.Events
+import com.gridnine.jasmine.web.server.components.ServerUiPanelConfiguration
+import com.gridnine.jasmine.web.server.components.ServerUiTextBoxConfiguration
+import com.gridnine.jasmine.web.server.zk.components.ZkServerUiPanel
+import com.gridnine.jasmine.web.server.zk.components.ZkServerUiTextBox
 import org.zkoss.zk.ui.util.Clients
-import org.zkoss.zul.Button
-import org.zkoss.zul.Textbox
-import org.zkoss.zul.Vbox
 
-class Panel :ZkServerUiPanel(createConfiguration()){
+class Panel : ZkServerUiPanel(createConfiguration()){
 
     init {
         setTitle("Panel")
@@ -34,7 +27,7 @@ class Panel :ZkServerUiPanel(createConfiguration()){
     }
 
     companion object{
-        private fun createConfiguration():ServerUiPanelConfiguration{
+        private fun createConfiguration(): ServerUiPanelConfiguration {
             val result = ServerUiPanelConfiguration()
             result.height = "100%"
             result.width = "100%"

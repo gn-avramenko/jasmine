@@ -5,11 +5,11 @@
 
 package com.gridnine.jasmine.web.server.zk.richlet.pg
 
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiAccordionContainerConfiguration
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiAccordionPanel
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiTextBoxConfiguration
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiAccordionContainer
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiTextBox
+import com.gridnine.jasmine.web.server.components.ServerUiAccordionContainerConfiguration
+import com.gridnine.jasmine.web.server.components.ServerUiAccordionPanel
+import com.gridnine.jasmine.web.server.components.ServerUiTextBoxConfiguration
+import com.gridnine.jasmine.web.server.zk.components.ZkServerUiAccordionContainer
+import com.gridnine.jasmine.web.server.zk.components.ZkServerUiTextBox
 
 class AccordionPanel : ZkServerUiAccordionContainer(createConfiguration()){
     init {
@@ -25,7 +25,7 @@ class AccordionPanel : ZkServerUiAccordionContainer(createConfiguration()){
             return ServerUiAccordionContainerConfiguration("300px", "100%")
         }
         private fun createTextboxConfig(): ServerUiTextBoxConfiguration {
-                val result =ServerUiTextBoxConfiguration()
+                val result = ServerUiTextBoxConfiguration()
             result.width = "100%"
             return result
         }

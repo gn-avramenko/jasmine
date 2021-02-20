@@ -5,16 +5,23 @@
 
 package com.gridnine.jasmine.web.server.zk.richlet.pg
 
-import com.gridnine.jasmine.web.server.zk.richlet.pg.ServerUiComponentHorizontalAlignment.*
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiDataGridColumnConfiguration
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiDataGridComponentConfiguration
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiDataGridResponse
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkDataGridComponent
+import com.gridnine.jasmine.web.server.components.ServerUiComponent
+import com.gridnine.jasmine.web.server.components.ServerUiComponentHorizontalAlignment.*
+import com.gridnine.jasmine.web.server.components.ServerUiDataGridColumnConfiguration
+import com.gridnine.jasmine.web.server.components.ServerUiDataGridComponentConfiguration
+import com.gridnine.jasmine.web.server.components.ServerUiDataGridResponse
+import com.gridnine.jasmine.web.server.zk.components.ZkDataGridComponent
+import com.gridnine.jasmine.web.server.zk.components.ZkServerUiComponent
+import org.zkoss.zk.ui.HtmlBasedComponent
 import org.zkoss.zk.ui.event.Events
 import org.zkoss.zul.*
 
-class ListPanel : Vlayout(){
+class ListPanel : ZkServerUiComponent(){
+    private var component:Vlayout?  = null
     init{
+        component = Vlayout()
+        component!!.hflex = "100%"
+        component!!.vflex = "100%"
         val l1 = Hlayout()
         l1.hflex = "1"
         val button = Button()
@@ -26,7 +33,7 @@ class ListPanel : Vlayout(){
         val searchBox = Textbox()
         searchBox.width = "200px"
         l1.appendChild(searchBox)
-        appendChild(l1)
+        component!!.appendChild(l1)
 
         val config = ServerUiDataGridComponentConfiguration()
         config.width = "100%"
@@ -97,7 +104,15 @@ class ListPanel : Vlayout(){
         button.addEventListener(Events.ON_CLICK){
             println("selected: ${ grid.getSelected().map { it.stringField1 }.joinToString (",") }}")
         }
-        appendChild(grid.getComponent())
+        component!!.appendChild(grid.getComponent())
+    }
+
+    override fun getComponent(): HtmlBasedComponent {
+        return component!!
+    }
+
+    override fun getParent(): ServerUiComponent? {
+        return parent
     }
 }
 

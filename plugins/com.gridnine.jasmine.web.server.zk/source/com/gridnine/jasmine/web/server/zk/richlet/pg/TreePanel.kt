@@ -5,9 +5,9 @@
 
 package com.gridnine.jasmine.web.server.zk.richlet.pg
 
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiTreeConfiguration
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.ServerUiTreeItem
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiTree
+import com.gridnine.jasmine.web.server.components.ServerUiTreeConfiguration
+import com.gridnine.jasmine.web.server.components.ServerUiTreeItem
+import com.gridnine.jasmine.web.server.zk.components.ZkServerUiTree
 
 class TreePanel : ZkServerUiTree(createConfiguration()){
     init {

@@ -5,10 +5,11 @@
 
 package com.gridnine.jasmine.web.server.zk.richlet.pg
 
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.*
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiDivsContainer
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiGridLayoutContainer
-import com.gridnine.jasmine.web.server.zk.richlet.pg.components.zk.ZkServerUiTextBox
+import com.gridnine.jasmine.web.server.components.*
+import com.gridnine.jasmine.web.server.zk.components.ZkServerUiComponent
+import com.gridnine.jasmine.web.server.zk.components.ZkServerUiDivsContainer
+import com.gridnine.jasmine.web.server.zk.components.ZkServerUiGridLayoutContainer
+import com.gridnine.jasmine.web.server.zk.components.ZkServerUiTextBox
 import org.zkoss.zk.ui.HtmlBasedComponent
 import org.zkoss.zk.ui.event.Events
 import org.zkoss.zul.Button
@@ -62,7 +63,7 @@ class DivsContainerPanel : ZkServerUiGridLayoutContainer(createConfiguration()){
     }
 }
 
-class TestButton(val  text:String, handler: ()->Unit ):ZkServerUiComponent(){
+class TestButton(val  text:String, handler: ()->Unit ): ZkServerUiComponent(){
 
     val comp = Button()
 
