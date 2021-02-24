@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.web.server.zk.components
 
-import com.gridnine.jasmine.web.server.components.ServerUiComponent
+import com.gridnine.jasmine.web.server.components.ServerUiNode
 import com.gridnine.jasmine.web.server.components.ServerUiBorderContainer
 import com.gridnine.jasmine.web.server.components.ServerUiBorderContainerConfiguration
 import com.gridnine.jasmine.web.server.components.ServerUiBorderContainerRegion
@@ -43,7 +43,7 @@ open class ZkServerUiBorderContainer(private val config: ServerUiBorderContainer
             north.isOpen = !northRegion.collapsed
         }
         north.border = if(northRegion.showBorder) "normal" else "0"
-        north.appendChild((northRegion.content as ZkServerUiComponent).getComponent())
+        north.appendChild(findZkComponent(northRegion.content).getZkComponent())
         component!!.appendChild(north)
     }
 
@@ -95,7 +95,7 @@ open class ZkServerUiBorderContainer(private val config: ServerUiBorderContainer
         setRegionInternal(centerRegion){Center()}
     }
 
-    override fun getComponent(): HtmlBasedComponent {
+    override fun getZkComponent(): HtmlBasedComponent {
         if(component != null){
             return component!!
         }
@@ -118,7 +118,7 @@ open class ZkServerUiBorderContainer(private val config: ServerUiBorderContainer
         return component!!
     }
 
-    override fun getParent(): ServerUiComponent? {
+    override fun getParent(): ServerUiNode? {
         return parent
     }
 

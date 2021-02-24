@@ -10,7 +10,7 @@ class ServerUiTreeItem(val id:String, var text:String, var userData:Any?){
     val children:MutableList<ServerUiTreeItem> = arrayListOf()
 }
 
-interface ServerUiTree: ServerUiComponent {
+interface ServerUiTree: ServerUiNode {
     fun setData(data: List<ServerUiTreeItem>)
     fun setSelectListener(listener:((item: ServerUiTreeItem) ->Unit)?)
     fun setOnContextMenuListener(listener:((node: ServerUiTreeItem, event: ServerUiTreeContextMenuEvent) ->Unit)?)
@@ -26,7 +26,10 @@ interface ServerUiTree: ServerUiComponent {
     fun remove(id: String)
 }
 
-class ServerUiTreeConfiguration{
+class ServerUiTreeConfiguration(){
+    constructor(config:ServerUiTreeConfiguration.()->Unit):this(){
+        config.invoke(this)
+    }
     var width:String? = null
     var height:String? = null
     var enableDnd = false

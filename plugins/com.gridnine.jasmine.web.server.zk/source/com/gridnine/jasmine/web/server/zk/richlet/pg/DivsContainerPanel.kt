@@ -74,11 +74,11 @@ class TestButton(val  text:String, handler: ()->Unit ): ZkServerUiComponent(){
         }
     }
 
-    override fun getComponent(): HtmlBasedComponent {
+    override fun getZkComponent(): HtmlBasedComponent {
         return comp
     }
 
-    override fun getParent(): ServerUiComponent? {
+    override fun getParent(): ServerUiNode? {
         return parent
     }
 

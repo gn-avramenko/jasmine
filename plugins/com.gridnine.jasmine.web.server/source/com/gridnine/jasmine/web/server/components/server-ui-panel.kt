@@ -5,11 +5,11 @@
 
 package com.gridnine.jasmine.web.server.components
 
-interface ServerUiPanel : ServerUiComponent {
+interface ServerUiPanel : ServerUiNode {
     fun setTitle(title:String)
     fun setMaximizeHandler(handler:() ->Unit)
     fun setMinimizeHandler(handler:() ->Unit)
-    fun setContent(comp: ServerUiComponent?)
+    fun setContent(comp: ServerUiNode?)
 }
 
 class ServerUiPanelConfiguration{

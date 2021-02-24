@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.web.server.zk.components
 
-import com.gridnine.jasmine.web.server.components.ServerUiComponent
+import com.gridnine.jasmine.web.server.components.ServerUiNode
 import com.gridnine.jasmine.web.server.components.ServerUiAccordionContainer
 import com.gridnine.jasmine.web.server.components.ServerUiAccordionContainerConfiguration
 import com.gridnine.jasmine.web.server.components.ServerUiAccordionPanel
@@ -39,7 +39,7 @@ open class ZkServerUiAccordionContainer(private val config: ServerUiAccordionCon
         val tabbPanel = Tabpanel()
         tabbPanel.vflex = "1"
         tabbPanel.hflex = "1"
-        tabbPanel.appendChild((panel.content as ZkServerUiComponent).getComponent())
+        tabbPanel.appendChild(findZkComponent(panel.content).getZkComponent())
         tabPanels!!.appendChild(tabbPanel)
     }
 
@@ -65,7 +65,7 @@ open class ZkServerUiAccordionContainer(private val config: ServerUiAccordionCon
         return panels
     }
 
-    override fun getComponent(): HtmlBasedComponent {
+    override fun getZkComponent(): HtmlBasedComponent {
         if(component!= null){
             return component!!
         }
@@ -94,7 +94,7 @@ open class ZkServerUiAccordionContainer(private val config: ServerUiAccordionCon
         return comp
     }
 
-    override fun getParent(): ServerUiComponent? {
+    override fun getParent(): ServerUiNode? {
         return parent
     }
 

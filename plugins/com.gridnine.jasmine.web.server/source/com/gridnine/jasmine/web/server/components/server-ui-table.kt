@@ -5,11 +5,11 @@
 
 package com.gridnine.jasmine.web.server.components
 
-interface ServerUiTable : ServerUiComponent {
+interface ServerUiTable : ServerUiNode {
     fun addRow(position:Int?, components:List<ServerUiTableCell>)
     fun removeRow(position: Int)
     fun moveRow(fromPosition:Int, toPosition:Int)
-    fun getRows():List<List<ServerUiComponent?>>
+    fun getRows():List<List<ServerUiNode?>>
 }
 
 class ServerUiTableConfiguration{
@@ -22,5 +22,5 @@ class ServerUiTableConfiguration{
 class ServerUiTableColumnDescription(val label:String?, val minWidth:Int?,  val prefWidth:Int?, val maxWidth:Int?)
 
 
-class ServerUiTableCell(val component: ServerUiComponent?, val colspan:Int =1)
+class ServerUiTableCell(val component: ServerUiNode?, val colspan:Int =1)
 

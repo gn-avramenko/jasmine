@@ -6,7 +6,7 @@
 package com.gridnine.jasmine.web.server.components
 
 
-interface ServerUiMenuButton: ServerUiComponent {
+interface ServerUiMenuButton: ServerUiNode {
     fun setEnabled(id:String, value:Boolean)
     fun setEnabled(value:Boolean)
 }

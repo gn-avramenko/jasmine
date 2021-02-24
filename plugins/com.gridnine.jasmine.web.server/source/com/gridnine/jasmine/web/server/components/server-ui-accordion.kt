@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.web.server.components
 
-interface ServerUiAccordionContainer : ServerUiComponent {
+interface ServerUiAccordionContainer : ServerUiNode {
     fun addPanel(panel: ServerUiAccordionPanel)
     fun removePanel(id:String)
     fun select(id:String)
@@ -14,4 +14,4 @@ interface ServerUiAccordionContainer : ServerUiComponent {
 
 data class ServerUiAccordionContainerConfiguration(val width:String? = null, val height:String? = null)
 
-data class ServerUiAccordionPanel(val id:String, val title:String?, val content: ServerUiComponent)
+data class ServerUiAccordionPanel(val id:String, val title:String?, val content: ServerUiNode)

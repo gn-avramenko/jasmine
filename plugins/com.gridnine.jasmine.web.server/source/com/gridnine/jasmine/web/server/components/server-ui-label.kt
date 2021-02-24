@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.web.server.components
 
-interface ServerUiLabel: ServerUiComponent {
+interface ServerUiLabel: ServerUiNode {
     fun setText(value: String?)
 }
 

@@ -2,5 +2,6 @@
     <parameter id="type" value="SERVER"/>
     <dependencies>
         <plugin-dependency plugin-id="com.gridnine.jasmine.server.core"/>
+        <plugin-dependency plugin-id="com.gridnine.jasmine.server.standard"/>
     </dependencies>
 </plugin>

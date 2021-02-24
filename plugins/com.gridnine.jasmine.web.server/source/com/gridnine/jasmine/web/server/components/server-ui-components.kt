@@ -6,10 +6,33 @@
 package com.gridnine.jasmine.web.server.components
 
 import com.gridnine.jasmine.server.core.app.Environment
+import com.gridnine.jasmine.server.core.app.PublishableWrapper
 import com.gridnine.jasmine.server.core.model.common.BaseIntrospectableObject
+import com.gridnine.jasmine.server.core.web.WebServer
 
-interface ServerUiComponent{
-    fun getParent(): ServerUiComponent?
+interface ServerUiNode{
+    fun getParent(): ServerUiNode?
+}
+
+interface ServerUiNodeWrapper: ServerUiNode{
+    fun getNode():ServerUiNode
+}
+
+abstract class BaseServerUiNodeWrapper:ServerUiNodeWrapper{
+    private var _parent:ServerUiNode? =  null
+    protected lateinit var _node:ServerUiNode
+
+    fun setParent(parent:ServerUiNode){
+        this._parent = parent
+    }
+
+    override fun getParent(): ServerUiNode? {
+        return _parent
+    }
+
+    override fun getNode(): ServerUiNode {
+        return _node
+    }
 }
 
 
@@ -34,7 +57,7 @@ interface ServerUiLibraryAdapter{
     fun createDateTimeBox(config:ServerUiDateTimeBoxConfiguration):ServerUiDateTimeBox
     fun createNumberBox(config:ServerUiNumberBoxConfiguration):ServerUiNumberBox
     fun createSelect(config:ServerUiSelectConfiguration): ServerUiSelect
-    fun<W> showDialog(config:ServerUiDialogConfiguration<W>):ServerUiDialog<W>  where W:ServerUiComponent
+    fun<W> showDialog(config:ServerUiDialogConfiguration<W>):ServerUiDialog<W>  where W:ServerUiNode
     fun createMenuButton(config:ServerUiMenuButtonConfiguration):ServerUiMenuButton
     fun createPanel(config:ServerUiPanelConfiguration):ServerUiPanel
     fun createTilesContainer(config:ServerUiTilesContainerConfiguration):ServerUiTilesContainer
@@ -45,7 +68,9 @@ interface ServerUiLibraryAdapter{
     fun showContextMenu(items:List<ServerUiContextMenuItem>, pageX:Int, pageY:Int)
     fun showNotification(message:String, timeout:Int)
 
+
     companion object{
-        fun get() = Environment.getPublished(ServerUiLibraryAdapter::class)
+        private val wrapper = PublishableWrapper(ServerUiLibraryAdapter::class)
+        fun get() = wrapper.get()
     }
 }

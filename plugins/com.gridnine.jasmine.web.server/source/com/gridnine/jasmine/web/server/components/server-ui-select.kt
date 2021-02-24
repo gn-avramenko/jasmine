@@ -7,7 +7,7 @@ package com.gridnine.jasmine.web.server.components
 
 import com.gridnine.jasmine.server.core.model.common.SelectItem
 
-interface ServerUiSelect: ServerUiComponent {
+interface ServerUiSelect: ServerUiNode {
     fun setLoaderParams(url:String, limit:Int=10, parameters: List<Pair<String,String?>>)
     fun getValues():List<SelectItem>
     fun setValues(values: List<SelectItem>)

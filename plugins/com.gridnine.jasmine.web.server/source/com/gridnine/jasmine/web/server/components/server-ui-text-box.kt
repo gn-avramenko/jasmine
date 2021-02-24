@@ -5,13 +5,17 @@
 
 package com.gridnine.jasmine.web.server.components
 
-interface ServerUiTextBox: ServerUiComponent {
+interface ServerUiTextBox: ServerUiNode {
     fun getValue():String?
     fun setValue(value:String?)
     fun showValidation(value:String?)
+    fun setActionListener(listener: (String?) -> Unit)
 }
 
-class ServerUiTextBoxConfiguration{
+class ServerUiTextBoxConfiguration(){
+    constructor(config:ServerUiTextBoxConfiguration.()->Unit):this(){
+        config.invoke(this)
+    }
     var width:String? = null
     var height:String? = null
 }

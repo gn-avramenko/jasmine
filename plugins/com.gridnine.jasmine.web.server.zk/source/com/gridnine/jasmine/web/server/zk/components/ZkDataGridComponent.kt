@@ -31,7 +31,7 @@ class ZkDataGridComponent<E : Any>(private val configuration: ServerUiDataGridCo
 
     private var doubleClickListener: ((item: E) -> Unit)? = null
 
-    override fun getComponent(): HtmlBasedComponent {
+    override fun getZkComponent(): HtmlBasedComponent {
         if (!initialized) {
             component = Grid()
             component.mold = "paging"
@@ -106,7 +106,7 @@ class ZkDataGridComponent<E : Any>(private val configuration: ServerUiDataGridCo
         return result
     }
 
-    override fun getParent(): ServerUiComponent? {
+    override fun getParent(): ServerUiNode? {
         return parent
     }
 

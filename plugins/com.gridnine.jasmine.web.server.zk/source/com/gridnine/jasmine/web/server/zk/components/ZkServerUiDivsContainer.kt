@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.web.server.zk.components
 
-import com.gridnine.jasmine.web.server.components.ServerUiComponent
+import com.gridnine.jasmine.web.server.components.ServerUiNode
 import com.gridnine.jasmine.web.server.components.ServerUiDivsContainer
 import com.gridnine.jasmine.web.server.components.ServerUiDivsContainerConfiguration
 import org.zkoss.zk.ui.HtmlBasedComponent
@@ -13,14 +13,14 @@ import org.zkoss.zul.Div
 
 class ZkServerUiDivsContainer (private val config: ServerUiDivsContainerConfiguration) : ServerUiDivsContainer, ZkServerUiComponent(){
 
-    private val divsMap = hashMapOf<String, ZkServerUiComponent>()
+    private val divsMap = hashMapOf<String, ServerUiNode>()
 
     private var component:Div? = null
 
     private var activeComponentId: String? = null
 
-    override fun addDiv(id: String, content: ServerUiComponent) {
-        divsMap[id] = content as ZkServerUiComponent
+    override fun addDiv(id: String, content: ServerUiNode) {
+        divsMap[id] = content
     }
 
     override fun show(id: String) {
@@ -34,9 +34,9 @@ class ZkServerUiDivsContainer (private val config: ServerUiDivsContainerConfigur
 
     private fun showInternal(id:String) {
         if(activeComponentId != null){
-            divsMap[activeComponentId]!!.getComponent().isVisible = false
+            findZkComponent(divsMap[activeComponentId]!!).getZkComponent().isVisible = false
         }
-        val comp = divsMap[id]!!.getComponent()
+        val comp = findZkComponent(divsMap[id]!!).getZkComponent()
         comp.parent = component!!
         comp.isVisible = true
     }
@@ -44,18 +44,18 @@ class ZkServerUiDivsContainer (private val config: ServerUiDivsContainerConfigur
     override fun removeDiv(id: String) {
         val comp = divsMap.remove(id)!!
         if(component != null){
-            val zkComp = comp.getComponent()
+            val zkComp = findZkComponent(comp).getZkComponent()
             if(zkComp.parent != null){
                 component!!.removeChild(zkComp)
             }
         }
     }
 
-    override fun getDiv(id: String): ServerUiComponent? {
+    override fun getDiv(id: String): ServerUiNode? {
         return divsMap[id]
     }
 
-    override fun getComponent(): HtmlBasedComponent {
+    override fun getZkComponent(): HtmlBasedComponent {
         if(component != null){
             return component!!
         }
@@ -79,7 +79,7 @@ class ZkServerUiDivsContainer (private val config: ServerUiDivsContainerConfigur
         return component!!
     }
 
-    override fun getParent(): ServerUiComponent? {
+    override fun getParent(): ServerUiNode? {
         return parent
     }
 

@@ -6,7 +6,7 @@
 package com.gridnine.jasmine.web.server.zk.components
 
 import com.gridnine.jasmine.server.core.model.common.SelectItem
-import com.gridnine.jasmine.web.server.components.ServerUiComponent
+import com.gridnine.jasmine.web.server.components.ServerUiNode
 import com.gridnine.jasmine.web.server.components.ServerUiSelect
 import com.gridnine.jasmine.web.server.components.ServerUiSelectConfiguration
 import com.gridnine.jasmine.web.server.components.ServerUiSelectDataType
@@ -100,7 +100,7 @@ class ZkServerUiSelect(private val config : ServerUiSelectConfiguration) : Serve
         }
     }
 
-    override fun getComponent(): HtmlBasedComponent {
+    override fun getZkComponent(): HtmlBasedComponent {
         if(component != null){
             return component!!
         }
@@ -134,7 +134,7 @@ class ZkServerUiSelect(private val config : ServerUiSelectConfiguration) : Serve
         return component!!
     }
 
-    override fun getParent(): ServerUiComponent? {
+    override fun getParent(): ServerUiNode? {
         return parent
     }
 

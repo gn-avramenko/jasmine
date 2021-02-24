@@ -5,26 +5,27 @@
 
 package com.gridnine.jasmine.web.server.zk.richlet
 
-import com.gridnine.jasmine.web.server.zk.richlet.pg.MainFrame
+import com.gridnine.jasmine.web.server.mainframe.ServerUiMainFrame
+import com.gridnine.jasmine.web.server.mainframe.ServerUiMainFrameConfiguration
+import com.gridnine.jasmine.web.server.zk.components.findZkComponent
+import com.gridnine.jasmine.web.server.zk.richlet.pg.PgMainFrame
 import org.zkoss.zk.ui.*
-import org.zkoss.zk.ui.event.Event
-import org.zkoss.zk.ui.event.EventListener
-import org.zkoss.zk.ui.event.Events
-import org.zkoss.zk.ui.impl.PollingServerPush
-import org.zkoss.zk.ui.sys.DesktopCtrl
-import org.zkoss.zk.ui.sys.WebAppCtrl
-import org.zkoss.zk.ui.util.Clients
-import org.zkoss.zul.Button
-import org.zkoss.zul.Label
-import org.zkoss.zul.Window
+import org.zkoss.zul.Div
 
 
 class JasmineRichlet : GenericRichlet() {
 
     override fun service(page: Page) {
         page.title = "Jasmine"
-        val mainFrame = MainFrame()
-        mainFrame.page = page
+        val mainFrame = ServerUiMainFrame(ServerUiMainFrameConfiguration{
+            title = "Jasmine"
+        })
+        val comp = findZkComponent(mainFrame).getZkComponent()
+        val div = Div()
+        div.hflex = "1"
+        div.vflex = "1"
+        div.appendChild(comp)
+        div.page = page
     }
 
 }

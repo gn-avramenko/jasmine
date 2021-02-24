@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.web.server.zk.components
 
-import com.gridnine.jasmine.web.server.components.ServerUiComponent
+import com.gridnine.jasmine.web.server.components.ServerUiNode
 import com.gridnine.jasmine.web.server.components.ServerUiPasswordBox
 import com.gridnine.jasmine.web.server.components.ServerUiPasswordBoxConfiguration
 import org.zkoss.zk.ui.HtmlBasedComponent
@@ -40,7 +40,7 @@ class ZkServerUiPasswordBox(private val config : ServerUiPasswordBoxConfiguratio
         }
     }
 
-    override fun getComponent(): HtmlBasedComponent {
+    override fun getZkComponent(): HtmlBasedComponent {
         if(component != null){
             return component!!
         }
@@ -63,7 +63,7 @@ class ZkServerUiPasswordBox(private val config : ServerUiPasswordBoxConfiguratio
         return comp
     }
 
-    override fun getParent(): ServerUiComponent? {
+    override fun getParent(): ServerUiNode? {
         return parent
     }
 

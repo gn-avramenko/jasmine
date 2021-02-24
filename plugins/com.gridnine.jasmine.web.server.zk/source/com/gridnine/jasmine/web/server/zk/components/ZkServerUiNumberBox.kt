@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.web.server.zk.components
 
-import com.gridnine.jasmine.web.server.components.ServerUiComponent
+import com.gridnine.jasmine.web.server.components.ServerUiNode
 import com.gridnine.jasmine.web.server.components.ServerUiNumberBox
 import com.gridnine.jasmine.web.server.components.ServerUiNumberBoxConfiguration
 import org.zkoss.zk.ui.HtmlBasedComponent
@@ -52,7 +52,7 @@ class ZkServerUiNumberBox (private val config: ServerUiNumberBoxConfiguration) :
         }
     }
 
-    override fun getComponent(): HtmlBasedComponent {
+    override fun getZkComponent(): HtmlBasedComponent {
         if(component != null){
             return  component!!
         }
@@ -82,7 +82,7 @@ class ZkServerUiNumberBox (private val config: ServerUiNumberBoxConfiguration) :
         return component!!
     }
 
-    override fun getParent(): ServerUiComponent? {
+    override fun getParent(): ServerUiNode? {
         return parent
     }
 

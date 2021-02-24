@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.web.server.components
 
-interface ServerUiBorderContainer : ServerUiComponent {
+interface ServerUiBorderContainer : ServerUiNode {
     fun setNorthRegion(region: ServerUiBorderContainerRegion)
     fun setWestRegion(region: ServerUiBorderContainerRegion)
     fun setEastRegion(region: ServerUiBorderContainerRegion)
@@ -13,12 +13,18 @@ interface ServerUiBorderContainer : ServerUiComponent {
     fun setCenterRegion(region: ServerUiBorderContainerRegion)
 }
 
-class ServerUiBorderContainerConfiguration{
+class ServerUiBorderContainerConfiguration(){
+    constructor(config:ServerUiBorderContainerConfiguration.() ->Unit):this(){
+        config.invoke(this)
+    }
     var width:String? = null
     var height:String? = null
 }
 
-class ServerUiBorderContainerRegion {
+class ServerUiBorderContainerRegion() {
+    constructor(config:ServerUiBorderContainerRegion.()->Unit):this(){
+        config.invoke(this)
+    }
     var title:String? = null
     var showBorder:Boolean = false
     var showSplitLine:Boolean = false
@@ -26,5 +32,5 @@ class ServerUiBorderContainerRegion {
     var collapsed:Boolean =false
     var width:String? = null
     var height:String? = null
-    lateinit var content: ServerUiComponent
+    lateinit var content: ServerUiNode
 }

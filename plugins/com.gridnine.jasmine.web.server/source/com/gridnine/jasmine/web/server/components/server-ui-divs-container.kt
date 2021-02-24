@@ -5,11 +5,11 @@
 
 package com.gridnine.jasmine.web.server.components
 
-interface ServerUiDivsContainer : ServerUiComponent {
-    fun addDiv(id:String, content: ServerUiComponent)
+interface ServerUiDivsContainer : ServerUiNode {
+    fun addDiv(id:String, content: ServerUiNode)
     fun show(id:String)
     fun removeDiv(id:String)
-    fun getDiv(id:String): ServerUiComponent?
+    fun getDiv(id:String): ServerUiNode?
 }
 
 class ServerUiDivsContainerConfiguration{

@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.web.server.components
 
-interface ServerUiBooleanBox: ServerUiComponent {
+interface ServerUiBooleanBox: ServerUiNode {
     fun getValue():Boolean
     fun setValue(value:Boolean)
     fun setEnabled(value:Boolean)

@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.web.server.zk.components
 
-import com.gridnine.jasmine.web.server.components.ServerUiComponent
+import com.gridnine.jasmine.web.server.components.ServerUiNode
 import com.gridnine.jasmine.web.server.components.ServerUiLabel
 import com.gridnine.jasmine.web.server.components.ServerUiLabelConfiguration
 import org.zkoss.zk.ui.HtmlBasedComponent
@@ -25,7 +25,7 @@ class ZkServerUiLabel(private val config: ServerUiLabelConfiguration) : ServerUi
     }
 
 
-    override fun getComponent(): HtmlBasedComponent {
+    override fun getZkComponent(): HtmlBasedComponent {
         if(component != null){
             return component!!
         }
@@ -44,7 +44,7 @@ class ZkServerUiLabel(private val config: ServerUiLabelConfiguration) : ServerUi
         return component!!
     }
 
-    override fun getParent(): ServerUiComponent? {
+    override fun getParent(): ServerUiNode? {
         return parent
     }
 

@@ -14,7 +14,7 @@ import org.zkoss.zk.ui.util.Clients
 import org.zkoss.zul.Div
 import java.util.*
 
-class MainFrame : Div() {
+class PgMainFrame : Div() {
     init {
         hflex = "1"
         vflex = "1"
@@ -30,7 +30,7 @@ class MainFrame : Div() {
         val centerRegion = ServerUiBorderContainerRegion()
         centerRegion.content = TabbboxComp()
         border.setCenterRegion(centerRegion)
-        appendChild(border.getComponent())
+        appendChild(border.getZkComponent())
     }
 
     private fun createNavigation(): ZkServerUiComponent {

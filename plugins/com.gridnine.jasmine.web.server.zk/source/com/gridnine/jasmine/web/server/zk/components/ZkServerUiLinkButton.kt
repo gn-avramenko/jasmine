@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.web.server.zk.components
 
-import com.gridnine.jasmine.web.server.components.ServerUiComponent
+import com.gridnine.jasmine.web.server.components.ServerUiNode
 import com.gridnine.jasmine.web.server.components.ServerUiLinkButton
 import com.gridnine.jasmine.web.server.components.ServerUiLinkButtonConfiguration
 import org.zkoss.zk.ui.HtmlBasedComponent
@@ -36,7 +36,7 @@ class ZkServerUiLinkButton(private val config: ServerUiLinkButtonConfiguration) 
         comp.isDisabled = !enabled
     }
 
-    override fun getComponent(): HtmlBasedComponent {
+    override fun getZkComponent(): HtmlBasedComponent {
         if(component!= null){
             return component!!
         }
@@ -60,7 +60,7 @@ class ZkServerUiLinkButton(private val config: ServerUiLinkButtonConfiguration) 
         return comp
     }
 
-    override fun getParent(): ServerUiComponent? {
+    override fun getParent(): ServerUiNode? {
         return parent
     }
 

@@ -6,7 +6,7 @@
 package com.gridnine.jasmine.web.server.components
 
 
-interface ServerUiLinkButton: ServerUiComponent {
+interface ServerUiLinkButton: ServerUiNode {
     fun setHandler(handler:()-> Unit)
     fun setEnabled(value:Boolean)
 }

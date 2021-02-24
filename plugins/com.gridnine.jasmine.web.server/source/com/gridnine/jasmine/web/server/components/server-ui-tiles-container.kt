@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.web.server.components
 
-interface ServerUiTilesContainer: ServerUiComponent {
+interface ServerUiTilesContainer: ServerUiNode {
     fun setExpandHandler(handler: (String) ->Unit)
     fun setTiles(tiles: List<ServerUiTileConfiguration>)
 }

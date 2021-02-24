@@ -6,7 +6,7 @@
 package com.gridnine.jasmine.web.server.zk.components
 
 import com.gridnine.jasmine.web.server.components.*
-import com.gridnine.jasmine.web.server.components.ServerUiComponent
+import com.gridnine.jasmine.web.server.components.ServerUiNode
 import org.zkoss.zk.ui.HtmlBasedComponent
 import org.zkoss.zk.ui.event.Events
 import org.zkoss.zul.*
@@ -43,7 +43,7 @@ class ZkServerUiMenuButton(private val config: ServerUiMenuButtonConfiguration) 
         }
     }
 
-    override fun getComponent(): HtmlBasedComponent {
+    override fun getZkComponent(): HtmlBasedComponent {
         if(component!= null){
             return component!!
         }
@@ -96,7 +96,7 @@ class ZkServerUiMenuButton(private val config: ServerUiMenuButtonConfiguration) 
         return menu
     }
 
-    override fun getParent(): ServerUiComponent? {
+    override fun getParent(): ServerUiNode? {
         return parent
     }
 

@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.web.server.components
 
-interface ServerUiTabbox : ServerUiComponent {
+interface ServerUiTabbox : ServerUiNode {
     fun addTab(panel: ServerUiTabPanel)
     fun removeTab(id:String)
     fun select(id:String): ServerUiTabPanel?
@@ -13,7 +13,10 @@ interface ServerUiTabbox : ServerUiComponent {
     fun setTitle(tabId: String, title: String)
 }
 
-class ServerUiTabboxConfiguration{
+class ServerUiTabboxConfiguration(){
+    constructor(config:ServerUiTabboxConfiguration.()->Unit):this(){
+        config(this)
+    }
     var width:String? = null
     var height:String? = null
     val tools = arrayListOf<ServerUiTabTool>()
@@ -21,6 +24,6 @@ class ServerUiTabboxConfiguration{
 
 class ServerUiTabTool(val text:String, val handler:()->Unit)
 
-class ServerUiTabPanel(val id:String, var title:String?, val comp: ServerUiComponent)
+class ServerUiTabPanel(val id:String, var title:String?, val comp: ServerUiNode)
 
 

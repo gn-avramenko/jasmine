@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.web.server.components
 
-interface ServerUiPasswordBox: ServerUiComponent {
+interface ServerUiPasswordBox: ServerUiNode {
     fun getValue():String?
     fun setValue(value:String?)
     fun showValidation(value:String?)

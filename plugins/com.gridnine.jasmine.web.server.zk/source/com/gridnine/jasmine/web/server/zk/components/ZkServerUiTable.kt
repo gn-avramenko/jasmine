@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.web.server.zk.components
 
-import com.gridnine.jasmine.web.server.components.ServerUiComponent
+import com.gridnine.jasmine.web.server.components.ServerUiNode
 import com.gridnine.jasmine.web.server.components.ServerUiTable
 import com.gridnine.jasmine.web.server.components.ServerUiTableCell
 import com.gridnine.jasmine.web.server.components.ServerUiTableConfiguration
@@ -36,7 +36,7 @@ open class ZkServerUiTable(private val config: ServerUiTableConfiguration) : Ser
             val cellComp = component.component
             if (cellComp is ZkServerUiComponent) {
                 cellComp.parent = this
-                cellComp.getComponent().parent = cell
+                cellComp.getZkComponent().parent = cell
             }
         }
         val children = comp.rows.getChildren<Row>()
@@ -83,11 +83,11 @@ open class ZkServerUiTable(private val config: ServerUiTableConfiguration) : Ser
         }
     }
 
-    override fun getRows(): List<List<ServerUiComponent?>> {
+    override fun getRows(): List<List<ServerUiNode?>> {
         return rows.map { row -> row.map { it.component } }
     }
 
-    override fun getComponent(): HtmlBasedComponent {
+    override fun getZkComponent(): HtmlBasedComponent {
         if(component != null){
             return component!!
         }
@@ -130,7 +130,7 @@ open class ZkServerUiTable(private val config: ServerUiTableConfiguration) : Ser
         return comp
     }
 
-    override fun getParent(): ServerUiComponent? {
+    override fun getParent(): ServerUiNode? {
         return parent
     }
 

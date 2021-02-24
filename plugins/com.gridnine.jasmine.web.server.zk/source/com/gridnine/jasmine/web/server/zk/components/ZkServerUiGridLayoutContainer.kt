@@ -6,7 +6,6 @@
 package com.gridnine.jasmine.web.server.zk.components
 
 import com.gridnine.jasmine.web.server.components.*
-import com.gridnine.jasmine.web.server.components.ServerUiComponent
 import org.zkoss.zk.ui.HtmlBasedComponent
 import org.zkoss.zul.Div
 
@@ -29,7 +28,7 @@ open class ZkServerUiGridLayoutContainer(private val configuration: ServerUiGrid
         rows.add(ServerUiGridLayoutRow(ServerUiGridLayoutRowConfiguration(height)))
         component?.let{
             it.style = createContainerStyle()
-            columnIndex = 0;
+            columnIndex = 0
         }
     }
 
@@ -54,7 +53,7 @@ open class ZkServerUiGridLayoutContainer(private val configuration: ServerUiGrid
         }
     }
 
-    override fun getComponent(): HtmlBasedComponent {
+    override fun getZkComponent(): HtmlBasedComponent {
         if(component != null){
             return component!!
         }
@@ -90,16 +89,21 @@ open class ZkServerUiGridLayoutContainer(private val configuration: ServerUiGrid
                 columnIndex = 0
             }
             cell.comp?.let {
-                it as ZkServerUiComponent
-                it.parent = this
-                val divComp = it.getComponent()
+                if(it is BaseServerUiNodeWrapper){
+                    it.setParent(this)
+                } else {
+                    it as ZkServerUiComponent
+                    it.parent = this
+
+                }
+                val divComp = findZkComponent(it).getZkComponent()
                 divComp.parent = cellDiv
             }
             cellDiv.parent = cont
         }
     }
 
-    override fun getParent(): ServerUiComponent? {
+    override fun getParent(): ServerUiNode? {
         return parent
     }
 

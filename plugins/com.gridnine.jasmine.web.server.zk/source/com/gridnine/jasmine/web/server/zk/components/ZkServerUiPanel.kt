@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.web.server.zk.components
 
-import com.gridnine.jasmine.web.server.components.ServerUiComponent
+import com.gridnine.jasmine.web.server.components.ServerUiNode
 import com.gridnine.jasmine.web.server.components.ServerUiPanel
 import com.gridnine.jasmine.web.server.components.ServerUiPanelConfiguration
 import org.zkoss.zk.ui.HtmlBasedComponent
@@ -40,20 +40,20 @@ open class ZkServerUiPanel (private val config: ServerUiPanelConfiguration) : Se
         this.minimizeHandler = handler
     }
 
-    override fun setContent(comp: ServerUiComponent?) {
-        this.content = comp as ZkServerUiComponent?
+    override fun setContent(comp: ServerUiNode?) {
+        this.content = comp?.let {findZkComponent(it)}
         if(component != null){
             val child = component!!.panelchildren.firstChild
             if(child != null){
                 component!!.panelchildren.removeChild(child)
             }
             if(comp is ZkServerUiComponent) {
-                component!!.panelchildren.appendChild(comp.getComponent())
+                component!!.panelchildren.appendChild(comp.getZkComponent())
             }
         }
     }
 
-    override fun getComponent(): HtmlBasedComponent {
+    override fun getZkComponent(): HtmlBasedComponent {
         if(component != null){
             return component!!
         }
@@ -92,12 +92,12 @@ open class ZkServerUiPanel (private val config: ServerUiPanelConfiguration) : Se
         val panelChildren = Panelchildren()
         panelChildren.parent = component
         if(content != null){
-            content!!.getComponent().parent = panelChildren
+            content!!.getZkComponent().parent = panelChildren
         }
         return component!!
     }
 
-    override fun getParent(): ServerUiComponent? {
+    override fun getParent(): ServerUiNode? {
         return parent
     }
 

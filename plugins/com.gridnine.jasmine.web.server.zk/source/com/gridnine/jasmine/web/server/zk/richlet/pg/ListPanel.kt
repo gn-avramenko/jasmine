@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.web.server.zk.richlet.pg
 
-import com.gridnine.jasmine.web.server.components.ServerUiComponent
+import com.gridnine.jasmine.web.server.components.ServerUiNode
 import com.gridnine.jasmine.web.server.components.ServerUiComponentHorizontalAlignment.*
 import com.gridnine.jasmine.web.server.components.ServerUiDataGridColumnConfiguration
 import com.gridnine.jasmine.web.server.components.ServerUiDataGridComponentConfiguration
@@ -104,14 +104,14 @@ class ListPanel : ZkServerUiComponent(){
         button.addEventListener(Events.ON_CLICK){
             println("selected: ${ grid.getSelected().map { it.stringField1 }.joinToString (",") }}")
         }
-        component!!.appendChild(grid.getComponent())
+        component!!.appendChild(grid.getZkComponent())
     }
 
-    override fun getComponent(): HtmlBasedComponent {
+    override fun getZkComponent(): HtmlBasedComponent {
         return component!!
     }
 
-    override fun getParent(): ServerUiComponent? {
+    override fun getParent(): ServerUiNode? {
         return parent
     }
 }

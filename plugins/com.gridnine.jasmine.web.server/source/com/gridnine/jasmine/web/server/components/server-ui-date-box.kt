@@ -7,7 +7,7 @@ package com.gridnine.jasmine.web.server.components
 
 import java.time.LocalDate
 
-interface ServerUiDateBox: ServerUiComponent {
+interface ServerUiDateBox: ServerUiNode {
     fun getValue():LocalDate?
     fun setValue(value:LocalDate?)
     fun setEnabled(value:Boolean)

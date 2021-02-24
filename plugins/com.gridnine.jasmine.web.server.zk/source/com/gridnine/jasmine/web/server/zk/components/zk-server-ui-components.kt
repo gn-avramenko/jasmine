@@ -10,11 +10,17 @@ import com.gridnine.jasmine.web.server.components.*
 import org.zkoss.zk.ui.Executions
 import org.zkoss.zk.ui.HtmlBasedComponent
 
-abstract class ZkServerUiComponent: ServerUiComponent {
+abstract class ZkServerUiComponent: ServerUiNode {
     var parent: ZkServerUiComponent? = null
-    abstract fun getComponent():HtmlBasedComponent
+    abstract fun getZkComponent():HtmlBasedComponent
 }
 
+fun findZkComponent(node:ServerUiNode):ZkServerUiComponent{
+    if(node is ServerUiNodeWrapper){
+        return findZkComponent(node.getNode())
+    }
+    return node as ZkServerUiComponent
+}
 class ZkServerUiLibraryAdapter:ServerUiLibraryAdapter{
     override fun redirect(relativeUrl: String) {
         Executions.getCurrent().sendRedirect(relativeUrl)
@@ -72,7 +78,7 @@ class ZkServerUiLibraryAdapter:ServerUiLibraryAdapter{
         return ZkServerUiSelect(config)
     }
 
-    override fun <W : ServerUiComponent> showDialog(config: ServerUiDialogConfiguration<W>): ServerUiDialog<W> {
+    override fun <W : ServerUiNode> showDialog(config: ServerUiDialogConfiguration<W>): ServerUiDialog<W> {
         return com.gridnine.jasmine.web.server.zk.components.showDialog(config)
     }
 

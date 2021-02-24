@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.web.server.components
 
-interface ServerUiGridLayoutContainer: ServerUiComponent {
+interface ServerUiGridLayoutContainer: ServerUiNode {
 
     fun addRow(height:String?=null)
 
@@ -13,9 +13,12 @@ interface ServerUiGridLayoutContainer: ServerUiComponent {
 }
 
 
-class ServerUiGridLayoutCell(val comp: ServerUiComponent?, val columnSpan:Int =1)
+class ServerUiGridLayoutCell(val comp: ServerUiNode?, val columnSpan:Int =1)
 
-class ServerUiGridLayoutContainerConfiguration{
+class ServerUiGridLayoutContainerConfiguration(){
+    constructor(config:ServerUiGridLayoutContainerConfiguration.()->Unit):this(){
+        config.invoke(this)
+    }
     val columns = arrayListOf<ServerUiGridLayoutColumnConfiguration>()
     var width:String? = null
     var height:String? = null

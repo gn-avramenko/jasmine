@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.web.server.zk.components
 
-import com.gridnine.jasmine.web.server.components.ServerUiComponent
+import com.gridnine.jasmine.web.server.components.ServerUiNode
 import com.gridnine.jasmine.web.server.components.ServerUiTree
 import com.gridnine.jasmine.web.server.components.ServerUiTreeConfiguration
 import com.gridnine.jasmine.web.server.components.ServerUiTreeContextMenuEvent
@@ -197,7 +197,7 @@ open class ZkServerUiTree(private val config: ServerUiTreeConfiguration) : Serve
         return result
     }
 
-    override fun getComponent(): HtmlBasedComponent {
+    override fun getZkComponent(): HtmlBasedComponent {
         if(this.component != null){
             return this.component!!
         }
@@ -227,17 +227,21 @@ open class ZkServerUiTree(private val config: ServerUiTreeConfiguration) : Serve
 
     private fun setSelectListenerInternal() {
         if (!selectListenerSet) {
-            treeComponent!!.addEventListener(Events.ON_SELECT) {
-                it as SelectEvent<*, *>
-                val obj = it.selectedItems.iterator().next() as Treeitem
-                val data = obj.getValue<ServerUiTreeItem>()
-                selectListener!!.invoke(data)
+            treeComponent!!.addEventListener(Events.ON_CLICK) {
+                it as MouseEvent
+                val target = it.target as Tree
+                val items = target.selectedItems
+                if (items.isNotEmpty()) {
+                    val obj = items.iterator().next() as Treeitem
+                    val data = obj.getValue<ServerUiTreeItem>()
+                    selectListener!!.invoke(data)
+                }
             }
             selectListenerSet = true
         }
     }
 
-    override fun getParent(): ServerUiComponent? {
+    override fun getParent(): ServerUiNode? {
         return parent
     }
 

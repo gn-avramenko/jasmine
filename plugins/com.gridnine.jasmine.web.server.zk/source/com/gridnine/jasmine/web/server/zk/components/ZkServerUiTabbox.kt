@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.web.server.zk.components
 
-import com.gridnine.jasmine.web.server.components.ServerUiComponent
+import com.gridnine.jasmine.web.server.components.ServerUiNode
 import com.gridnine.jasmine.web.server.components.ServerUiContextMenuStandardItem
 import com.gridnine.jasmine.web.server.components.ServerUiTabPanel
 import com.gridnine.jasmine.web.server.components.ServerUiTabbox
@@ -48,8 +48,10 @@ open class ZkServerUiTabbox(private val config : ServerUiTabboxConfiguration) : 
         val tabbPanel = Tabpanel()
         tabbPanel.vflex = "1"
         tabbPanel.hflex = "1"
-        tabbPanel.appendChild((panel.comp as ZkServerUiComponent).getComponent())
+        tabbPanel.appendChild(findZkComponent(panel.comp).getZkComponent())
         tabpanels!!.appendChild(tabbPanel)
+
+        select(panel.id)
 
     }
 
@@ -88,7 +90,7 @@ open class ZkServerUiTabbox(private val config : ServerUiTabboxConfiguration) : 
         }
     }
 
-    override fun getComponent(): HtmlBasedComponent {
+    override fun getZkComponent(): HtmlBasedComponent {
         if(component != null){
             return component!!
         }
@@ -127,7 +129,7 @@ open class ZkServerUiTabbox(private val config : ServerUiTabboxConfiguration) : 
     }
 
 
-    override fun getParent(): ServerUiComponent? {
+    override fun getParent(): ServerUiNode? {
         return parent
     }
 

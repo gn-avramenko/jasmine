@@ -7,7 +7,7 @@ package com.gridnine.jasmine.web.server.components
 
 import java.math.BigDecimal
 
-interface ServerUiNumberBox: ServerUiComponent {
+interface ServerUiNumberBox: ServerUiNode {
     fun getValue():BigDecimal?
     fun setValue(value:BigDecimal?)
     fun setEnabled(value:Boolean)

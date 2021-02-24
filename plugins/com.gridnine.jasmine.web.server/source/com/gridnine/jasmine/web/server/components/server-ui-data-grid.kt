@@ -6,7 +6,7 @@
 package com.gridnine.jasmine.web.server.components
 
 
-interface ServerUiDataGridComponent<E:Any>: ServerUiComponent {
+interface ServerUiDataGridComponent<E:Any>: ServerUiNode {
     fun setLoader(loader: (ServerUiDataGridRequest) -> ServerUiDataGridResponse<E>)
     fun setFormatter(formatter: (item:E, fieldId:String)->String?)
     fun setDoubleClickListener(listener: ((item:E)->Unit)?)

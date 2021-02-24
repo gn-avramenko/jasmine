@@ -5,18 +5,18 @@
 
 package com.gridnine.jasmine.web.server.components
 
-interface ServerUiDialog<W> where W:ServerUiComponent{
+interface ServerUiDialog<W> where W:ServerUiNode{
     fun close()
     fun getContent():W
 }
 
 
-class ServerUiDialogButtonConfiguration<W> where W:ServerUiComponent{
+class ServerUiDialogButtonConfiguration<W> where W:ServerUiNode{
     lateinit var displayName:String
     lateinit var handler:(ServerUiDialog<W>)  ->Unit
 }
 
-class ServerUiDialogConfiguration<W>  where W:ServerUiComponent{
+class ServerUiDialogConfiguration<W>  where W:ServerUiNode{
     constructor(conf:ServerUiDialogConfiguration<W>.()->Unit){
         this.conf()
     }

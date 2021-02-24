@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.web.server.zk.components
 
-import com.gridnine.jasmine.web.server.components.ServerUiComponent
+import com.gridnine.jasmine.web.server.components.ServerUiNode
 import com.gridnine.jasmine.web.server.components.ServerUiTileConfiguration
 import com.gridnine.jasmine.web.server.components.ServerUiTilesContainer
 import com.gridnine.jasmine.web.server.components.ServerUiTilesContainerConfiguration
@@ -62,7 +62,7 @@ open class ZkServerUiTilesContainer(private val config : ServerUiTilesContainerC
         }
     }
 
-    override fun getComponent(): HtmlBasedComponent {
+    override fun getZkComponent(): HtmlBasedComponent {
         if(component != null){
             return component!!
         }
@@ -82,7 +82,7 @@ open class ZkServerUiTilesContainer(private val config : ServerUiTilesContainerC
     }
 
 
-    override fun getParent(): ServerUiComponent? {
+    override fun getParent(): ServerUiNode? {
         return parent
     }
 
