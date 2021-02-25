@@ -14,13 +14,13 @@ interface ServerUiNode{
     fun getParent(): ServerUiNode?
 }
 
-interface ServerUiNodeWrapper: ServerUiNode{
-    fun getNode():ServerUiNode
+interface ServerUiNodeWrapper<T:ServerUiNode>: ServerUiNode{
+    fun getNode():T
 }
 
-abstract class BaseServerUiNodeWrapper:ServerUiNodeWrapper{
+abstract class BaseServerUiNodeWrapper<T:ServerUiNode>:ServerUiNodeWrapper<T>{
     private var _parent:ServerUiNode? =  null
-    protected lateinit var _node:ServerUiNode
+    protected lateinit var _node:T
 
     fun setParent(parent:ServerUiNode){
         this._parent = parent
@@ -30,7 +30,7 @@ abstract class BaseServerUiNodeWrapper:ServerUiNodeWrapper{
         return _parent
     }
 
-    override fun getNode(): ServerUiNode {
+    override fun getNode(): T {
         return _node
     }
 }

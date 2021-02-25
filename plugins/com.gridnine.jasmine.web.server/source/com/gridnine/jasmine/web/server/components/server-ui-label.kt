@@ -9,7 +9,10 @@ interface ServerUiLabel: ServerUiNode {
     fun setText(value: String?)
 }
 
-class ServerUiLabelConfiguration{
+class ServerUiLabelConfiguration(){
+    constructor(config:ServerUiLabelConfiguration.()->Unit):this(){
+        config.invoke(this)
+    }
     var width:String?=null
     var height:String?=null
 }

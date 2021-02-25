@@ -5,35 +5,36 @@
 
 package com.gridnine.jasmine.web.server.widgets
 
+import com.gridnine.jasmine.server.core.model.ui.TextBoxConfiguration
 import com.gridnine.jasmine.web.server.components.BaseServerUiNodeWrapper
 import com.gridnine.jasmine.web.server.components.ServerUiLibraryAdapter
 import com.gridnine.jasmine.web.server.components.ServerUiTextBox
 import com.gridnine.jasmine.web.server.components.ServerUiTextBoxConfiguration
 
-class ServerUiSearchBoxWidget(config:ServerUiSearchBoxWidgetConfiguration): BaseServerUiNodeWrapper<ServerUiTextBox>(){
-
-    private var searchHandler: ((String?) ->Unit)? = null
+class ServerUiTextBoxWidget(config:ServerUiTextBoxWidgetConfiguration): BaseServerUiNodeWrapper<ServerUiTextBox>(){
 
     init{
         val comp = ServerUiLibraryAdapter.get().createTextBox(ServerUiTextBoxConfiguration{
             width = config.width
             height = config.height
         })
-        comp.setActionListener {
-            searchHandler?.invoke(it)
-        }
         _node = comp
     }
 
-    fun setSearchHandler(handler: (String?) ->Unit){
-        searchHandler = handler
-    }
+    fun setValue(value:String?) = _node.setValue(value)
 
     fun getValue() = _node.getValue()
+
+    fun showValidation(value: String?) {
+        _node.showValidation(value)
+    }
+    fun configure(config: TextBoxConfiguration) {
+        _node.setDisabled(config.notEditable)
+    }
 }
 
-class ServerUiSearchBoxWidgetConfiguration(){
-    constructor(config:ServerUiSearchBoxWidgetConfiguration.()->Unit):this(){
+class ServerUiTextBoxWidgetConfiguration(){
+    constructor(config:ServerUiTextBoxWidgetConfiguration.()->Unit):this(){
         config.invoke(this)
     }
     var width:String? = null

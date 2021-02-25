@@ -18,7 +18,10 @@ data class ServerUiDataGridRequest(var offSet: Int = 0, var limit: Int = 0, var 
 
 data class ServerUiDataGridResponse<E:Any>(val count:Int, val data:List<E>)
 
-class ServerUiDataGridComponentConfiguration{
+class ServerUiDataGridComponentConfiguration(){
+    constructor(config: ServerUiDataGridComponentConfiguration.()->Unit):this(){
+        config.invoke(this)
+    }
     var span = false
     var initSortingColumn:String? = null
     var initSortingOrderAsc = false
@@ -28,7 +31,10 @@ class ServerUiDataGridComponentConfiguration{
     val columns = arrayListOf<ServerUiDataGridColumnConfiguration>()
 }
 
-class ServerUiDataGridColumnConfiguration{
+class ServerUiDataGridColumnConfiguration(){
+    constructor(config: ServerUiDataGridColumnConfiguration.()->Unit):this(){
+        config.invoke(this)
+    }
     lateinit var fieldId:String
     lateinit var title:String
     var width:String? = null

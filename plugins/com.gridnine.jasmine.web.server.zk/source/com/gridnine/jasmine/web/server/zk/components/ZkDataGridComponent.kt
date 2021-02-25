@@ -196,12 +196,15 @@ internal class GridTableModel<E : Any>(private val loader: (ServerUiDataGridRequ
         }
     }
     fun updateData() {
+        _data.clear()
+        _size = null
         fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1)
     }
 
     override fun sort(cmpr: Comparator<E>, ascending: Boolean) {
         if(!Objects.equals(cmpr, _sortingComparator) || ascending != _ascending){
             _data.clear()
+            _size = null
         }
         _sortingComparator = cmpr
         _ascending = ascending

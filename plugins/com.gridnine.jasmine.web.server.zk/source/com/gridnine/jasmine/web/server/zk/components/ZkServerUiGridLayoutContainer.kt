@@ -89,7 +89,7 @@ open class ZkServerUiGridLayoutContainer(private val configuration: ServerUiGrid
                 columnIndex = 0
             }
             cell.comp?.let {
-                if(it is BaseServerUiNodeWrapper){
+                if(it is BaseServerUiNodeWrapper<*>){
                     it.setParent(this)
                 } else {
                     it as ZkServerUiComponent

@@ -10,6 +10,7 @@ interface ServerUiTextBox: ServerUiNode {
     fun setValue(value:String?)
     fun showValidation(value:String?)
     fun setActionListener(listener: (String?) -> Unit)
+    fun setDisabled(value:Boolean)
 }
 
 class ServerUiTextBoxConfiguration(){

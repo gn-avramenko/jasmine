@@ -43,16 +43,8 @@ class ZkServerUiLinkButton(private val config: ServerUiLinkButtonConfiguration) 
         val comp = Button()
         component = comp
         comp.label = config.title
-        if(config.width == "100%"){
-            comp.hflex = "1"
-        } else if(config.width != null){
-            comp.width = config.width
-        }
-        if(config.height == "100%"){
-            comp.vflex = "1"
-        } else if(config.height != null){
-            comp.height = config.height
-        }
+        comp.width = config.width
+        comp.height = config.height
         comp.addEventListener(Events.ON_CLICK){
             handler?.invoke()
         }

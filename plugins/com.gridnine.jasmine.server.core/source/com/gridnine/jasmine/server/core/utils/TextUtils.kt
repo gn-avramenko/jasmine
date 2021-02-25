@@ -17,6 +17,9 @@ object TextUtils {
     fun isBlank(str: String?): Boolean {
         return str == null || str.isBlank()
     }
+    fun isNotBlank(str:String?):Boolean{
+        return !isBlank(str)
+    }
 
     fun getExceptionStackTrace(e: Throwable?): String? {
         if (e == null) {

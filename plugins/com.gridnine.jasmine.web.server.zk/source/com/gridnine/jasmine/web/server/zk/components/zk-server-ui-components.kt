@@ -16,7 +16,7 @@ abstract class ZkServerUiComponent: ServerUiNode {
 }
 
 fun findZkComponent(node:ServerUiNode):ZkServerUiComponent{
-    if(node is ServerUiNodeWrapper){
+    if(node is ServerUiNodeWrapper<*>){
         return findZkComponent(node.getNode())
     }
     return node as ZkServerUiComponent

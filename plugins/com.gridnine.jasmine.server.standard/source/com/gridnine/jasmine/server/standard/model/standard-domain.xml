@@ -92,4 +92,42 @@
         <collection id="groups" element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.server.standard.model.domain.WorkspaceGroup"/>
     </document>
 
+    <nested-document id="com.gridnine.jasmine.server.standard.model.BaseListFilterValue" abstract="true"/>
+    <nested-document id="com.gridnine.jasmine.server.standard.model.ListFilterStringValues" extends="com.gridnine.jasmine.server.standard.model.BaseListFilterValue">
+        <collection id="values" element-type="STRING"/>
+    </nested-document>
+    <nested-document id="com.gridnine.jasmine.server.standard.model.ListFilterEntityValues" extends="com.gridnine.jasmine.server.standard.model.BaseListFilterValue">
+        <collection id="values" element-type="ENTITY_REFERENCE" element-class-name="com.gridnine.jasmine.server.core.model.common.BaseIdentity"/>
+    </nested-document>
+    <nested-document id="com.gridnine.jasmine.server.standard.model.ListFilterDateIntervalValue" extends="com.gridnine.jasmine.server.standard.model.BaseListFilterValue">
+        <property id="startDate" type="LOCAL_DATE"/>
+        <property id="endDate" type="LOCAL_DATE"/>
+    </nested-document>
+    <nested-document id="com.gridnine.jasmine.server.standard.model.ListFilterDateTimeIntervalValue" extends="com.gridnine.jasmine.server.standard.model.BaseListFilterValue">
+        <property id="startDate" type="LOCAL_DATE_TIME"/>
+        <property id="endDate" type="LOCAL_DATE_TIME"/>
+    </nested-document>
+    <nested-document id="com.gridnine.jasmine.server.standard.model.ListFilterEnumValues" extends="com.gridnine.jasmine.server.standard.model.BaseListFilterValue">
+        <collection id="values" element-type="STRING"/>
+        <property id="enumClassName" type="STRING"/>
+    </nested-document>
+
+    <nested-document id="com.gridnine.jasmine.server.standard.model.ListFilterFloatIntervalValue" extends="com.gridnine.jasmine.server.standard.model.BaseListFilterValue">
+        <property id="fromValue" type="BIG_DECIMAL"/>
+        <property id="toValue" type="BIG_DECIMAL"/>
+    </nested-document>
+
+    <nested-document id="com.gridnine.jasmine.server.standard.model.ListFilterIntIntervalValue" extends="com.gridnine.jasmine.server.standard.model.BaseListFilterValue">
+        <property id="fromValue" type="INT"/>
+        <property id="toValue" type="INT"/>
+    </nested-document>
+
+    <nested-document id="com.gridnine.jasmine.server.standard.model.ListFilterBooleanValues" extends="com.gridnine.jasmine.server.standard.model.BaseListFilterValue">
+        <property id="value" type="BOOLEAN"/>
+    </nested-document>
+
+    <nested-document id="com.gridnine.jasmine.server.standard.model.ListFilter">
+        <property id="fieldId" type="STRING"/>
+        <property id="value" type="NESTED_DOCUMENT" class-name="com.gridnine.jasmine.server.standard.model.BaseListFilterValue"/>
+    </nested-document>
 </domain>

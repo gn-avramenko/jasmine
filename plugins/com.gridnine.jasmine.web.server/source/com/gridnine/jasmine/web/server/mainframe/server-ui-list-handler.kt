@@ -5,46 +5,257 @@
 
 package com.gridnine.jasmine.web.server.mainframe
 
+import com.gridnine.jasmine.server.core.model.common.BaseIntrospectableObject
+import com.gridnine.jasmine.server.core.model.domain.BaseIndexDescription
+import com.gridnine.jasmine.server.core.model.domain.DatabasePropertyType
+import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistry
+import com.gridnine.jasmine.server.standard.helpers.UiListHelper
+import com.gridnine.jasmine.server.standard.model.BaseListFilterValue
+import com.gridnine.jasmine.server.standard.model.ListFilter
 import com.gridnine.jasmine.server.standard.model.domain.ListWorkspaceItem
+import com.gridnine.jasmine.server.standard.model.domain.SortOrderType
 import com.gridnine.jasmine.web.server.components.*
 import com.gridnine.jasmine.web.server.widgets.ServerUiSearchBoxWidget
 import com.gridnine.jasmine.web.server.widgets.ServerUiSearchBoxWidgetConfiguration
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
-class ServerUiListHandler : ServerUiMainFrameTabHandler<ListWorkspaceItem>{
+class ServerUiListHandler : ServerUiMainFrameTabHandler<ListWorkspaceItem> {
     override fun getTabId(obj: ListWorkspaceItem): String {
         return obj.uid
     }
 
     override fun createTabData(obj: ListWorkspaceItem, callback: ServerUiMainFrameTabCallback): ServerUiMainFrameTabData {
-        return ServerUiMainFrameTabData(obj.displayName?:"", ServerUiMainframeListComponent(obj))
+        return ServerUiMainFrameTabData(obj.displayName ?: "", ServerUiMainframeListComponent(obj))
     }
 
 }
 
-class ServerUiMainframeListComponent(item: ListWorkspaceItem):BaseServerUiNodeWrapper(){
-    init{
-        val listBorder  = ServerUiLibraryAdapter.get().createBorderLayout(ServerUiBorderContainerConfiguration{
-            width ="100%"
+class ServerUiMainframeListComponent(item: ListWorkspaceItem) : BaseServerUiNodeWrapper<ServerUiBorderContainer>() {
+    init {
+        val listBorder = ServerUiLibraryAdapter.get().createBorderLayout(ServerUiBorderContainerConfiguration {
+            width = "100%"
             height = "100%"
         })
-        val northContent = ServerUiLibraryAdapter.get().createGridLayoutContainer(ServerUiGridLayoutContainerConfiguration{
-            width ="100%"
+        val northContent = ServerUiLibraryAdapter.get().createGridLayoutContainer(ServerUiGridLayoutContainerConfiguration {
+            width = "100%"
             columns.add(ServerUiGridLayoutColumnConfiguration("100%"))
             columns.add(ServerUiGridLayoutColumnConfiguration("auto"))
         })
         northContent.addRow()
         northContent.addCell(ServerUiGridLayoutCell(null, 1))
-        val searchWidget = ServerUiSearchBoxWidget(ServerUiSearchBoxWidgetConfiguration{
+        val searchWidget = ServerUiSearchBoxWidget(ServerUiSearchBoxWidgetConfiguration {
             width = "200px"
         })
         northContent.addCell(ServerUiGridLayoutCell(searchWidget, 1))
-        val northRegion = ServerUiBorderContainerRegion{
+        val northRegion = ServerUiBorderContainerRegion {
             collapsible = false
             showSplitLine = false
-            showBorder  =false
+            showBorder = false
             content = northContent
         }
         listBorder.setNorthRegion(northRegion)
+        val centerContent = ServerUiListDataGridPanel(item)
+        listBorder.setCenterRegion(ServerUiBorderContainerRegion{
+            showSplitLine = false
+            showBorder = false
+            content = centerContent
+        })
+        searchWidget.setSearchHandler {
+            centerContent.updateData()
+        }
+        val filtersPanel = ServerUiListFilterPanel(item) {
+            centerContent.updateData()
+        }
+        centerContent.filtersProvider = {filtersPanel.getFiltersValues()}
+        centerContent.freeTextProvider = {searchWidget.getValue()}
+        listBorder.setEastRegion(ServerUiBorderContainerRegion{
+            showBorder = true
+            title = "Фильтры"
+            collapsible = true
+            collapsed = true
+            width = "250px"
+            content = filtersPanel
+        })
         _node = listBorder
     }
+}
+
+class ServerUiListFilterPanel(private val we: ListWorkspaceItem, private val applyCallback:()->Unit) : BaseServerUiNodeWrapper<ServerUiBorderContainer>() {
+
+    private val filters = arrayListOf<FilterData>()
+
+    private val domainDescr: BaseIndexDescription =
+            DomainMetaRegistry.get().indexes[we.listId] ?: DomainMetaRegistry.get().assets[we.listId]
+            ?: throw IllegalArgumentException("no description found for ${we.listId}")
+
+    init {
+        _node = ServerUiLibraryAdapter.get().createBorderLayout(ServerUiBorderContainerConfiguration{
+            width = "100%"
+            height = "100%"
+        })
+        _node.setCenterRegion(ServerUiBorderContainerRegion{
+            showBorder = false
+            showSplitLine = false
+            content = createFilters()
+        })
+        _node.setSouthRegion(ServerUiBorderContainerRegion{
+                showBorder = false
+                showSplitLine = false
+                content = createButtons()
+            })
+        }
+
+    private fun createFilters(): ServerUiGridLayoutContainer {
+        val container = ServerUiLibraryAdapter.get().createGridLayoutContainer(ServerUiGridLayoutContainerConfiguration{
+            width = "100%"
+            columns.add(ServerUiGridLayoutColumnConfiguration("100%"))
+        })
+        we.filters.forEach {
+            container.addRow()
+            val label = ServerUiLibraryAdapter.get().createLabel(ServerUiLabelConfiguration{})
+            label.setText(domainDescr.properties[it]?.getDisplayName() ?: domainDescr.collections[it]!!.getDisplayName())
+            container.addCell(ServerUiGridLayoutCell(label))
+            val handler = when (domainDescr.properties[it]?.type) {
+                DatabasePropertyType.STRING, DatabasePropertyType.TEXT ->
+                    StringFilterHandler()
+                else -> null
+            }
+            if (handler != null) {
+                val component = handler.createEditor()
+                container.addRow()
+                container.addCell(ServerUiGridLayoutCell(component))
+                filters.add(FilterData(it, component, handler as ServerUiListFilterHandler<BaseListFilterValue, ServerUiNode>))
+            }
+        }
+        return container
+    }
+
+    private fun createButtons(): ServerUiGridLayoutContainer {
+        val container = ServerUiLibraryAdapter.get().createGridLayoutContainer(ServerUiGridLayoutContainerConfiguration{
+            width = "100%"
+            columns.add(ServerUiGridLayoutColumnConfiguration("50%"))
+            columns.add(ServerUiGridLayoutColumnConfiguration("50%"))
+        })
+        container.addRow()
+        val applyButton = ServerUiLibraryAdapter.get().createLinkButton(ServerUiLinkButtonConfiguration{
+            width = "100%"
+            title = "Применить"
+        })
+        applyButton.setHandler {
+            applyCallback.invoke()
+        }
+        container.addCell(ServerUiGridLayoutCell(applyButton))
+        val resetButton = ServerUiLibraryAdapter.get().createLinkButton(ServerUiLinkButtonConfiguration{
+            width = "100%"
+            title = "Сбросить"
+        })
+        container.addCell(ServerUiGridLayoutCell(resetButton))
+        return container
+    }
+
+    fun getFiltersValues(): List<ListFilter> {
+        return filters.filter { it.handler.isNotEmpty(it.comp) }.map {
+            val res = ListFilter()
+            res.fieldId = it.fieldId
+            res.value = it.handler.getValue(it.comp)
+            res
+        }.toList()
+    }
+}
+
+
+internal class FilterData(val fieldId: String, val comp: ServerUiNode, val handler: ServerUiListFilterHandler<BaseListFilterValue, ServerUiNode>)
+
+internal class ServerUiListDataGridPanel(val we: ListWorkspaceItem, ) : BaseServerUiNodeWrapper<ServerUiDataGridComponent<BaseIntrospectableObject>>() {
+    lateinit var freeTextProvider:()->String?
+    lateinit var filtersProvider:()->List<ListFilter>
+
+    private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+
+    init {
+        val indexDescription = DomainMetaRegistry.get().indexes[we.listId] ?: DomainMetaRegistry.get().assets[we.listId]
+        ?: error("unable to find description for list ${we.listId}")
+        _node = ServerUiLibraryAdapter.get().createDataGrid(ServerUiDataGridComponentConfiguration {
+            height = "100%"
+            width = "100%"
+            selectable = true
+            span = true
+            columns.addAll(we.columns.map { column ->
+                val pd = indexDescription.properties[column]
+                if (pd != null) {
+                    ServerUiDataGridColumnConfiguration {
+                        title = pd.getDisplayName()!!
+                        fieldId = column
+                        sortable = true
+                        horizontalAlignment = when (pd.type) {
+                            DatabasePropertyType.STRING,
+                            DatabasePropertyType.TEXT,
+                            DatabasePropertyType.LOCAL_DATE,
+                            DatabasePropertyType.LOCAL_DATE_TIME,
+                            DatabasePropertyType.ENUM,
+                            DatabasePropertyType.BOOLEAN,
+                            DatabasePropertyType.ENTITY_REFERENCE -> ServerUiComponentHorizontalAlignment.LEFT
+                            DatabasePropertyType.LONG,
+                            DatabasePropertyType.INT,
+                            DatabasePropertyType.BIG_DECIMAL -> ServerUiComponentHorizontalAlignment.RIGHT
+                        }
+                        width = "150px"
+                    }
+                } else {
+                    val cd = indexDescription.collections[column]
+                            ?: error("neither property nor column with id ${column} found in list ${we.listId}")
+                    ServerUiDataGridColumnConfiguration {
+                        title = cd.getDisplayName()!!
+                        fieldId = column
+                        sortable = true
+                        horizontalAlignment = ServerUiComponentHorizontalAlignment.LEFT
+                        width = "200px"
+                    }
+                }
+
+            })
+            if (we.sortOrders.isNotEmpty()) {
+                val sorting = we.sortOrders[0]
+                initSortingColumn = sorting.field
+                initSortingOrderAsc = sorting.orderType == SortOrderType.ASC
+            }
+        })
+        _node.setFormatter { item, fieldId ->
+            val value = if (indexDescription.properties.containsKey(fieldId)) item.getValue(fieldId) else item.getCollection(fieldId)
+            lateinit var displayName: String
+            if (value is Enum<*>) {
+                val enumDescr = DomainMetaRegistry.get().enums[value::class.qualifiedName]
+                if (enumDescr != null) {
+                    enumDescr.items[value.name]!!.getDisplayName()!!
+                } else {
+                    value.name
+                }
+
+            } else if (value is Boolean) {
+                if (value) "Да" else "Нет"
+            } else if (value is LocalDate) {
+                dateFormatter.format(value)
+            } else if (value is LocalDateTime) {
+                dateTimeFormatter.format(value)
+            } else {
+                value?.toString() ?: ""
+            }
+        }
+        _node.setDoubleClickListener {
+            ServerUiLibraryAdapter.get().showNotification("выбрано ${it.toString()}", 2000)
+        }
+        _node.setLoader {request ->
+                val searchResult = UiListHelper.search(listId = we.listId!!, criterions = we.criterions, filters = filtersProvider.invoke(), columns = we.columns,
+                        freeText = freeTextProvider.invoke(),  offset = request.offSet, limit = request.limit, sortColumn = request.sortColumn, sortDesc = request.desc == true)
+            ServerUiDataGridResponse(searchResult.first, searchResult.second)
+        }
+    }
+
+    internal fun updateData(){
+        _node.updateData()
+    }
+
 }

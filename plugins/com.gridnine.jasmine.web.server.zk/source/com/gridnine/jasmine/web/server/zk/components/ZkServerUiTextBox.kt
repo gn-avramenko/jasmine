@@ -24,6 +24,8 @@ class ZkServerUiTextBox(private val config : ServerUiTextBoxConfiguration) : Ser
 
     private var actionListener: ((String?)->Unit)? = null
 
+    private var disabled = false
+
     override fun getValue(): String? {
         if(component != null){
             return component!!.value
@@ -57,6 +59,13 @@ class ZkServerUiTextBox(private val config : ServerUiTextBoxConfiguration) : Ser
         }
     }
 
+    override fun setDisabled(value: Boolean) {
+        disabled = value
+        if(component != null){
+            component!!.isDisabled = disabled
+        }
+    }
+
     override fun getZkComponent(): HtmlBasedComponent {
         if(component != null){
             return component!!
@@ -80,6 +89,7 @@ class ZkServerUiTextBox(private val config : ServerUiTextBoxConfiguration) : Ser
             }
             actionListenerSet = true
         }
+        comp.isDisabled = disabled
         component = comp
 
         return comp

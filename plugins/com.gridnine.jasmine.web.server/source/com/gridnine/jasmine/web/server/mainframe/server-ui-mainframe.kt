@@ -12,7 +12,7 @@ import com.gridnine.jasmine.server.standard.rest.WorkspaceProvider
 import com.gridnine.jasmine.web.server.components.*
 import kotlin.reflect.KClass
 
-class ServerUiMainFrame(config:ServerUiMainFrameConfiguration) : BaseServerUiNodeWrapper(){
+class ServerUiMainFrame(config:ServerUiMainFrameConfiguration) : BaseServerUiNodeWrapper<ServerUiBorderContainer>(){
 
     private val navigationItemsHandlers = hashMapOf<KClass<*>, ServerUiMainFrameTabHandler<Any>>()
 
