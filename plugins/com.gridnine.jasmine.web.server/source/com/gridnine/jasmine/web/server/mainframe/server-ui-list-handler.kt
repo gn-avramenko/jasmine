@@ -119,7 +119,19 @@ class ServerUiListFilterPanel(private val we: ListWorkspaceItem, private val app
             container.addCell(ServerUiGridLayoutCell(label))
             val handler = when (domainDescr.properties[it]?.type) {
                 DatabasePropertyType.STRING, DatabasePropertyType.TEXT ->
-                    StringFilterHandler()
+                    ServerUiStringFilterHandler()
+                DatabasePropertyType.BOOLEAN ->
+                    ServerUiBooleanFilterHandler()
+                DatabasePropertyType.ENUM ->
+                    ServerUiEnumValueFilterHandler(domainDescr.properties[it]!!.className!!)
+                DatabasePropertyType.LOCAL_DATE ->
+                    ServerUiDateFilterHandler()
+                DatabasePropertyType.LOCAL_DATE_TIME ->
+                    ServerUiDateTimeFilterHandler()
+                DatabasePropertyType.BIG_DECIMAL ->
+                    ServerUiBigDecimalFilterHandler()
+                DatabasePropertyType.ENTITY_REFERENCE ->
+                    ServerUiEntityValuesFilterHandler(domainDescr.properties[it]!!.className!!)
                 else -> null
             }
             if (handler != null) {
@@ -151,6 +163,10 @@ class ServerUiListFilterPanel(private val we: ListWorkspaceItem, private val app
             width = "100%"
             title = "Сбросить"
         })
+        resetButton.setHandler {
+            filters.forEach { it.handler.reset(it.comp) }
+            applyCallback.invoke()
+        }
         container.addCell(ServerUiGridLayoutCell(resetButton))
         return container
     }

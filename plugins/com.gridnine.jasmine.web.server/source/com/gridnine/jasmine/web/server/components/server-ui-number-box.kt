@@ -14,7 +14,10 @@ interface ServerUiNumberBox: ServerUiNode {
     fun showValidation(value:String?)
 }
 
-class ServerUiNumberBoxConfiguration{
+class ServerUiNumberBoxConfiguration(){
+    constructor(config:ServerUiNumberBoxConfiguration.()->Unit ):this(){
+        config.invoke(this)
+    }
     var width:String? = null
     var height:String? = null
     var precision = 2

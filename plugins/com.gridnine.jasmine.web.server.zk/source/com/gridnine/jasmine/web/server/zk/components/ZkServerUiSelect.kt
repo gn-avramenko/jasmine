@@ -48,7 +48,15 @@ class ZkServerUiSelect(private val config : ServerUiSelectConfiguration) : Serve
     }
 
     private fun setLoaderParametersInternal() {
-        TODO("Not yet implemented")
+        component!!.configuration.remoteUrl = this.url
+        component!!.configuration.limit = limit!!
+        component!!.configuration.queryParameters.clear()
+        component!!.configuration.queryParameters.addAll(parameters!!.map {
+            val param = Select2QueryParameter()
+            param.key = it.first
+            param.value = it.second
+            param
+        })
     }
 
     override fun getValues(): List<SelectItem> {
@@ -109,7 +117,7 @@ class ZkServerUiSelect(private val config : ServerUiSelectConfiguration) : Serve
         component!!.configuration.isShowClearIcon = config.showClearIcon
         component!!.configuration.isMultiple = config.multiple
         component!!.configuration.dataSourceType  = if(config.mode == ServerUiSelectDataType.REMOTE) Select2DataSourceType.REMOTE else Select2DataSourceType.LOCAL
-        component!!.configuration.baseUrl = url
+        component!!.configuration.remoteUrl = url
         component!!.configuration.queryParameters= parameters?.map {
             val result = Select2QueryParameter()
             result.key = it.first
@@ -117,16 +125,8 @@ class ZkServerUiSelect(private val config : ServerUiSelectConfiguration) : Serve
             result
         }?: arrayListOf()
         component!!.configuration.isEditable = config.editable
-        if(config.width == "100%"){
-            component!!.hflex = "1"
-        } else if(config.width != null){
-            component!!.width = config.width
-        }
-        if(config.height == "100%"){
-            component!!.vflex = "1"
-        }else if(config.height != null) {
-            component!!.height = config.height
-        }
+        component!!.width = config.width
+        component!!.height = config.height
         component!!.selectedValues = initValues.map { Select2Option(it.id, it.text) }
         if(config.mode == ServerUiSelectDataType.REMOTE){
             setLoaderParametersInternal()

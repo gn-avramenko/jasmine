@@ -22,7 +22,10 @@ enum class ServerUiSelectDataType{
     REMOTE
 }
 
-class ServerUiSelectConfiguration{
+class ServerUiSelectConfiguration(){
+    constructor(config:ServerUiSelectConfiguration.()->Unit):this(){
+        config.invoke(this)
+    }
     var width:String? = null
     var height:String? = null
     var mode: ServerUiSelectDataType = ServerUiSelectDataType.LOCAL

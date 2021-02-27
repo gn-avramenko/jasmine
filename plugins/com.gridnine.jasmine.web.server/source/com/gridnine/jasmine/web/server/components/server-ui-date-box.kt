@@ -14,7 +14,10 @@ interface ServerUiDateBox: ServerUiNode {
     fun showValidation(value:String?)
 }
 
-class ServerUiDateBoxConfiguration{
+class ServerUiDateBoxConfiguration(){
+    constructor(config:ServerUiDateBoxConfiguration.()->Unit):this(){
+        config.invoke(this)
+    }
     var width:String? = null
     var height:String? = null
 }

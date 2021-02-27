@@ -41,6 +41,8 @@ open class ZkServerUiBorderContainer(private val config: ServerUiBorderContainer
             north.isSplittable = northRegion.showSplitLine
             north.isCollapsible = northRegion.collapsible
             north.isOpen = !northRegion.collapsed
+        } else {
+            north.isAutoscroll = true
         }
         north.border = if(northRegion.showBorder) "normal" else "0"
         north.appendChild(findZkComponent(northRegion.content).getZkComponent())

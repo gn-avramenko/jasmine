@@ -10,6 +10,8 @@ import com.gridnine.jasmine.server.core.app.PublishableWrapper
 import com.gridnine.jasmine.server.core.model.common.BaseIntrospectableObject
 import com.gridnine.jasmine.server.core.web.WebServer
 
+
+
 interface ServerUiNode{
     fun getParent(): ServerUiNode?
 }

@@ -186,3 +186,5 @@ enum class XeptionType {
     FOR_ADMIN,
     FOR_DEVELOPER
 }
+
+enum class FakeEnum

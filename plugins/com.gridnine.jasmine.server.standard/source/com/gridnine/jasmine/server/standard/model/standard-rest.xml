@@ -339,6 +339,10 @@
         <property id="objectType" type="STRING" lateinit="true"/>
         <property id="objectUid" type="STRING" lateinit="true"/>
     </entity>
+    <entity id="com.gridnine.jasmine.server.standard.rest.Select2QueryParameter">
+        <property id="key" type="STRING"/>
+        <property id="value" type="STRING"/>
+    </entity>
     <group id="standard">
         <operation id="meta" handler="com.gridnine.jasmine.server.standard.rest.StandardMetaRestHandler">
             <request id="com.gridnine.jasmine.server.standard.model.rest.GetMetadataRequest"/>
@@ -400,6 +404,17 @@
             </request>
             <response id="com.gridnine.jasmine.server.standard.model.rest.AutocompletetResponse">
                 <collection id="items" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.rest.AutocompleteItemDT"/>
+            </response>
+        </operation>
+
+        <operation id="autocompleteSelect2" handler="com.gridnine.jasmine.server.standard.rest.Select2AutocompleteRestHandler">
+            <request id="com.gridnine.jasmine.server.standard.model.rest.Select2AutocompleteRequest">
+                <property id="limit" type="INT" non-nullable="true"/>
+                <property id="searchText" type="STRING"/>
+                <collection id="queryParameters" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.standard.rest.Select2QueryParameter"/>
+            </request>
+            <response id="com.gridnine.jasmine.server.standard.model.rest.Select2AutocompleteResponse">
+                <collection id="values" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.core.model.common.SelectItem"/>
             </response>
         </operation>
         <operation id="getEditorData" handler="com.gridnine.jasmine.server.standard.rest.StandardGetEditorDataRestHandler">
