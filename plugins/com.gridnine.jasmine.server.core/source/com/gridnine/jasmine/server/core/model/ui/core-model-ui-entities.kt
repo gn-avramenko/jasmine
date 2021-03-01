@@ -215,3 +215,5 @@ abstract class BaseTableBoxVV:BaseVV(){
         super.setValue(propertyName, value)
     }
 }
+
+class EditorReadDataBundle(val vm:BaseVM, val vs:BaseVS, val title:String)

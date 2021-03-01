@@ -5,7 +5,9 @@
 
 package com.gridnine.jasmine.web.server.mainframe
 
+import com.gridnine.jasmine.server.core.model.common.BaseIdentity
 import com.gridnine.jasmine.server.core.model.common.BaseIntrospectableObject
+import com.gridnine.jasmine.server.core.model.domain.BaseIndex
 import com.gridnine.jasmine.server.core.model.domain.BaseIndexDescription
 import com.gridnine.jasmine.server.core.model.domain.DatabasePropertyType
 import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistry
@@ -261,7 +263,9 @@ internal class ServerUiListDataGridPanel(val we: ListWorkspaceItem, ) : BaseServ
             }
         }
         _node.setDoubleClickListener {
-            ServerUiLibraryAdapter.get().showNotification("выбрано ${it.toString()}", 2000)
+            if(it is BaseIndex<*>){
+                ServerUiMainFrame.get().openTab(it.document!!, null)
+            }
         }
         _node.setLoader {request ->
                 val searchResult = UiListHelper.search(listId = we.listId!!, criterions = we.criterions, filters = filtersProvider.invoke(), columns = we.columns,

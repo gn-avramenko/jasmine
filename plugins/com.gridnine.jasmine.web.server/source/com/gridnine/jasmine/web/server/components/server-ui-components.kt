@@ -5,11 +5,11 @@
 
 package com.gridnine.jasmine.web.server.components
 
-import com.gridnine.jasmine.server.core.app.Environment
 import com.gridnine.jasmine.server.core.app.PublishableWrapper
 import com.gridnine.jasmine.server.core.model.common.BaseIntrospectableObject
-import com.gridnine.jasmine.server.core.web.WebServer
-
+import com.gridnine.jasmine.server.core.model.ui.BaseVM
+import com.gridnine.jasmine.server.core.model.ui.BaseVS
+import com.gridnine.jasmine.server.core.model.ui.BaseVV
 
 
 interface ServerUiNode{
@@ -69,10 +69,18 @@ interface ServerUiLibraryAdapter{
     fun createTree(config:ServerUiTreeConfiguration):ServerUiTree
     fun showContextMenu(items:List<ServerUiContextMenuItem>, pageX:Int, pageY:Int)
     fun showNotification(message:String, timeout:Int)
-
+    fun findRootComponent():ServerUiNode
 
     companion object{
         private val wrapper = PublishableWrapper(ServerUiLibraryAdapter::class)
         fun get() = wrapper.get()
     }
+}
+
+interface ServerUiViewEditor<VM:BaseVM, VS:BaseVS, VV:BaseVV>:ServerUiNode{
+    fun setData(data:VM, settings:VS?)
+    fun getData():VM
+    fun showValidation(validation:VV?)
+    fun setReadonly(value:Boolean)
+    fun navigate(key:String)
 }

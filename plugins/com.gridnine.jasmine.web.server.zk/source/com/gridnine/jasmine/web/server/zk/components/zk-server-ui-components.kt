@@ -7,6 +7,7 @@ package com.gridnine.jasmine.web.server.zk.components
 
 import com.gridnine.jasmine.server.core.model.common.BaseIntrospectableObject
 import com.gridnine.jasmine.web.server.components.*
+import org.zkoss.zk.ui.Component
 import org.zkoss.zk.ui.Executions
 import org.zkoss.zk.ui.HtmlBasedComponent
 
@@ -15,7 +16,7 @@ abstract class ZkServerUiComponent: ServerUiNode {
     abstract fun getZkComponent():HtmlBasedComponent
 }
 
-fun findZkComponent(node:ServerUiNode):ZkServerUiComponent{
+fun findZkComponent(node: ServerUiNode):ZkServerUiComponent{
     if(node is ServerUiNodeWrapper<*>){
         return findZkComponent(node.getNode())
     }
@@ -116,6 +117,10 @@ class ZkServerUiLibraryAdapter:ServerUiLibraryAdapter{
 
     override fun showNotification(message: String, timeout: Int) {
         zkShowNotification(message, timeout)
+    }
+
+    override fun findRootComponent(): ServerUiNode {
+        return Executions.getCurrent().desktop.firstPage.firstRoot.attributes["rootComponent"] as ServerUiNode
     }
 
 }

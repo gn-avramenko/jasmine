@@ -9,8 +9,10 @@ import com.gridnine.jasmine.web.server.components.ServerUiNode
 import com.gridnine.jasmine.web.server.components.ServerUiBorderContainer
 import com.gridnine.jasmine.web.server.components.ServerUiBorderContainerConfiguration
 import com.gridnine.jasmine.web.server.components.ServerUiBorderContainerRegion
+import org.zkoss.zk.ui.Component
 import org.zkoss.zk.ui.HtmlBasedComponent
 import org.zkoss.zul.*
+import kotlin.reflect.KClass
 
 open class ZkServerUiBorderContainer(private val config: ServerUiBorderContainerConfiguration) : ServerUiBorderContainer, ZkServerUiComponent(){
 
@@ -29,13 +31,23 @@ open class ZkServerUiBorderContainer(private val config: ServerUiBorderContainer
         }
     }
 
-    private fun setRegionInternal(northRegion: ServerUiBorderContainerRegion?, factory: () -> LayoutRegion) {
+    private fun setRegionInternal(northRegion: ServerUiBorderContainerRegion?, regionCls:KClass<*> , factory: () -> LayoutRegion) {
+        ArrayList(component!!.getChildren<Component>()).forEach {
+            if(it::class == regionCls){
+                component!!.removeChild(it)
+            }
+        }
+
         if(northRegion == null){
             return
         }
         val north = factory.invoke()
+
+
         north.title = northRegion.title
-        northRegion.width?.let { north.width = it }
+        if(north !is North) {
+            northRegion.width?.let { north.width = it }
+        }
         northRegion.height?.let { north.height = it}
         if(north !is Center) {
             north.isSplittable = northRegion.showSplitLine
@@ -50,7 +62,7 @@ open class ZkServerUiBorderContainer(private val config: ServerUiBorderContainer
     }
 
     private fun setNorthInternal() {
-        setRegionInternal(northRegion) { North() }
+        setRegionInternal(northRegion, North::class) { North() }
     }
 
     override fun setWestRegion(region: ServerUiBorderContainerRegion) {
@@ -61,7 +73,7 @@ open class ZkServerUiBorderContainer(private val config: ServerUiBorderContainer
     }
 
     private fun setWestInternal() {
-        setRegionInternal(westRegion){West()}
+        setRegionInternal(westRegion, West::class){West()}
     }
 
     override fun setEastRegion(region: ServerUiBorderContainerRegion) {
@@ -72,7 +84,7 @@ open class ZkServerUiBorderContainer(private val config: ServerUiBorderContainer
     }
 
     private fun setEastInternal() {
-        setRegionInternal(eastRegion){East()}
+        setRegionInternal(eastRegion, East::class){East()}
     }
 
     override fun setSouthRegion(region: ServerUiBorderContainerRegion) {
@@ -83,7 +95,7 @@ open class ZkServerUiBorderContainer(private val config: ServerUiBorderContainer
     }
 
     private fun setSouthInternal() {
-        setRegionInternal(southRegion){South()}
+        setRegionInternal(southRegion, South::class){South()}
     }
 
     override fun setCenterRegion(region: ServerUiBorderContainerRegion) {
@@ -94,7 +106,7 @@ open class ZkServerUiBorderContainer(private val config: ServerUiBorderContainer
     }
 
     private fun setCenterInternal() {
-        setRegionInternal(centerRegion){Center()}
+        setRegionInternal(centerRegion, Center::class){Center()}
     }
 
     override fun getZkComponent(): HtmlBasedComponent {

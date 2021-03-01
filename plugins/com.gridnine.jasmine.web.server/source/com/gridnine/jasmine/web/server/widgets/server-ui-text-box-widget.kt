@@ -28,6 +28,10 @@ class ServerUiTextBoxWidget(config:ServerUiTextBoxWidgetConfiguration): BaseServ
     fun showValidation(value: String?) {
         _node.showValidation(value)
     }
+
+    fun setReadonly(value:Boolean){
+        _node.setDisabled(value)
+    }
     fun configure(config: TextBoxConfiguration) {
         _node.setDisabled(config.notEditable)
     }

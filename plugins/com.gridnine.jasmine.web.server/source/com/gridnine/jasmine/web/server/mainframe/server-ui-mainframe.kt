@@ -5,6 +5,7 @@
 
 package com.gridnine.jasmine.web.server.mainframe
 
+import com.gridnine.jasmine.server.core.model.domain.ObjectReference
 import com.gridnine.jasmine.server.standard.model.domain.ListWorkspaceItem
 import com.gridnine.jasmine.server.standard.model.domain.Workspace
 import com.gridnine.jasmine.server.standard.model.domain.WorkspaceGroup
@@ -19,6 +20,8 @@ class ServerUiMainFrame(config:ServerUiMainFrameConfiguration) : BaseServerUiNod
     private val _navigationTree:ServerUiTree
 
     private val _tabs:ServerUiTabbox
+
+    private val editorHandler = ServerUiObjectEditorHandler() as ServerUiMainFrameTabHandler<Any>
 
     init {
         val border = ServerUiLibraryAdapter.get().createBorderLayout(ServerUiBorderContainerConfiguration{
@@ -89,6 +92,16 @@ class ServerUiMainFrame(config:ServerUiMainFrameConfiguration) : BaseServerUiNod
             }
         }
         _navigationTree.setData(result)
+    }
+
+    fun openTab(ref:ObjectReference<*>, navigationKey:String?){
+        openTab(editorHandler, ServerUiObjectEditorHandlerData(ref, navigationKey))
+    }
+
+    companion object{
+        fun get():ServerUiMainFrame{
+            return ServerUiLibraryAdapter.get().findRootComponent() as ServerUiMainFrame
+        }
     }
 
 }

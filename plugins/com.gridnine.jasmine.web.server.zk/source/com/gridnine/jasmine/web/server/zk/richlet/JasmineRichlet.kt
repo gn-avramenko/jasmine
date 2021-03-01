@@ -25,6 +25,7 @@ class JasmineRichlet : GenericRichlet() {
         div.hflex = "1"
         div.vflex = "1"
         div.appendChild(comp)
+        div.attributes["rootComponent"] = mainFrame
         div.page = page
     }
 

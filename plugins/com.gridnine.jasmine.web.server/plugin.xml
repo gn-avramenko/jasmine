@@ -4,4 +4,7 @@
         <plugin-dependency plugin-id="com.gridnine.jasmine.server.core"/>
         <plugin-dependency plugin-id="com.gridnine.jasmine.server.standard"/>
     </dependencies>
+    <extension point-id="activator">
+        <parameter id="class" value="com.gridnine.jasmine.web.server.activator.ServerUiActivator"/>
+    </extension>
 </plugin>
