@@ -21,7 +21,10 @@ class ServerUiMenuButtonGroupItem(val text:String, val icon:String?, val disable
 
 class ServerUiMenuButtonSeparator: ServerUiMenuButtonItem
 
-class ServerUiMenuButtonConfiguration{
+class ServerUiMenuButtonConfiguration(){
+    constructor(config:ServerUiMenuButtonConfiguration.() -> Unit):this(){
+        config.invoke(this)
+    }
     var title:String? = null
     var width:String?=null
     var height:String?=null

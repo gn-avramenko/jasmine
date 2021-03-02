@@ -16,21 +16,22 @@ import com.gridnine.jasmine.server.core.rest.RestHandler
 import com.gridnine.jasmine.server.core.rest.RestOperationContext
 import com.gridnine.jasmine.server.core.storage.Storage
 import com.gridnine.jasmine.server.standard.StandardServerMessagesFactory
+import com.gridnine.jasmine.server.standard.helpers.ObjectEditorsRegistry
+import com.gridnine.jasmine.server.standard.helpers.UiVersionsHelper
 import com.gridnine.jasmine.server.standard.model.rest.*
 import kotlin.reflect.full.createInstance
 
 class StandardRestGetVersionsMetadataHandler : RestHandler<GetVersionsMetadataRequest, GetVersionsMetaResponse> {
     override fun service(request: GetVersionsMetadataRequest, ctx: RestOperationContext): GetVersionsMetaResponse {
-        val metadata = Storage.get().getVersionsMetadata<BaseIdentity>(ReflectionFactory.get().getClass(request.objectId), request.objectUid)
         val response = GetVersionsMetaResponse()
-        response.versions.addAll(metadata.map {
+        UiVersionsHelper.getVersionsMetadata(request.objectId, request.objectUid).forEach{
             val item = ObjectVersionMetaData()
-            item.version = it.version + 1
+            item.version = it.version
             item.comment = it.comment
             item.modified = it.modified
             item.modifiedBy = it.modifiedBy
-            item
-        })
+            response.versions.add(item)
+        }
         return response
     }
 }

@@ -3,7 +3,7 @@
  * Project: Jasmine
  *****************************************************************/
 
-package com.gridnine.jasmine.web.server.registry
+package com.gridnine.jasmine.web.server.common
 
 import com.gridnine.jasmine.server.core.app.Disposable
 import com.gridnine.jasmine.server.core.app.PublishableWrapper
@@ -16,6 +16,8 @@ interface ServerUiRegistryItem<T:Any> {
     fun getType(): ServerUiRegistryItemType<T>
     fun getId(): String
 }
+
+
 
 class ServerUiClientRegistry:Disposable{
 

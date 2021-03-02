@@ -7,7 +7,6 @@ package com.gridnine.jasmine.web.server.zk.components
 
 import com.gridnine.jasmine.server.core.model.common.BaseIntrospectableObject
 import com.gridnine.jasmine.web.server.components.*
-import org.zkoss.zk.ui.Component
 import org.zkoss.zk.ui.Executions
 import org.zkoss.zk.ui.HtmlBasedComponent
 
@@ -115,8 +114,8 @@ class ZkServerUiLibraryAdapter:ServerUiLibraryAdapter{
         zkShowContextMenu(items, pageX, pageY)
     }
 
-    override fun showNotification(message: String, timeout: Int) {
-        zkShowNotification(message, timeout)
+    override fun showNotification(message: String, type:ServerUiNotificationType, timeout: Int) {
+        zkShowNotification(message, type, timeout)
     }
 
     override fun findRootComponent(): ServerUiNode {

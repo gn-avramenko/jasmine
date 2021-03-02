@@ -7,7 +7,7 @@ package com.gridnine.jasmine.server.standard.activator
 
 import com.gridnine.jasmine.server.core.app.Environment
 import com.gridnine.jasmine.server.core.app.IPluginActivator
-import com.gridnine.jasmine.server.standard.rest.ObjectEditorsRegistry
+import com.gridnine.jasmine.server.standard.helpers.ObjectEditorsRegistry
 import java.util.*
 
 class StandardServerActivator : IPluginActivator{

@@ -169,7 +169,7 @@ class Select2Panel : ZkServerUiGridLayoutContainer(createConfiguration()){
             buttonConfig.title = "show notification"
             val button = ZkServerUiLinkButton(buttonConfig)
             button.setHandler {
-                zkShowNotification("<b>Notification</b> 1<br> Notification 2", 3000)
+                zkShowNotification("<b>Notification</b> 1<br> Notification 2", ServerUiNotificationType.INFO, 3000)
             }
             addRow()
             addCell(ServerUiGridLayoutCell(button, 1))

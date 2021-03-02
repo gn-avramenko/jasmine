@@ -44,6 +44,11 @@ enum class ServerUiComponentHorizontalAlignment {
     CENTER
 }
 
+enum class ServerUiNotificationType {
+    INFO,
+    ERROR
+}
+
 interface ServerUiLibraryAdapter{
     fun redirect(relativeUrl:String)
     fun createBorderLayout(config:ServerUiBorderContainerConfiguration):ServerUiBorderContainer
@@ -68,7 +73,7 @@ interface ServerUiLibraryAdapter{
     fun createTableBox(config:ServerUiTableConfiguration):ServerUiTable
     fun createTree(config:ServerUiTreeConfiguration):ServerUiTree
     fun showContextMenu(items:List<ServerUiContextMenuItem>, pageX:Int, pageY:Int)
-    fun showNotification(message:String, timeout:Int)
+    fun showNotification(message:String,  type:ServerUiNotificationType, timeout:Int)
     fun findRootComponent():ServerUiNode
 
     companion object{
