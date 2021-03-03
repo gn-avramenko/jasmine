@@ -218,4 +218,6 @@ abstract class BaseTableBoxVV:BaseVV(){
 
 class EditorReadDataBundle(val vm:BaseVM, val vs:BaseVS, val title:String)
 
+class EditorVersionReadDataBundle(val vm:BaseVM, val vs:BaseVS)
+
 class EditorWriteDataBundle(val vm:BaseVM?, val vs:BaseVS?, val vv:BaseVV?, val newUid:String?, val title:String?)

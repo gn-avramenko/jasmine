@@ -19,7 +19,7 @@ interface ServerUiRegistryItem<T:Any> {
 
 
 
-class ServerUiClientRegistry:Disposable{
+class ServerUiRegistry:Disposable{
 
     private val registry = hashMapOf<String, MutableMap<String, ServerUiRegistryItem<*>>>()
 
@@ -39,7 +39,7 @@ class ServerUiClientRegistry:Disposable{
         wrapper.dispose()
     }
     companion object {
-        private val wrapper = PublishableWrapper(ServerUiClientRegistry::class)
+        private val wrapper = PublishableWrapper(ServerUiRegistry::class)
         fun get() = wrapper.get()
     }
 }

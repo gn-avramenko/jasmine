@@ -42,7 +42,7 @@ class ServerUiObjectEditorHandler : ServerUiMainFrameTabHandler<ServerUiObjectEd
 
     override fun createTabData(obj:ServerUiObjectEditorHandlerData, callback: ServerUiMainFrameTabCallback): ServerUiMainFrameTabData {
         val bundle = UiEditorHelper.getReadDataBundle(obj.obj.type.java.name, obj.obj.uid)
-        val handler:ServerUiObjectHandler = ServerUiClientRegistry.get().get(ServerUiObjectHandler.TYPE, obj.obj.type)!!
+        val handler:ServerUiObjectHandler = ServerUiRegistry.get().get(ServerUiObjectHandler.TYPE, obj.obj.type)!!
         val editor = ServerUiObjectEditor(obj.obj, bundle.vm,bundle.vs, handler.createEditor(), true,obj.navigationKey, callback)
         return ServerUiMainFrameTabData(bundle.title, editor)
     }
@@ -75,7 +75,7 @@ interface ServerUiObjectEditorMenuItem<VM:BaseVM, W:ServerUiViewEditor<VM,*,*>>:
     }
 }
 
-class ServerUiObjectEditor<V:ServerUiViewEditor<*,*,*>>(val reference: ObjectReference<*>, vm:BaseVM, vs:BaseVS, val rootEditor:V, var readOnly:Boolean, private val navigationKey:String?, private val callback: ServerUiMainFrameTabCallback):BaseServerUiNodeWrapper<ServerUiBorderContainer>(){
+class ServerUiObjectEditor<V:ServerUiViewEditor<*,*,*>>(val reference: ObjectReference<*>, vm:BaseVM, vs:BaseVS, val rootEditor:V, var readOnly:Boolean, private val navigationKey:String?, private val callback: ServerUiMainFrameTabCallback):BaseServerUiNodeWrapper<ServerUiBorderContainer>(), ServerUiEventsSubscriber{
 
     init {
         _node = ServerUiLibraryAdapter.get().createBorderLayout(ServerUiBorderContainerConfiguration {
@@ -94,11 +94,11 @@ class ServerUiObjectEditor<V:ServerUiViewEditor<*,*,*>>(val reference: ObjectRef
     }
 
     fun updateTools(vm: BaseVM) {
-        val buttons = ServerUiClientRegistry.get().allOf(ServerUiObjectEditorButton.TYPE).filter { it.isApplicable(vm, ServerUiObjectEditor@this as ServerUiObjectEditor<ServerUiViewEditor<BaseVM, *, *>>) }.toMutableList()
-        val menuButtons = ServerUiClientRegistry.get().allOf(ServerUiObjectEditorMenuItem.TYPE).filter {  it.isApplicable(vm, ServerUiObjectEditor@this as ServerUiObjectEditor<ServerUiViewEditor<BaseVM, *, *>>)  }
+        val buttons = ServerUiRegistry.get().allOf(ServerUiObjectEditorButton.TYPE).filter { it.isApplicable(vm, ServerUiObjectEditor@this as ServerUiObjectEditor<ServerUiViewEditor<BaseVM, *, *>>) }.toMutableList()
+        val menuButtons = ServerUiRegistry.get().allOf(ServerUiObjectEditorMenuItem.TYPE).filter {  it.isApplicable(vm, ServerUiObjectEditor@this as ServerUiObjectEditor<ServerUiViewEditor<BaseVM, *, *>>)  }
         val lst = arrayListOf<ServerUiHasWeight>()
         lst.addAll(buttons)
-        lst.addAll(menuButtons.map { it.getMenuButtonId() }.distinct().map { ServerUiClientRegistry.get().get(ServerUiMainFrameMenuButton.TYPE, it) as ServerUiHasWeight})
+        lst.addAll(menuButtons.map { it.getMenuButtonId() }.distinct().map { ServerUiRegistry.get().get(ServerUiMainFrameMenuButton.TYPE, it) as ServerUiHasWeight})
         lst.sortBy { it.getWeight() }
         val buttonsGrid = ServerUiLibraryAdapter.get().createGridLayoutContainer(ServerUiGridLayoutContainerConfiguration {
             lst.forEach {
@@ -165,6 +165,20 @@ class ServerUiObjectEditor<V:ServerUiViewEditor<*,*,*>>(val reference: ObjectRef
 
     fun updateTitle(title: String?) {
         callback.setTitle(title?:"???")
+    }
+
+    override fun receiveEvent(event: Any) {
+        if(event is ServerUiObjectModificationEvent){
+            val bundle = UiEditorHelper.getReadDataBundle(reference.type.java.name, reference.uid)
+            (rootEditor as ServerUiViewEditor<BaseVM,BaseVS,BaseVV>).setData(bundle.vm, bundle.vs)
+            updateTools(bundle.vm)
+            updateTitle(bundle.title)
+            return
+        }
+        if(event is ServerUiObjectDeleteEvent){
+            callback.close()
+            return
+        }
     }
 
 }

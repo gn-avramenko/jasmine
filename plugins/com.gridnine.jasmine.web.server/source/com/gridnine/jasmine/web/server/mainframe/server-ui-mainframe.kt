@@ -10,6 +10,7 @@ import com.gridnine.jasmine.server.standard.model.domain.ListWorkspaceItem
 import com.gridnine.jasmine.server.standard.model.domain.Workspace
 import com.gridnine.jasmine.server.standard.model.domain.WorkspaceGroup
 import com.gridnine.jasmine.server.standard.rest.WorkspaceProvider
+import com.gridnine.jasmine.web.server.common.ServerUiEventsSubscriber
 import com.gridnine.jasmine.web.server.components.*
 import kotlin.reflect.KClass
 
@@ -59,7 +60,7 @@ class ServerUiMainFrame(config:ServerUiMainFrameConfiguration) : BaseServerUiNod
         _node = border
      }
 
-    private fun openTab(handler: ServerUiMainFrameTabHandler<Any>, userData: Any) {
+    fun openTab(handler: ServerUiMainFrameTabHandler<Any>, userData: Any) {
         val tabId = handler.getTabId(userData)
         val tab = _tabs.getTabs().find { it.id == tabId }
         if(tab != null){
@@ -76,6 +77,10 @@ class ServerUiMainFrame(config:ServerUiMainFrameConfiguration) : BaseServerUiNod
             }
         })
         _tabs.addTab(ServerUiTabPanel(tabId, tabData.title, tabData.content))
+    }
+
+    fun publishEvent(event:Any){
+        _tabs.getTabs().map { it.comp }.filter { it is ServerUiEventsSubscriber }.forEach { (it as ServerUiEventsSubscriber).receiveEvent(event) }
     }
 
     private fun setWorkspace(workspace: Workspace) {

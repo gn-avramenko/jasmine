@@ -5,7 +5,6 @@
 
 package com.gridnine.jasmine.web.server.mainframe
 
-import com.gridnine.jasmine.server.core.model.common.BaseIdentity
 import com.gridnine.jasmine.server.core.model.common.BaseIntrospectableObject
 import com.gridnine.jasmine.server.core.model.domain.BaseIndex
 import com.gridnine.jasmine.server.core.model.domain.BaseIndexDescription
@@ -16,6 +15,7 @@ import com.gridnine.jasmine.server.standard.model.BaseListFilterValue
 import com.gridnine.jasmine.server.standard.model.ListFilter
 import com.gridnine.jasmine.server.standard.model.domain.ListWorkspaceItem
 import com.gridnine.jasmine.server.standard.model.domain.SortOrderType
+import com.gridnine.jasmine.web.server.common.*
 import com.gridnine.jasmine.web.server.components.*
 import com.gridnine.jasmine.web.server.widgets.ServerUiSearchBoxWidget
 import com.gridnine.jasmine.web.server.widgets.ServerUiSearchBoxWidgetConfiguration
@@ -33,19 +33,54 @@ class ServerUiListHandler : ServerUiMainFrameTabHandler<ListWorkspaceItem> {
     }
 
 }
+interface ServerUiListWrapper<E:BaseIntrospectableObject>{
+    fun getSelectedItems():List<E>
+}
 
-class ServerUiMainframeListComponent(item: ListWorkspaceItem) : BaseServerUiNodeWrapper<ServerUiBorderContainer>() {
+interface ServerUiListToolButton<E:BaseIntrospectableObject>: ServerUiRegistryItem<ServerUiListToolButton<BaseIntrospectableObject>>, ServerUiHasWeight {
+    fun isApplicable(listId:String):Boolean
+    fun onClick(value: ServerUiListWrapper<E>)
+    fun getDisplayName():String
+    override fun getType(): ServerUiRegistryItemType<ServerUiListToolButton<BaseIntrospectableObject>> {
+        return TYPE
+    }
+    companion object{
+        val TYPE = ServerUiRegistryItemType<ServerUiListToolButton<BaseIntrospectableObject>>("list-button-handlers")
+    }
+}
+
+class ServerUiMainframeListComponent(private val item: ListWorkspaceItem) : BaseServerUiNodeWrapper<ServerUiBorderContainer>(), ServerUiEventsSubscriber {
+    private val updateCallback:()->Unit
     init {
+        val centerContent = ServerUiListDataGridPanel(item)
+        val listWrapper = object :ServerUiListWrapper<BaseIntrospectableObject>{
+            override fun getSelectedItems(): List<BaseIntrospectableObject> {
+                return centerContent.getSelectedItems()
+            }
+        }
         val listBorder = ServerUiLibraryAdapter.get().createBorderLayout(ServerUiBorderContainerConfiguration {
             width = "100%"
             height = "100%"
         })
+        val buttons = ServerUiRegistry.get().allOf(ServerUiListToolButton.TYPE).filter { it.isApplicable(item.listId!!) }.sortedBy { it.getWeight() }
         val northContent = ServerUiLibraryAdapter.get().createGridLayoutContainer(ServerUiGridLayoutContainerConfiguration {
             width = "100%"
+            buttons.forEach {
+                columns.add(ServerUiGridLayoutColumnConfiguration("auto"))
+            }
             columns.add(ServerUiGridLayoutColumnConfiguration("100%"))
             columns.add(ServerUiGridLayoutColumnConfiguration("auto"))
         })
         northContent.addRow()
+        buttons.forEach {
+            val button = ServerUiLibraryAdapter.get().createLinkButton(ServerUiLinkButtonConfiguration{
+                title = it.getDisplayName()
+            })
+            button.setHandler {
+                it.onClick(listWrapper)
+            }
+            northContent.addCell(ServerUiGridLayoutCell(button))
+        }
         northContent.addCell(ServerUiGridLayoutCell(null, 1))
         val searchWidget = ServerUiSearchBoxWidget(ServerUiSearchBoxWidgetConfiguration {
             width = "200px"
@@ -58,7 +93,7 @@ class ServerUiMainframeListComponent(item: ListWorkspaceItem) : BaseServerUiNode
             content = northContent
         }
         listBorder.setNorthRegion(northRegion)
-        val centerContent = ServerUiListDataGridPanel(item)
+
         listBorder.setCenterRegion(ServerUiBorderContainerRegion{
             showSplitLine = false
             showBorder = false
@@ -81,6 +116,15 @@ class ServerUiMainframeListComponent(item: ListWorkspaceItem) : BaseServerUiNode
             content = filtersPanel
         })
         _node = listBorder
+        updateCallback = {centerContent.updateData()}
+    }
+
+    override fun receiveEvent(event: Any) {
+        if(event is ServerUiObjectDeleteEvent){
+            if(DomainMetaRegistry.get().indexes.values.filter { it.document == event.objectType}.any { it.id == item.listId}){
+                updateCallback.invoke()
+            }
+        }
     }
 }
 
@@ -276,6 +320,10 @@ internal class ServerUiListDataGridPanel(val we: ListWorkspaceItem, ) : BaseServ
 
     internal fun updateData(){
         _node.updateData()
+    }
+
+    fun getSelectedItems(): List<BaseIntrospectableObject> {
+        return _node.getSelected()
     }
 
 }

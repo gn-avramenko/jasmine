@@ -23,6 +23,14 @@ interface ServerUiMainFrameMenuButton:ServerUiRegistryItem<ServerUiMainFrameMenu
     }
 }
 
+interface ServerUiEventsSubscriber{
+    fun receiveEvent(event:Any)
+}
+
+data class ServerUiObjectModificationEvent(val objectType: String, val objectUid:String)
+
+data class ServerUiObjectDeleteEvent(val objectType: String, val objectUid:String)
+
 object ServerUiCommonUtils{
 
     private val dateTimeFormatter =  DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")

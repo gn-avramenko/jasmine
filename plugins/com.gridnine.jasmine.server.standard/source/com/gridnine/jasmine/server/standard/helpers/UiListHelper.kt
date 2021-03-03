@@ -344,4 +344,14 @@ object UiListHelper {
         }
         throw IllegalArgumentException("unsupported filter id ${filter.fieldId}")
     }
+
+    fun deleteObjects(references:List<Pair<String,String>>){
+        references.forEach {
+            if(DomainMetaRegistry.get().assets.containsKey(it.first)){
+                Storage.get().deleteAsset(ObjectReference(ReflectionFactory.get().getClass<BaseAsset>(it.first), it.second, null))
+            } else {
+                Storage.get().deleteDocument(ObjectReference(ReflectionFactory.get().getClass<BaseDocument>(it.first), it.second, null))
+            }
+        }
+    }
 }

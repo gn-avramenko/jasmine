@@ -10,6 +10,7 @@ import com.gridnine.jasmine.web.server.components.ServerUiContextMenuStandardIte
 import com.gridnine.jasmine.web.server.components.ServerUiTabPanel
 import com.gridnine.jasmine.web.server.components.ServerUiTabbox
 import com.gridnine.jasmine.web.server.components.ServerUiTabboxConfiguration
+import org.zkoss.zk.ui.Component
 import org.zkoss.zk.ui.HtmlBasedComponent
 import org.zkoss.zk.ui.event.Events
 import org.zkoss.zk.ui.event.MouseEvent
@@ -58,9 +59,16 @@ open class ZkServerUiTabbox(private val config : ServerUiTabboxConfiguration) : 
     override fun removeTab(id: String) {
         panels.removeIf { it.id == id }
         if(component != null){
-           val child = tabs!!.getChildren<Tab>().find { it.id == id }
+           val children = tabs!!.getChildren<Component>()
+           val child = children.find { it.id == id }
             if(child != null){
+                val idx = children.indexOf(child)
                 tabs!!.removeChild(child)
+                val panelChild = tabpanels!!.getChildren<Component>()[idx]
+                tabpanels!!.removeChild(panelChild)
+                if(panels.isNotEmpty()){
+                    select(panels.last().id)
+                }
             }
         }
     }
