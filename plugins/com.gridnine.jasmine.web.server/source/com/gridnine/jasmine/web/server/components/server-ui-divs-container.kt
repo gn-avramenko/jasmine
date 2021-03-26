@@ -12,7 +12,10 @@ interface ServerUiDivsContainer : ServerUiNode {
     fun getDiv(id:String): ServerUiNode?
 }
 
-class ServerUiDivsContainerConfiguration{
+class ServerUiDivsContainerConfiguration(){
+    constructor(config:ServerUiDivsContainerConfiguration.()->Unit):this(){
+        config.invoke(this)
+    }
     var width:String? = null
     var height:String? = null
 }

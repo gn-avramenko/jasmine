@@ -38,11 +38,16 @@ class ServerUiEnumValueWidget<E:Enum<E>>(private val config:ServerUiEnumValueWid
         return if(values.isNotEmpty()) toEnum(values[0], config.enumClass) else null
     }
 
+    fun setReadonly(value:Boolean){
+        _node.setEnabled(!value)
+    }
+
+
     fun showValidation(value: String?) {
         _node.showValidation(value)
     }
-    fun configure(config: EnumSelectBoxConfiguration) {
-        _node.setEnabled(!config.notEditable)
+    fun configure(config: EnumSelectBoxConfiguration?) {
+        _node.setEnabled(config?.notEditable != false)
     }
 
     companion object{

@@ -12,7 +12,10 @@ interface ServerUiPanel : ServerUiNode {
     fun setContent(comp: ServerUiNode?)
 }
 
-class ServerUiPanelConfiguration{
+class ServerUiPanelConfiguration(){
+    constructor(config:ServerUiPanelConfiguration.()->Unit ):this(){
+        config.invoke(this)
+    }
     var width:String? = null
     var height:String? = null
     var maximizable = false

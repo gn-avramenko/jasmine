@@ -92,7 +92,7 @@ class ZkServerUiSelect(private val config : ServerUiSelectConfiguration) : Serve
     override fun setEnabled(value: Boolean) {
         enabled = value
         if(component != null){
-            component!!.isEnabled = true
+            component!!.isEnabled = value
         }
     }
 
@@ -128,6 +128,7 @@ class ZkServerUiSelect(private val config : ServerUiSelectConfiguration) : Serve
         component!!.width = config.width
         component!!.height = config.height
         component!!.selectedValues = initValues.map { Select2Option(it.id, it.text) }
+        component!!.isEnabled = enabled
         if(config.mode == ServerUiSelectDataType.REMOTE){
             setLoaderParametersInternal()
         }

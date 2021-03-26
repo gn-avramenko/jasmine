@@ -32,8 +32,8 @@ class ServerUiTextBoxWidget(config:ServerUiTextBoxWidgetConfiguration): BaseServ
     fun setReadonly(value:Boolean){
         _node.setDisabled(value)
     }
-    fun configure(config: TextBoxConfiguration) {
-        _node.setDisabled(config.notEditable)
+    fun configure(config: TextBoxConfiguration?) {
+        _node.setDisabled(config?.notEditable?:false)
     }
 }
 

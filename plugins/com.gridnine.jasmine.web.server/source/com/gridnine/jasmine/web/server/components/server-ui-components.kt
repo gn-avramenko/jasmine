@@ -87,5 +87,5 @@ interface ServerUiViewEditor<VM:BaseVM, VS:BaseVS, VV:BaseVV>:ServerUiNode{
     fun getData():VM
     fun showValidation(validation:VV?)
     fun setReadonly(value:Boolean)
-    fun navigate(key:String)
+    fun navigate(key:String):Boolean
 }

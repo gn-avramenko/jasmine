@@ -27,8 +27,11 @@ class ServerUiDateBoxWidget(config:ServerUiDateBoxWidgetConfiguration): BaseServ
         _node.showValidation(value)
     }
 
-    fun configure(config: DateBoxConfiguration) {
-        _node.setEnabled(!config.notEditable)
+    fun setReadonly(value:Boolean){
+        _node.setEnabled(!value)
+    }
+    fun configure(config: DateBoxConfiguration?) {
+        _node.setEnabled(config?.notEditable != false)
     }
 }
 

@@ -26,6 +26,7 @@ class Panel : ZkServerUiPanel(createConfiguration()){
         setContent(ZkServerUiTextBox(config))
     }
 
+
     companion object{
         private fun createConfiguration(): ServerUiPanelConfiguration {
             val result = ServerUiPanelConfiguration()

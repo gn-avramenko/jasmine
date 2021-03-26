@@ -10,7 +10,10 @@ interface ServerUiTilesContainer: ServerUiNode {
     fun setTiles(tiles: List<ServerUiTileConfiguration>)
 }
 
-class ServerUiTilesContainerConfiguration{
+class ServerUiTilesContainerConfiguration(){
+    constructor(config:ServerUiTilesContainerConfiguration.()->Unit):this(){
+        config.invoke(this)
+    }
     var width:String? = null
     var height:String? = null
     var tileWidth:String? = null

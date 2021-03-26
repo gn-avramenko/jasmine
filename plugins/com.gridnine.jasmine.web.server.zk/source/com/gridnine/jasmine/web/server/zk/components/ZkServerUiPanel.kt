@@ -10,6 +10,7 @@ import com.gridnine.jasmine.web.server.components.ServerUiPanel
 import com.gridnine.jasmine.web.server.components.ServerUiPanelConfiguration
 import org.zkoss.zk.ui.HtmlBasedComponent
 import org.zkoss.zk.ui.event.Events
+import org.zkoss.zk.ui.event.MinimizeEvent
 import org.zkoss.zul.Panel
 import org.zkoss.zul.Panelchildren
 
@@ -69,12 +70,12 @@ open class ZkServerUiPanel (private val config: ServerUiPanelConfiguration) : Se
             component!!.height = config.height
         }
         component!!.title = title
-        component!!.isMaximizable = config.maximizable
-        component!!.isMaximized = true
-        if(config.maximizable){
-            component!!.addEventListener(Events.ON_MAXIMIZE){event->
-                maximizeHandler?.let{
-                    event.stopPropagation()
+        component!!.setBorder(true)
+        if(config.maximizable) {
+            component!!.isMaximizable = true
+            component!!.isMaximized = true
+            component!!.addEventListener(Events.ON_MAXIMIZE) { event ->
+                maximizeHandler?.let {
                     it.invoke()
                 }
             }
@@ -82,10 +83,11 @@ open class ZkServerUiPanel (private val config: ServerUiPanelConfiguration) : Se
         component!!.isMinimizable = config.minimizable
         if(config.minimizable){
             component!!.addEventListener(Events.ON_MINIMIZE){event->
-                minimizeHandler?.let{
-                    event.stopPropagation()
-                    component!!.isMaximized = true
-                    it.invoke()
+                event as MinimizeEvent
+                if(event.isMinimized){
+                    minimizeHandler?.let{
+                        it.invoke()
+                    }
                 }
             }
         }
