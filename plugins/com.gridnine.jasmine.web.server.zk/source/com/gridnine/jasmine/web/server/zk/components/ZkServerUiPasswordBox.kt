@@ -19,6 +19,8 @@ class ZkServerUiPasswordBox(private val config : ServerUiPasswordBoxConfiguratio
 
     private var validation:String? = null
 
+    private var disabled = false
+
     override fun getValue(): String? {
         if(component != null){
             return component!!.value
@@ -40,6 +42,13 @@ class ZkServerUiPasswordBox(private val config : ServerUiPasswordBoxConfiguratio
         }
     }
 
+    override fun setDisabled(value: Boolean) {
+        disabled = value
+        if(component != null){
+            component!!.isDisabled = disabled
+        }
+    }
+
     override fun getZkComponent(): HtmlBasedComponent {
         if(component != null){
             return component!!
@@ -58,6 +67,7 @@ class ZkServerUiPasswordBox(private val config : ServerUiPasswordBoxConfiguratio
         }
         comp.text = value
         comp.setClass(if(validation != null) "jasmine-error" else "jasmine-normal")
+        comp.isDisabled = disabled
         component = comp
 
         return comp

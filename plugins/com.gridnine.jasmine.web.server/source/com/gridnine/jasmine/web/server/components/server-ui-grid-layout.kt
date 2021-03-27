@@ -25,7 +25,7 @@ class ServerUiGridLayoutContainerConfiguration(){
     var noPadding = false
 }
 
-class ServerUiGridLayoutColumnConfiguration(val width:String?)
+class ServerUiGridLayoutColumnConfiguration(val width:String?=null)
 
 class ServerUiGridLayoutRowConfiguration(val height:String?)
 

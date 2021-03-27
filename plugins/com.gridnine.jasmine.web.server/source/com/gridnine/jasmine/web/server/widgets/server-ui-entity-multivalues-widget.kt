@@ -33,7 +33,7 @@ class ServerUiEntityMultiValuesWidget<D:BaseIdentity>(config:ServerUiEntityMulti
     }
 
     fun setValues(list: List<ObjectReference<D>>) {
-        _node.setValues(list.map { SelectItem("${it.type}||${it.uid}", it.caption!!) })
+        _node.setValues(list.map { SelectItem("${it.type.qualifiedName}||${it.uid}", it.caption!!) })
     }
 
 }

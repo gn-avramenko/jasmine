@@ -20,7 +20,7 @@ class ServerUiEntityValueWidget<D:BaseIdentity>(config:ServerUiEntityValueWidget
             width = config.width
             height = config.height
             mode = ServerUiSelectDataType.REMOTE
-            showClearIcon = false
+            showClearIcon = config.showClearIcon
             editable = true
             multiple = false
         })
@@ -39,7 +39,7 @@ class ServerUiEntityValueWidget<D:BaseIdentity>(config:ServerUiEntityValueWidget
             _node.setValues(emptyList())
             return
         }
-        _node.setValues(arrayListOf(SelectItem("${value.type}||${value.uid}", value.caption!!)))
+        _node.setValues(arrayListOf(SelectItem("${value.type.qualifiedName}||${value.uid}", value.caption!!)))
     }
 
     fun setReadonly(value:Boolean){
@@ -60,5 +60,6 @@ class ServerUiEntityValueWidgetConfiguration(){
     }
     var width:String? = null
     var height:String? = null
+    var showClearIcon = false
     lateinit var handler: ServerUiAutocompleteHandler
 }

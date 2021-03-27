@@ -12,7 +12,10 @@ interface ServerUiTable : ServerUiNode {
     fun getRows():List<List<ServerUiNode?>>
 }
 
-class ServerUiTableConfiguration{
+class ServerUiTableConfiguration(){
+    constructor(config:ServerUiTableConfiguration.()->Unit):this(){
+        config.invoke(this)
+    }
     var width:String? = null
     var height:String? = null
     var noHeader  = false

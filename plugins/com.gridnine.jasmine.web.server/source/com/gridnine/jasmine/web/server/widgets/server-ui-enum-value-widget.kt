@@ -33,6 +33,10 @@ class ServerUiEnumValueWidget<E:Enum<E>>(private val config:ServerUiEnumValueWid
         _node.setValues(if(value != null) arrayListOf(toSelectItem(value)) else emptyList())
     }
 
+    fun setUncastedValue(value:Any?){
+        _node.setValues(if(value != null) arrayListOf(toSelectItem(value as E)) else emptyList())
+    }
+
     fun getValue(): E?{
         val values = _node.getValues()
         return if(values.isNotEmpty()) toEnum(values[0], config.enumClass) else null

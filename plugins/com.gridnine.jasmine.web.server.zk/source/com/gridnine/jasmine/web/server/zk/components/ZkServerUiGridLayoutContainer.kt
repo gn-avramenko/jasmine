@@ -33,7 +33,7 @@ open class ZkServerUiGridLayoutContainer(private val configuration: ServerUiGrid
     }
 
     private fun createContainerStyle(): String {
-        return """display: grid;grid-template-columns:${configuration.columns.joinToString(" ") { getWidthOrHeight(it.width, "200px") }};grid-template-rows: ${rows.joinToString(" "){ getWidthOrHeight(it.config.height, "auto") }};"""
+        return """display: grid;grid-template-columns:${configuration.columns.joinToString(" ") { getWidthOrHeight(it.width, "auto") }};grid-template-rows: ${rows.joinToString(" "){ getWidthOrHeight(it.config.height, "auto") }};"""
     }
 
 

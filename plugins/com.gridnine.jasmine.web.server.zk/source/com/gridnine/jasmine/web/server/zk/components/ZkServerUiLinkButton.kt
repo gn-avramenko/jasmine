@@ -45,6 +45,7 @@ class ZkServerUiLinkButton(private val config: ServerUiLinkButtonConfiguration) 
         comp.label = config.title
         comp.width = config.width
         comp.height = config.height
+        comp.iconSclass = config.iconClass
         comp.addEventListener(Events.ON_CLICK){
             handler?.invoke()
         }

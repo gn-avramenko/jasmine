@@ -18,4 +18,5 @@ class ServerUiLinkButtonConfiguration(){
     var title:String? = null
     var width:String?=null
     var height:String?=null
+    var iconClass:String? = null
 }

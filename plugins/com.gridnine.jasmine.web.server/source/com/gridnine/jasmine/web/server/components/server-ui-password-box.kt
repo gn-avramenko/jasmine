@@ -9,9 +9,13 @@ interface ServerUiPasswordBox: ServerUiNode {
     fun getValue():String?
     fun setValue(value:String?)
     fun showValidation(value:String?)
+    fun setDisabled(value:Boolean)
 }
 
-class ServerUiPasswordBoxConfiguration{
+class ServerUiPasswordBoxConfiguration(){
+    constructor(config:ServerUiPasswordBoxConfiguration.()->Unit):this(){
+        config.invoke(this)
+    }
     var width:String? = null
     var height:String? = null
 }

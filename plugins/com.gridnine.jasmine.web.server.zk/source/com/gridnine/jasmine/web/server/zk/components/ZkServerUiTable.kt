@@ -34,9 +34,12 @@ open class ZkServerUiTable(private val config: ServerUiTableConfiguration) : Ser
             cell.parent = row
             cell.colspan = component.colspan
             val cellComp = component.component
-            if (cellComp is ZkServerUiComponent) {
-                cellComp.parent = this
-                cellComp.getZkComponent().parent = cell
+            if (cellComp != null) {
+                val zkComp = findZkComponent(cellComp)
+                zkComp.parent = this
+                zkComp.getZkComponent().parent = cell
+//                cell.setWidgetListener("onAfterSize", "console.log('cell resized')")
+//                zkComp.getZkComponent().setWidgetListener("onAfterSize", "console.log('comp resized')")
             }
         }
         val children = comp.rows.getChildren<Row>()
@@ -72,15 +75,14 @@ open class ZkServerUiTable(private val config: ServerUiTableConfiguration) : Ser
 
     private fun moveRowInternal(fromPosition: Int, toPosition: Int) {
         val comp = component!!
+        val tp = if(fromPosition > toPosition) toPosition else fromPosition
+        val fp =if(fromPosition > toPosition) fromPosition else toPosition
         val children = comp.rows.getChildren<Row>()
-        val child = children[fromPosition]
-        val toChild = if (children.size - 1 > toPosition) children[toPosition + 1] else null
+        val child = children[fp]
+        val toChild = children[tp]
         comp.rows.removeChild(child)
-        if (toChild != null) {
-            comp.rows.insertBefore(child, toChild)
-        } else {
-            child.parent = comp.rows
-        }
+        comp.rows.insertBefore(child, toChild)
+
     }
 
     override fun getRows(): List<List<ServerUiNode?>> {
@@ -126,7 +128,8 @@ open class ZkServerUiTable(private val config: ServerUiTableConfiguration) : Ser
         comp.setClientDataAttribute("columns", "[" + config.columns.joinToString(",") {
             """{"minWidth":${it.minWidth}, "prefWidth":${it.prefWidth}, "maxWidth":${it.maxWidth} }"""
         } + "]")
-        comp.setWidgetListener("onAfterSize", "jasmineUpdateTableColumnsWidths($(this._node))")
+        comp.setWidgetOverride("onSize", "function() {this.\$onSize();jasmineUpdateTableColumnsWidths(\$(this._node));}")
+
         return comp
     }
 
