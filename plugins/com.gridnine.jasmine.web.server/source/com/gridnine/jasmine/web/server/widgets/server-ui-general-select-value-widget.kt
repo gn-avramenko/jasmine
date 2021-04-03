@@ -9,13 +9,15 @@ import com.gridnine.jasmine.server.core.model.common.SelectItem
 import com.gridnine.jasmine.server.core.model.ui.GeneralSelectBoxConfiguration
 import com.gridnine.jasmine.web.server.components.*
 
-class ServerUiGeneralSelectValueWidget(private val config:ServerUiGeneralSelectValueWidgetConfiguration):BaseServerUiNodeWrapper<ServerUiSelect>(){
+class ServerUiGeneralSelectValueWidget(configure:ServerUiGeneralSelectValueWidgetConfiguration.()->Unit):BaseServerUiNodeWrapper<ServerUiSelect>(){
+    private val config = ServerUiGeneralSelectValueWidgetConfiguration()
     var changeListener:((SelectItem?) ->Unit)? = null
     set(value) = _node.setChangeListener {values ->
         value?.let {
         it.invoke(if(values.isNotEmpty()) values[0] else null)
     } }
     init {
+        config.configure()
         _node = ServerUiLibraryAdapter.get().createSelect(ServerUiSelectConfiguration{
             width = config.width
             height = config.height
@@ -23,6 +25,7 @@ class ServerUiGeneralSelectValueWidget(private val config:ServerUiGeneralSelectV
             editable = false
             multiple = false
             showClearIcon = config.showClearIcon
+            showAllPossibleValues = config.showAllPossibleValues
         })
     }
 
@@ -62,10 +65,8 @@ class ServerUiGeneralSelectValueWidget(private val config:ServerUiGeneralSelectV
 }
 
 class ServerUiGeneralSelectValueWidgetConfiguration(){
-    constructor(config:ServerUiGeneralSelectValueWidgetConfiguration.()->Unit):this(){
-        config.invoke(this)
-    }
     var width:String? = null
     var height:String? = null
     var showClearIcon = true
+    var showAllPossibleValues = false
 }

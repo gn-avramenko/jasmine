@@ -11,9 +11,12 @@ import com.gridnine.jasmine.server.core.model.domain.ObjectReference
 import com.gridnine.jasmine.server.core.reflection.ReflectionFactory
 import com.gridnine.jasmine.web.server.components.*
 
-class ServerUiEntityMultiValuesWidget<D:BaseIdentity>(config:ServerUiEntityMultiValuesWidgetConfiguration):BaseServerUiNodeWrapper<ServerUiSelect>() {
+class ServerUiEntityMultiValuesWidget<D:BaseIdentity>(configure:ServerUiEntityMultiValuesWidgetConfiguration.()->Unit):BaseServerUiNodeWrapper<ServerUiSelect>() {
+
 
     init {
+        val config = ServerUiEntityMultiValuesWidgetConfiguration()
+        config.configure()
         _node = ServerUiLibraryAdapter.get().createSelect(ServerUiSelectConfiguration{
             width = config.width
             height = config.height
@@ -39,9 +42,6 @@ class ServerUiEntityMultiValuesWidget<D:BaseIdentity>(config:ServerUiEntityMulti
 }
 
 class ServerUiEntityMultiValuesWidgetConfiguration(){
-    constructor(config:ServerUiEntityMultiValuesWidgetConfiguration.()->Unit):this(){
-        config.invoke(this)
-    }
     var width:String? = null
     var height:String? = null
     lateinit var handler: ServerUiAutocompleteHandler

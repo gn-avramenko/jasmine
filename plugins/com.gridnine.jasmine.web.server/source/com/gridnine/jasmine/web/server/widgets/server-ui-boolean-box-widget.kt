@@ -11,9 +11,11 @@ import com.gridnine.jasmine.server.core.model.ui.IntegerNumberBoxConfiguration
 import com.gridnine.jasmine.web.server.components.*
 import java.math.BigDecimal
 
-class ServerUiBooleanBoxWidget(private val config:ServerUiBooleanBoxWidgetConfiguration): BaseServerUiNodeWrapper<ServerUiBooleanBox>(){
+class ServerUiBooleanBoxWidget(configure:ServerUiBooleanBoxWidgetConfiguration.()->Unit): BaseServerUiNodeWrapper<ServerUiBooleanBox>(){
 
     init{
+        val config = ServerUiBooleanBoxWidgetConfiguration()
+        config.configure()
         _node = ServerUiLibraryAdapter.get().createBooleanBox(ServerUiBooleanBoxConfiguration{
             width = config.width
             height = config.height
@@ -38,9 +40,6 @@ class ServerUiBooleanBoxWidget(private val config:ServerUiBooleanBoxWidgetConfig
 }
 
 class ServerUiBooleanBoxWidgetConfiguration(){
-    constructor(config:ServerUiBooleanBoxWidgetConfiguration.()->Unit):this(){
-        config.invoke(this)
-    }
     var width:String? = null
     var height:String? = null
 }

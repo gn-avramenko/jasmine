@@ -32,4 +32,5 @@ class ServerUiSelectConfiguration(){
     var editable = false
     var showClearIcon = true
     var multiple = false
+    var showAllPossibleValues = false
 }

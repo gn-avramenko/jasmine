@@ -8,7 +8,6 @@ package com.gridnine.jasmine.web.server.zk.richlet
 import com.gridnine.jasmine.web.server.mainframe.ServerUiMainFrame
 import com.gridnine.jasmine.web.server.mainframe.ServerUiMainFrameConfiguration
 import com.gridnine.jasmine.web.server.zk.components.findZkComponent
-import com.gridnine.jasmine.web.server.zk.richlet.pg.PgMainFrame
 import org.zkoss.zk.ui.*
 import org.zkoss.zul.Div
 

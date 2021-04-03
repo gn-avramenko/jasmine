@@ -118,6 +118,7 @@ class ZkServerUiSelect(private val config : ServerUiSelectConfiguration) : Serve
         component!!.configuration.isMultiple = config.multiple
         component!!.configuration.dataSourceType  = if(config.mode == ServerUiSelectDataType.REMOTE) Select2DataSourceType.REMOTE else Select2DataSourceType.LOCAL
         component!!.configuration.remoteUrl = url
+        component!!.configuration.isShowAllPossibleValues = config.showAllPossibleValues
         component!!.configuration.queryParameters= parameters?.map {
             val result = Select2QueryParameter()
             result.key = it.first
@@ -129,6 +130,12 @@ class ZkServerUiSelect(private val config : ServerUiSelectConfiguration) : Serve
         component!!.height = config.height
         component!!.selectedValues = initValues.map { Select2Option(it.id, it.text) }
         component!!.isEnabled = enabled
+        if(changeListener != null){
+            component!!.addChangeListener{
+                changeListener?.invoke(it.selectedValues.map { SelectItem(it.id, it.text) })
+            }
+            changeListenerAdded = true
+        }
         if(config.mode == ServerUiSelectDataType.REMOTE){
             setLoaderParametersInternal()
         }

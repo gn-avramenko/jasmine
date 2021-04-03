@@ -5,9 +5,9 @@
 
 package com.gridnine.jasmine.web.server.utils
 
-import com.gridnine.jasmine.web.server.components.ServerUiDialogConfiguration
-import com.gridnine.jasmine.web.server.components.ServerUiLabelConfiguration
-import com.gridnine.jasmine.web.server.components.ServerUiLibraryAdapter
+import com.gridnine.jasmine.web.server.components.*
+import com.gridnine.jasmine.web.server.widgets.ServerUiEnumValueWidget
+import kotlin.reflect.KClass
 
 object ServerUiUtils {
     fun confirm(question:String, dialogTitle:String = "Вопрос", action:()->Unit){
@@ -21,6 +21,32 @@ object ServerUiUtils {
                 handler = {
                     it.close()
                     action.invoke()
+                }
+            }
+            cancelButton()
+        })
+    }
+
+    fun<E:Enum<E>> choseVariant(cls: KClass<E>, aTitle:String = "Выберите вариант", action: (E)->Unit){
+        val layout = ServerUiLibraryAdapter.get().createGridLayoutContainer(ServerUiGridLayoutContainerConfiguration{
+            columns.add(ServerUiGridLayoutColumnConfiguration("auto"))
+        })
+        layout.addRow()
+        val widget = ServerUiEnumValueWidget<E>{
+            width = "200px"
+            allowNull = false
+            enumClass = cls
+        }
+        layout.addCell(ServerUiGridLayoutCell(widget))
+        ServerUiLibraryAdapter.get().showDialog(ServerUiDialogConfiguration{
+            title = aTitle
+            editor = layout
+            button {
+                displayName = "Да"
+                handler = {
+                    val selectedValue = widget.getValue()!!
+                    it.close()
+                    action.invoke(selectedValue)
                 }
             }
             cancelButton()

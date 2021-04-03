@@ -11,14 +11,19 @@ import com.gridnine.jasmine.web.server.components.ServerUiLibraryAdapter
 import com.gridnine.jasmine.web.server.components.ServerUiTextBox
 import com.gridnine.jasmine.web.server.components.ServerUiTextBoxConfiguration
 
-class ServerUiTextBoxWidget(config:ServerUiTextBoxWidgetConfiguration): BaseServerUiNodeWrapper<ServerUiTextBox>(){
+class ServerUiTextBoxWidget(configure:ServerUiTextBoxWidgetConfiguration.()->Unit): BaseServerUiNodeWrapper<ServerUiTextBox>(){
 
-    init{
-        val comp = ServerUiLibraryAdapter.get().createTextBox(ServerUiTextBoxConfiguration{
+    private var readonly = false
+
+    private var tbConfig:TextBoxConfiguration? = null
+
+    init {
+        val config = ServerUiTextBoxWidgetConfiguration()
+        config.configure()
+        _node = ServerUiLibraryAdapter.get().createTextBox(ServerUiTextBoxConfiguration{
             width = config.width
             height = config.height
         })
-        _node = comp
     }
 
     fun setValue(value:String?) = _node.setValue(value)
@@ -30,10 +35,11 @@ class ServerUiTextBoxWidget(config:ServerUiTextBoxWidgetConfiguration): BaseServ
     }
 
     fun setReadonly(value:Boolean){
-        _node.setDisabled(value)
+        readonly = value
+        _node.setDisabled(tbConfig?.notEditable?:false || value)
     }
     fun configure(config: TextBoxConfiguration?) {
-        _node.setDisabled(config?.notEditable?:false)
+        _node.setDisabled(readonly || (config?.notEditable?:false))
     }
 }
 

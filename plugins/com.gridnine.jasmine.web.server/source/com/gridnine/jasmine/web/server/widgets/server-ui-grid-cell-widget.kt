@@ -18,9 +18,9 @@ class ServerUiGridCellWidget(caption:String?, val comp: ServerUiNode): BaseServe
             _node.addRow()
             val label = ServerUiLibraryAdapter.get().createLabel(ServerUiLabelConfiguration{})
             label.setText(caption)
-            _node.addCell(ServerUiGridLayoutCell(label))
+            _node.addCell(ServerUiGridLayoutCell(label, sClass = "jasmine-grid-container-only-bottom-padding"))
         }
         _node.addRow()
-        _node.addCell(ServerUiGridLayoutCell(comp))
+        _node.addCell(ServerUiGridLayoutCell(comp, sClass = "jasmine-grid-container-no-padding"))
     }
 }

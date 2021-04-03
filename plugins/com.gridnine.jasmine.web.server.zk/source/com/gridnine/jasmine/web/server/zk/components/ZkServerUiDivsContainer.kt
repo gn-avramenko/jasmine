@@ -34,7 +34,7 @@ class ZkServerUiDivsContainer (private val config: ServerUiDivsContainerConfigur
 
     private fun showInternal(id:String) {
         if(activeComponentId != null){
-            findZkComponent(divsMap[activeComponentId]!!).getZkComponent().isVisible = false
+            divsMap[activeComponentId]?.let { findZkComponent(it).getZkComponent().isVisible = false}
         }
         val comp = findZkComponent(divsMap[id]!!).getZkComponent()
         comp.parent = component!!

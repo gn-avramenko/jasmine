@@ -12,9 +12,11 @@ import com.gridnine.jasmine.web.server.components.ServerUiDateTimeBoxConfigurati
 import com.gridnine.jasmine.web.server.components.ServerUiLibraryAdapter
 import java.time.LocalDateTime
 
-class ServerUiDateTimeBoxWidget(config:ServerUiDateTimeBoxWidgetConfiguration): BaseServerUiNodeWrapper<ServerUiDateTimeBox>(){
+class ServerUiDateTimeBoxWidget(configure:ServerUiDateTimeBoxWidgetConfiguration.()->Unit): BaseServerUiNodeWrapper<ServerUiDateTimeBox>(){
 
     init{
+        val config = ServerUiDateTimeBoxWidgetConfiguration()
+        config.configure()
         _node = ServerUiLibraryAdapter.get().createDateTimeBox(ServerUiDateTimeBoxConfiguration{
             width = config.width
             height = config.height
@@ -38,10 +40,7 @@ class ServerUiDateTimeBoxWidget(config:ServerUiDateTimeBoxWidgetConfiguration): 
     }
 }
 
-class ServerUiDateTimeBoxWidgetConfiguration(){
-    constructor(config:ServerUiDateTimeBoxWidgetConfiguration.()->Unit):this(){
-        config.invoke(this)
-    }
+class ServerUiDateTimeBoxWidgetConfiguration{
     var width:String? = null
     var height:String? = null
 

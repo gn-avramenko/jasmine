@@ -23,9 +23,9 @@ internal interface ServerUiListFilterHandler<V : BaseListFilterValue, W : Server
 
 internal class ServerUiStringFilterHandler : ServerUiListFilterHandler<ListFilterStringValues, ServerUiTextBoxWidget> {
     override fun createEditor(): ServerUiTextBoxWidget {
-        return ServerUiTextBoxWidget(ServerUiTextBoxWidgetConfiguration{
+        return ServerUiTextBoxWidget{
             width = "100%"
-        })
+        }
     }
 
     override fun getValue(editor: ServerUiTextBoxWidget): ListFilterStringValues? {
@@ -48,11 +48,11 @@ internal class ServerUiStringFilterHandler : ServerUiListFilterHandler<ListFilte
 
 internal class ServerUiBooleanFilterHandler : ServerUiListFilterHandler<ListFilterBooleanValues, ServerUiEnumValueWidget<YesNoEnum>> {
     override fun createEditor(): ServerUiEnumValueWidget<YesNoEnum> {
-        val widget = ServerUiEnumValueWidget<YesNoEnum>( ServerUiEnumValueWidgetConfiguration{
+        val widget = ServerUiEnumValueWidget<YesNoEnum>{
             width = "100%"
             enumClass = YesNoEnum::class
             allowNull = false
-        })
+        }
         widget.setValue(YesNoEnum.NOT_IMPORTANT)
         return widget
     }
@@ -83,10 +83,10 @@ internal class ServerUiBooleanFilterHandler : ServerUiListFilterHandler<ListFilt
 
 internal class ServerUiEnumValueFilterHandler(private val className:String) : ServerUiListFilterHandler<ListFilterEnumValues, ServerUiEnumMultiValuesWidget<*>> {
     override fun createEditor(): ServerUiEnumMultiValuesWidget<*> {
-        val widget = ServerUiEnumMultiValuesWidget<FakeEnum>(ServerUiEnumMultiValuesWidgetConfiguration{
+        val widget = ServerUiEnumMultiValuesWidget<FakeEnum>{
             width = "100%"
             enumClass = ReflectionFactory.get().getClass<FakeEnum>(className)
-        })
+        }
         return widget
     }
 
@@ -127,17 +127,17 @@ internal class ServerUiDateIntervalListFilterEditor : BaseServerUiNodeWrapper<Se
         val startLabel = ServerUiLibraryAdapter.get().createLabel(ServerUiLabelConfiguration())
         startLabel.setText("с:")
         _node.addCell(ServerUiGridLayoutCell(startLabel))
-        fromDateWidget = ServerUiDateBoxWidget(ServerUiDateBoxWidgetConfiguration{
+        fromDateWidget = ServerUiDateBoxWidget{
             width = "100%"
-        })
+        }
         _node.addCell(ServerUiGridLayoutCell(fromDateWidget))
         _node.addRow()
         val endLabel = ServerUiLibraryAdapter.get().createLabel(ServerUiLabelConfiguration())
         endLabel.setText("по:")
         _node.addCell(ServerUiGridLayoutCell(endLabel))
-        toDateWidget = ServerUiDateBoxWidget(ServerUiDateBoxWidgetConfiguration{
+        toDateWidget = ServerUiDateBoxWidget{
             width = "100%"
-        })
+        }
         _node.addCell(ServerUiGridLayoutCell(toDateWidget))
     }
 
@@ -189,17 +189,17 @@ internal class ServerUiDateTimeIntervalListFilterEditor : BaseServerUiNodeWrappe
         val startLabel = ServerUiLibraryAdapter.get().createLabel(ServerUiLabelConfiguration())
         startLabel.setText("с:")
         _node.addCell(ServerUiGridLayoutCell(startLabel))
-        fromDateWidget = ServerUiDateTimeBoxWidget(ServerUiDateTimeBoxWidgetConfiguration{
+        fromDateWidget = ServerUiDateTimeBoxWidget{
             width = "100%"
-        })
+        }
         _node.addCell(ServerUiGridLayoutCell(fromDateWidget))
         _node.addRow()
         val endLabel = ServerUiLibraryAdapter.get().createLabel(ServerUiLabelConfiguration())
         endLabel.setText("по:")
         _node.addCell(ServerUiGridLayoutCell(endLabel))
-        toDateWidget = ServerUiDateTimeBoxWidget(ServerUiDateTimeBoxWidgetConfiguration{
+        toDateWidget = ServerUiDateTimeBoxWidget{
             width = "100%"
-        })
+        }
         _node.addCell(ServerUiGridLayoutCell(toDateWidget))
     }
 
@@ -251,19 +251,19 @@ internal class ServerUiBigDecimalIntervalListFilterEditor : BaseServerUiNodeWrap
         val startLabel = ServerUiLibraryAdapter.get().createLabel(ServerUiLabelConfiguration())
         startLabel.setText("с:")
         _node.addCell(ServerUiGridLayoutCell(startLabel))
-        fromValueWidget = ServerUiBigDecimalBoxWidget(ServerUiBigDecimalBoxWidgetConfiguration{
+        fromValueWidget = ServerUiBigDecimalBoxWidget{
             width = "100%"
             precision = 2
-        })
+        }
         _node.addCell(ServerUiGridLayoutCell(fromValueWidget))
         _node.addRow()
         val endLabel = ServerUiLibraryAdapter.get().createLabel(ServerUiLabelConfiguration())
         endLabel.setText("по:")
         _node.addCell(ServerUiGridLayoutCell(endLabel))
-        toValueWidget = ServerUiBigDecimalBoxWidget(ServerUiBigDecimalBoxWidgetConfiguration{
+        toValueWidget = ServerUiBigDecimalBoxWidget{
             width = "100%"
             precision = 2
-        })
+        }
         _node.addCell(ServerUiGridLayoutCell(toValueWidget))
     }
 
@@ -303,11 +303,10 @@ internal class ServerUiBigDecimalFilterHandler : ServerUiListFilterHandler<ListF
 internal class ServerUiEntityValuesFilterHandler(private val className:String) : ServerUiListFilterHandler<ListFilterEntityValues, ServerUiEntityMultiValuesWidget<BaseIdentity>> {
 
     override fun createEditor(): ServerUiEntityMultiValuesWidget<BaseIdentity> {
-        return ServerUiEntityMultiValuesWidget<BaseIdentity>(
-                ServerUiEntityMultiValuesWidgetConfiguration{
+        return ServerUiEntityMultiValuesWidget<BaseIdentity>{
                     width = "100%"
                     handler = ServerUiAutocompleteHandler.createMetadataBasedAutocompleteHandler(className)
-        })
+        }
     }
 
     override fun getValue(editor: ServerUiEntityMultiValuesWidget<BaseIdentity>): ListFilterEntityValues? {

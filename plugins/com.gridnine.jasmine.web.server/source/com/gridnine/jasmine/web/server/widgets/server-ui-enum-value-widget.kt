@@ -14,9 +14,12 @@ import com.gridnine.jasmine.server.core.reflection.ReflectionFactory
 import com.gridnine.jasmine.web.server.components.*
 import kotlin.reflect.KClass
 
-class ServerUiEnumValueWidget<E:Enum<E>>(private val config:ServerUiEnumValueWidgetConfiguration<E>): BaseServerUiNodeWrapper<ServerUiSelect>(){
+class ServerUiEnumValueWidget<E:Enum<E>>(configure: ServerUiEnumValueWidgetConfiguration<E>.()->Unit): BaseServerUiNodeWrapper<ServerUiSelect>(){
+
+    private val config = ServerUiEnumValueWidgetConfiguration<E>()
 
     init{
+        config.configure()
         val comp = ServerUiLibraryAdapter.get().createSelect(ServerUiSelectConfiguration{
             width = config.width
             height = config.height
@@ -85,9 +88,6 @@ class ServerUiEnumValueWidget<E:Enum<E>>(private val config:ServerUiEnumValueWid
 }
 
 class ServerUiEnumValueWidgetConfiguration<E:Enum<E>>(){
-    constructor(config:ServerUiEnumValueWidgetConfiguration<E>.()->Unit):this(){
-        config.invoke(this)
-    }
     var width:String? = null
     var height:String? = null
     var allowNull = true

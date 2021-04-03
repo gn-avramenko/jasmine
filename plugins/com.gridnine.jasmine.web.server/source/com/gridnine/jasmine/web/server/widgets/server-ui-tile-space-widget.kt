@@ -9,12 +9,14 @@ import com.gridnine.jasmine.server.core.model.ui.*
 import com.gridnine.jasmine.web.server.components.*
 import java.util.*
 
-open class ServerUiTileSpaceWidget<VM:BaseVM, VS:BaseVS, VV:BaseVV>(private val configuration:ServerUiTileSpaceWidgetConfiguration<VM>) :ServerUiViewEditor<VM,VS,VV>,BaseServerUiNodeWrapper<ServerUiDivsContainer>(){
+abstract class ServerUiTileSpaceWidget<VM:BaseVM, VS:BaseVS, VV:BaseVV>() :ServerUiViewEditor<VM,VS,VV>,BaseServerUiNodeWrapper<ServerUiDivsContainer>(){
 
+    private val configuration= ServerUiTileSpaceWidgetConfiguration<VM>()
     private val mainPanelId = "mainPanel${UUID.randomUUID().toString()}"
     private val mainPanel:ServerUiTilesSpaceMainPanel<VM, VS, VV>
     private val tilesEditors = hashMapOf<String,ServerUiTileWidgetPanel>()
     init {
+        createInitializer().apply { configuration }
         _node = ServerUiLibraryAdapter.get().createDivsContainer(ServerUiDivsContainerConfiguration{
             width = configuration.width
             height = configuration.height
@@ -33,6 +35,8 @@ open class ServerUiTileSpaceWidget<VM:BaseVM, VS:BaseVS, VV:BaseVV>(private val 
         _node.show(mainPanelId)
 
     }
+
+    protected abstract fun createInitializer():ServerUiTileSpaceWidgetConfiguration<VM>.()->Unit
 
     override fun getData(): VM {
         val vm = configuration.vmFactory.invoke()

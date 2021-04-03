@@ -180,10 +180,14 @@ class ServerUiListFilterPanel(private val we: ListWorkspaceItem, private val app
                     ServerUiEntityValuesFilterHandler(domainDescr.properties[it]!!.className!!)
                 else -> null
             }
+            val noPadding =  when (domainDescr.properties[it]?.type) {
+                DatabasePropertyType.LOCAL_DATE ,DatabasePropertyType.LOCAL_DATE_TIME,DatabasePropertyType.BIG_DECIMAL -> true
+                else -> false
+            }
             if (handler != null) {
                 val component = handler.createEditor()
                 container.addRow()
-                container.addCell(ServerUiGridLayoutCell(component))
+                container.addCell(ServerUiGridLayoutCell(component, sClass = if(noPadding) "jasmine-grid-container-no-padding" else null))
                 filters.add(FilterData(it, component, handler as ServerUiListFilterHandler<BaseListFilterValue, ServerUiNode>))
             }
         }
@@ -308,7 +312,7 @@ internal class ServerUiListDataGridPanel(val we: ListWorkspaceItem, ) : BaseServ
         }
         _node.setDoubleClickListener {
             if(it is BaseIndex<*>){
-                ServerUiMainFrame.get().openTab(it.document!!, null)
+                ServerUiMainFrame.get().openTab(it.document!!, it.uid)
             }
         }
         _node.setLoader {request ->

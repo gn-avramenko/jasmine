@@ -83,7 +83,18 @@ open class ZkServerUiGridLayoutContainer(private val configuration: ServerUiGrid
     private fun addCellInternal(cell: ServerUiGridLayoutCell, rowIndex:Int) {
         component!!.let {cont ->
             val cellDiv = Div()
-            cellDiv.style = """grid-row: ${rowIndex+1};grid-column: ${columnIndex+1}/${columnIndex+1+cell.columnSpan};padding: ${if(configuration.noPadding) "0px" else "5px"}"""
+            cellDiv.style = """grid-row: ${rowIndex+1};grid-column: ${columnIndex+1}/${columnIndex+1+cell.columnSpan};"""
+            when {
+                cell.sClass != null -> {
+                    cellDiv.setClass(cell.sClass)
+                }
+                configuration.noPadding -> {
+                    cellDiv.setClass("jasmine-grid-container-no-padding")
+                }
+                else -> {
+                    cellDiv.setClass("${if (rowIndex == 0) "jasmine-grid-container-first-row " else "jasmine-grid-container-other-row "}${if (columnIndex == 0) "jasmine-grid-container-left-column" else "jasmine-grid-container-other-column"}")
+                }
+            }
             columnIndex+=cell.columnSpan
             if(columnIndex >= configuration.columns.size ){
                 columnIndex = 0

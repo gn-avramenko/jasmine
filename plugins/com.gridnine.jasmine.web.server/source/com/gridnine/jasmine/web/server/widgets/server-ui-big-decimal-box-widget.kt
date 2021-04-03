@@ -12,9 +12,11 @@ import com.gridnine.jasmine.web.server.components.ServerUiNumberBox
 import com.gridnine.jasmine.web.server.components.ServerUiNumberBoxConfiguration
 import java.math.BigDecimal
 
-class ServerUiBigDecimalBoxWidget(config:ServerUiBigDecimalBoxWidgetConfiguration): BaseServerUiNodeWrapper<ServerUiNumberBox>(){
+class ServerUiBigDecimalBoxWidget(configure:ServerUiBigDecimalBoxWidgetConfiguration.()->Unit): BaseServerUiNodeWrapper<ServerUiNumberBox>(){
 
     init{
+        val config = ServerUiBigDecimalBoxWidgetConfiguration()
+        config.configure()
         _node = ServerUiLibraryAdapter.get().createNumberBox(ServerUiNumberBoxConfiguration(){
             width = config.width
             height = config.height
@@ -39,9 +41,6 @@ class ServerUiBigDecimalBoxWidget(config:ServerUiBigDecimalBoxWidgetConfiguratio
 }
 
 class ServerUiBigDecimalBoxWidgetConfiguration(){
-    constructor(config:ServerUiBigDecimalBoxWidgetConfiguration.()->Unit):this(){
-        config.invoke(this)
-    }
     var width:String? = null
     var height:String? = null
     var precision = 2

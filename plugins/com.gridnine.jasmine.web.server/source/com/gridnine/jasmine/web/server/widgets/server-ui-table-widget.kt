@@ -159,41 +159,41 @@ open class ServerUiTableWidget<VM:BaseTableBoxVM,VS:BaseTableBoxVS, VV:BaseTable
 
     private fun createWebComponent(widgetDescription: BaseWidgetDescription): ServerUiNode {
         return when(widgetDescription.widgetType){
-            WidgetType.TEXT_BOX -> ServerUiTextBoxWidget(ServerUiTextBoxWidgetConfiguration{
+            WidgetType.TEXT_BOX -> ServerUiTextBoxWidget{
                 width = "100%"
-            })
+            }
             WidgetType.PASSWORD_BOX ->  ServerUiPasswordBoxWidget(ServerUiPasswordBoxWidgetConfiguration {
                 width = "100%"
             })
-            WidgetType.FLOAT_NUMBER_BOX ->  ServerUiBigDecimalBoxWidget(ServerUiBigDecimalBoxWidgetConfiguration{
+            WidgetType.FLOAT_NUMBER_BOX ->  ServerUiBigDecimalBoxWidget{
                 width = "100%"
-            })
-            WidgetType.INTEGER_NUMBER_BOX ->  ServerUiIntBoxWidget(ServerUiBigIntBoxWidgetConfiguration{
+            }
+            WidgetType.INTEGER_NUMBER_BOX ->  ServerUiIntBoxWidget{
                 widgetDescription as IntegerNumberBoxWidgetDescription
                 width = "100%"
                 nullable = !widgetDescription.nonNullable
-            })
-            WidgetType.BOOLEAN_BOX  ->  ServerUiBooleanBoxWidget(ServerUiBooleanBoxWidgetConfiguration{})
-            WidgetType.ENTITY_SELECT_BOX ->  ServerUiEntityValueWidget<BaseIdentity>(ServerUiEntityValueWidgetConfiguration{
+            }
+            WidgetType.BOOLEAN_BOX  ->  ServerUiBooleanBoxWidget{}
+            WidgetType.ENTITY_SELECT_BOX ->  ServerUiEntityValueWidget<BaseIdentity>{
                 widgetDescription as EntitySelectBoxWidgetDescription
                 width = "100%"
                 handler = ServerUiAutocompleteHandler.createMetadataBasedAutocompleteHandler(widgetDescription.objectId!!)
                 showClearIcon = true
-            })
-            WidgetType.ENUM_SELECT_BOX ->  ServerUiEnumValueWidget<FakeEnum>(ServerUiEnumValueWidgetConfiguration{
+            }
+            WidgetType.ENUM_SELECT_BOX ->  ServerUiEnumValueWidget<FakeEnum>{
                 widgetDescription as EnumSelectBoxWidgetDescription
                 width = "100%"
                 enumClass = ReflectionFactory.get().getClass(widgetDescription.enumId)
-            })
-            WidgetType.DATE_BOX ->  ServerUiDateBoxWidget(ServerUiDateBoxWidgetConfiguration{
+            }
+            WidgetType.DATE_BOX ->  ServerUiDateBoxWidget{
                 width = "100%"
-            })
-            WidgetType.DATE_TIME_BOX ->  ServerUiDateTimeBoxWidget(ServerUiDateTimeBoxWidgetConfiguration{
+            }
+            WidgetType.DATE_TIME_BOX ->  ServerUiDateTimeBoxWidget{
                 width = "100%"
-            })
-            WidgetType.GENERAL_SELECT_BOX ->  ServerUiGeneralSelectValueWidget(ServerUiGeneralSelectValueWidgetConfiguration {
+            }
+            WidgetType.GENERAL_SELECT_BOX ->  ServerUiGeneralSelectValueWidget{
                 width = "100%"
-            })
+            }
             WidgetType.TABLE_BOX -> throw Xeption.forDeveloper("unsupported type : TABLE_BOX")
             WidgetType.HIDDEN -> throw Xeption.forDeveloper("unsupported type : HIDDEN")
         }

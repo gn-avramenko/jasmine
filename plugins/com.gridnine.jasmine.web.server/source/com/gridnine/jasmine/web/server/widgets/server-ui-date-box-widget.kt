@@ -10,9 +10,12 @@ import com.gridnine.jasmine.server.core.model.ui.TextBoxConfiguration
 import com.gridnine.jasmine.web.server.components.*
 import java.time.LocalDate
 
-class ServerUiDateBoxWidget(config:ServerUiDateBoxWidgetConfiguration): BaseServerUiNodeWrapper<ServerUiDateBox>(){
+class ServerUiDateBoxWidget(configure:ServerUiDateBoxWidgetConfiguration.()->Unit): BaseServerUiNodeWrapper<ServerUiDateBox>(){
+
 
     init{
+        val config = ServerUiDateBoxWidgetConfiguration()
+        config.configure()
         _node = ServerUiLibraryAdapter.get().createDateBox(ServerUiDateBoxConfiguration{
             width = config.width
             height = config.height
@@ -36,10 +39,6 @@ class ServerUiDateBoxWidget(config:ServerUiDateBoxWidgetConfiguration): BaseServ
 }
 
 class ServerUiDateBoxWidgetConfiguration(){
-    constructor(config:ServerUiDateBoxWidgetConfiguration.()->Unit):this(){
-        config.invoke(this)
-    }
     var width:String? = null
     var height:String? = null
-
 }

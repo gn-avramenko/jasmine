@@ -13,7 +13,7 @@ interface ServerUiGridLayoutContainer: ServerUiNode {
 }
 
 
-class ServerUiGridLayoutCell(val comp: ServerUiNode?, val columnSpan:Int =1)
+class ServerUiGridLayoutCell(val comp: ServerUiNode?, val columnSpan:Int =1, val sClass:String? = null)
 
 class ServerUiGridLayoutContainerConfiguration(){
     constructor(config:ServerUiGridLayoutContainerConfiguration.()->Unit):this(){

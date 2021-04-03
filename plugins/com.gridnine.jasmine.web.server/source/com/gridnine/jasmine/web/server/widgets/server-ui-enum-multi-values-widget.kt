@@ -9,9 +9,12 @@ import com.gridnine.jasmine.server.core.model.ui.EnumSelectBoxConfiguration
 import com.gridnine.jasmine.web.server.components.*
 import kotlin.reflect.KClass
 
-class ServerUiEnumMultiValuesWidget<E:Enum<E>>(private val config:ServerUiEnumMultiValuesWidgetConfiguration<E>): BaseServerUiNodeWrapper<ServerUiSelect>(){
+class ServerUiEnumMultiValuesWidget<E:Enum<E>>(configure: ServerUiEnumMultiValuesWidgetConfiguration<E>.()->Unit): BaseServerUiNodeWrapper<ServerUiSelect>(){
+
+    private val config = ServerUiEnumMultiValuesWidgetConfiguration<E>()
 
     init{
+        config.configure()
         val comp = ServerUiLibraryAdapter.get().createSelect(ServerUiSelectConfiguration{
             width = config.width
             height = config.height
@@ -41,9 +44,6 @@ class ServerUiEnumMultiValuesWidget<E:Enum<E>>(private val config:ServerUiEnumMu
 }
 
 class ServerUiEnumMultiValuesWidgetConfiguration<E:Enum<E>>(){
-    constructor(config:ServerUiEnumMultiValuesWidgetConfiguration<E>.()->Unit):this(){
-        config.invoke(this)
-    }
     var width:String? = null
     var height:String? = null
     lateinit var enumClass: KClass<E>

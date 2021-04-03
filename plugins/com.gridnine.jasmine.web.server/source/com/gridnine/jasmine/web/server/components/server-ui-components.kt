@@ -89,3 +89,7 @@ interface ServerUiViewEditor<VM:BaseVM, VS:BaseVS, VV:BaseVV>:ServerUiNode{
     fun setReadonly(value:Boolean)
     fun navigate(key:String):Boolean
 }
+
+interface ServerUiEditorInterceptor<E:ServerUiViewEditor<*,*,*>>{
+    fun onInit(editor:E){}
+}

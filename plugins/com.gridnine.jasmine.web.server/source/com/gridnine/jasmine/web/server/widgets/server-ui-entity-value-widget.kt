@@ -13,9 +13,11 @@ import com.gridnine.jasmine.server.core.model.ui.EnumSelectBoxConfiguration
 import com.gridnine.jasmine.server.core.reflection.ReflectionFactory
 import com.gridnine.jasmine.web.server.components.*
 
-class ServerUiEntityValueWidget<D:BaseIdentity>(config:ServerUiEntityValueWidgetConfiguration):BaseServerUiNodeWrapper<ServerUiSelect>() {
+class ServerUiEntityValueWidget<D:BaseIdentity>(configure: ServerUiEntityValueWidgetConfiguration.()->Unit):BaseServerUiNodeWrapper<ServerUiSelect>() {
 
     init {
+        val config = ServerUiEntityValueWidgetConfiguration()
+        config.configure()
         _node = ServerUiLibraryAdapter.get().createSelect(ServerUiSelectConfiguration{
             width = config.width
             height = config.height
@@ -55,9 +57,6 @@ class ServerUiEntityValueWidget<D:BaseIdentity>(config:ServerUiEntityValueWidget
 }
 
 class ServerUiEntityValueWidgetConfiguration(){
-    constructor(config:ServerUiEntityValueWidgetConfiguration.()->Unit):this(){
-        config.invoke(this)
-    }
     var width:String? = null
     var height:String? = null
     var showClearIcon = false
