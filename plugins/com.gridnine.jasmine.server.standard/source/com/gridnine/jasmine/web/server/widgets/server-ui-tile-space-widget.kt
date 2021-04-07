@@ -16,7 +16,7 @@ abstract class ServerUiTileSpaceWidget<VM:BaseVM, VS:BaseVS, VV:BaseVV>() :Serve
     private val mainPanel:ServerUiTilesSpaceMainPanel<VM, VS, VV>
     private val tilesEditors = hashMapOf<String,ServerUiTileWidgetPanel>()
     init {
-        createInitializer().apply { configuration }
+        configuration.apply(createInitializer())
         _node = ServerUiLibraryAdapter.get().createDivsContainer(ServerUiDivsContainerConfiguration{
             width = configuration.width
             height = configuration.height
@@ -33,7 +33,9 @@ abstract class ServerUiTileSpaceWidget<VM:BaseVM, VS:BaseVS, VV:BaseVV>() :Serve
         }
         _node.addDiv(mainPanelId, mainPanel)
         _node.show(mainPanelId)
-
+        ServerUiEditorInterceptorsRegistry.get().getInterceptors(this)?.forEach {
+            it.onInit(this)
+        }
     }
 
     protected abstract fun createInitializer():ServerUiTileSpaceWidgetConfiguration<VM>.()->Unit

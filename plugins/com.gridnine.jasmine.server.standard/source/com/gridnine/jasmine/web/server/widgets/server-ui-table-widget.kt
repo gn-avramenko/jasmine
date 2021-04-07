@@ -18,11 +18,13 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 
-open class ServerUiTableWidget<VM:BaseTableBoxVM,VS:BaseTableBoxVS, VV:BaseTableBoxVV>(private val config: ServerUiTableWidgetConfiguration<VM>):BaseServerUiNodeWrapper<ServerUiTable>(){
+open class ServerUiTableWidget<VM:BaseTableBoxVM,VS:BaseTableBoxVS, VV:BaseTableBoxVV>(configure:ServerUiTableWidgetConfiguration<VM>.()->Unit):BaseServerUiNodeWrapper<ServerUiTable>(){
+    private val config = ServerUiTableWidgetConfiguration<VM>()
     lateinit var vsFactory:()->VS?
     internal val rowsAdditionalData = arrayListOf<ServerUiTableWidgetRowAdditionalData>()
     private var readonly = false
     init {
+        config.configure()
         _node = ServerUiLibraryAdapter.get().createTableBox(ServerUiTableConfiguration{
             width = config.width
             height = config.height
@@ -162,9 +164,9 @@ open class ServerUiTableWidget<VM:BaseTableBoxVM,VS:BaseTableBoxVS, VV:BaseTable
             WidgetType.TEXT_BOX -> ServerUiTextBoxWidget{
                 width = "100%"
             }
-            WidgetType.PASSWORD_BOX ->  ServerUiPasswordBoxWidget(ServerUiPasswordBoxWidgetConfiguration {
+            WidgetType.PASSWORD_BOX ->  ServerUiPasswordBoxWidget{
                 width = "100%"
-            })
+            }
             WidgetType.FLOAT_NUMBER_BOX ->  ServerUiBigDecimalBoxWidget{
                 width = "100%"
             }
@@ -295,9 +297,6 @@ open class ServerUiTableWidget<VM:BaseTableBoxVM,VS:BaseTableBoxVS, VV:BaseTable
 
 }
 class ServerUiTableWidgetConfiguration<VM:BaseTableBoxVM>(){
-    constructor(config:ServerUiTableWidgetConfiguration<VM>.()->Unit):this(){
-        config.invoke(this)
-    }
     var width:String? = null
     var height:String? = null
     val columns = arrayListOf<ServerUiTableWidgetColumnDescription>()

@@ -9,7 +9,6 @@ import com.gridnine.jasmine.server.core.model.common.BaseIntrospectableObject
 import com.gridnine.jasmine.server.core.model.domain.BaseAsset
 import com.gridnine.jasmine.server.core.model.domain.BaseIndex
 import com.gridnine.jasmine.server.standard.helpers.UiListHelper
-import com.gridnine.jasmine.web.server.common.ServerUiMainFrameMenuButton
 import com.gridnine.jasmine.web.server.common.ServerUiObjectDeleteEvent
 import com.gridnine.jasmine.web.server.components.ServerUiLibraryAdapter
 import com.gridnine.jasmine.web.server.components.ServerUiNotificationType

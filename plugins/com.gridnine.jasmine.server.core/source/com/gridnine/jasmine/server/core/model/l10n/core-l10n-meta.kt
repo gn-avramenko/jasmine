@@ -39,6 +39,12 @@ class WebMessagesBundleDescription(val id:String, val messagesClassName:String){
 
 class WebMessageDescription(id:String) : BaseModelElementDescription(id)
 
+class UiCaptionDescription(id:String) : BaseModelElementDescription(id)
+
+class UiCaptionsBundleDescription(val id:String){
+    val messages = linkedMapOf<String, UiCaptionDescription>()
+}
+
 class L10nMetaRegistry:Disposable{
     val serverMessages = linkedMapOf<String, ServerMessagesBundleDescription>()
 

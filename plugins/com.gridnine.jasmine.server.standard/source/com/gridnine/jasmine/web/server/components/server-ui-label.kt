@@ -15,4 +15,5 @@ class ServerUiLabelConfiguration(){
     }
     var width:String?=null
     var height:String?=null
+    var multiline = false
 }

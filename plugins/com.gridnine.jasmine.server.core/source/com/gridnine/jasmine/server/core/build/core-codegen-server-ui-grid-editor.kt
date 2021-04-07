@@ -4,12 +4,9 @@
  *****************************************************************/
 package com.gridnine.jasmine.server.core.build
 
-import com.gridnine.jasmine.server.core.app.IApplicationMetadataProvider
 import com.gridnine.jasmine.server.core.model.common.Xeption
-import com.gridnine.jasmine.server.core.model.domain.*
 import com.gridnine.jasmine.server.core.model.ui.*
 import java.io.File
-import java.lang.StringBuilder
 
 
 object ServerUiGridWebEditorGenerator {
@@ -36,281 +33,125 @@ object ServerUiGridWebEditorGenerator {
                 }
             }
             "init"{
-                "delegate = com.gridnine.jasmine.web.core.ui.UiLibraryAdapter.get().createGridLayoutContainer(this){}"()
-                description.columns.forEach { column ->
-                    when(column.predefinedWidth){
-                        PredefinedColumnWidth.STANDARD -> "delegate.defineColumn(com.gridnine.jasmine.web.core.ui.DefaultUIParameters.controlWidthAsString)"()
-                        PredefinedColumnWidth.REMAINING -> """delegate.defineColumn("100%")"""()
-                        PredefinedColumnWidth.CUSTOM -> """delegate.defineColumn(${column.customWidth})"""()
+                val columns = if(description.columns.isEmpty()) arrayListOf(GridContainerColumnDescription(PredefinedColumnWidth.STANDARD, null)) else description.columns
+                val fixedWidth = columns.map {
+                    when(it.predefinedWidth){
+                        PredefinedColumnWidth.STANDARD -> 300
+                        PredefinedColumnWidth.REMAINING -> null
+                        PredefinedColumnWidth.CUSTOM -> if(it.customWidth?.contains("px") == true) it.customWidth.substringBeforeLast("px").toInt() else null
+                    }
+                }.reduce{ c1, c2 -> if(c1 == null || c2 == null) null else c1+c2}
+                "_node = com.gridnine.jasmine.web.server.components.ServerUiLibraryAdapter.get().createGridLayoutContainer(com.gridnine.jasmine.web.server.components.ServerUiGridLayoutContainerConfiguration"{
+                    if(fixedWidth != null){
+                        """width="${fixedWidth}px""""()
+                    }
+                    columns.forEach { column ->
+                        when(column.predefinedWidth){
+                            PredefinedColumnWidth.STANDARD ->  """columns.add(com.gridnine.jasmine.web.server.components.ServerUiGridLayoutColumnConfiguration("300px"))"""()
+                            PredefinedColumnWidth.REMAINING ->  """columns.add(com.gridnine.jasmine.web.server.components.ServerUiGridLayoutColumnConfiguration("100%"))"""()
+                            PredefinedColumnWidth.CUSTOM ->  """columns.add(com.gridnine.jasmine.web.server.components.ServerUiGridLayoutColumnConfiguration("${column.customWidth}"))"""()
+                        }
                     }
                 }
+                sb.append(")")
                 description.rows.forEach {row ->
                     when(row.predefinedHeight){
-                        PredefinedRowHeight.AUTO -> "delegate.addRow()"()
-                        PredefinedRowHeight.REMAINING -> "delegate.addRow(\"100%\")"()
-                        PredefinedRowHeight.CUSTOM -> "delegate.addRow(${row.customHeight})"()
+                        PredefinedRowHeight.AUTO -> "_node.addRow()"()
+                        PredefinedRowHeight.REMAINING -> "_node.addRow(\"100%\")"()
+                        PredefinedRowHeight.CUSTOM -> "_node.addRow(${row.customHeight})"()
                     }
                     row.cells.forEach cell@{ cell ->
                         if(cell.widget.widgetType == WidgetType.HIDDEN){
                             return@cell
                         }
-                        if(cell.caption  == null){
-                            val widget = cell.widget
-                            when(widget.widgetType){
-                                WidgetType.TEXT_BOX -> {
-                                    widget as TextBoxWidgetDescription
-                                    "${cell.id}Widget = com.gridnine.jasmine.web.core.ui.widgets.TextBoxWidget(delegate)"{
-                                        """width = "100%""""()
-                                    }
+                        val widget = cell.widget
+                        when(widget.widgetType) {
+                            WidgetType.ENTITY_SELECT_BOX -> {
+                                widget as EntitySelectBoxWidgetDescription
+                                "${cell.id}Widget = ${getWidgetClassName(widget)}"{
+                                    """width = "100%""""()
+                                    """handler = com.gridnine.jasmine.web.server.widgets.ServerUiAutocompleteHandler.createMetadataBasedAutocompleteHandler("${widget.objectId}")"""()
                                 }
-                                WidgetType.PASSWORD_BOX -> {
-                                    widget as PasswordBoxWidgetDescription
-                                    "${cell.id}Widget = com.gridnine.jasmine.web.core.ui.widgets.PasswordBoxWidget(delegate)"{
-                                        """width = "100%""""()
-                                    }
+                            }
+                            WidgetType.ENUM_SELECT_BOX -> {
+                                widget as EnumSelectBoxWidgetDescription
+                                "${cell.id}Widget =  ${getWidgetClassName(widget)}"{
+                                    """width = "100%""""()
+                                    "enumClass = ${widget.enumId}::class"()
                                 }
-                                WidgetType.FLOAT_NUMBER_BOX -> {
-                                    widget as FloatNumberBoxWidgetDescription
-                                    "${cell.id}Widget = com.gridnine.jasmine.web.core.ui.widgets.FloatNumberBoxWidget(delegate)"{
-                                        """width = "100%""""()
-                                    }
-                                }
-                                WidgetType.INTEGER_NUMBER_BOX -> {
-                                    widget as IntegerNumberBoxWidgetDescription
-                                    "${cell.id}Widget = com.gridnine.jasmine.web.core.ui.widgets.IntegerNumberBoxWidget(delegate)"{
-                                        """width = "100%""""()
-                                    }
-                                }
-                                WidgetType.BOOLEAN_BOX -> {
-                                    widget as BooleanBoxWidgetDescription
-                                    "${cell.id}Widget = com.gridnine.jasmine.web.core.ui.widgets.BooleanBoxWidget(delegate)"{
-                                        """width = "100%""""()
-                                    }
-                                }
-                                WidgetType.ENTITY_SELECT_BOX -> {
-                                    widget as EntitySelectBoxWidgetDescription
-                                    "${cell.id}Widget = com.gridnine.jasmine.web.core.ui.widgets.EntitySelectWidget(delegate)"{
-                                        """width = "100%""""()
-                                        """handler = com.gridnine.jasmine.web.core.ui.ClientRegistry.get().get(com.gridnine.jasmine.web.core.ui.ObjectHandler.TYPE, "${widget.objectId}JS")!!.getAutocompleteHandler()"""()
-                                    }
-                                }
-                                WidgetType.GENERAL_SELECT_BOX -> {
-                                    widget as GeneralSelectBoxWidgetDescription
-                                    "${cell.id}Widget = com.gridnine.jasmine.web.core.ui.widgets.GeneralSelectWidget(delegate)"{
-                                        """width = "100%""""()
-                                    }
-                                }
-                                WidgetType.ENUM_SELECT_BOX -> {
-                                    widget as EnumSelectBoxWidgetDescription
-                                    "${cell.id}Widget = com.gridnine.jasmine.web.core.ui.widgets.EnumValueWidget<${widget.enumId}JS>(delegate)"{
-                                        """width = "100%""""()
-                                        "enumClass = ${widget.enumId}JS::class"()
-                                    }
-                                }
-                                WidgetType.DATE_BOX -> {
-                                    widget as DateBoxWidgetDescription
-                                    "${cell.id}Widget = com.gridnine.jasmine.web.core.ui.widgets.DateBoxWidget(delegate)"{
-                                        """width = "100%""""()
-                                    }
-                                }
-                                WidgetType.DATE_TIME_BOX -> {
-                                    widget as DateTimeBoxWidgetDescription
-                                    "${cell.id}Widget = com.gridnine.jasmine.web.core.ui.widgets.DateTimeBoxWidget(delegate)"{
-                                        """width = "100%""""()
-                                    }
-                                }
-                                WidgetType.HIDDEN -> TODO()
-                                WidgetType.TABLE_BOX -> {
-                                    widget as TableBoxWidgetDescription
-                                    "${cell.id}Widget = com.gridnine.jasmine.web.core.ui.widgets.TableBoxWidget<${widget.id}VMJS,${widget.id}VSJS,${widget.id}VVJS>(delegate)"{
-                                        """width = "100%""""()
-                                        "showToolsColumn = true"()
-                                        "vmFactory = {${widget.id}VMJS()}"()
-                                        "vsFactory = {${widget.id}VSJS()}"()
-                                        widget.columns.forEach { column ->
-                                            val colWidget = column.widget
-                                            when(colWidget.widgetType){
-                                                WidgetType.TEXT_BOX -> {
-                                                    colWidget as TextBoxWidgetDescription
-                                                    """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.TextBoxWidgetDescriptionJS(false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth?:"100"})"""()
-                                                }
-                                                WidgetType.PASSWORD_BOX -> {
-                                                    colWidget as PasswordBoxWidgetDescription
-                                                    """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.PasswordBoxWidgetDescriptionJS(false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth?:"100"})"""()
-                                                }
-                                                WidgetType.FLOAT_NUMBER_BOX -> {
-                                                    colWidget as FloatNumberBoxWidgetDescription
-                                                    """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.FloatNumberBoxWidgetDescriptionJS(false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth?:"100"})"""()
-                                                }
-                                                WidgetType.INTEGER_NUMBER_BOX -> {
-                                                    colWidget as IntegerNumberBoxWidgetDescription
-                                                    """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.IntegerNumberBoxWidgetDescriptionJS(false,false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth?:"100"})"""()
-                                                }
-                                                WidgetType.BOOLEAN_BOX -> {
-                                                    colWidget as BooleanBoxWidgetDescription
-                                                    """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.BooleanBoxWidgetDescriptionJS(false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth?:"100"})"""()
-                                                }
-                                                WidgetType.ENTITY_SELECT_BOX ->  {
-                                                    colWidget as EntitySelectBoxWidgetDescription
-                                                    """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.EntitySelectBoxWidgetDescriptionJS(false, "${colWidget.objectId}JS"), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth?:"100"})"""()
-                                                }
-                                                WidgetType.GENERAL_SELECT_BOX -> {
-                                                    colWidget as GeneralSelectBoxWidgetDescription
-                                                    """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.GeneralSelectBoxWidgetDescriptionJS(false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth?:"100"})"""()
-                                                }
-                                                WidgetType.ENUM_SELECT_BOX -> {
-                                                    colWidget as EnumSelectBoxWidgetDescription
-                                                    """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.EnumSelectBoxWidgetDescriptionJS(false, "${colWidget.enumId}JS"), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth?:"100"})"""()
-                                                }
-                                                WidgetType.DATE_BOX ->  {
-                                                    colWidget as DateBoxWidgetDescription
-                                                    """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.DateBoxWidgetDescriptionJS(false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth?:"100"})"""()
-                                                }
-                                                WidgetType.DATE_TIME_BOX -> {
-                                                    colWidget as DateTimeBoxWidgetDescription
-                                                    """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.DateTimeBoxWidgetDescriptionJS(false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth?:"100"})"""()
-                                                }
-                                                WidgetType.HIDDEN -> throw  Xeption.forDeveloper("unsupported widget type ${widget.widgetType}" )
-                                                WidgetType.TABLE_BOX -> throw Xeption.forDeveloper("table inside table is not supported")
+                            }
+                            WidgetType.TABLE_BOX -> {
+                                widget as TableBoxWidgetDescription
+                                "${cell.id}Widget = ${getWidgetClassName(widget)}"{
+                                    """width = "100%""""()
+                                    "showToolsColumn = true"()
+                                    "vmFactory = {${widget.id}VM()}"()
+                                    widget.columns.forEach { column ->
+                                        val colWidget = column.widget
+                                        when(colWidget.widgetType){
+                                            WidgetType.TEXT_BOX -> {
+                                                colWidget as TextBoxWidgetDescription
+                                                """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.TextBoxWidgetDescription(false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistry.get().webMessages["${widget.id}"]?.messages?.get("${column.id}")?.getDisplayName()?:"${column.id}", ${column.prefWidth?:"100"})"""()
                                             }
+                                            WidgetType.PASSWORD_BOX -> {
+                                                colWidget as PasswordBoxWidgetDescription
+                                                """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.PasswordBoxWidgetDescription(false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistry.get().webMessages["${widget.id}"]?.messages?.get("${column.id}")?.getDisplayName()?:"${column.id}", ${column.prefWidth?:"100"})"""()
+                                            }
+                                            WidgetType.FLOAT_NUMBER_BOX -> {
+                                                colWidget as FloatNumberBoxWidgetDescription
+                                                """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.FloatNumberBoxWidgetDescription(false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistry.get().webMessages["${widget.id}"]?.messages?.get("${column.id}")?.getDisplayName()?:"${column.id}", ${column.prefWidth?:"100"})"""()
+                                            }
+                                            WidgetType.INTEGER_NUMBER_BOX -> {
+                                                colWidget as IntegerNumberBoxWidgetDescription
+                                                """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.IntegerNumberBoxWidgetDescription(false,false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistry.get().webMessages["${widget.id}"]?.messages?.get("${column.id}")?.getDisplayName()?:"${column.id}", ${column.prefWidth?:"100"})"""()
+                                            }
+                                            WidgetType.BOOLEAN_BOX -> {
+                                                colWidget as BooleanBoxWidgetDescription
+                                                """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.BooleanBoxWidgetDescription(false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistry.get().webMessages["${widget.id}"]?.messages?.get("${column.id}")?.getDisplayName()?:"${column.id}", ${column.prefWidth?:"100"})"""()
+                                            }
+                                            WidgetType.ENTITY_SELECT_BOX ->  {
+                                                colWidget as EntitySelectBoxWidgetDescription
+                                                """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.EntitySelectBoxWidgetDescription(false, "${colWidget.objectId}"), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistry.get().webMessages["${widget.id}"]?.messages?.get("${column.id}")?.getDisplayName()?:"${column.id}", ${column.prefWidth?:"100"})"""()
+                                            }
+                                            WidgetType.GENERAL_SELECT_BOX -> {
+                                                colWidget as GeneralSelectBoxWidgetDescription
+                                                """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.GeneralSelectBoxWidgetDescription(false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistry.get().webMessages["${widget.id}"]?.messages?.get("${column.id}")?.getDisplayName()?:"${column.id}", ${column.prefWidth?:"100"})"""()
+                                            }
+                                            WidgetType.ENUM_SELECT_BOX -> {
+                                                colWidget as EnumSelectBoxWidgetDescription
+                                                """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.EnumSelectBoxWidgetDescription(false, "${colWidget.enumId}"), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistry.get().webMessages["${widget.id}"]?.messages?.get("${column.id}")?.getDisplayName()?:"${column.id}", ${column.prefWidth?:"100"})"""()
+                                            }
+                                            WidgetType.DATE_BOX ->  {
+                                                colWidget as DateBoxWidgetDescription
+                                                """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.DateBoxWidgetDescription(false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistry.get().webMessages["${widget.id}"]?.messages?.get("${column.id}")?.getDisplayName()?:"${column.id}", ${column.prefWidth?:"100"})"""()
+                                            }
+                                            WidgetType.DATE_TIME_BOX -> {
+                                                colWidget as DateTimeBoxWidgetDescription
+                                                """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.DateTimeBoxWidgetDescription(false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistry.get().webMessages["${widget.id}"]?.messages?.get("${column.id}")?.getDisplayName()?:"${column.id}", ${column.prefWidth?:"100"})"""()
+                                            }
+                                            WidgetType.HIDDEN -> throw  Xeption.forDeveloper("unsupported widget type ${widget.widgetType}" )
+                                            WidgetType.TABLE_BOX -> throw Xeption.forDeveloper("table inside table is not supported")
                                         }
                                     }
                                 }
                             }
-                            "delegate.addCell(com.gridnine.jasmine.web.core.ui.components.WebGridLayoutCell(${cell.id}Widget,${cell.colSpan}))"()
-                            return@cell
+                            else ->{
+                                "${cell.id}Widget =  ${getWidgetClassName(widget)}"{
+                                    """width = "100%""""()
+                                }
+                            }
                         }
-                        """val ${cell.id}Cell = com.gridnine.jasmine.web.core.ui.widgets.GridCellWidget(delegate, com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS.get().messages["${description.id}"]?.get("${cell.id}")?:"${cell.id}")"""("par"){
-                            val widget = cell.widget
-                             when(widget.widgetType){
-                                 WidgetType.TEXT_BOX -> {
-                                     widget as TextBoxWidgetDescription
-                                     "com.gridnine.jasmine.web.core.ui.widgets.TextBoxWidget(par)"{
-                                         """width = "100%""""()
-                                     }
-                                 }
-                                 WidgetType.PASSWORD_BOX -> {
-                                     widget as PasswordBoxWidgetDescription
-                                     "com.gridnine.jasmine.web.core.ui.widgets.PasswordBoxWidget(par)"{
-                                         """width = "100%""""()
-                                     }
-                                 }
-                                 WidgetType.FLOAT_NUMBER_BOX -> {
-                                     widget as FloatNumberBoxWidgetDescription
-                                     "com.gridnine.jasmine.web.core.ui.widgets.FloatNumberBoxWidget(par)"{
-                                         """width = "100%""""()
-                                     }
-                                 }
-                                 WidgetType.INTEGER_NUMBER_BOX -> {
-                                     widget as IntegerNumberBoxWidgetDescription
-                                     "com.gridnine.jasmine.web.core.ui.widgets.IntegerNumberBoxWidget(par)"{
-                                         """width = "100%""""()
-                                     }
-                                 }
-                                 WidgetType.BOOLEAN_BOX -> {
-                                     widget as BooleanBoxWidgetDescription
-                                     "com.gridnine.jasmine.web.core.ui.widgets.BooleanBoxWidget(par)"{
-                                         """width = "100%""""()
-                                     }
-                                 }
-                                 WidgetType.ENTITY_SELECT_BOX -> {
-                                     widget as EntitySelectBoxWidgetDescription
-                                     "com.gridnine.jasmine.web.core.ui.widgets.EntitySelectWidget(par)"{
-                                         """width = "100%""""()
-                                         """handler = com.gridnine.jasmine.web.core.ui.ClientRegistry.get().get(com.gridnine.jasmine.web.core.ui.ObjectHandler.TYPE, "${widget.objectId}JS")!!.getAutocompleteHandler()"""()
-                                     }
-                                 }
-                                 WidgetType.GENERAL_SELECT_BOX -> {
-                                     widget as GeneralSelectBoxWidgetDescription
-                                     "com.gridnine.jasmine.web.core.ui.widgets.GeneralSelectWidget(par)"{
-                                         """width = "100%""""()
-                                     }
-                                 }
-                                 WidgetType.ENUM_SELECT_BOX -> {
-                                     widget as EnumSelectBoxWidgetDescription
-                                     "com.gridnine.jasmine.web.core.ui.widgets.EnumValueWidget<${widget.enumId}JS>(par)"{
-                                         """width = "100%""""()
-                                         "enumClass = ${widget.enumId}JS::class"()
-                                     }
-                                 }
-                                 WidgetType.DATE_BOX -> {
-                                     widget as DateBoxWidgetDescription
-                                     "com.gridnine.jasmine.web.core.ui.widgets.DateBoxWidget(par)"{
-                                         """width = "100%""""()
-                                     }
-                                 }
-                                 WidgetType.DATE_TIME_BOX -> {
-                                     widget as DateTimeBoxWidgetDescription
-                                     "com.gridnine.jasmine.web.core.ui.widgets.DateTimeBoxWidget(par)"{
-                                         """width = "100%""""()
-                                     }
-                                 }
-                                 WidgetType.HIDDEN -> TODO()
-                                 WidgetType.TABLE_BOX -> {
-                                     widget as TableBoxWidgetDescription
-                                     "com.gridnine.jasmine.web.core.ui.widgets.TableBoxWidget<${widget.id}VMJS,${widget.id}VSJS,${widget.id}VVJS>(par)"{
-                                         """width = "100%""""()
-                                         "showToolsColumn = true"()
-                                         "vmFactory = {${widget.id}VMJS()}"()
-                                         "vsFactory = {${widget.id}VSJS()}"()
-                                         widget.columns.forEach { column ->
-                                             val colWidget = column.widget
-                                             when(colWidget.widgetType){
-                                                 WidgetType.TEXT_BOX -> {
-                                                     colWidget as TextBoxWidgetDescription
-                                                    """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.TextBoxWidgetDescriptionJS(false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth?:"100"})"""()
-                                                 }
-                                                 WidgetType.PASSWORD_BOX -> {
-                                                     colWidget as PasswordBoxWidgetDescription
-                                                     """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.PasswordBoxWidgetDescriptionJS(false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth?:"100"})"""()
-                                                 }
-                                                 WidgetType.FLOAT_NUMBER_BOX -> {
-                                                     colWidget as FloatNumberBoxWidgetDescription
-                                                     """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.FloatNumberBoxWidgetDescriptionJS(false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth?:"100"})"""()
-                                                 }
-                                                 WidgetType.INTEGER_NUMBER_BOX -> {
-                                                     colWidget as IntegerNumberBoxWidgetDescription
-                                                     """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.IntegerNumberBoxWidgetDescriptionJS(false,false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth?:"100"})"""()
-                                                 }
-                                                 WidgetType.BOOLEAN_BOX -> {
-                                                     colWidget as BooleanBoxWidgetDescription
-                                                     """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.BooleanBoxWidgetDescriptionJS(false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth?:"100"})"""()
-                                                 }
-                                                 WidgetType.ENTITY_SELECT_BOX ->  {
-                                                     colWidget as EntitySelectBoxWidgetDescription
-                                                     """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.EntitySelectBoxWidgetDescriptionJS(false, "${colWidget.objectId}JS"), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth?:"100"})"""()
-                                                 }
-                                                 WidgetType.GENERAL_SELECT_BOX -> {
-                                                     colWidget as GeneralSelectBoxWidgetDescription
-                                                     """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.GeneralSelectBoxWidgetDescriptionJS(false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth?:"100"})"""()
-                                                 }
-                                                 WidgetType.ENUM_SELECT_BOX -> {
-                                                     colWidget as EnumSelectBoxWidgetDescription
-                                                     """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.EnumSelectBoxWidgetDescriptionJS(false, "${colWidget.enumId}JS"), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth?:"100"})"""()
-                                                 }
-                                                 WidgetType.DATE_BOX ->  {
-                                                     colWidget as DateBoxWidgetDescription
-                                                     """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.DateBoxWidgetDescriptionJS(false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth?:"100"})"""()
-                                                 }
-                                                 WidgetType.DATE_TIME_BOX -> {
-                                                     colWidget as DateTimeBoxWidgetDescription
-                                                     """column("${column.id}", com.gridnine.jasmine.server.core.model.ui.DateTimeBoxWidgetDescriptionJS(false), com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth?:"100"})"""()
-                                                 }
-                                                 WidgetType.HIDDEN -> throw  Xeption.forDeveloper("unsupported widget type ${widget.widgetType}" )
-                                                 WidgetType.TABLE_BOX -> throw Xeption.forDeveloper("table inside table is not supported")
-                                             }
-                                         }
-                                     }
-                                 }
-                             }
+                        if(cell.caption  != null){
+                            """_node.addCell(com.gridnine.jasmine.web.server.components.ServerUiGridLayoutCell(com.gridnine.jasmine.web.server.widgets.ServerUiGridCellWidget(com.gridnine.jasmine.server.core.model.l10n.L10nMetaRegistry.get().webMessages["${description.id}"]?.messages?.get("${cell.id}")?.getDisplayName()?:"${cell.id}", ${cell.id}Widget),${cell.colSpan}))"""()
+                        } else {
+                            """_node.addCell(com.gridnine.jasmine.web.server.components.ServerUiGridLayoutCell(${cell.id}Widget,${cell.colSpan}))"""()
                         }
-                        "delegate.addCell(com.gridnine.jasmine.web.core.ui.components.WebGridLayoutCell(${cell.id}Cell,${cell.colSpan}))"()
-                        "${cell.id}Widget = ${cell.id}Cell.widget"()
                     }
                 }
+                """com.gridnine.jasmine.web.server.components.ServerUiEditorInterceptorsRegistry.get().getInterceptors(this)?.forEach{it.onInit(this)}"""()
             }
             blankLine()
-            "override fun readData(vm: ${description.id}VMJS, vs: ${description.id}VSJS)" {
+            "override fun setData(vm: ${description.id}VM, vs: ${description.id}VS?)" {
                 description.rows.forEach { row ->
                     row.cells.forEach { cell ->
                         when (cell.widget) {
@@ -318,11 +159,11 @@ object ServerUiGridWebEditorGenerator {
                                 "${cell.id}Value = vm.${cell.id}"()
                             }
                             is TableBoxWidgetDescription -> {
-                                "${cell.id}Widget.readData(vm.${cell.id}, vs.${cell.id})"()
+                                "${cell.id}Widget.setData(vm.${cell.id}, vs?.${cell.id})"()
                             }
                             else -> {
                                 "${cell.id}Widget.setValue(vm.${cell.id})"()
-                                "vs.${cell.id}?.let{${cell.id}Widget.configure(it)}"()
+                                "${cell.id}Widget.configure(vs?.${cell.id})"()
                             }
                         }
                     }
@@ -340,20 +181,11 @@ object ServerUiGridWebEditorGenerator {
                 }
             }
             blankLine()
-            "override fun getParent(): com.gridnine.jasmine.web.core.ui.WebComponent?" {
-                "return parent"()
-            }
-            blankLine()
-            "override fun destroy()"{
-                "delegate.destroy()"()
-            }
-            blankLine()
-            "override fun getData(): ${description.id}VMJS" {
-                "val result = ${description.id}VMJS()"()
+            "override fun getData(): ${description.id}VM" {
+                "val result = ${description.id}VM()"()
                 description.rows.forEach { row ->
                     row.cells.forEach { cell ->
-                        val widget = cell.widget
-                        when (widget) {
+                        when (val widget = cell.widget) {
                             is HiddenWidgetDescription -> {
                                 "result.${cell.id} = ${cell.id}Value"()
                             }
@@ -372,31 +204,19 @@ object ServerUiGridWebEditorGenerator {
                 "return result"()
             }
             blankLine()
-            "override fun getChildren(): List<com.gridnine.jasmine.web.core.ui.WebComponent>" {
-                "return arrayListOf(delegate)"()
-            }
-            blankLine()
-            "override fun getHtml(): String" {
-                "return delegate.getHtml()"()
-            }
-            blankLine()
-            "override fun decorate()" {
-                "delegate.decorate()"()
-            }
-            blankLine()
-            "override fun showValidation(validation: ${description.id}VVJS) " {
+            "override fun showValidation(validation: ${description.id}VV?) " {
                 description.rows.forEach { row ->
                     row.cells.forEach cell@{ cell ->
                         if(cell.widget.widgetType == WidgetType.HIDDEN){
                             return@cell
                         }
-                        "validation.${cell.id}?.let{${cell.id}Widget.showValidation(it)}"()
+                        "${cell.id}Widget.showValidation(validation?.${cell.id})"()
                     }
                 }
             }
             blankLine()
-            "override fun getId(): String" {
-                "return delegate.getId()"()
+            "override fun navigate(key: String): Boolean" {
+                "return false"()
             }
         }
         val file = File(baseDir, "source-gen/${GenUtils.getPackageName(description.id).replace(".", File.separator)}/${GenUtils.getSimpleClassName(description.id)}.kt")
@@ -412,13 +232,13 @@ object ServerUiGridWebEditorGenerator {
             WidgetType.INTEGER_NUMBER_BOX -> "com.gridnine.jasmine.web.server.widgets.ServerUiIntBoxWidget"
             WidgetType.BOOLEAN_BOX -> "com.gridnine.jasmine.web.server.widgets.ServerUiBooleanBoxWidget"
             WidgetType.ENTITY_SELECT_BOX -> "com.gridnine.jasmine.web.server.widgets.ServerUiEntityValueWidget<${(widget as EntitySelectBoxWidgetDescription).objectId}>"
-            WidgetType.GENERAL_SELECT_BOX -> "com.gridnine.jasmine.web.core.ui.widgets.GeneralSelectWidget"
-            WidgetType.ENUM_SELECT_BOX -> "com.gridnine.jasmine.web.core.ui.widgets.EnumValueWidget<${(widget as EnumSelectBoxWidgetDescription).enumId}JS>"
-            WidgetType.DATE_BOX -> "com.gridnine.jasmine.web.core.ui.widgets.DateBoxWidget"
-            WidgetType.DATE_TIME_BOX -> "com.gridnine.jasmine.web.core.ui.widgets.DateTimeBoxWidget"
+            WidgetType.GENERAL_SELECT_BOX -> "com.gridnine.jasmine.web.server.widgets.ServerUiGeneralSelectValueWidget"
+            WidgetType.ENUM_SELECT_BOX -> "com.gridnine.jasmine.web.server.widgets.ServerUiEnumValueWidget<${(widget as EnumSelectBoxWidgetDescription).enumId}>"
+            WidgetType.DATE_BOX -> "com.gridnine.jasmine.web.server.widgets.ServerUiDateBoxWidget"
+            WidgetType.DATE_TIME_BOX -> "com.gridnine.jasmine.web.server.widgets.ServerUiDateTimeBoxWidget"
             WidgetType.TABLE_BOX -> {
                 widget as TableBoxWidgetDescription
-                "com.gridnine.jasmine.web.core.ui.widgets.TableBoxWidget<${widget.id}VMJS,${widget.id}VSJS,${widget.id}VVJS>"
+                "com.gridnine.jasmine.web.server.widgets.ServerUiTableWidget<${widget.id}VM,${widget.id}VS,${widget.id}VV>"
             }
             WidgetType.HIDDEN -> throw  Xeption.forDeveloper("unsupported widget type ${widget.widgetType}" )
         }

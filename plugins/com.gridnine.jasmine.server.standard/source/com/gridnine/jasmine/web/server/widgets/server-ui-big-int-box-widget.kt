@@ -5,7 +5,6 @@
 
 package com.gridnine.jasmine.web.server.widgets
 
-import com.gridnine.jasmine.server.core.model.ui.FloatNumberBoxConfiguration
 import com.gridnine.jasmine.server.core.model.ui.IntegerNumberBoxConfiguration
 import com.gridnine.jasmine.web.server.components.BaseServerUiNodeWrapper
 import com.gridnine.jasmine.web.server.components.ServerUiLibraryAdapter

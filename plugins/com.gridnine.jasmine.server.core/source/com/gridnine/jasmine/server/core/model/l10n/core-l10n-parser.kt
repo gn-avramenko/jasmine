@@ -6,6 +6,7 @@
 package com.gridnine.jasmine.server.core.model.l10n
 
 import com.gridnine.jasmine.server.core.model.common.ParserUtils
+import com.gridnine.jasmine.server.core.model.ui.*
 import com.gridnine.jasmine.server.core.utils.XmlNode
 import java.io.File
 import java.util.*
@@ -30,6 +31,48 @@ object L10nMetadataParser {
     fun updateWebMessages(registry: L10nMetaRegistry, metaQualifiedName: String, classLoader: ClassLoader) {
         val (node, localizations) = ParserUtils.parseMeta(metaQualifiedName,classLoader)
         updateWebMessages(registry, node, localizations)
+    }
+
+    fun updateWebMessages(registry: L10nMetaRegistry, uiRegistry:UiMetaRegistry){
+        uiRegistry.views.values.forEach {vd->
+            val bundle = WebMessagesBundleDescription(vd.id,"")
+            registry.webMessages[bundle.id] = bundle
+            when(vd.viewType){
+                ViewType.GRID_CONTAINER ->{
+                    vd as GridContainerDescription
+                    vd.rows.forEach {row ->
+                        row.cells.forEach{cell ->
+                            val message = WebMessageDescription(cell.id)
+                            message.displayNames.putAll(cell.displayNames)
+                            bundle.messages[cell.id] = message
+                            val widget = cell.widget
+                            if(widget is TableBoxWidgetDescription){
+                                val bundle2 = WebMessagesBundleDescription(widget.id,"")
+                                registry.webMessages[widget.id] = bundle2
+                                widget.columns.forEach{column ->
+                                    val message2 = WebMessageDescription(column.id)
+                                    message2.displayNames.putAll(column.displayNames)
+                                    bundle2.messages[column.id] = message2
+                                }
+                            }
+                        }
+                    }
+                }
+                ViewType.TILE_SPACE ->{
+                    vd as TileSpaceDescription
+                    vd.overviewDescription?.let {
+                        val message = WebMessageDescription("overview")
+                        message.displayNames.putAll(it.displayNames)
+                        bundle.messages[it.id] = message
+                    }
+                    vd.tiles.forEach {
+                        val message = WebMessageDescription(it.id)
+                        message.displayNames.putAll(it.displayNames)
+                        bundle.messages[it.id] = message
+                    }
+                }
+            }
+        }
     }
 
     private fun updateServerMessages(registry: L10nMetaRegistry, node: XmlNode, localizations:Map<String, Map<Locale, String>>){
@@ -58,4 +101,6 @@ object L10nMetadataParser {
             ParserUtils.updateLocalizations(descr, localizations, descr.id)
         }
     }
+
+
 }

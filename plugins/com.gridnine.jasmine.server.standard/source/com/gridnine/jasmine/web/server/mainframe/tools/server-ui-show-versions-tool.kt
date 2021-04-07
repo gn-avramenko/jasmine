@@ -11,7 +11,6 @@ import com.gridnine.jasmine.server.core.model.ui.BaseVS
 import com.gridnine.jasmine.server.core.model.ui.BaseVV
 import com.gridnine.jasmine.server.standard.helpers.UiVersionMetaData
 import com.gridnine.jasmine.server.standard.helpers.UiVersionsHelper
-import com.gridnine.jasmine.web.server.common.ServerUiRegistry
 import com.gridnine.jasmine.web.server.common.ServerUiCommonUtils
 import com.gridnine.jasmine.web.server.common.ServerUiObjectModificationEvent
 import com.gridnine.jasmine.web.server.components.*
@@ -136,7 +135,7 @@ class ServerUiObjectVersionViewer(val reference: ObjectReference<*>, versionNumb
             content = buttonsGrid
         })
         val bundle = UiVersionsHelper.getVersionReadBundle(reference.type.java.name, reference.uid, versionNumber)
-        val handler: ServerUiObjectHandler = ServerUiRegistry.get().get(ServerUiObjectHandler.TYPE, reference.type)!!
+        val handler: ServerUiObjectHandler = com.gridnine.jasmine.web.server.common.ServerUiRegistry.get().get(ServerUiObjectHandler.TYPE, reference.type)!!
         val rootEditor = handler.createEditor()
         _node.setCenterRegion(ServerUiBorderContainerRegion {
             content = rootEditor

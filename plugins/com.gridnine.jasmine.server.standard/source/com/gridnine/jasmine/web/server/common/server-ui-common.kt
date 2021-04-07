@@ -12,14 +12,14 @@ interface ServerUiHasWeight{
     fun getWeight():Double
 }
 
-interface ServerUiMainFrameMenuButton:ServerUiRegistryItem<ServerUiMainFrameMenuButton>,ServerUiHasWeight{
+interface ServerUiMainFrameMenuButton: com.gridnine.jasmine.web.server.common.ServerUiRegistryItem<ServerUiMainFrameMenuButton>,ServerUiHasWeight{
     fun getIcon():String?
     fun getDisplayName():String
-    override fun getType(): ServerUiRegistryItemType<ServerUiMainFrameMenuButton>{
+    override fun getType(): com.gridnine.jasmine.web.server.common.ServerUiRegistryItemType<ServerUiMainFrameMenuButton> {
         return TYPE
     }
     companion object{
-        val TYPE = ServerUiRegistryItemType<ServerUiMainFrameMenuButton>("menu-buttons-handlers")
+        val TYPE = com.gridnine.jasmine.web.server.common.ServerUiRegistryItemType<ServerUiMainFrameMenuButton>("menu-buttons-handlers")
     }
 }
 

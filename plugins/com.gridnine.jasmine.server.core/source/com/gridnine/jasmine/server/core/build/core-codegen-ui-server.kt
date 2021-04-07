@@ -43,7 +43,16 @@ internal object UiServerGenerator {
                 classesData.add(toGenData(vmd))
             }
             GenUtils.generateClasses(classesData, pluginsLocation[key]?: throw Xeption.forDeveloper("unable to find basedir of plugin $key"), projectName,  generatedFiles.getOrPut(key, { arrayListOf()}))
+            registry.views.values.forEach {
+                when(it){
+                    is GridContainerDescription ->ServerUiGridWebEditorGenerator.generateEditor(it,pluginsLocation[key]?: throw Xeption.forDeveloper("unable to find basedir of plugin $key"), projectName, generatedFiles.getOrPut(key, { arrayListOf() }) )
+                    is NavigatorDescription ->ServerUiNavigatorWebEditorGenerator.generateEditor(it,pluginsLocation[key]?: throw Xeption.forDeveloper("unable to find basedir of plugin $key"), projectName, generatedFiles.getOrPut(key, { arrayListOf() }) )
+                    is TileSpaceDescription ->ServerUiTileSpaceWebEditorGenerator.generateEditor(it,pluginsLocation[key]?: throw Xeption.forDeveloper("unable to find basedir of plugin $key"), projectName, generatedFiles.getOrPut(key, { arrayListOf() }) )
+                }
+            }
         }
+
+
     }
     private fun toGenData(descr: VVEntityDescription): BaseGenData {
         val result = GenClassData(descr.id, descr.extendsId?:BaseVV::class.qualifiedName, false, true)

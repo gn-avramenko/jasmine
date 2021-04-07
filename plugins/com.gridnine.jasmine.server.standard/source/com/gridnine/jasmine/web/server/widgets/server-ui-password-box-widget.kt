@@ -6,12 +6,13 @@
 package com.gridnine.jasmine.web.server.widgets
 
 import com.gridnine.jasmine.server.core.model.ui.PasswordBoxConfiguration
-import com.gridnine.jasmine.server.core.model.ui.TextBoxConfiguration
 import com.gridnine.jasmine.web.server.components.*
 
-class ServerUiPasswordBoxWidget(config:ServerUiPasswordBoxWidgetConfiguration): BaseServerUiNodeWrapper<ServerUiPasswordBox>(){
+class ServerUiPasswordBoxWidget(configure:ServerUiPasswordBoxWidgetConfiguration.()->Unit): BaseServerUiNodeWrapper<ServerUiPasswordBox>(){
 
+    private val config = ServerUiPasswordBoxWidgetConfiguration()
     init{
+        config.configure()
         val comp = ServerUiLibraryAdapter.get().createPasswordBox(ServerUiPasswordBoxConfiguration{
             width = config.width
             height = config.height

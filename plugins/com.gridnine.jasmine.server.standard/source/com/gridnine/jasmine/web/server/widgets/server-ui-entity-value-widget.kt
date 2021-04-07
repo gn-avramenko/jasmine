@@ -9,7 +9,6 @@ import com.gridnine.jasmine.server.core.model.common.BaseIdentity
 import com.gridnine.jasmine.server.core.model.common.SelectItem
 import com.gridnine.jasmine.server.core.model.domain.ObjectReference
 import com.gridnine.jasmine.server.core.model.ui.EntitySelectBoxConfiguration
-import com.gridnine.jasmine.server.core.model.ui.EnumSelectBoxConfiguration
 import com.gridnine.jasmine.server.core.reflection.ReflectionFactory
 import com.gridnine.jasmine.web.server.components.*
 

@@ -241,51 +241,6 @@ class StandardMetaRestHandler : RestHandler<GetMetadataRequest, GetMetadataRespo
             }
             result.viewValidations.add(entityDescriptionDT)
         }
-        UiMetaRegistry.get().views.values.forEach {vd->
-            val bundle = WebMessagesBundleDT()
-            bundle.id = vd.id
-            result.webMessages.add(bundle)
-            when(vd.viewType){
-                ViewType.GRID_CONTAINER ->{
-                    val descr = vd as GridContainerDescription
-                    vd.rows.forEach {row ->
-                        row.cells.forEach{cell ->
-                            val message = WebMessageDT()
-                            message.id = cell.id
-                            message.displayName = cell.getDisplayName()
-                            bundle.messages.add(message)
-                            val widget = cell.widget
-                            if(widget is TableBoxWidgetDescription){
-                                val bundle2 = WebMessagesBundleDT()
-                                bundle2.id = widget.id
-                                result.webMessages.add(bundle2)
-                                widget.columns.forEach{column ->
-                                    val message2 = WebMessageDT()
-                                    message2.id = column.id
-                                    message2.displayName = column.getDisplayName()
-                                    bundle2.messages.add(message2)
-                                }
-                            }
-                        }
-                    }
-                }
-                ViewType.TILE_SPACE ->{
-                    vd as TileSpaceDescription
-                    vd.overviewDescription?.let {
-                        val message = WebMessageDT()
-                        message.id = "overview"
-                        message.displayName = it.getDisplayName()
-                        bundle.messages.add(message)
-                    }
-                    vd.tiles.forEach {
-                        val message = WebMessageDT()
-                        message.id = it.id
-                        message.displayName = it.getDisplayName()
-                        bundle.messages.add(message)
-                    }
-                }
-            }
-        }
         L10nMetaRegistry.get().webMessages.values.forEach {
             val bundle = WebMessagesBundleDT()
             bundle.id = it.id

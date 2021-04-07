@@ -20,7 +20,7 @@ abstract class ServerUiNavigatorWidget<VM: BaseVM, VS: BaseVS, VV: BaseVV>() : S
     private var removeHandler:((ServerUiViewEditor<*,*,*>) ->Unit)? = null
 
     init {
-        createInitializer().apply { config }
+        config.apply(createInitializer())
         _node = ServerUiLibraryAdapter.get().createGridLayoutContainer(ServerUiGridLayoutContainerConfiguration{
             width = config.width
             height = config.height
@@ -66,8 +66,8 @@ abstract class ServerUiNavigatorWidget<VM: BaseVM, VS: BaseVS, VV: BaseVV>() : S
                 divsContainer.show(it.id)
             }
         }
-        config.interceptors.forEach {
-            (it as ServerUiEditorInterceptor<ServerUiNavigatorWidget<VM,VS,VV>>).onInit(this)
+        ServerUiEditorInterceptorsRegistry.get().getInterceptors(this)?.forEach {
+            it.onInit(this)
         }
     }
 
@@ -173,7 +173,6 @@ abstract class ServerUiNavigatorWidget<VM: BaseVM, VS: BaseVS, VV: BaseVV>() : S
 class ServerUiNavigatorWidgetConfiguration<VM:BaseVM> {
     var width:String? = null
     var height:String? = null
-    val interceptors = arrayListOf<ServerUiEditorInterceptor<*>>()
     lateinit var vmFactory:()->VM
     val factories = hashMapOf<String, ()->ServerUiViewEditor<*,*,*>>()
 }

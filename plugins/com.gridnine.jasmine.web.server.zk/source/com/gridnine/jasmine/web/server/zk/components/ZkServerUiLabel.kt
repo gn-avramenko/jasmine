@@ -41,6 +41,7 @@ class ZkServerUiLabel(private val config: ServerUiLabelConfiguration) : ServerUi
             component!!.width = config.width
         }
         component!!.value  = text
+        component!!.isMultiline  = config.multiline
         return component!!
     }
 

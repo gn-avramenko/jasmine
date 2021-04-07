@@ -11,7 +11,9 @@ import kotlin.reflect.KClass
 
 object ServerUiUtils {
     fun confirm(question:String, dialogTitle:String = "Вопрос", action:()->Unit){
-        val label = ServerUiLibraryAdapter.get().createLabel(ServerUiLabelConfiguration())
+        val label = ServerUiLibraryAdapter.get().createLabel(ServerUiLabelConfiguration(){
+            multiline = true
+        })
         label.setText(question)
         ServerUiLibraryAdapter.get().showDialog(ServerUiDialogConfiguration {
             title = dialogTitle

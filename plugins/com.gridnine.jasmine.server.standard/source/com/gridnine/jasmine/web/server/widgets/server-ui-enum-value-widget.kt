@@ -8,9 +8,7 @@ package com.gridnine.jasmine.web.server.widgets
 import com.gridnine.jasmine.server.core.model.common.SelectItem
 import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistry
 import com.gridnine.jasmine.server.core.model.ui.EnumSelectBoxConfiguration
-import com.gridnine.jasmine.server.core.model.ui.TextBoxConfiguration
 import com.gridnine.jasmine.server.core.model.ui.UiMetaRegistry
-import com.gridnine.jasmine.server.core.reflection.ReflectionFactory
 import com.gridnine.jasmine.web.server.components.*
 import kotlin.reflect.KClass
 

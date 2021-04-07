@@ -5,11 +5,13 @@
 
 package com.gridnine.jasmine.web.server.components
 
+import com.gridnine.jasmine.server.core.app.Disposable
 import com.gridnine.jasmine.server.core.app.PublishableWrapper
 import com.gridnine.jasmine.server.core.model.common.BaseIntrospectableObject
 import com.gridnine.jasmine.server.core.model.ui.BaseVM
 import com.gridnine.jasmine.server.core.model.ui.BaseVS
 import com.gridnine.jasmine.server.core.model.ui.BaseVV
+import kotlin.reflect.KClass
 
 
 interface ServerUiNode{
@@ -83,7 +85,7 @@ interface ServerUiLibraryAdapter{
 }
 
 interface ServerUiViewEditor<VM:BaseVM, VS:BaseVS, VV:BaseVV>:ServerUiNode{
-    fun setData(data:VM, settings:VS?)
+    fun setData(vm:VM, vs:VS?)
     fun getData():VM
     fun showValidation(validation:VV?)
     fun setReadonly(value:Boolean)
@@ -92,4 +94,29 @@ interface ServerUiViewEditor<VM:BaseVM, VS:BaseVS, VV:BaseVV>:ServerUiNode{
 
 interface ServerUiEditorInterceptor<E:ServerUiViewEditor<*,*,*>>{
     fun onInit(editor:E){}
+    fun getEditorClass():KClass<E>
+    fun getPriority():Double{
+        return 0.0;
+    }
+}
+
+class ServerUiEditorInterceptorsRegistry: Disposable {
+
+    private val registry = hashMapOf<String, List<ServerUiEditorInterceptor<*>>>()
+
+    fun<E:ServerUiViewEditor<*,*,*>> register(item: ServerUiEditorInterceptor<E>){
+        val items = registry.getOrPut(item.getEditorClass().qualifiedName!!, { arrayListOf() }) as MutableList
+        items.add(item)
+        items.sortBy { item.getPriority() }
+    }
+
+    fun <E:ServerUiViewEditor<*,*,*>> getInterceptors(item : E) = registry[item::class.qualifiedName] as List<ServerUiEditorInterceptor<E>>?
+
+    override fun dispose() {
+        wrapper.dispose()
+    }
+    companion object {
+        private val wrapper = PublishableWrapper(ServerUiEditorInterceptorsRegistry::class)
+        fun get() = wrapper.get()
+    }
 }

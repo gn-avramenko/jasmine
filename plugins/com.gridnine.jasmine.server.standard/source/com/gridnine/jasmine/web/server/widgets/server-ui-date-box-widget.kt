@@ -6,7 +6,6 @@
 package com.gridnine.jasmine.web.server.widgets
 
 import com.gridnine.jasmine.server.core.model.ui.DateBoxConfiguration
-import com.gridnine.jasmine.server.core.model.ui.TextBoxConfiguration
 import com.gridnine.jasmine.web.server.components.*
 import java.time.LocalDate
 

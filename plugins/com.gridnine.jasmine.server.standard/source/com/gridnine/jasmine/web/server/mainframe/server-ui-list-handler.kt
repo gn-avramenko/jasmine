@@ -37,15 +37,15 @@ interface ServerUiListWrapper<E:BaseIntrospectableObject>{
     fun getSelectedItems():List<E>
 }
 
-interface ServerUiListToolButton<E:BaseIntrospectableObject>: ServerUiRegistryItem<ServerUiListToolButton<BaseIntrospectableObject>>, ServerUiHasWeight {
+interface ServerUiListToolButton<E:BaseIntrospectableObject>: com.gridnine.jasmine.web.server.common.ServerUiRegistryItem<ServerUiListToolButton<BaseIntrospectableObject>>, ServerUiHasWeight {
     fun isApplicable(listId:String):Boolean
     fun onClick(value: ServerUiListWrapper<E>)
     fun getDisplayName():String
-    override fun getType(): ServerUiRegistryItemType<ServerUiListToolButton<BaseIntrospectableObject>> {
+    override fun getType(): com.gridnine.jasmine.web.server.common.ServerUiRegistryItemType<ServerUiListToolButton<BaseIntrospectableObject>> {
         return TYPE
     }
     companion object{
-        val TYPE = ServerUiRegistryItemType<ServerUiListToolButton<BaseIntrospectableObject>>("list-button-handlers")
+        val TYPE = com.gridnine.jasmine.web.server.common.ServerUiRegistryItemType<ServerUiListToolButton<BaseIntrospectableObject>>("list-button-handlers")
     }
 }
 
@@ -62,7 +62,7 @@ class ServerUiMainframeListComponent(private val item: ListWorkspaceItem) : Base
             width = "100%"
             height = "100%"
         })
-        val buttons = ServerUiRegistry.get().allOf(ServerUiListToolButton.TYPE).filter { it.isApplicable(item.listId!!) }.sortedBy { it.getWeight() }
+        val buttons = com.gridnine.jasmine.web.server.common.ServerUiRegistry.get().allOf(ServerUiListToolButton.TYPE).filter { it.isApplicable(item.listId!!) }.sortedBy { it.getWeight() }
         val northContent = ServerUiLibraryAdapter.get().createGridLayoutContainer(ServerUiGridLayoutContainerConfiguration {
             width = "100%"
             buttons.forEach {

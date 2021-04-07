@@ -14,16 +14,16 @@ import com.gridnine.jasmine.web.server.common.*
 import com.gridnine.jasmine.web.server.components.*
 import kotlin.reflect.KClass
 
-interface ServerUiObjectHandler:ServerUiRegistryItem<ServerUiObjectHandler>{
+interface ServerUiObjectHandler: com.gridnine.jasmine.web.server.common.ServerUiRegistryItem<ServerUiObjectHandler> {
 
     fun createEditor():ServerUiViewEditor<*,*,*>
 
-    override fun getType(): ServerUiRegistryItemType<ServerUiObjectHandler> {
+    override fun getType(): com.gridnine.jasmine.web.server.common.ServerUiRegistryItemType<ServerUiObjectHandler> {
         return TYPE
     }
 
     companion object{
-        val TYPE = ServerUiRegistryItemType<ServerUiObjectHandler>("object-handlers")
+        val TYPE = com.gridnine.jasmine.web.server.common.ServerUiRegistryItemType<ServerUiObjectHandler>("object-handlers")
     }
 }
 
@@ -42,36 +42,36 @@ class ServerUiObjectEditorHandler : ServerUiMainFrameTabHandler<ServerUiObjectEd
 
     override fun createTabData(obj:ServerUiObjectEditorHandlerData, callback: ServerUiMainFrameTabCallback): ServerUiMainFrameTabData {
         val bundle = UiEditorHelper.getReadDataBundle(obj.obj.type.java.name, obj.obj.uid)
-        val handler:ServerUiObjectHandler = ServerUiRegistry.get().get(ServerUiObjectHandler.TYPE, obj.obj.type)!!
+        val handler:ServerUiObjectHandler = com.gridnine.jasmine.web.server.common.ServerUiRegistry.get().get(ServerUiObjectHandler.TYPE, obj.obj.type)!!
         val editor = ServerUiObjectEditor(obj.obj, bundle.vm,bundle.vs, handler.createEditor(), true,obj.navigationKey, callback)
         return ServerUiMainFrameTabData(bundle.title, editor)
     }
 
 }
 
-interface ServerUiObjectEditorButton<VM:BaseVM, W:ServerUiViewEditor<VM,*,*>>:ServerUiRegistryItem<ServerUiObjectEditorButton<BaseVM, ServerUiViewEditor<BaseVM,*,*>>>,ServerUiHasWeight{
+interface ServerUiObjectEditorButton<VM:BaseVM, W:ServerUiViewEditor<VM,*,*>>: com.gridnine.jasmine.web.server.common.ServerUiRegistryItem<ServerUiObjectEditorButton<BaseVM, ServerUiViewEditor<BaseVM, *, *>>>,ServerUiHasWeight{
     fun isApplicable(vm:VM, editor: ServerUiObjectEditor<W>):Boolean
     fun onClick(value: ServerUiObjectEditor<W>)
     fun getDisplayName():String
-    override fun getType(): ServerUiRegistryItemType<ServerUiObjectEditorButton<BaseVM, ServerUiViewEditor<BaseVM,*,*>>>{
+    override fun getType(): com.gridnine.jasmine.web.server.common.ServerUiRegistryItemType<ServerUiObjectEditorButton<BaseVM, ServerUiViewEditor<BaseVM, *, *>>> {
         return TYPE
     }
     companion object{
-        val TYPE = ServerUiRegistryItemType<ServerUiObjectEditorButton<BaseVM, ServerUiViewEditor<BaseVM,*,*>>>("editor-button-handlers")
+        val TYPE = com.gridnine.jasmine.web.server.common.ServerUiRegistryItemType<ServerUiObjectEditorButton<BaseVM, ServerUiViewEditor<BaseVM, *, *>>>("editor-button-handlers")
     }
 }
 
 
-interface ServerUiObjectEditorMenuItem<VM:BaseVM, W:ServerUiViewEditor<VM,*,*>>:ServerUiRegistryItem<ServerUiObjectEditorMenuItem<BaseVM, ServerUiViewEditor<BaseVM,*,*>>>,ServerUiHasWeight{
+interface ServerUiObjectEditorMenuItem<VM:BaseVM, W:ServerUiViewEditor<VM,*,*>>: com.gridnine.jasmine.web.server.common.ServerUiRegistryItem<ServerUiObjectEditorMenuItem<BaseVM, ServerUiViewEditor<BaseVM, *, *>>>,ServerUiHasWeight{
     fun isApplicable(vm:VM, editor: ServerUiObjectEditor<W>):Boolean
     fun onClick(value: ServerUiObjectEditor<W>)
     fun getDisplayName():String
     fun getMenuButtonId():String
-    override fun getType(): ServerUiRegistryItemType<ServerUiObjectEditorMenuItem<BaseVM, ServerUiViewEditor<BaseVM,*,*>>>{
+    override fun getType(): com.gridnine.jasmine.web.server.common.ServerUiRegistryItemType<ServerUiObjectEditorMenuItem<BaseVM, ServerUiViewEditor<BaseVM, *, *>>> {
         return TYPE
     }
     companion object{
-        val TYPE = ServerUiRegistryItemType<ServerUiObjectEditorMenuItem<BaseVM, ServerUiViewEditor<BaseVM,*,*>>>("editor-menu-item-handlers")
+        val TYPE = com.gridnine.jasmine.web.server.common.ServerUiRegistryItemType<ServerUiObjectEditorMenuItem<BaseVM, ServerUiViewEditor<BaseVM, *, *>>>("editor-menu-item-handlers")
     }
 }
 
@@ -94,11 +94,11 @@ class ServerUiObjectEditor<V:ServerUiViewEditor<*,*,*>>(val reference: ObjectRef
     }
 
     fun updateTools(vm: BaseVM) {
-        val buttons = ServerUiRegistry.get().allOf(ServerUiObjectEditorButton.TYPE).filter { it.isApplicable(vm, ServerUiObjectEditor@this as ServerUiObjectEditor<ServerUiViewEditor<BaseVM, *, *>>) }.toMutableList()
-        val menuButtons = ServerUiRegistry.get().allOf(ServerUiObjectEditorMenuItem.TYPE).filter {  it.isApplicable(vm, ServerUiObjectEditor@this as ServerUiObjectEditor<ServerUiViewEditor<BaseVM, *, *>>)  }
+        val buttons = com.gridnine.jasmine.web.server.common.ServerUiRegistry.get().allOf(ServerUiObjectEditorButton.TYPE).filter { it.isApplicable(vm, ServerUiObjectEditor@this as ServerUiObjectEditor<ServerUiViewEditor<BaseVM, *, *>>) }.toMutableList()
+        val menuButtons = com.gridnine.jasmine.web.server.common.ServerUiRegistry.get().allOf(ServerUiObjectEditorMenuItem.TYPE).filter {  it.isApplicable(vm, ServerUiObjectEditor@this as ServerUiObjectEditor<ServerUiViewEditor<BaseVM, *, *>>)  }
         val lst = arrayListOf<ServerUiHasWeight>()
         lst.addAll(buttons)
-        lst.addAll(menuButtons.map { it.getMenuButtonId() }.distinct().map { ServerUiRegistry.get().get(ServerUiMainFrameMenuButton.TYPE, it) as ServerUiHasWeight})
+        lst.addAll(menuButtons.map { it.getMenuButtonId() }.distinct().map { com.gridnine.jasmine.web.server.common.ServerUiRegistry.get().get(ServerUiMainFrameMenuButton.TYPE, it) as ServerUiHasWeight})
         lst.sortBy { it.getWeight() }
         val buttonsGrid = ServerUiLibraryAdapter.get().createGridLayoutContainer(ServerUiGridLayoutContainerConfiguration {
             lst.forEach {

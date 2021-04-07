@@ -51,7 +51,7 @@ class CoreActivator:IPluginActivator{
         registerUiMetadata(uiRegistry)
         Environment.publish(uiRegistry)
         val l10nMetaRegistry = L10nMetaRegistry()
-        registerL10nMetadata(l10nMetaRegistry)
+        registerL10nMetadata(l10nMetaRegistry, uiRegistry)
         Environment.publish(l10nMetaRegistry)
 
         Environment.publish(JsonSerializer())
@@ -61,7 +61,7 @@ class CoreActivator:IPluginActivator{
         Environment.publish(WebServerConfig())
     }
 
-    private fun registerL10nMetadata(l10nMetaregistry: L10nMetaRegistry) {
+    private fun registerL10nMetadata(l10nMetaregistry: L10nMetaRegistry, uiRegistry: UiMetaRegistry) {
         val extensions = IApplicationMetadataProvider.get()
                 .getExtensions("server-messages")
         for (ext in extensions) {
@@ -76,6 +76,7 @@ class CoreActivator:IPluginActivator{
                 L10nMetadataParser.updateWebMessages(l10nMetaregistry, location, ext.plugin.classLoader)
             }
         }
+        L10nMetadataParser.updateWebMessages(l10nMetaregistry, uiRegistry)
     }
 
     private fun publishCache() {
