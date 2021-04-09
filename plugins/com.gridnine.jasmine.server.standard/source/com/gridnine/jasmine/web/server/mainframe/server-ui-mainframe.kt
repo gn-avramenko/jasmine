@@ -83,7 +83,7 @@ class ServerUiMainFrame(config:ServerUiMainFrameConfiguration) : BaseServerUiNod
         _tabs.getTabs().map { it.comp }.filter { it is ServerUiEventsSubscriber }.forEach { (it as ServerUiEventsSubscriber).receiveEvent(event) }
     }
 
-    private fun setWorkspace(workspace: Workspace) {
+    fun setWorkspace(workspace: Workspace) {
         val result = arrayListOf<ServerUiTreeItem>()
         workspace.groups.forEach { group ->
             val item = ServerUiTreeItem(group.uid, group.displayName?:"", group)

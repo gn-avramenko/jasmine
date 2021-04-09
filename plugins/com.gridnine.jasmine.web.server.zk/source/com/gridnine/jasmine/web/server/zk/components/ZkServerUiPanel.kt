@@ -92,6 +92,7 @@ open class ZkServerUiPanel (private val config: ServerUiPanelConfiguration) : Se
             }
         }
         val panelChildren = Panelchildren()
+        panelChildren.style ="overflow: auto"
         panelChildren.parent = component
         if(content != null){
             content!!.getZkComponent().parent = panelChildren

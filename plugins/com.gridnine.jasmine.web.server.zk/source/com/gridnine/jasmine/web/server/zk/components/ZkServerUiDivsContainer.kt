@@ -8,6 +8,7 @@ package com.gridnine.jasmine.web.server.zk.components
 import com.gridnine.jasmine.web.server.components.ServerUiNode
 import com.gridnine.jasmine.web.server.components.ServerUiDivsContainer
 import com.gridnine.jasmine.web.server.components.ServerUiDivsContainerConfiguration
+import org.zkoss.zk.ui.AbstractComponent
 import org.zkoss.zk.ui.HtmlBasedComponent
 import org.zkoss.zul.Div
 
@@ -53,6 +54,13 @@ class ZkServerUiDivsContainer (private val config: ServerUiDivsContainerConfigur
 
     override fun getDiv(id: String): ServerUiNode? {
         return divsMap[id]
+    }
+
+    override fun clear() {
+        divsMap.clear()
+        if(component != null){
+            component!!.getChildren<AbstractComponent>().clear()
+        }
     }
 
     override fun getZkComponent(): HtmlBasedComponent {

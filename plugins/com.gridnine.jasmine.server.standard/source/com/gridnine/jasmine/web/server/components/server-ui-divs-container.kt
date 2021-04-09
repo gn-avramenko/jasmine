@@ -10,6 +10,7 @@ interface ServerUiDivsContainer : ServerUiNode {
     fun show(id:String)
     fun removeDiv(id:String)
     fun getDiv(id:String): ServerUiNode?
+    fun clear()
 }
 
 class ServerUiDivsContainerConfiguration(){

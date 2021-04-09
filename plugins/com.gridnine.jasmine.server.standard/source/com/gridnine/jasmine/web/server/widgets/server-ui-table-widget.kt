@@ -98,20 +98,19 @@ open class ServerUiTableWidget<VM:BaseTableBoxVM,VS:BaseTableBoxVS, VV:BaseTable
 
     fun setData(vm: List<VM>, vs: List<VS>?) {
         val size = vm.size
-        if(rowsAdditionalData.isEmpty()){
-            if(vm.isEmpty()){
-                if(_node.getRows().isEmpty()){
-                    addEmptyRow()
-                }
-                return
+        val additionalDataSize = rowsAdditionalData.size
+        if(additionalDataSize > 0) {
+            for (n in additionalDataSize - 1 downTo size) {
+                rowsAdditionalData.removeAt(if (size > 0) size - 1 else 0)
+                _node.removeRow(if (size > 0) size - 1 else 0)
             }
-            if(_node.getRows().isNotEmpty()) {
-                _node.removeRow(0)
-            }
+        } else if (_node.getRows().isNotEmpty()){
+            _node.removeRow(0)
         }
-        for( n in rowsAdditionalData.size-1 downTo  size){
-            rowsAdditionalData.removeAt(if(size > 0) size-1 else 0)
-            _node.removeRow(if(size > 0) size-1 else 0)
+        if(size==0){
+            addEmptyRow()
+            updateToolsVisibility()
+            return
         }
         val existingRows = _node.getRows()
         vm.withIndex().forEach{(idx, value) ->

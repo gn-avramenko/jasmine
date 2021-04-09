@@ -43,7 +43,7 @@ object GridWebEditorGenerator {
                     when(column.predefinedWidth){
                         PredefinedColumnWidth.STANDARD -> "delegate.defineColumn(com.gridnine.jasmine.web.core.ui.DefaultUIParameters.controlWidthAsString)"()
                         PredefinedColumnWidth.REMAINING -> """delegate.defineColumn("100%")"""()
-                        PredefinedColumnWidth.CUSTOM -> """delegate.defineColumn(${column.customWidth})"""()
+                        PredefinedColumnWidth.CUSTOM -> """delegate.defineColumn("${column.customWidth}")"""()
                     }
                 }
                 description.rows.forEach {row ->

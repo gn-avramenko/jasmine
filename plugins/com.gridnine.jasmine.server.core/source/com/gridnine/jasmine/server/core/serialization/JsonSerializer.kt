@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
 import com.gridnine.jasmine.server.core.app.Disposable
 import com.gridnine.jasmine.server.core.app.PublishableWrapper
 import com.gridnine.jasmine.server.core.model.common.BaseIdentity
+import com.gridnine.jasmine.server.core.model.common.BaseIntrospectableObject
 import com.gridnine.jasmine.server.core.model.common.Xeption
 import com.gridnine.jasmine.server.core.model.custom.CustomMetaRegistry
 import com.gridnine.jasmine.server.core.model.domain.DomainMetaRegistry
@@ -25,8 +26,10 @@ import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
+import kotlin.reflect.full.createInstance
 
 @Suppress("UNCHECKED_CAST")
 class JsonSerializer : Disposable {
@@ -275,6 +278,69 @@ class JsonSerializer : Disposable {
     }
 
 
+    fun <T : BaseIntrospectableObject> clone(source: T, newUids: Boolean): T {
+        val qualifiedName = source.javaClass.name
+        val result = ReflectionFactory.get().newInstance<T>(qualifiedName)
+        val provider = providersCache.getOrPut(qualifiedName, { createProvider(qualifiedName) }) as ObjectMetadataProvider<T>
+        copy(source, result, newUids, provider)
+        return result
+    }
+
+    private fun <T : BaseIntrospectableObject> copy(source: T, result: T, newUids: Boolean, provider: ObjectMetadataProvider<*>) {
+        if (provider.hasUid()) {
+            result.setValue(BaseIdentity.uid, if (newUids) UUID.randomUUID().toString() else source.getValue(BaseIdentity.uid))
+        }
+        provider.getAllProperties().forEach {
+            val value = source.getValue(it.id) ?: return@forEach
+            if (it.id == BaseIdentity.uid) {
+                return@forEach
+            }
+            when (it.type) {
+                SerializablePropertyType.ENTITY -> {
+                    val qualifiedName = value.javaClass.name
+                    val newEntity = ReflectionFactory.get().newInstance<BaseIntrospectableObject>(qualifiedName)
+                    val elmProvider = providersCache.getOrPut(qualifiedName, { createProvider(qualifiedName) }) as ObjectMetadataProvider<T>
+                    copy(value as BaseIntrospectableObject, newEntity, newUids, elmProvider)
+                    result.setValue(it.id, newEntity)
+                }
+                SerializablePropertyType.STRING,
+                SerializablePropertyType.ENUM,
+                SerializablePropertyType.BIG_DECIMAL,
+                SerializablePropertyType.BOOLEAN,
+                SerializablePropertyType.LONG,
+                SerializablePropertyType.LOCAL_DATE,
+                SerializablePropertyType.LOCAL_DATE_TIME,
+                SerializablePropertyType.INT -> result.setValue(it.id, value)
+                SerializablePropertyType.BYTE_ARRAY ->
+                    result.setValue(it.id, (value as ByteArray).copyOf())
+            }
+
+        }
+        provider.getAllCollections().forEach {
+            val sourceColl = source.getCollection(it.id)
+            val destColl = result.getCollection(it.id)
+            sourceColl.forEach {elmValue ->
+                when (it.elementType) {
+                    SerializablePropertyType.ENTITY -> {
+                        val qualifiedName = elmValue.javaClass.name
+                        val newEntity = ReflectionFactory.get().newInstance<BaseIntrospectableObject>(qualifiedName)
+                        val elmProvider = providersCache.getOrPut(qualifiedName, { createProvider(qualifiedName) }) as ObjectMetadataProvider<T>
+                        copy(elmValue as BaseIntrospectableObject, newEntity, newUids, elmProvider)
+                        destColl.add(newEntity)
+                    }
+                    SerializablePropertyType.STRING,
+                    SerializablePropertyType.ENUM,
+                    SerializablePropertyType.BIG_DECIMAL,
+                    SerializablePropertyType.BOOLEAN,
+                    SerializablePropertyType.LONG,
+                    SerializablePropertyType.LOCAL_DATE,
+                    SerializablePropertyType.LOCAL_DATE_TIME,
+                    SerializablePropertyType.INT -> destColl.add(elmValue)
+                    SerializablePropertyType.BYTE_ARRAY ->destColl.add((elmValue as ByteArray).copyOf())
+                }
+            }
+        }
+    }
 
     override fun dispose() {
         wrapper.dispose()

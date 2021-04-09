@@ -11,12 +11,22 @@ function jasmineUpdateTableColumnsWidths(node){
     //    console.log("column widths: " + columns.map(function(elm){
     //        return elm.calculatedWidth
     //    }))
-        node.find("colgroup").each(function(){
-            var columnsNodes = $(this).children()
-            for(var n=0; n< columns.length; n++){
-                 columnsNodes.eq(n).css("width", columns[n].calculatedWidth+"px")
-            }
+    node.children("div").each(function(){ //div
+        $(this).children("table").each(function(){
+            $(this).children("colgroup").each(function(){
+                var columnsNodes = $(this).children()
+                 for(var n=0; n< columns.length; n++){
+                    columnsNodes.eq(n).css("width", columns[n].calculatedWidth+"px")
+                 }
+            })
         })
+    })
+//        node.find("colgroup").each(function(){
+//            var columnsNodes = $(this).children()
+//            for(var n=0; n< columns.length; n++){
+//                 columnsNodes.eq(n).css("width", columns[n].calculatedWidth+"px")
+//            }
+//        })
     } finally{
          _jasmineIgnoreTableResize = false
     }

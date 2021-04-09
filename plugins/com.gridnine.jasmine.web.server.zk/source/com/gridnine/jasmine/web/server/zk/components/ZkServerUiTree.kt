@@ -19,6 +19,7 @@ import org.zkoss.zul.Div
 import org.zkoss.zul.Tree
 import org.zkoss.zul.Treechildren
 import org.zkoss.zul.Treeitem
+import java.util.*
 
 open class ZkServerUiTree(private val config: ServerUiTreeConfiguration) : ServerUiTree, ZkServerUiComponent() {
 
@@ -34,9 +35,9 @@ open class ZkServerUiTree(private val config: ServerUiTreeConfiguration) : Serve
 
     private var contextMenuListener: ((node: ServerUiTreeItem, uiComp: ServerUiTreeContextMenuEvent) -> Unit)? = null
 
-
     private var dropListener: ((target: ServerUiTreeItem, source: ServerUiTreeItem) -> Unit)? = null
 
+    private val treeUid = UUID.randomUUID().toString()
     override fun setData(data: List<ServerUiTreeItem>) {
         this.data.clear()
         this.data.addAll(data)
@@ -97,6 +98,7 @@ open class ZkServerUiTree(private val config: ServerUiTreeConfiguration) : Serve
         val node = findNodeInternal(id)
         if(node != null){
             treeComponent!!.selectItem(node)
+            selectListener?.invoke(node.getValue())
         }
     }
 
@@ -105,7 +107,7 @@ open class ZkServerUiTree(private val config: ServerUiTreeConfiguration) : Serve
     }
 
     override fun updateUserData(id: String, data: Any?) {
-        findNodeInternal(id)?.setValue(data)
+        findNodeInternal(id)?.getValue<ServerUiTreeItem>()!!.userData = (data)
     }
 
     override fun getData(): List<ServerUiTreeItem> {
@@ -114,8 +116,9 @@ open class ZkServerUiTree(private val config: ServerUiTreeConfiguration) : Serve
 
     private fun getData(treechildren: Treechildren): List<ServerUiTreeItem> {
         val result = arrayListOf<ServerUiTreeItem>()
-        treechildren.items.forEach {
-            val item = ServerUiTreeItem(it.id, it.label, (it.getValue() as ServerUiTreeItem).userData)
+        treechildren.getChildren<Treeitem>().forEach {
+            val itemValue = it.getValue() as ServerUiTreeItem
+            val item = ServerUiTreeItem(itemValue.id, it.label, itemValue.userData)
             result.add(item)
             if(!it.isEmpty){
                 item.children.addAll(getData(it.treechildren))
@@ -133,6 +136,7 @@ open class ZkServerUiTree(private val config: ServerUiTreeConfiguration) : Serve
         val comp = treeComponent!!
         return findNodeInternal(comp.treechildren, id)
     }
+
 
     private fun findNodeInternal(children: Treechildren, id: String): Treeitem? {
         for(child in children.items){
@@ -153,6 +157,10 @@ open class ZkServerUiTree(private val config: ServerUiTreeConfiguration) : Serve
 
     private fun setDataInternal() {
         val comp = treeComponent!!
+        val children = comp.getChildren<Treechildren>()
+        if(children.isNotEmpty()){
+            children.clear()
+        }
         val rootChildren = Treechildren()
         rootChildren.parent = comp
         data.forEach {
@@ -165,6 +173,7 @@ open class ZkServerUiTree(private val config: ServerUiTreeConfiguration) : Serve
         val result = Treeitem()
         result.isOpen = data.children.isNotEmpty()
         result.label = data.text
+        result.id = "${treeUid}||${data.id}"
         result.setValue(data)
         if (config.enableDnd) {
             result.draggable = "true"

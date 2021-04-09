@@ -28,7 +28,10 @@
             </cell>
         </row>
     </grid-container>
-    <grid-container id="com.gridnine.jasmine.web.core.workspace.WorkspaceListColumnsEditor" columns-count="1">
+    <grid-container id="com.gridnine.jasmine.web.core.workspace.WorkspaceListColumnsEditor">
+        <columns>
+            <column width="CUSTOM" custom-width="600px"/>
+        </columns>
         <row>
             <cell id="columns">
                 <table-box id="com.gridnine.jasmine.web.core.workspace.WorkspaceListColumnsTable">
@@ -39,7 +42,10 @@
             </cell>
         </row>
     </grid-container>
-    <grid-container id="com.gridnine.jasmine.web.core.workspace.WorkspaceListFiltersEditor" columns-count="1">
+    <grid-container id="com.gridnine.jasmine.web.core.workspace.WorkspaceListFiltersEditor">
+        <columns>
+            <column width="CUSTOM" custom-width="600px"/>
+        </columns>
         <row>
             <cell id="filters">
                 <table-box id="com.gridnine.jasmine.web.core.workspace.WorkspaceListFiltersTable">
@@ -50,7 +56,10 @@
             </cell>
         </row>
     </grid-container>
-    <grid-container id="com.gridnine.jasmine.web.core.workspace.WorkspaceListSortOrdersEditor" columns-count="1">
+    <grid-container id="com.gridnine.jasmine.web.core.workspace.WorkspaceListSortOrdersEditor">
+        <columns>
+            <column width="CUSTOM" custom-width="600px"/>
+        </columns>
         <row>
             <cell id="sortOrders" >
                 <table-box id="com.gridnine.jasmine.web.core.workspace.WorkspaceListSortOrdersTable">

@@ -22,6 +22,8 @@ open class ZkServerUiAccordionContainer(private val config: ServerUiAccordionCon
 
     private var tabPanels: Tabpanels? = null
 
+    private var selectedTabId:String? = null
+
     override fun addPanel(panel: ServerUiAccordionPanel) {
         panels.add(panel)
         if(component != null){
@@ -55,7 +57,17 @@ open class ZkServerUiAccordionContainer(private val config: ServerUiAccordionCon
     }
 
     override fun select(id: String) {
-        val tab = tabs!!.getChildren<Tab>().find { it.id == id }
+        if(selectedTabId != id){
+            selectedTabId = id
+            if(component != null){
+                selectTabInternal()
+            }
+        }
+
+    }
+
+    private fun selectTabInternal() {
+        val tab = tabs!!.getChildren<Tab>().find { it.id == selectedTabId }
         val panel = tabPanels!!.getChildren<Tabpanel>().find { it.linkedTab == tab }
         component!!.selectedTab = tab
         component!!.selectedPanel = panel
@@ -90,6 +102,9 @@ open class ZkServerUiAccordionContainer(private val config: ServerUiAccordionCon
         component = comp
         this.panels.forEach {
             addPanelInternal(it)
+        }
+        if(selectedTabId != null){
+            selectTabInternal()
         }
         return comp
     }

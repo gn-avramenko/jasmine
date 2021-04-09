@@ -33,7 +33,13 @@ object ServerUiGridWebEditorGenerator {
                 }
             }
             "init"{
-                val columns = if(description.columns.isEmpty()) arrayListOf(GridContainerColumnDescription(PredefinedColumnWidth.STANDARD, null)) else description.columns
+                val columns = if(description.columns.isEmpty()){
+                    val result = arrayListOf<GridContainerColumnDescription>()
+                    for (n in 1..(description.columnsCount?:1)){
+                        result.add(GridContainerColumnDescription(PredefinedColumnWidth.STANDARD, null))
+                    }
+                    result
+                } else description.columns
                 val fixedWidth = columns.map {
                     when(it.predefinedWidth){
                         PredefinedColumnWidth.STANDARD -> 300
