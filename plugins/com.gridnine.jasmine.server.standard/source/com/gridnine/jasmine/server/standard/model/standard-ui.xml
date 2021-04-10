@@ -1,5 +1,0 @@
-<ui xmlns="http://xtrip.gridnine.com/jasmine/ui">
-    <validation-messages id="com.gridnine.jasmine.server.standard.model.ui.StandardValidationMessages">
-        <message id="EMPTY_VALUE"/>
-    </validation-messages>
-</ui>

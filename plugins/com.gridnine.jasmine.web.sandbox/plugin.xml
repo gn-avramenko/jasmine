@@ -1,8 +1,0 @@
-<plugin xmlns="http://xtrip.gridnine.com/spf" id="com.gridnine.jasmine.web.sandbox">
-    <parameter id="type" value="WEB"/>
-    <parameter id="kotlin-output-dir" value="resources/web-sandbox"/>
-    <dependencies>
-        <plugin-dependency plugin-id="com.gridnine.jasmine.web.core"/>
-        <plugin-dependency plugin-id="com.gridnine.jasmine.web.easyui"/>
-    </dependencies>
-</plugin>
