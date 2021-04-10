@@ -1,0 +1,9 @@
+<plugin xmlns="http://xtrip.gridnine.com/spf" id="com.gridnine.jasmine.common.core">
+    <parameter id="type" value="CORE"/>
+    <dependencies>
+        <lib-dependency group="ch.qos.logback" name="logback-classic" version="1.2.3"/>
+        <lib-dependency group="org.jetbrains.kotlin" name="kotlin-stdlib-jdk8" version="1.4.10"/>
+        <lib-dependency group="org.jetbrains.kotlin" name="kotlin-reflect" version="1.4.10"/>
+        <lib-dependency group="com.fasterxml.jackson.core" name="jackson-core" version="2.10.3"/>
+    </dependencies>
+</plugin>
