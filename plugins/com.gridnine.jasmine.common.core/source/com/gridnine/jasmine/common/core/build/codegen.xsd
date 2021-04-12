@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://gridnine.com/jasmine/codegen"
+        elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema">
+    <element name="code-gen">
+		<complexType>
+            <sequence>
+                <choice maxOccurs="unbounded" minOccurs="0">
+                    <element name="source">
+						<complexType>
+							<attribute name="id" type="string" use="required"/>
+							<attribute name="location" type="string" use="required"/>
+							<attribute name="factoryClassName" type="string"/>
+						</complexType>
+					</element>
+					<element name="generator">
+						<complexType>
+							<attribute name="id" type="string" use="required"/>
+							<attribute name="className" type="string" use="required"/>
+							<attribute name="priority" type="int" use="required"/>
+						</complexType>
+					</element>
+					<element name="generate">
+						<complexType>
+							<attribute name="source" type="string" use="required"/>
+							<attribute name="targetPlugin" type="string" use="required"/>
+							<attribute name="generator" type="string" use="required"/>
+						</complexType>
+					</element>
+				</choice>
+			</sequence>
+		</complexType>
+	</element>
+</schema>

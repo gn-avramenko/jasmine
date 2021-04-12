@@ -1,0 +1,11 @@
+<plugin xmlns="http://xtrip.gridnine.com/spf" id="com.gridnine.jasmine.server.core">
+    <parameter id="type" value="SERVER_CORE"/>
+    <dependencies>
+        <plugin-dependency plugin-id="com.gridnine.jasmine.common.core"/>
+        <lib-dependency group="com.mchange" name="c3p0" version="0.9.5.5"/>
+        <lib-dependency group="org.apache.tomcat.embed" name="tomcat-embed-core" version="9.0.30"/>
+        <lib-dependency group="org.apache.tomcat.embed" name="tomcat-embed-jasper" version="9.0.30"/>
+        <lib-dependency group="com.nothome" name="javaxdelta" version="2.0.1"/>
+        <lib-dependency group="org.ehcache" name="ehcache" version="3.8.1"/>
+    </dependencies>
+</plugin>

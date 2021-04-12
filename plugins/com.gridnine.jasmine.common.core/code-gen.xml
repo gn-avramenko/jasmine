@@ -1,0 +1,5 @@
+<code-gen xmlns="http://gridnine.com/jasmine/codegen">
+    <generator id="common-domain" className="com.gridnine.jasmine.common.core.build.CommonDomainGenerator" priority="0"/>
+    <generator id="common-rest" className="com.gridnine.jasmine.common.core.build.CommonRestGenerator" priority="1"/>
+    <generator id="common-l10n" className="com.gridnine.jasmine.common.core.build.L10nCommonGenerator" priority="2"/>
+</code-gen>

@@ -25,8 +25,10 @@ class JasminePlugin: Plugin<Project>{
         }
         val registry = SpfPluginsRegistry()
         registry.initRegistry(pluginsURLs)
-        KotlinUtils.createConfiguration(KotlinUtils.SERVER_CONFIGURATION_NAME, registry, target, pluginsToFileMap, SpfPluginType.CORE, SpfPluginType.SERVER)
-        KotlinUtils.createConfiguration(KotlinUtils.SERVER_TEST_CONFIGURATION_NAME, registry, target,pluginsToFileMap, SpfPluginType.SERVER_TEST)
+        KotlinUtils.createConfiguration(KotlinUtils.SERVER_CONFIGURATION_NAME, registry, target, pluginsToFileMap, SpfPluginType.COMMON_CORE, SpfPluginType.COMMON, SpfPluginType.SERVER_CORE, SpfPluginType.SERVER)
+        KotlinUtils.createConfiguration(KotlinUtils.COMMON_CONFIGURATION_NAME, registry, target, pluginsToFileMap, SpfPluginType.COMMON_CORE, SpfPluginType.COMMON)
+        KotlinUtils.createConfiguration(KotlinUtils.COMMON_TEST_CONFIGURATION_NAME, registry, target,pluginsToFileMap, SpfPluginType.COMMON_TEST)
+        KotlinUtils.createConfiguration(KotlinUtils.SERVER_TEST_CONFIGURATION_NAME, registry, target,pluginsToFileMap, SpfPluginType.COMMON_TEST, SpfPluginType.SERVER_TEST)
         target.configurations.maybeCreate(KotlinUtils.COMPILER_CLASSPATH_CONFIGURATION_NAME).defaultDependencies {
             it.add(target.dependencies.create("${KotlinUtils.KOTLIN_MODULE_GROUP}:${KotlinUtils.KOTLIN_COMPILER_EMBEDDABLE}:${extension.kotlinVersion}"))
         }
@@ -45,7 +47,7 @@ class JasminePlugin: Plugin<Project>{
         registry.plugins.forEach { plugin ->
             CreateWarTasksFactory.createTasks(plugin, pluginsToFileMap, target)
             when(val pluginType = KotlinUtils.getType(plugin)){
-                SpfPluginType.CORE,SpfPluginType.SERVER_TEST,SpfPluginType.SERVER,SpfPluginType.SPF ->{
+                SpfPluginType.COMMON_CORE, SpfPluginType.SERVER_CORE,SpfPluginType.COMMON,SpfPluginType.COMMON_TEST,SpfPluginType.SERVER_TEST,SpfPluginType.SERVER,SpfPluginType.SPF ->{
                     target.tasks.create(CopyJvmResourcesTask.getTaskName(plugin.id), CopyJvmResourcesTask::class.java, plugin, pluginsToFileMap)
                     target.tasks.create(CompileKotlinJVMPluginTask.getTaskName(plugin.id), CompileKotlinJVMPluginTask::class.java, plugin, registry,extension, pluginsToFileMap)
                     if(pluginType != SpfPluginType.SERVER_TEST){

@@ -22,7 +22,7 @@ open class TestJvmPluginTask() : Test() {
         val dependentPlugins = KotlinUtils.getDependentPlugins(plugin, registry)
         dependentPlugins.forEach { dp ->
             when(KotlinUtils.getType(dp)){
-                SpfPluginType.CORE,SpfPluginType.SERVER ->{
+                SpfPluginType.COMMON_CORE, SpfPluginType.SERVER_CORE,SpfPluginType.COMMON,SpfPluginType.SERVER ->{
                     dependsOn(CompileKotlinJVMPluginTask.getTaskName(dp.id))
                     dependsOn(CopyJvmResourcesTask.getTaskName(dp.id))
                 }

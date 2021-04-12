@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-entities xmlns="http://xtrip.gridnine.com/jasmine/custom" >
+    <entity id="com.gridnine.jasmine.common.core.model.BaseIdentity" abstract="true">
+        <property id="uid" type="STRING"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.common.core.model.ObjectReference" extends="com.gridnine.jasmine.common.core.model.BaseIdentity">
+        <property id="type" type="CLASS"/>
+        <property id="caption" type="STRING"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.common.core.model.SelectItem">
+        <property id="id" type="STRING"/>
+        <property id="text" type="STRING"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration" abstract="true">
+        <property id="notEditable" type="BOOLEAN"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.common.core.model.TextBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>
+    <entity id="com.gridnine.jasmine.common.core.model.PasswordBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>
+    <entity id="com.gridnine.jasmine.common.core.model.FloatNumberBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>
+    <entity id="com.gridnine.jasmine.common.core.model.IntegerNumberBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>
+    <entity id="com.gridnine.jasmine.common.core.model.BooleanBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>
+    <entity id="com.gridnine.jasmine.common.core.model.EntitySelectdBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>
+    <entity id="com.gridnine.jasmine.common.core.model.EnumSelectBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>
+    <entity id="com.gridnine.jasmine.common.core.model.DateBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>
+    <entity id="com.gridnine.jasmine.common.core.model.DateTimeBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>
+    <entity id="com.gridnine.jasmine.common.core.model.GeneralSelectBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration">
+        <collection id="possibleValues" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.core.model.common.SelectItem"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.common.core.model.BaseVM" abstract="true"/>
+    <entity id="com.gridnine.jasmine.common.core.model.BaseVS" abstract="true"/>
+    <entity id="com.gridnine.jasmine.common.core.model.BaseVV" abstract="true"/>
+    <entity id="com.gridnine.jasmine.common.core.model.BaseNavigatorVariantVM" abstract="true" extends="com.gridnine.jasmine.common.core.model.BaseVM">
+        <property id="uid" type="STRING" lateinit="true"/>
+        <property id="title" type="STRING" lateinit="true"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.common.core.model.BaseNavigatorVariantVS" abstract="true" extends="com.gridnine.jasmine.common.core.model.BaseVS">
+        <property id="uid" type="STRING" lateinit="true"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.common.core.model.BaseNavigatorVariantVV" abstract="true" extends="com.gridnine.jasmine.common.core.model.BaseVV">
+        <property id="uid" type="STRING" lateinit="true"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.common.core.model.BaseTableBoxVM" abstract="true" extends="com.gridnine.jasmine.common.core.model.BaseVM">
+        <property id="uid" type="STRING" lateinit="true"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.common.core.model.BaseTableBoxVS" abstract="true" extends="com.gridnine.jasmine.common.core.model.BaseVS">
+        <property id="uid" type="STRING" lateinit="true"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.common.core.model.BaseTableBoxVV" abstract="true" extends="com.gridnine.jasmine.common.core.model.BaseVV">
+        <property id="uid" type="STRING" lateinit="true"/>
+    </entity>
+</custom-entities>

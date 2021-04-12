@@ -41,7 +41,8 @@ open class CompileKotlinJVMPluginTask() :DefaultTask(){
         plugin.pluginsDependencies.forEach {dep ->
             dependsOn(getTaskName(dep.pluginId))
         }
-        if(KotlinUtils.getType(plugin) != SpfPluginType.CORE && KotlinUtils.getType(plugin) != SpfPluginType.SPF){
+        val pluginType = KotlinUtils.getType(plugin)
+        if(pluginType!= SpfPluginType.COMMON_CORE && pluginType!= SpfPluginType.SPF && pluginType!= SpfPluginType.SERVER_CORE){
             dependsOn(CodeGenPluginTask.TASK_NAME)
         }
         mustRunAfter(CleanupTask.TASK_NAME)
@@ -64,7 +65,10 @@ open class CompileKotlinJVMPluginTask() :DefaultTask(){
         val cpFiles = hashSetOf<File>()
         val spfLib = File(project.projectDir, "${config.libRelativePath}/spf-1.0.jar")
         when(val pluginType = KotlinUtils.getType(plugin)){
-            SpfPluginType.SERVER,SpfPluginType.CORE ->{
+            SpfPluginType.COMMON,SpfPluginType.COMMON_CORE ->{
+                cpFiles.addAll(project.configurations.getByName(KotlinUtils.COMMON_CONFIGURATION_NAME).toSet())
+            }
+            SpfPluginType.SERVER,SpfPluginType.SERVER_CORE ->{
                 cpFiles.addAll(project.configurations.getByName(KotlinUtils.SERVER_CONFIGURATION_NAME).toSet())
             }
             SpfPluginType.SPF ->{
@@ -74,6 +78,11 @@ open class CompileKotlinJVMPluginTask() :DefaultTask(){
             SpfPluginType.SERVER_TEST ->{
                 cpFiles.addAll(project.configurations.getByName(KotlinUtils.SERVER_CONFIGURATION_NAME).toSet())
                 cpFiles.addAll(project.configurations.getByName(KotlinUtils.SERVER_TEST_CONFIGURATION_NAME).toSet())
+                cpFiles.add(spfLib)
+            }
+            SpfPluginType.COMMON_TEST ->{
+                cpFiles.addAll(project.configurations.getByName(KotlinUtils.COMMON_CONFIGURATION_NAME).toSet())
+                cpFiles.addAll(project.configurations.getByName(KotlinUtils.COMMON_TEST_CONFIGURATION_NAME).toSet())
                 cpFiles.add(spfLib)
             }
             else -> throw IllegalArgumentException("unsupported plugin type $pluginType")

@@ -18,6 +18,8 @@ object KotlinUtils{
     internal const val KOTLIN_COMPILER_EMBEDDABLE = "kotlin-compiler-embeddable"
     internal const val COMPILER_CLASS_JVM = "org.jetbrains.kotlin.cli.jvm.K2JVMCompiler"
     internal const val COMPILER_CLASS_JS = "org.jetbrains.kotlin.cli.js.K2JSCompiler"
+    const val COMMON_CONFIGURATION_NAME = "common"
+    const val COMMON_TEST_CONFIGURATION_NAME = "common_test"
     const val SERVER_CONFIGURATION_NAME = "server"
     const val SERVER_TEST_CONFIGURATION_NAME = "server_test"
     const val WEB_CONFIGURATION_NAME = "web_js"
@@ -114,7 +116,10 @@ enum class ExitCode(val code: Int) {
 }
 
 enum class SpfPluginType{
-    CORE,
+    COMMON_CORE,
+    COMMON,
+    COMMON_TEST,
+    SERVER_CORE,
     SERVER,
     SERVER_TEST,
     SPF,

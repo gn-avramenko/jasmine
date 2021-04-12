@@ -1,0 +1,6 @@
+<code-gen xmlns="http://gridnine.com/jasmine/codegen">
+    <source id="core-test-model-domain" location="source/com/gridnine/jasmine/common/core/test/model/core-test-model-domain.xml"/>
+    <generate source="core-test-model-domain" targetPlugin="com.gridnine.jasmine.common.core.test" generator="common-domain"/>
+    <source id="core-test-model-rest" location="source/com/gridnine/jasmine/common/core/test/model/core-test-model-rest.xml"/>
+    <generate source="core-test-model-rest" targetPlugin="com.gridnine.jasmine.common.core.test" generator="common-rest"/>
+</code-gen>

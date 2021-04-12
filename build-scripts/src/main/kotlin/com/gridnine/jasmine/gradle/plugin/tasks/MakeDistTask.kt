@@ -23,7 +23,7 @@ open class MakeDistTask() :DefaultTask(){
         registry.plugins.forEach {
             dependsOn(*CreateWarTasksFactory.getTasksNames(it, filesMap))
             when(KotlinUtils.getType(it)){
-                SpfPluginType.CORE,SpfPluginType.SERVER,SpfPluginType.SPF ->{
+                SpfPluginType.COMMON_CORE, SpfPluginType.SERVER_CORE,SpfPluginType.COMMON,SpfPluginType.SERVER,SpfPluginType.SPF ->{
                     dependsOn(CreateJarForJvmPluginTask.getTaskName(it.id))
                 }
                 else -> {}

@@ -49,7 +49,7 @@ open class CreateModulesTask() : DefaultTask() {
             val pluginType = SpfPluginType.valueOf(plugin.parameters.find { par -> "type" == par.id }?.value
                     ?: throw IllegalArgumentException("plugin ${plugin.id} has no type attribute"))
             when (pluginType) {
-                SpfPluginType.CORE, SpfPluginType.SERVER, SpfPluginType.SPF -> {
+                SpfPluginType.COMMON_CORE,SpfPluginType.SERVER_CORE, SpfPluginType.SERVER, SpfPluginType.COMMON, SpfPluginType.SPF -> {
                     externals.add("${baseDir.absolutePath}/")
                     val classesDir = File(baseDir, "classes")
                     if (classesDir.exists()) {
@@ -89,12 +89,12 @@ open class CreateModulesTask() : DefaultTask() {
         }
         val config = project.configurations.getByName(KotlinUtils.SERVER_CONFIGURATION_NAME)
         config.forEach{
-            externals.add("${it.absolutePath}")
+            externals.add(it.absolutePath)
         }
         File(project.projectDir, "lib/externals.txt").writeIfDiffers(externals.joinToString("\n"))
         val testConfig = project.configurations.getByName(KotlinUtils.SERVER_TEST_CONFIGURATION_NAME)
         testConfig.forEach{
-            externalsTest.add("${it.absolutePath}")
+            externalsTest.add(it.absolutePath)
         }
         externals.addAll(externalsTest)
         File(project.projectDir, "lib/externals-test.txt").writeIfDiffers(externals.joinToString("\n"))
@@ -108,13 +108,13 @@ open class CreateModulesTask() : DefaultTask() {
             val content = xml("module", "version" to "4") {
                 "component"("name" to "NewModuleRootManager") {
                     when (pluginType) {
-                        SpfPluginType.SERVER, SpfPluginType.CORE, SpfPluginType.SERVER_TEST, SpfPluginType.SPF -> {
+                        SpfPluginType.COMMON_CORE,SpfPluginType.COMMON_TEST,SpfPluginType.SERVER_CORE, SpfPluginType.SERVER, SpfPluginType.COMMON, SpfPluginType.SERVER_TEST, SpfPluginType.SPF -> {
                             emptyTag("output", "url" to "file://\$MODULE_DIR\$/../../$pluginRelativePath/classes")
                             emptyTag("output-test", "url" to "file://\$MODULE_DIR\$/../../$pluginRelativePath/classes")
                             "content"("url" to "file://\$MODULE_DIR\$/../../$pluginRelativePath") {
                                 if (File(project.projectDir, "$pluginRelativePath/source").exists()) {
                                     emptyTag("sourceFolder", "url" to "file://\$MODULE_DIR\$/../../$pluginRelativePath/source",
-                                            "isTestSource" to if (pluginType == SpfPluginType.SERVER_TEST) "true" else "false")
+                                            "isTestSource" to if (pluginType == SpfPluginType.SERVER_TEST || pluginType == SpfPluginType.COMMON_TEST) "true" else "false")
                                 }
                                 if (File(project.projectDir, "$pluginRelativePath/source-gen").exists()) {
                                     emptyTag("sourceFolder", "url" to "file://\$MODULE_DIR\$/../../$pluginRelativePath/source-gen",
@@ -144,16 +144,28 @@ open class CreateModulesTask() : DefaultTask() {
                     }
 
                     when (pluginType) {
-                        SpfPluginType.SERVER, SpfPluginType.CORE -> {
+                        SpfPluginType.COMMON_CORE, SpfPluginType.COMMON -> {
                             emptyTag("orderEntry", "type" to "sourceFolder", "forTests" to "false")
                             emptyTag("orderEntry", "type" to "inheritedJdk")
-                            emptyTag("orderEntry", "type" to "library", "name" to "server", "level" to "project")
+                            emptyTag("orderEntry", "type" to "library", "name" to KotlinUtils.COMMON_CONFIGURATION_NAME, "level" to "project")
+                        }
+                        SpfPluginType.SERVER_CORE, SpfPluginType.SERVER -> {
+                            emptyTag("orderEntry", "type" to "sourceFolder", "forTests" to "false")
+                            emptyTag("orderEntry", "type" to "inheritedJdk")
+                            emptyTag("orderEntry", "type" to "library", "name" to KotlinUtils.SERVER_CONFIGURATION_NAME, "level" to "project")
                         }
                         SpfPluginType.SERVER_TEST -> {
                             emptyTag("orderEntry", "type" to "sourceFolder", "forTests" to "true")
                             emptyTag("orderEntry", "type" to "inheritedJdk")
                             emptyTag("orderEntry", "type" to "library", "name" to "server", "level" to "project")
                             emptyTag("orderEntry", "type" to "library", "name" to "server_test", "level" to "project")
+                            emptyTag("orderEntry", "type" to "library", "name" to "spf", "level" to "project")
+                        }
+                        SpfPluginType.COMMON_TEST -> {
+                            emptyTag("orderEntry", "type" to "sourceFolder", "forTests" to "true")
+                            emptyTag("orderEntry", "type" to "inheritedJdk")
+                            emptyTag("orderEntry", "type" to "library", "name" to KotlinUtils.COMMON_CONFIGURATION_NAME, "level" to "project")
+                            emptyTag("orderEntry", "type" to "library", "name" to  KotlinUtils.COMMON_TEST_CONFIGURATION_NAME, "level" to "project")
                             emptyTag("orderEntry", "type" to "library", "name" to "spf", "level" to "project")
                         }
                         SpfPluginType.SPF -> {

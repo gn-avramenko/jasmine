@@ -1,0 +1,10 @@
+<plugin xmlns="http://xtrip.gridnine.com/spf" id="com.gridnine.jasmine.common.core.test">
+    <parameter id="type" value="COMMON_TEST"/>
+    <dependencies>
+        <lib-dependency group="junit" name="junit" version="4.12"/>
+        <plugin-dependency plugin-id="com.gridnine.jasmine.common.core"/>
+    </dependencies>
+    <extension point-id="domain-metadata">
+        <parameter id="url" value="com/gridnine/jasmine/common/core/test/model/core-test-model-domain.xml"/>
+    </extension>
+</plugin>

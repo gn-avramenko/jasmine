@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rest xmlns="http://gridnine.com/jasmine/rest" id="standard-test-rest" >
+	<enum id="com.gridnine.jasmine.common.core.test.model.rest.TestRestEnum">
+		<enum-item id="ELEMENT1"/>
+		<enum-item id="ELEMENT2"/>
+	</enum>
+	<entity id="com.gridnine.jasmine.common.core.test.model.rest.TestRestEntity">
+		<property id="stringField" type="STRING"/>
+		<property id="enumField" type="ENUM" class-name="com.gridnine.jasmine.common.core.test.model.rest.TestRestEnum"/>
+	</entity>
+</rest>

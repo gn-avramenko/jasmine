@@ -24,7 +24,7 @@ open class CodeGenPluginTask() :DefaultTask(){
         this.pluginsLocations = pluginsLocations
         registry.plugins.forEach { plugin ->
             when(KotlinUtils.getType(plugin)){
-                SpfPluginType.SPF,SpfPluginType.CORE -> {
+                SpfPluginType.SPF,SpfPluginType.COMMON_CORE, SpfPluginType.SERVER_CORE-> {
                     dependsOn(CompileKotlinJVMPluginTask.getTaskName(plugin.id))
                 }
                 else ->{}
@@ -37,7 +37,7 @@ open class CodeGenPluginTask() :DefaultTask(){
         val urls = project.configurations.getByName(KotlinUtils.SERVER_CONFIGURATION_NAME).map { it.toURI().toURL() }.toMutableList()
         registry.plugins.forEach { plugin ->
             when(KotlinUtils.getType(plugin)){
-                SpfPluginType.SPF,SpfPluginType.CORE -> {
+                SpfPluginType.SPF,SpfPluginType.COMMON_CORE,SpfPluginType.SERVER_CORE -> {
                     urls.add(File(project.projectDir, "build/plugins/${plugin.id}/classes").toURI().toURL())
                 }
                 else ->{}
@@ -45,7 +45,7 @@ open class CodeGenPluginTask() :DefaultTask(){
         }
         urls.add(File(project.projectDir, "${config.libRelativePath}/spf-1.0.jar").toURI().toURL())
         val classLoader = URLClassLoader(urls.toTypedArray(), this::class.java.classLoader)
-        val codeGen = Class.forName("com.gridnine.jasmine.server.spf.SpfCodeGen", true, classLoader)
+        val codeGen = Class.forName("com.gridnine.jasmine.common.spf.SpfCodeGen", true, classLoader)
         val method = codeGen.getMethod("generateCode")
         val instance = codeGen.constructors[0].newInstance(registry, project.name, pluginsLocations)
         method.invoke(instance)

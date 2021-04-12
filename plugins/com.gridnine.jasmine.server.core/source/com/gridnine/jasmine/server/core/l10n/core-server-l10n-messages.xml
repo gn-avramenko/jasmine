@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages-bundle xmlns="http://gridnine.com/jasmine/l10n" id ="core" >
+    <message id="FOUND_SEVERAL_RECORDS">
+        <parameter id="objectType" type="STRING"/>
+        <parameter id="propertyName" type="STRING"/>
+        <parameter id="propertyValue" type="STRING"/>
+    </message>
+</messages-bundle>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain xmlns="http://gridnine.com/jasmine/domain" >
+	<enum id="com.gridnine.jasmine.common.core.test.model.domain.TestEnum">
+		<enum-item id="ITEM1"/>
+		<enum-item id="ITEM2"/>
+		<enum-item id="ITEM3"/>
+	</enum>
+	<document id="com.gridnine.jasmine.common.core.test.model.domain.TestDomainDocument" x-cache-resolve="true">
+			<property type="STRING" id="stringProperty"/>
+			<collection element-type="STRING" id="stringCollection"/>
+			<property type="NESTED_DOCUMENT" id="entityProperty" class-name="com.gridnine.jasmine.common.core.test.model.domain.BaseTestDomainNestedDocument"/>
+			<property type="ENUM" id="enumProperty" class-name="com.gridnine.jasmine.common.core.test.model.domain.TestEnum"/>
+			<property id="entityReference" type="ENTITY_REFERENCE" class-name="com.gridnine.jasmine.common.core.test.model.domain.TestDomainDocument"/>
+			<collection element-type="NESTED_DOCUMENT" id="entityCollection" element-class-name="com.gridnine.jasmine.common.core.test.model.domain.BaseTestDomainNestedDocument"/>
+			<collection element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.common.core.test.model.domain.TestGroup" id="groups"/>
+			<collection element-type="ENUM" id="enumCollection" element-class-name="com.gridnine.jasmine.common.core.test.model.domain.TestEnum"/>
+			<collection element-type="ENTITY_REFERENCE" id="entityRefCollection" element-class-name="com.gridnine.jasmine.common.core.test.model.domain.TestDomainDocument"/>
+	</document>
+	<nested-document id="com.gridnine.jasmine.common.core.test.model.domain.BaseTestDomainNestedDocument" abstract="true">
+		<property type="STRING" id="name"/>
+	</nested-document>
+	<nested-document id="com.gridnine.jasmine.common.core.test.model.domain.TestDomainNestedDocumentImpl" extends = "com.gridnine.jasmine.common.core.test.model.domain.BaseTestDomainNestedDocument">
+		<property type="STRING" id="value"/>
+	</nested-document>
+	<nested-document id="com.gridnine.jasmine.common.core.test.model.domain.TestGroup">
+		<property type="STRING" id="name"/>
+		<collection element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.common.core.test.model.domain.TestItem" id="items"/>
+	</nested-document>
+	<nested-document id="com.gridnine.jasmine.common.core.test.model.domain.TestItem">
+		<property type="STRING" id="name"/>
+	</nested-document>
+	<index document="com.gridnine.jasmine.common.core.test.model.domain.TestDomainDocument" id="com.gridnine.jasmine.common.core.test.model.domain.TestDomainDocumentIndex">
+		<property type="STRING" id="stringProperty" x-cache-find-handler="com.gridnine.jasmine.server.core.test.storage.TestDomainDocumentIndexStringPropertyCacheHandler" />
+		<collection element-type="STRING" id="stringCollection"/>
+		<property type="ENUM" id="enumProperty" class-name="com.gridnine.jasmine.common.core.test.model.domain.TestEnum"/>
+		<property id="entityReference" type="ENTITY_REFERENCE" class-name="com.gridnine.jasmine.common.core.test.model.domain.TestDomainDocument"/>
+		<collection element-type="ENUM" id="enumCollection" element-class-name="com.gridnine.jasmine.common.core.test.model.domain.TestEnum"/>
+		<collection element-type="ENTITY_REFERENCE" id="entityRefCollection" element-class-name="com.gridnine.jasmine.common.core.test.model.domain.TestDomainDocument"/>
+
+	</index>
+	<asset id="com.gridnine.jasmine.common.core.test.model.domain.TestDomainAsset" x-cache-resolve="true">
+		<property type="STRING" id="stringProperty" x-cache-find-handler="com.gridnine.jasmine.server.core.test.storage.TestDomainAssetStringPropertyCacheHandler"/>
+		<property id="dateProperty" type="LOCAL_DATE_TIME"/>
+	</asset>
+</domain>

@@ -28,8 +28,10 @@ open class CreateLibrariesTask(): DefaultTask(){
 
     @TaskAction
     fun createLibraries(){
-        createLibrary("server")
-        createLibrary("server_test")
+        createLibrary(KotlinUtils.COMMON_CONFIGURATION_NAME)
+        createLibrary(KotlinUtils.COMMON_TEST_CONFIGURATION_NAME)
+        createLibrary(KotlinUtils.SERVER_CONFIGURATION_NAME)
+        createLibrary(KotlinUtils.SERVER_TEST_CONFIGURATION_NAME)
         createSpfLibrary()
         createKotlinJSLibrary()
     }
