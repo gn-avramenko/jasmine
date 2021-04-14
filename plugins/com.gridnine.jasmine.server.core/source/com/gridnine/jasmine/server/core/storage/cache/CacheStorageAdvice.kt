@@ -8,6 +8,7 @@ package com.gridnine.jasmine.server.core.storage.cache
 import com.gridnine.jasmine.common.core.model.*
 import com.gridnine.jasmine.common.core.storage.CachedObjectsConverter
 import com.gridnine.jasmine.common.core.storage.Storage
+import com.gridnine.jasmine.common.core.utils.TextUtils
 import com.gridnine.jasmine.server.core.storage.StorageAdvice
 import java.util.*
 import kotlin.reflect.KClass
@@ -93,7 +94,7 @@ class CacheStorageAdvice(override val priority: Double) : StorageAdvice{
 
     companion object{
         private val nullObject:Any = object {}
-        private val nullObjectReference = ObjectReference(BaseIdentity::class, UUID.randomUUID().toString(),null)
+        private val nullObjectReference = ObjectReference(BaseIdentity::class, TextUtils.generateUid(),null)
 
     }
 

@@ -13,8 +13,10 @@ import com.gridnine.jasmine.common.core.storage.ProjectionQuery
 import com.gridnine.jasmine.common.core.storage.SearchQuery
 import com.gridnine.jasmine.common.core.storage.TransactionContext
 import com.gridnine.jasmine.common.core.storage.VersionMetadata
+import com.mchange.v2.c3p0.ComboPooledDataSource
 import java.io.InputStream
 import java.time.LocalDateTime
+import javax.sql.DataSource
 import kotlin.reflect.KClass
 
 
@@ -313,6 +315,8 @@ class StorageRegistry:Disposable {
 
     private val indexHandlers = hashMapOf<KClass<*>, MutableList<IndexHandler<*, *>>>()
 
+    private val dataSourceProviders = hashMapOf<String, DataSourceProvider>()
+
     fun register(interceptor:StorageInterceptor) {
         storageInterceptors.add(interceptor)
         storageInterceptors.sortBy { it.priority }
@@ -337,6 +341,12 @@ class StorageRegistry:Disposable {
         emptyList()
     }
 
+    fun register(dataSourceProvider: DataSourceProvider) {
+        dataSourceProviders[dataSourceProvider.getId()] = dataSourceProvider
+    }
+
+    fun getDataSourceProvider(id:String)= dataSourceProviders[id]!!
+
     override fun dispose() {
         wrapper.dispose()
     }
@@ -360,3 +370,14 @@ class VersionReadData(val streamProvider: () -> InputStream, private val closeCa
 }
 
 class DocumentWrapper<D:BaseIdentity>(val uid:String, val content:ByteArray,val metadata:VersionMetadata,val revision:Int,val oid:Long?,val cls:KClass<D>)
+
+
+class C3PoDataSource(private val delegate:ComboPooledDataSource): DataSource by delegate,Disposable{
+    override fun dispose() {
+        delegate.close()
+    }
+}
+interface DataSourceProvider{
+    fun createDataSource(): C3PoDataSource
+    fun getId():String
+}

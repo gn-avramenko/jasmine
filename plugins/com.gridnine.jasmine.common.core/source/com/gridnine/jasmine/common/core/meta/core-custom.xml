@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<custom-entities xmlns="http://xtrip.gridnine.com/jasmine/custom" >
+<custom-entities xmlns="http://gridnine.com/jasmine/custom" >
     <entity id="com.gridnine.jasmine.common.core.model.BaseIdentity" abstract="true">
         <property id="uid" type="STRING"/>
     </entity>
@@ -16,7 +16,7 @@
     </entity>
     <entity id="com.gridnine.jasmine.common.core.model.TextBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>
     <entity id="com.gridnine.jasmine.common.core.model.PasswordBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>
-    <entity id="com.gridnine.jasmine.common.core.model.FloatNumberBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>
+    <entity id="com.gridnine.jasmine.common.core.model.BigDecimalBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>
     <entity id="com.gridnine.jasmine.common.core.model.IntegerNumberBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>
     <entity id="com.gridnine.jasmine.common.core.model.BooleanBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>
     <entity id="com.gridnine.jasmine.common.core.model.EntitySelectdBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>

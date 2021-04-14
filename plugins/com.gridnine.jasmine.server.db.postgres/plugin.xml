@@ -1,11 +1,11 @@
-<plugin xmlns="http://xtrip.gridnine.com/spf" id="com.gridnine.jasmine.server.db.h2">
+<plugin xmlns="http://xtrip.gridnine.com/spf" id="com.gridnine.jasmine.server.db.postgres">
     <parameter id="type" value="SERVER"/>
     <dependencies>
         <plugin-dependency plugin-id="com.gridnine.jasmine.common.core"/>
         <plugin-dependency plugin-id="com.gridnine.jasmine.server.core"/>
-        <lib-dependency group="com.h2database" name="h2" version="1.4.200"/>
+        <lib-dependency group="org.postgresql" name="postgresql" version="42.2.18"/>
     </dependencies>
     <extension point-id="activator">
-        <parameter id="class" value="com.gridnine.jasmine.server.db.h2.H2Activator"/>
+        <parameter id="class" value="com.gridnine.jasmine.server.db.postgres.PostgresActivator"/>
     </extension>
 </plugin>

@@ -196,7 +196,7 @@ internal class VSEntityMetadataProvider(description: VSEntityDescription) : Obje
             VSPropertyType.TEXT_BOX_SETTINGS -> TextBoxConfiguration::class.qualifiedName
             VSPropertyType.PASSWORD_BOX_SETTINGS -> PasswordBoxConfiguration::class.qualifiedName
             VSPropertyType.ENTITY -> elementClassName
-            VSPropertyType.FLOAT_NUMBER_BOX_SETTINGS -> FloatNumberBoxConfiguration::class.qualifiedName
+            VSPropertyType.FLOAT_NUMBER_BOX_SETTINGS -> BigDecimalBoxConfiguration::class.qualifiedName
             VSPropertyType.INTEGER_NUMBER_BOX_SETTINGS -> IntegerNumberBoxConfiguration::class.qualifiedName
             VSPropertyType.BOOLEAN_BOX_SETTINGS -> BooleanBoxConfiguration::class.qualifiedName
             VSPropertyType.ENTITY_SELECT_BOX_SETTINGS -> EntitySelectBoxConfiguration::class.qualifiedName

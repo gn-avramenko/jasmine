@@ -18,7 +18,7 @@ import com.gridnine.jasmine.server.core.storage.cache.InvalidateCacheStorageInte
 import com.gridnine.jasmine.server.core.storage.cache.ehcache.EhCacheManager
 import com.gridnine.jasmine.server.core.storage.jdbc.JdbcDatabase
 import com.gridnine.jasmine.server.core.storage.jdbc.JdbcDialect
-import com.gridnine.jasmine.server.db.h2.H2DataSource
+import com.gridnine.jasmine.server.db.h2.H2DataSourceProvider
 import com.gridnine.jasmine.server.db.h2.H2dbDialect
 import javax.sql.DataSource
 
@@ -56,7 +56,8 @@ abstract class StorageTestBase:CommonCoreTestBase(){
     }
 
     protected fun startH2Database(){
-        Environment.publish(DataSource::class, H2DataSource.createDataSource("jdbc:h2:mem:jasmine"))
+        System.setProperty("db.h2.connectionUrl","jdbc:h2:mem:jasmine")
         Environment.publish(JdbcDialect::class, H2dbDialect())
+        Environment.publish(DataSource::class, H2DataSourceProvider().createDataSource())
     }
 }

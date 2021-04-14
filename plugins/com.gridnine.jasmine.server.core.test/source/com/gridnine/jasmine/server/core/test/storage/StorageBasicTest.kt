@@ -99,7 +99,7 @@ class StorageBasicTest : StorageTestBase() {
     fun testAssetCRUD() {
         AuthUtils.setCurrentUser("system")
         var asset = TestDomainAsset()
-        asset.uid = UUID.randomUUID().toString()
+        asset.uid = TextUtils.generateUid()
         asset.stringProperty = "test"
         asset.dateProperty = LocalDateTime.now()
         Storage.get().saveAsset(asset)

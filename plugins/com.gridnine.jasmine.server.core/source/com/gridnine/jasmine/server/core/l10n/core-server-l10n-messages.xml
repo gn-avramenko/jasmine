@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages-bundle xmlns="http://gridnine.com/jasmine/l10n" id ="core" >
-    <message id="FOUND_SEVERAL_RECORDS">
+    <message id="Found_several_records">
         <parameter id="objectType" type="STRING"/>
         <parameter id="propertyName" type="STRING"/>
         <parameter id="propertyValue" type="STRING"/>
+    </message>
+    <message id="Yes"/>
+    <message id="No"/>
+    <message id="Choose_variant"/>
+    <message id="Question"/>
+    <message id="Object_not_found">
+        <parameter id="objectId" type="STRING"/>
+        <parameter id="objectUid" type="STRING"/>
     </message>
 </messages-bundle>

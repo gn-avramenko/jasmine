@@ -78,8 +78,8 @@ class PasswordBoxConfiguration() : BaseWidgetConfiguration(){
 }
 
 
-class FloatNumberBoxConfiguration() : BaseWidgetConfiguration(){
-    constructor(configure:FloatNumberBoxConfiguration.()->Unit):this(){
+class BigDecimalBoxConfiguration() : BaseWidgetConfiguration(){
+    constructor(configure:BigDecimalBoxConfiguration.()->Unit):this(){
         configure.invoke(this)
     }
 }

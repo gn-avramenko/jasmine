@@ -111,7 +111,7 @@ class StorageImpl : Storage {
             return when (lst.size) {
                 0 -> null
                 1 -> lst[0].document
-                else -> throw Xeption.forAdmin(CoreServerL10nMessagesFactory.FOUND_SEVERAL_RECORDS(index.qualifiedName, property.name, propertyValue?.toString()))
+                else -> throw Xeption.forAdmin(CoreServerL10nMessagesFactory.Found_several_records(index.qualifiedName, property.name, propertyValue?.toString()))
             }
         }
         return advices[idx].onFindUniqueDocumentReference(index, property, propertyValue) { index2, property2, propertyValue2 ->
