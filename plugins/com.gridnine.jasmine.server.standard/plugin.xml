@@ -1,0 +1,8 @@
+<plugin xmlns="http://xtrip.gridnine.com/spf" id="com.gridnine.jasmine.server.standard">
+    <parameter id="type" value="COMMON"/>
+    <dependencies>
+        <plugin-dependency plugin-id="com.gridnine.jasmine.common.core"/>
+        <plugin-dependency plugin-id="com.gridnine.jasmine.common.standard"/>
+        <plugin-dependency plugin-id="com.gridnine.jasmine.server.core"/>
+    </dependencies>
+</plugin>

@@ -25,11 +25,11 @@ class Registry:Disposable{
         registry.getOrPut(item.getType().id, { hashMapOf()})[item.getId()] = item
     }
 
-    fun<T:Any> allOf(type: RegistryItem<T>):List<T> = (registry[type.getId()]?.values?.toList() as List<T>?)?: emptyList()
+    fun<T:Any> allOf(type: RegistryItemType<T>):List<T> = (registry[type.id]?.values?.toList() as List<T>?)?: emptyList()
 
-    fun <T:Any> get(type: RegistryItem<T>, id:String)= registry[type.getId()]?.get(id) as T?
+    fun <T:Any> get(type: RegistryItemType<T>, id:String)= registry[type.id]?.get(id) as T?
 
-    fun <T:Any> get(type: RegistryItem<T>, cls:KClass<*>)= registry[type.getId()]?.get(cls.qualifiedName) as T?
+    fun <T:Any> get(type: RegistryItemType<T>, cls:KClass<*>)= registry[type.id]?.get(cls.qualifiedName) as T?
 
 
     override fun dispose() {

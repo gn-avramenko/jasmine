@@ -31,7 +31,9 @@ open class ZkBorderContainer(configure: BorderContainerConfiguration.() -> Unit)
         config.configure()
     }
     
-    override fun setNorthRegion(region: BorderContainerRegion) {
+    override fun setNorthRegion(configure: BorderContainerRegion.()->Unit) {
+        val region = BorderContainerRegion()
+        region.configure()
         northRegion  = region
         if(component != null){
             setNorthInternal()
@@ -72,7 +74,9 @@ open class ZkBorderContainer(configure: BorderContainerConfiguration.() -> Unit)
         setRegionInternal(northRegion, North::class) { North() }
     }
 
-    override fun setWestRegion(region: BorderContainerRegion) {
+    override fun setWestRegion(configure: BorderContainerRegion.()->Unit) {
+        val region = BorderContainerRegion()
+        region.configure()
         westRegion  = region
         if(component != null){
             setWestInternal()
@@ -83,7 +87,9 @@ open class ZkBorderContainer(configure: BorderContainerConfiguration.() -> Unit)
         setRegionInternal(westRegion, West::class){West()}
     }
 
-    override fun setEastRegion(region: BorderContainerRegion) {
+    override fun setEastRegion(configure: BorderContainerRegion.()->Unit) {
+        val region = BorderContainerRegion()
+        region.configure()
         eastRegion  = region
         if(component != null){
             setEastInternal()
@@ -94,7 +100,9 @@ open class ZkBorderContainer(configure: BorderContainerConfiguration.() -> Unit)
         setRegionInternal(eastRegion, East::class){East()}
     }
 
-    override fun setSouthRegion(region: BorderContainerRegion) {
+    override fun setSouthRegion(configure: BorderContainerRegion.()->Unit) {
+        val region = BorderContainerRegion()
+        region.configure()
         southRegion  = region
         if(component != null){
             setSouthInternal()
@@ -105,7 +113,9 @@ open class ZkBorderContainer(configure: BorderContainerConfiguration.() -> Unit)
         setRegionInternal(southRegion, South::class){South()}
     }
 
-    override fun setCenterRegion(region: BorderContainerRegion) {
+    override fun setCenterRegion(configure: BorderContainerRegion.()->Unit) {
+        val region = BorderContainerRegion()
+        region.configure()
         centerRegion  = region
         if(component != null){
             setCenterInternal()

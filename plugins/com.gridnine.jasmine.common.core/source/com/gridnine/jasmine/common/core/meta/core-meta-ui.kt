@@ -117,7 +117,7 @@ class PasswordBoxWidgetDescription(notEditable:Boolean):BaseWidgetDescription(no
 
 class TextBoxWidgetDescription(notEditable:Boolean):BaseWidgetDescription(notEditable, WidgetType.TEXT_BOX)
 
-class FloatNumberBoxWidgetDescription(notEditable:Boolean):BaseWidgetDescription(notEditable, WidgetType.FLOAT_NUMBER_BOX)
+class BigDecimalNumberBoxWidgetDescription(notEditable:Boolean):BaseWidgetDescription(notEditable, WidgetType.BIG_DECIMAL_NUMBER_BOX)
 
 class IntegerNumberBoxWidgetDescription(notEditable:Boolean, val nonNullable: Boolean):BaseWidgetDescription(notEditable, WidgetType.INTEGER_NUMBER_BOX)
 
@@ -144,7 +144,7 @@ class TableBoxWidgetDescription(val id:String, notEditable: Boolean):BaseWidgetD
 enum class WidgetType{
     TEXT_BOX,
     PASSWORD_BOX,
-    FLOAT_NUMBER_BOX,
+    BIG_DECIMAL_NUMBER_BOX,
     INTEGER_NUMBER_BOX,
     BOOLEAN_BOX,
     ENTITY_SELECT_BOX,

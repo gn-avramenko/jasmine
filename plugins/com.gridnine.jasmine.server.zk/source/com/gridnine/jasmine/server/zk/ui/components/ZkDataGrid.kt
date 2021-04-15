@@ -47,7 +47,7 @@ class ZkDataGrid<E : Any>(configure: DataGridConfiguration.() -> Unit) : DataGri
             component.mold = "paging"
             component.isAutopaging = true
             component.isSpan = configuration.span
-            configureDimensions(component!!, configuration)
+            configureDimensions(component, configuration)
             val columns = Columns()
             columns.parent = component
             if (configuration.selectable) {

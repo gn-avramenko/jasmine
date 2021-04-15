@@ -1,0 +1,8 @@
+<code-gen xmlns="http://gridnine.com/jasmine/codegen">
+    <source id="standard-domain" location="source/com/gridnine/jasmine/common/standard/model/standard-model-domain.xml"/>
+    <source id="standard-l10n" location="source/com/gridnine/jasmine/common/standard/model/standard-l10n.xml" factoryClassName="com.gridnine.jasmine.common.standard.model.l10n.StandardL10nMessagesFactory"/>
+    <source id="standard-ui" location="source/com/gridnine/jasmine/common/standard/model/standard-ui.xml" />
+    <generate source="standard-domain" targetPlugin="com.gridnine.jasmine.common.standard" generator="common-domain"/>
+    <generate source="standard-l10n" targetPlugin="com.gridnine.jasmine.common.standard" generator="common-l10n" />
+    <generate source="standard-ui" targetPlugin="com.gridnine.jasmine.common.standard" generator="common-ui" />
+</code-gen>

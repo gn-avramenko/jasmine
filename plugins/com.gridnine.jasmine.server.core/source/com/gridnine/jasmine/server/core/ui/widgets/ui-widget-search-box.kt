@@ -11,11 +11,13 @@ import com.gridnine.jasmine.server.core.ui.components.TextBox
 import com.gridnine.jasmine.server.core.ui.components.UiLibraryAdapter
 
 
-class SearchBoxWidget(config: SearchBoxWidgetConfiguration): BaseNodeWrapper<TextBox>(){
+class SearchBoxWidget(configure: SearchBoxWidgetConfiguration.()->Unit): BaseNodeWrapper<TextBox>(){
 
     private var searchHandler: ((String?) ->Unit)? = null
 
     init{
+        val config = SearchBoxWidgetConfiguration()
+        config.configure()
         val comp = UiLibraryAdapter.get().createTextBox{
             width = config.width
             height = config.height

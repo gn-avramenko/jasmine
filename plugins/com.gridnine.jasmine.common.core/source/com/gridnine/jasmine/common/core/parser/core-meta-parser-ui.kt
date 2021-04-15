@@ -204,8 +204,8 @@ object UiMetadataParser {
                 val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
                 WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription, null, null, null)
             }
-            "float-number-box" -> {
-                val widget = FloatNumberBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
+            "big-decimal-number-box" -> {
+                val widget = BigDecimalNumberBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
                         ?: false)
                 val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.BIG_DECIMAL, null, false,false)
                 val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.FLOAT_NUMBER_BOX_SETTINGS, null, false)

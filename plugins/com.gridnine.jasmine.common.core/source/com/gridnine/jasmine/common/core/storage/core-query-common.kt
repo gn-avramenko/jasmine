@@ -102,6 +102,81 @@ abstract class BaseQuery{
     val criterions = arrayListOf<SearchCriterion>()
 }
 
+fun<T> eq(property:T, value:Any):SearchCriterion where T:PropertyNameSupport, T:EqualitySupport{
+    return SimpleCriterion(property.name, SimpleCriterion.Operation.EQ, value)
+}
+
+fun<T> ne(property:T, value:Any):SearchCriterion where T:PropertyNameSupport, T:EqualitySupport{
+    return SimpleCriterion(property.name, SimpleCriterion.Operation.NE, value)
+}
+
+fun<T> like(property:T, value:Any):SearchCriterion where T:PropertyNameSupport, T:StringOperationsSupport{
+    return SimpleCriterion(property.name, SimpleCriterion.Operation.LIKE, value)
+}
+fun<T> ilike(property:T, value:Any):SearchCriterion where T:PropertyNameSupport, T:StringOperationsSupport{
+    return SimpleCriterion(property.name, SimpleCriterion.Operation.ILIKE, value)
+}
+
+fun<T> gt(property:T, value:Any):SearchCriterion where T:PropertyNameSupport, T:ComparisonSupport{
+    return SimpleCriterion(property.name, SimpleCriterion.Operation.GT, value)
+}
+fun<T> ge(property:T, value:Any):SearchCriterion where T:PropertyNameSupport, T:ComparisonSupport{
+    return SimpleCriterion(property.name, SimpleCriterion.Operation.GE, value)
+}
+fun<T> lt(property:T, value:Any):SearchCriterion where T:PropertyNameSupport, T:ComparisonSupport{
+    return SimpleCriterion(property.name, SimpleCriterion.Operation.LT, value)
+}
+
+fun<T> le(property:T, value:Any):SearchCriterion where T:PropertyNameSupport, T:ComparisonSupport{
+    return SimpleCriterion(property.name, SimpleCriterion.Operation.LE, value)
+}
+
+fun<T> contains(property:T, value:Any):SearchCriterion where T:PropertyNameSupport, T:CollectionSupport{
+    return SimpleCriterion(property.name, SimpleCriterion.Operation.CONTAINS, value)
+}
+
+fun<T> icontains(property:T, value:Any):SearchCriterion where T:PropertyNameSupport, T:CollectionSupport{
+    return SimpleCriterion(property.name, SimpleCriterion.Operation.ICONTAINS, value)
+}
+
+fun<T> isEmpty(property:T):SearchCriterion where T:PropertyNameSupport, T:CollectionSupport{
+    return CheckCriterion(property.name, CheckCriterion.Check.IS_EMPTY)
+}
+
+fun<T> isNotEmpty(property:T):SearchCriterion where T:PropertyNameSupport, T:CollectionSupport{
+    return CheckCriterion(property.name, CheckCriterion.Check.NOT_EMPTY)
+}
+
+fun<T> isNull(property:T):SearchCriterion where T:PropertyNameSupport{
+    return CheckCriterion(property.name, CheckCriterion.Check.IS_NULL)
+}
+
+fun<T> isNotNull(property:T):SearchCriterion where T:PropertyNameSupport{
+    return CheckCriterion(property.name, CheckCriterion.Check.IS_NOT_NULL)
+}
+
+fun<T,P:Any> between(property:T, lo:P, hi:P):SearchCriterion where T:PropertyNameSupport, T:ComparisonSupport{
+    return BetweenCriterion(property.name, lo, hi)
+}
+
+fun<T,P:Any> notBetween(property:T, lo:P, hi:P):SearchCriterion where T:PropertyNameSupport, T:ComparisonSupport{
+    return NotBetweenCriterion(property.name, lo, hi)
+}
+
+fun<T,P:Any> isIn(property:T, values:List<P>):SearchCriterion where T:PropertyNameSupport, T:EqualitySupport{
+    return InCriterion(property.name, values)
+}
+
+fun and(criterions:List<SearchCriterion>):SearchCriterion{
+    return JunctionCriterion(false, criterions)
+}
+fun or(criterions:List<SearchCriterion>):SearchCriterion{
+    return JunctionCriterion(true, criterions)
+}
+
+fun not(criterion:SearchCriterion):SearchCriterion{
+    return NotCriterion(criterion)
+}
 
 open class CriterionsBuilder(private val criterions: MutableList<SearchCriterion>){
 

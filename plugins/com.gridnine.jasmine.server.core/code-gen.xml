@@ -1,0 +1,3 @@
+<code-gen xmlns="http://gridnine.com/jasmine/codegen">
+    <generator id="server-ui" className="com.gridnine.jasmine.server.core.build.UiServerGenerator" priority="4"/>
+</code-gen>

@@ -1,0 +1,37 @@
+<messages-bundle xmlns="http://gridnine.com/jasmine/l10n" id = "standard">
+    <message id="settings"/>
+    <message id="YES"/>
+    <message id="NO"/>
+    <message id="reset"/>
+    <message id="apply"/>
+    <message id="filters"/>
+    <message id="from"/>
+    <message id="to"/>
+    <message id="selectItem"/>
+    <message id="view"/>
+    <message id="edit"/>
+    <message id="save"/>
+    <message id="close"/>
+    <message id="cancel"/>
+    <message id="ok"/>
+    <message id="more"/>
+    <message id="showVersions"/>
+    <message id="version"/>
+    <message id="modifiedBy"/>
+    <message id="modified"/>
+    <message id="comment"/>
+    <message id="openVersion"/>
+    <message id="restoreVersion"/>
+    <message id="versionRestored"/>
+    <message id="delete"/>
+    <message id="areYouSureToDelete"/>
+    <message id="question"/>
+    <message id="objectsDeleted"/>
+    <message id="ChoseVariant"/>
+    <message id="Workspace"/>
+    <message id="Filters"/>
+    <message id="Columns"/>
+    <message id="Empty_field"/>
+    <message id="Validation_errors_exist"/>
+    <message id="Operation_completed"/>
+</messages-bundle>

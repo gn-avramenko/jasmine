@@ -9,11 +9,11 @@ import com.gridnine.jasmine.server.core.ui.common.BaseComponentConfiguration
 import com.gridnine.jasmine.server.core.ui.common.UiNode
 
 interface BorderContainer : UiNode {
-    fun setNorthRegion(region: BorderContainerRegion)
-    fun setWestRegion(region: BorderContainerRegion)
-    fun setEastRegion(region: BorderContainerRegion)
-    fun setSouthRegion(region: BorderContainerRegion)
-    fun setCenterRegion(region: BorderContainerRegion)
+    fun setNorthRegion(configure: BorderContainerRegion.()->Unit)
+    fun setWestRegion(configure: BorderContainerRegion.()->Unit)
+    fun setEastRegion(configure: BorderContainerRegion.()->Unit)
+    fun setSouthRegion(configure: BorderContainerRegion.()->Unit)
+    fun setCenterRegion(configure: BorderContainerRegion.()->Unit)
 }
 
 class BorderContainerConfiguration: BaseComponentConfiguration()

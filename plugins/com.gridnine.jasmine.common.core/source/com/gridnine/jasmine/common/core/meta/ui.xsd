@@ -185,7 +185,7 @@
                     </complexContent>
                 </complexType>
             </element>
-            <element name="float-number-box">
+            <element name="big-decimal-number-box">
                 <complexType>
                     <complexContent>
                         <extension base="tns:baseWidget">

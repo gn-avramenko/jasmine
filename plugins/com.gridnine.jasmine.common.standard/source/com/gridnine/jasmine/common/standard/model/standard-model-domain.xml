@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain xmlns="http://gridnine.com/jasmine/domain" >
+    <!-- workspace -->
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceItem" abstract="true">
+        <property id="displayName" type="STRING"/>
+    </nested-document>
+    <enum id="com.gridnine.jasmine.common.standard.model.domain.SortOrderType">
+        <enum-item id="ASC"/>
+        <enum-item id="DESC"/>
+    </enum>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.SortOrder">
+        <property id="orderType" type="ENUM" class-name="com.gridnine.jasmine.common.standard.model.domain.SortOrderType"/>
+        <property id="field" type="STRING"/>
+    </nested-document>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceSimpleCriterionValue" abstract="true"/>
+    <enum id="com.gridnine.jasmine.common.standard.model.domain.WorkspaceSimpleCriterionCondition">
+        <enum-item id="EQUALS"/>
+        <enum-item id="NOT_EQUALS"/>
+        <enum-item id="GREATER_THAN"/>
+        <enum-item id="GREATER_THAN_OR_EQUALS"/>
+        <enum-item id="LESS_THAN_OR_EQUALS"/>
+        <enum-item id="LESS_THAN"/>
+        <enum-item id="SET"/>
+        <enum-item id="NOT_SET"/>
+        <enum-item id="CONTAINS"/>
+        <enum-item id="NOT_CONTAINS"/>
+        <enum-item id="WITHIN_PERIOD"/>
+        <enum-item id="YES"/>
+        <enum-item id="NO"/>
+    </enum>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.WorkspaceSimpleCriterionStringValues" extends="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceSimpleCriterionValue">
+        <collection id="values" element-type="STRING"/>
+    </nested-document>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.WorkspaceSimpleCriterionEntityValues" extends="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceSimpleCriterionValue">
+        <collection id="values" element-type="ENTITY_REFERENCE" element-class-name="com.gridnine.jasmine.common.core.model.BaseIdentity"/>
+    </nested-document>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.WorkspaceSimpleCriterionEnumValues" extends="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceSimpleCriterionValue">
+        <collection id="values" element-type="STRING"/>
+        <property id="enumClassName" type="STRING"/>
+    </nested-document>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.WorkspaceSimpleCriterionDateValue" extends="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceSimpleCriterionValue">
+        <property id="value" type="LOCAL_DATE"/>
+    </nested-document>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.WorkspaceSimpleCriterionDateIntervalValue" extends="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceSimpleCriterionValue">
+        <property id="startDate" type="LOCAL_DATE"/>
+        <property id="endDate" type="LOCAL_DATE"/>
+    </nested-document>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.WorkspaceSimpleCriterionDateTimeValue" extends="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceSimpleCriterionValue">
+        <property id="value" type="LOCAL_DATE_TIME"/>
+    </nested-document>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.WorkspaceSimpleCriterionDateTimeIntervalValue" extends="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceSimpleCriterionValue">
+        <property id="startDate" type="LOCAL_DATE_TIME"/>
+        <property id="endDate" type="LOCAL_DATE_TIME"/>
+    </nested-document>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.WorkspaceSimpleCriterionFloatValue" extends="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceSimpleCriterionValue">
+        <property id="value" type="BIG_DECIMAL"/>
+    </nested-document>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.WorkspaceSimpleCriterionIntValue" extends="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceSimpleCriterionValue">
+        <property id="value" type="INT"/>
+    </nested-document>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.WorkspaceSimpleCriterionLongValue" extends="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceSimpleCriterionValue">
+        <property id="value" type="LONG"/>
+    </nested-document>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceCriterion" abstract="true"/>
+
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.SimpleWorkspaceCriterion" extends="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceCriterion">
+        <property id="property" type="STRING"/>
+        <property id="condition" type="ENUM" class-name="com.gridnine.jasmine.common.standard.model.domain.WorkspaceSimpleCriterionCondition"/>
+        <property id="value" type="NESTED_DOCUMENT" class-name="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceSimpleCriterionValue"/>
+    </nested-document>
+
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.BaseComplexWorkspaceCriterion" extends="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceCriterion" abstract="true">
+        <collection id="criterions" element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceCriterion"/>
+    </nested-document>
+
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.OrWorkspaceCriterion" extends="com.gridnine.jasmine.common.standard.model.domain.BaseComplexWorkspaceCriterion"/>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.AndWorkspaceCriterion" extends="com.gridnine.jasmine.common.standard.model.domain.BaseComplexWorkspaceCriterion"/>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.NotWorkspaceCriterion" extends="com.gridnine.jasmine.common.standard.model.domain.BaseComplexWorkspaceCriterion"/>
+
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.ListWorkspaceItem" extends="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceItem">
+        <property id="listId" type="STRING"/>
+        <collection id="criterions" element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceCriterion"/>
+        <collection id="columns" element-type="STRING"/>
+        <collection id="filters" element-type="STRING"/>
+        <collection id="sortOrders" element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.common.standard.model.domain.SortOrder"/>
+    </nested-document>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.WorkspaceGroup">
+        <property id="displayName" type="STRING"/>
+        <collection id="items" element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceItem"/>
+    </nested-document>
+    <document id="com.gridnine.jasmine.common.standard.model.domain.Workspace" >
+        <collection id="groups" element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.common.standard.model.domain.WorkspaceGroup"/>
+    </document>
+
+    <nested-document id="com.gridnine.jasmine.common.standard.model.BaseListFilterValue" abstract="true"/>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.ListFilterStringValues" extends="com.gridnine.jasmine.common.standard.model.BaseListFilterValue">
+        <collection id="values" element-type="STRING"/>
+    </nested-document>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.ListFilterEntityValues" extends="com.gridnine.jasmine.common.standard.model.BaseListFilterValue">
+        <collection id="values" element-type="ENTITY_REFERENCE" element-class-name="com.gridnine.jasmine.common.core.model.BaseIdentity"/>
+    </nested-document>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.ListFilterDateIntervalValue" extends="com.gridnine.jasmine.common.standard.model.BaseListFilterValue">
+        <property id="startDate" type="LOCAL_DATE"/>
+        <property id="endDate" type="LOCAL_DATE"/>
+    </nested-document>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.ListFilterDateTimeIntervalValue" extends="com.gridnine.jasmine.common.standard.model.BaseListFilterValue">
+        <property id="startDate" type="LOCAL_DATE_TIME"/>
+        <property id="endDate" type="LOCAL_DATE_TIME"/>
+    </nested-document>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.ListFilterEnumValues" extends="com.gridnine.jasmine.common.standard.model.BaseListFilterValue">
+        <collection id="values" element-type="STRING"/>
+        <property id="enumClassName" type="STRING"/>
+    </nested-document>
+
+    <nested-document id="com.gridnine.jasmine.common.standard.model.ListFilterFloatIntervalValue" extends="com.gridnine.jasmine.common.standard.model.BaseListFilterValue">
+        <property id="fromValue" type="BIG_DECIMAL"/>
+        <property id="toValue" type="BIG_DECIMAL"/>
+    </nested-document>
+
+    <nested-document id="com.gridnine.jasmine.common.standard.model.ListFilterIntIntervalValue" extends="com.gridnine.jasmine.common.standard.model.BaseListFilterValue">
+        <property id="fromValue" type="INT"/>
+        <property id="toValue" type="INT"/>
+    </nested-document>
+
+    <nested-document id="com.gridnine.jasmine.common.standard.model.ListFilterBooleanValues" extends="com.gridnine.jasmine.common.standard.model.BaseListFilterValue">
+        <property id="value" type="BOOLEAN"/>
+    </nested-document>
+
+    <nested-document id="com.gridnine.jasmine.common.standard.model.ListFilter">
+        <property id="fieldId" type="STRING"/>
+        <property id="value" type="NESTED_DOCUMENT" class-name="com.gridnine.jasmine.common.standard.model.BaseListFilterValue"/>
+    </nested-document>
+</domain>

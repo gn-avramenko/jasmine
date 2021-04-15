@@ -31,6 +31,9 @@ class DataGridConfiguration : BaseComponentConfiguration(){
 }
 
 class DataGridColumnConfiguration {
+    constructor(configure:DataGridColumnConfiguration.()->Unit){
+        this.configure()
+    }
     lateinit var fieldId:String
     lateinit var title:String
     var width:String? = null

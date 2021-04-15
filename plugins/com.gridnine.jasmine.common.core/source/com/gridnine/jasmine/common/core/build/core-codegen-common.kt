@@ -12,24 +12,24 @@ import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-internal open class BaseGenData(val id: String)
+open class BaseGenData(val id: String)
 
-internal class GenClassData(id: String, val extends: String?, val abstract: Boolean, val noEnumProperties: Boolean, val open:Boolean = false, val implementCachedObject:Boolean=false):BaseGenData(id) {
+class GenClassData(id: String, val extends: String?, val abstract: Boolean, val noEnumProperties: Boolean, val open:Boolean = false, val implementCachedObject:Boolean=false):BaseGenData(id) {
     var generateBuilder = false
     val properties = arrayListOf<GenPropertyDescription>()
     val collections = arrayListOf<GenCollectionDescription>()
     val codeInjections = arrayListOf<String>()
 }
 
-internal class GenEnumData(id: String):BaseGenData(id) {
+class GenEnumData(id: String):BaseGenData(id) {
     val enumItems = arrayListOf<String>()
 }
 
 
-internal class GenPropertyDescription(val id: String, val type: GenPropertyType, val className: String?, var lateinit: Boolean = false, var nonNullable: Boolean = false, var openSetter:Boolean = false, var disallowedSetter:Boolean = false, var override:Boolean = false)
-internal class GenCollectionDescription(val id: String, val elementType: GenPropertyType, var elementClassName: String?, var openGetter:Boolean = false, var readonlyImpl:Boolean = false)
+class GenPropertyDescription(val id: String, val type: GenPropertyType, val className: String?, var lateinit: Boolean = false, var nonNullable: Boolean = false, var openSetter:Boolean = false, var disallowedSetter:Boolean = false, var override:Boolean = false, val useBuilder:Boolean = false)
+class GenCollectionDescription(val id: String, val elementType: GenPropertyType, var elementClassName: String?, var openGetter:Boolean = false, var readonlyImpl:Boolean = false)
 
-internal enum class GenPropertyType {
+enum class GenPropertyType {
 
     STRING,
     ENUM,
@@ -47,7 +47,7 @@ internal enum class GenPropertyType {
 
 }
 
-internal object GenUtils {
+object GenUtils {
 
     fun generateHeader(sb:StringBuilder, className: String, projectName: String){
         sb.append("""
@@ -91,6 +91,13 @@ internal object GenUtils {
                             }
                             if(prop.disallowedSetter) {
                                 "set(value) = if(allowChanges) field = value else throw ${Xeption::class.java.name}.forDeveloper(\"illegal setter call in ${it.id}\")"()
+                            }
+                            if(prop.useBuilder){
+                                blankLine()
+                                "fun set${prop.id.capitalize()}(configure: ${prop.className}.()->Unit)"{
+                                    "${prop.id} = ${prop.className}()"()
+                                    "${prop.id}!!.configure()"()
+                                }
                             }
                         }
                         it.collections.forEach { coll ->
@@ -228,7 +235,7 @@ internal object GenUtils {
         }
     }
 
-    internal fun deleteFiles(baseDir: File, generatedFiles: List<File>) {
+    fun deleteFiles(baseDir: File, generatedFiles: List<File>) {
         baseDir.listFiles()?.forEach {
             if(it.isFile && !generatedFiles.contains(it)){
                 it.delete()
@@ -277,7 +284,7 @@ internal object GenUtils {
     }
 
 
-    internal open class UNIT(val sb: StringBuilder, private val indent: Int) {
+    open class UNIT(val sb: StringBuilder, private val indent: Int) {
 
 
         operator fun String.invoke() {
@@ -321,7 +328,7 @@ internal object GenUtils {
 
     }
 
-    internal class CLASS(sb: StringBuilder) : UNIT(sb, 1) {
+    class CLASS(sb: StringBuilder) : UNIT(sb, 1) {
 
         fun injection(value: String) {
             sb.append("\n")

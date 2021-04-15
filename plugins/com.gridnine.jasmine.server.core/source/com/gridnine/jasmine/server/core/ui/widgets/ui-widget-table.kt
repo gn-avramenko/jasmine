@@ -82,7 +82,7 @@ open class TableWidget<VM:BaseTableBoxVM,VS:BaseTableBoxVS, VV:BaseTableBoxVV>(c
                     when (column.widgetDescription.widgetType) {
                         WidgetType.TEXT_BOX -> vm.setValue(column.id, (comp as TextBoxWidget).getValue())
                         WidgetType.PASSWORD_BOX -> vm.setValue(column.id, (comp as PasswordBoxWidget).getValue())
-                        WidgetType.FLOAT_NUMBER_BOX -> vm.setValue(column.id, (comp as BigDecimalBoxWidget).getValue())
+                        WidgetType.BIG_DECIMAL_NUMBER_BOX -> vm.setValue(column.id, (comp as BigDecimalBoxWidget).getValue())
                         WidgetType.INTEGER_NUMBER_BOX -> vm.setValue(column.id, (comp as IntBoxWidget).getValue())
                         WidgetType.BOOLEAN_BOX -> vm.setValue(column.id, (comp as BooleanBoxWidget).getValue())
                         WidgetType.ENTITY_SELECT_BOX -> vm.setValue(column.id, (comp as EntityValueWidget<*>).getValue())
@@ -170,7 +170,7 @@ open class TableWidget<VM:BaseTableBoxVM,VS:BaseTableBoxVS, VV:BaseTableBoxVV>(c
             WidgetType.PASSWORD_BOX ->  PasswordBoxWidget{
                 width = "100%"
             }
-            WidgetType.FLOAT_NUMBER_BOX ->  BigDecimalBoxWidget{
+            WidgetType.BIG_DECIMAL_NUMBER_BOX ->  BigDecimalBoxWidget{
                 width = "100%"
             }
             WidgetType.INTEGER_NUMBER_BOX ->  IntBoxWidget{
@@ -209,7 +209,7 @@ open class TableWidget<VM:BaseTableBoxVM,VS:BaseTableBoxVS, VV:BaseTableBoxVV>(c
         when(column.widgetDescription.widgetType){
             WidgetType.TEXT_BOX -> (comp as TextBoxWidget).setValue(value.getValue(column.id) as String?)
             WidgetType.PASSWORD_BOX -> (comp as PasswordBoxWidget).setValue(value.getValue(column.id) as String?)
-            WidgetType.FLOAT_NUMBER_BOX -> (comp as BigDecimalBoxWidget).setValue(value.getValue(column.id) as BigDecimal?)
+            WidgetType.BIG_DECIMAL_NUMBER_BOX -> (comp as BigDecimalBoxWidget).setValue(value.getValue(column.id) as BigDecimal?)
             WidgetType.INTEGER_NUMBER_BOX -> (comp as IntBoxWidget).setValue(value.getValue(column.id) as Int?)
             WidgetType.BOOLEAN_BOX -> (comp as BooleanBoxWidget).setValue(value.getValue(column.id) as Boolean)
             WidgetType.ENTITY_SELECT_BOX -> (comp as EntityValueWidget<BaseIdentity>).setValue(value.getValue(column.id) as ObjectReference<BaseIdentity>?)
@@ -228,7 +228,7 @@ open class TableWidget<VM:BaseTableBoxVM,VS:BaseTableBoxVS, VV:BaseTableBoxVV>(c
         when(column.widgetDescription.widgetType){
             WidgetType.TEXT_BOX -> (comp as TextBoxWidget).configure(vsValue as TextBoxConfiguration)
             WidgetType.PASSWORD_BOX -> (comp as PasswordBoxWidget).configure(vsValue as PasswordBoxConfiguration)
-            WidgetType.FLOAT_NUMBER_BOX -> (comp as BigDecimalBoxWidget).configure(vsValue as BigDecimalBoxConfiguration)
+            WidgetType.BIG_DECIMAL_NUMBER_BOX -> (comp as BigDecimalBoxWidget).configure(vsValue as BigDecimalBoxConfiguration)
             WidgetType.INTEGER_NUMBER_BOX -> (comp as IntBoxWidget).configure(vsValue as IntegerNumberBoxConfiguration)
             WidgetType.BOOLEAN_BOX -> (comp as BooleanBoxWidget).configure(vsValue as BooleanBoxConfiguration)
             WidgetType.ENTITY_SELECT_BOX -> (comp as EntityValueWidget<*>).configure(vsValue as EntitySelectBoxConfiguration)
@@ -252,7 +252,7 @@ open class TableWidget<VM:BaseTableBoxVM,VS:BaseTableBoxVS, VV:BaseTableBoxVV>(c
                         when (config.columns[idx].widgetDescription.widgetType) {
                             WidgetType.TEXT_BOX -> (comp as TextBoxWidget).setReadonly(value)
                             WidgetType.PASSWORD_BOX -> (comp as PasswordBoxWidget).setReadonly(value)
-                            WidgetType.FLOAT_NUMBER_BOX -> (comp as BigDecimalBoxWidget).setReadonly(value)
+                            WidgetType.BIG_DECIMAL_NUMBER_BOX -> (comp as BigDecimalBoxWidget).setReadonly(value)
                             WidgetType.INTEGER_NUMBER_BOX -> (comp as IntBoxWidget).setReadonly(value)
                             WidgetType.BOOLEAN_BOX -> (comp as BooleanBoxWidget).setReadonly(value)
                             WidgetType.ENTITY_SELECT_BOX -> (comp as EntityValueWidget<*>).setReadonly(value)
@@ -285,7 +285,7 @@ open class TableWidget<VM:BaseTableBoxVM,VS:BaseTableBoxVS, VV:BaseTableBoxVV>(c
                     when (column.widgetDescription.widgetType) {
                         WidgetType.TEXT_BOX -> (comp as TextBoxWidget).showValidation(value as String?)
                         WidgetType.PASSWORD_BOX -> (comp as PasswordBoxWidget).showValidation(value as String?)
-                        WidgetType.FLOAT_NUMBER_BOX -> (comp as BigDecimalBoxWidget).showValidation(value as String?)
+                        WidgetType.BIG_DECIMAL_NUMBER_BOX -> (comp as BigDecimalBoxWidget).showValidation(value as String?)
                         WidgetType.INTEGER_NUMBER_BOX -> (comp as IntBoxWidget).showValidation(value as String?)
                         WidgetType.BOOLEAN_BOX -> {
                         }

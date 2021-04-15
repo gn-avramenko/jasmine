@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui xmlns="http://gridnine.com/jasmine/ui" >
+   <enum id="com.gridnine.jasmine.common.standard.model.ui.YesNoEnum">
+       <enum-item id="YES"/>
+       <enum-item id="NO"/>
+       <enum-item id="NOT_IMPORTANT"/>
+   </enum>
+    <grid-container id="com.gridnine.jasmine.common.standard.model.workspace.WorkspaceGroupEditor">
+        <row>
+            <cell id="name" caption="name">
+                <text-box/>
+            </cell>
+            <cell id="uid">
+                <hidden object-id="String"/>
+            </cell>
+        </row>
+    </grid-container>
+    <grid-container id="com.gridnine.jasmine.common.standard.model.workspace.WorkspaceListGeneralParametersEditor" columns-count="2">
+        <row>
+            <cell id="name" caption="name">
+                <text-box/>
+            </cell>
+            <cell id="list" caption="list">
+                <general-select-box/>
+            </cell>
+            <cell id="uid">
+                <hidden object-id="String"/>
+            </cell>
+        </row>
+    </grid-container>
+    <grid-container id="com.gridnine.jasmine.common.standard.model.workspace.WorkspaceListColumnsEditor">
+        <columns>
+            <column width="CUSTOM" custom-width="600px"/>
+        </columns>
+        <row>
+            <cell id="columns">
+                <table-box id="com.gridnine.jasmine.common.standard.model.workspace.WorkspaceListColumnsTable">
+                    <column id="columnName" caption="name" pref-width="200">
+                        <general-select-box/>
+                    </column>
+                </table-box>
+            </cell>
+        </row>
+    </grid-container>
+    <grid-container id="com.gridnine.jasmine.common.standard.model.workspace.WorkspaceListFiltersEditor">
+        <columns>
+            <column width="CUSTOM" custom-width="600px"/>
+        </columns>
+        <row>
+            <cell id="filters">
+                <table-box id="com.gridnine.jasmine.common.standard.model.workspace.WorkspaceListFiltersTable">
+                    <column id="filterName" caption="name" pref-width="200">
+                        <general-select-box/>
+                    </column>
+                </table-box>
+            </cell>
+        </row>
+    </grid-container>
+    <grid-container id="com.gridnine.jasmine.common.standard.model.workspace.WorkspaceListSortOrdersEditor">
+        <columns>
+            <column width="CUSTOM" custom-width="600px"/>
+        </columns>
+        <row>
+            <cell id="sortOrders" >
+                <table-box id="com.gridnine.jasmine.common.standard.model.workspace.WorkspaceListSortOrdersTable">
+                    <column id="columnName" caption="name" pref-width="200">
+                        <general-select-box/>
+                    </column>
+                    <column id="sortOrder" caption="sortOrder" pref-width="100">
+                        <enum-select-box enumId="com.gridnine.jasmine.common.standard.model.domain.SortOrderType"/>
+                    </column>
+                </table-box>
+            </cell>
+        </row>
+    </grid-container>
+</ui>
+
+
+
