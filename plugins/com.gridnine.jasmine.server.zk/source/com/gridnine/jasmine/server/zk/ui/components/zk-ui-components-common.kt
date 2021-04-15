@@ -47,7 +47,7 @@ class ZkUiLibraryAdapter:UiLibraryAdapter{
         Executions.getCurrent().sendRedirect(relativeUrl)
     }
 
-    override fun createBorderContainer(configure: BorderContainerConfiguration.() -> Unit): BorderContainer {
+    override fun createBorderLayout(configure: BorderContainerConfiguration.() -> Unit): BorderContainer {
         return ZkBorderContainer(configure)
     }
 
