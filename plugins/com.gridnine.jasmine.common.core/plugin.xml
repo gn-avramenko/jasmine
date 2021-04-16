@@ -6,10 +6,29 @@
         <lib-dependency group="org.jetbrains.kotlin" name="kotlin-reflect" version="1.4.10"/>
         <lib-dependency group="com.fasterxml.jackson.core" name="jackson-core" version="2.10.3"/>
     </dependencies>
+    <extension-point id="activator">
+        <parameter-def id="class"/>
+    </extension-point>
+    <extension-point id="domain-metadata">
+        <parameter-def id="url"/>
+    </extension-point>
+    <extension-point id="rest-metadata">
+        <parameter-def id="url"/>
+    </extension-point>
+    <extension-point id="ui-metadata">
+        <parameter-def id="url"/>
+    </extension-point>
     <extension-point id="custom-metadata">
         <parameter-def id="url"/>
     </extension-point>
+    <extension-point id="l10n-messages">
+        <parameter-def id="url"/>
+    </extension-point>
     <extension point-id="custom-metadata">
-        <parameter id="url" value="com/gridnine/jasmine/server/core/model/custom/core-custom.xml"/>
+        <parameter id="url" value="com/gridnine/jasmine/common/core/meta/core-custom.xml"/>
     </extension>
+    <extension point-id="activator">
+        <parameter id="class" value="com.gridnine.jasmine.common.core.activator.CoreActivator"/>
+    </extension>
+
 </plugin>

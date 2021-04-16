@@ -112,7 +112,6 @@ object UiMetadataParser {
                 ParserUtils.updateLocalizations(descr, localizations, ParserUtils.getCaptionAttribute(overviewElm))
                 descr
             }.firstOrNull()?.let {
-                val view = registry.views[it.viewId]!!
                 viewModelEntity.properties["overview"] = VMPropertyDescription("overview", VMPropertyType.ENTITY, "${it.viewId}VM", false, false)
                 viewSettingsEntity.properties["overview"] = VSPropertyDescription("overview", VSPropertyType.ENTITY, "${it.viewId}VS", false)
                 viewValidationEntity.properties["overview"] = VVPropertyDescription("overview", VVPropertyType.ENTITY, "${it.viewId}VV", false)
@@ -134,8 +133,8 @@ object UiMetadataParser {
                 ParserUtils.updateLocalizations(descr, localizations, ParserUtils.getCaptionAttribute(tileElm))
                 res.tiles.add(descr)
                 viewModelEntity.properties[tileId] = VMPropertyDescription(tileId, VMPropertyType.ENTITY, "${descr.fullViewId}VM", false, true)
-                viewSettingsEntity.properties[tileId] = VSPropertyDescription(tileId, VSPropertyType.ENTITY, "${descr.fullViewId}VS", true)
-                viewValidationEntity.properties[tileId] = VVPropertyDescription(tileId, VVPropertyType.ENTITY, "${descr.fullViewId}VV", true)
+                viewSettingsEntity.properties[tileId] = VSPropertyDescription(tileId, VSPropertyType.ENTITY, "${descr.fullViewId}VS", false)
+                viewValidationEntity.properties[tileId] = VVPropertyDescription(tileId, VVPropertyType.ENTITY, "${descr.fullViewId}VV", false)
             }
         }
         node.children("navigator").forEach { child ->

@@ -9,6 +9,7 @@ import com.gridnine.jasmine.server.core.storage.cache.CachedValue
 import org.ehcache.spi.serialization.Serializer
 import java.nio.ByteBuffer
 
+@Suppress("UNUSED_PARAMETER")
 class CachedValueSerializer(cl: ClassLoader) :Serializer<CachedValue<*>>{
 
     override fun equals(`object`: CachedValue<*>?, binary: ByteBuffer?): Boolean {

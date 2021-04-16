@@ -20,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 
 
+@Suppress("UNCHECKED_CAST")
 class EhCacheManager : CacheManager{
     private val  cacheManager = CacheManagerBuilder.newCacheManagerBuilder().withSerializer(CachedValue::class.java, CachedValueSerializer::class.java).build(true)
 

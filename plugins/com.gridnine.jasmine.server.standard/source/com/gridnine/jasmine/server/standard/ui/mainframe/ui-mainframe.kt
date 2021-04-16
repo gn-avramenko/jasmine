@@ -13,6 +13,7 @@ import com.gridnine.jasmine.server.core.ui.common.BaseNodeWrapper
 import com.gridnine.jasmine.server.core.ui.common.EventsSubscriber
 import com.gridnine.jasmine.server.core.ui.components.*
 import com.gridnine.jasmine.server.standard.model.WorkspaceProvider
+import com.gridnine.jasmine.server.standard.ui.mainframe.workspace.WorkspaceEditorTabHandler
 import kotlin.reflect.KClass
 
 @Suppress("UNCHECKED_CAST")

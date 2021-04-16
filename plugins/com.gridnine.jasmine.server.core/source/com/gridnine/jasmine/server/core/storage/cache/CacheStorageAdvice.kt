@@ -13,6 +13,7 @@ import com.gridnine.jasmine.server.core.storage.StorageAdvice
 import java.util.*
 import kotlin.reflect.KClass
 
+@Suppress("MISPLACED_TYPE_PARAMETER_CONSTRAINTS", "UNCHECKED_CAST")
 class CacheStorageAdvice(override val priority: Double) : StorageAdvice{
 
 

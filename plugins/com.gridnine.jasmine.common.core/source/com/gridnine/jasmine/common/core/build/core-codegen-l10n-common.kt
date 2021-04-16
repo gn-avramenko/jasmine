@@ -50,7 +50,10 @@ class L10nCommonGenerator:CodeGenerator {
                         "const val bundle = \"${bundle.id}\""()
                         blankLine()
                         bundle.messages.values.forEach { message ->
-                            "fun ${message.id}(${message.params.map { getParameterWithType(it.value) }.joinToString() }) = ${L10nMessage::class.qualifiedName}(bundle, \"${message.id}\" ${if(message.params.isEmpty())"" else ","} ${message.params.map { "${it.key}?:\"???\"" }.joinToString()})"()
+                            "fun ${message.id}Message(${message.params.map { getParameterWithType(it.value) }.joinToString() }) = ${L10nMessage::class.qualifiedName}(bundle, \"${message.id}\" ${if(message.params.isEmpty())"" else ","} ${message.params.map { "${it.key}?:\"???\"" }.joinToString()})"()
+                            blankLine()
+                            "fun ${message.id}(${message.params.map { getParameterWithType(it.value) }.joinToString() }) = ${message.id}Message(${message.params.map { it.value.id }.joinToString() }).toString()"()
+                            blankLine()
                         }
                     }
                     val file = File(destPlugin, "source-gen/${GenUtils.getPackageName(source.second!!).replace(".", "/")}/${GenUtils.getSimpleClassName(source.second!!)}.kt")

@@ -12,6 +12,7 @@ import com.gridnine.jasmine.common.core.model.BaseIdentity
 import com.gridnine.jasmine.common.core.reflection.ReflectionFactory
 import kotlin.reflect.KClass
 
+@Suppress("UNCHECKED_CAST")
 class CacheConfiguration {
 
     private val cachedObjects = hashSetOf<String>()

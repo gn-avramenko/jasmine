@@ -24,7 +24,9 @@
     <message id="restoreVersion"/>
     <message id="versionRestored"/>
     <message id="delete"/>
-    <message id="areYouSureToDelete"/>
+    <message id="areYouSureToDelete">
+        <parameter id="objectName" type="STRING"/>
+    </message>
     <message id="question"/>
     <message id="objectsDeleted"/>
     <message id="ChoseVariant"/>
@@ -34,4 +36,22 @@
     <message id="Empty_field"/>
     <message id="Validation_errors_exist"/>
     <message id="Operation_completed"/>
+    <message id="Additional"/>
+    <message id="Versions"/>
+    <message id="Data_saved"/>
+    <message id="Add_group_above"/>
+    <message id="New_group"/>
+    <message id="Add_group_below"/>
+    <message id="Add_list"/>
+    <message id="New_list"/>
+    <message id="Delete_group"/>
+    <message id="Unable_to_delete_all_groups"/>
+    <message id="Copy_list"/>
+    <message id="Copy_suffix"/>
+    <message id="Delete_list"/>
+    <message id="Simple_criterion"/>
+    <message id="Or_criterion"/>
+    <message id="And_criterion"/>
+    <message id="Not_criterion"/>
+    <message id="Workspace_editor"/>
 </messages-bundle>

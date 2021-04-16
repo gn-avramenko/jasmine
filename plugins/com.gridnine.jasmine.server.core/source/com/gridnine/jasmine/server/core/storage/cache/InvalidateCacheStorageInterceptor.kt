@@ -12,6 +12,7 @@ import com.gridnine.jasmine.server.core.storage.OperationContext
 import com.gridnine.jasmine.server.core.storage.StorageInterceptor
 import kotlin.reflect.KClass
 
+@Suppress("UNCHECKED_CAST")
 class InvalidateCacheStorageInterceptor(override val priority: Double, private val advice: CacheStorageAdvice) : StorageInterceptor{
 
     override fun <A : BaseAsset> onDelete(asset: A, context: OperationContext<A>) {

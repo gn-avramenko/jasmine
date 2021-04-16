@@ -68,7 +68,7 @@ object GenUtils {
             generateHeader(sb, it.id, projectName)
             when(it){
                 is GenClassData ->{
-                    classBuilder(sb, "${if(it.open) "open " else ""}${if (it.abstract) "abstract " else ""}class ${getSimpleClassName(it.id)}():${it.extends!!}()${if(it.implementCachedObject) ", "+CachedObject::class.java.name else ""}") {
+                    classBuilder(sb, "${if(it.open && !it.abstract) "open " else ""}${if (it.abstract) "abstract " else ""}class ${getSimpleClassName(it.id)}():${it.extends!!}()${if(it.implementCachedObject) ", "+CachedObject::class.java.name else ""}") {
                         if (!(it.abstract) && it.generateBuilder) {
                             blankLine()
                             """

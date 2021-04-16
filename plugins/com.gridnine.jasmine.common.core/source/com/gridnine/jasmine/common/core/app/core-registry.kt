@@ -3,6 +3,8 @@
  * Project: Jasmine
  *****************************************************************/
 
+@file:Suppress("UNCHECKED_CAST")
+
 package com.gridnine.jasmine.common.core.app
 
 import kotlin.reflect.KClass

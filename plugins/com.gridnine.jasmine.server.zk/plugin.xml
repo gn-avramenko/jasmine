@@ -7,4 +7,7 @@
         <lib-dependency group="org.zkoss.zk" name="zul" version="9.5.0.2"/>
         <lib-dependency group="org.zkoss.theme" name="silvertail" version="9.5.0.2"/>
     </dependencies>
+    <extension point-id="activator">
+        <parameter id="class" value="com.gridnine.jasmine.server.zk.activator.ZkActivator"/>
+    </extension>
 </plugin>

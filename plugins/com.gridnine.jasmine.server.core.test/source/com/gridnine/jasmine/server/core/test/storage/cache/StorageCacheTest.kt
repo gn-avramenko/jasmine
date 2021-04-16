@@ -17,6 +17,7 @@ import org.junit.Assert
 import org.junit.Test
 import kotlin.reflect.KClass
 
+@Suppress("MISPLACED_TYPE_PARAMETER_CONSTRAINTS")
 class StorageCacheTest:StorageTestBase(){
 
     private var loadDocumentCount = 0

@@ -19,20 +19,20 @@ import org.gradle.process.internal.ExecActionFactory
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
-import java.util.*
 import javax.inject.Inject
 
+@Suppress("UNCHECKED_CAST", "UnstableApiUsage", "LeakingThis", "unused")
 abstract class BaseStartServerTask : ConventionTask(), JavaExecSpec{
-    private var javaExecHandleBuilder = getExecActionFactory().newJavaExecAction() as DefaultJavaExecAction;
+    private var javaExecHandleBuilder = getExecActionFactory().newJavaExecAction() as DefaultJavaExecAction
 
     @Inject
-    open protected fun getExecActionFactory(): ExecActionFactory {
+    protected open fun getExecActionFactory(): ExecActionFactory {
         throw UnsupportedOperationException()
     }
 
     @TaskAction
     fun exec() {
-        setIgnoreExitValue(true)
+        isIgnoreExitValue = true
         javaExecHandleBuilder.build().start()
     }
 
@@ -270,7 +270,7 @@ abstract class BaseStartServerTask : ConventionTask(), JavaExecSpec{
     @Incubating
     @Option(option = "args", description = "Command line arguments passed to the main class. [INCUBATING]")
     fun setArgsString(args: String?): BaseStartServerTask? {
-        return setArgs(Arrays.asList(*Commandline.translateCommandline(args)))
+        return setArgs(listOf(*Commandline.translateCommandline(args)))
     }
 
     /**
@@ -351,7 +351,7 @@ abstract class BaseStartServerTask : ConventionTask(), JavaExecSpec{
     @Input
     @Incubating
     fun getJavaVersion(): JavaVersion? {
-        return services.get(JvmVersionDetector::class.java).getJavaVersion(getExecutable())
+        return services.get(JvmVersionDetector::class.java).getJavaVersion(executable)
     }
 
     /**

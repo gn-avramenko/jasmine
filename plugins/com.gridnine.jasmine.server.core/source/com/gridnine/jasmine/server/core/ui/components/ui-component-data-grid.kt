@@ -28,12 +28,14 @@ class DataGridConfiguration : BaseComponentConfiguration(){
     var initSortingOrderAsc = false
     var selectable = false
     val columns = arrayListOf<DataGridColumnConfiguration>()
+    fun column(configure: DataGridColumnConfiguration.()->Unit){
+        val config = DataGridColumnConfiguration()
+        config.configure()
+        columns.add(config)
+    }
 }
 
 class DataGridColumnConfiguration {
-    constructor(configure:DataGridColumnConfiguration.()->Unit){
-        this.configure()
-    }
     lateinit var fieldId:String
     lateinit var title:String
     var width:String? = null

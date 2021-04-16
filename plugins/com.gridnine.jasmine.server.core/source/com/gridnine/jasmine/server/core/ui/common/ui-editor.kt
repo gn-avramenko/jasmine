@@ -96,7 +96,7 @@ object UiEditorHelper {
                 Storage.get().loadAsset(ReflectionFactory.get().getClass<BaseAsset>(correctedObjectId), objectUid)
             } else {
                 Storage.get().loadDocument(ReflectionFactory.get().getClass<BaseDocument>(correctedObjectId), objectUid)
-            }?: throw Xeption.forAdmin(CoreServerL10nMessagesFactory.Object_not_found(correctedObjectId, objectUid))
+            }?: throw Xeption.forAdmin(CoreServerL10nMessagesFactory.Object_not_foundMessage(correctedObjectId, objectUid))
         }
         val vmEntity = handler.getVMClass().createInstance()
         handlers.forEach {
@@ -135,7 +135,7 @@ object UiEditorHelper {
                         Storage.get().loadAsset(ReflectionFactory.get().getClass(correctedObjectId), objectUid, ignoreCache = true)
                     } else {
                         Storage.get().loadDocument(ReflectionFactory.get().getClass(correctedObjectId), objectUid, ignoreCache = true)
-                    }?: throw Xeption.forAdmin(CoreServerL10nMessagesFactory.Object_not_found(correctedObjectId, objectUid))
+                    }?: throw Xeption.forAdmin(CoreServerL10nMessagesFactory.Object_not_foundMessage(correctedObjectId, objectUid))
                 }
 
 

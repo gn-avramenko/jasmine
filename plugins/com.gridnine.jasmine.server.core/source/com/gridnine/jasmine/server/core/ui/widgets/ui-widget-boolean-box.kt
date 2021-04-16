@@ -11,6 +11,7 @@ import com.gridnine.jasmine.server.core.ui.common.BaseWidgetConfiguration
 import com.gridnine.jasmine.server.core.ui.components.BooleanBox
 import com.gridnine.jasmine.server.core.ui.components.UiLibraryAdapter
 
+@Suppress("UNUSED_PARAMETER")
 class BooleanBoxWidget(configure: BooleanBoxWidgetConfiguration.()->Unit): BaseNodeWrapper<BooleanBox>(){
 
     init{

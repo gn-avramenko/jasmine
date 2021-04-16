@@ -30,7 +30,7 @@ class DialogConfiguration<W>  where W: UiNode {
     }
     fun cancelButton(){
         val button = DialogButtonConfiguration<W>()
-        button.displayName = CoreServerL10nMessagesFactory.No().toString()
+        button.displayName = CoreServerL10nMessagesFactory.No()
         button.handler = {
             it.close()
         }

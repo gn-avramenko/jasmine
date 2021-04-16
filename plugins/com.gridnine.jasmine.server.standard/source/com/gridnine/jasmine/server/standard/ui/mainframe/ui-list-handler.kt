@@ -251,10 +251,10 @@ internal class ListDataGridPanel(val we: ListWorkspaceItem) : BaseNodeWrapper<Da
             width = "100%"
             selectable = true
             span = true
-            columns.addAll(we.columns.map { column ->
+            we.columns.map { column ->
                 val pd = indexDescription.properties[column]
                 if (pd != null) {
-                    DataGridColumnConfiguration {
+                    column {
                         title = pd.getDisplayName()!!
                         fieldId = column
                         sortable = true
@@ -275,7 +275,7 @@ internal class ListDataGridPanel(val we: ListWorkspaceItem) : BaseNodeWrapper<Da
                 } else {
                     val cd = indexDescription.collections[column]
                             ?: error("neither property nor column with id $column found in list ${we.listId}")
-                    DataGridColumnConfiguration {
+                    column {
                         title = cd.getDisplayName()!!
                         fieldId = column
                         sortable = true
@@ -283,8 +283,7 @@ internal class ListDataGridPanel(val we: ListWorkspaceItem) : BaseNodeWrapper<Da
                         width = "200px"
                     }
                 }
-
-            })
+            }
             if (we.sortOrders.isNotEmpty()) {
                 val sorting = we.sortOrders[0]
                 initSortingColumn = sorting.field

@@ -170,6 +170,7 @@ internal class EnumTypeFieldHandler : GenericStringTypeFieldHandler(SqlType.STRI
     }
 
 }
+@Suppress("UNCHECKED_CAST")
 internal open class GenericStringTypeCollectionFieldHandler(private val sqlType: SqlType) : JdbcCollectionMappingHandler {
 
     override fun getCollectionIndexes(coll: DatabaseCollectionDescription, table: DatabaseTableDescription): Map<String, JdbcIndexDescription> {
@@ -268,6 +269,7 @@ internal class EntityReferenceFieldHandler : JdbcPropertyMappingHandler {
 
 }
 
+@Suppress("UNCHECKED_CAST")
 internal class EntityReferenceCollectionFieldHandler : JdbcCollectionMappingHandler {
 
     override fun getCollectionColumns(coll: DatabaseCollectionDescription): Map<String, SqlType> {

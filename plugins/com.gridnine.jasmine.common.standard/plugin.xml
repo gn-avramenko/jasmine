@@ -3,4 +3,13 @@
     <dependencies>
         <plugin-dependency plugin-id="com.gridnine.jasmine.common.core"/>
     </dependencies>
+    <extension point-id="domain-metadata">
+        <parameter id="url" value="com/gridnine/jasmine/common/standard/model/standard-model-domain.xml"/>
+    </extension>
+    <extension point-id="l10n-metadata">
+        <parameter id="url" value="com/gridnine/jasmine/common/standard/model/standard-l10n.xml"/>
+    </extension>
+    <extension point-id="ui-metadata">
+        <parameter id="url" value="com/gridnine/jasmine/common/standard/model/standard-ui.xml"/>
+    </extension>
 </plugin>

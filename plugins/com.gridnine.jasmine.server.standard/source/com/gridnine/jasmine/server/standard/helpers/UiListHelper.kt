@@ -1,4 +1,4 @@
-@file:Suppress("UNCHECKED_CAST")
+@file:Suppress("UNCHECKED_CAST", "UNREACHABLE_CODE")
 
 package com.gridnine.jasmine.server.standard.helpers
 
