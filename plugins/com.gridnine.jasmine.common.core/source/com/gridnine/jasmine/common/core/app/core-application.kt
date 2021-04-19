@@ -21,7 +21,7 @@ interface IPluginActivator {
     }
 
 
-    fun activate(){
+    fun activate(config:Properties){
         //noops
     }
 }

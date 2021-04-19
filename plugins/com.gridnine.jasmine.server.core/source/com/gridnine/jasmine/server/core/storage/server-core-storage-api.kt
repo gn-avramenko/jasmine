@@ -13,6 +13,7 @@ import com.gridnine.jasmine.common.core.storage.ProjectionQuery
 import com.gridnine.jasmine.common.core.storage.SearchQuery
 import com.gridnine.jasmine.common.core.storage.TransactionContext
 import com.gridnine.jasmine.common.core.storage.VersionMetadata
+import com.gridnine.jasmine.server.core.storage.jdbc.JdbcDialect
 import com.mchange.v2.c3p0.ComboPooledDataSource
 import java.io.InputStream
 import java.time.LocalDateTime
@@ -379,5 +380,6 @@ class C3PoDataSource(private val delegate:ComboPooledDataSource): DataSource by 
 }
 interface DataSourceProvider{
     fun createDataSource(): C3PoDataSource
+    fun createDialect():JdbcDialect
     fun getId():String
 }

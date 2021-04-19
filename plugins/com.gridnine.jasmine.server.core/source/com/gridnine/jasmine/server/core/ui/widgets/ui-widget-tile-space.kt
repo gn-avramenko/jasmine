@@ -148,7 +148,7 @@ class TilesSpaceMainPanel<VM:BaseVM, VS:BaseVS, VV:BaseVV>(expandHadler:(String)
     }
 
     override fun setData(vm: VM, vs: VS?) {
-        (configuration.overviewConfig!!.editor as  ViewEditor<BaseVM,BaseVS,BaseVV>).setData(vm.getValue("overview") as BaseVM, vs?.getValue("overview") as BaseVS)
+        (configuration.overviewConfig!!.editor as  ViewEditor<BaseVM,BaseVS,BaseVV>).setData(vm.getValue("overview") as BaseVM, vs?.getValue("overview") as BaseVS?)
     }
 
     override fun getData(): VM {

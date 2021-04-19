@@ -8,6 +8,7 @@ package com.gridnine.jasmine.server.db.postgres
 import com.gridnine.jasmine.common.core.app.ConfigurationProvider
 import com.gridnine.jasmine.server.core.storage.C3PoDataSource
 import com.gridnine.jasmine.server.core.storage.DataSourceProvider
+import com.gridnine.jasmine.server.core.storage.jdbc.JdbcDialect
 import com.mchange.v2.c3p0.ComboPooledDataSource
 import org.postgresql.Driver
 
@@ -26,6 +27,10 @@ class PostgresDataSourceProvider():DataSourceProvider{
         cpds.password = ConfigurationProvider.get().getProperty("db.postgres.password")
         cpds.isAutoCommitOnClose = false
         return C3PoDataSource(cpds)
+    }
+
+    override fun createDialect(): JdbcDialect {
+        return PostgresDbDialect()
     }
 
     override fun getId(): String {

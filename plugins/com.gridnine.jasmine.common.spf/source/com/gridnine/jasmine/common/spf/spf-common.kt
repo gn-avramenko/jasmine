@@ -68,7 +68,7 @@ class SpfApplicationImpl: SpfApplication {
         Environment.publish(IApplicationMetadataProvider::class, SpfApplicationMetadataProvider(registry))
         val activators = IApplicationMetadataProvider.get().getExtensions("activator").map { ep ->ep.plugin.classLoader.loadClass(ep.getParameters("class").first()).constructors.first().newInstance() as IPluginActivator }.toList()
         activators.forEach { a ->a.configure(config) }
-        activators.forEach { a ->a.activate() }
+        activators.forEach { a ->a.activate(config) }
 
     }
 

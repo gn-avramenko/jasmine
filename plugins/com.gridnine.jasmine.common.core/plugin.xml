@@ -9,26 +9,7 @@
     <extension-point id="activator">
         <parameter-def id="class"/>
     </extension-point>
-    <extension-point id="domain-metadata">
-        <parameter-def id="url"/>
-    </extension-point>
-    <extension-point id="rest-metadata">
-        <parameter-def id="url"/>
-    </extension-point>
-    <extension-point id="ui-metadata">
-        <parameter-def id="url"/>
-    </extension-point>
-    <extension-point id="custom-metadata">
-        <parameter-def id="url"/>
-    </extension-point>
-    <extension-point id="l10n-messages">
-        <parameter-def id="url"/>
-    </extension-point>
-    <extension point-id="custom-metadata">
-        <parameter id="url" value="com/gridnine/jasmine/common/core/meta/core-custom.xml"/>
-    </extension>
     <extension point-id="activator">
         <parameter id="class" value="com.gridnine.jasmine.common.core.activator.CoreActivator"/>
     </extension>
-
 </plugin>

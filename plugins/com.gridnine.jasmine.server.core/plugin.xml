@@ -13,6 +13,6 @@
         <parameter id="url" value="com/gridnine/jasmine/server/core/l10n/core-server-l10n-messages.xml"/>
     </extension>
     <extension point-id="activator">
-        <parameter id="com.gridnine.jasmine.server.core.activator.ServerCoreActivator"/>
+        <parameter id = "class" value="com.gridnine.jasmine.server.core.activator.ServerCoreActivator"/>
     </extension>
 </plugin>

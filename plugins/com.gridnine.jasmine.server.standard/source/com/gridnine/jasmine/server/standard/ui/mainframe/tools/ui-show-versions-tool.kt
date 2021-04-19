@@ -27,7 +27,7 @@ class ShowVersionsMenuItem :ObjectEditorMenuItem<BaseVM, ViewEditor<BaseVM, *,*>
         val data = UiVersionsHelper.getVersionsMetadata(value.reference.type.java.name, value.reference.uid)
         val dialogContent = VersionsListDialogContent(data)
         val dialog = UiLibraryAdapter.get().showDialog(dialogContent){
-            title = "Версии"
+            title = StandardL10nMessagesFactory.Versions()
             cancelButton()
         }
         dialogContent.closeCallback = dialog::close
