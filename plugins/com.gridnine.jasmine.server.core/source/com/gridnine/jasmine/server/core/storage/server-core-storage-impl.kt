@@ -34,6 +34,7 @@ class StorageImpl : Storage {
 
     private val patcher = GDiffPatcher()
     private val delta = Delta()
+    private val criterionsUpdater = DynamicCriterionsUpdater()
 
     override fun <D : BaseDocument> loadDocument(ref: ObjectReference<D>?, ignoreCache: Boolean): D? {
         return ref?.uid?.let { loadDocument(ref.type, it, ignoreCache) }
@@ -297,7 +298,7 @@ class StorageImpl : Storage {
 
     private fun <D : BaseDocument, I : BaseIndex<D>> searchDocumentsInternal(cls: KClass<I>, query: SearchQuery, interceptors: List<StorageAdvice>, idx: Int): List<I> {
         if (idx == interceptors.size) {
-            return Database.get().searchIndex(cls, query)
+            return Database.get().searchIndex(cls, criterionsUpdater.updateQuery(cls.java.name, query))
         }
         return interceptors[idx].onSearchDocuments(cls, query) { cls2, query2 ->
             searchDocumentsInternal(cls2, query2, interceptors, idx + 1)
@@ -314,7 +315,7 @@ class StorageImpl : Storage {
 
     private fun <D : BaseDocument, I : BaseIndex<D>> searchDocumentsInternal(cls: KClass<I>, query: ProjectionQuery, interceptors: List<StorageAdvice>, idx: Int): List<Map<String, Any>> {
         if (idx == interceptors.size) {
-            return Database.get().searchIndex(cls, query)
+            return Database.get().searchIndex(cls, criterionsUpdater.updateQuery(cls.java.name, query))
         }
         return interceptors[idx].onSearchDocuments(cls, query) { cls2, query2 ->
             searchDocumentsInternal(cls2, query2, interceptors, idx + 1)
@@ -512,7 +513,7 @@ class StorageImpl : Storage {
 
     private fun <D : BaseAsset> searchAssets(cls: KClass<D>, query: SearchQuery, ignoreCache: Boolean, interceptors: List<StorageAdvice>, idx: Int): List<D> {
         if (idx == interceptors.size) {
-            return Database.get().searchAsset(cls, query)
+            return Database.get().searchAsset(cls, criterionsUpdater.updateQuery(cls.java.name, query))
         }
         return interceptors[idx].onSearchAssets(cls, query, ignoreCache) { cls2, query2, ignoreCache2 ->
             searchAssets(cls2, query2, ignoreCache2, interceptors, idx + 1)
@@ -525,7 +526,7 @@ class StorageImpl : Storage {
 
     private fun <D : BaseAsset> searchAssets(cls: KClass<D>, query: ProjectionQuery, interceptors: List<StorageAdvice>, idx: Int): List<Map<String, Any>> {
         if (idx == interceptors.size) {
-            return Database.get().searchAsset(cls, query)
+            return Database.get().searchAsset(cls, criterionsUpdater.updateQuery(cls.java.name, query))
         }
         return interceptors[idx].onSearchAssets(cls, query) { cls2, query2 ->
             searchAssets(cls2, query2, interceptors, idx + 1)
@@ -575,6 +576,7 @@ class StorageImpl : Storage {
         }
 
     }
+
 
     companion object {
         internal val contexts = ThreadLocal<GlobalOperationContext>()

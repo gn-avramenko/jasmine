@@ -31,6 +31,7 @@ class EnumBoxValueWidget<E:Enum<E>>(configure: EnumBoxValueWidgetConfiguration<E
             editable = false
             showClearIcon = config.allowNull
             multiple = false
+            showAllPossibleValues = config.showAllPossibleValues
         }
         comp.setPossibleValues(getPossibleValues(config.enumClassName?:config.enumClass!!.qualifiedName!!))
         _node = comp
@@ -95,4 +96,5 @@ class EnumBoxValueWidgetConfiguration<E:Enum<E>>:BaseWidgetConfiguration(){
     var allowNull = true
     var enumClass: KClass<E>? = null
     var enumClassName:String? = null
+    var showAllPossibleValues = false
 }

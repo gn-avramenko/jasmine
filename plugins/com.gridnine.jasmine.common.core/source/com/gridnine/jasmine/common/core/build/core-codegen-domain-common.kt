@@ -22,7 +22,7 @@ class CommonDomainGenerator : CodeGenerator {
         while (extendsId != null) {
             val nestedDoc = registry.nestedDocuments[extendsId]!!
             nestedDoc.properties.values.forEach { prop ->
-                result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), prop.className, nonNullable = prop.nonNullable, lateinit = false, openSetter = false, override = true, disallowedSetter = true))
+                result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), prop.className, nonNullable = (prop.nonNullable && isSimpleType(prop.type)), lateinit = (prop.nonNullable && !isSimpleType(prop.type)), openSetter = false, override = true, disallowedSetter = true))
             }
             nestedDoc.collections.values.forEach { coll ->
                 result.collections.add(GenCollectionDescription(coll.id, getPropertyType(coll.elementType), coll.elementClassName, openGetter = false, readonlyImpl = true))
@@ -63,7 +63,7 @@ class CommonDomainGenerator : CodeGenerator {
         }
         val result = GenClassData(descr.id, extendsId, descr.isAbstract, noEnumProperties = true, open = cached)
         descr.properties.values.forEach { prop ->
-            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), prop.className, nonNullable = prop.nonNullable, lateinit = false, openSetter = cached))
+            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type) , prop.className, nonNullable = (prop.nonNullable && isSimpleType(prop.type)), lateinit = (prop.nonNullable && !isSimpleType(prop.type)), openSetter = cached))
         }
         descr.collections.values.forEach { coll ->
             result.collections.add(GenCollectionDescription(coll.id, getPropertyType(coll.elementType), coll.elementClassName, openGetter = cached))
@@ -103,6 +103,22 @@ class CommonDomainGenerator : CodeGenerator {
             DatabasePropertyType.LOCAL_DATE -> GenPropertyType.LOCAL_DATE
             DatabasePropertyType.LOCAL_DATE_TIME -> GenPropertyType.LOCAL_DATE_TIME
             DatabasePropertyType.LONG -> GenPropertyType.LONG
+        }
+    }
+
+    private fun isSimpleType(type: DocumentPropertyType): Boolean {
+        return when (type) {
+            DocumentPropertyType.STRING -> true
+            DocumentPropertyType.BYTE_ARRAY -> false
+            DocumentPropertyType.BIG_DECIMAL -> false
+            DocumentPropertyType.BOOLEAN -> true
+            DocumentPropertyType.NESTED_DOCUMENT -> false
+            DocumentPropertyType.ENTITY_REFERENCE -> false
+            DocumentPropertyType.ENUM -> false
+            DocumentPropertyType.INT -> true
+            DocumentPropertyType.LOCAL_DATE -> false
+            DocumentPropertyType.LOCAL_DATE_TIME -> false
+            DocumentPropertyType.LONG -> true
         }
     }
 
@@ -157,6 +173,11 @@ class CommonDomainGenerator : CodeGenerator {
             it.items.values.forEach { ei ->
                 enumClassData.enumItems.add(ei.id)
             }
+            enumClassData.codeInjections.add("""
+                override fun toString():String{
+                    return ${DomainMetaRegistry::class.qualifiedName}.get().enums["${it.id}"]?.items?.get(name)?.getDisplayName()?:name
+                }
+            """.trimIndent())
             classesData.add(enumClassData)
         }
         val cachedEntities = hashSetOf<String>()

@@ -2,8 +2,12 @@
  * Gridnine AB http://www.gridnine.com
  * Project: Jasmine
  *****************************************************************/
+@file:Suppress("unused")
+
 package com.gridnine.jasmine.common.core.storage
 
+import com.gridnine.jasmine.common.core.app.RegistryItem
+import com.gridnine.jasmine.common.core.app.RegistryItemType
 import com.gridnine.jasmine.common.core.model.*
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -257,3 +261,32 @@ open class CriterionsBuilder(private val criterions: MutableList<SearchCriterion
     }
 
 }
+
+abstract class BaseDynamicCriterionValue :BaseIdentity()
+
+class DynamicCriterion(val handlerId:String, val propertyId:String, val conditionId:String,  val value:BaseDynamicCriterionValue):SearchCriterion()
+
+interface DynamicCriterionHandler<T:BaseDynamicCriterionValue> : RegistryItem<DynamicCriterionHandler<*>> {
+    fun isApplicable(listId:String, propertyId:String) : Boolean
+    fun getConditionIds():Collection<String>
+    fun getDisplayName():String
+    fun getCriterion(listId:String, propertyId: String, conditionId: String, value:T): SearchCriterion
+    fun getRendererId():String
+    override fun getType(): RegistryItemType<DynamicCriterionHandler<*>>{
+        return TYPE
+    }
+    companion object{
+        val TYPE = RegistryItemType<DynamicCriterionHandler<*>>("dynamic-criterion-handler")
+    }
+}
+
+interface DynamicCriterionCondition: RegistryItem<DynamicCriterionCondition>{
+    fun getDisplayName():String
+    override fun getType(): RegistryItemType<DynamicCriterionCondition>{
+        return TYPE
+    }
+    companion object{
+        val TYPE = RegistryItemType<DynamicCriterionCondition>("dynamic-criterion")
+    }
+}
+

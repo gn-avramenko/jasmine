@@ -48,4 +48,5 @@
     <entity id="com.gridnine.jasmine.common.core.model.BaseTableBoxVV" abstract="true" extends="com.gridnine.jasmine.common.core.model.BaseVV">
         <property id="uid" type="STRING" lateinit="true"/>
     </entity>
+    <entity id="com.gridnine.jasmine.common.core.storage.BaseDynamicCriterionValue" abstract="true"/>
 </custom-entities>

@@ -3,4 +3,5 @@
     <generator id="common-rest" className="com.gridnine.jasmine.common.core.build.CommonRestGenerator" priority="1"/>
     <generator id="common-l10n" className="com.gridnine.jasmine.common.core.build.L10nCommonGenerator" priority="2"/>
     <generator id="common-ui" className="com.gridnine.jasmine.common.core.build.UiCommonGenerator" priority="3"/>
+    <generator id="common-misc" className="com.gridnine.jasmine.common.core.build.CommonMiscGenerator" priority="4"/>
 </code-gen>

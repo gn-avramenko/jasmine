@@ -14,6 +14,8 @@ import com.gridnine.jasmine.server.standard.ui.mainframe.tools.AdditionalMenuBut
 import com.gridnine.jasmine.server.standard.ui.mainframe.tools.DeleteListToolButton
 import com.gridnine.jasmine.server.standard.ui.mainframe.tools.SaveObjectEditorButton
 import com.gridnine.jasmine.server.standard.ui.mainframe.tools.ShowVersionsMenuItem
+import com.gridnine.jasmine.server.standard.ui.mainframe.workspace.DateDynamicValueRendererFactory
+import com.gridnine.jasmine.server.standard.ui.mainframe.workspace.DynamicCriterionEditorRegistry
 import java.util.*
 
 class StandardServerActivator : IPluginActivator{
@@ -24,5 +26,7 @@ class StandardServerActivator : IPluginActivator{
         Registry.get().register(AdditionalMenuButton())
         Registry.get().register(ShowVersionsMenuItem())
         Registry.get().register(DeleteListToolButton())
+        Environment.publish(DynamicCriterionEditorRegistry())
+        Registry.get().register(DateDynamicValueRendererFactory())
     }
 }

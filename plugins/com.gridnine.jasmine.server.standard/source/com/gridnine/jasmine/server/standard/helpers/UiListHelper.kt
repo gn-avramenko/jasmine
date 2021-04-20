@@ -63,6 +63,9 @@ object UiListHelper {
             is NotWorkspaceCriterion ->{
                 arrayListOf(not(and(it.criterions.flatMap { toCriterions(it, descr) })))
             }
+            is DynamicWorkspaceCriterion ->{
+                arrayListOf(DynamicCriterion(it.handlerId, it.propertyId, it.conditionId, it.value))
+            }
             else -> throw IllegalArgumentException("unsupported criterion type $it")
         }
     }

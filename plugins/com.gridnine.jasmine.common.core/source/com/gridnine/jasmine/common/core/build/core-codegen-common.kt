@@ -18,16 +18,19 @@ class GenClassData(id: String, val extends: String?, val abstract: Boolean, val 
     var generateBuilder = false
     val properties = arrayListOf<GenPropertyDescription>()
     val collections = arrayListOf<GenCollectionDescription>()
+    val maps = arrayListOf<GenMapDescription>()
     val codeInjections = arrayListOf<String>()
 }
 
-class GenEnumData(id: String):BaseGenData(id) {
+class GenEnumData(id:String):BaseGenData(id) {
     val enumItems = arrayListOf<String>()
+    val codeInjections = arrayListOf<String>()
 }
 
 
 class GenPropertyDescription(val id: String, val type: GenPropertyType, val className: String?, var lateinit: Boolean = false, var nonNullable: Boolean = false, var openSetter:Boolean = false, var disallowedSetter:Boolean = false, var override:Boolean = false, val useBuilder:Boolean = false)
 class GenCollectionDescription(val id: String, val elementType: GenPropertyType, var elementClassName: String?, var openGetter:Boolean = false, var readonlyImpl:Boolean = false)
+class GenMapDescription(val id: String, val keyType: GenPropertyType, var keyClassName: String?, val valueType: GenPropertyType, var valuesClassName: String?)
 
 enum class GenPropertyType {
 
@@ -43,7 +46,8 @@ enum class GenPropertyType {
     LOCAL_DATE,
     BOOLEAN,
     BYTE_ARRAY,
-    DATE
+    DATE,
+    CLASS
 
 }
 
@@ -104,7 +108,10 @@ object GenUtils {
                             blankLine()
                             "${if(coll.readonlyImpl) "override " else ""}${if(coll.openGetter) "open " else ""}val ${coll.id} = ${if(coll.readonlyImpl) ReadOnlyArrayList::class.java.name else "arrayListOf"}<${getPropertyType(coll.elementType, coll.elementClassName)}>()"()
                         }
-
+                        it.maps.forEach { map ->
+                            blankLine()
+                            "val ${map.id} = hashMapOf<${getPropertyType(map.keyType, map.keyClassName)}?,${getPropertyType(map.valueType, map.valuesClassName)}?>()"()
+                        }
 
 
                         if (it.properties.isNotEmpty()) {
@@ -150,6 +157,21 @@ object GenUtils {
                                 }
                                 blankLine()
                                 "return super.getCollection(collectionName)"()
+                            }
+                        }
+                        if (it.maps.isNotEmpty()) {
+
+                            blankLine()
+                            "@Suppress(\"UNCHECKED_CAST\")"()
+                            "override fun getMap(mapName: String): MutableMap<Any?,Any?>" {
+                                it.collections.forEach { prop ->
+                                    blankLine()
+                                    "if(\"${prop.id}\" == mapName)"{
+                                        "return this.${prop.id} as MutableMap<Any?,Any?>"()
+                                    }
+                                }
+                                blankLine()
+                                "return super.getMap(mapName)"()
                             }
                         }
                         it.codeInjections.forEach { str ->
@@ -212,9 +234,13 @@ object GenUtils {
                     classBuilder(sb, "enum class ${getSimpleClassName(it.id)}") {
                         blankLine()
                         it.enumItems.withIndex().forEach { (idx, value) ->
-                            if (idx < it.enumItems.size - 1) "$value,"() else value()
+                            if (idx < it.enumItems.size - 1) "$value,"() else "${value};"()
                         }
                         blankLine()
+                        it.codeInjections.forEach { str ->
+                            blankLine()
+                            str()
+                        }
                     }
                 }
                 else -> throw Xeption.forDeveloper("unsupported type $it")

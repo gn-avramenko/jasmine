@@ -61,7 +61,7 @@ class ZkNumberBox (configure: NumberBoxComponentConfiguration.() -> Unit) : Numb
         }
         component = Doublebox()
         configureDimensions(component!!, config)
-        val sb = StringBuilder("#")
+        val sb = StringBuilder("0")
         for(n in 1..config.precision){
             if(n == 1){
                 sb.append(".")

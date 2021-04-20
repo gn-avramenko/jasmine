@@ -13,14 +13,13 @@ import com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceSimpleCrit
 import com.gridnine.jasmine.common.standard.model.domain.SimpleWorkspaceCriterion
 import com.gridnine.jasmine.common.standard.model.domain.WorkspaceSimpleCriterionCondition
 import com.gridnine.jasmine.server.core.ui.components.DivsContainer
-import com.gridnine.jasmine.server.core.ui.components.Table
 import com.gridnine.jasmine.server.core.ui.components.TableCell
 import com.gridnine.jasmine.server.core.ui.components.UiLibraryAdapter
 import com.gridnine.jasmine.server.core.ui.widgets.GeneralSelectBoxValueWidget
 import java.util.*
 
 @Suppress("UNCHECKED_CAST", "UNREACHABLE_CODE")
-class SimpleCriterionHandler(private val tableBox: Table, listId: String, private val initData: SimpleWorkspaceCriterion?) : UiCriterionHandler<SimpleWorkspaceCriterion> {
+class SimpleCriterionHandler(listId: String, private val initData: SimpleWorkspaceCriterion?) : UiCriterionHandler<SimpleWorkspaceCriterion> {
     private val uuid = UUID.randomUUID().toString()
 
     private val properties = arrayListOf<CriterionPropertyWrapper>()
@@ -85,7 +84,7 @@ class SimpleCriterionHandler(private val tableBox: Table, listId: String, privat
         }
         conditionSelect.setChangeListener {
             val property = properties.find { prop -> prop.id == propertySelect.getValue()?.id }
-            val condition = it?.id?.let {toCondition(it)}
+            val condition = it?.id?.let { condItem -> toCondition(condItem)}
             setEditor(property,condition, null)
         }
         return result

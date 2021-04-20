@@ -50,6 +50,8 @@
     <message id="Copy_suffix"/>
     <message id="Delete_list"/>
     <message id="Simple_criterion"/>
+    <message id="Dynamic_criterion"/>
+    <message id="with_correction"/>
     <message id="Or_criterion"/>
     <message id="And_criterion"/>
     <message id="Not_criterion"/>

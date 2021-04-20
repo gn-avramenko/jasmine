@@ -22,9 +22,9 @@ internal open class BaseDomainDocumentMetadataProvider(description: BaseDocument
         addProperty(SerializablePropertyDescription(BaseIdentity.uid, SerializablePropertyType.STRING, null, false))
         var extendsId = description.extendsId
         while (extendsId != null) {
+            //TODO consider parent is custom entity
             val parentDescr = DomainMetaRegistry.get().documents[extendsId]
-                    ?: DomainMetaRegistry.get().nestedDocuments[extendsId]
-                    ?: throw IllegalStateException("no document found for id $extendsId")
+                    ?: DomainMetaRegistry.get().nestedDocuments[extendsId] ?: break
             fillProperties(parentDescr)
             fillCollections(parentDescr)
             extendsId = parentDescr.extendsId
@@ -56,6 +56,10 @@ internal open class BaseDomainDocumentMetadataProvider(description: BaseDocument
                 if (nd != null) {
                     return nd.isAbstract
                 }
+            }
+            val cd = CustomMetaRegistry.get().entities[elementClassName]
+            if(cd != null){
+                return cd.isAbstract
             }
         }
         return false
@@ -188,14 +192,14 @@ internal open class BaseDomainIndexMetadataProvider(description: BaseIndexDescri
 }
 
 internal class DomainIndexMetadataProvider(description: IndexDescription) : BaseDomainIndexMetadataProvider(description) {
-    init{
+    init {
         addProperty(SerializablePropertyDescription(BaseIdentity.uid, SerializablePropertyType.STRING, null, false))
         addProperty(SerializablePropertyDescription(BaseIndex.documentField, SerializablePropertyType.ENTITY, ObjectReference::class.qualifiedName, false))
     }
 }
 
 internal class AssetMetadataProvider(description: AssetDescription) : BaseDomainIndexMetadataProvider(description) {
-    init{
+    init {
         addProperty(SerializablePropertyDescription(BaseIdentity.uid, SerializablePropertyType.STRING, null, false))
         addProperty(SerializablePropertyDescription(BaseAsset.revision, SerializablePropertyType.INT, null, false))
     }

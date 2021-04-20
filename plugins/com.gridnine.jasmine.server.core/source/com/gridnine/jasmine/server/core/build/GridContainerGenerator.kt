@@ -106,7 +106,7 @@ internal object GridContainerGenerator {
                                         when(colWidget.widgetType){
                                             WidgetType.TEXT_BOX -> {
                                                 colWidget as TextBoxWidgetDescription
-                                                """column("${column.id}", ${TextBoxWidgetDescription::class.qualifiedName}(false), ${UiMetaRegistry::class.qualifiedName}.get().bundles["${widget.id}"]?.messages?.get("${column.id}")?.getDisplayName()?:"${column.id}", ${column.prefWidth?:"100"})"""()
+                                                """column("${column.id}", ${TextBoxWidgetDescription::class.qualifiedName}(false), ${L10nMetaRegistry::class.qualifiedName}.get().bundles["${widget.id}"]?.messages?.get("${column.id}")?.getDisplayName()?:"${column.id}", ${column.prefWidth?:"100"})"""()
                                             }
                                             WidgetType.PASSWORD_BOX -> {
                                                 colWidget as PasswordBoxWidgetDescription

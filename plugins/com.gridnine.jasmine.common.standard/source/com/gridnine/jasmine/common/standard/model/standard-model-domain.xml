@@ -69,6 +69,32 @@
         <property id="value" type="NESTED_DOCUMENT" class-name="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceSimpleCriterionValue"/>
     </nested-document>
 
+    <enum id="com.gridnine.jasmine.common.standard.model.domain.StandardDynamicCriterionCondition">
+        <enum-item id="EQUALS"/>
+        <enum-item id="GREATER_THAN_OR_EQUALS"/>
+        <enum-item id="GREATER_THAN"/>
+        <enum-item id="LESS_THAN_OR_EQUALS"/>
+        <enum-item id="LESS_THAN"/>
+    </enum>
+    <enum id="com.gridnine.jasmine.common.standard.model.domain.StandardDynamicCriterionHandlerType">
+        <enum-item id="TODAY"/>
+    </enum>
+    <enum id="com.gridnine.jasmine.common.standard.model.domain.DynamicCriterionDateValueType">
+        <enum-item id="DAYS"/>
+    </enum>
+    <enum id="com.gridnine.jasmine.common.standard.model.domain.StandardDynamicCriterionValueRendererType">
+        <enum-item id="DATE"/>
+    </enum>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.DynamicWorkspaceCriterion" extends="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceCriterion">
+        <property id="handlerId" type="STRING" non-nullable="true"/>
+        <property id="propertyId" type="STRING" non-nullable="true"/>
+        <property id="conditionId" type="STRING" non-nullable="true"/>
+        <property id="value" type="NESTED_DOCUMENT" non-nullable="true" class-name="com.gridnine.jasmine.common.core.storage.BaseDynamicCriterionValue"/>
+    </nested-document>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.DynamicCriterionDateValue" extends="com.gridnine.jasmine.common.core.storage.BaseDynamicCriterionValue">
+        <property id="correction" type="INT" non-nullable="true"/>
+        <property id="valueType" type="ENUM" class-name="com.gridnine.jasmine.common.standard.model.domain.DynamicCriterionDateValueType" non-nullable="true"/>
+    </nested-document>
     <nested-document id="com.gridnine.jasmine.common.standard.model.domain.BaseComplexWorkspaceCriterion" extends="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceCriterion" abstract="true">
         <collection id="criterions" element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceCriterion"/>
     </nested-document>

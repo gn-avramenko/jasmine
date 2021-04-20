@@ -18,7 +18,7 @@ class CriterionsListEditor(internal val tableBox: Table, private val indent:Int)
     internal val handlers = arrayListOf<UiCriterionHandler<*>>()
 
     fun clearData(){
-        tableBox.getRows().indices.forEach {
+        tableBox.getRows().indices.forEach { _ ->
             tableBox.removeRow(0)
         }
         handlers.clear()
@@ -29,7 +29,11 @@ class CriterionsListEditor(internal val tableBox: Table, private val indent:Int)
             iconClass = "z-icon-plus"
             items.add(MenuButtonStandardItem(StandardL10nMessagesFactory.Simple_criterion(), null, false){
                 tableBox.removeRow(0)
-                addRow(0, SimpleCriterionHandler(tableBox, listId, null))
+                addRow(0, SimpleCriterionHandler(listId, null))
+            })
+            items.add(MenuButtonStandardItem(StandardL10nMessagesFactory.Dynamic_criterion(), null, false){
+                tableBox.removeRow(0)
+                addRow(0, DynamicCriterionUiHandler(listId, null))
             })
             items.add(MenuButtonStandardItem(StandardL10nMessagesFactory.And_criterion(), null, false){
                 tableBox.removeRow(0)
@@ -67,7 +71,8 @@ class CriterionsListEditor(internal val tableBox: Table, private val indent:Int)
         }
         criterions.forEach {
             val handler = when(it){
-                is SimpleWorkspaceCriterion ->SimpleCriterionHandler(tableBox, listId, it)
+                is SimpleWorkspaceCriterion ->SimpleCriterionHandler(listId, it)
+                is DynamicWorkspaceCriterion ->DynamicCriterionUiHandler(listId, it)
                 is OrWorkspaceCriterion -> OrCriterionHandler(tableBox, indent, listId, it)
                 is AndWorkspaceCriterion -> AndCriterionHandler(tableBox, indent, listId, it)
                 is NotWorkspaceCriterion -> NotCriterionHandler(tableBox, indent, listId, it)
@@ -132,19 +137,23 @@ class CriterionsListToolsPanel(private val listEditor: CriterionsListEditor, pri
         _node.addCell(GridLayoutCell(downButton))
         plusButton = UiLibraryAdapter.get().createMenuButton{
             iconClass = "z-icon-plus"
-            items.add(MenuButtonStandardItem("Простое условие", null, false){
+            items.add(MenuButtonStandardItem(StandardL10nMessagesFactory.Simple_criterion(), null, false){
                 val idx = listEditor.handlers.indexOfFirst { rowId == it.getId() }
-                listEditor.addRow(idx+1, SimpleCriterionHandler(listEditor.tableBox, listId,null))
+                listEditor.addRow(idx+1, SimpleCriterionHandler(listId,null))
             })
-            items.add(MenuButtonStandardItem("Логическое И", null, false){
+            items.add(MenuButtonStandardItem(StandardL10nMessagesFactory.Dynamic_criterion(), null, false){
+                val idx = listEditor.handlers.indexOfFirst { rowId == it.getId() }
+                listEditor.addRow(idx+1, DynamicCriterionUiHandler(listId,null))
+            })
+            items.add(MenuButtonStandardItem(StandardL10nMessagesFactory.And_criterion(), null, false){
                 val idx = listEditor.handlers.indexOfFirst { rowId == it.getId() }
                 listEditor.addRow(idx+1, AndCriterionHandler(listEditor.tableBox, indent, listId,null))
             })
-            items.add(MenuButtonStandardItem("Логическое ИЛИ", null, false){
+            items.add(MenuButtonStandardItem(StandardL10nMessagesFactory.Or_criterion(), null, false){
                 val idx = listEditor.handlers.indexOfFirst { rowId == it.getId() }
                 listEditor.addRow(idx+1, OrCriterionHandler(listEditor.tableBox, indent, listId,null))
             })
-            items.add(MenuButtonStandardItem("Логическое НЕ", null, false){
+            items.add(MenuButtonStandardItem(StandardL10nMessagesFactory.Not_criterion(), null, false){
                 val idx = listEditor.handlers.indexOfFirst { rowId == it.getId() }
                 listEditor.addRow(idx+1, NotCriterionHandler(listEditor.tableBox, indent, listId,null))
             })
