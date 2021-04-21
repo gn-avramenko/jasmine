@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<misc-objects xmlns="http://gridnine.com/jasmine/misc" >
+    <enum id="com.gridnine.jasmine.server.reports.model.StandardReportRequestedParameterId">
+        <enum-item id="START_DATE"/>
+        <enum-item id="END_DATE"/>
+    </enum>
+</misc-objects>

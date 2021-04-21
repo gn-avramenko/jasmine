@@ -99,7 +99,7 @@ open class ZkTable(configure: TableConfiguration.() -> Unit) : Table, ZkUiCompon
         val comp = Grid()
         component = comp
         comp.isSpan = true
-        configureDimensions(comp, config)
+        configureBasicParameters(comp, config)
         if (!config.noHeader) {
             val columns = Columns()
             columns.parent = comp

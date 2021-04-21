@@ -60,7 +60,7 @@ class ZkDateBox (configure: DateBoxComponentConfiguration.() -> Unit) : DateBox,
             return  component!!
         }
         component = Datebox()
-        configureDimensions(component!!, config)
+        configureBasicParameters(component!!, config)
         component!!.format = "yyyy-MM-dd"
         component!!.valueInLocalDate = value
         component!!.isDisabled = !enabled

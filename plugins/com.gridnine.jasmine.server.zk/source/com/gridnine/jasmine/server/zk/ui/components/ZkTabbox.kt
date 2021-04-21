@@ -107,7 +107,7 @@ open class ZkTabbox(configure: TabboxConfiguration.() -> Unit) : com.gridnine.ja
             return component!!
         }
         component = Tabbox()
-        configureDimensions(component!!, config)
+        configureBasicParameters(component!!, config)
         tabs = Tabs()
         component!!.appendChild(tabs)
         tabpanels = Tabpanels()

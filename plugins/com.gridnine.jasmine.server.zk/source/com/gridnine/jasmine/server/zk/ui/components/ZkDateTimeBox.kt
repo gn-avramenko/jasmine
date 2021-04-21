@@ -7,8 +7,6 @@ package com.gridnine.jasmine.server.zk.ui.components
 
 import com.gridnine.jasmine.server.core.ui.components.DateTimeBox
 import com.gridnine.jasmine.server.core.ui.components.DateTimeBoxComponentConfiguration
-import com.gridnine.jasmine.server.zk.ui.components.ZkUiComponent
-import com.gridnine.jasmine.server.zk.ui.components.configureDimensions
 import org.zkoss.zk.ui.HtmlBasedComponent
 import org.zkoss.zul.Datebox
 import java.time.LocalDateTime
@@ -63,7 +61,7 @@ class ZkDateTimeBox (configure: DateTimeBoxComponentConfiguration.() -> Unit) : 
             return  component!!
         }
         component = Datebox()
-        configureDimensions(component!!, config)
+        configureBasicParameters(component!!, config)
         component!!.format = "yyyy-MM-dd HH:mm"
         component!!.valueInLocalDateTime = value
         component!!.isDisabled = !enabled

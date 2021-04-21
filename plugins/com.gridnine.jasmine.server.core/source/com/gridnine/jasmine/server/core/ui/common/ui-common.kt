@@ -107,6 +107,7 @@ class ViewEditorInterceptorsRegistry: Disposable {
 abstract class BaseComponentConfiguration{
     var width:String? = null
     var height:String? = null
+    var sClass:String? = null
 }
 
 abstract class BaseWidgetConfiguration:BaseComponentConfiguration()

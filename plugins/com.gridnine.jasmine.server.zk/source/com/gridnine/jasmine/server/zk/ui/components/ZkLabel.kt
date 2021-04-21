@@ -7,7 +7,7 @@ package com.gridnine.jasmine.web.server.zk.components
 
 import com.gridnine.jasmine.server.core.ui.components.LabelConfiguration
 import com.gridnine.jasmine.server.zk.ui.components.ZkUiComponent
-import com.gridnine.jasmine.server.zk.ui.components.configureDimensions
+import com.gridnine.jasmine.server.zk.ui.components.configureBasicParameters
 import org.zkoss.zk.ui.HtmlBasedComponent
 import org.zkoss.zul.Label
 
@@ -36,7 +36,7 @@ class ZkLabel(configure: LabelConfiguration.() -> Unit ): com.gridnine.jasmine.s
             return component!!
         }
         component = Label()
-        configureDimensions(component!!, config)
+        configureBasicParameters(component!!, config)
         component!!.value  = text
         component!!.isMultiline  = config.multiline
         return component!!

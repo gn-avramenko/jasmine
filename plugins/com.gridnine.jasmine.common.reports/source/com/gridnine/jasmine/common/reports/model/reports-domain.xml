@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain xmlns="http://gridnine.com/jasmine/domain" >
+	<document id="com.gridnine.jasmine.common.reports.model.domain.ReportDescription" x-cache-resolve="true">
+		<property type="STRING" id="name"/>
+		<property type="STRING" id="id"/>
+	</document>
+	<index document="com.gridnine.jasmine.common.reports.model.domain.ReportDescription" id="com.gridnine.jasmine.common.reports.model.domain.ReportDescriptionIndex">
+		<property type="STRING" id="name"/>
+		<property type="STRING" id="id"/>
+	</index>
+</domain>

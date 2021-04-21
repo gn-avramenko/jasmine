@@ -28,7 +28,9 @@ class CoreActivator:IPluginActivator{
         CustomMetadataParser.updateCustomMetaRegistry(CustomMetaRegistry.get(), "com/gridnine/jasmine/common/core/meta/core-custom.xml", javaClass.classLoader)
         Environment.publish(UiMetaRegistry())
         Environment.publish( L10nMetaRegistry())
+        Environment.publish( MiscMetaRegistry())
         Environment.publish(SerializationProvider())
+
     }
 
     override fun activate(config: Properties) {

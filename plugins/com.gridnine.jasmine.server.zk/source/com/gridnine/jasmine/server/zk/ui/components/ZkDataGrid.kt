@@ -8,7 +8,7 @@ package com.gridnine.jasmine.web.server.zk.components
 import com.gridnine.jasmine.server.core.ui.common.ComponentHorizontalAlignment
 import com.gridnine.jasmine.server.core.ui.components.*
 import com.gridnine.jasmine.server.zk.ui.components.ZkUiComponent
-import com.gridnine.jasmine.server.zk.ui.components.configureDimensions
+import com.gridnine.jasmine.server.zk.ui.components.configureBasicParameters
 import org.zkoss.zk.ui.HtmlBasedComponent
 import org.zkoss.zk.ui.event.EventListener
 import org.zkoss.zk.ui.event.Events
@@ -47,7 +47,7 @@ class ZkDataGrid<E : Any>(configure: DataGridConfiguration.() -> Unit) : DataGri
             component.mold = "paging"
             component.isAutopaging = true
             component.isSpan = configuration.span
-            configureDimensions(component, configuration)
+            configureBasicParameters(component, configuration)
             val columns = Columns()
             columns.parent = component
             if (configuration.selectable) {

@@ -5,6 +5,11 @@
 
 package com.gridnine.jasmine.server.standard.ui.mainframe
 
+import com.gridnine.jasmine.common.core.app.RegistryItem
+import com.gridnine.jasmine.common.core.app.RegistryItemType
+import com.gridnine.jasmine.common.core.model.BaseIntrospectableObject
+import com.gridnine.jasmine.common.core.model.ObjectReference
+import com.gridnine.jasmine.server.core.ui.common.HasWeight
 import com.gridnine.jasmine.server.core.ui.common.UiNode
 import com.gridnine.jasmine.server.core.ui.components.TabTool
 
@@ -21,10 +26,22 @@ interface MainFrameTabHandler<T:Any>{
 }
 
 
+
 class MainFrameConfiguration {
 
     lateinit var title:String
 
     val tools = arrayListOf<TabTool>()
 
+}
+
+
+interface UiListItemHandler: RegistryItem<UiListItemHandler> {
+    fun open(obj:ObjectReference<*>, navigationKey:String)
+    override fun getType(): RegistryItemType<UiListItemHandler> {
+        return TYPE
+    }
+    companion object{
+        val TYPE = RegistryItemType<UiListItemHandler>("list-item-handlers")
+    }
 }

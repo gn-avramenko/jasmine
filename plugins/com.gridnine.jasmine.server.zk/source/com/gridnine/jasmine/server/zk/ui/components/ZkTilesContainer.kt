@@ -72,7 +72,7 @@ open class ZkTilesContainer(configure: TilesContainerConfiguration.() -> Unit) :
             return component!!
         }
         component = Div()
-        configureDimensions(component!!, config)
+        configureBasicParameters(component!!, config)
         setTilesInternal()
         return component!!
     }

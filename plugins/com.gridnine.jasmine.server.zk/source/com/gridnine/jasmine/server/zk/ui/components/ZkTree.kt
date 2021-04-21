@@ -213,7 +213,7 @@ open class ZkTree(configure: TreeConfiguration.() -> Unit) : com.gridnine.jasmin
             return this.component!!
         }
         val div = Div()
-        configureDimensions(div, config)
+        configureBasicParameters(div, config)
         val comp = Tree()
         comp.vflex = "1"
         comp.hflex = "1"

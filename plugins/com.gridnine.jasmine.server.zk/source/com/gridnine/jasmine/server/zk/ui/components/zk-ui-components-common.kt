@@ -28,7 +28,7 @@ fun findZkComponent(node: UiNode): ZkUiComponent {
     return node as ZkUiComponent
 }
 
-fun configureDimensions(component:HtmlBasedComponent, configuration:BaseComponentConfiguration){
+fun configureBasicParameters(component:HtmlBasedComponent, configuration:BaseComponentConfiguration){
     val width = configuration.width
     if (width == "100%") {
         component.hflex = "1"
@@ -41,6 +41,7 @@ fun configureDimensions(component:HtmlBasedComponent, configuration:BaseComponen
     } else {
         component.height = height
     }
+    component.setClass(configuration.sClass)
 }
 class ZkUiLibraryAdapter:UiLibraryAdapter{
     override fun redirect(relativeUrl: String) {

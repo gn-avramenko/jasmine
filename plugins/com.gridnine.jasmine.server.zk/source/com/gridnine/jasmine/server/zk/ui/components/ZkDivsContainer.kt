@@ -76,10 +76,10 @@ class ZkDivsContainer(configure: DivsContainerConfiguration.() -> Unit) : DivsCo
             return component!!
         }
         component = Div()
-        configureDimensions(component!!, config)
-        var previousId = activeComponentId
+        configureBasicParameters(component!!, config)
+        val previousId = activeComponentId
         if(previousId != null){
-            activeComponentId == null
+            activeComponentId = null
             showInternal(previousId)
             activeComponentId = previousId
         }

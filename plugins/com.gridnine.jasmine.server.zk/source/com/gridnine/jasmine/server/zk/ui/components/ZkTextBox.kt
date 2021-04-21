@@ -76,7 +76,7 @@ class ZkTextBox(configure: TextBoxComponentConfiguration.() -> Unit) : TextBox, 
             return component!!
         }
         val comp = Textbox()
-        configureDimensions(comp, config)
+        configureBasicParameters(comp, config)
         comp.text = value
         comp.setClass(if(validation != null) "jasmine-error" else "jasmine-normal")
         if(actionListener != null){

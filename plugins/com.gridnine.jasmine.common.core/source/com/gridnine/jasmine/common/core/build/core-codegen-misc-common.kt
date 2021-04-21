@@ -62,6 +62,11 @@ class CommonMiscGenerator:CodeGenerator {
             it.items.values.forEach { ei ->
                 enumClassData.enumItems.add(ei.id)
             }
+            enumClassData.codeInjections.add("""
+                override fun toString():String{
+                    return ${MiscMetaRegistry::class.qualifiedName}.get().enums["${it.id}"]?.items?.get(name)?.getDisplayName()?:name
+                }
+            """.trimIndent())
             classesData.add(enumClassData)
         }
         registry.entities.values.forEach {

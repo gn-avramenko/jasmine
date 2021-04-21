@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<misc-objects xmlns="http://gridnine.com/jasmine/misc" >
+	<enum id="com.gridnine.jasmine.common.reports.model.misc.ReportRequestedParameterType">
+		<enum-item id="LOCAL_DATE"/>
+		<enum-item id="OBJECT_REFERENCE"/>
+	</enum>
+	<entity id="com.gridnine.jasmine.common.reports.model.misc.ReportRequestedParameterDescription">
+		<property id="id" type="STRING" lateinit="true"/>
+		<property id="name" type="STRING" lateinit="true"/>
+		<property id="type" type="ENUM" class-name="com.gridnine.jasmine.common.reports.model.misc.ReportRequestedParameterType" lateinit="true"/>
+		<property id="objectClassName" type="STRING"/>
+	</entity>
+	<entity id="com.gridnine.jasmine.common.reports.model.misc.BaseReportRequestedParameter" abstract="true">
+		<property id="id" type="STRING" lateinit="true"/>
+	</entity>
+	<entity id="com.gridnine.jasmine.common.reports.model.misc.LocalDateReportRequestedParameter" extends="com.gridnine.jasmine.common.reports.model.misc.BaseReportRequestedParameter">
+		<property id="value" type="LOCAL_DATE"/>
+	</entity>
+	<entity id="com.gridnine.jasmine.common.reports.model.misc.ObjectReferenceReportRequestedParameter" extends="com.gridnine.jasmine.common.reports.model.misc.BaseReportRequestedParameter">
+		<property id="value" type="ENTITY_REFERENCE" class-name="com.gridnine.jasmine.common.core.model.BaseIdentity"/>
+	</entity>
+
+
+</misc-objects>

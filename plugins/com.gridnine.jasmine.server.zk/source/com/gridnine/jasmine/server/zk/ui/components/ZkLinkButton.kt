@@ -48,7 +48,7 @@ class ZkLinkButton(configure: LinkButtonConfiguration.() -> Unit) : LinkButton, 
         val comp = Button()
         component = comp
         comp.label = config.title
-        configureDimensions(comp, config)
+        configureBasicParameters(comp, config)
         comp.iconSclass = config.iconClass
         comp.addEventListener(Events.ON_CLICK){
             handler?.invoke()

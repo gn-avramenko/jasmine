@@ -50,7 +50,7 @@ class ZkBooleanBox(configure: BooleanBoxComponentConfiguration.() -> Unit): Bool
             return component!!
         }
         component = Checkbox()
-        configureDimensions(component!!, config)
+        configureBasicParameters(component!!, config)
         component!!.mold = "switch"
         component!!.isChecked =value
         component!!.isDisabled = !enabled

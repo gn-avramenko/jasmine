@@ -312,7 +312,8 @@ internal class ListDataGridPanel(val we: ListWorkspaceItem) : BaseNodeWrapper<Da
         }
         _node.setDoubleClickListener {
             if(it is BaseIndex<*>){
-                MainFrame.get().openTab(it.document!!, it.uid)
+                val doc = it.document!!
+                Registry.get().get(UiListItemHandler.TYPE, doc.type)?.open(doc, it.uid) ?:MainFrame.get().openTab(doc, it.uid)
             }
         }
         _node.setLoader {request ->

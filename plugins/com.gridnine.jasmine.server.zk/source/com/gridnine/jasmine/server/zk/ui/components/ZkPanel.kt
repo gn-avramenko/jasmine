@@ -64,7 +64,7 @@ open class ZkPanel (configure: PanelConfiguration.() -> Unit) : com.gridnine.jas
             return component!!
         }
         component = Panel()
-        configureDimensions(component!!, config)
+        configureBasicParameters(component!!, config)
         component!!.title = title
         component!!.setBorder(true)
         if(config.maximizable) {

@@ -87,7 +87,7 @@ open class ZkAccordionContainer(configure: AccordionContainerConfiguration.() ->
         }
         val comp = Tabbox()
         comp.mold = "accordion"
-        configureDimensions(comp, config)
+        configureBasicParameters(comp, config)
         val tabs = Tabs()
         this.tabs = tabs
         comp.appendChild(tabs)

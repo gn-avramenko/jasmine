@@ -59,7 +59,7 @@ class ZkPasswordBox(configure: PasswordBoxComponentConfiguration.() -> Unit) : P
         }
         val comp = Textbox()
         comp.type = "password"
-        configureDimensions(comp, config)
+        configureBasicParameters(comp, config)
         comp.text = value
         comp.setClass(if(validation != null) "jasmine-error" else "jasmine-normal")
         comp.isDisabled = disabled

@@ -1,0 +1,6 @@
+<code-gen xmlns="http://gridnine.com/jasmine/codegen">
+    <source id="reports-model-domain" location="source/com/gridnine/jasmine/common/reports/model/reports-domain.xml"/>
+    <generate source="reports-model-domain" targetPlugin="com.gridnine.jasmine.common.reports" generator="common-domain"/>
+    <source id="reports-model-misc" location="source/com/gridnine/jasmine/common/reports/model/reports-misc.xml"/>
+    <generate source="reports-model-misc" targetPlugin="com.gridnine.jasmine.common.reports" generator="common-misc"/>
+</code-gen>

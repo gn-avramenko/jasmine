@@ -1,0 +1,4 @@
+<code-gen xmlns="http://gridnine.com/jasmine/codegen">
+    <source id="reports-server-model-misc" location="source/com/gridnine/jasmine/server/reports/model/reports-server-model-misc.xml"/>
+    <generate source="reports-server-model-misc" targetPlugin="com.gridnine.jasmine.server.reports" generator="common-misc"/>
+</code-gen>

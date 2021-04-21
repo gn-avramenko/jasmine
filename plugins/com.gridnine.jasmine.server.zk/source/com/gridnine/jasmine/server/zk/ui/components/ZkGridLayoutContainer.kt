@@ -64,7 +64,7 @@ open class ZkGridLayoutContainer(configure: GridLayoutContainerConfiguration.() 
         }
         val comp = Div()
         comp.style = createContainerStyle()
-        configureDimensions(comp, configuration)
+        configureBasicParameters(comp, configuration)
         component = comp
         rows.withIndex().forEach { (idx, row) ->
             row.cells.forEach {

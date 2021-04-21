@@ -9,7 +9,7 @@ import com.gridnine.jasmine.server.core.ui.components.BorderContainer
 import com.gridnine.jasmine.server.core.ui.components.BorderContainerConfiguration
 import com.gridnine.jasmine.server.core.ui.components.BorderContainerRegion
 import com.gridnine.jasmine.server.zk.ui.components.ZkUiComponent
-import com.gridnine.jasmine.server.zk.ui.components.configureDimensions
+import com.gridnine.jasmine.server.zk.ui.components.configureBasicParameters
 import com.gridnine.jasmine.server.zk.ui.components.findZkComponent
 import org.zkoss.zk.ui.Component
 import org.zkoss.zk.ui.HtmlBasedComponent
@@ -131,7 +131,7 @@ open class ZkBorderContainer(configure: BorderContainerConfiguration.() -> Unit)
             return component!!
         }
         component = Borderlayout()
-        configureDimensions(component!!, config)
+        configureBasicParameters(component!!, config)
         setNorthInternal()
         setSouthInternal()
         setEastInternal()
