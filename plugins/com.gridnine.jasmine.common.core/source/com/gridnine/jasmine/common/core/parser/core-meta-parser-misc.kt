@@ -14,8 +14,8 @@ import java.util.*
 
 
 object MiscMetadataParser {
-    private fun getPropertyType(typeStr: String): MiscType {
-        return MiscType.valueOf(typeStr)
+    private fun getPropertyType(typeStr: String): MiscFieldType {
+        return MiscFieldType.valueOf(typeStr)
     }
 
     private fun  fillMiscEntity(elm: XmlNode, description: MiscEntityDescription, localizations: Map<String, Map<Locale, String>>) {

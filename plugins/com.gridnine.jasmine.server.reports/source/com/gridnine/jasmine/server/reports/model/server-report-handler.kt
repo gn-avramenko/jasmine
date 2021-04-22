@@ -7,6 +7,8 @@ package com.gridnine.jasmine.server.reports.model
 
 import com.gridnine.jasmine.common.core.app.RegistryItem
 import com.gridnine.jasmine.common.core.app.RegistryItemType
+import com.gridnine.jasmine.common.reports.model.misc.BaseReportRequestedParameter
+import com.gridnine.jasmine.common.reports.model.misc.ReportGenerationResult
 import com.gridnine.jasmine.common.reports.model.misc.ReportRequestedParameterDescription
 
 interface ServerReportHandler : RegistryItem<ServerReportHandler> {
@@ -14,6 +16,10 @@ interface ServerReportHandler : RegistryItem<ServerReportHandler> {
     fun getName():String
 
     fun getRequestedParametersDescriptions():List<ReportRequestedParameterDescription>
+
+    fun generateReport(parameters:List<BaseReportRequestedParameter>) : ReportGenerationResult
+
+    fun validate(params: List<BaseReportRequestedParameter>):Map<String, String?>?
 
     override fun getType(): RegistryItemType<ServerReportHandler> {
         return TYPE

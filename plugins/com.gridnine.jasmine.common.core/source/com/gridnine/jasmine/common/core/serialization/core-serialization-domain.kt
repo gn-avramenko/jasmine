@@ -61,6 +61,10 @@ internal open class BaseDomainDocumentMetadataProvider(description: BaseDocument
             if(cd != null){
                 return cd.isAbstract
             }
+            val md = MiscMetaRegistry.get().entities[elementClassName]
+            if(md != null){
+                return md.isAbstract
+            }
         }
         return false
 

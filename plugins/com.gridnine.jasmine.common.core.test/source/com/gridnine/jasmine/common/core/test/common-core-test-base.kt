@@ -3,6 +3,8 @@
  * Project: Jasmine
  *****************************************************************/
 
+@file:Suppress("UseExpressionBody")
+
 package com.gridnine.jasmine.common.core.test
 
 import com.gridnine.jasmine.common.core.app.ConfigurationProvider
@@ -11,6 +13,7 @@ import com.gridnine.jasmine.common.core.lock.LockManager
 import com.gridnine.jasmine.common.core.lock.StandardLockManager
 import com.gridnine.jasmine.common.core.meta.CustomMetaRegistry
 import com.gridnine.jasmine.common.core.meta.DomainMetaRegistry
+import com.gridnine.jasmine.common.core.meta.MiscMetaRegistry
 import com.gridnine.jasmine.common.core.meta.RestMetaRegistry
 import com.gridnine.jasmine.common.core.parser.CustomMetadataParser
 import com.gridnine.jasmine.common.core.parser.DomainMetadataParser
@@ -60,12 +63,14 @@ abstract class TestBase {
 }
 
 
+@Suppress("UNUSED_PARAMETER")
 abstract class CommonCoreTestBase : TestBase() {
 
     override fun setUp() {
         super.setUp()
         publishConfigurationProvider()
         publishDomainMetadataProvider()
+        publishMiscMetadataProvider()
         publishRestMetadataProvider()
         publishCustomMetaRegistry()
         publishReflectionFactory()
@@ -125,6 +130,16 @@ abstract class CommonCoreTestBase : TestBase() {
         registerDomainMetadata(result)
         Environment.publish(result)
 
+    }
+
+    private fun publishMiscMetadataProvider() {
+        val result = MiscMetaRegistry()
+        registerMiscMetadata(result)
+        Environment.publish(result)
+
+    }
+
+    protected fun registerMiscMetadata(result: MiscMetaRegistry) {
     }
 
     protected fun registerDomainMetadata(result: DomainMetaRegistry) {

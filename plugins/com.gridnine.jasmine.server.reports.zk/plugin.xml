@@ -1,15 +1,15 @@
-<plugin xmlns="http://xtrip.gridnine.com/spf" id="com.gridnine.jasmine.server.reports">
+<plugin xmlns="http://xtrip.gridnine.com/spf" id="com.gridnine.jasmine.server.reports.zk">
     <parameter id="type" value="SERVER"/>
     <dependencies>
-        <lib-dependency group="org.apache.poi" name="poi" version="5.0.0"/>
-        <lib-dependency group="org.apache.poi" name="poi-ooxml" version="5.0.0"/>
         <plugin-dependency plugin-id="com.gridnine.jasmine.common.core"/>
         <plugin-dependency plugin-id="com.gridnine.jasmine.common.standard"/>
         <plugin-dependency plugin-id="com.gridnine.jasmine.common.reports"/>
         <plugin-dependency plugin-id="com.gridnine.jasmine.server.core"/>
         <plugin-dependency plugin-id="com.gridnine.jasmine.server.standard"/>
+        <plugin-dependency plugin-id="com.gridnine.jasmine.server.reports"/>
+        <plugin-dependency plugin-id="com.gridnine.jasmine.server.zk"/>
     </dependencies>
     <extension point-id="activator">
-        <parameter id="class" value="com.gridnine.jasmine.server.reports.activator.ServerReportsActivator"/>
+        <parameter id="class" value="com.gridnine.jasmine.reports.zk.activator.ZkReportsActivator"/>
     </extension>
 </plugin>

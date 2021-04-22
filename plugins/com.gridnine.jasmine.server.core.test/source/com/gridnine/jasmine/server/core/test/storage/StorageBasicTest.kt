@@ -163,4 +163,19 @@ class StorageBasicTest : StorageTestBase() {
         doc = Storage.get().loadDocumentVersion(doc::class, doc.uid, 0)!!
         Assert.assertEquals("test", doc.stringProperty)
     }
+
+    @Test
+    fun testDocumentSameVersionMultipleTimes(){
+        AuthUtils.setCurrentUser("system")
+        val doc = TestDomainDocument()
+        doc.uid = TextUtils.generateUid()
+        doc.stringProperty = "test"
+        Storage.get().saveDocument(doc, false)
+        doc.stringProperty = "test2"
+        Storage.get().saveDocument(doc, false)
+        doc.stringProperty = "test3"
+        Storage.get().saveDocument(doc, false)
+        doc.stringProperty = "test5"
+        Storage.get().saveDocument(doc, false)
+    }
 }

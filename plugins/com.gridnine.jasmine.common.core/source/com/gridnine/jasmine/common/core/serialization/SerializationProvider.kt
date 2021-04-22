@@ -8,17 +8,14 @@ package com.gridnine.jasmine.common.core.serialization
 
 import com.fasterxml.jackson.core.*
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
-import com.gridnine.jasmine.common.core.meta.CustomMetaRegistry
-import com.gridnine.jasmine.common.core.meta.DomainMetaRegistry
-import com.gridnine.jasmine.common.core.meta.RestMetaRegistry
-import com.gridnine.jasmine.common.core.meta.UiMetaRegistry
+import com.gridnine.jasmine.common.core.app.Disposable
+import com.gridnine.jasmine.common.core.app.PublishableWrapper
+import com.gridnine.jasmine.common.core.meta.*
 import com.gridnine.jasmine.common.core.model.BaseIdentity
 import com.gridnine.jasmine.common.core.model.BaseIntrospectableObject
 import com.gridnine.jasmine.common.core.model.ObjectReference
 import com.gridnine.jasmine.common.core.model.Xeption
 import com.gridnine.jasmine.common.core.reflection.ReflectionFactory
-import com.gridnine.jasmine.common.core.app.Disposable
-import com.gridnine.jasmine.common.core.app.PublishableWrapper
 import com.gridnine.jasmine.common.core.utils.TextUtils
 import java.io.InputStream
 import java.io.OutputStream
@@ -26,7 +23,6 @@ import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 
@@ -385,6 +381,10 @@ class SerializationProvider : Disposable {
             val viewValidationEntityDescription = UiMetaRegistry.get().viewValidations[key]
             if (viewValidationEntityDescription != null) {
                 return VVEntityMetadataProvider(viewValidationEntityDescription)
+            }
+            val miscEntityDescription = MiscMetaRegistry.get().entities[key]
+            if (miscEntityDescription != null) {
+                return MiscEntityMetadataProvider(miscEntityDescription)
             }
             TODO()
         }

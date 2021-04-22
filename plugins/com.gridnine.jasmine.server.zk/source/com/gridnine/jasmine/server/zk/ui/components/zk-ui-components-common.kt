@@ -30,11 +30,7 @@ fun findZkComponent(node: UiNode): ZkUiComponent {
 
 fun configureBasicParameters(component:HtmlBasedComponent, configuration:BaseComponentConfiguration){
     val width = configuration.width
-    if (width == "100%") {
-        component.hflex = "1"
-    } else {
-        component.width = width
-    }
+    component.width = width
     val height = configuration.height
     if (height == "100%") {
         component.vflex = "1"

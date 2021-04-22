@@ -10,7 +10,7 @@ package com.gridnine.jasmine.common.core.meta
 import com.gridnine.jasmine.common.core.app.Disposable
 import com.gridnine.jasmine.common.core.app.PublishableWrapper
 
-enum class MiscType {
+enum class MiscFieldType {
 
     STRING,
     ENUM,
@@ -28,16 +28,16 @@ enum class MiscType {
 
 abstract class BaseMiscElementDescription(id:String):BaseModelElementDescription(id)
 
-class MiscPropertyDescription(id: String, val type: MiscType, val lateinit:Boolean, val nonNullable:Boolean): BaseMiscElementDescription(id){
+class MiscPropertyDescription(id: String, val type: MiscFieldType, val lateinit:Boolean, val nonNullable:Boolean): BaseMiscElementDescription(id){
     var className: String? = null
 }
 
-class MiscCollectionDescription(id: String, val elementType: MiscType): BaseMiscElementDescription(id){
+class MiscCollectionDescription(id: String, val elementType: MiscFieldType): BaseMiscElementDescription(id){
     var elementClassName: String? = null
 }
 
 
-class MiscMapDescription(id: String, val keyClassType: MiscType, val valueClassType: MiscType): BaseMiscElementDescription(id){
+class MiscMapDescription(id: String, val keyClassType: MiscFieldType, val valueClassType: MiscFieldType): BaseMiscElementDescription(id){
     var keyClassName: String? = null
     var valueClassName: String? = null
 }

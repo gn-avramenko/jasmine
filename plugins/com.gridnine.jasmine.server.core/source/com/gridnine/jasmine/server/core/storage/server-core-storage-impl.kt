@@ -172,7 +172,7 @@ class StorageImpl : Storage {
                 null
             }
         }
-        val localContext = LocalOperationContext<D>(factory)
+        val localContext = LocalOperationContext(factory)
         val operationContext = OperationContext(globalContext, localContext)
         return UpdateDocumentContext(oldDocument, previousVersionContentFactory, operationContext)
     }
@@ -214,7 +214,7 @@ class StorageImpl : Storage {
                         modified = now
                         modifiedBy = AuthUtils.getCurrentUser()
                         this.comment = comment
-                        version = if(updatePreviousVersion) oldDocument!!.metadata.version else (oldDocument?.let { it.metadata.version + 1 } ?: 0)
+                        version = if(oldDocument == null) 0 else (if(createNewVersion) oldDocument.metadata.version+1 else oldDocument.metadata.version)
                     },
                     cls = doc::class as KClass<D>), oldDocument)
             if ((createNewVersion && oldDocument != null) || (oldDocument != null && updatePreviousVersion)) {
@@ -421,7 +421,7 @@ class StorageImpl : Storage {
             contexts.set(gc)
             gc
         }
-        val localContext = LocalOperationContext<A>(factory)
+        val localContext = LocalOperationContext(factory)
         val operationContext = OperationContext(globalContext, localContext)
         return UpdateAssetContext(oldAssetWrapperData, operationContext)
     }
@@ -459,7 +459,7 @@ class StorageImpl : Storage {
                 sb.append(" " + value.toString().toLowerCase())
             }
             val now = LocalDateTime.now()
-            Database.get().saveAsset(AssetWrapper(sb.toString(), comment, now, AuthUtils.getCurrentUser(), if (oldAssetReadData == null) 0 else oldAssetReadData.version + 1, asset), oldAssetReadData)
+            Database.get().saveAsset(AssetWrapper(sb.toString(), comment, now, AuthUtils.getCurrentUser(), if (oldAssetReadData == null) 0 else (if(createNewVersion) oldAssetReadData.version + 1 else oldAssetReadData.version), asset), oldAssetReadData)
             val metadata = VersionMetadata {
                 modified = now
                 modifiedBy = AuthUtils.getCurrentUser()

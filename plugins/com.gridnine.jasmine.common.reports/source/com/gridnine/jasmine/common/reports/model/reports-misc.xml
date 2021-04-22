@@ -21,4 +21,16 @@
 	</entity>
 
 
+	<entity id="com.gridnine.jasmine.common.reports.model.misc.GeneratedReport">
+		<collection id="lists" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportList"/>
+	</entity>
+
+	<entity id="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportList">
+		<property id="title" type="STRING" lateinit="true"/>
+	</entity>
+
+	<entity id="com.gridnine.jasmine.common.reports.model.misc.ReportGenerationResult">
+		<property id="errorMessage" type="STRING"/>
+		<property id="report" type="ENTITY" class-name="com.gridnine.jasmine.common.reports.model.misc.GeneratedReport"/>
+	</entity>
 </misc-objects>

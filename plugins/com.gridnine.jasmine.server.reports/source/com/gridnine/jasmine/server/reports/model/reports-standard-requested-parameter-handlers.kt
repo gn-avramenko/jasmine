@@ -7,11 +7,13 @@ package com.gridnine.jasmine.server.reports.model
 
 import com.gridnine.jasmine.common.core.model.BaseIdentity
 import com.gridnine.jasmine.common.core.model.ObjectReference
+import com.gridnine.jasmine.common.reports.model.misc.BaseReportRequestedParameter
 import com.gridnine.jasmine.common.reports.model.misc.ReportRequestedParameterDescription
 import com.gridnine.jasmine.common.reports.model.misc.ReportRequestedParameterType
 import java.time.LocalDate
 import kotlin.reflect.KClass
 
+@Suppress("UNCHECKED_CAST")
 abstract class BaseReportRequestedParameterHandler<T:Any>(private val id:Enum<*>):ReportRequestedParameterHandler<T>{
     override fun createParameterDescription(): ReportRequestedParameterDescription {
         return ReportRequestedParameterDescription().let{
@@ -22,6 +24,13 @@ abstract class BaseReportRequestedParameterHandler<T:Any>(private val id:Enum<*>
             it
         }
     }
+
+    fun getValue(params:List<BaseReportRequestedParameter>):T?{
+        return params.find { it.id == id.name }?.getValue("value") as T?
+    }
+
+    fun getId() = id.name
+
     abstract fun getReportRequestedParameterType(): ReportRequestedParameterType
 
     open fun getObjectClassName(): String? {

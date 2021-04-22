@@ -8,4 +8,8 @@
 		<property type="STRING" id="name"/>
 		<property type="STRING" id="id"/>
 	</index>
+	<document id="com.gridnine.jasmine.common.reports.model.domain.SavedReportParameters">
+		<collection id="parameters" element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.common.reports.model.misc.BaseReportRequestedParameter"/>
+	</document>
+
 </domain>

@@ -34,20 +34,20 @@ class CommonMiscGenerator:CodeGenerator {
     }
 
 
-    private fun getPropertyType(type: MiscType): GenPropertyType {
+    private fun getPropertyType(type: MiscFieldType): GenPropertyType {
         return when (type) {
-            MiscType.STRING->  GenPropertyType.STRING
-            MiscType.BYTE_ARRAY ->GenPropertyType.BYTE_ARRAY
-            MiscType.BIG_DECIMAL ->GenPropertyType.BIG_DECIMAL
-            MiscType.BOOLEAN ->GenPropertyType.BOOLEAN
-            MiscType.ENTITY ->GenPropertyType.ENTITY
-            MiscType.ENTITY_REFERENCE ->GenPropertyType.ENTITY_REFERENCE
-            MiscType.ENUM ->GenPropertyType.ENUM
-            MiscType.INT ->GenPropertyType.INT
-            MiscType.LOCAL_DATE ->GenPropertyType.LOCAL_DATE
-            MiscType.LOCAL_DATE_TIME ->GenPropertyType.LOCAL_DATE_TIME
-            MiscType.LONG ->GenPropertyType.LONG
-            MiscType.CLASS -> GenPropertyType.CLASS
+            MiscFieldType.STRING->  GenPropertyType.STRING
+            MiscFieldType.BYTE_ARRAY ->GenPropertyType.BYTE_ARRAY
+            MiscFieldType.BIG_DECIMAL ->GenPropertyType.BIG_DECIMAL
+            MiscFieldType.BOOLEAN ->GenPropertyType.BOOLEAN
+            MiscFieldType.ENTITY ->GenPropertyType.ENTITY
+            MiscFieldType.ENTITY_REFERENCE ->GenPropertyType.ENTITY_REFERENCE
+            MiscFieldType.ENUM ->GenPropertyType.ENUM
+            MiscFieldType.INT ->GenPropertyType.INT
+            MiscFieldType.LOCAL_DATE ->GenPropertyType.LOCAL_DATE
+            MiscFieldType.LOCAL_DATE_TIME ->GenPropertyType.LOCAL_DATE_TIME
+            MiscFieldType.LONG ->GenPropertyType.LONG
+            MiscFieldType.CLASS -> GenPropertyType.CLASS
         }
     }
 
