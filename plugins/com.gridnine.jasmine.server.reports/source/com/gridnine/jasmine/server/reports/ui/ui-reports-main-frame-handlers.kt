@@ -18,9 +18,11 @@ import com.gridnine.jasmine.common.reports.model.misc.GeneratedReport
 import com.gridnine.jasmine.common.reports.model.misc.ReportRequestedParameterType
 import com.gridnine.jasmine.common.standard.model.l10n.StandardL10nMessagesFactory
 import com.gridnine.jasmine.server.core.ui.common.BaseNodeWrapper
+import com.gridnine.jasmine.server.core.ui.common.ContentType
 import com.gridnine.jasmine.server.core.ui.common.UiNode
 import com.gridnine.jasmine.server.core.ui.components.*
 import com.gridnine.jasmine.server.core.ui.utils.UiUtils
+import com.gridnine.jasmine.server.reports.excel.ExcelGenerator
 import com.gridnine.jasmine.server.reports.model.ServerReportHandler
 import com.gridnine.jasmine.server.standard.ui.mainframe.*
 
@@ -144,6 +146,7 @@ class PrepareReportParametersPanel(doc: ReportDescription, updateReport:(Generat
                 UiUtils.showError(result.errorMessage!!)
                 return@setHandler
             }
+            result.report!!.descriptionUid = doc.uid
             updateReport.invoke(result.report!!)
         }
         _node.addRow()
@@ -178,15 +181,18 @@ class PrepareReportContentPanel(reportTitle: String) : BaseNodeWrapper<BorderCon
             iconClass = "z-icon-download"
         }
         northPanel.addCell(GridLayoutCell(downloadButton))
-        downloadButton.setHandler {
-            UiUtils.showInfo("Загрузить")
-        }
+
         _node.setNorthRegion {
             content = northPanel
         }
         reportResultPanel = ReportsUiComponentsFactory.get().createResultPanel {
             width = "100%"
             height = "100%"
+        }
+        downloadButton.setHandler {
+            reportResultPanel.getData()?.let{
+                UiLibraryAdapter.get().save(ExcelGenerator.generate(it), ContentType.EXCEL.getMimeType(), it.fileName)
+            }
         }
         _node.setCenterRegion {
             content = reportResultPanel

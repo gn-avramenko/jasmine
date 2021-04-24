@@ -16,6 +16,7 @@ import com.gridnine.jasmine.web.server.zk.components.ZkDataGrid
 import com.gridnine.jasmine.web.server.zk.components.ZkLabel
 import org.zkoss.zk.ui.Executions
 import org.zkoss.zk.ui.HtmlBasedComponent
+import org.zkoss.zul.Filedownload
 
 interface ZkUiComponent: UiNode {
     fun getZkComponent():HtmlBasedComponent
@@ -139,6 +140,10 @@ class ZkUiLibraryAdapter:UiLibraryAdapter{
 
     override fun findRootComponent(): UiNode {
         return Executions.getCurrent().desktop.firstPage.firstRoot.attributes["rootComponent"] as UiNode
+    }
+
+    override fun save(content: ByteArray, contentType: String, sugestedFileName: String?) {
+        Filedownload.save(content, contentType, sugestedFileName)
     }
 
 }

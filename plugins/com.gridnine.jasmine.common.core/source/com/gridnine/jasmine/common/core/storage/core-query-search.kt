@@ -39,11 +39,16 @@ class SearchQuery : BaseQuery(){
 
 }
 
+@DslMarker
+annotation class SearchQueryDsl
+
+@SearchQueryDsl
 class SearchCriterionsBuilder(private val query: SearchQuery): CriterionsBuilder(query.criterions){
     fun freeText(text:String?){
         query.freeText = text
     }
 }
+@SearchQueryDsl
 class SearchQueryBuilder(private val query: SearchQuery){
     fun limit(limit:Int){
         query.limit = limit

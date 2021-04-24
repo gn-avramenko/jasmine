@@ -22,11 +22,93 @@
 
 
 	<entity id="com.gridnine.jasmine.common.reports.model.misc.GeneratedReport">
+		<property id="fileName" type="STRING" lateinit="true"/>
+		<property id="descriptionUid" type="STRING" lateinit="true"/>
 		<collection id="lists" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportList"/>
+		<collection id="styles" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportCellStyle"/>
 	</entity>
 
 	<entity id="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportList">
 		<property id="title" type="STRING" lateinit="true"/>
+		<collection id="mergedRegions" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportMergeRegion"/>
+		<collection id="rows" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportRow"/>
+		<collection id="columns" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportColumn"/>
+	</entity>
+
+	<enum id="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportCellBorderWidth">
+		<enum-item id="NONE"/>
+		<enum-item id="THIN"/>
+		<enum-item id="THICK"/>
+	</enum>
+	<enum id="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportCellHorizontalAlignment">
+		<enum-item id="LEFT"/>
+		<enum-item id="CENTER"/>
+		<enum-item id="RIGHT"/>
+	</enum>
+	<enum id="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportCellVerticalAlignment">
+		<enum-item id="TOP"/>
+		<enum-item id="CENTER"/>
+		<enum-item id="BOTTOM"/>
+	</enum>
+
+	<enum id="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportFontUnderline">
+		<enum-item id="SINGLE"/>
+		<enum-item id="DOUBLE"/>
+		<enum-item id="SINGLE_ACCOUNTING"/>
+		<enum-item id="DOUBLE_ACCOUNTING"/>
+		<enum-item id="NONE"/>
+	</enum>
+
+	<enum id="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportColor">
+		<enum-item id="BLACK"/>
+		<enum-item id="GREY_40_PERCENT"/>
+		<enum-item id="GREY_25_PERCENT"/>
+	</enum>
+
+	<entity id="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportCellStyle">
+		<property id="id" type="STRING"/>
+		<property id="bottomBorderWidth" type="ENUM" class-name="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportCellBorderWidth"/>
+		<property id="leftBorderWidth" type="ENUM" class-name="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportCellBorderWidth"/>
+		<property id="rightBorderWidth" type="ENUM" class-name="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportCellBorderWidth"/>
+		<property id="topBorderWidth" type="ENUM" class-name="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportCellBorderWidth"/>
+		<property id="horizontalAlignment" type="ENUM" class-name="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportCellHorizontalAlignment"/>
+		<property id="verticalAlignment" type="ENUM" class-name="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportCellVerticalAlignment"/>
+		<property id="wrapText" type="BOOLEAN"/>
+		<property id="fontFamily" type="STRING"/>
+		<property id="fontHeight" type="INT"/>
+		<property id="fontBold" type="BOOLEAN"/>
+		<property id="fontItalic" type="BOOLEAN"/>
+		<property id="fontUnderline" type="ENUM" class-name="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportFontUnderline"/>
+		<property id="format" type="STRING"/>
+		<property id="locked" type="BOOLEAN"/>
+		<property id="fontColor" type="ENUM" class-name="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportColor"/>
+		<property id="foregroundColor" type="ENUM" class-name="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportColor"/>
+	</entity>
+	<enum id="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportCellValueType">
+		<enum-item id="NONE"/>
+		<enum-item id="NUMBER"/>
+		<enum-item id="DATE"/>
+		<enum-item id="FORMULA"/>
+		<enum-item id="TEXT"/>
+	</enum>
+	<entity id="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportColumn">
+		<property id="width" type="INT" non-nullable="true"/>
+	</entity>
+	<entity id="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportCell">
+		<property id="styleId" type="STRING"/>
+		<property id="contentType" type="ENUM" class-name="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportCellValueType" lateinit="true"/>
+		<property id="value" type="STRING"/>
+		<property id="formula" type="STRING"/>
+	</entity>
+	<entity id="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportRow">
+		<property id="height" type="INT"/>
+		<collection id="cells" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportCell"/>
+	</entity>
+	<entity id="com.gridnine.jasmine.common.reports.model.misc.GeneratedReportMergeRegion">
+		<property id="leftTopRow" type="INT" non-nullable="true"/>
+		<property id="leftTopColumn" type="INT"  non-nullable="true"/>
+		<property id="rightBottomRow" type="INT" non-nullable="true"/>
+		<property id="rightBottomColumn" type="INT" non-nullable="true"/>
 	</entity>
 
 	<entity id="com.gridnine.jasmine.common.reports.model.misc.ReportGenerationResult">

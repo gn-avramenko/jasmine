@@ -124,3 +124,28 @@ object UiCommonUtils{
         }
     }
 }
+
+enum class ContentType{
+    TEXT{
+        override fun getMimeType(): String {
+            return "text/plain"
+        }
+    },
+    EXCEL{
+        override fun getMimeType(): String {
+            return "application/vnd.ms-excel"
+        }
+    },
+    PDF{
+        override fun getMimeType(): String {
+            return "application/pdf"
+        }
+    },
+    XML{
+        override fun getMimeType(): String {
+            return "text/xml"
+        }
+
+    };
+    abstract fun getMimeType():String
+}

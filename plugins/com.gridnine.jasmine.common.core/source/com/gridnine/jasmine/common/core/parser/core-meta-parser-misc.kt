@@ -24,7 +24,7 @@ object MiscMetadataParser {
         elm.children("property").forEach {
             val id = ParserUtils.getIdAttribute(it)
             val propDescr = description.properties.getOrPut(id){ MiscPropertyDescription(id,
-                    getPropertyType(it.attributes["type"]?:throw Xeption.forDeveloper("$it has no type attribute")), "true" == it.attributes["lateinit"],"true" == it.attributes["nonNullable"])
+                    getPropertyType(it.attributes["type"]?:throw Xeption.forDeveloper("$it has no type attribute")), "true" == it.attributes["lateinit"],"true" == it.attributes["non-nullable"])
             }
             propDescr.className = it.attributes["class-name"]
             ParserUtils.updateLocalizations(propDescr, description.id, localizations)

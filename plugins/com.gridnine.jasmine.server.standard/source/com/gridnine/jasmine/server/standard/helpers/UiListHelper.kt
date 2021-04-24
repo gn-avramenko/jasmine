@@ -58,10 +58,10 @@ object UiListHelper {
                 it.criterions.flatMap { toCriterions(it, descr) }
             }
             is OrWorkspaceCriterion ->{
-                arrayListOf(or(it.criterions.flatMap { toCriterions(it, descr) }))
+                arrayListOf(JunctionCriterion(true, it.criterions.flatMap { toCriterions(it, descr) }))
             }
             is NotWorkspaceCriterion ->{
-                arrayListOf(not(and(it.criterions.flatMap { toCriterions(it, descr) })))
+                arrayListOf(NotCriterion(JunctionCriterion(false,it.criterions.flatMap { toCriterions(it, descr) })))
             }
             is DynamicWorkspaceCriterion ->{
                 arrayListOf(DynamicCriterion(it.handlerId, it.propertyId, it.conditionId, it.value))
@@ -92,11 +92,11 @@ object UiListHelper {
                         WorkspaceSimpleCriterionCondition.NOT_SET -> {arrayListOf(CheckCriterion(property, CheckCriterion.Check.IS_NULL))}
                         WorkspaceSimpleCriterionCondition.CONTAINS -> {
                             val eValue = value as WorkspaceSimpleCriterionStringValues??:return emptyList()
-                            if(eValue.values.size>1)  arrayListOf(or(eValue.values.map { SimpleCriterion(property, SimpleCriterion.Operation.ILIKE, "%$it%") })) else arrayListOf(SimpleCriterion(property, SimpleCriterion.Operation.ILIKE, "%${eValue.values[0]}%"))
+                            if(eValue.values.size>1)  arrayListOf(JunctionCriterion(true, eValue.values.map { SimpleCriterion(property, SimpleCriterion.Operation.ILIKE, "%$it%") })) else arrayListOf(SimpleCriterion(property, SimpleCriterion.Operation.ILIKE, "%${eValue.values[0]}%"))
                         }
                         WorkspaceSimpleCriterionCondition.NOT_CONTAINS ->{
                             val eValue = value as WorkspaceSimpleCriterionStringValues??:return emptyList()
-                            if(eValue.values.size>1)  arrayListOf(not(or(eValue.values.map { SimpleCriterion(property, SimpleCriterion.Operation.ILIKE, "%$it%") }))) else arrayListOf(not(SimpleCriterion(property, SimpleCriterion.Operation.ILIKE, "%${eValue.values[0]}%")))
+                            if(eValue.values.size>1)  arrayListOf(NotCriterion(JunctionCriterion(true, eValue.values.map { SimpleCriterion(property, SimpleCriterion.Operation.ILIKE, "%$it%") }))) else arrayListOf(NotCriterion(SimpleCriterion(property, SimpleCriterion.Operation.ILIKE, "%${eValue.values[0]}%")))
                         }
                         else -> throw IllegalArgumentException("unsupported condition $condition")
                     }
@@ -275,7 +275,7 @@ object UiListHelper {
             return when(propertyDescription.type){
                 DatabasePropertyType.STRING, DatabasePropertyType.TEXT -> {
                     val eValue = filter.value as ListFilterStringValues??:return emptyList()
-                    if(eValue.values.size>1)  arrayListOf(or(eValue.values.map { SimpleCriterion(filter.fieldId!!, SimpleCriterion.Operation.ILIKE, "%$it%") })) else arrayListOf(SimpleCriterion(filter.fieldId!!, SimpleCriterion.Operation.ILIKE, "%${eValue.values[0]}%"))
+                    if(eValue.values.size>1)  arrayListOf(JunctionCriterion(true, eValue.values.map { SimpleCriterion(filter.fieldId!!, SimpleCriterion.Operation.ILIKE, "%$it%") })) else arrayListOf(SimpleCriterion(filter.fieldId!!, SimpleCriterion.Operation.ILIKE, "%${eValue.values[0]}%"))
                 }
                 DatabasePropertyType.LOCAL_DATE -> {
                     val result = arrayListOf<SearchCriterion>()

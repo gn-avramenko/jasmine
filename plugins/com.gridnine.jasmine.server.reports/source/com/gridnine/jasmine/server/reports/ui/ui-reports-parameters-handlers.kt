@@ -52,6 +52,7 @@ class ObjectReferenceRequestedParameterUiHandler(private val clsName:String): Re
         return EntityValueWidget{
             width = "100%"
             handler = AutocompleteHandler.createMetadataBasedAutocompleteHandler(clsName)
+            showClearIcon = true
         }
     }
 

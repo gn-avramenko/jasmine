@@ -36,6 +36,7 @@ interface UiLibraryAdapter{
     fun showContextMenu(items:List<ContextMenuItem>, pageX:Int, pageY:Int)
     fun showNotification(message:String, type: NotificationType, timeout:Int)
     fun findRootComponent(): UiNode
+    fun save(content:ByteArray, contentType:String, sugestedFileName:String?)
 
     companion object{
         private val wrapper = PublishableWrapper(UiLibraryAdapter::class)

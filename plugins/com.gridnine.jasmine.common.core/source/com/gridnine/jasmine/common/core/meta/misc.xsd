@@ -30,6 +30,7 @@
 														<extension base="tns:baseMetaElement">
 															<attribute name="type" type="tns:valueType" use="required"/>
 															<attribute name="lateinit" type="boolean"/>
+															<attribute name="non-nullable" type="boolean"/>
 															<attribute name="class-name" type="string"/>
 														</extension>
 													</complexContent>
