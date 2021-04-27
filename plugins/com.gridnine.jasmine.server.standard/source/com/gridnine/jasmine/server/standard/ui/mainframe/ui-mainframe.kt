@@ -84,6 +84,10 @@ class MainFrame(configure:MainFrameConfiguration.()->Unit) : BaseNodeWrapper<Bor
         _tabs.addTab(TabPanel(tabId, tabData.title, tabData.content))
     }
 
+    fun closeAllTabs(){
+        _tabs.getTabs().toList().forEach {  _tabs.removeTab(it.id)}
+    }
+
     fun publishEvent(event:Any){
         _tabs.getTabs().map { it.comp }.filter { it is EventsSubscriber }.forEach { (it as EventsSubscriber).receiveEvent(event) }
     }
