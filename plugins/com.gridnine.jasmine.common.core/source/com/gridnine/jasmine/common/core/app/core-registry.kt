@@ -22,12 +22,15 @@ class Registry:Disposable{
 
     private val registry = hashMapOf<String, MutableMap<String, RegistryItem<*>>>()
 
+    private val allItems = hashMapOf<String, MutableList<RegistryItem<*>>>()
+
 
     fun register(item: RegistryItem<*>){
         registry.getOrPut(item.getType().id, { hashMapOf()})[item.getId()] = item
+        allItems.getOrPut(item.getType().id){ arrayListOf()}.add(item)
     }
 
-    fun<T:Any> allOf(type: RegistryItemType<T>):List<T> = (registry[type.id]?.values?.toList() as List<T>?)?: emptyList()
+    fun<T:Any> allOf(type: RegistryItemType<T>):List<T> = (allItems[type.id] as List<T>?)?: emptyList()
 
     fun <T:Any> get(type: RegistryItemType<T>, id:String)= registry[type.id]?.get(id) as T?
 

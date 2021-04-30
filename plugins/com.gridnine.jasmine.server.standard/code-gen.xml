@@ -1,3 +1,0 @@
-<code-gen xmlns="http://gridnine.com/jasmine/codegen">
-    <generate source="standard-ui" targetPlugin="com.gridnine.jasmine.server.standard" generator="server-ui"/>
-</code-gen>

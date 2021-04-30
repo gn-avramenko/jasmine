@@ -25,7 +25,7 @@ class StandardCommonActivator :IPluginActivator{
         L10nMetadataParser.updateL10nMessages(L10nMetaRegistry.get(), "com/gridnine/jasmine/common/standard/model/standard-l10n.xml", javaClass.classLoader)
         DomainMetadataParser.updateDomainMetaRegistry(DomainMetaRegistry.get(), "com/gridnine/jasmine/common/standard/model/standard-model-domain.xml", javaClass.classLoader)
         UiMetadataParser.updateUiMetaRegistry(UiMetaRegistry.get(), "com/gridnine/jasmine/common/standard/model/standard-ui.xml", javaClass.classLoader)
-        RestMetadataParser.updateRestMetaRegistry(RestMetaRegistry.get(), "com/gridnine/jasmine/common/standard/model/standard-rest.xml", javaClass.classLoader)
+        RestMetadataParser.updateRestMetaRegistry(RestMetaRegistry.get(), "com/gridnine/jasmine/common/standard/model/core-rest.xml", javaClass.classLoader)
         Registry.get().register(TodayDynamicCriterionHandler())
         StandardDynamicCriterionCondition.values().forEach {cond ->
             Registry.get().register(object :DynamicCriterionCondition{

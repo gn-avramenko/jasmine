@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://gridnine.com/jasmine/web-messages"
+        elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema">
+    <element name="messages-bundle">
+        <complexType>
+            <sequence maxOccurs="unbounded" minOccurs="0">
+                <element name="message">
+                    <complexType>
+                        <attribute name="id" type="string" use="required"/>
+                    </complexType>
+                </element>
+            </sequence>
+            <attribute name="id" type="string" use="required"/>
+        </complexType>
+    </element>
+</schema>

@@ -32,16 +32,11 @@ open class CreateLibrariesTask(): DefaultTask(){
         createLibrary(KotlinUtils.COMMON_TEST_CONFIGURATION_NAME)
         createLibrary(KotlinUtils.SERVER_CONFIGURATION_NAME)
         createLibrary(KotlinUtils.SERVER_TEST_CONFIGURATION_NAME)
+        createLibrary(KotlinUtils.WEB_CONFIGURATION_NAME, "kotlin-stdlib-common-.*")
         createSpfLibrary()
-        createKotlinJSLibrary()
     }
 
-    private fun createKotlinJSLibrary() {
-        LibraryUtils.createLibrary(LibraryUtils.LibraryData("web_js"){
-            classes.add("jar://\$KOTLIN_BUNDLED\$/lib/kotlin-stdlib-js.jar!/")
-            sources.add("jar://\$KOTLIN_BUNDLED\$/lib/kotlin-stdlib-js-sources.jar!/")
-        }, project.projectDir)
-    }
+
 
     private fun createSpfLibrary() {
         LibraryUtils.createLibrary(LibraryUtils.LibraryData("spf"){
@@ -51,11 +46,13 @@ open class CreateLibrariesTask(): DefaultTask(){
     }
 
     @Suppress("UnstableApiUsage")
-    private fun createLibrary(configurationName: String) {
+    private fun createLibrary(configurationName: String, excludePattern: String? = null) {
         val config = project.configurations.getByName(configurationName)
         val libraryData = LibraryUtils.LibraryData(configurationName)
         config.forEach{
-            libraryData.classes.add("jar://${it.absolutePath}!/")
+            if(excludePattern == null || !it.name.matches(Regex(excludePattern))){
+                libraryData.classes.add("jar://${it.absolutePath}!/")
+            }
         }
         val components = arrayListOf<ComponentIdentifier>()
         config.incoming.resolutionResult.allDependencies.forEach{ res ->
@@ -70,7 +67,9 @@ open class CreateLibrariesTask(): DefaultTask(){
         result.resolvedComponents.forEach{comp ->
             comp.getArtifacts(SourcesArtifact::class.java).forEach{
                 if(it is DefaultResolvedArtifactResult){
-                    libraryData.sources.add("jar://${it.file.absolutePath}!/")
+                    if(excludePattern == null || !it.file.name.matches(Regex(excludePattern))) {
+                        libraryData.sources.add("jar://${it.file.absolutePath}!/")
+                    }
                 }
             }
         }

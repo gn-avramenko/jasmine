@@ -13,7 +13,7 @@ open class StopTestServerInIDETask() : BaseStartServerTask() {
 
     @Inject
     constructor(plugin: SpfPlugin):this(){
-        dependsOn(StartTestServerInIDETask.getTaskName(plugin.id))
+        //dependsOn(StartTestServerInIDETask.getTaskName(plugin.id))
         val launcherClassName = plugin.parameters.find { param -> param.id == "server-launcher-class" }!!.value
         jvmArgs = arrayListOf("-Dspf.mode=stop", "-Dspf.applicationClass=$launcherClassName")
         main = "com.gridnine.spf.app.SpfBoot"

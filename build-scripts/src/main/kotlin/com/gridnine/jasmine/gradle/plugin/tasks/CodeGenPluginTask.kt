@@ -24,7 +24,7 @@ open class CodeGenPluginTask() :DefaultTask(){
         this.pluginsLocations = pluginsLocations
         registry.plugins.forEach { plugin ->
             when(KotlinUtils.getType(plugin)){
-                SpfPluginType.SPF,SpfPluginType.COMMON_CORE, SpfPluginType.SERVER_CORE-> {
+                SpfPluginType.SPF,SpfPluginType.COMMON_CORE-> {
                     dependsOn(CompileKotlinJVMPluginTask.getTaskName(plugin.id))
                 }
                 else ->{}
@@ -37,7 +37,7 @@ open class CodeGenPluginTask() :DefaultTask(){
         val urls = project.configurations.getByName(KotlinUtils.SERVER_CONFIGURATION_NAME).map { it.toURI().toURL() }.toMutableList()
         registry.plugins.forEach { plugin ->
             when(KotlinUtils.getType(plugin)){
-                SpfPluginType.SPF,SpfPluginType.COMMON_CORE,SpfPluginType.SERVER_CORE -> {
+                SpfPluginType.SPF,SpfPluginType.COMMON_CORE -> {
                     urls.add(File(project.projectDir, "build/plugins/${plugin.id}/classes").toURI().toURL())
                 }
                 else ->{}

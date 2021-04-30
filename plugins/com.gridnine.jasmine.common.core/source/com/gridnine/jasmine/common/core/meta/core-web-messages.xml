@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages-bundle id="core" xmlns="http://gridnine.com/jasmine/web-messages" >
+    <message id="Unknown_error"/>
+</messages-bundle>

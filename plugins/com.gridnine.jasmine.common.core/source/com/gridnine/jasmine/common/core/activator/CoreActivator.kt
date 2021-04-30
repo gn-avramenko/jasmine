@@ -12,6 +12,7 @@ import com.gridnine.jasmine.common.core.lock.LockManager
 import com.gridnine.jasmine.common.core.lock.StandardLockManager
 import com.gridnine.jasmine.common.core.meta.*
 import com.gridnine.jasmine.common.core.parser.CustomMetadataParser
+import com.gridnine.jasmine.common.core.parser.WebMessagesMetadataParser
 import com.gridnine.jasmine.common.core.reflection.ReflectionFactory
 import com.gridnine.jasmine.common.core.serialization.SerializationProvider
 import java.util.*
@@ -30,7 +31,8 @@ class CoreActivator:IPluginActivator{
         Environment.publish( L10nMetaRegistry())
         Environment.publish( MiscMetaRegistry())
         Environment.publish(SerializationProvider())
-
+        Environment.publish(WebMessagesMetaRegistry())
+        WebMessagesMetadataParser.updateWebMessages(WebMessagesMetaRegistry.get(), "com/gridnine/jasmine/common/core/meta/core-web-messages.xml", javaClass.classLoader)
     }
 
     override fun activate(config: Properties) {

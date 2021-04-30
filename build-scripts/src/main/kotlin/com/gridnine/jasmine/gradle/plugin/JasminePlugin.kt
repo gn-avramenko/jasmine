@@ -8,6 +8,9 @@ import com.gridnine.jasmine.gradle.plugin.tasks.*
 import com.gridnine.spf.meta.SpfPluginsRegistry
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.attributes.Attribute
+import org.gradle.api.attributes.AttributeDisambiguationRule
+import org.gradle.api.attributes.MultipleCandidatesDetails
 import java.io.File
 import java.lang.IllegalArgumentException
 import java.net.URL
@@ -32,18 +35,33 @@ class JasminePlugin: Plugin<Project>{
         target.configurations.maybeCreate(KotlinUtils.COMPILER_CLASSPATH_CONFIGURATION_NAME).defaultDependencies {
             it.add(target.dependencies.create("${KotlinUtils.KOTLIN_MODULE_GROUP}:${KotlinUtils.KOTLIN_COMPILER_EMBEDDABLE}:${extension.kotlinVersion}"))
         }
-        if(extension.enableWebTasks){
+        if(extension.enableWebTasks) {
             target.extensions.configure("node") { it: com.moowork.gradle.node.NodeExtension ->
                 it.download = true
             }
-            KotlinUtils.createConfiguration(KotlinUtils.WEB_CONFIGURATION_NAME, registry, target, pluginsToFileMap,SpfPluginType.WEB, SpfPluginType.WEB_CORE)
+            KotlinUtils.createConfiguration(KotlinUtils.WEB_CONFIGURATION_NAME, registry, target, pluginsToFileMap, SpfPluginType.WEB, SpfPluginType.WEB_CORE)
             target.dependencies.add(KotlinUtils.WEB_CONFIGURATION_NAME, "org.jetbrains.kotlin:kotlin-stdlib-js:${extension.kotlinVersion}")
+            target.dependencies.add(KotlinUtils.WEB_CONFIGURATION_NAME, "org.jetbrains.kotlinx:kotlinx-coroutines-core-js:${extension.kotlinCoroutinesJSVersion}")
+            val jsCompilerAttr = Attribute.of("org.jetbrains.kotlin.js.compiler", String::class.java)
+            val jsUsageAttr = Attribute.of("org.gradle.usage", String::class.java)
+
+            target.dependencies.attributesSchema.attribute(jsCompilerAttr) {
+                it.disambiguationRules.add(KotlinJsCompilerDisambiguationRule::class.java)
+            }
+            target.dependencies.attributesSchema.attribute(jsUsageAttr) {
+                it.disambiguationRules.add(KotlinJsUsageDisambiguationRule::class.java)
+            }
         }
 
         target.tasks.create(CreateArtifactsTask.TASK_NAME, CreateArtifactsTask::class.java, extension)
         target.tasks.create(CreateLibrariesTask.TASK_NAME, CreateLibrariesTask::class.java, extension)
         target.tasks.create(CreateModulesTask.TASK_NAME, CreateModulesTask::class.java,registry, extension, pluginsToFileMap)
         target.tasks.create(MakeProjectTask.TASK_NAME, MakeProjectTask::class.java)
+//        target.tasks.create(NodeJsInstallWebpackTask.taskName, NodeJsInstallWebpackTask::class.java)
+//        target.tasks.create(NodeJsInstallWebpackCliTask.taskName, NodeJsInstallWebpackCliTask::class.java)
+//        target.tasks.create(NodeJsRunWebpackTask.taskName, NodeJsRunWebpackTask::class.java)
+//        target.tasks.create(NodeJsInstallUglifyTask.taskName, NodeJsInstallUglifyTask::class.java)
+//        target.tasks.create(NodeJsRunUglifyTask.taskName, NodeJsRunUglifyTask::class.java)
         registry.plugins.forEach { plugin ->
             CreateWarTasksFactory.createTasks(plugin, pluginsToFileMap, target)
             when(val pluginType = KotlinUtils.getType(plugin)){
@@ -63,8 +81,8 @@ class JasminePlugin: Plugin<Project>{
                     target.tasks.create(CompileKotlinJSPluginTask.getTaskName(plugin.id), CompileKotlinJSPluginTask::class.java, plugin, registry,extension, pluginsToFileMap)
                     val individualLauncher = plugin.parameters.find{ param -> param.id == "individual-test-launcher" }?.value
                     if(individualLauncher != null){
-                            target.tasks.create(StartTestServerInIDETask.getTaskName(plugin.id), StartTestServerInIDETask::class.java, registry, plugin)
-                            target.tasks.create(StopTestServerInIDETask.getTaskName(plugin.id), StopTestServerInIDETask::class.java, registry, plugin)
+//                            target.tasks.create(StartTestServerInIDETask.getTaskName(plugin.id), StartTestServerInIDETask::class.java,  plugin)
+//                            target.tasks.create(StopTestServerInIDETask.getTaskName(plugin.id), StopTestServerInIDETask::class.java, plugin)
                             target.tasks.create(NodeJsStartTestInIDETask.getTaskName(individualLauncher, plugin.id, false), NodeJsStartTestInIDETask::class.java, individualLauncher, plugin.id, false)
                             target.tasks.create(NodeJsStartTestInIDETask.getTaskName(individualLauncher, plugin.id, true), NodeJsStartTestInIDETask::class.java, individualLauncher, plugin.id, true)
                             target.tasks.create(StartIndividualJSTestInIDETask.getTaskName(plugin.id, false), StartIndividualJSTestInIDETask::class.java, plugin, false)
@@ -72,8 +90,8 @@ class JasminePlugin: Plugin<Project>{
                     }
                     val suiteLauncher = plugin.parameters.find{ param -> param.id == "test-suite-launcher" }?.value
                     if(suiteLauncher != null){
-                        target.tasks.create(StartTestServerInBuildTask.getTaskName(plugin.id), StartTestServerInBuildTask::class.java, registry, plugin, extension,pluginsToFileMap)
-                        target.tasks.create(StopTestServerInBuildTask.getTaskName(plugin.id), StopTestServerInBuildTask::class.java, registry, plugin, extension,pluginsToFileMap)
+//                        target.tasks.create(StartTestServerInBuildTask.getTaskName(plugin.id), StartTestServerInBuildTask::class.java, registry, plugin, extension,pluginsToFileMap)
+//                        target.tasks.create(StopTestServerInBuildTask.getTaskName(plugin.id), StopTestServerInBuildTask::class.java, registry, plugin, extension,pluginsToFileMap)
                         target.tasks.create(TestJsPluginTask.getTaskName(plugin.id), TestJsPluginTask::class.java,  plugin,registry)
                         target.tasks.create(NodeJsStartTestInBuildTask.getTaskName(suiteLauncher, plugin.id), NodeJsStartTestInBuildTask::class.java,  suiteLauncher, plugin.id)
 
@@ -97,6 +115,18 @@ class JasminePlugin: Plugin<Project>{
             target.tasks.create(NodeJsCopyJsFilesInBuildTask.taskName, NodeJsCopyJsFilesInBuildTask::class.java, registry, pluginsToFileMap)
         }
         target.tasks.create(TestProjectTask.TASK_NAME, TestProjectTask::class.java, registry)
+    }
+
+    private class KotlinJsCompilerDisambiguationRule : AttributeDisambiguationRule<String> {
+        override fun execute(details: MultipleCandidatesDetails<String>) {
+            details.closestMatch("legacy")
+        }
+    }
+
+    private class KotlinJsUsageDisambiguationRule : AttributeDisambiguationRule<String> {
+        override fun execute(details: MultipleCandidatesDetails<String>) {
+            details.closestMatch("kotlin-api")
+        }
     }
 
 }

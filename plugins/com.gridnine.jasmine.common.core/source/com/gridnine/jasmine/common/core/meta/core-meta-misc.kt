@@ -26,30 +26,30 @@ enum class MiscFieldType {
     BYTE_ARRAY
 }
 
-abstract class BaseMiscElementDescription(id:String):BaseModelElementDescription(id)
 
-class MiscPropertyDescription(id: String, val type: MiscFieldType, val lateinit:Boolean, val nonNullable:Boolean): BaseMiscElementDescription(id){
+
+class MiscPropertyDescription(id: String, val type: MiscFieldType, val lateinit:Boolean, val nonNullable:Boolean): BaseModelElementDescription(id){
     var className: String? = null
 }
 
-class MiscCollectionDescription(id: String, val elementType: MiscFieldType): BaseMiscElementDescription(id){
+class MiscCollectionDescription(id: String, val elementType: MiscFieldType): BaseModelElementDescription(id){
     var elementClassName: String? = null
 }
 
 
-class MiscMapDescription(id: String, val keyClassType: MiscFieldType, val valueClassType: MiscFieldType): BaseMiscElementDescription(id){
+class MiscMapDescription(id: String, val keyClassType: MiscFieldType, val valueClassType: MiscFieldType): BaseModelElementDescription(id){
     var keyClassName: String? = null
     var valueClassName: String? = null
 }
 
-class MiscEnumItemDescription(id:String) : BaseMiscElementDescription(id)
+class MiscEnumItemDescription(id:String) : BaseModelElementDescription(id)
 
-class MiscEnumDescription(id:String) : BaseMiscElementDescription(id){
+class MiscEnumDescription(id:String) : BaseModelElementDescription(id){
     val items = linkedMapOf<String, MiscEnumItemDescription>()
 }
 
 
-class MiscEntityDescription(id:String) : BaseMiscElementDescription(id) {
+class MiscEntityDescription(id:String) : BaseModelElementDescription(id) {
 
     var isAbstract:Boolean = false
 

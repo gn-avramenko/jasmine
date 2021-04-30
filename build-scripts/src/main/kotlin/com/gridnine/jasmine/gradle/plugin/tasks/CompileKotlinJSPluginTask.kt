@@ -60,7 +60,7 @@ open class CompileKotlinJSPluginTask():DefaultTask(){
                 Array<String>::class.java
         )
         val cpFiles = hashSetOf<File>()
-        cpFiles.addAll(project.configurations.getByName(KotlinUtils.WEB_CONFIGURATION_NAME).toSet().filter { it.name.contains("kotlin-stdlib-js") })
+        cpFiles.addAll(project.configurations.getByName(KotlinUtils.WEB_CONFIGURATION_NAME))
 
         plugin.pluginsDependencies.forEach {pd ->
             cpFiles.add(File(project.projectDir, "build/plugins/${pd.pluginId}/output"))
