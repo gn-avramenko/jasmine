@@ -103,13 +103,14 @@
     <nested-document id="com.gridnine.jasmine.common.standard.model.domain.AndWorkspaceCriterion" extends="com.gridnine.jasmine.common.standard.model.domain.BaseComplexWorkspaceCriterion"/>
     <nested-document id="com.gridnine.jasmine.common.standard.model.domain.NotWorkspaceCriterion" extends="com.gridnine.jasmine.common.standard.model.domain.BaseComplexWorkspaceCriterion"/>
 
-    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.ListWorkspaceItem" extends="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceItem">
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.BaseListWorkspaceItem" extends="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceItem" abstract="true">
         <property id="listId" type="STRING"/>
         <collection id="criterions" element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceCriterion"/>
         <collection id="columns" element-type="STRING"/>
         <collection id="filters" element-type="STRING"/>
         <collection id="sortOrders" element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.common.standard.model.domain.SortOrder"/>
     </nested-document>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.domain.ListWorkspaceItem" extends="com.gridnine.jasmine.common.standard.model.domain.BaseListWorkspaceItem"/>
     <nested-document id="com.gridnine.jasmine.common.standard.model.domain.WorkspaceGroup">
         <property id="displayName" type="STRING"/>
         <collection id="items" element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.common.standard.model.domain.BaseWorkspaceItem"/>

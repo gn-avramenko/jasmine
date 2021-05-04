@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rest xmlns="http://gridnine.com/jasmine/rest" id="reports">
+    <entity id="com.gridnine.jasmine.common.reports.model.rest.ReportsWorkspaceItemDT" extends="com.gridnine.jasmine.common.standard.model.rest.BaseListWorkspaceItemDT"/>
+</rest>
+
+
+

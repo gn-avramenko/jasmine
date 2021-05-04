@@ -3,8 +3,10 @@
     <source id="standard-l10n" location="source/com/gridnine/jasmine/common/standard/model/standard-l10n.xml" factoryClassName="com.gridnine.jasmine.common.standard.model.l10n.StandardL10nMessagesFactory"/>
     <source id="standard-ui" location="source/com/gridnine/jasmine/common/standard/model/standard-ui.xml" />
     <source id="core-rest" location="source/com/gridnine/jasmine/common/standard/model/core-rest.xml" />
+    <source id="standard-rest" location="source/com/gridnine/jasmine/common/standard/model/standard-rest.xml" />
     <generate source="standard-domain" targetPlugin="com.gridnine.jasmine.common.standard" generator="common-domain"/>
     <generate source="standard-l10n" targetPlugin="com.gridnine.jasmine.common.standard" generator="common-l10n" />
     <generate source="standard-ui" targetPlugin="com.gridnine.jasmine.common.standard" generator="common-ui" />
     <generate source="core-rest" targetPlugin="com.gridnine.jasmine.common.standard" generator="common-rest" />
+    <generate source="standard-rest" targetPlugin="com.gridnine.jasmine.common.standard" generator="common-rest" />
 </code-gen>

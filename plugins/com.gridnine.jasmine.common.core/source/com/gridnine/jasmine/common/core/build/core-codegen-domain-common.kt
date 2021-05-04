@@ -2,6 +2,8 @@
  * Gridnine AB http://www.gridnine.com
  * Project: Jasmine
  *****************************************************************/
+@file:Suppress("UNCHECKED_CAST")
+
 package com.gridnine.jasmine.common.core.build
 
 import com.gridnine.jasmine.common.core.app.Environment
@@ -168,6 +170,8 @@ class CommonDomainGenerator : CodeGenerator {
         sources.forEach { metaFile -> DomainMetadataParser.updateDomainMetaRegistry(registry, metaFile.first) }
         sources.forEach { metaFile -> DomainMetadataParser.updateDomainMetaRegistry(totalRegistry, metaFile.first) }
         val classesData = arrayListOf<BaseGenData>()
+        val mapping = context[PluginAssociationsGenerator.COMMON_MAP_KEY] as HashMap<String,String>
+        val pluginId = destPlugin.name
         registry.enums.values.forEach {
             val enumClassData = GenEnumData(it.id)
             it.items.values.forEach { ei ->
@@ -179,6 +183,7 @@ class CommonDomainGenerator : CodeGenerator {
                 }
             """.trimIndent())
             classesData.add(enumClassData)
+            mapping[it.id] = pluginId
         }
         val cachedEntities = hashSetOf<String>()
         registry.documents.values.forEach {
@@ -208,6 +213,7 @@ class CommonDomainGenerator : CodeGenerator {
             val data = GenClassData(it.id, "${BaseIndex::class.qualifiedName}<${it.document}>", abstract = false, noEnumProperties = false)
             fillGenData(it, data, false)
             classesData.add(data)
+            mapping[it.id] = pluginId
         }
         registry.assets.values.forEach {
 
@@ -225,6 +231,7 @@ class CommonDomainGenerator : CodeGenerator {
             val data = GenClassData(it.id, BaseAsset::class.qualifiedName, abstract = false, noEnumProperties = false, open = cached)
             fillGenData(it, data, cached)
             classesData.add(data)
+            mapping[it.id] = pluginId
         }
         GenUtils.generateClasses(classesData, destPlugin, projectName, generatedFiles)
         if(!Environment.isPublished(DomainMetaRegistry::class)){

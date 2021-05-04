@@ -200,7 +200,13 @@ class SerializationProvider : Disposable {
                 }
             }
         }
-        return result as T
+        if(result == null) {
+            result = ReflectionFactory.get().newInstance<T>(realClassName)
+            if(uid != null) {
+                provider.setPropertyValue(result, BaseIdentity.uid, uid)
+            }
+        }
+        return result
     }
 
     private fun <T : Any> serialize(generator: JsonGenerator, obj: T, isAbstract: Boolean, uids: MutableSet<String>) {

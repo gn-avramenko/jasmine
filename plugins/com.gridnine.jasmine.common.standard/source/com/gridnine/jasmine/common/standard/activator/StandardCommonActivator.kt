@@ -16,6 +16,7 @@ import com.gridnine.jasmine.common.core.parser.L10nMetadataParser
 import com.gridnine.jasmine.common.core.parser.RestMetadataParser
 import com.gridnine.jasmine.common.core.parser.UiMetadataParser
 import com.gridnine.jasmine.common.core.storage.DynamicCriterionCondition
+import com.gridnine.jasmine.common.standard.WebPluginsAssociations
 import com.gridnine.jasmine.common.standard.model.domain.StandardDynamicCriterionCondition
 import com.gridnine.jasmine.common.standard.storage.TodayDynamicCriterionHandler
 import java.util.*
@@ -26,6 +27,7 @@ class StandardCommonActivator :IPluginActivator{
         DomainMetadataParser.updateDomainMetaRegistry(DomainMetaRegistry.get(), "com/gridnine/jasmine/common/standard/model/standard-model-domain.xml", javaClass.classLoader)
         UiMetadataParser.updateUiMetaRegistry(UiMetaRegistry.get(), "com/gridnine/jasmine/common/standard/model/standard-ui.xml", javaClass.classLoader)
         RestMetadataParser.updateRestMetaRegistry(RestMetaRegistry.get(), "com/gridnine/jasmine/common/standard/model/core-rest.xml", javaClass.classLoader)
+        RestMetadataParser.updateRestMetaRegistry(RestMetaRegistry.get(), "com/gridnine/jasmine/common/standard/model/standard-rest.xml", javaClass.classLoader)
         Registry.get().register(TodayDynamicCriterionHandler())
         StandardDynamicCriterionCondition.values().forEach {cond ->
             Registry.get().register(object :DynamicCriterionCondition{
@@ -38,6 +40,7 @@ class StandardCommonActivator :IPluginActivator{
                 }
             })
         }
+        WebPluginsAssociations.registerAssociations()
     }
 
 }

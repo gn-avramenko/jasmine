@@ -11,5 +11,6 @@
 	<document id="com.gridnine.jasmine.common.reports.model.domain.SavedReportParameters">
 		<collection id="parameters" element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.common.reports.model.misc.BaseReportRequestedParameter"/>
 	</document>
+	<nested-document id="com.gridnine.jasmine.common.reports.model.domain.ReportsWorkspaceItem" extends="com.gridnine.jasmine.common.standard.model.domain.BaseListWorkspaceItem"/>
 
 </domain>

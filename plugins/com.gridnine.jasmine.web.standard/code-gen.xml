@@ -1,0 +1,4 @@
+<code-gen xmlns="http://gridnine.com/jasmine/codegen">
+    <generate source="standard-rest" targetPlugin="com.gridnine.jasmine.web.standard" generator="web-rest"/>
+    <generate source="standard-domain" targetPlugin="com.gridnine.jasmine.web.standard" generator="web-domain"/>
+</code-gen>

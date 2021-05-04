@@ -132,11 +132,11 @@ open class CreateModulesTask() : DefaultTask() {
                             "content"("url" to "file://\$MODULE_DIR\$/../../$pluginRelativePath") {
                                 if (File(project.projectDir, "$pluginRelativePath/source").exists()) {
                                     emptyTag("sourceFolder", "url" to "file://\$MODULE_DIR\$/../../$pluginRelativePath/source",
-                                            "isTestSource" to "false", "type" to "kotlin-source")
+                                            "isTestSource" to "false")
                                 }
                                 if (File(project.projectDir, "$pluginRelativePath/source-gen").exists()) {
                                     emptyTag("sourceFolder", "url" to "file://\$MODULE_DIR\$/../../$pluginRelativePath/source-gen",
-                                            "isTestSource" to "false", "type" to "kotlin-source", "generated" to "true")
+                                            "isTestSource" to "false", "generated" to "true")
                                 }
                                 emptyTag("excludeFolder", "url" to outputDir)
                             }
@@ -176,10 +176,12 @@ open class CreateModulesTask() : DefaultTask() {
                         }
                         SpfPluginType.WEB , SpfPluginType.WEB_CORE -> {
                             emptyTag("orderEntry", "type" to "sourceFolder", "forTests" to "false")
+                            emptyTag("orderEntry", "type" to "inheritedJdk")
                             emptyTag("orderEntry", "type" to "library", "name" to "web_js", "level" to "project")
                         }
                         SpfPluginType.WEB_TEST -> {
                             emptyTag("orderEntry", "type" to "sourceFolder", "forTests" to "true")
+                            emptyTag("orderEntry", "type" to "inheritedJdk")
                             emptyTag("orderEntry", "type" to "library", "name" to "web_js", "level" to "project")
                         }
                     }

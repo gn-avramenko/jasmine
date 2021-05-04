@@ -66,12 +66,15 @@ object CodeGeneratorTask{
         val registry = CodeGenRegistry(pluginsMap, pluginsRegistry)
         val generatedFiles = hashMapOf<String, MutableList<File>>()
         val genContext = hashMapOf<String,Any>()
+        genContext[PluginAssociationsGenerator.COMMON_MAP_KEY] = hashMapOf<String,String>()
+        genContext[PluginAssociationsGenerator.WEB_MAP_KEY] = hashMapOf<String,String>()
         registry.getGeneratorsClassNames().forEach {generatorClassName ->
             val generator = ReflectionFactory.get().newInstance<CodeGenerator>(generatorClassName)
             registry.getPluginsIds(generatorClassName).forEach { pluginId ->
                 generator.generate(pluginsMap[pluginId]!!, registry.getSources(pluginId, generatorClassName),  projectName, generatedFiles.computeIfAbsent(pluginId){arrayListOf()},  genContext)
             }
         }
+        PluginAssociationsGenerator.generate(pluginsMap, genContext, generatedFiles)
         generatedFiles.entries.forEach {
             GenUtils.deleteFiles(File(pluginsMap[it.key], "source-gen"), it.value)
         }

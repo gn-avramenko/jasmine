@@ -5,14 +5,16 @@
 
 package com.gridnine.jasmine.server.standard.activator
 
-import com.gridnine.jasmine.common.core.app.Environment
 import com.gridnine.jasmine.common.core.app.IPluginActivator
 import com.gridnine.jasmine.common.core.app.Registry
-
+import com.gridnine.jasmine.server.standard.rest.DateWorkspaceToDtConverter
+import com.gridnine.jasmine.server.standard.rest.WorkspaceListItemToDTConverter
 import java.util.*
 
 class StandardServerActivator : IPluginActivator{
     override fun configure(config: Properties) {
+        Registry.get().register(WorkspaceListItemToDTConverter())
+        Registry.get().register(DateWorkspaceToDtConverter())
 
     }
 }

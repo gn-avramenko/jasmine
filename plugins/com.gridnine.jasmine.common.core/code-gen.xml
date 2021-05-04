@@ -4,4 +4,6 @@
     <generator id="common-l10n" className="com.gridnine.jasmine.common.core.build.L10nCommonGenerator" priority="2"/>
     <generator id="common-ui" className="com.gridnine.jasmine.common.core.build.UiCommonGenerator" priority="3"/>
     <generator id="common-misc" className="com.gridnine.jasmine.common.core.build.CommonMiscGenerator" priority="4"/>
+    <generator id="web-rest" className="com.gridnine.jasmine.common.core.build.WebRestGenerator" priority="5"/>
+    <generator id="web-domain" className="com.gridnine.jasmine.common.core.build.WebDomainGenerator" priority="6"/>
 </code-gen>

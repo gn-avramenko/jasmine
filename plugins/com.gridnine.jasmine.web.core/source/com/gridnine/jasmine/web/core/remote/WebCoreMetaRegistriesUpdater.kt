@@ -12,12 +12,11 @@ import com.gridnine.jasmine.common.core.meta.*
 object WebCoreMetaRegistriesUpdater {
     suspend fun updateMetaRegistries(module:String){
         val response = RpcManager.get().postDynamic("core_core_getMetadata", """{
-          "moduleId" : "$module"    
+          "pluginId" : "$module"    
         }""".trimIndent())
         updateCustomMetadata(response)
         updateDomainMetadata(response)
         updateL10nRegistry(response)
-        updateMiscMetadata(response)
         updateRestRegistry(response)
         updateUiRegistry(response)
     }
@@ -145,30 +144,6 @@ object WebCoreMetaRegistriesUpdater {
             domainRegistry.assets[entity.id] = entity
             Unit
         }
-        it.domainDocuments?.forEach{itJs ->
-            val entity = DocumentDescriptionJS(itJs.id).apply {
-                isAbstract = itJs.isAbstract
-                extendsId = itJs.extendsId
-            }
-            itJs.properties?.forEach{ prop:dynamic ->
-                val id = DocumentPropertyDescriptionJS(prop.id).apply {
-                    type = DocumentPropertyTypeJS.valueOf(prop.type)
-                    className =  prop.className
-                    nonNullable = prop.nonNullable
-                }
-                entity.properties.put(prop.id, id)
-            }
-            itJs.collections?.forEach{ coll:dynamic ->
-                val cd = DocumentCollectionDescriptionJS(id = coll.id).apply {
-                    elementType = DocumentPropertyTypeJS.valueOf(coll.elementType)
-                    elementClassName = coll.elementClassName
-                }
-                entity.collections.put(coll.id, cd)
-            }
-            domainRegistry.documents[entity.id] = entity
-
-            Unit
-        }
     }
 
     private fun fillBaseIndexDescription(entity: BaseIndexDescriptionJS, itJs: dynamic) {
@@ -192,49 +167,6 @@ object WebCoreMetaRegistriesUpdater {
         }
     }
 
-    private fun updateMiscMetadata(it: dynamic) {
-        val miscRegistry = MiscMetaRegistryJS.get()
-        it.miscEnums?.forEach{ itJs ->
-            val enum = MiscEnumDescriptionJS(itJs.id)
-            itJs.items.forEach{ item:dynamic ->
-                enum.items.put(item, MiscEnumItemDescriptionJS(item))
-            }
-            miscRegistry.enums.put(enum.id, enum)
-        }
-        it.miscEntities?.forEach{itJs ->
-            val entity = MiscEntityDescriptionJS(itJs.id)
-            entity.isAbstract = itJs.isAbstract
-            entity.extendsId = itJs.extendsId
-            itJs.properties?.forEach{ prop:dynamic ->
-                entity.properties.put(prop.id, MiscPropertyDescriptionJS(
-                        id = prop.id,
-                        type = MiscFieldTypeJS.valueOf(prop.type),
-                        lateinit = prop.lateInit,
-                        nonNullable = prop.nonNullable).apply {
-                    className = prop.className
-                })
-
-            }
-            itJs.collections?.forEach{ coll:dynamic ->
-                entity.collections.put(coll.id, MiscCollectionDescriptionJS(
-                        id = coll.id,
-                        elementType = MiscFieldTypeJS.valueOf(coll.elementType)).apply {
-                    elementClassName = coll.elementClassName
-                })
-            }
-            itJs.maps?.forEach{ map:dynamic ->
-                entity.maps.put(map.id, MiscMapDescriptionJS(
-                        id = map.id,
-                        keyClassType = MiscFieldTypeJS.valueOf(it.keyClassType),
-                        valueClassType = MiscFieldTypeJS.valueOf(it.valueClassType)
-                ).apply {
-                    keyClassName = map.keyClassName
-                    valueClassName = map.valueClassName
-                })
-            }
-            miscRegistry.entities.put(entity.id, entity)
-        }
-    }
 
     private fun updateCustomMetadata(it: dynamic) {
         val customRegistry = CustomMetaRegistryJS.get()

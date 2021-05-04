@@ -6,16 +6,23 @@
 package com.gridnine.jasmine.web.core.activator
 
 import com.gridnine.jasmine.common.core.meta.*
+import com.gridnine.jasmine.common.core.model.ObjectReferenceJS
+import com.gridnine.jasmine.common.core.model.PasswordBoxConfigurationJS
+import com.gridnine.jasmine.common.core.model.SelectItemJS
+import com.gridnine.jasmine.common.core.model.TextBoxConfigurationJS
 import com.gridnine.jasmine.web.core.common.ActivatorJS
 import com.gridnine.jasmine.web.core.common.EnvironmentJS
 import com.gridnine.jasmine.web.core.common.RegistryJS
 import com.gridnine.jasmine.web.core.l10n.WebCoreL10nMessagesInitializer
+import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.remote.RpcManager
 import com.gridnine.jasmine.web.core.remote.StandardRpcManager
 import com.gridnine.jasmine.web.core.remote.WebCoreMetaRegistriesUpdater
+import com.gridnine.jasmine.web.core.remote.WebPluginsHandler
+import com.gridnine.jasmine.web.core.serialization.JsonSerializerJS
 
 
-const val moduleId = "com.gridnine.jasmine.web.core"
+const val pluginId = "com.gridnine.jasmine.web.core"
 
 fun main(){
     EnvironmentJS.publish(RegistryJS())
@@ -27,19 +34,30 @@ class WebCoreActivator : ActivatorJS{
         EnvironmentJS.publish(CustomMetaRegistryJS())
         EnvironmentJS.publish(DomainMetaRegistryJS())
         EnvironmentJS.publish(L10nMetaRegistryJS())
-        EnvironmentJS.publish(MiscMetaRegistryJS())
         EnvironmentJS.publish(RestMetaRegistryJS())
         EnvironmentJS.publish(UiMetaRegistryJS())
+        EnvironmentJS.publish(ReflectionFactoryJS())
+        EnvironmentJS.publish(JsonSerializerJS())
+        EnvironmentJS.publish(WebPluginsHandler())
+        ReflectionFactoryJS.get().registerClass(ObjectReferenceJS.qualifiedClassName){ObjectReferenceJS()}
+        ReflectionFactoryJS.get().registerQualifiedName(ObjectReferenceJS::class, ObjectReferenceJS.qualifiedClassName)
+        ReflectionFactoryJS.get().registerClass(TextBoxConfigurationJS.qualifiedClassName){TextBoxConfigurationJS()}
+        ReflectionFactoryJS.get().registerQualifiedName(TextBoxConfigurationJS::class, TextBoxConfigurationJS.qualifiedClassName)
+        ReflectionFactoryJS.get().registerClass(PasswordBoxConfigurationJS.qualifiedClassName){PasswordBoxConfigurationJS()}
+        ReflectionFactoryJS.get().registerQualifiedName(PasswordBoxConfigurationJS::class, PasswordBoxConfigurationJS.qualifiedClassName)
+        ReflectionFactoryJS.get().registerClass(SelectItemJS.qualifiedClassName){SelectItemJS()}
+        ReflectionFactoryJS.get().registerQualifiedName(SelectItemJS::class, SelectItemJS.qualifiedClassName)
+
         if(!EnvironmentJS.isPublished(RpcManager::class)){
             EnvironmentJS.publish(RpcManager::class, StandardRpcManager())
         }
-        WebCoreMetaRegistriesUpdater.updateMetaRegistries(moduleId)
+        WebCoreMetaRegistriesUpdater.updateMetaRegistries(pluginId)
         WebCoreL10nMessagesInitializer.initialize()
         console.log("web core activated")
     }
 
     override fun getId(): String {
-        return moduleId
+        return pluginId
     }
 }
 

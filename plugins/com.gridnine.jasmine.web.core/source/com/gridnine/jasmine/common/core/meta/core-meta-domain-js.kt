@@ -101,20 +101,13 @@ abstract class BaseIndexDescriptionJS(id:String) : BaseModelElementDescriptionJS
 
 class AssetDescriptionJS(id:String) : BaseIndexDescriptionJS(id)
 
-class DocumentDescriptionJS(id:String) : BaseDocumentDescriptionJS(id)
 
 class IndexDescriptionJS(id:String) : BaseIndexDescriptionJS(id) {
     lateinit var document: String
 }
 
-class NestedDocumentDescriptionJS(id:String) : BaseDocumentDescriptionJS(id)
-
 class DomainMetaRegistryJS {
     val enums = linkedMapOf<String, DomainEnumDescriptionJS>()
-
-    val documents = linkedMapOf<String, DocumentDescriptionJS>()
-
-    val nestedDocuments = linkedMapOf<String, NestedDocumentDescriptionJS>()
 
     val indexes = linkedMapOf<String, IndexDescriptionJS>()
 

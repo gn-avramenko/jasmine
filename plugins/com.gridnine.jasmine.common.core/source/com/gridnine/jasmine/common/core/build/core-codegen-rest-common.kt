@@ -2,7 +2,7 @@
  * Gridnine AB http://www.gridnine.com
  * Project: Jasmine
  *****************************************************************/
-@file:Suppress("unused")
+@file:Suppress("unused", "UNCHECKED_CAST")
 package com.gridnine.jasmine.common.core.build
 
 import com.gridnine.jasmine.common.core.meta.*
@@ -56,16 +56,20 @@ class CommonRestGenerator:CodeGenerator {
             RestMetadataParser.updateRestMetaRegistry(registry, source.first)
         }
         val classesData = arrayListOf<BaseGenData>()
+        val mapping = context[PluginAssociationsGenerator.COMMON_MAP_KEY] as HashMap<String,String>
+        val pluginId = destPlugin.name
         registry.enums.values.forEach {
             val enumClassData = GenEnumData(it.id)
             it.items.values.forEach { ei ->
                 enumClassData.enumItems.add(ei.id)
             }
             classesData.add(enumClassData)
+            mapping[it.id] = pluginId
         }
         registry.entities.values.forEach {
             val docClassData = toGenData(it)
             classesData.add(docClassData)
+            mapping[it.id] = pluginId
         }
         GenUtils.generateClasses(classesData, destPlugin, projectName,  generatedFiles)
     }

@@ -33,6 +33,7 @@ class CoreActivator:IPluginActivator{
         Environment.publish(SerializationProvider())
         Environment.publish(WebMessagesMetaRegistry())
         WebMessagesMetadataParser.updateWebMessages(WebMessagesMetaRegistry.get(), "com/gridnine/jasmine/common/core/meta/core-web-messages.xml", javaClass.classLoader)
+        Environment.publish(WebPluginsAssociationsRegistry())
     }
 
     override fun activate(config: Properties) {
