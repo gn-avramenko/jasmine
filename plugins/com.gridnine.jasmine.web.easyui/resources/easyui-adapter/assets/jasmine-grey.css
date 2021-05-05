@@ -1,0 +1,163 @@
+.jasmine-logo {
+    font-size:300%;
+    background-color: #f3f3f3;
+    color: #0092DC;
+    text-align: center;
+}
+
+.icon_core_settings{
+    background:url('images/settings.png') no-repeat center center;
+}
+
+.icon_core_link{
+    background: url('images/panel_tools.png') no-repeat 0px -16px;
+}
+
+.select2-jasmine-regular .select2-choices{
+    border: 1px solid #D3D3D3;
+    border-radius: 5px 5px 5px 5px;
+    height: 28px;
+    min-height: 28px;
+}
+
+.select2-jasmine-regular .select2-choice{
+    border: 1px solid #D3D3D3;
+    border-radius: 5px 5px 5px 5px;
+    height: 28px;
+    min-height: 28px;
+}
+
+.select2-jasmine-error .select2-choice{
+    border: 1px solid red;
+    border-radius: 5px 5px 5px 5px;
+    height: 28px;
+    min-height: 28px;
+}
+
+.notification-message{
+    color: green;
+}
+
+.notification-warning{
+    color: yellow;
+}
+
+.notification-error{
+    color: red;
+}
+
+.jasmine-web-tile{
+    display: inline-block;
+    padding: 5px;
+    margin:5px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #575765;
+    line-height: 20px;
+    background: url('images/blank.gif') no-repeat;
+    vertical-align:top;
+    border-color: #D3D3D3;
+    border-width: 1px;
+    border-style: solid;
+    background-color: #f3f3f3;
+    background: -webkit-linear-gradient(top,#F8F8F8 0,#eeeeee 100%);
+    background: -moz-linear-gradient(top,#F8F8F8 0,#eeeeee 100%);
+    background: -o-linear-gradient(top,#F8F8F8 0,#eeeeee 100%);
+    background: linear-gradient(to bottom,#F8F8F8 0,#eeeeee 100%);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#F8F8F8,endColorstr=#eeeeee,GradientType=0);
+}
+.jasmine-tile-caption{
+    display: inline-block;
+    vertical-align: center;
+}
+.jasmine-tile-expand{
+    display: inline-block;
+    float: right;
+    vertical-align: center;
+    cursor: pointer;
+    width: 20px;
+    height: 15px;
+    background: url('images/panel_tools.png') no-repeat -32px 0px;
+}
+
+.jasmine-table-box th{
+  height:31px;
+  font-size: 14px;
+  padding:5px;
+  background-color: #fafafa;
+  background: -webkit-linear-gradient(top,#fdfdfd 0,#f5f5f5 100%);
+  background: -moz-linear-gradient(top,#fdfdfd 0,#f5f5f5 100%);
+  background: -o-linear-gradient(top,#fdfdfd 0,#f5f5f5 100%);
+  background: linear-gradient(to bottom,#fdfdfd 0,#f5f5f5 100%);
+  background-repeat: repeat-x;
+  border-width: 1px 1px 1px 1px;
+  border-style: dotted;
+  margin: 0;
+  border-color: #ccc;
+  font-weight: 100
+}
+.jasmine-table-box{
+table-layout:fixed;
+}
+
+
+
+.jasmine-table-box td{
+  font-size: 14px;
+  padding:0px;
+  border-width: 1px 1px 1px 1px;
+  border-style: dotted;
+  margin: 0;
+  border-color: #ccc;
+  font-weight: 100
+}
+
+.jasmine-table-box .jasmine-grid-layout-td{
+  padding:0px;
+  border-width: 0px 0px 0px 0px;
+  border-style: none;
+  margin: 0;
+  font-weight: 100
+}
+.icon_core_close{
+    background: url('images/panel_tools.png') no-repeat -32px -16px;
+}
+
+.icon_core_plus{
+    background: url('images/datagrid_icons.png') no-repeat -32px center;
+}
+
+.icon_core_minus{
+    background: url('images/datagrid_icons.png') no-repeat -48px center;
+}
+
+.icon_core_up{
+    background: url('images/datagrid_icons.png') no-repeat 0px 0px;
+}
+
+.icon_core_down{
+    background: url('images/datagrid_icons.png') no-repeat -16px center;
+}
+
+.tree-folder-open {
+    background:url("images/folder_minus.svg") !important;
+    background-repeat:no-repeat !important;
+    background-position-y:2px !important;
+}
+
+.tree-file {
+    background:url("images/page.svg");
+    background-repeat:no-repeat;
+    background-position-y:2px;
+    background-size:15px;
+}
+
+
+.tree-folder {
+    background:url("images/folder_plus.svg");
+    background-repeat:no-repeat;
+    background-position-y:2px};
+}
+
+

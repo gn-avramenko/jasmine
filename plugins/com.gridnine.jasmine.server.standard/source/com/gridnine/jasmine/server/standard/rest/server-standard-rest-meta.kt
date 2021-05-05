@@ -193,7 +193,7 @@ class MetadataRestHandler : RestHandler<GetMetadataRequest, GetMetadataResponse>
             val ed = CustomEntityDescriptionDT()
             ed.id = ett.id+"JS"
             ed.isAbstract = ett.isAbstract
-            ed.extendsId = ett.extendsId
+            ed.extendsId = ett.extendsId?.let { ext -> ext+"JS"}
             result.customEntities.add(ed)
             ett.properties.values.forEach {
                 val pd = CustomPropertyDescriptionDT()

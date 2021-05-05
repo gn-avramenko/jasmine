@@ -6,6 +6,10 @@
 
 package com.gridnine.jasmine.web.core.utils
 
+import com.gridnine.jasmine.common.core.meta.DatabasePropertyTypeJS
+import com.gridnine.jasmine.common.core.meta.DomainMetaRegistryJS
+import com.gridnine.jasmine.common.core.model.BaseIntrospectableObjectJS
+import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import kotlin.js.Date
 import kotlin.math.round
 import kotlin.random.Random
@@ -52,4 +56,41 @@ object MiscUtilsJS {
     fun formatDateTime(value:Date?) : String? {
         return value?.let{"${it.getFullYear()}-${fillWithZeros(it.getMonth() + 1)}-${fillWithZeros(it.getDate())} ${fillWithZeros(it.getHours())}:${fillWithZeros(it.getMinutes())}:${fillWithZeros(it.getSeconds())}"}
     }
+
+    private val dateListFormatter = { date: Date? ->
+        date?.let { "${it.getFullYear()}-${fillWithZeros(it.getMonth() + 1)}-${fillWithZeros(it.getDate())}" }
+    }
+
+    private val dateListTimeFormatter = { date: Date? ->
+        date?.let { "${it.getFullYear()}-${fillWithZeros(it.getMonth() + 1)}-${fillWithZeros(it.getDate())} ${fillWithZeros(it.getHours())}:${fillWithZeros(it.getMinutes())}" }
+    }
+
+    fun createListFormatter(type: DatabasePropertyTypeJS?) =
+            { value: Any?, _: BaseIntrospectableObjectJS, _: Int ->
+                lateinit var displayName: String
+                displayName = if (value is Enum<*>) {
+                    val qualifiedName = ReflectionFactoryJS.get().getQualifiedClassName(value::class)
+                    val enumDescr = DomainMetaRegistryJS.get().enums[qualifiedName]
+                    if (enumDescr != null) {
+                        enumDescr.items[value.name]!!.displayName
+                    } else {
+                        value.name
+                    }?:""
+
+                } else if (value is Boolean) {
+                    if (value) "Да" else "Нет"
+                } else if (value?.asDynamic()?.caption != null) {
+                    value.asDynamic()?.caption as String
+                } else if (type == DatabasePropertyTypeJS.LOCAL_DATE) {
+                    dateListFormatter(value as Date?) ?: "???"
+                } else if (type == DatabasePropertyTypeJS.LOCAL_DATE_TIME) {
+                    dateListTimeFormatter(value as Date?) ?: "???"
+                } else {
+                    value?.toString() ?: ""
+                }
+                if (displayName.length > 100) {
+                    displayName = "<span title=\"$displayName\" class=\"easyui-tooltip\">${displayName.substring(0, 50)} ...</span>"
+                }
+                displayName
+            }
 }
