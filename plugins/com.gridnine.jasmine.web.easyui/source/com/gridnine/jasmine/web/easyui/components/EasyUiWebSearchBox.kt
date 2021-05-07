@@ -30,7 +30,7 @@ class EasyUiWebSearchBox(configure: WebSearchBoxConfiguration.()->Unit) :WebSear
     }
 
     override fun getHtml(): String {
-        return "<input id=\"searchBox${uid}\" style=\"${if(config.width != null) "width:${config.width}" else ""};${if(config.height != null) "height:${config.height}" else ""}\"/>"
+        return "<input id=\"searchBox${uid}\" style=\"${getSizeAttributes(config)}\"/>"
     }
 
     override fun setSearcher(value: suspend (String?) -> Unit) {
@@ -67,7 +67,9 @@ class EasyUiWebSearchBox(configure: WebSearchBoxConfiguration.()->Unit) :WebSear
     }
 
     override fun destroy() {
-        //noops
+      if(initialized){
+          jq.searchbox("destroy")
+      }
     }
 
 }

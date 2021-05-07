@@ -29,6 +29,18 @@ interface WebUiLibraryAdapter{
 
     fun createGridContainer(configure:WebGridContainerConfiguration.()->Unit):WebGridLayoutContainer
 
+    fun createDateBox(configure:WebDateBoxConfiguration.()->Unit):WebDateBox
+
+    fun createDateTimeBox(configure:WebDateTimeBoxConfiguration.()->Unit):WebDateTimeBox
+
+    fun createLinkButton(configure:WebLinkButtonConfiguration.()->Unit):WebLinkButton
+
+    fun createNumberBox(configure:WebNumberBoxConfiguration.()->Unit):WebNumberBox
+
+    fun createSelect(configure:WebSelectConfiguration.()->Unit):WebSelect
+
+    fun createTextBox(configure:WebTextBoxConfiguration.()->Unit):WebTextBox
+
     fun showWindow(component: WebNode)
 
     companion object{

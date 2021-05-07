@@ -28,7 +28,7 @@ class EasyUiWebDataGrid<E:BaseIntrospectableObjectJS>(configure: WebDataGridConf
 
 
     override fun getHtml(): String {
-        return "<div id=\"dataGrid${uid}\" style=\"${if(config.width != null) "width:${config.width}" else ""};${if(config.height != null) "height:${config.height}" else ""}\"></div>"
+        return "<div id=\"dataGrid${uid}\" style=\"${getSizeAttributes(config)}\"></div>"
     }
 
     override fun decorate() {

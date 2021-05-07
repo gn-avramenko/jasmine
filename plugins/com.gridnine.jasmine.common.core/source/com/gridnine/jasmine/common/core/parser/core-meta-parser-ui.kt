@@ -39,9 +39,34 @@ object UiMetadataParser {
                 ParserUtils.updateLocalizations(enumItem, enumId, localizations)
             }
         }
+        node.children("actions-group").forEach { child ->
+            updateActionsGroup(child, registry, localizations).apply { root = true }
+        }
         processContainers(registry, node, null, localizations)
 
 
+    }
+
+    private fun updateActionsGroup(elm: XmlNode, registry: UiMetaRegistry, localizations: Map<String, Map<Locale, String>>):ActionsGroupDescription {
+        val groupId = ParserUtils.getIdAttribute(elm)
+        val groupDescription = registry.actions.getOrPut(groupId) { ActionsGroupDescription(groupId) } as ActionsGroupDescription
+        ParserUtils.updateLocalizations(groupDescription, null, localizations)
+        elm.children.forEach {child ->
+            when(child.name){
+                "action" ->{
+                    val actionId = ParserUtils.getIdAttribute(child)
+                    val action = registry.actions.getOrPut(actionId) { ActionDescription(actionId) } as ActionDescription
+                    action.actionHandler = child.attributes["actionHandler"]!!
+                    ParserUtils.updateLocalizationsForId(action, actionId, localizations)
+                    groupDescription.actionsIds.add(actionId)
+                }
+                "group" ->{
+                    updateActionsGroup(child, registry, localizations)
+                }
+                "group-ref","action-ref" ->  groupDescription.actionsIds.add(ParserUtils.getIdAttribute(child))
+            }
+        }
+        return groupDescription
     }
 
     private fun processContainers(registry: UiMetaRegistry, node: XmlNode, baseExtendsId:String?, localizations: Map<String, Map<Locale, String>>): List<String> {

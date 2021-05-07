@@ -32,3 +32,12 @@ enum class WebDataHorizontalAlignment {
     RIGHT,
     CENTER
 }
+
+interface SimpleActionHandler{
+    suspend fun invoke()
+}
+
+object DefaultUIParameters{
+    var controlWidth = 200
+    var controlWidthAsString = "200px"
+}

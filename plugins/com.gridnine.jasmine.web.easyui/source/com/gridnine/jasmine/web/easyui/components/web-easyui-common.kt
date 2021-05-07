@@ -6,6 +6,7 @@
 package com.gridnine.jasmine.web.easyui.components
 
 import com.gridnine.jasmine.common.core.model.XeptionJS
+import com.gridnine.jasmine.web.core.ui.components.BaseWebComponentConfiguration
 import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
 import com.gridnine.jasmine.web.core.ui.components.WebNode
 
@@ -27,3 +28,9 @@ fun findEasyUiComponent(comp:WebNode):EasyUiComponent{
     }
     throw XeptionJS.forDeveloper("unable to find EasyUiComponent of ${comp}")
 }
+
+fun getSizeAttributes(config:BaseWebComponentConfiguration):String{
+    return "${if(config.width != null) "width:${config.width}" else ""};${if(config.height != null) "height:${config.height}" else ""}"
+}
+
+fun getIconClass(iconName:String?) = if(iconName != null) "icon_${iconName.substringBefore(":")}_${iconName.substringAfterLast(":")}" else null

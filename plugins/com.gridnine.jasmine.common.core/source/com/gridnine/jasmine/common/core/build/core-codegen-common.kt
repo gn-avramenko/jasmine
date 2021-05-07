@@ -378,6 +378,19 @@ object GenUtils {
         unit.init()
         sb.append("\n}")
     }
+
+    fun saveFile(destPlugin:File, className:String, strContent:String, generatedFiles:MutableList<File>){
+        val pluginId = destPlugin.name
+        val file = File(destPlugin, "source-gen/${pluginId.replace(".", "/")}/${className}.kt")
+        if (!file.parentFile.exists()) {
+            file.parentFile.mkdirs()
+        }
+        val content = strContent.toByteArray()
+        if (!file.exists() || !content.contentEquals(file.readBytes())) {
+            file.writeBytes(content)
+        }
+        generatedFiles.add(file)
+    }
 }
 
 

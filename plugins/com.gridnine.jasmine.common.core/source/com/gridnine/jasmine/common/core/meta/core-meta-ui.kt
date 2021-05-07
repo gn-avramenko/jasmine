@@ -192,6 +192,16 @@ class NavigatorVariantDescription(val modelId:String, val viewId: String)
 
 class NavigatorDescription(id:String, val variants:MutableList<NavigatorVariantDescription> = arrayListOf()):BaseViewDescription(id, ViewType.NAVIGATOR)
 
+open class BaseActionDescription(id:String) :BaseModelElementDescription(id)
+
+class ActionDescription(id:String) :BaseActionDescription(id){
+    lateinit var actionHandler:String
+}
+class ActionsGroupDescription(id:String) :BaseActionDescription(id){
+    val actionsIds = arrayListOf<String>()
+    var root:Boolean = false
+}
+
 class UiMetaRegistry: Disposable {
     val enums = linkedMapOf<String, UiEnumDescription>()
 
@@ -202,6 +212,8 @@ class UiMetaRegistry: Disposable {
     val viewSettings = linkedMapOf<String, VSEntityDescription>()
 
     val viewValidations = linkedMapOf<String, VVEntityDescription>()
+
+    val actions = linkedMapOf<String, BaseActionDescription>()
 
     override fun dispose() {
         wrapper.dispose()

@@ -16,6 +16,7 @@ class ReflectionFactoryJS{
     private val factories:MutableMap<String, () -> Any> = hashMapOf()
     private val enumFactories:MutableMap<String, (String) -> Any> = hashMapOf()
     private val qualifiedNames:MutableMap<KClass<*>, String> = hashMapOf()
+
     fun registerClass(className:String, factory: () ->Any){
         factories[className] = factory
     }
@@ -41,5 +42,9 @@ class ReflectionFactoryJS{
 
     fun <E:Enum<E>> getEnum(enumClassName:String, itemName:String):E{
         return enumFactories[enumClassName]?.invoke(itemName) as E??:throw IllegalArgumentException("no enum factories is registered for  $enumClassName")
+    }
+
+    fun isRegistered(className:String):Boolean{
+        return factories.containsKey(className)
     }
 }

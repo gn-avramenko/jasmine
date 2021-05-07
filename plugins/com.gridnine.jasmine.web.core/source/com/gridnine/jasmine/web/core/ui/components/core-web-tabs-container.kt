@@ -14,9 +14,14 @@ interface WebTabsContainer : WebNode{
     fun getTabs():List<WebTabPanel>
     fun setTitle(tabId: String, title: String)
 }
+class WebTabsContainerTool{
+    lateinit var displayName:String
+    lateinit var handler: suspend ()->Unit
+}
 
 class WebTabsContainerConfiguration:BaseWebComponentConfiguration(){
     var fit:Boolean = true
+    val tools = arrayListOf<WebTabsContainerTool>()
 }
 
 class WebTabPanel {

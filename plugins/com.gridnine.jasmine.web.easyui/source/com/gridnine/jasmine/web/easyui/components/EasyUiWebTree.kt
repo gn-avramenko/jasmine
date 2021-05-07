@@ -192,7 +192,7 @@ class EasyUiWebTree(configure: WebTreeConfiguration.() -> Unit) : WebTree,EasyUi
 
     override fun getHtml(): String {
         return """
-           <div id = "treeDiv${uid}"  style = "${config.width?.let { "width:$it" } ?: ""};${config.height?.let { "height:$it" } ?: ""}">
+           <div id = "treeDiv${uid}"  style = "${getSizeAttributes(config)}">
                 <ul id = "tree${uid}"/>
             </div>
         """.trimIndent()

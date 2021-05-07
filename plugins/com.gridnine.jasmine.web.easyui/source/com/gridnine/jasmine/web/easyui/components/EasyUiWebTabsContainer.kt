@@ -7,6 +7,7 @@
 
 package com.gridnine.jasmine.web.easyui.components
 
+import com.gridnine.jasmine.web.core.remote.launch
 import com.gridnine.jasmine.web.core.ui.components.*
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 
@@ -87,7 +88,7 @@ class EasyUiWebTabsContainer(configure: WebTabsContainerConfiguration.()->Unit) 
 
 
     override fun getHtml(): String {
-        return "<div id=\"tabs${uid}\" style=\"${if(config.width != null) "width:${config.width}" else ""};${if(config.height != null) "height:${config.height}" else ""}\"></div>"
+        return "<div id=\"tabs${uid}\" style=\"${getSizeAttributes(config)}\"></div>"
     }
 
     override fun decorate() {
@@ -104,49 +105,38 @@ class EasyUiWebTabsContainer(configure: WebTabsContainerConfiguration.()->Unit) 
         tabs.forEach {
             addTabInternal(it)
         }
-//        val header  = jq.children("div.tabs-header")
-//        header.children("div.tabs-tool").remove()
-//        if(.isNotEmpty()){
-//            header.children("div.tabs-tool").remove()
-//            var toolsElm = jQuery("<div class=\"tabs-tool\"><table cellspacing=\"0\" cellpadding=\"0\" style=\"height:100%\"><tr></tr></table></div>").appendTo(header)
-//            var tr = toolsElm.find("tr");
-//            tools.withIndex().forEach {(index, tool) ->
-//                var td = jQuery("<td></td>").appendTo(tr);
-//                var toolElm = jQuery("<a href=\"javascript:;\"></a>").appendTo(td);
-//                if(tool is MenuButtonConfiguration){
-//                    val content = HtmlUtilsJS.div {
-//                        id = "toolsMenu${index}${uid}"
-//                        //style ="width:200px"
-//                        tool.elements.withIndex().forEach {(index2, elm) ->
-//                            if(elm is StandardMenuItem){
-//                                div(id = "toolsMenu${index}${uid}-$index2") {
-//                                    text(elm.title!!)
-//                                }
-//                            }
-//                        }
-//                    }.toString()
-//                    jq.append(content)
-//
-//                    toolElm.menubutton(object{
-//                        val plain = true
-//                        val text = tool.title
-//                        val iconCls = EasyUiUtils.getIconClass(tool.icon)
-//                        val menu = "#toolsMenu${index}${uid}"
-//                    })
-//                    jQuery("#toolsMenu${index}${uid}").menu(object {
-//                        val onClick = { item: dynamic ->
-//                            val id = item.id as String
-//                            val idx = id.substring(id.lastIndexOf("-") + 1).toInt()
-//                            val elm =tool.elements[idx]
-//                            if(elm is StandardMenuItem){
-//                                elm.handler.invoke()
-//                            }
-//                        }
-//                    })
-//                }
-//
-//            }
-//        }
+        val header  = jq.children("div.tabs-header")
+        header.children("div.tabs-tool").remove()
+        if(config.tools.isNotEmpty()){
+            header.children("div.tabs-tool").remove()
+            val toolsElm = jQuery("<div class=\"tabs-tool\"><table cellspacing=\"0\" cellpadding=\"0\" style=\"height:100%\"><tr></tr></table></div>").appendTo(header)
+            val tr = toolsElm.find("tr")
+            val td = jQuery("<td></td>").appendTo(tr)
+            val toolElm = jQuery("<a href=\"javascript:;\"></a>").appendTo(td)
+            val content = """
+                        <div id = "toolsMenu${uid}">
+                            ${config.tools.withIndex().joinToString ("\n") { 
+                """<div id = "toolsMenu${uid}-${it.index}">${it.value.displayName}</div>"""
+            }}
+                        </div>
+                    """.trimIndent()
+            jq.append(content)
+            toolElm.menubutton(object{
+                val plain = true
+                val iconCls = getIconClass("core:settings")
+                val menu = "#toolsMenu${uid}"
+            })
+            jQuery("#toolsMenu${uid}").menu(object {
+                val onClick = { item: dynamic ->
+                    val id = item.id as String
+                    val idx = id.substring(id.lastIndexOf("-") + 1).toInt()
+                    val elm =config.tools[idx]
+                    launch {
+                        elm.handler.invoke()
+                    }
+                }
+            })
+        }
         jq!!.tabs("select", selected)
         initialized = true
     }

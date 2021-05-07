@@ -15,10 +15,7 @@ import com.gridnine.jasmine.web.core.common.EnvironmentJS
 import com.gridnine.jasmine.web.core.common.RegistryJS
 import com.gridnine.jasmine.web.core.l10n.WebCoreL10nMessagesInitializer
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
-import com.gridnine.jasmine.web.core.remote.RpcManager
-import com.gridnine.jasmine.web.core.remote.StandardRpcManager
-import com.gridnine.jasmine.web.core.remote.WebCoreMetaRegistriesUpdater
-import com.gridnine.jasmine.web.core.remote.WebPluginsHandler
+import com.gridnine.jasmine.web.core.remote.*
 import com.gridnine.jasmine.web.core.serialization.JsonSerializerJS
 
 

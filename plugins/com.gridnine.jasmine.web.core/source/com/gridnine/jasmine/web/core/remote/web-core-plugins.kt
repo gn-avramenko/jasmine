@@ -8,6 +8,7 @@ package com.gridnine.jasmine.web.core.remote
 import com.gridnine.jasmine.web.core.common.ActivatorJS
 import com.gridnine.jasmine.web.core.common.EnvironmentJS
 import com.gridnine.jasmine.web.core.common.RegistryJS
+import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import kotlinx.browser.document
 import kotlinx.coroutines.await
 import kotlinx.coroutines.delay
@@ -60,3 +61,4 @@ class WebPluginsHandler{
         fun get() = EnvironmentJS.getPublished(WebPluginsHandler::class)
     }
 }
+

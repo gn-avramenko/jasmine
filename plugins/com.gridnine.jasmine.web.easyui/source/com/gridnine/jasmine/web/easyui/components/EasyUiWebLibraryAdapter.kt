@@ -47,6 +47,30 @@ class EasyUiWebLibraryAdapter :WebUiLibraryAdapter{
         return EasyUiWebGridContainer(configure)
     }
 
+    override fun createDateBox(configure: WebDateBoxConfiguration.() -> Unit): WebDateBox {
+        return EasyUiWebDateBox(configure)
+    }
+
+    override fun createDateTimeBox(configure: WebDateTimeBoxConfiguration.() -> Unit): WebDateTimeBox {
+        return EasyUiWebDateTimeBox(configure)
+    }
+
+    override fun createLinkButton(configure: WebLinkButtonConfiguration.() -> Unit): WebLinkButton {
+        return EasyUiWebLinkButton(configure)
+    }
+
+    override fun createNumberBox(configure: WebNumberBoxConfiguration.() -> Unit): WebNumberBox {
+        return EasyUiWebNumberBox(configure)
+    }
+
+    override fun createSelect(configure: WebSelectConfiguration.() -> Unit): WebSelect {
+        return EasyUiWebSelect(configure)
+    }
+
+    override fun createTextBox(configure: WebTextBoxConfiguration.() -> Unit): WebTextBox {
+        return EasyUiWebTextBox(configure)
+    }
+
     override fun showWindow(component: WebNode) {
         if(EnvironmentJS.test){
             return

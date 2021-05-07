@@ -73,6 +73,9 @@
             </cell>
         </row>
     </grid-container>
+    <actions-group id="standard.workspace-tools">
+
+    </actions-group>
 </ui>
 
 

@@ -8,6 +8,7 @@
                 <choice maxOccurs="unbounded" minOccurs="0">
                     <element name="enum" type="tns:enumType"/>
                     <group ref="tns:container"/>
+                    <element name="actions-group" type="tns:actionsGroup"/>
                 </choice>
             </sequence>
         </complexType>
@@ -232,6 +233,27 @@
             </element>
         </choice>
     </group>
+    <complexType name="actionsGroup">
+        <complexContent>
+            <extension base="tns:baseMetaElement">
+                <sequence>
+                    <choice minOccurs="0" maxOccurs="unbounded">
+                        <element name="action" type="tns:actionElement"/>
+                        <element name="action-ref" type="tns:baseMetaElement"/>
+                        <element name="group" type="tns:actionsGroup"/>
+                        <element name="group-ref" type="tns:baseMetaElement"/>
+                    </choice>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType name="actionElement">
+        <complexContent>
+            <extension base="tns:baseMetaElement">
+                <attribute name="actionHandler" type="string" use="required"/>
+            </extension>
+        </complexContent>
+    </complexType>
     <simpleType name="predefined-row-height">
         <restriction base="string">
             <enumeration value="AUTO"/>

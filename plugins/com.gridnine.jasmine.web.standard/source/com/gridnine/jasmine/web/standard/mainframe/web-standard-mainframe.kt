@@ -25,7 +25,7 @@ open class MainFrame(configure: MainFrameConfiguration.()->Unit):BaseWebNodeWrap
 
     private val navigationTree:WebTree
 
-    private val tabs:WebTabsContainer
+    val tabs:WebTabsContainer
 
     private val itemsCache = hashMapOf<String, BaseWorkspaceItemDTJS>()
 
@@ -64,6 +64,7 @@ open class MainFrame(configure: MainFrameConfiguration.()->Unit):BaseWebNodeWrap
         }
         tabs = WebUiLibraryAdapter.get().createTabsContainer {
             fit = true
+            tools.addAll(config.tools)
         }
         _node.setCenterRegion {
             content = tabs
@@ -133,9 +134,12 @@ open class MainFrame(configure: MainFrameConfiguration.()->Unit):BaseWebNodeWrap
     }
 }
 
+
+
 class MainFrameConfiguration{
     lateinit var title:String
     var navigationWidth:Int =200
+    val tools = arrayListOf<WebTabsContainerTool>()
 }
 
 interface MainFrameTabCallback{

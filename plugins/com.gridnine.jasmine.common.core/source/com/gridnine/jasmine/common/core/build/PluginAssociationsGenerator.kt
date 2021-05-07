@@ -14,15 +14,19 @@ internal object PluginAssociationsGenerator {
 
     const val WEB_MAP_KEY = "web-associations"
     const val COMMON_MAP_KEY = "common-associations"
+    const val PLUGINS_MAP_KEY = "plugins-associations"
 
 
     fun generate(pluginsMap: Map<String, File>,  genContext: HashMap<String, Any>, generatedFiles: HashMap<String, MutableList<File>>) {
         val result = hashMapOf<String, HashMap<String,String>>()
         val webMap =   genContext[WEB_MAP_KEY] as Map<String,String>
         val commonMap =   genContext[COMMON_MAP_KEY] as Map<String,String>
+        val pm =   genContext[PLUGINS_MAP_KEY] as Map<String,List<String>>
         webMap.entries.forEach { we ->
             val commonName = we.key.substringBeforeLast("JS")
-            val commonPlugin = commonMap[commonName]!!
+            val commonPlugin = commonMap[commonName]?:let {
+                pm[we.value]!!.last()
+            }
             result.getOrPut(commonPlugin){ hashMapOf()}[we.key] = we.value
         }
         result.entries.forEach {entry ->

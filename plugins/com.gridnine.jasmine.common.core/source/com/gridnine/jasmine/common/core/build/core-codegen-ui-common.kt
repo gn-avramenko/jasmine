@@ -2,6 +2,8 @@
  * Gridnine AB http://www.gridnine.com
  * Project: Jasmine
  *****************************************************************/
+@file:Suppress("UNCHECKED_CAST")
+
 package com.gridnine.jasmine.common.core.build
 
 import com.gridnine.jasmine.common.core.meta.*
@@ -147,13 +149,16 @@ class UiCommonGenerator: CodeGenerator {
     override fun generate(destPlugin: File, sources: List<Pair<File, String?>>, projectName: String, generatedFiles: MutableList<File>, context: MutableMap<String, Any>) {
         val registry = UiMetaRegistry()
         sources.forEach { metaFile -> UiMetadataParser.updateUiMetaRegistry(registry, metaFile.first) }
+        val commonMapping = context[PluginAssociationsGenerator.COMMON_MAP_KEY] as HashMap<String,String>
         val classesData = arrayListOf<BaseGenData>()
+        val pluginId = destPlugin.name
         registry.enums.values.forEach {
             val enumClassData = GenEnumData(it.id)
             it.items.values.forEach { ei ->
                 enumClassData.enumItems.add(ei.id)
             }
             classesData.add(enumClassData)
+            commonMapping[enumClassData.id] = pluginId
         }
         registry.viewModels.values.forEach {vmd ->
             classesData.add(toGenData(vmd))

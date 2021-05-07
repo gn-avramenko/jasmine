@@ -45,6 +45,11 @@ internal class CodeGenRegistry(pluginsMap:Map<String,File>,pluginsRegistry:IAppl
                 .map { sources[it.sourceId]!! }.sortedBy { pluginsIndex[it.sourcePluginId]!! }.map { Pair(it.location, it.factoryClassName) }
     }
 
+    internal fun getSourcePluginsFor(pluginId: String, generatorClassName:String):List<String>{
+        return codeGen.filter { generators[it.generatorId]!!.className == generatorClassName && it.targetPluginId == pluginId }
+                .map { sources[it.sourceId]!! }.sortedBy { pluginsIndex[it.sourcePluginId]!! }.map {it.sourcePluginId }.distinct()
+    }
+
     internal fun getPluginsIds(generatorClassName:String):List<String>{
         return codeGen.filter{ generators[it.generatorId]!!.className == generatorClassName }.map { it.targetPluginId }.distinct()
     }
@@ -68,9 +73,15 @@ object CodeGeneratorTask{
         val genContext = hashMapOf<String,Any>()
         genContext[PluginAssociationsGenerator.COMMON_MAP_KEY] = hashMapOf<String,String>()
         genContext[PluginAssociationsGenerator.WEB_MAP_KEY] = hashMapOf<String,String>()
+        val pm = hashMapOf<String,List<String>>()
+        genContext[PluginAssociationsGenerator.PLUGINS_MAP_KEY] =pm
         registry.getGeneratorsClassNames().forEach {generatorClassName ->
             val generator = ReflectionFactory.get().newInstance<CodeGenerator>(generatorClassName)
             registry.getPluginsIds(generatorClassName).forEach { pluginId ->
+                val sources = registry.getSourcePluginsFor(pluginId, generatorClassName)
+                if(sources.isNotEmpty()) {
+                    pm.putIfAbsent(pluginId, sources)
+                }
                 generator.generate(pluginsMap[pluginId]!!, registry.getSources(pluginId, generatorClassName),  projectName, generatedFiles.computeIfAbsent(pluginId){arrayListOf()},  genContext)
             }
         }
