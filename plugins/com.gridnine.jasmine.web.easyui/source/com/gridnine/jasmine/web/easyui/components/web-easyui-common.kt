@@ -11,6 +11,7 @@ import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
 import com.gridnine.jasmine.web.core.ui.components.WebNode
 
 interface EasyUiComponent: WebNode {
+    fun getId():String
     fun getHtml():String
     fun decorate()
     fun destroy()

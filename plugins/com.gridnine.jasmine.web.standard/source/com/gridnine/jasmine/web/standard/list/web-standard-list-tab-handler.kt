@@ -38,11 +38,14 @@ class WebListMainFrameTabHandler : MainFrameTabHandler<ListWorkspaceItemDTJS>{
 
 }
 
-class ListPanel(we: ListWorkspaceItemDTJS, actions: ActionsGroupWrapper) : BaseWebNodeWrapper<WebBorderContainer>() {
+class ListPanel(we: ListWorkspaceItemDTJS, actions: ActionsGroupWrapper) : BaseWebNodeWrapper<WebBorderContainer>(), EventsSubscriber {
 
     private lateinit var grid :WebDataGrid<BaseIdentityJS>
+    private val objectTypes = arrayListOf<String>()
 
     init {
+        DomainMetaRegistryJS.get().indexes[we.listId+"JS"]?.let { objectTypes.add(it.document) }
+        DomainMetaRegistryJS.get().assets[we.listId+"JS"]?.let { objectTypes.add(it.id) }
         _node = WebUiLibraryAdapter.get().createBorderContainer {
             fit = true
         }
@@ -57,7 +60,7 @@ class ListPanel(we: ListWorkspaceItemDTJS, actions: ActionsGroupWrapper) : BaseW
             width = DefaultUIParameters.controlWidth + 10
             showSplitLine = true
             collapsible = true
-            collapsed = true
+            collapsed = false
             title = "Фильтры"
             content = filterPanel
         }
@@ -145,6 +148,19 @@ class ListPanel(we: ListWorkspaceItemDTJS, actions: ActionsGroupWrapper) : BaseW
             }
         }
         return dataGrid
+    }
+
+    override fun receiveEvent(event: Any) {
+            if(event is ObjectDeleteEvent){
+                if(objectTypes.contains(event.objectType)){
+                    grid.reload()
+                }
+            }
+            if(event is ObjectModificationEvent){
+                if(objectTypes.contains(event.objectType)){
+                    grid.reload()
+                }
+            }
     }
 }
 

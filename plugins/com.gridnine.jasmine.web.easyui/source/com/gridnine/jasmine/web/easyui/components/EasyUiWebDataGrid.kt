@@ -26,6 +26,9 @@ class EasyUiWebDataGrid<E:BaseIntrospectableObjectJS>(configure: WebDataGridConf
         config.configure()
     }
 
+    override fun getId(): String {
+        return "dataGrid${uid}"
+    }
 
     override fun getHtml(): String {
         return "<div id=\"dataGrid${uid}\" style=\"${getSizeAttributes(config)}\"></div>"

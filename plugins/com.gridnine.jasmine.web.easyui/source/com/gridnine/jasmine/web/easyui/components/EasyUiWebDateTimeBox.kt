@@ -45,6 +45,9 @@ class EasyUiWebDateTimeBox(configure: WebDateTimeBoxConfiguration.()->Unit) :Web
         }
     }
 
+    override fun getId(): String {
+        return "dateTimeBox${uid}"
+    }
     override fun getHtml(): String {
         return "<input id=\"dateTimeBox${uid}\" style=\"${getSizeAttributes(config)}\"/>"
     }

@@ -76,6 +76,9 @@
     <actions-group id="standard.workspace-tools">
 
     </actions-group>
+    <actions-group id="standard.list-actions">
+        <action id="deleteSelectedListItems" actionHandler="com.gridnine.jasmine.web.standard.list.DeleteSelectedItemsListButtonHandler"/>
+    </actions-group>
 </ui>
 
 

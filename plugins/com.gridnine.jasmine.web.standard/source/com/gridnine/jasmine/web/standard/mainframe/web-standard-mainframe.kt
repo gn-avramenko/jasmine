@@ -80,6 +80,10 @@ open class MainFrame(configure: MainFrameConfiguration.()->Unit):BaseWebNodeWrap
         }
     }
 
+    fun publishEvent(event:Any){
+        tabs.getTabs().filter { it.content is EventsSubscriber }.forEach { (it.content as EventsSubscriber).receiveEvent(event) }
+    }
+
     suspend fun openTab(obj:Any){
         val handler = RegistryJS.get().get(MainFrameTabHandler.TYPE, obj::class.simpleName!!)!!
         val tabId = "$uid|${handler.getTabId(obj)}"
@@ -146,6 +150,14 @@ interface MainFrameTabCallback{
     fun setTitle(title:String)
     fun close()
 }
+
+interface EventsSubscriber{
+    fun receiveEvent(event:Any)
+}
+
+data class ObjectModificationEvent(val objectType: String, val objectUid:String)
+
+data class ObjectDeleteEvent(val objectType: String, val objectUid:String)
 
 data class MainFrameTabData(var title:String, var content:WebNode)
 

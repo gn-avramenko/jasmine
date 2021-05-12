@@ -28,7 +28,9 @@ class EasyUiWebNumberBox(configure: WebNumberBoxConfiguration.()->Unit) :WebNumb
     }
 
 
-
+    override fun getId(): String {
+        return "numberBox${uid}"
+    }
     override fun getHtml(): String {
         return "<input id=\"numberBox${uid}\" style=\"${getSizeAttributes(config)}\"/>"
     }

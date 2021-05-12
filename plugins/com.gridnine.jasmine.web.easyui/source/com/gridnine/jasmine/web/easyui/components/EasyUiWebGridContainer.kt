@@ -10,11 +10,11 @@ import com.gridnine.jasmine.web.core.ui.components.WebGridContainerConfiguration
 import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutContainer
 
 
-class EasyUiWebGridContainer(configure:WebGridContainerConfiguration.()->Unit) :WebGridLayoutContainer,EasyUiComponent{
+class EasyUiWebGridContainer(configure: WebGridContainerConfiguration.() -> Unit) : WebGridLayoutContainer, EasyUiComponent {
 
     private var initialized = false
 
-    private val uid:String
+    private val uid: String
 
     private val config = WebGridContainerConfiguration()
 
@@ -30,20 +30,62 @@ class EasyUiWebGridContainer(configure:WebGridContainerConfiguration.()->Unit) :
                 ${config.rows.withIndex().joinToString("\n") { generateRow(it)  }}
             </div>
         """.trimIndent()
+//    return  """<table id = "gridLayout$uid" style = "${getWidthAttribute()} ${getHeightAttribute()}" ${if(config.noPadding) "cellspacing=0 cellpadding=0 border=0" else ""}>
+//            <tr>${config.columns.joinToString("\n") {
+//                """<td class = "jasmine-grid-layout-td" style="${if(it.width != null) "width:${it.width}" else ""};" />"""
+//            }}
+//            </tr>
+//        </tr>
+//        ${config.rows.joinToString {row ->
+//            """
+//                <tr style ="${if(row.config.height!=null) "height:${row.config.height}" else ""}">
+//                    ${row.cells.joinToString("\n") { cell ->
+//                    """
+//                        <td class= "jasmine-grid-layout-td", hSpan = ${cell.columnSpan}>
+//                            ${cell.comp?.let { findEasyUiComponent(it).getHtml() }?:""}
+//                        </td>
+//                    }
+//                    """.trimIndent()
+//            }}
+//                </tr>
+//            """.trimIndent()
+//        }}
+//        """.trimIndent()
+//        val table = HtmlUtilsJS.table(id = "gridLayout${uid}", style = "${if (config.width != null) "width:${config.width}" else ""};${if (config.height != null) "height:${config.height}" else ""};") {
+//            tr {
+//                config.columns.forEach {
+//                    td(`class` = "jasmine-grid-layout-td", style = "${if (it.width != null) "width:${it.width}" else ""};") {}
+//                }
+//            }
+//            config.rows.forEach { row ->
+//                tr(style = if (row.config.height != null) "height:${row.config.height}" else "") {
+//                    row.cells.forEach { cell ->
+//                        td(`class` = "jasmine-grid-layout-td", hSpan = cell.columnSpan) {
+//                            (cell.comp?.let { findEasyUiComponent(it).getHtml() } ?: "")()
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        if (config.noPadding) {
+//            table.attributes["cellspacing"] = "0"
+//            table.attributes["cellpadding"] = "0"
+//            table.attributes["border"] = "0"
+//        }
+//        return table.toString()
     }
 
     private fun generateRow(rowData: IndexedValue<GridRow>) :String {
         var columnIndex = 0
-        val result = rowData.value.cells.joinToString ("\n"){cell->
+        return rowData.value.cells.joinToString("\n"){ cell->
             val hRes = """
-              <div style = "grid-row: "${rowData.index + 1}";grid-column: "${columnIndex + 1}"/"${columnIndex + 1 + cell.columnSpan}";" class = "${getClassAttribute(rowData.index, columnIndex)}">
+              <div style = "grid-row: ${rowData.index + 1};grid-column: ${columnIndex + 1}/${columnIndex + 1 + cell.columnSpan};" class = "${getClassAttribute(rowData.index, columnIndex)}">
                 ${cell.comp?.let { findEasyUiComponent(it).getHtml() }?:""}
             </div>
             """.trimIndent()
             columnIndex += cell.columnSpan
             hRes
         }
-        return result
     }
 
     private fun getClassAttribute(rowIndex: Int, columnIndex: Int): String {
@@ -69,14 +111,15 @@ class EasyUiWebGridContainer(configure:WebGridContainerConfiguration.()->Unit) :
 
 
     private fun getWidthAttribute(): String {
-        return if(config.width != null){
+        return if (config.width != null) {
             return """width:${config.width};"""
         } else {
             ""
         }
     }
+
     private fun getHeightAttribute(): String {
-        return if(config.height != null){
+        return if (config.height != null) {
             return """height:${config.height};"""
         } else {
             ""
@@ -84,7 +127,7 @@ class EasyUiWebGridContainer(configure:WebGridContainerConfiguration.()->Unit) :
     }
 
     private fun getNoPaddingAttribute(): String {
-        return if(config.noPadding){
+        return if (config.noPadding) {
             return """grid-column-gap: 0px;grid-row-gap: 0px;"""
         } else {
             ""
@@ -98,9 +141,13 @@ class EasyUiWebGridContainer(configure:WebGridContainerConfiguration.()->Unit) :
     }
 
     override fun destroy() {
-        if(initialized) {
+        if (initialized) {
             config.rows.flatMap { it.cells }.forEach { it.comp?.apply { findEasyUiComponent(this).destroy() } }
         }
+    }
+
+    override fun getId(): String {
+        return "gridLayout$uid"
     }
 
 }

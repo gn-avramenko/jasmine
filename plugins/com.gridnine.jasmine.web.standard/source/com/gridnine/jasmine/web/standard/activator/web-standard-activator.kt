@@ -11,6 +11,7 @@ import com.gridnine.jasmine.web.core.common.RegistryJS
 import com.gridnine.jasmine.web.core.remote.WebCoreMetaRegistriesUpdater
 import com.gridnine.jasmine.web.standard.DomainReflectionUtilsJS
 import com.gridnine.jasmine.web.standard.RestReflectionUtilsJS
+import com.gridnine.jasmine.web.standard.UiReflectionUtilsJS
 import com.gridnine.jasmine.web.standard.list.WebListMainFrameTabHandler
 import com.gridnine.jasmine.web.standard.mainframe.WebActionsHandler
 
@@ -26,6 +27,7 @@ class WebStandardActivator : ActivatorJS{
         EnvironmentJS.publish(WebActionsHandler())
         DomainReflectionUtilsJS.registerWebDomainClasses()
         RestReflectionUtilsJS.registerWebRestClasses()
+        UiReflectionUtilsJS.registerWebUiClasses()
         WebCoreMetaRegistriesUpdater.updateMetaRegistries(pluginId)
         RegistryJS.get().register(WebListMainFrameTabHandler())
         console.log("web standard activated")

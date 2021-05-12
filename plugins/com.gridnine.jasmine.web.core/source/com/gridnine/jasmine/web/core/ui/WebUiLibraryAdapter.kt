@@ -43,6 +43,10 @@ interface WebUiLibraryAdapter{
 
     fun showWindow(component: WebNode)
 
+    fun showNotification(message:String, timeout:Int)
+
+    fun<W:WebNode> showDialog(dialogContent:W, configure:DialogConfiguration<W>.()->Unit):Dialog<W>
+
     companion object{
         fun get() = EnvironmentJS.getPublished(WebUiLibraryAdapter::class)
     }

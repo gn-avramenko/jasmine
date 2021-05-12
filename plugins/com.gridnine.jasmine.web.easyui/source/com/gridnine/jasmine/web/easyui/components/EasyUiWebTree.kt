@@ -189,6 +189,9 @@ class EasyUiWebTree(configure: WebTreeConfiguration.() -> Unit) : WebTree,EasyUi
     }
 
 
+    override fun getId(): String {
+        return "treeDiv${uid}"
+    }
 
     override fun getHtml(): String {
         return """

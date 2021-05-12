@@ -47,6 +47,10 @@ class UiWebGenerator: CodeGenerator {
                         "com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS.get().registerQualifiedName(${it.actionHandler}::class, \"${it.actionHandler}\")"()
                     }
                 }
+                registry.enums.values.forEach {
+                    "com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS.get().registerEnum(\"${it.id}JS\", {${it.id}JS.valueOf(it)})"()
+                    "com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS.get().registerQualifiedName(${it.id}JS::class, \"${it.id}JS\")"()
+                }
             }
         }
         GenUtils.saveFile(destPlugin, "UiReflectionUtilsJS", sb.toString(), generatedFiles)

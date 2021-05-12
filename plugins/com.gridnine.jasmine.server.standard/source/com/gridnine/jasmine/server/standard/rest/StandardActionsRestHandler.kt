@@ -20,7 +20,7 @@ class StandardActionsRestHandler :RestHandler<GetActionsRequest,GetActionsRespon
     }
 
     private fun processGroupDescription(actions: ArrayList<BaseActionDescriptionDT>, groupId: String) {
-        val groupDescription = UiMetaRegistry.get().actions[groupId] as ActionsGroupDescription
+        val groupDescription = (UiMetaRegistry.get().actions[groupId] as ActionsGroupDescription?)?:return
         groupDescription.actionsIds.forEach {actId ->
             when(val action = UiMetaRegistry.get().actions[actId]){
                 is ActionDescription ->{

@@ -7,7 +7,7 @@ package com.gridnine.jasmine.web.core.ui.components
 
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 
-interface WebGridLayoutContainer : WebNode
+interface WebGridLayoutContainer : WebNode,HasId
 
 class WebGridLayoutCell(val comp:WebNode?, val columnSpan:Int =1)
 

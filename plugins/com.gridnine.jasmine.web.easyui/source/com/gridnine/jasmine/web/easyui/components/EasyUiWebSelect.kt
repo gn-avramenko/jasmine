@@ -34,6 +34,9 @@ class EasyUiWebSelect(configure: WebSelectConfiguration.() -> Unit) : WebSelect,
         config.configure()
     }
 
+    override fun getId(): String {
+        return "select${uid}"
+    }
 
     override fun getHtml(): String {
         return "<input  id=\"select${uid}\" style=\"${getSizeAttributes(config)}\"/>"
@@ -65,29 +68,23 @@ class EasyUiWebSelect(configure: WebSelectConfiguration.() -> Unit) : WebSelect,
         }
         ignoreChange = true
         if (config.multiple) {
-            jq.select2("val", selectedValues.map { toId(it)}.toTypedArray())
+            jq.select2("val", selectedValues.map { "${it.id}||${it.text}" }.toTypedArray())
         } else {
-            jq.select2("val", if (selectedValues.isEmpty()) null else toId(selectedValues[0]))
+            jq.select2("val", if (selectedValues.isEmpty()) null else "${selectedValues[0].id}||${selectedValues[0].text}")
         }
         jq.trigger("change")
         ignoreChange =false
     }
 
-    private fun toId(it: SelectItemJS): String {
-        return JSON.stringify(object{
-            val id = it.id
-            val text = it.text
-        })
-    }
+
 
     private fun toSelectItem(id: String): SelectItemJS {
-        val obj:dynamic = JSON.parse(id)
-        return SelectItemJS(obj.id, obj.text)
+        return SelectItemJS(id.substringBeforeLast("||"), id.substringAfterLast("||"))
     }
 
     private fun toItem(it: SelectItemJS): dynamic {
         return object {
-            val id = toId(it)
+            val id = "${it.id}||${it.text}"
             val text = it.text
         }
     }

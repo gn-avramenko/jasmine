@@ -26,6 +26,9 @@ class EasyUiWebLinkButton(configure: WebLinkButtonConfiguration.()->Unit) :WebLi
         config.configure()
     }
 
+    override fun getId(): String {
+        return "linkButton${uid}"
+    }
     override fun getHtml(): String {
         return "<a id=\"linkButton${uid}\" style=\"${if(config.width != null) "width:${config.width}" else ""};${if(config.height != null) "height:${config.height}" else ""}\"/>"
     }

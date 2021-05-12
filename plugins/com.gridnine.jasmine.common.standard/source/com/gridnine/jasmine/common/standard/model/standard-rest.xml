@@ -145,9 +145,25 @@
        <collection id="actions" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.BaseActionDescriptionDT"/>
     </entity>
     <entity id="com.gridnine.jasmine.common.standard.model.rest.AutocompleteItemDT">
-        <property id="document" type="ENTITY_REFERENCE" class-name="com.gridnine.jasmine.server.core.model.common.BaseIdentity" lateinit="true"/>
+        <property id="document" type="ENTITY_REFERENCE" class-name="com.gridnine.jasmine.common.core.model.BaseIdentity" lateinit="true"/>
         <property id="searchFieldValue" type="STRING"/>
     </entity>
+    <entity id="com.gridnine.jasmine.common.standard.rest.DeletedObjectReference">
+        <property id="objectType" type="STRING" lateinit="true"/>
+        <property id="objectUid" type="STRING" lateinit="true"/>
+    </entity>
+
+    <enum id="com.gridnine.jasmine.common.standard.rest.MessageTypeDT">
+        <enum-item id="MESSAGE"/>
+        <enum-item id="WARNING"/>
+        <enum-item id="ERROR"/>
+    </enum>
+
+    <entity id="com.gridnine.jasmine.common.standard.rest.MessageDT">
+        <property id="type" type="ENUM" class-name="com.gridnine.jasmine.common.standard.rest.MessageTypeDT" lateinit="true"/>
+        <property id="message" type="STRING" lateinit="true"/>
+    </entity>
+
     <group id="standard">
         <operation id="getWorkspace" handler="com.gridnine.jasmine.server.standard.rest.StandardGetWorkspaceRestHandler">
             <request id="com.gridnine.jasmine.common.standard.model.rest.GetWorkspaceRequest"/>
@@ -199,6 +215,12 @@
             <response id="com.gridnine.jasmine.server.standard.model.rest.AutocompletetResponse">
                 <collection id="items" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.AutocompleteItemDT"/>
             </response>
+        </operation>
+        <operation id="delete" handler="com.gridnine.jasmine.server.standard.rest.StandardRestDeleteObjectsHandler">
+            <request id="com.gridnine.jasmine.server.standard.model.rest.DeleteObjectsRequest">
+                <collection id="objects" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.rest.DeletedObjectReference"/>
+            </request>
+            <response id="com.gridnine.jasmine.common.standard.model.rest.DeleteObjectsResponse"/>
         </operation>
     </group>
 

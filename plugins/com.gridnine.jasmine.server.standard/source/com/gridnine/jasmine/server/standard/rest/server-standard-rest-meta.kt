@@ -173,7 +173,22 @@ class MetadataRestHandler : RestHandler<GetMetadataRequest, GetMetadataResponse>
         return DatabaseCollectionTypeDT.valueOf(elementType.name)
 
     }
-
+    private fun updateUiMetadata(result: GetMetadataResponse, registry: UiMetaRegistry, pluginId: String?) {
+        registry.enums.values.forEach { en ->
+            if (pluginId != null && WebPluginsAssociationsRegistry.get().associations[en.id] != pluginId) {
+                return@forEach
+            }
+            val ed = UiEnumDescriptionDT()
+            ed.id = en.id + "JS"
+            result.uiEnums.add(ed)
+            en.items.values.forEach {
+                val item = UiEnumItemDescriptionDT()
+                item.id = it.id
+                item.displayName = it.getDisplayName()
+                ed.items.add(item)
+            }
+        }
+    }
     private fun updateCustomMetadata(result: GetMetadataResponse, registry: CustomMetaRegistry, pluginId: String?) {
         registry.enums.values.forEach { en ->
             if (pluginId != null && WebPluginsAssociationsRegistry.get().associations[en.id] != pluginId) {
@@ -291,6 +306,7 @@ class MetadataRestHandler : RestHandler<GetMetadataRequest, GetMetadataResponse>
                 updateCustomMetadata(result, CustomMetaRegistry.get(), request.pluginId)
                 updateDomainMetadata(result, DomainMetaRegistry.get(), request.pluginId)
                 updateRestMetadata(result, RestMetaRegistry.get(), request.pluginId)
+                updateUiMetadata(result, UiMetaRegistry.get(), request.pluginId)
                 result
             }
         }

@@ -86,6 +86,9 @@ class EasyUiWebTabsContainer(configure: WebTabsContainerConfiguration.()->Unit) 
         uiComp.decorate()
     }
 
+    override fun getId(): String {
+        return "tabs${uid}"
+    }
 
     override fun getHtml(): String {
         return "<div id=\"tabs${uid}\" style=\"${getSizeAttributes(config)}\"></div>"

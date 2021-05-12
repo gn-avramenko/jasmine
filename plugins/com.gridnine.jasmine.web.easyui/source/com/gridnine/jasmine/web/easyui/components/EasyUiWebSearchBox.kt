@@ -29,6 +29,9 @@ class EasyUiWebSearchBox(configure: WebSearchBoxConfiguration.()->Unit) :WebSear
         config.configure()
     }
 
+    override fun getId(): String {
+        return "searchBox${uid}"
+    }
     override fun getHtml(): String {
         return "<input id=\"searchBox${uid}\" style=\"${getSizeAttributes(config)}\"/>"
     }

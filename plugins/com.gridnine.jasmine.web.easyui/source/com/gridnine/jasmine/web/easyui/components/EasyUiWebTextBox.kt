@@ -25,6 +25,9 @@ class EasyUiWebTextBox(configure: WebTextBoxConfiguration.()->Unit) :WebTextBox,
         config.configure()
     }
 
+    override fun getId(): String {
+        return "textBox${uid}"
+    }
     override fun getHtml(): String {
         return "<input id=\"textBox${uid}\" style=\"${getSizeAttributes(config)}\"/>"
     }

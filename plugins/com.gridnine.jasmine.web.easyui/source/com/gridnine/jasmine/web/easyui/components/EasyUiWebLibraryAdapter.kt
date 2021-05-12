@@ -3,6 +3,8 @@
  * Project: Jasmine
  *****************************************************************/
 
+@file:Suppress("unused")
+
 package com.gridnine.jasmine.web.easyui.components
 
 import com.gridnine.jasmine.common.core.model.BaseIntrospectableObjectJS
@@ -79,6 +81,65 @@ class EasyUiWebLibraryAdapter :WebUiLibraryAdapter{
             jQuery("body").html(it.getHtml())
             it.decorate()
         }
+    }
+
+    override fun showNotification(message: String, timeout: Int) {
+            jQuery.messager.show(object{
+                val msg = message
+                val timeout = timeout
+                val showType = "show"
+            })
+    }
+
+
+    override fun <W : WebNode> showDialog(dialogContent: W, configure: DialogConfiguration<W>.() -> Unit): Dialog<W> {
+        val conf = DialogConfiguration<W>()
+        conf.configure()
+        val compJq = jQuery("body")
+        val zkComp = findEasyUiComponent(dialogContent)
+        compJq.append(zkComp.getHtml())
+        val jq = jQuery("#${zkComp.getId()}")
+        val result = object:Dialog<W>{
+            override fun close() {
+                zkComp.destroy()
+                jq.dialog("close")
+                jq.dialog("destroy")
+                jq.remove()
+            }
+
+            override fun getContent(): W {
+                return dialogContent
+            }
+
+        }
+        val buttons = conf.buttons.map { db->
+            object {
+                val text = db.displayName
+                val handler = {
+                    db.handler.invoke(result)
+                }
+            }
+        }.toTypedArray()
+        val dialogConfig = object{
+            val title = conf.title
+            val modal = true
+            val buttons = buttons
+        }.asDynamic()
+        if(conf.expandToMainFrame){
+            val bd = jQuery("body")
+            dialogConfig.width = bd.width() - 100
+            dialogConfig.height = bd.height() - 100
+        }
+        zkComp.decorate()
+        jq.dialog(dialogConfig)
+        if(!conf.expandToMainFrame){
+            jq.dialog("resize",object{
+                val width = jq.width()+20
+//                val width = "auto"
+                val height = "auto"
+            })
+        }
+        return result
     }
 
 }

@@ -38,6 +38,10 @@ class EasyUiWebBorderContainer(configure: WebBorderContainerConfiguration.()->Un
         return "<div id = \"borderLayout$uid\"></div>"
     }
 
+    override fun getId(): String {
+        return "borderLayout$uid"
+    }
+
     private fun getSelector() = "#borderLayout$uid"
 
     override fun decorate() {

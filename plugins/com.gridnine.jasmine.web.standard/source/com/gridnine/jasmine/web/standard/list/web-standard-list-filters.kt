@@ -139,7 +139,7 @@ internal class DateTimeIntervalEditor:BaseWebNodeWrapper<WebGridLayoutContainer>
     lateinit var toDateTimeBox:DateTimeBoxWidget
     init {
         _node = WebUiLibraryAdapter.get().createGridContainer {
-            width = "100%"
+            width = "100px"
             column("auto")
             column("100%")
             row {
