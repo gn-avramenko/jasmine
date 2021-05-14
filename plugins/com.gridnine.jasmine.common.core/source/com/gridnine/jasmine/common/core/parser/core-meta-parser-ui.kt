@@ -15,6 +15,47 @@ import java.util.*
 
 object UiMetadataParser {
 
+    fun updateWebMessages(registry: WebMessagesMetaRegistry, uiRegistry:UiMetaRegistry){
+        uiRegistry.views.values.forEach {vd->
+            val bundle = WebMessagesBundleDescription(vd.id)
+            registry.bundles[bundle.id] = bundle
+            when(vd.viewType){
+                ViewType.GRID_CONTAINER ->{
+                    vd as GridContainerDescription
+                    vd.rows.forEach {row ->
+                        row.cells.forEach{cell ->
+                            val message = WebMessageDescription(cell.id)
+                            message.displayNames.putAll(cell.displayNames)
+                            bundle.messages[cell.id] = message
+                            val widget = cell.widget
+                            if(widget is TableBoxWidgetDescription){
+                                val bundle2 = WebMessagesBundleDescription(widget.id)
+                                registry.bundles[widget.id] = bundle2
+                                widget.columns.forEach{column ->
+                                    val message2 = WebMessageDescription(column.id)
+                                    message2.displayNames.putAll(column.displayNames)
+                                    bundle2.messages[column.id] = message2
+                                }
+                            }
+                        }
+                    }
+                }
+                ViewType.TILE_SPACE ->{
+                    vd as TileSpaceDescription
+                    vd.overviewDescription?.let {
+                        val message = WebMessageDescription("overview")
+                        message.displayNames.putAll(it.displayNames)
+                        bundle.messages[it.id] = message
+                    }
+                    vd.tiles.forEach {
+                        val message = WebMessageDescription(it.id)
+                        message.displayNames.putAll(it.displayNames)
+                        bundle.messages[it.id] = message
+                    }
+                }
+            }
+        }
+    }
 
     fun updateUiMetaRegistry(registry: UiMetaRegistry, meta: File) {
         val (node, localizations) = ParserUtils.parseMeta(meta)
@@ -42,6 +83,12 @@ object UiMetadataParser {
         node.children("actions-group").forEach { child ->
             updateActionsGroup(child, registry, localizations).apply { root = true }
         }
+        node.children("display-handler").forEach { child ->
+            val id = ParserUtils.getIdAttribute(child)
+            registry.displayHandlers[id] = DisplayHandlerDescription(id).apply {
+                className = child.attributes["class-name"]!!
+            }
+        }
         processContainers(registry, node, null, localizations)
 
 
@@ -50,18 +97,21 @@ object UiMetadataParser {
     private fun updateActionsGroup(elm: XmlNode, registry: UiMetaRegistry, localizations: Map<String, Map<Locale, String>>):ActionsGroupDescription {
         val groupId = ParserUtils.getIdAttribute(elm)
         val groupDescription = registry.actions.getOrPut(groupId) { ActionsGroupDescription(groupId) } as ActionsGroupDescription
-        ParserUtils.updateLocalizations(groupDescription, null, localizations)
+        ParserUtils.updateLocalizationsForId(groupDescription, groupDescription.id, localizations)
         elm.children.forEach {child ->
             when(child.name){
                 "action" ->{
                     val actionId = ParserUtils.getIdAttribute(child)
                     val action = registry.actions.getOrPut(actionId) { ActionDescription(actionId) } as ActionDescription
-                    action.actionHandler = child.attributes["actionHandler"]!!
+                    action.actionHandler = child.attributes["action-handler"]!!
+                    action.displayHandlerRef = child.attributes["display-handler-ref"]
                     ParserUtils.updateLocalizationsForId(action, actionId, localizations)
                     groupDescription.actionsIds.add(actionId)
                 }
                 "group" ->{
-                    updateActionsGroup(child, registry, localizations)
+                    updateActionsGroup(child, registry, localizations).also {
+                        groupDescription.actionsIds.add(it.id)
+                    }
                 }
                 "group-ref","action-ref" ->  groupDescription.actionsIds.add(ParserUtils.getIdAttribute(child))
             }

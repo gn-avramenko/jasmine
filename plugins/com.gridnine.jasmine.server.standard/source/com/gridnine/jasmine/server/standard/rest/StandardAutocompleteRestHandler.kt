@@ -15,9 +15,9 @@ import com.gridnine.jasmine.common.core.storage.SortOrder
 import com.gridnine.jasmine.common.core.storage.Storage
 import com.gridnine.jasmine.common.standard.model.rest.AutocompleteItemDT
 import com.gridnine.jasmine.common.standard.model.rest.AutocompleteRequest
+import com.gridnine.jasmine.common.standard.model.rest.AutocompletetResponse
 import com.gridnine.jasmine.server.core.rest.RestHandler
 import com.gridnine.jasmine.server.core.rest.RestOperationContext
-import com.gridnine.jasmine.server.standard.model.rest.AutocompletetResponse
 
 class StandardAutocompleteRestHandler: RestHandler<AutocompleteRequest, AutocompletetResponse>{
     override fun service(request: AutocompleteRequest, ctx: RestOperationContext): AutocompletetResponse {

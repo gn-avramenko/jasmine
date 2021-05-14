@@ -59,6 +59,9 @@ class GeneralSelectWidget(configure:GeneralSelectWidgetConfiguration.()->Unit):B
         }
     }
 
+    fun setReadonly(value:Boolean){
+        _node.setEnabled(!value)
+    }
     fun showValidation(value:String?){
         _node.showValidation(value)
     }

@@ -21,7 +21,10 @@ abstract class BaseActionWrapper{
 
 class ActionWrapper:BaseActionWrapper(){
     internal lateinit var actionHandlerClassName:String
+    internal var displayHandlerClassName:String? = null
     private var actionHandler:Any? = null
+    private var displayHandler:Any? = null
+    private var displayHandlerLoaded = false
     suspend fun<E:Any> getActionHandler():E{
         if(actionHandler == null){
             if(!ReflectionFactoryJS.get().isRegistered(actionHandlerClassName)){
@@ -31,6 +34,18 @@ class ActionWrapper:BaseActionWrapper(){
 
         }
         return actionHandler as E
+    }
+    suspend fun<E:Any> getDisplayHandler():E?{
+        if(!displayHandlerLoaded){
+            if(displayHandlerClassName != null){
+                if(!ReflectionFactoryJS.get().isRegistered(displayHandlerClassName!!)){
+                    WebPluginsHandler.get().loadPluginForClass(displayHandlerClassName!!)
+                }
+                displayHandler = ReflectionFactoryJS.get().getFactory(displayHandlerClassName!!).invoke()
+            }
+            displayHandlerLoaded = true
+        }
+        return displayHandler as E?
     }
 }
 
@@ -58,6 +73,7 @@ class WebActionsHandler{
                 val action = ActionWrapper()
                 action.id = it.id
                 action.actionHandlerClassName = it.actionHandler
+                action.displayHandlerClassName = it.displayHandler
                 action.displayName = it.displayName
                 result.actions.add(action)
                 return@forEach

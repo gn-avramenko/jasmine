@@ -47,6 +47,12 @@ interface WebUiLibraryAdapter{
 
     fun<W:WebNode> showDialog(dialogContent:W, configure:DialogConfiguration<W>.()->Unit):Dialog<W>
 
+    fun createMenuButton(configure:WebMenuButtonConfiguration.()->Unit):WebMenuButton
+
+    fun createBooleanBox(configure:WebBooleanBoxConfiguration.()->Unit):WebBooleanBox
+
+    fun createTableBox(configure:WebTableBoxConfiguration.()->Unit):WebTableBox
+
     companion object{
         fun get() = EnvironmentJS.getPublished(WebUiLibraryAdapter::class)
     }

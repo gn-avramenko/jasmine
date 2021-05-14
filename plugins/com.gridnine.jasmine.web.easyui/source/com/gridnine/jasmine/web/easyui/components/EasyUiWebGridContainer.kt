@@ -79,7 +79,7 @@ class EasyUiWebGridContainer(configure: WebGridContainerConfiguration.() -> Unit
         var columnIndex = 0
         return rowData.value.cells.joinToString("\n"){ cell->
             val hRes = """
-              <div style = "grid-row: ${rowData.index + 1};grid-column: ${columnIndex + 1}/${columnIndex + 1 + cell.columnSpan};" class = "${getClassAttribute(rowData.index, columnIndex)}">
+              <div style = "grid-row: ${rowData.index + 1};grid-column: ${columnIndex + 1}/${columnIndex + 1 + cell.columnSpan};" class = "${getClassAttribute(cell.sClass, rowData.index, columnIndex)}">
                 ${cell.comp?.let { findEasyUiComponent(it).getHtml() }?:""}
             </div>
             """.trimIndent()
@@ -88,11 +88,13 @@ class EasyUiWebGridContainer(configure: WebGridContainerConfiguration.() -> Unit
         }
     }
 
-    private fun getClassAttribute(rowIndex: Int, columnIndex: Int): String {
-        return if(config.noPadding){
-            "jasmine-grid-container-no-padding"
-        } else {
-            "${if (rowIndex == 0) "jasmine-grid-container-first-row " else "jasmine-grid-container-other-row "}${if (columnIndex == 0) "jasmine-grid-container-left-column" else "jasmine-grid-container-other-column"}"
+    private fun getClassAttribute(sClass:String?, rowIndex: Int, columnIndex: Int): String {
+        return when{
+            sClass != null -> sClass
+            config.noPadding -> {
+                "jasmine-grid-container-no-padding"
+            }
+            else ->"${if (rowIndex == 0) "jasmine-grid-container-first-row " else "jasmine-grid-container-other-row "}${if (columnIndex == 0) "jasmine-grid-container-left-column" else "jasmine-grid-container-other-column"}"
         }
     }
 

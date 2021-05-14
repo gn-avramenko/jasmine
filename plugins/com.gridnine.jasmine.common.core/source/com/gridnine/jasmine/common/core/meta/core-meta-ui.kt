@@ -196,7 +196,13 @@ open class BaseActionDescription(id:String) :BaseModelElementDescription(id)
 
 class ActionDescription(id:String) :BaseActionDescription(id){
     lateinit var actionHandler:String
+    var displayHandlerRef:String? = null
 }
+
+class DisplayHandlerDescription(id:String) :BaseModelElementDescription(id){
+    lateinit var className:String
+}
+
 class ActionsGroupDescription(id:String) :BaseActionDescription(id){
     val actionsIds = arrayListOf<String>()
     var root:Boolean = false
@@ -215,6 +221,7 @@ class UiMetaRegistry: Disposable {
 
     val actions = linkedMapOf<String, BaseActionDescription>()
 
+    val displayHandlers = linkedMapOf<String, DisplayHandlerDescription>()
     override fun dispose() {
         wrapper.dispose()
     }

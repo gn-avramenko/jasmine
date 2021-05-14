@@ -6,6 +6,10 @@
 
 package com.gridnine.jasmine.common.core.model
 
+import com.gridnine.jasmine.web.core.common.EnvironmentJS
+import com.gridnine.jasmine.web.core.ui.components.WebNode
+import kotlin.reflect.KClass
+
 
 abstract class BaseVMJS:BaseIntrospectableObjectJS()
 abstract class BaseVSJS:BaseIntrospectableObjectJS()
@@ -295,3 +299,4 @@ abstract class BaseTableBoxVVJS:BaseVVJS(){
         super.setValue(propertyName, value)
     }
 }
+

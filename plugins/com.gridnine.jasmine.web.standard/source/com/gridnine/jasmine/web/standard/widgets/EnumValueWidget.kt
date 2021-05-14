@@ -68,6 +68,9 @@ class EnumValueWidget<E:Enum<E>>(configure:EnumValueWidgetConfiguration<E>.()->U
     }
 
 
+    fun setReadonly(value:Boolean){
+        _node.setEnabled(!value)
+    }
     fun configure(config: EnumSelectBoxConfigurationJS?){
         config?.let {
             _node.setEnabled(!config.notEditable)

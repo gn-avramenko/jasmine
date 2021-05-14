@@ -11,10 +11,10 @@ import com.gridnine.jasmine.common.core.model.BaseDocument
 import com.gridnine.jasmine.common.core.model.ObjectReference
 import com.gridnine.jasmine.common.core.reflection.ReflectionFactory
 import com.gridnine.jasmine.common.core.storage.Storage
+import com.gridnine.jasmine.common.standard.model.rest.DeleteObjectsRequest
 import com.gridnine.jasmine.common.standard.model.rest.DeleteObjectsResponse
 import com.gridnine.jasmine.server.core.rest.RestHandler
 import com.gridnine.jasmine.server.core.rest.RestOperationContext
-import com.gridnine.jasmine.server.standard.model.rest.DeleteObjectsRequest
 
 class StandardRestDeleteObjectsHandler :RestHandler<DeleteObjectsRequest, DeleteObjectsResponse>{
     override fun service(request: DeleteObjectsRequest, ctx: RestOperationContext): DeleteObjectsResponse {

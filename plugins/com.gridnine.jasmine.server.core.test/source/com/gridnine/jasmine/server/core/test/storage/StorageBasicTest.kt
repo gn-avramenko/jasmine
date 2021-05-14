@@ -33,7 +33,7 @@ class StorageBasicTest : StorageTestBase() {
         doc.enumCollection.addAll(arrayListOf(TestEnum.ITEM1, TestEnum.ITEM2))
         doc.entityRefCollection.addAll(arrayListOf(EntityUtils.toReference(doc), EntityUtils.toReference(doc)))
         doc.enumProperty = TestEnum.ITEM1
-        Storage.get().saveDocument(doc)
+        Storage.get().saveDocument(doc, comment = "version1")
         Storage.get().searchDocuments(TestDomainDocumentIndex::class,
                 searchQuery {
                     select(TestDomainDocumentIndex.entityReferenceProperty)

@@ -7,4 +7,5 @@
     <generator id="web-rest" className="com.gridnine.jasmine.common.core.build.WebRestGenerator" priority="5"/>
     <generator id="web-domain" className="com.gridnine.jasmine.common.core.build.WebDomainGenerator" priority="6"/>
     <generator id="web-ui" className="com.gridnine.jasmine.common.core.build.UiWebGenerator" priority="7"/>
+    <generator id="web-l10n" className="com.gridnine.jasmine.common.core.build.WebMessagesGenerator" priority="8"/>
 </code-gen>

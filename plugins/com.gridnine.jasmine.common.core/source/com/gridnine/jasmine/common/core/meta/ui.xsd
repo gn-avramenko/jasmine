@@ -9,6 +9,7 @@
                     <element name="enum" type="tns:enumType"/>
                     <group ref="tns:container"/>
                     <element name="actions-group" type="tns:actionsGroup"/>
+                    <element name="display-handler" type="tns:displayHandlerElement"/>
                 </choice>
             </sequence>
         </complexType>
@@ -250,7 +251,16 @@
     <complexType name="actionElement">
         <complexContent>
             <extension base="tns:baseMetaElement">
-                <attribute name="actionHandler" type="string" use="required"/>
+                <attribute name="action-handler" type="string" use="required"/>
+                <attribute name="display-handler-ref" type="string"/>
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType name="displayHandlerElement">
+        <complexContent>
+            <extension base="tns:baseMetaElement">
+                <attribute name="id" type="string" use="required"/>
+                <attribute name="class-name" type="string" use="required"/>
             </extension>
         </complexContent>
     </complexType>

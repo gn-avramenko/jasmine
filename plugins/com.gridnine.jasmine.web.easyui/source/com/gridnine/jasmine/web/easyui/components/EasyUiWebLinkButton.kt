@@ -19,6 +19,7 @@ class EasyUiWebLinkButton(configure: WebLinkButtonConfiguration.()->Unit) :WebLi
     private val uid = MiscUtilsJS.createUUID()
 
     private var enabled=true
+    private var visible=true
     private  var jq:dynamic = null
     private lateinit var handler:suspend ()->Unit
     private val config = WebLinkButtonConfiguration()
@@ -45,6 +46,7 @@ class EasyUiWebLinkButton(configure: WebLinkButtonConfiguration.()->Unit) :WebLi
         })
         initialized = true
         updateState()
+        updateVisibility()
     }
 
     override fun destroy() {
@@ -57,6 +59,17 @@ class EasyUiWebLinkButton(configure: WebLinkButtonConfiguration.()->Unit) :WebLi
 
     }
 
+    private fun updateVisibility() {
+        if(visible){
+            jq.show()
+            val function = if(enabled) "enable" else "disable"
+            jq.linkbutton(function)
+        } else {
+            jq.hide()
+        }
+
+    }
+
     override fun setHandler(handler: suspend () -> Unit) {
         this.handler = handler
     }
@@ -65,6 +78,13 @@ class EasyUiWebLinkButton(configure: WebLinkButtonConfiguration.()->Unit) :WebLi
         enabled = value
         if(initialized){
             updateState()
+        }
+    }
+
+    override fun setVisible(value: Boolean) {
+        visible = value
+        if(initialized){
+            updateVisibility()
         }
     }
 

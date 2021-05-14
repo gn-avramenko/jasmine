@@ -8,8 +8,8 @@ package com.gridnine.jasmine.web.standard.list
 import com.gridnine.jasmine.common.core.model.BaseAssetJS
 import com.gridnine.jasmine.common.core.model.BaseIdentityJS
 import com.gridnine.jasmine.common.core.model.BaseIndexJS
+import com.gridnine.jasmine.common.standard.model.rest.DeleteObjectsRequestJS
 import com.gridnine.jasmine.common.standard.rest.DeletedObjectReferenceJS
-import com.gridnine.jasmine.server.standard.model.rest.DeleteObjectsRequestJS
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.remote.launch
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS

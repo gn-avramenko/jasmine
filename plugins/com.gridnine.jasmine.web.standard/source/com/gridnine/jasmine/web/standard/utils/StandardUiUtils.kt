@@ -7,14 +7,31 @@
 
 package com.gridnine.jasmine.web.standard.utils
 
+import com.gridnine.jasmine.common.core.meta.UiMetaRegistryJS
+import com.gridnine.jasmine.common.core.model.BaseVVJS
 import com.gridnine.jasmine.common.standard.rest.MessageDTJS
 import com.gridnine.jasmine.common.standard.rest.MessageTypeDTJS
+import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.DefaultUIParameters
 import com.gridnine.jasmine.web.standard.widgets.EnumValueWidget
 import kotlin.reflect.KClass
 
 object StandardUiUtils {
+
+    fun hasValidationErrors(vv: BaseVVJS?): Boolean {
+        if(vv == null){
+            return false
+        }
+        val description  = UiMetaRegistryJS.get().viewValidations[ReflectionFactoryJS.get().getQualifiedClassName(vv::class)]!!
+        for (property in description.properties.values) {
+            val value = vv.getValue(property.id)
+            if (value!= null){
+                return true
+            }
+        }
+        return false
+    }
 
     fun showMessage(message: MessageDTJS?){
         if(message == null){

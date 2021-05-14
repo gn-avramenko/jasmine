@@ -29,7 +29,7 @@ class WebDomainGenerator : CodeGenerator {
         if (descr is IndexDescription) {
             result.codeInjections.add("""
             companion object{
-                val objectId = "${descr.document}JS"
+                val objectId = "${descr.document}"
                 val indexId = "${descr.id}JS"
             }
         """.trimIndent())

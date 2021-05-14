@@ -188,6 +188,78 @@ class MetadataRestHandler : RestHandler<GetMetadataRequest, GetMetadataResponse>
                 ed.items.add(item)
             }
         }
+        registry.viewModels.values.forEach {ed->
+            if (pluginId != null && WebPluginsAssociationsRegistry.get().associations[ed.id] != pluginId) {
+                return@forEach
+            }
+            val entityDescriptionDT = VMEntityDescriptionDT()
+            entityDescriptionDT.id = ed.id +"JS"
+            entityDescriptionDT.extendsId = ed.extendsId?.let { it+"JS" }
+            ed.properties.values.forEach { pd ->
+                val propertyDescriptionDT = VMPropertyDescriptionDT()
+                propertyDescriptionDT.className = getClassName(pd.className)
+                propertyDescriptionDT.id = pd.id
+                propertyDescriptionDT.nonNullable = pd.nonNullable
+                propertyDescriptionDT.type = VMPropertyTypeDT.valueOf(pd.type.name)
+                entityDescriptionDT.properties.add(propertyDescriptionDT)
+            }
+            ed.collections.values.forEach { cd ->
+                val collectionDescriptionDT = VMCollectionDescriptionDT()
+                collectionDescriptionDT.elementClassName = getClassName(cd.elementClassName)
+                collectionDescriptionDT.id = cd.id
+                collectionDescriptionDT.elementType = VMCollectionTypeDT.valueOf(cd.elementType.name)
+                entityDescriptionDT.collections.add(collectionDescriptionDT)
+            }
+            result.viewModels.add(entityDescriptionDT)
+        }
+        registry.viewSettings.values.forEach {ed->
+            if (pluginId != null && WebPluginsAssociationsRegistry.get().associations[ed.id] != pluginId) {
+                return@forEach
+            }
+            val entityDescriptionDT = VSEntityDescriptionDT()
+            entityDescriptionDT.id = ed.id+"JS"
+            entityDescriptionDT.extendsId = ed.extendsId?.let { it+"JS" }
+            ed.properties.values.forEach { pd ->
+                val propertyDescriptionDT = VSPropertyDescriptionDT()
+                propertyDescriptionDT.className = getClassName(pd.className)
+                propertyDescriptionDT.id = pd.id
+                propertyDescriptionDT.type = VSPropertyTypeDT.valueOf(pd.type.name)
+                propertyDescriptionDT.lateInit = pd.lateInit
+                entityDescriptionDT.properties.add(propertyDescriptionDT)
+            }
+            ed.collections.values.forEach { cd ->
+                val collectionDescriptionDT = VSCollectionDescriptionDT()
+                collectionDescriptionDT.elementClassName = getClassName(cd.elementClassName)
+                collectionDescriptionDT.id = cd.id
+                collectionDescriptionDT.elementType = VSCollectionTypeDT.valueOf(cd.elementType.name)
+                entityDescriptionDT.collections.add(collectionDescriptionDT)
+            }
+            result.viewSettings.add(entityDescriptionDT)
+        }
+        registry.viewValidations.values.forEach {ed->
+            if (pluginId != null && WebPluginsAssociationsRegistry.get().associations[ed.id] != pluginId) {
+                return@forEach
+            }
+            val entityDescriptionDT = VVEntityDescriptionDT()
+            entityDescriptionDT.id = ed.id+"JS"
+            entityDescriptionDT.extendsId = ed.extendsId?.let { it+"JS" }
+            ed.properties.values.forEach { pd ->
+                val propertyDescriptionDT = VVPropertyDescriptionDT()
+                propertyDescriptionDT.className = getClassName(pd.className)
+                propertyDescriptionDT.id = pd.id
+                propertyDescriptionDT.type = VVPropertyTypeDT.valueOf(pd.type.name)
+                propertyDescriptionDT.lateInit = pd.lateInit
+                entityDescriptionDT.properties.add(propertyDescriptionDT)
+            }
+            ed.collections.values.forEach { cd ->
+                val collectionDescriptionDT = VVCollectionDescriptionDT()
+                collectionDescriptionDT.elementClassName = getClassName(cd.elementClassName)
+                collectionDescriptionDT.id = cd.id
+                collectionDescriptionDT.elementType = VVCollectionTypeDT.valueOf(cd.elementType.name)
+                entityDescriptionDT.collections.add(collectionDescriptionDT)
+            }
+            result.viewValidations.add(entityDescriptionDT)
+        }
     }
     private fun updateCustomMetadata(result: GetMetadataResponse, registry: CustomMetaRegistry, pluginId: String?) {
         registry.enums.values.forEach { en ->
@@ -307,9 +379,28 @@ class MetadataRestHandler : RestHandler<GetMetadataRequest, GetMetadataResponse>
                 updateDomainMetadata(result, DomainMetaRegistry.get(), request.pluginId)
                 updateRestMetadata(result, RestMetaRegistry.get(), request.pluginId)
                 updateUiMetadata(result, UiMetaRegistry.get(), request.pluginId)
+                updateWebMessages(result, WebMessagesMetaRegistry.get(), request.pluginId)
                 result
             }
         }
     }
+
+    private fun updateWebMessages(result: GetMetadataResponse, registry: WebMessagesMetaRegistry, pluginId: String?) {
+        registry.bundles.values.forEach {bundle ->
+            if (pluginId != null && WebPluginsAssociationsRegistry.get().associations["web-messages-${bundle.id}"] != pluginId) {
+                return@forEach
+            }
+            val b = WebMessagesBundleDT()
+            b.id = bundle.id
+            result.webMessages.add(b)
+            bundle.messages.values.forEach {message->
+                val m = WebMessageDT()
+                m.id = message.id
+                m.displayName = message.getDisplayName()
+                b.messages.add(m)
+            }
+        }
+    }
+
 
 }

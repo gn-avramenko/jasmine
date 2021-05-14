@@ -2,4 +2,5 @@
     <generate source="standard-rest" targetPlugin="com.gridnine.jasmine.web.standard" generator="web-rest"/>
     <generate source="standard-domain" targetPlugin="com.gridnine.jasmine.web.standard" generator="web-domain"/>
     <generate source="standard-ui" targetPlugin="com.gridnine.jasmine.web.standard" generator="web-ui"/>
+    <generate source="standard-web-messages" targetPlugin="com.gridnine.jasmine.web.standard" generator="web-l10n"/>
 </code-gen>

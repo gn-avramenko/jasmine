@@ -4,6 +4,7 @@
     <source id="standard-ui" location="source/com/gridnine/jasmine/common/standard/model/standard-ui.xml" />
     <source id="core-rest" location="source/com/gridnine/jasmine/common/standard/model/core-rest.xml" />
     <source id="standard-rest" location="source/com/gridnine/jasmine/common/standard/model/standard-rest.xml" />
+    <source id="standard-web-messages" location="source/com/gridnine/jasmine/common/standard/model/standard-web-messages.xml" />
     <generate source="standard-domain" targetPlugin="com.gridnine.jasmine.common.standard" generator="common-domain"/>
     <generate source="standard-l10n" targetPlugin="com.gridnine.jasmine.common.standard" generator="common-l10n" />
     <generate source="standard-ui" targetPlugin="com.gridnine.jasmine.common.standard" generator="common-ui" />

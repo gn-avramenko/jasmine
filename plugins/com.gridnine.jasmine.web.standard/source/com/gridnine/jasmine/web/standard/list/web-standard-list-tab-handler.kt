@@ -20,6 +20,7 @@ import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.*
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import com.gridnine.jasmine.web.standard.StandardRestClient
+import com.gridnine.jasmine.web.standard.WebMessages
 import com.gridnine.jasmine.web.standard.editor.OpenObjectData
 import com.gridnine.jasmine.web.standard.mainframe.*
 
@@ -60,8 +61,8 @@ class ListPanel(we: ListWorkspaceItemDTJS, actions: ActionsGroupWrapper) : BaseW
             width = DefaultUIParameters.controlWidth + 10
             showSplitLine = true
             collapsible = true
-            collapsed = false
-            title = "Фильтры"
+            collapsed = true
+            title = WebMessages.Filters
             content = filterPanel
         }
         _node.setCenterRegion{
@@ -233,7 +234,7 @@ internal class FilterPanel(private val listItem:ListWorkspaceItemDTJS, private v
             row {
                 cell(WebUiLibraryAdapter.get().createLinkButton {
                     width = "100%"
-                    title = "Применить"
+                    title = WebMessages.apply
                 }.apply {
                     setHandler {
                         applyCallback.invoke()
@@ -241,7 +242,7 @@ internal class FilterPanel(private val listItem:ListWorkspaceItemDTJS, private v
                 })
                 cell(WebUiLibraryAdapter.get().createLinkButton {
                     width = "100%"
-                    title = "Cбросить"
+                    title =  WebMessages.reset
                 }.apply {
                     setHandler {
                         filters.forEach {

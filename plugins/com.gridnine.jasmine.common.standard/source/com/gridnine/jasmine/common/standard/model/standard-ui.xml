@@ -76,8 +76,13 @@
     <actions-group id="standard.workspace-tools">
 
     </actions-group>
+    <display-handler id="edit-state-handler" class-name="com.gridnine.jasmine.web.standard.editor.ObjectEditorEditStateActionDisplayHandler"/>
     <actions-group id="standard.list-actions">
-        <action id="deleteSelectedListItems" actionHandler="com.gridnine.jasmine.web.standard.list.DeleteSelectedItemsListButtonHandler"/>
+        <action id="deleteSelectedListItems" action-handler="com.gridnine.jasmine.web.standard.list.DeleteSelectedItemsListButtonHandler"/>
+    </actions-group>
+    <actions-group id="standard.editor-actions">
+        <action id="standard.saveObject" action-handler="com.gridnine.jasmine.web.standard.editor.SaveObjectEditorObjectButtonHandler" display-handler-ref="edit-state-handler"/>
+        <action id="standard.showVersions" action-handler="com.gridnine.jasmine.web.standard.editor.ShowVersionsEditorObjectButtonHandler"/>
     </actions-group>
 </ui>
 

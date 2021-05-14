@@ -28,6 +28,9 @@ class StandardActionsRestHandler :RestHandler<GetActionsRequest,GetActionsRespon
                     ad.id = action.id
                     ad.displayName = action.getDisplayName()!!
                     ad.actionHandler = action.actionHandler
+                    if(action.displayHandlerRef != null) {
+                        ad.displayHandler = UiMetaRegistry.get().displayHandlers[action.displayHandlerRef]!!.className
+                    }
                     actions.add(ad)
                 }
                 is ActionsGroupDescription ->{

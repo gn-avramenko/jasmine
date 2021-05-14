@@ -12,6 +12,10 @@ import com.gridnine.jasmine.web.core.remote.WebCoreMetaRegistriesUpdater
 import com.gridnine.jasmine.web.standard.DomainReflectionUtilsJS
 import com.gridnine.jasmine.web.standard.RestReflectionUtilsJS
 import com.gridnine.jasmine.web.standard.UiReflectionUtilsJS
+import com.gridnine.jasmine.web.standard.WebMessagesInitializerJS
+import com.gridnine.jasmine.web.standard.editor.ObjectEditorMainFrameTabHandler
+import com.gridnine.jasmine.web.standard.editor.ObjectVersionViewerMainFrameTabHandler
+import com.gridnine.jasmine.web.standard.editor.WebEditorInterceptorsRegistry
 import com.gridnine.jasmine.web.standard.list.WebListMainFrameTabHandler
 import com.gridnine.jasmine.web.standard.mainframe.WebActionsHandler
 
@@ -25,11 +29,15 @@ fun main(){
 class WebStandardActivator : ActivatorJS{
     override suspend fun activate() {
         EnvironmentJS.publish(WebActionsHandler())
+        EnvironmentJS.publish(WebEditorInterceptorsRegistry())
+        WebCoreMetaRegistriesUpdater.updateMetaRegistries(pluginId)
         DomainReflectionUtilsJS.registerWebDomainClasses()
         RestReflectionUtilsJS.registerWebRestClasses()
         UiReflectionUtilsJS.registerWebUiClasses()
-        WebCoreMetaRegistriesUpdater.updateMetaRegistries(pluginId)
+        WebMessagesInitializerJS.initialize()
         RegistryJS.get().register(WebListMainFrameTabHandler())
+        RegistryJS.get().register(ObjectEditorMainFrameTabHandler())
+        RegistryJS.get().register(ObjectVersionViewerMainFrameTabHandler())
         console.log("web standard activated")
     }
 

@@ -157,6 +157,7 @@ class JdbcDatabase : Database {
         jdbcData.version = obj.metadata.version
         jdbcData.modified = obj.metadata.modified
         jdbcData.modifiedBy = obj.metadata.modifiedBy
+        jdbcData.comment = obj.metadata.comment
         jdbcData.setValue(BaseDocument.revision, obj.revision)
         jdbcData.data = JdbcBlobWrapper {
             oid = existingObjectData?.oid

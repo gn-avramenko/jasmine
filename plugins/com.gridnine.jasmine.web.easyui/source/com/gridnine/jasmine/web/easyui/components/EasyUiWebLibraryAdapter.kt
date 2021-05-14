@@ -142,6 +142,18 @@ class EasyUiWebLibraryAdapter :WebUiLibraryAdapter{
         return result
     }
 
+    override fun createMenuButton(configure: WebMenuButtonConfiguration.() -> Unit): WebMenuButton {
+        return EasyUiWebMenuButton(configure)
+    }
+
+    override fun createBooleanBox(configure: WebBooleanBoxConfiguration.() -> Unit): WebBooleanBox {
+        return EasyUiWebBooleanBox(configure)
+    }
+
+    override fun createTableBox(configure: WebTableBoxConfiguration.() -> Unit): WebTableBox {
+        return EasyUiWebTableBox(configure)
+    }
+
 }
 
 
