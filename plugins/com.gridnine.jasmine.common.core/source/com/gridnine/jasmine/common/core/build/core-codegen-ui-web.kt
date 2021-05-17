@@ -53,8 +53,15 @@ class UiWebGenerator: CodeGenerator {
             webMapping[it.id] = pluginId
             webMapping["web-messages-${it.id}"] = pluginId
             if(it is GridContainerDescription){
-                GridWebEditorGenerator.generateEditor(it,destPlugin, projectName, generatedFiles)
+                GridWebEditorGenerator.generateEditor(it,destPlugin, projectName, generatedFiles, context)
             }
+            if(it is NavigatorDescription){
+                WebNavigatorGenerator.generateEditor(it,destPlugin, projectName, generatedFiles)
+            }
+            if(it is TileSpaceDescription){
+                WebTileSpaceGenerator.generateEditor(it,destPlugin, projectName, generatedFiles,context)
+            }
+
         }
         GenUtils.generateClasses(classesData, destPlugin, projectName, generatedFiles)
         generateActionsIds(registry,destPlugin, generatedFiles)

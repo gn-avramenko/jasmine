@@ -53,6 +53,12 @@ interface WebUiLibraryAdapter{
 
     fun createTableBox(configure:WebTableBoxConfiguration.()->Unit):WebTableBox
 
+    fun createDivsContainer(configure: WebDivsContainerConfiguration.() -> Unit):WebDivsContainer
+
+    fun createTilesContainer(configure: WebTilesContainerConfiguration.() -> Unit):WebTilesContainer
+
+    fun createPanel(configure: WebPanelConfiguration.() -> Unit):WebPanel
+
     companion object{
         fun get() = EnvironmentJS.getPublished(WebUiLibraryAdapter::class)
     }

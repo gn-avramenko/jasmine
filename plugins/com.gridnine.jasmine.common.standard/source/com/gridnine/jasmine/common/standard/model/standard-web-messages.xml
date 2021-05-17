@@ -32,6 +32,7 @@
     <message id="Workspace"/>
     <message id="Filters"/>
     <message id="Columns"/>
+    <message id="Object_saved"/>
 </messages-bundle>
 
 

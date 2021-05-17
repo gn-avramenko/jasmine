@@ -11,7 +11,8 @@ import java.lang.StringBuilder
 
 
 object GridWebEditorGenerator {
-    fun generateEditor(description: GridContainerDescription, baseDir: File, projectName: String, generatedFiles: MutableList<File>) {
+    fun generateEditor(description: GridContainerDescription, baseDir: File, projectName: String, generatedFiles: MutableList<File>, context: MutableMap<String, Any>) {
+        val webMapping = context[PluginAssociationsGenerator.WEB_MAP_KEY] as HashMap<String, String>
         val sb = StringBuilder()
         GenUtils.generateHeader(sb, description.id, projectName)
         GenUtils.classBuilder(sb, "class ${GenUtils.getSimpleClassName(description.id)}:com.gridnine.jasmine.web.standard.editor.WebEditor<${description.id}VMJS,${description.id}VSJS,${description.id}VVJS>, com.gridnine.jasmine.web.core.ui.components.HasId, com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper<com.gridnine.jasmine.web.core.ui.components.WebGridLayoutContainer>()") {
@@ -62,6 +63,7 @@ object GridWebEditorGenerator {
                                     """width = "100%""""()
                                     "showToolsColumn = true"()
                                     "vmFactory = {${widget.id}VMJS()}"()
+                                    webMapping["web-messages-${widget.id}"] = baseDir.name
                                     widget.columns.forEach { column ->
                                         val colWidget = column.widget
                                         when (colWidget.widgetType) {
@@ -87,7 +89,7 @@ object GridWebEditorGenerator {
                                             }
                                             WidgetType.ENTITY_SELECT_BOX -> {
                                                 colWidget as EntitySelectBoxWidgetDescription
-                                                """column("${column.id}", com.gridnine.jasmine.web.standard.widgets.EntitySelectBoxWidgetDescriptionJS(false, "${colWidget.objectId}"), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
+                                                """column("${column.id}", com.gridnine.jasmine.web.standard.widgets.EntitySelectBoxWidgetDescriptionJS(false, "${colWidget.objectId}JS"), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
                                             }
                                             WidgetType.GENERAL_SELECT_BOX -> {
                                                 colWidget as GeneralSelectBoxWidgetDescription
@@ -95,7 +97,7 @@ object GridWebEditorGenerator {
                                             }
                                             WidgetType.ENUM_SELECT_BOX -> {
                                                 colWidget as EnumSelectBoxWidgetDescription
-                                                """column("${column.id}", com.gridnine.jasmine.web.standard.widgets.EnumSelectBoxWidgetDescriptionJS(false, "${colWidget.enumId}"), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
+                                                """column("${column.id}", com.gridnine.jasmine.web.standard.widgets.EnumSelectBoxWidgetDescriptionJS(false, "${colWidget.enumId}JS"), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
                                             }
                                             WidgetType.DATE_BOX -> {
                                                 colWidget as DateBoxWidgetDescription

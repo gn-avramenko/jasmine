@@ -154,6 +154,18 @@ class EasyUiWebLibraryAdapter :WebUiLibraryAdapter{
         return EasyUiWebTableBox(configure)
     }
 
+    override fun createDivsContainer(configure: WebDivsContainerConfiguration.() -> Unit): WebDivsContainer {
+        return EasyUiWebDivsContainer(configure)
+    }
+
+    override fun createTilesContainer(configure: WebTilesContainerConfiguration.() -> Unit): WebTilesContainer {
+        return EasyUiWebTilesContainer(configure)
+    }
+
+    override fun createPanel(configure: WebPanelConfiguration.() -> Unit): WebPanel {
+        return EasyUiWebPanel(configure)
+    }
+
 }
 
 

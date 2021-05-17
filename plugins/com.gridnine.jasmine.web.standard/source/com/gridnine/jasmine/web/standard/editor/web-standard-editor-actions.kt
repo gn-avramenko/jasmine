@@ -19,29 +19,30 @@ import com.gridnine.jasmine.web.standard.WebMessages
 import com.gridnine.jasmine.web.standard.utils.StandardUiUtils
 import kotlin.js.Date
 
-class ObjectEditorEditStateActionDisplayHandler:ObjectEditorActionDisplayHandler<WebEditor<*,*,*>>{
+class ObjectEditorEditStateActionDisplayHandler : ObjectEditorActionDisplayHandler<WebEditor<*, *, *>> {
     override fun isEnabled(editor: ObjectEditor<WebEditor<*, *, *>>): Boolean {
         return !editor.isReadonly()
     }
 }
 
-class SaveObjectEditorObjectButtonHandler: ObjectEditorTool<WebEditor<BaseVMJS,BaseVSJS,BaseVVJS>> {
-    override suspend fun invoke(editor: ObjectEditor<WebEditor<BaseVMJS,BaseVSJS,BaseVVJS>>) {
+class SaveObjectEditorObjectButtonHandler : ObjectEditorTool<WebEditor<BaseVMJS, BaseVSJS, BaseVVJS>> {
+    override suspend fun invoke(editor: ObjectEditor<WebEditor<BaseVMJS, BaseVSJS, BaseVVJS>>) {
         val vm = editor.getEditor().getData()
         val request = SaveEditorDataRequestJS()
         request.objectId = editor.objectType
-        request.objectUid =editor.objectUid
+        request.objectUid = editor.objectUid
         request.viewModel = vm
         val response = StandardRestClient.standard_standard_saveEditorData(request)
         val validation = response.viewValidation
 
-            if(StandardUiUtils.hasValidationErrors(validation)){
-                editor.getEditor().showValidation(validation)
-                return
-            }
+        if (StandardUiUtils.hasValidationErrors(validation)) {
+            editor.getEditor().showValidation(validation)
+            return
+        }
         editor.getEditor().readData(response.viewModel!!, response.viewSettings)
         editor.updateTitle(response.title)
         response.newUid?.let { editor.objectUid = it }
+        StandardUiUtils.showMessage(WebMessages.Object_saved)
     }
 }
 

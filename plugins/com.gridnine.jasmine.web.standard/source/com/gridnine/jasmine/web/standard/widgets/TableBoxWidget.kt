@@ -14,14 +14,13 @@ import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import kotlin.js.Date
 
 class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJS>(configure:TableBoxWidgetConfiguration<VM,VS>.()->Unit):BaseWebNodeWrapper<WebTableBox>(){
-    internal val delegate:WebTableBox
     internal val rowsAdditionalData = arrayListOf<TableBoxWidgetRowAdditionalData>()
     private val config = TableBoxWidgetConfiguration<VM,VS>()
     private lateinit var createButton:WebLinkButton
     private var readonly = false
     init {
         config.configure()
-        delegate = WebUiLibraryAdapter.get().createTableBox{
+        _node = WebUiLibraryAdapter.get().createTableBox{
             width = config.width
             height = config.height
             config.columns.forEach {
@@ -58,7 +57,7 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
             components.add(WebTableBoxCell(comp))
         }
         components.add(WebTableBoxCell(TableBoxWidgetToolsPanel( this@TableBoxWidget, rowId)))
-        delegate.addRow(idx, components)
+        _node.addRow(idx, components)
         rowsAdditionalData.add(idx, TableBoxWidgetRowAdditionalData(uuid, rowId))
         updateToolsVisibility()
     }
@@ -66,7 +65,7 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
 
     fun getData(): List<VM> {
         val result = arrayListOf<VM>()
-        val rows = delegate.getRows()
+        val rows = _node.getRows()
         rows.withIndex().forEach {(rowIdx, row) ->
             val vm = config.vmFactory.invoke()
             vm.uid = rowsAdditionalData[rowIdx].uid
@@ -98,9 +97,9 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
         val size = vm.size
         for( n in rowsAdditionalData.size-1 downTo  size){
             rowsAdditionalData.removeAt(if(size > 0) size-1 else 0)
-            delegate.removeRow(if(size > 0) size-1 else 0)
+            _node.removeRow(if(size > 0) size-1 else 0)
         }
-        val existingRows = delegate.getRows()
+        val existingRows = _node.getRows()
         vm.withIndex().forEach{(idx, value) ->
             if(rowsAdditionalData.size> idx){
                 rowsAdditionalData[idx].uid = value.uid
@@ -122,7 +121,7 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
                 }
                 val rowId = MiscUtilsJS.createUUID()
                 components.add(WebTableBoxCell(TableBoxWidgetToolsPanel( this@TableBoxWidget, rowId)))
-                delegate.addRow(null, components)
+                _node.addRow(null, components)
                 rowsAdditionalData.add(TableBoxWidgetRowAdditionalData(value.uid, rowId))
             }
         }
@@ -131,7 +130,7 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
 
     internal fun updateToolsVisibility(){
         createButton.setEnabled(!readonly)
-        val rows = delegate.getRows()
+        val rows = _node.getRows()
         val size = rows.size
         rows.withIndex().forEach { (idx, row) ->
             val comp = row.last()
@@ -222,7 +221,7 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
 
     fun setReadonly(value: Boolean) {
         readonly = value
-        val rows = delegate.getRows()
+        val rows = _node.getRows()
         rows.forEach { row ->
             val size = row.size
             row.withIndex().forEach {(idx, comp) ->
@@ -247,7 +246,7 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
     }
 
     fun showValidation(vv: List<VV>) {
-        val rows = delegate.getRows()
+        val rows = _node.getRows()
         rows.withIndex().forEach { (rowIdx, row) ->
             val validation = vv[rowIdx]
             val size = row.size
@@ -313,7 +312,7 @@ class TableBoxWidgetToolsPanel( private val tableBox:TableBoxWidget<*,*,*>, priv
             val idx = tableBox.rowsAdditionalData.indexOfFirst { rowId == it.id }
             val item = tableBox.rowsAdditionalData.removeAt(idx)
             tableBox.rowsAdditionalData.add(idx-1, item)
-            tableBox.delegate.moveRow(idx, idx-1)
+            tableBox.getNode().moveRow(idx, idx-1)
             tableBox.updateToolsVisibility()
         }
         downButton = WebUiLibraryAdapter.get().createLinkButton{
@@ -323,7 +322,7 @@ class TableBoxWidgetToolsPanel( private val tableBox:TableBoxWidget<*,*,*>, priv
             val idx = tableBox.rowsAdditionalData.indexOfFirst { rowId == it.id }
             val item = tableBox.rowsAdditionalData.removeAt(idx)
             tableBox.rowsAdditionalData.add(idx+1, item)
-            tableBox.delegate.moveRow(idx, idx+1)
+            tableBox.getNode().moveRow(idx, idx+1)
             tableBox.updateToolsVisibility()
         }
         plusButton = WebUiLibraryAdapter.get().createLinkButton{
@@ -339,7 +338,7 @@ class TableBoxWidgetToolsPanel( private val tableBox:TableBoxWidget<*,*,*>, priv
         minusButton.setHandler {
             val idx = tableBox.rowsAdditionalData.indexOfFirst { rowId == it.id }
             tableBox.rowsAdditionalData.removeAt(idx)
-            tableBox.delegate.removeRow(idx)
+            tableBox.getNode().removeRow(idx)
             tableBox.updateToolsVisibility()
         }
         _node = WebUiLibraryAdapter.get().createGridContainer {
