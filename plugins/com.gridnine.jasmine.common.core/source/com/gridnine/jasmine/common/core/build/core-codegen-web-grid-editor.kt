@@ -2,6 +2,8 @@
  * Gridnine AB http://www.gridnine.com
  * Project: Jasmine
  *****************************************************************/
+@file:Suppress("UNCHECKED_CAST")
+
 package com.gridnine.jasmine.common.core.build
 
 import com.gridnine.jasmine.common.core.meta.*
@@ -130,7 +132,7 @@ object GridWebEditorGenerator {
                 } else description.columns
                 val fixedWidth = columns.map {
                     when (it.predefinedWidth) {
-                        PredefinedColumnWidth.STANDARD -> 300
+                        PredefinedColumnWidth.STANDARD -> 200
                         PredefinedColumnWidth.REMAINING -> null
                         PredefinedColumnWidth.CUSTOM -> if (it.customWidth?.contains("px") == true) it.customWidth.substringBeforeLast("px").toInt() else null
                     }
@@ -222,13 +224,13 @@ object GridWebEditorGenerator {
             }
 
             blankLine()
-            "override fun showValidation(validation: ${description.id}VVJS?) " {
+            "override fun showValidation(vv: ${description.id}VVJS?) " {
                 description.rows.forEach { row ->
                     row.cells.forEach cell@{ cell ->
                         if (cell.widget.widgetType == WidgetType.HIDDEN) {
                             return@cell
                         }
-                        "validation?.${cell.id}?.let{${cell.id}Widget.showValidation(it)}"()
+                        "vv?.${cell.id}?.let{${cell.id}Widget.showValidation(it)}"()
                     }
                 }
             }

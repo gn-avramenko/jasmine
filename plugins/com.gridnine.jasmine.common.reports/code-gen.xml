@@ -5,5 +5,5 @@
     <generate source="reports-model-misc" targetPlugin="com.gridnine.jasmine.common.reports" generator="common-misc"/>
     <source id="reports-rest" location="source/com/gridnine/jasmine/common/reports/model/reports-rest.xml"/>
     <generate source="reports-rest" targetPlugin="com.gridnine.jasmine.common.reports" generator="common-rest"/>
-
+    <source id="reports-ui" location="source/com/gridnine/jasmine/common/reports/model/reports-ui.xml"/>
 </code-gen>

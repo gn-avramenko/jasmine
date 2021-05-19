@@ -53,6 +53,7 @@ object UiMetadataParser {
                         bundle.messages[it.id] = message
                     }
                 }
+                else -> {}
             }
         }
     }
@@ -82,6 +83,16 @@ object UiMetadataParser {
         }
         node.children("actions-group").forEach { child ->
             updateActionsGroup(child, registry, localizations).apply { root = true }
+        }
+        node.children("options-group").forEach { child ->
+            val id = ParserUtils.getIdAttribute(child)
+            val optionsGroup = registry.optionsGroups.getOrPut(id){OptionsGroupDescription(id)}
+            child.children("option").forEach {optionElm ->
+                val optionId = ParserUtils.getIdAttribute(optionElm)
+                val option = OptionDescription(optionId)
+                optionsGroup.options.add(option)
+                ParserUtils.updateLocalizationsForId(option, ParserUtils.getCaptionAttribute(optionElm), localizations)
+            }
         }
         node.children("display-handler").forEach { child ->
             val id = ParserUtils.getIdAttribute(child)

@@ -192,6 +192,11 @@ class NavigatorVariantDescription(val modelId:String, val viewId: String)
 
 class NavigatorDescription(id:String, val variants:MutableList<NavigatorVariantDescription> = arrayListOf()):BaseViewDescription(id, ViewType.NAVIGATOR)
 
+open class OptionDescription(id:String) :BaseModelElementDescription(id)
+class OptionsGroupDescription(id:String) :BaseModelElementDescription(id){
+    val options = arrayListOf<OptionDescription>()
+}
+
 open class BaseActionDescription(id:String) :BaseModelElementDescription(id)
 
 class ActionDescription(id:String) :BaseActionDescription(id){
@@ -220,6 +225,8 @@ class UiMetaRegistry: Disposable {
     val viewValidations = linkedMapOf<String, VVEntityDescription>()
 
     val actions = linkedMapOf<String, BaseActionDescription>()
+
+    val optionsGroups = linkedMapOf<String, OptionsGroupDescription>()
 
     val displayHandlers = linkedMapOf<String, DisplayHandlerDescription>()
     override fun dispose() {

@@ -3,6 +3,8 @@
  * Project: Jasmine
  *****************************************************************/
 
+@file:Suppress("UNCHECKED_CAST")
+
 package com.gridnine.jasmine.web.standard.mainframe
 
 import com.gridnine.jasmine.common.standard.model.rest.ActionDescriptionDTJS
@@ -28,7 +30,7 @@ class ActionWrapper:BaseActionWrapper(){
     suspend fun<E:Any> getActionHandler():E{
         if(actionHandler == null){
             if(!ReflectionFactoryJS.get().isRegistered(actionHandlerClassName)){
-                WebPluginsHandler.get().loadPluginForClass(actionHandlerClassName)
+                WebPluginsHandler.get().loadPluginForId(actionHandlerClassName)
             }
             actionHandler = ReflectionFactoryJS.get().getFactory(actionHandlerClassName).invoke()
 
@@ -39,7 +41,7 @@ class ActionWrapper:BaseActionWrapper(){
         if(!displayHandlerLoaded){
             if(displayHandlerClassName != null){
                 if(!ReflectionFactoryJS.get().isRegistered(displayHandlerClassName!!)){
-                    WebPluginsHandler.get().loadPluginForClass(displayHandlerClassName!!)
+                    WebPluginsHandler.get().loadPluginForId(displayHandlerClassName!!)
                 }
                 displayHandler = ReflectionFactoryJS.get().getFactory(displayHandlerClassName!!).invoke()
             }

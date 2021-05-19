@@ -65,6 +65,17 @@ object WebCoreMetaRegistriesUpdater {
             }
             uiRegistry.viewValidations.put(entityDescription.id, entityDescription)
         }
+        it.optionsGroups?.forEach{ itJs ->
+            val groupId = itJs.id
+            val group  = uiRegistry.optionsGroups.getOrPut(groupId){
+                OptionsGroupDescriptionJS(groupId)
+            }
+            itJs.options.forEach{optJs ->
+                group.options.add(OptionDescriptionJS(optJs.id).apply {
+                    displayName = optJs.displayName
+                })
+            }
+        }
     }
 
     private fun updateRestRegistry(it: dynamic) {

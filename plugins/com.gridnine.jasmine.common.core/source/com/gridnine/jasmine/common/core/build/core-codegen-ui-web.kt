@@ -65,6 +65,7 @@ class UiWebGenerator: CodeGenerator {
         }
         GenUtils.generateClasses(classesData, destPlugin, projectName, generatedFiles)
         generateActionsIds(registry,destPlugin, generatedFiles)
+        generateOptionsGroupsIds(registry,destPlugin, generatedFiles, context)
         generateUiReflectionUtils(registry, classes, destPlugin, projectName, generatedFiles, context)
     }
 
@@ -252,7 +253,27 @@ class UiWebGenerator: CodeGenerator {
             }
         }
     }
-
+    private fun generateOptionsGroupsIds(registry: UiMetaRegistry, destPlugin: File, generatedFiles: MutableList<File>, context: MutableMap<String, Any>) {
+        if(registry.optionsGroups.isEmpty()){
+            return
+        }
+        val pluginId = destPlugin.name
+        val map =context.get(PluginAssociationsGenerator.WEB_MAP_KEY) as MutableMap<String,String>
+        registry.optionsGroups.values.forEach {group ->
+            group.options.forEach { option ->
+                map["options-${group.id}-${option.id}"] = pluginId
+            }
+        }
+        val sb = StringBuilder()
+        GenUtils.generateHeader(sb, "${pluginId}.OptionsGroupsIds", pluginId)
+        GenUtils.classBuilder(sb, "object OptionsIds") {
+            registry.optionsGroups.keys.forEach {groupId->
+                blankLine()
+                """val ${groupId.replace(".","_").replace("-","_")} = "$groupId" """()
+            }
+        }
+        GenUtils.saveFile(destPlugin, "OptionsGroupsIds", sb.toString(), generatedFiles)
+    }
     private fun generateActionsIds(registry: UiMetaRegistry, destPlugin: File, generatedFiles: MutableList<File>) {
         val actionGroupsIds = registry.actions.values.filterIsInstance<ActionsGroupDescription>().filter { it.root }.map { it.id }
         if(actionGroupsIds.isEmpty()){

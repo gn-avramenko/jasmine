@@ -98,6 +98,11 @@ class VVEntityDescriptionJS(id: String) : BaseModelElementDescriptionJS(id) {
     val collections = linkedMapOf<String, VVCollectionDescriptionJS>()
 }
 
+open class OptionDescriptionJS(id:String) :BaseModelElementDescriptionJS(id)
+class OptionsGroupDescriptionJS(id:String) :BaseModelElementDescriptionJS(id){
+    val options = arrayListOf<OptionDescriptionJS>()
+}
+
 class UiMetaRegistryJS {
     val enums = linkedMapOf<String, UiEnumDescriptionJS>()
 
@@ -107,6 +112,7 @@ class UiMetaRegistryJS {
 
     val viewValidations = linkedMapOf<String, VVEntityDescriptionJS>()
 
+    val optionsGroups  = linkedMapOf<String, OptionsGroupDescriptionJS>()
     companion object {
         fun get() = EnvironmentJS.getPublished(UiMetaRegistryJS::class)
     }

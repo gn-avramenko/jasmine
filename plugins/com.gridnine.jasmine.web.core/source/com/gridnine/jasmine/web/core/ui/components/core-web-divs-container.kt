@@ -12,6 +12,7 @@ interface WebDivsContainer : WebNode {
     fun removeDiv(id:String)
     fun getDiv(id:String): WebNode?
     fun clear()
+    fun getActiveDivId():String?
 }
 
 class WebDivsContainerConfiguration: BaseWebComponentConfiguration()

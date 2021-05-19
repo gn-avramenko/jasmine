@@ -245,6 +245,10 @@
         <collection id="items" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.UiEnumItemDescriptionDT"/>
     </entity>
 
+    <entity id="com.gridnine.jasmine.common.standard.model.rest.OptionDescriptionDT"  extends="com.gridnine.jasmine.common.standard.model.rest.BaseModelElementDescriptionDT"/>
+    <entity id="com.gridnine.jasmine.common.standard.model.rest.OptionsGroupDescriptionDT"  extends="com.gridnine.jasmine.common.standard.model.rest.BaseModelElementDescriptionDT">
+        <collection id="options" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.OptionDescriptionDT"/>
+    </entity>
 
     
     <group id="core">
@@ -266,11 +270,12 @@
                 <collection id="viewValidations" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.VVEntityDescriptionDT"/>
                 <collection id="webMessages" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.WebMessagesBundleDT"/>
                 <collection id="operations" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.RestOperationDescriptionDT"/>
+                <collection id="optionsGroups" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.OptionsGroupDescriptionDT"/>
             </response>
         </operation>
         <operation id="getPluginUrl" handler="com.gridnine.jasmine.server.standard.rest.StandardGetPluginUrlHandler">
             <request id="com.gridnine.jasmine.common.standard.model.rest.GetPluginUrlRequest">
-                <property id="className" type="STRING" lateinit="true"/>
+                <property id="id" type="STRING" lateinit="true"/>
             </request>
             <response id="com.gridnine.jasmine.common.standard.model.rest.GetPluginUrlResponse">
                 <property id="url" type="STRING" lateinit="true"/>

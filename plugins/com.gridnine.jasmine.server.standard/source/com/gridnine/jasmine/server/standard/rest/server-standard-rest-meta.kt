@@ -260,6 +260,21 @@ class MetadataRestHandler : RestHandler<GetMetadataRequest, GetMetadataResponse>
             }
             result.viewValidations.add(entityDescriptionDT)
         }
+        registry.optionsGroups.values.forEach { og ->
+            if(og.options.any { pluginId == null || pluginId == WebPluginsAssociationsRegistry.get().associations["options-${og.id}-${it.id}"]}){
+                val group = OptionsGroupDescriptionDT()
+                group.id = og.id
+                result.optionsGroups.add(group)
+                og.options.forEach {
+                    if(pluginId == null || pluginId == WebPluginsAssociationsRegistry.get().associations["options-${og.id}-${it.id}"]){
+                        val option = OptionDescriptionDT()
+                        option.id = it.id
+                        option.displayName = it.getDisplayName()
+                        group.options.add(option)
+                    }
+                }
+            }
+        }
     }
     private fun updateCustomMetadata(result: GetMetadataResponse, registry: CustomMetaRegistry, pluginId: String?) {
         registry.enums.values.forEach { en ->

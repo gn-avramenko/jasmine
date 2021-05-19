@@ -2,6 +2,8 @@
  * Gridnine AB http://www.gridnine.com
  * Project: Jasmine
  *****************************************************************/
+@file:Suppress("UNCHECKED_CAST")
+
 package com.gridnine.jasmine.common.core.build
 
 import com.gridnine.jasmine.common.core.meta.TileSpaceDescription

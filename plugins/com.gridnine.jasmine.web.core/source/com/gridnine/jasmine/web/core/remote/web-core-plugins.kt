@@ -8,7 +8,6 @@ package com.gridnine.jasmine.web.core.remote
 import com.gridnine.jasmine.web.core.common.ActivatorJS
 import com.gridnine.jasmine.web.core.common.EnvironmentJS
 import com.gridnine.jasmine.web.core.common.RegistryJS
-import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import kotlinx.browser.document
 import kotlinx.coroutines.await
 import kotlinx.coroutines.delay
@@ -23,9 +22,9 @@ class WebPluginsHandler{
 
     private val pluginsStatuses = hashMapOf<String, PluginStatus>()
 
-    suspend fun loadPluginForClass(className:String){
+    suspend fun loadPluginForId(id:String){
         val res = RpcManager.get().postDynamic("core_core_getPluginUrl","""{
-         "className":"$className"   
+         "id":"$id"   
         }""".trimIndent())
         val url = res.url as String
         val pluginId = res.pluginId as String

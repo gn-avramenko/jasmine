@@ -210,6 +210,14 @@
                 <collection id="actions" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.BaseActionDescriptionDT"/>
             </response>
         </operation>
+        <operation id="getOptions" handler="com.gridnine.jasmine.server.standard.rest.StandardOptionsRestHandler">
+            <request id="com.gridnine.jasmine.common.standard.model.rest.GetOptionsRequest">
+                <property id="groupId" type="STRING" lateinit="true"/>
+            </request>
+            <response id="com.gridnine.jasmine.common.standard.model.rest.GetOptionsResponse">
+                <collection id="options" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.core.model.SelectItem"/>
+            </response>
+        </operation>
         <operation id="autocomplete" handler="com.gridnine.jasmine.server.standard.rest.StandardAutocompleteRestHandler">
             <request id="com.gridnine.jasmine.common.standard.model.rest.AutocompleteRequest">
                 <property id="listId" type="STRING" lateinit="true"/>
@@ -280,6 +288,13 @@
                 <property id="viewModel" type="ENTITY" class-name="com.gridnine.jasmine.common.core.model.BaseVM" lateinit="true"/>
                 <property id="viewSettings" type="ENTITY" class-name="com.gridnine.jasmine.common.core.model.BaseVS" lateinit="true"/>
             </response>
+        </operation>
+        <operation id="saveWorkspace" handler="com.gridnine.jasmine.server.standard.rest.StandardSaveWorkspaceRestHandler">
+            <request id="com.gridnine.jasmine.common.standard.model.rest.SaveWorkspaceRequest">
+                <property id="workspace" type="ENTITY" class-name="com.gridnine.jasmine.common.standard.model.rest.WorkspaceDT" lateinit="true"/>
+                <collection id="updatedItems" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.BaseWorkspaceItemDT"/>
+            </request>
+            <response id="com.gridnine.jasmine.common.standard.model.rest.SaveWorkspaceResponse"/>
         </operation>
     </group>
 

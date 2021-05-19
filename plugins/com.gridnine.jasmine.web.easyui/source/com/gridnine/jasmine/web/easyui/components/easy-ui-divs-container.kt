@@ -18,19 +18,27 @@ class EasyUiWebDivsContainer(configure:WebDivsContainerConfiguration.()->Unit) :
     private var activeComponentId:String? = null
     private var jq:dynamic = null
     private val conf = WebDivsContainerConfiguration()
+    private val idsMapping = hashMapOf<String,String>()
     init {
         conf.configure()
     }
     override fun addDiv(id: String, content: WebNode) {
-        divsMap[id] = WebDivData("div${id}${MiscUtilsJS.createUUID()}", content, null)
+        val clDiv = cleanupId(id)
+        idsMapping[clDiv] = id
+        divsMap[clDiv] = WebDivData("div${clDiv}${MiscUtilsJS.createUUID()}", content, null)
+    }
+
+    private fun cleanupId(id: String): String {
+        return id.replace(".","_")
     }
 
     override fun show(id: String) {
-        if(activeComponentId != id){
+        val clDiv = cleanupId(id)
+        if(activeComponentId != clDiv){
             if(initialized){
-                showInternal(id)
+                showInternal(clDiv)
             }
-            activeComponentId = id
+            activeComponentId = clDiv
         }
     }
 
@@ -57,22 +65,27 @@ class EasyUiWebDivsContainer(configure:WebDivsContainerConfiguration.()->Unit) :
     }
 
     override fun removeDiv(id: String) {
-        divsMap[id]?.let {
+        val clDiv = cleanupId(id)
+        divsMap[clDiv]?.let {
             if(it.jq != null){
                 findEasyUiComponent(it.content).destroy()
                 it.jq.remove()
             }
-            divsMap.remove(id)
+            divsMap.remove(clDiv)
             activeComponentId = null
         }
     }
 
     override fun getDiv(id: String): WebNode? {
-        return divsMap[id]?.content
+        return divsMap[cleanupId(id)]?.content
     }
 
     override fun clear() {
         ArrayList(divsMap.keys).forEach { removeDiv(it) }
+    }
+
+    override fun getActiveDivId(): String? {
+        return idsMapping[activeComponentId]
     }
 
 

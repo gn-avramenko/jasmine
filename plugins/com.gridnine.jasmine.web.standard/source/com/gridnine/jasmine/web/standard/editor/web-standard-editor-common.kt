@@ -3,6 +3,8 @@
  * Project: Jasmine
  *****************************************************************/
 
+@file:Suppress("UNCHECKED_CAST")
+
 package com.gridnine.jasmine.web.standard.editor
 
 import com.gridnine.jasmine.common.core.model.BaseVMJS

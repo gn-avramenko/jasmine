@@ -15,6 +15,19 @@
             </cell>
         </row>
     </grid-container>
+    <grid-container id="com.gridnine.jasmine.common.standard.model.workspace.WorkspaceElementGeneralEditor" columns-count="2">
+        <row>
+            <cell id="name" caption="name">
+                <text-box/>
+            </cell>
+            <cell id="type" caption="type">
+                <general-select-box/>
+            </cell>
+            <cell id="uid">
+                <hidden object-id="String"/>
+            </cell>
+        </row>
+    </grid-container>
     <grid-container id="com.gridnine.jasmine.common.standard.model.workspace.WorkspaceListGeneralParametersEditor" columns-count="2">
         <row>
             <cell id="name" caption="name">
@@ -74,7 +87,7 @@
         </row>
     </grid-container>
     <actions-group id="standard.workspace-tools">
-
+        <action id="editWorkspace" action-handler="com.gridnine.jasmine.web.standard.workspaceEditor.WorkspaceEditorActionHandler"/>
     </actions-group>
     <display-handler id="edit-state-handler" class-name="com.gridnine.jasmine.web.standard.editor.ObjectEditorEditStateActionDisplayHandler"/>
     <actions-group id="standard.list-actions">
@@ -84,6 +97,9 @@
         <action id="standard.saveObject" action-handler="com.gridnine.jasmine.web.standard.editor.SaveObjectEditorObjectButtonHandler" display-handler-ref="edit-state-handler"/>
         <action id="standard.showVersions" action-handler="com.gridnine.jasmine.web.standard.editor.ShowVersionsEditorObjectButtonHandler"/>
     </actions-group>
+    <options-group id="standard.workspace-elements-handlers">
+        <option id="com.gridnine.jasmine.common.standard.model.rest.ListWorkspaceItemDTJS"  caption="standard.workspace-elements-handlers.list"/>
+    </options-group>
 </ui>
 
 

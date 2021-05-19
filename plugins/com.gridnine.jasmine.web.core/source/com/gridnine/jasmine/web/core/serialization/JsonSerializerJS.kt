@@ -134,7 +134,7 @@ class JsonSerializerJS {
     internal suspend fun getProvider(qualifiedName: String): ObjectMetadataProviderJS<*> {
         val provider = getProviderInternal(qualifiedName)
         if(provider == null){
-            WebPluginsHandler.get().loadPluginForClass(qualifiedName)
+            WebPluginsHandler.get().loadPluginForId(qualifiedName)
         }
         return getProviderInternal(qualifiedName)?:throw XeptionJS.forDeveloper("no provider registered for class $qualifiedName")
     }

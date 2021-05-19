@@ -10,6 +10,7 @@
                     <group ref="tns:container"/>
                     <element name="actions-group" type="tns:actionsGroup"/>
                     <element name="display-handler" type="tns:displayHandlerElement"/>
+                    <element name="options-group" type="tns:optionsGroup"/>
                 </choice>
             </sequence>
         </complexType>
@@ -234,6 +235,22 @@
             </element>
         </choice>
     </group>
+    <complexType name="optionsGroup">
+        <complexContent>
+            <extension base="tns:baseMetaElement">
+                <sequence minOccurs="0" maxOccurs="unbounded">
+                    <element name="option" type="tns:option"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType name="option">
+        <complexContent>
+            <extension base="tns:baseMetaElement">
+                <attribute name="caption" type="string" use="required"/>
+            </extension>
+        </complexContent>
+    </complexType>
     <complexType name="actionsGroup">
         <complexContent>
             <extension base="tns:baseMetaElement">

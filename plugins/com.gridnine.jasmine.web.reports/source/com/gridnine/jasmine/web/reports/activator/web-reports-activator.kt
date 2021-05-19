@@ -11,6 +11,7 @@ import com.gridnine.jasmine.web.core.remote.WebCoreMetaRegistriesUpdater
 import com.gridnine.jasmine.web.reports.DomainReflectionUtilsJS
 import com.gridnine.jasmine.web.reports.RestReflectionUtilsJS
 import com.gridnine.jasmine.web.reports.list.WebReportsListMainFrameTabHandler
+import com.gridnine.jasmine.web.reports.workspaceEditor.WorkspaceReportsItemVariantHandler
 
 
 const val pluginId = "com.gridnine.jasmine.web.reports"
@@ -25,6 +26,7 @@ class WebReportsActivator : ActivatorJS{
         DomainReflectionUtilsJS.registerWebDomainClasses()
         WebCoreMetaRegistriesUpdater.updateMetaRegistries(pluginId)
         RegistryJS.get().register(WebReportsListMainFrameTabHandler())
+        RegistryJS.get().register(WorkspaceReportsItemVariantHandler())
         console.log("web reports activated")
     }
 

@@ -3,6 +3,8 @@
  * Project: Jasmine
  *****************************************************************/
 
+@file:Suppress("UNUSED_PARAMETER")
+
 package com.gridnine.jasmine.web.standard.widgets
 
 import com.gridnine.jasmine.common.core.model.BooleanBoxConfigurationJS

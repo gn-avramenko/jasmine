@@ -52,9 +52,9 @@ class EasyUiWebSelect(configure: WebSelectConfiguration.() -> Unit) : WebSelect,
         }
         val data = jq.select2("val")
         return if (config.multiple) {
-            (data as Array<*>).map {  toSelectItem(it as String) }
+            (data as Array<*>).mapNotNull {  toSelectItem(it as String) }
         } else {
-            if (data == null) emptyList() else arrayListOf(toSelectItem(data))
+            if (MiscUtilsJS.isBlank(data)) emptyList() else arrayListOf(toSelectItem(data))
         }
     }
 
@@ -146,11 +146,15 @@ class EasyUiWebSelect(configure: WebSelectConfiguration.() -> Unit) : WebSelect,
                 selectedValues.clear()
                 if(values is Array<String>){
                     values.forEach { item ->
-                        selectedValues.add(toSelectItem(item))
+                        if(!MiscUtilsJS.isBlank(item)) {
+                            selectedValues.add(toSelectItem(item))
+                        }
                     }
                 }
                 if(values is String){
-                    selectedValues.add(toSelectItem(values))
+                    if(!MiscUtilsJS.isBlank(values)) {
+                        selectedValues.add(toSelectItem(values))
+                    }
                 }
                 changeListener?.let {
                     launch {

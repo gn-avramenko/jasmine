@@ -59,6 +59,8 @@ interface WebUiLibraryAdapter{
 
     fun createPanel(configure: WebPanelConfiguration.() -> Unit):WebPanel
 
+    fun showContextMenu(items:List<WebContextMenuItem>, pageX:Int, pageY:Int)
+
     companion object{
         fun get() = EnvironmentJS.getPublished(WebUiLibraryAdapter::class)
     }

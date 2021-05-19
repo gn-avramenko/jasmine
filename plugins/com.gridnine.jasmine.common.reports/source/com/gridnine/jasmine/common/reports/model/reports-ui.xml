@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui xmlns="http://gridnine.com/jasmine/ui" >
+    <options-group id="standard.workspace-elements-handlers">
+        <option id="com.gridnine.jasmine.common.reports.model.rest.ReportsWorkspaceItemDTJS"  caption="standard.workspace-elements-handlers.reports"/>
+    </options-group>
+</ui>
+
+
+

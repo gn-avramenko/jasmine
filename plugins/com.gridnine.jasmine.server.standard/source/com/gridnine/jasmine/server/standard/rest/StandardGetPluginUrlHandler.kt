@@ -14,7 +14,7 @@ import com.gridnine.jasmine.server.core.rest.RestOperationContext
 class StandardGetPluginUrlHandler : RestHandler<GetPluginUrlRequest, GetPluginUrlResponse>{
     override fun service(request: GetPluginUrlRequest, ctx: RestOperationContext): GetPluginUrlResponse {
         val result = GetPluginUrlResponse()
-        result.pluginId = WebPluginsAssociationsRegistry.get().associations[request.className.substringBeforeLast("JS")]!!
+        result.pluginId = WebPluginsAssociationsRegistry.get().associations[request.id.substringBeforeLast("JS")]!!
         result.url = WebPluginsAssociationsRegistry.get().links[result.pluginId]!!
         return result
     }
