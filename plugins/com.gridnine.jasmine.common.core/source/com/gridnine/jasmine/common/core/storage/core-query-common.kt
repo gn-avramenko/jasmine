@@ -12,6 +12,7 @@ import com.gridnine.jasmine.common.core.model.*
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.reflect.KClass
 
 private val  dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss:SSS")
 private val  df = DateTimeFormatter.ofPattern("yyyy-MM-dd")
@@ -189,13 +190,14 @@ open class CriterionsBuilder(private val criterions: MutableList<SearchCriterion
 
 abstract class BaseDynamicCriterionValue :BaseIdentity()
 
-class DynamicCriterion(val handlerId:String, val propertyId:String, val conditionId:String,  val value:BaseDynamicCriterionValue):SearchCriterion()
+class DynamicCriterion(val handlerId:String, val propertyId:String, val conditionId:String,  val value:BaseDynamicCriterionValue?):SearchCriterion()
 
 interface DynamicCriterionHandler<T:BaseDynamicCriterionValue> : RegistryItem<DynamicCriterionHandler<*>> {
     fun isApplicable(listId:String, propertyId:String) : Boolean
     fun getConditionIds():Collection<String>
     fun getDisplayName():String
-    fun getCriterion(listId:String, propertyId: String, conditionId: String, value:T): SearchCriterion
+    fun getCriterion(listId:String, propertyId: String, conditionId: String, value:T?): SearchCriterion
+    fun getRestCorrectionClass():KClass<*>?
     fun getRendererId():String
     override fun getType(): RegistryItemType<DynamicCriterionHandler<*>>{
         return TYPE

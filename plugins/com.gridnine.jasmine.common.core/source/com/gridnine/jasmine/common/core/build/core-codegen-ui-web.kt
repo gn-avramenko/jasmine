@@ -109,7 +109,7 @@ class UiWebGenerator: CodeGenerator {
     private fun toGenData(descr: VSEntityDescription): BaseGenData {
         val result = GenClassData(descr.id+"JS", (descr.extendsId?:BaseVS::class.qualifiedName)+"JS", false, true)
         descr.properties.values.forEach { prop ->
-            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.type, prop.className),lateinit = prop.lateInit, nonNullable = false))
+            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.type, prop.className),lateinit = prop.lateInit, nonNullable = false, useBuilder = true))
         }
         descr.collections.values.forEach { coll ->
             result.collections.add(GenCollectionDescription(coll.id, getPropertyType(coll.elementType), getClassName(coll.elementType, coll.elementClassName)))

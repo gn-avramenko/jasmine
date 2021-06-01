@@ -8,6 +8,7 @@ package com.gridnine.jasmine.web.core.remote
 import com.gridnine.jasmine.web.core.common.ActivatorJS
 import com.gridnine.jasmine.web.core.common.EnvironmentJS
 import com.gridnine.jasmine.web.core.common.RegistryJS
+import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import kotlinx.browser.document
 import kotlinx.coroutines.await
 import kotlinx.coroutines.delay
@@ -21,6 +22,13 @@ internal enum class PluginStatus{
 class WebPluginsHandler{
 
     private val pluginsStatuses = hashMapOf<String, PluginStatus>()
+
+    suspend fun ensureClassLoaded(className:String){
+        if(ReflectionFactoryJS.get().isRegistered(className)){
+            return
+        }
+        loadPluginForId(className)
+    }
 
     suspend fun loadPluginForId(id:String){
         val res = RpcManager.get().postDynamic("core_core_getPluginUrl","""{

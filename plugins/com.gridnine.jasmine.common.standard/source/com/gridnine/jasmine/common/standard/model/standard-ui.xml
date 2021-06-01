@@ -100,6 +100,7 @@
     <options-group id="standard.workspace-elements-handlers">
         <option id="com.gridnine.jasmine.common.standard.model.rest.ListWorkspaceItemDTJS"  caption="standard.workspace-elements-handlers.list"/>
     </options-group>
+    <options-group id="standard.list-ids"/>
 </ui>
 
 

@@ -28,7 +28,16 @@ abstract class BaseWidgetConfiguration: BaseIntrospectableObject(){
     }
 
 }
-data class SelectItem(var id:String, var text:String):BaseIntrospectableObject(){
+class SelectItem():BaseIntrospectableObject(){
+
+    lateinit var id:String
+    lateinit var text:String
+
+    constructor(id:String, text:String):this(){
+      this.id = id
+      this.text = text
+    }
+
     override fun equals(other: Any?): Boolean {
         return other is SelectItem && other.id == id
     }

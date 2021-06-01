@@ -9,6 +9,7 @@ import com.gridnine.jasmine.common.core.model.XeptionJS
 import com.gridnine.jasmine.web.core.ui.components.BaseWebComponentConfiguration
 import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
 import com.gridnine.jasmine.web.core.ui.components.WebNode
+import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 
 interface EasyUiComponent: WebNode {
     fun getId():String
@@ -32,6 +33,10 @@ fun findEasyUiComponent(comp:WebNode):EasyUiComponent{
 
 fun getSizeAttributes(config:BaseWebComponentConfiguration):String{
     return "${if(config.width != null) "width:${config.width}" else ""};${if(config.height != null) "height:${config.height}" else ""}"
+}
+
+fun getClassAttribute(config:BaseWebComponentConfiguration):String{
+    return if(!MiscUtilsJS.isBlank(config.className)) "" else "class=\"${config.className}\""
 }
 
 fun getIconClass(iconName:String?) = if(iconName != null) "icon_${iconName.substringBefore(":")}_${iconName.substringAfterLast(":")}" else null

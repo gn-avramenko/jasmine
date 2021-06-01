@@ -183,6 +183,14 @@ class GeneralSelectBoxConfigurationJS() : BaseWidgetConfigurationJS(){
         const val qualifiedClassName = "com.gridnine.jasmine.common.core.model.GeneralSelectBoxConfigurationJS"
     }
 }
+class RemoteGeneralSelectBoxConfigurationJS() : BaseWidgetConfigurationJS(){
+    constructor(configure:RemoteGeneralSelectBoxConfigurationJS.()->Unit):this(){
+        configure.invoke(this)
+    }
+    companion object{
+        const val qualifiedClassName = "com.gridnine.jasmine.common.core.model.RemoteGeneralSelectBoxConfigurationJS"
+    }
+}
 
 abstract class BaseNavigatorVariantVMJS:BaseVMJS(){
     lateinit var uid:String

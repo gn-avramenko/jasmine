@@ -37,7 +37,7 @@ class WorkspaceItemEditorHandler(private val itemsTypes:List<SelectItemJS>) : Wo
     }
 
     override fun getData(editor: WorkspaceItemEditor): BaseWorkspaceItemDTJS {
-        return editor.getData()
+         return editor.getData()
     }
 
     override fun validate(editor: WorkspaceItemEditor): Boolean {
@@ -116,7 +116,7 @@ class WorkspaceItemEditor(private val itemsTypes:List<SelectItemJS>):BaseWebNode
     internal fun getData():BaseWorkspaceItemDTJS{
         val activeId = divsContainer.getActiveDivId()!!
         val handler = RegistryJS.get().get(WorkspaceItemVariantHandler.TYPE, activeId)!!
-        val result = handler.getData(editorsCache.get(activeId)!!)
+        val result = handler.getData(editorsCache[activeId]!!)
         result.uid = generalEditor.uidValue
         result.displayName = generalEditor.nameWidget.getValue()
         return result

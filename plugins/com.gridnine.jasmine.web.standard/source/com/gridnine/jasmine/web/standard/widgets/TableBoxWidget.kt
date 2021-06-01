@@ -18,8 +18,10 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
     private val config = TableBoxWidgetConfiguration<VM,VS>()
     private lateinit var createButton:WebLinkButton
     private var readonly = false
+    private var vsFactory:(()->VS)? = null
     init {
         config.configure()
+        vsFactory = config.vsFactory
         _node = WebUiLibraryAdapter.get().createTableBox{
             width = config.width
             height = config.height
@@ -42,15 +44,16 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
         }
     }
 
+    fun setNewRowVSFactory(factory: ()->VS){
+        vsFactory = factory
+    }
     internal fun addRow(idx:Int){
         val uuid = MiscUtilsJS.createUUID()
         val rowId = MiscUtilsJS.createUUID()
         val vm = config.vmFactory.invoke()
         vm.uid = uuid
-        val vs = config.vsFactory.invoke()
-        vs.uid= uuid
         val components = arrayListOf<WebTableBoxCell>()
-        val configuration = config.vsFactory.invoke()
+        val configuration = vsFactory?.invoke()
         config.columns.withIndex().forEach {(collIdx, coll) ->
             val comp = createWebComponent(coll.widgetDescription)
             configure(comp, collIdx, configuration)
@@ -279,7 +282,7 @@ class TableBoxWidgetConfiguration<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS>{
     val columns = arrayListOf<TableBoxWidgetColumnDescription>()
     var showToolsColumn = true
     lateinit var vmFactory:()->VM
-    lateinit var vsFactory:()->VS
+    var vsFactory:(()->VS)? = null
     fun column(id:String, widgetDescription:BaseWidgetDescriptionJS, title:String, width:Int? = null){
         val cell = TableBoxWidgetColumnDescription()
         cell.width = width

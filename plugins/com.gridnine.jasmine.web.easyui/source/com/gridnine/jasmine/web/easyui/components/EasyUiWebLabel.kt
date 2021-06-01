@@ -26,7 +26,7 @@ class EasyUiWebLabel(configure: WebLabelConfiguration.()->Unit) :WebLabel,EasyUi
         return ""
     }
     override fun getHtml(): String {
-        return """<div style="display:inline-block; ${getSizeAttributes(config)}" id = "label$uid"></div>"""
+        return """<div style="display:inline-block; ${getSizeAttributes(config)}" ${getClassAttribute(config)}  id = "label$uid"></div>"""
     }
 
     private fun getSelector() = "#label$uid"

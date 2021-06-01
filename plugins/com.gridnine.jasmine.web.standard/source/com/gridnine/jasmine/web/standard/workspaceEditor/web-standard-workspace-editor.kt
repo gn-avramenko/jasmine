@@ -179,7 +179,7 @@ class WorkspaceEditor(workspace:WorkspaceDTJS): BaseWebNodeWrapper<WebBorderCont
         tree.setData(workspace.groups.map {wg ->
             val node = WebTreeNode(wg.uid!!, wg.displayName?:"???",wg)
             node.children.addAll(wg.items.map {
-                val itemNode = WebTreeNode(it.id, it.text,it)
+                val itemNode = WebTreeNode(it.id, it.text, null)
                 itemNode
             })
             node
@@ -204,13 +204,14 @@ class WorkspaceEditor(workspace:WorkspaceDTJS): BaseWebNodeWrapper<WebBorderCont
             request.workspace = result
             StandardRestClient.standard_standard_saveWorkspace(request)
             MainFrame.get().setWorkspace(result)
+            StandardUiUtils.showMessage(WebMessages.Object_saved)
         }
     }
 
     private suspend fun getElementData(uuid:String):BaseWorkspaceItemDTJS{
         return StandardRestClient.standard_standard_getWorkspaceItem(GetWorkspaceItemRequestJS().apply {
-            uid =uuid
-        }).workspaceItem
+                uid =uuid
+            }).workspaceItem
     }
     @Suppress("USELESS_CAST")
     private suspend fun showEditor(node: WebTreeNode) {
@@ -236,7 +237,7 @@ class WorkspaceEditor(workspace:WorkspaceDTJS): BaseWebNodeWrapper<WebBorderCont
             editor
         }
         centerContent.show(handler.getId())
-        val userData = if(handler as Any is WorkspaceGroupEditorHandler) node.userData!! else getElementData(node.id)
+        val userData =  node.userData?:getElementData(node.id)
         handler.setData(comp,  userData)
         lastEditor = handler
     }

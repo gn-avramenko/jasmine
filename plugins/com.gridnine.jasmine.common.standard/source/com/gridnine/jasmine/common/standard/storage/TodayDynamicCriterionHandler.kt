@@ -16,7 +16,9 @@ import com.gridnine.jasmine.common.standard.model.domain.DynamicCriterionDateVal
 import com.gridnine.jasmine.common.standard.model.domain.StandardDynamicCriterionCondition
 import com.gridnine.jasmine.common.standard.model.domain.StandardDynamicCriterionHandlerType
 import com.gridnine.jasmine.common.standard.model.domain.StandardDynamicCriterionValueRendererType
+import com.gridnine.jasmine.common.standard.model.rest.DynamicCriterionDateValueDT
 import java.time.LocalDate
+import kotlin.reflect.KClass
 
 class TodayDynamicCriterionHandler : DynamicCriterionHandler<DynamicCriterionDateValue>{
     override fun isApplicable(listId: String, propertyId: String): Boolean {
@@ -35,13 +37,13 @@ class TodayDynamicCriterionHandler : DynamicCriterionHandler<DynamicCriterionDat
         return StandardDynamicCriterionHandlerType.TODAY.toString()
     }
 
-    override fun getCriterion(listId: String, propertyId: String, conditionId: String, value: DynamicCriterionDateValue): SearchCriterion {
+    override fun getCriterion(listId: String, propertyId: String, conditionId: String, value: DynamicCriterionDateValue?): SearchCriterion {
 
         val descr = DomainMetaRegistry.get().indexes[listId]?:DomainMetaRegistry.get().assets[listId]!!
         val propType = descr.properties[propertyId]?.type!!
         return when (propType){
             DatabasePropertyType.LOCAL_DATE ->{
-                val correctedValue = LocalDate.now().plusDays(value.correction.toLong())
+                val correctedValue = LocalDate.now().plusDays(value!!.correction.toLong())
                 when (conditionId){
                     StandardDynamicCriterionCondition.EQUALS.name ->{
                         SimpleCriterion(propertyId, SimpleCriterion.Operation.EQ, correctedValue)
@@ -62,7 +64,7 @@ class TodayDynamicCriterionHandler : DynamicCriterionHandler<DynamicCriterionDat
                 }
             }
             DatabasePropertyType.LOCAL_DATE_TIME ->{
-                val correctedValue = LocalDate.now().plusDays(value.correction.toLong())
+                val correctedValue = LocalDate.now().plusDays(value!!.correction.toLong())
                 val lv = correctedValue.atStartOfDay()
                 val hv = correctedValue.atTime(23,59,59,999999)
                 when (conditionId){
@@ -95,6 +97,10 @@ class TodayDynamicCriterionHandler : DynamicCriterionHandler<DynamicCriterionDat
 
     override fun getId(): String {
         return StandardDynamicCriterionHandlerType.TODAY.name
+    }
+
+    override fun getRestCorrectionClass(): KClass<*> {
+        return DynamicCriterionDateValueDT::class
     }
 
 }

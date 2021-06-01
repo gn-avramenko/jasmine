@@ -215,6 +215,10 @@ class EasyUiWebLibraryAdapter :WebUiLibraryAdapter{
         })
     }
 
+    override fun createAccordionContainer(configure: WebAccordionContainerConfiguration.() -> Unit):WebAccordionContainer {
+        return EasyUiWebAccordionContainer(configure)
+    }
+
     private fun fillItemsMap(itemsMap: HashMap<WebContextMenuItem, String>, items: List<WebContextMenuItem>) {
         items.forEach {
             itemsMap[it] = MiscUtilsJS.createUUID()

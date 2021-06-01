@@ -55,10 +55,10 @@
         <property id="value" type="ENTITY" class-name="com.gridnine.jasmine.common.standard.model.rest.BaseWorkspaceSimpleCriterionValueDT"/>
     </entity>
     <entity id="com.gridnine.jasmine.common.standard.model.rest.DynamicWorkspaceCriterionDT" extends="com.gridnine.jasmine.common.standard.model.rest.BaseWorkspaceCriterionDT">
-        <property id="handlerId" type="STRING" non-nullable="true"/>
-        <property id="propertyId" type="STRING" non-nullable="true"/>
-        <property id="conditionId" type="STRING" non-nullable="true"/>
-        <property id="value" type="ENTITY" lateinit="true" class-name="com.gridnine.jasmine.common.standard.model.rest.BaseDynamicCriterionValueDT"/>
+        <property id="handler" type="ENTITY" lateinit="true" class-name="com.gridnine.jasmine.common.core.model.SelectItem"/>
+        <property id="property" type="ENTITY" lateinit="true" class-name="com.gridnine.jasmine.common.core.model.SelectItem"/>
+        <property id="condition" type="ENTITY" lateinit="true" class-name="com.gridnine.jasmine.common.core.model.SelectItem"/>
+        <property id="value" type="ENTITY"  class-name="com.gridnine.jasmine.common.standard.model.rest.BaseDynamicCriterionValueDT"/>
     </entity>
     <entity id="com.gridnine.jasmine.common.standard.model.rest.DynamicCriterionDateValueDT" extends="com.gridnine.jasmine.common.standard.model.rest.BaseDynamicCriterionValueDT">
         <property id="correction" type="INT" non-nullable="true"/>
@@ -68,7 +68,7 @@
         <collection id="criterions" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.BaseWorkspaceCriterionDT"/>
     </entity>
     <entity id="com.gridnine.jasmine.common.standard.model.rest.BaseDynamicCriterionValueDT" abstract="true">
-        <property id="uid" type="STRING"/>
+        <property id="uid" type="STRING" lateinit="true"/>
     </entity>
 
     <entity id="com.gridnine.jasmine.common.standard.model.rest.OrWorkspaceCriterionDT" extends="com.gridnine.jasmine.common.standard.model.rest.BaseComplexWorkspaceCriterionDT"/>
@@ -295,6 +295,36 @@
                 <collection id="updatedItems" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.BaseWorkspaceItemDT"/>
             </request>
             <response id="com.gridnine.jasmine.common.standard.model.rest.SaveWorkspaceResponse"/>
+        </operation>
+        <operation id="getDynamicQueryProperties" handler="com.gridnine.jasmine.server.standard.rest.StandardDynamicQueryPropertiesRestHandler">
+            <request id="com.gridnine.jasmine.common.standard.model.rest.GetDynamicQueryPropertiesRequest">
+                <property id="listId" type="STRING" lateinit="true"/>
+                <property id="pattern" type="STRING"/>
+            </request>
+            <response id="com.gridnine.jasmine.common.standard.model.rest.GetDynamicQueryPropertiesResponse">
+                <collection id="items" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.core.model.SelectItem"/>
+            </response>
+        </operation>
+        <operation id="getDynamicQueryConditions" handler="com.gridnine.jasmine.server.standard.rest.StandardDynamicQueryConditionsRestHandler">
+            <request id="com.gridnine.jasmine.common.standard.model.rest.GetDynamicQueryConditionsRequest">
+                <property id="listId" type="STRING" lateinit="true"/>
+                <property id="propertyId" type="STRING" lateinit="true"/>
+                <property id="pattern" type="STRING"/>
+            </request>
+            <response id="com.gridnine.jasmine.common.standard.model.rest.GetDynamicQueryConditionsResponse">
+                <collection id="items" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.core.model.SelectItem"/>
+            </response>
+        </operation>
+        <operation id="getDynamicQueryHandlers" handler="com.gridnine.jasmine.server.standard.rest.StandardDynamicQueryHandlersRestHandler">
+            <request id="com.gridnine.jasmine.common.standard.model.rest.GetDynamicQueryHandlersRequest">
+                <property id="listId" type="STRING" lateinit="true"/>
+                <property id="propertyId" type="STRING" lateinit="true"/>
+                <property id="conditionId" type="STRING" lateinit="true"/>
+                <property id="pattern" type="STRING"/>
+            </request>
+            <response id="com.gridnine.jasmine.common.standard.model.rest.GetDynamicQueryHandlersResponse">
+                <collection id="items" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.core.model.SelectItem"/>
+            </response>
         </operation>
     </group>
 

@@ -11,6 +11,7 @@ import com.gridnine.jasmine.common.standard.model.rest.DynamicCriterionDateValue
 class DateWorkspaceToDtConverter:WorkspaceDynamicValueToDtConverter<DynamicCriterionDateValue, DynamicCriterionDateValueDT>{
     override fun convert(item: DynamicCriterionDateValue): DynamicCriterionDateValueDT {
         val res = DynamicCriterionDateValueDT()
+        res.uid = item.uid
         res.valueType = item.valueType
         res.correction = item.correction
         return res

@@ -61,6 +61,8 @@ interface WebUiLibraryAdapter{
 
     fun showContextMenu(items:List<WebContextMenuItem>, pageX:Int, pageY:Int)
 
+    fun createAccordionContainer(configure:WebAccordionContainerConfiguration.()->Unit):WebAccordionContainer
+
     companion object{
         fun get() = EnvironmentJS.getPublished(WebUiLibraryAdapter::class)
     }

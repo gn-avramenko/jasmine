@@ -98,10 +98,10 @@ abstract class BaseWorkspaceItemListFromDTConverter<M: BaseListWorkspaceItem, DT
             }
             is DynamicWorkspaceCriterionDT ->{
                 val res = DynamicWorkspaceCriterion()
-                res.propertyId = it.propertyId
-                res.conditionId = it.conditionId
-                res.handlerId = it.handlerId
-                res.value = Registry.get().get(WorkspaceDynamicValueFromDtConverter.TYPE, it.value.javaClass.name)!!.convert(it.value)
+                res.propertyId = it.property.id
+                res.conditionId = it.condition.id
+                res.handlerId = it.handler.id.substringAfter("_")
+                res.value = it.value?.let { Registry.get().get(WorkspaceDynamicValueFromDtConverter.TYPE, it.javaClass.name)!!.convert(it)}
                 res
             }
             else -> throw Xeption.forDeveloper("unsupported criterion $it")
@@ -114,7 +114,7 @@ abstract class BaseWorkspaceItemListFromDTConverter<M: BaseListWorkspaceItem, DT
 class WorkspaceListItemFromDTConverter : BaseWorkspaceItemListFromDTConverter<ListWorkspaceItem, ListWorkspaceItemDT>(){
 
     override fun getId(): String {
-        return ListWorkspaceItem::class.qualifiedName!!
+        return ListWorkspaceItemDT::class.qualifiedName!!
     }
 
     override fun createModel(): ListWorkspaceItem {

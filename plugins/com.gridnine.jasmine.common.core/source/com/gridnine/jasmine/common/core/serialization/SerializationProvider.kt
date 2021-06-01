@@ -80,6 +80,9 @@ class SerializationProvider : Disposable {
                             return existingObject as T
                         }
                     }
+                    if(result != null){
+                        provider.setPropertyValue(result, BaseIdentity.uid, uid)
+                    }
                 }
                 CLASS_NAME_PROPERTY ->{
                     parser.nextToken()

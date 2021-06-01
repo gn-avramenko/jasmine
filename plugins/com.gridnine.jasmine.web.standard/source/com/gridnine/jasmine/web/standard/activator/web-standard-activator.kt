@@ -19,6 +19,7 @@ import com.gridnine.jasmine.web.standard.editor.WebEditorInterceptorsRegistry
 import com.gridnine.jasmine.web.standard.list.WebListMainFrameTabHandler
 import com.gridnine.jasmine.web.standard.mainframe.WebActionsHandler
 import com.gridnine.jasmine.web.standard.mainframe.WebOptionsHandler
+import com.gridnine.jasmine.web.standard.workspaceEditor.DateDynamicValueEditorHandler
 import com.gridnine.jasmine.web.standard.workspaceEditor.WorkspaceEditorTabHandler
 import com.gridnine.jasmine.web.standard.workspaceEditor.WorkspaceListItemVariantHandler
 
@@ -44,6 +45,7 @@ class WebStandardActivator : ActivatorJS{
         RegistryJS.get().register(ObjectVersionViewerMainFrameTabHandler())
         RegistryJS.get().register(WorkspaceEditorTabHandler())
         RegistryJS.get().register(WorkspaceListItemVariantHandler())
+        RegistryJS.get().register(DateDynamicValueEditorHandler())
         console.log("web standard activated")
     }
 

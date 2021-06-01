@@ -6,6 +6,7 @@
 
 package com.gridnine.jasmine.server.standard.rest
 
+import com.gridnine.jasmine.common.core.app.Registry
 import com.gridnine.jasmine.common.core.meta.BaseIndexDescription
 import com.gridnine.jasmine.common.core.meta.DatabaseCollectionType
 import com.gridnine.jasmine.common.core.meta.DatabasePropertyType
@@ -73,6 +74,10 @@ class StandardListRestHandler: RestHandler<GetListRequest, GetListResponse>{
                 }
                 is NotWorkspaceCriterionDT ->{
                     arrayListOf(NotCriterion(JunctionCriterion(false, it.criterions.flatMap { toCriterions(it, descr) })))
+                }
+                is DynamicWorkspaceCriterionDT ->{
+                    arrayListOf(DynamicCriterion(handlerId = it.handler.id.substringAfter("_"), propertyId = it.property.id,
+                    conditionId = it.condition.id, value = Registry.get().get(WorkspaceDynamicValueFromDtConverter.TYPE, it.value!!::class.qualifiedName!!)!!.convert(it.value!!)))
                 }
                 else -> throw IllegalArgumentException("unsupported criterion type $it")
             }

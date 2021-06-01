@@ -89,7 +89,7 @@
         <property id="handlerId" type="STRING" non-nullable="true"/>
         <property id="propertyId" type="STRING" non-nullable="true"/>
         <property id="conditionId" type="STRING" non-nullable="true"/>
-        <property id="value" type="NESTED_DOCUMENT" non-nullable="true" class-name="com.gridnine.jasmine.common.core.storage.BaseDynamicCriterionValue"/>
+        <property id="value" type="NESTED_DOCUMENT"  class-name="com.gridnine.jasmine.common.core.storage.BaseDynamicCriterionValue"/>
     </nested-document>
     <nested-document id="com.gridnine.jasmine.common.standard.model.domain.DynamicCriterionDateValue" extends="com.gridnine.jasmine.common.core.storage.BaseDynamicCriterionValue">
         <property id="correction" type="INT" non-nullable="true"/>
