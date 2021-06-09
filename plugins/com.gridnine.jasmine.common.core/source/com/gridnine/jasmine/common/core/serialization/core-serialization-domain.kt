@@ -108,6 +108,10 @@ internal open class BaseDomainDocumentMetadataProvider(description: BaseDocument
     override fun hasUid(): Boolean {
         return true
     }
+
+    override fun getMap(obj: BaseIdentity, id: String): MutableMap<Any?, Any?> {
+        return obj.getMap(id)
+    }
 }
 
 
@@ -192,6 +196,10 @@ internal open class BaseDomainIndexMetadataProvider(description: BaseIndexDescri
 
     override fun hasUid(): Boolean {
         return true
+    }
+
+    override fun getMap(obj: BaseIdentity, id: String): MutableMap<Any?, Any?> {
+        return obj.getMap(id)
     }
 }
 

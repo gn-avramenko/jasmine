@@ -55,7 +55,7 @@ class MetadataRestHandler : RestHandler<GetMetadataRequest, GetMetadataResponse>
                 val property = RestPropertyDescriptionDT()
                 property.className = getClassName(propertyDescrition.className)
                 property.id = propertyDescrition.id
-                property.type = toRestCollectionType(propertyDescrition.type)
+                property.type = toRestFieldType(propertyDescrition.type)
                 property.nonNullable = propertyDescrition.nonNullable
                 property.lateInit = propertyDescrition.lateinit
                 entityDescr.properties.add(property)
@@ -64,8 +64,17 @@ class MetadataRestHandler : RestHandler<GetMetadataRequest, GetMetadataResponse>
                 val coll = RestCollectionDescriptionDT()
                 coll.elementClassName = getClassName(collectionDescription.elementClassName)
                 coll.id = collectionDescription.id
-                coll.elementType = toRestCollectionType(collectionDescription.elementType)
+                coll.elementType = toRestFieldType(collectionDescription.elementType)
                 entityDescr.collections.add(coll)
+            }
+            it.maps.values.forEach { mapDescr ->
+                val map = RestMapDescriptionDT()
+                map.id = mapDescr.id
+                map.keyClassType  = toRestFieldType(mapDescr.keyClassType)
+                map.keyClassName = getClassName(mapDescr.keyClassName)
+                map.valueClassType  = toRestFieldType(mapDescr.valueClassType)
+                map.valueClassName = getClassName(mapDescr.valueClassName)
+                entityDescr.maps.add(map)
             }
 
             result.restEntities.add(entityDescr)
@@ -81,8 +90,68 @@ class MetadataRestHandler : RestHandler<GetMetadataRequest, GetMetadataResponse>
             result.operations.add(opDescr)
         }
     }
-    private fun toRestCollectionType(type: RestPropertyType): RestPropertyTypeDT {
+    private fun toRestFieldType(type: RestPropertyType): RestPropertyTypeDT {
         return RestPropertyTypeDT.valueOf(type.name)
+    }
+
+    private fun updateMiscMetadata(result: GetMetadataResponse, registry:MiscMetaRegistry,  pluginId: String?) {
+        registry.enums.values.forEach {
+            if(!it.exposedAtRest){
+                return@forEach
+            }
+            if (pluginId != null && WebPluginsAssociationsRegistry.get().associations[it.id] != pluginId) {
+                return@forEach
+            }
+            val enumDescr = MiscEnumDescriptionDT()
+            enumDescr.id = it.id+"JS"
+            it.items.values.forEach { enumItemDescription ->
+                enumDescr.items.add(enumItemDescription.id)
+            }
+            result.miscEnums.add(enumDescr)
+        }
+        registry.entities.values.forEach {
+            if(!it.exposedAtRest){
+                return@forEach
+            }
+            if (pluginId != null && WebPluginsAssociationsRegistry.get().associations[it.id] != pluginId) {
+                return@forEach
+            }
+            val entityDescr = MiscEntityDescriptionDT()
+            entityDescr.id = it.id+"JS"
+            entityDescr.isAbstract = it.isAbstract
+            entityDescr.extendsId = it.extendsId?.let { ext -> ext+"JS"}
+
+            it.properties.values.forEach { propertyDescrition ->
+                val property = MiscPropertyDescriptionDT()
+                property.className = getClassName(propertyDescrition.className)
+                property.id = propertyDescrition.id
+                property.type = toMiscFieldType(propertyDescrition.type)
+                property.nonNullable = propertyDescrition.nonNullable
+                property.lateInit = propertyDescrition.lateinit
+                entityDescr.properties.add(property)
+            }
+            it.collections.values.forEach { collectionDescription ->
+                val coll = MiscCollectionDescriptionDT()
+                coll.elementClassName = getClassName(collectionDescription.elementClassName)
+                coll.id = collectionDescription.id
+                coll.elementType = toMiscFieldType(collectionDescription.elementType)
+                entityDescr.collections.add(coll)
+            }
+            it.maps.values.forEach { mapDescr ->
+                val map = MiscMapDescriptionDT()
+                map.id = mapDescr.id
+                map.keyClassType  = toMiscFieldType(mapDescr.keyClassType)
+                map.keyClassName = getClassName(mapDescr.keyClassName)
+                map.valueClassType  = toMiscFieldType(mapDescr.valueClassType)
+                map.valueClassName = getClassName(mapDescr.valueClassName)
+                entityDescr.maps.add(map)
+            }
+            result.miscEntities.add(entityDescr)
+        }
+
+    }
+    private fun toMiscFieldType(type: MiscFieldType): MiscFieldTypeDT {
+        return MiscFieldTypeDT.valueOf(type.name)
     }
 
     private fun updateDomainMetadata(result: GetMetadataResponse, registry: DomainMetaRegistry, pluginId: String?) {
@@ -155,9 +224,51 @@ class MetadataRestHandler : RestHandler<GetMetadataRequest, GetMetadataResponse>
             }
             result.domainAssets.add(assetDescription)
         }
+        registry.documents.values.forEach {
+            if (!it.exposedAtRest || (pluginId != null && WebPluginsAssociationsRegistry.get().associations[it.id] != pluginId)) {
+                return@forEach
+            }
+            result.domainDocuments.add(createDocumentDescription(it))
+        }
+
+        registry.nestedDocuments.values.forEach {
+            if (!it.exposedAtRest || (pluginId != null && WebPluginsAssociationsRegistry.get().associations[it.id] != pluginId)) {
+                return@forEach
+            }
+            result.domainDocuments.add(createDocumentDescription(it))
+        }
 
     }
 
+    private fun createDocumentDescription(it: BaseDocumentDescription): DocumentDescriptionDT {
+        val documentDescription = DocumentDescriptionDT()
+        documentDescription.root = it is DocumentDescription
+        documentDescription.id = it.id+"JS"
+        documentDescription.extendsId = if(it.extendsId ==null) null else "${it.extendsId}JS"
+        documentDescription.isAbstract = it.isAbstract
+        it.properties.values.forEach { propertyDescription ->
+            val property = DocumentPropertyDescriptionDT()
+            property.className = getClassName(propertyDescription.className)
+            property.id = propertyDescription.id
+            property.type = toRestCollectionType(propertyDescription.type)
+            property.nonNullable = propertyDescription.nonNullable
+            documentDescription.properties.add(property)
+        }
+        it.collections.values.forEach { collectionDescription ->
+            val coll = DocumentCollectionDescriptionDT()
+            coll.elementClassName = getClassName(collectionDescription.elementClassName)
+            coll.id = collectionDescription.id
+            coll.elementType = toRestCollectionType(collectionDescription.elementType)
+            documentDescription.collections.add(coll)
+        }
+
+        return documentDescription
+    }
+
+    private fun toRestCollectionType(type: DocumentPropertyType): DocumentPropertyTypeDT {
+        return DocumentPropertyTypeDT.valueOf(type.name)
+
+    }
     private fun getClassName(className: String?): String? {
         return when(className){
             null -> null
@@ -393,6 +504,7 @@ class MetadataRestHandler : RestHandler<GetMetadataRequest, GetMetadataResponse>
                 updateCustomMetadata(result, CustomMetaRegistry.get(), request.pluginId)
                 updateDomainMetadata(result, DomainMetaRegistry.get(), request.pluginId)
                 updateRestMetadata(result, RestMetaRegistry.get(), request.pluginId)
+                updateMiscMetadata(result, MiscMetaRegistry.get(), request.pluginId)
                 updateUiMetadata(result, UiMetaRegistry.get(), request.pluginId)
                 updateWebMessages(result, WebMessagesMetaRegistry.get(), request.pluginId)
                 result

@@ -10,6 +10,7 @@ import com.gridnine.jasmine.common.core.meta.DatabasePropertyTypeJS
 import com.gridnine.jasmine.common.core.meta.DomainMetaRegistryJS
 import com.gridnine.jasmine.common.core.model.BaseIntrospectableObjectJS
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
+import kotlinx.browser.window
 import kotlin.js.Date
 import kotlin.math.round
 import kotlin.random.Random
@@ -93,4 +94,18 @@ object MiscUtilsJS {
                 }
                 displayName
             }
+
+    fun downloadFile(suggestedFileName:String, contentType:ContentTypeJS, base64EncodedContent:String){
+        val contentTypeStr = when(contentType){
+            ContentTypeJS.EXCEL -> "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
+        var a = window.document.createElement("a").asDynamic();
+        a.href = "data:$contentTypeStr;base64,$base64EncodedContent"
+        a.download = suggestedFileName;
+        a.click();
+    }
+}
+
+enum class ContentTypeJS{
+    EXCEL
 }

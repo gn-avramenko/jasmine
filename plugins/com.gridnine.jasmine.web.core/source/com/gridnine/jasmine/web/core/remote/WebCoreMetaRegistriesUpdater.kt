@@ -19,6 +19,7 @@ object WebCoreMetaRegistriesUpdater {
         updateL10nRegistry(response)
         updateRestRegistry(response)
         updateUiRegistry(response)
+        updateMiscRegistry(response)
     }
 
     private fun updateUiRegistry(it: dynamic) {
@@ -107,6 +108,16 @@ object WebCoreMetaRegistriesUpdater {
                     elementClassName = coll.elementClassName
                 })
             }
+            itJs.maps?.forEach{ map:dynamic ->
+                entity.maps.put(map.id, RestMapDescriptionJS(
+                    id = map.id,
+                    keyClassType = RestPropertyTypeJS.valueOf(map.keyClassType),
+                    valueClassType = RestPropertyTypeJS.valueOf(map.valueClassType)
+                ).apply {
+                    keyClassName = map.keyClassName
+                    valueClassName = map.valueClassName
+                })
+            }
             restRegistry.entities.put(entity.id, entity)
         }
         it.operations?.forEach{itJs ->
@@ -115,11 +126,57 @@ object WebCoreMetaRegistriesUpdater {
         }
 
     }
+
+    private fun updateMiscRegistry(it: dynamic) {
+        val miscRegistry = MiscMetaRegistryJS.get()
+        it.miscEnums?.forEach{ itJs ->
+            val enum = MiscEnumDescriptionJS(itJs.id)
+            itJs.items.forEach{ item:dynamic ->
+                enum.items.put(item, MiscEnumItemDescriptionJS(item))
+            }
+            miscRegistry.enums.put(enum.id, enum)
+        }
+        it.miscEntities?.forEach{itJs ->
+            val entity = MiscEntityDescriptionJS(itJs.id)
+            entity.isAbstract = itJs.isAbstract
+            entity.extendsId = itJs.extendsId
+            itJs.properties?.forEach{ prop:dynamic ->
+                entity.properties.put(prop.id, MiscPropertyDescriptionJS(
+                    id = prop.id,
+                    type = MiscFieldTypeJS.valueOf(prop.type),
+                    lateinit = prop.lateInit,
+                    nonNullable = prop.nonNullable).apply {
+                    className = prop.className
+                })
+            }
+            itJs.collections?.forEach{ coll:dynamic ->
+                entity.collections.put(coll.id, MiscCollectionDescriptionJS(
+                    id = coll.id,
+                    elementType = MiscFieldTypeJS.valueOf(coll.elementType)).apply {
+                    elementClassName = coll.elementClassName
+                })
+            }
+            itJs.maps?.forEach{ map:dynamic ->
+                entity.maps.put(map.id, MiscMapDescriptionJS(
+                    id = map.id,
+                    keyClassType = MiscFieldTypeJS.valueOf(map.keyClassType),
+                    valueClassType = MiscFieldTypeJS.valueOf(map.valueClassType)
+                ).apply {
+                    keyClassName = map.keyClassName
+                    valueClassName = map.valueClassName
+                })
+            }
+            miscRegistry.entities.put(entity.id, entity)
+        }
+
+
+    }
+
     private fun updateL10nRegistry(it: dynamic) {
         val registry = L10nMetaRegistryJS.get()
         it.webMessages?.forEach{item:dynamic ->
             val bundleId = item.id as String
-            val messages = registry.messages.getOrPut(bundleId, { linkedMapOf()}) as MutableMap
+            val messages = registry.messages.getOrPut(bundleId) { linkedMapOf() } as MutableMap
             item.messages?.forEach{message ->
                 messages[message.id] = message.displayName
                 Unit
@@ -153,6 +210,27 @@ object WebCoreMetaRegistriesUpdater {
             }
             fillBaseIndexDescription(entity, itJs)
             domainRegistry.assets[entity.id] = entity
+            Unit
+        }
+        it.domainDocuments?.forEach{itJs ->
+            val entity = DocumentDescriptionJS(itJs.id, itJs.isAbstract, itJs.extendsId, itJs.root)
+            itJs.properties?.forEach{ prop:dynamic ->
+                val id = DocumentPropertyDescriptionJS(id = prop.id).apply {
+                    type = DocumentPropertyTypeJS.valueOf(prop.type)
+                    className = prop.className
+                    nonNullable = prop.nonNullable
+                    }
+                    entity.properties.put(prop.id, id)
+            }
+
+            itJs.collections?.forEach{ coll:dynamic ->
+                val cd = DocumentCollectionDescriptionJS(id = coll.id).apply {
+                    elementType = DocumentPropertyTypeJS.valueOf(coll.elementType)
+                    elementClassName = coll.elementClassName
+                }
+                entity.collections.put(coll.id, cd)
+            }
+            domainRegistry.documents[entity.id] = entity
             Unit
         }
     }

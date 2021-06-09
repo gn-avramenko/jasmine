@@ -7,10 +7,7 @@
 
 package com.gridnine.jasmine.web.core.serialization
 
-import com.gridnine.jasmine.common.core.meta.CustomMetaRegistryJS
-import com.gridnine.jasmine.common.core.meta.DomainMetaRegistryJS
-import com.gridnine.jasmine.common.core.meta.RestMetaRegistryJS
-import com.gridnine.jasmine.common.core.meta.UiMetaRegistryJS
+import com.gridnine.jasmine.common.core.meta.*
 import com.gridnine.jasmine.common.core.model.BaseIdentityJS
 import com.gridnine.jasmine.common.core.model.XeptionJS
 import com.gridnine.jasmine.web.core.common.EnvironmentJS
@@ -65,12 +62,12 @@ class JsonSerializerJS {
         val result = js("{}")
         if (provider.hasUid()) {
             val uid = provider.getPropertyValue(obj, BaseIdentityJS.uid) as String?
-            if (uid != null) {
+            if (MiscUtilsJS.isNotBlank(uid )) {
                 if (uids.contains(uid)) {
                     result[BaseIdentityJS.uid] = uid
                     return result
                 }
-                uids.add(uid)
+                uids.add(uid!!)
             }
         }
         if (isAbstract) {
@@ -80,20 +77,7 @@ class JsonSerializerJS {
         provider.getAllProperties().forEach { prop ->
             val value = provider.getPropertyValue(obj, prop.id)
             if (value != null) {
-                when (prop.type) {
-                    SerializablePropertyTypeJS.STRING -> result[prop.id] = value as String
-                    SerializablePropertyTypeJS.ENUM -> result[prop.id] = (value as Enum<*>).name
-                    SerializablePropertyTypeJS.ENTITY -> {
-                        val ett = serialize(value, prop.isAbstract, uids)
-                        result[prop.id] = ett
-                    }
-                    SerializablePropertyTypeJS.BIG_DECIMAL, SerializablePropertyTypeJS.INT, SerializablePropertyTypeJS.LONG -> result[prop.id] = value as Number
-                    SerializablePropertyTypeJS.BOOLEAN -> result[prop.id] = value as Boolean
-                    SerializablePropertyTypeJS.BYTE_ARRAY -> result[prop.id] = value as String
-                    SerializablePropertyTypeJS.LOCAL_DATE_TIME -> result[prop.id] = dateTimeFormatter(value as Date)
-                    SerializablePropertyTypeJS.LOCAL_DATE -> result[prop.id] = dateFormatter(value as Date)
-                    SerializablePropertyTypeJS.CLASS -> result[prop.id] = clearClassName(value as String)
-                }
+                result[prop.id] = toJsonValue(prop.type, prop.isAbstract, value, uids)
             }
         }
         provider.getAllCollections().forEach { coll ->
@@ -102,26 +86,42 @@ class JsonSerializerJS {
                 val array = arrayOfNulls<Any>(colls.size)
                 result[coll.id] = array
                 colls.withIndex().forEach { (idx, elm) ->
-                    when (coll.elementType) {
-                        SerializablePropertyTypeJS.STRING -> array[idx] = elm as String
-                        SerializablePropertyTypeJS.CLASS -> array[idx] = clearClassName(elm as String)
-                        SerializablePropertyTypeJS.ENUM -> array[idx] = (elm as Enum<*>).name
-                        SerializablePropertyTypeJS.ENTITY -> {
-                            val ett = serialize(elm, coll.isAbstract, uids)
-                            array[idx] = ett
-                        }
-                        SerializablePropertyTypeJS.BIG_DECIMAL, SerializablePropertyTypeJS.INT, SerializablePropertyTypeJS.LONG ->
-                            array[idx] = elm as Number
-                        SerializablePropertyTypeJS.BOOLEAN -> array[idx] = elm as Boolean
-                        SerializablePropertyTypeJS.BYTE_ARRAY -> array[idx] = elm as String
-                        SerializablePropertyTypeJS.LOCAL_DATE_TIME -> array[idx] = dateTimeFormatter(elm as Date)
-                        SerializablePropertyTypeJS.LOCAL_DATE -> array[idx] = dateFormatter(elm as Date)
-                    }
-
+                    array[idx] = toJsonValue(coll.elementType, coll.isAbstract, elm, uids)
                 }
             }
         }
+        provider.getAllMaps().forEach { mapDescription ->
+            val map = provider.getMap(obj, mapDescription.id)
+            if (map.isNotEmpty()) {
+                val array = arrayOfNulls<Any>(map.size)
+                map.entries.withIndex().forEach { (idx, value) ->
+                    val item = js("{}")
+                    if(value.key != null){
+                        item["key"] = toJsonValue(mapDescription.keyType, mapDescription.isKeyAbstract, value.key!!, uids )
+                    }
+                    if(value.value != null){
+                        item["value"] = toJsonValue(mapDescription.valueType, mapDescription.isValueAbstract, value.value!!, uids )
+                    }
+                    array[idx] = item
+                }
+                result[mapDescription.id] = array
+            }
+        }
         return result
+    }
+
+    private suspend fun toJsonValue(type: SerializablePropertyTypeJS, abstract: Boolean, value: Any, uids: MutableSet<String>) : dynamic {
+        return when (type) {
+            SerializablePropertyTypeJS.STRING ->  value as String
+            SerializablePropertyTypeJS.ENUM ->  (value as Enum<*>).name
+            SerializablePropertyTypeJS.ENTITY -> serialize(value, abstract, uids)
+            SerializablePropertyTypeJS.BIG_DECIMAL, SerializablePropertyTypeJS.INT, SerializablePropertyTypeJS.LONG -> value as Number
+            SerializablePropertyTypeJS.BOOLEAN ->  value as Boolean
+            SerializablePropertyTypeJS.BYTE_ARRAY ->  value as String
+            SerializablePropertyTypeJS.LOCAL_DATE_TIME ->  dateTimeFormatter(value as Date)
+            SerializablePropertyTypeJS.LOCAL_DATE ->  dateFormatter(value as Date)
+            SerializablePropertyTypeJS.CLASS ->  clearClassName(value as String)
+        }
     }
 
 
@@ -162,6 +162,12 @@ class JsonSerializerJS {
             providersCache[qualifiedName] = provider
             return provider
         }
+        val ddd = DomainMetaRegistryJS.get().documents[qualifiedName]
+        if(ddd != null){
+            provider = DomainDocumentMetadataProvider(ddd)
+            providersCache[qualifiedName] = provider
+            return provider
+        }
         val red = RestMetaRegistryJS.get().entities[qualifiedName]
         if(red != null){
             provider = RestEntityMetadataProviderJS(red)
@@ -186,6 +192,12 @@ class JsonSerializerJS {
             providersCache[qualifiedName] = provider
             return provider
         }
+        val med = MiscMetaRegistryJS.get().entities[qualifiedName]
+        if(med != null){
+            provider = MiscEntityMetadataProviderJS(med)
+            providersCache[qualifiedName] = provider
+            return provider
+        }
         return null
     }
 
@@ -205,31 +217,18 @@ class JsonSerializerJS {
 
         if (provider.hasUid()) {
             val uid = jsonObj[BaseIdentityJS.uid] as String?
-            if (uid != null) {
+            if (MiscUtilsJS.isNotBlank(uid)) {
                 val existing = context[uid]
                 if (existing != null) {
                     return existing as T
                 }
-                context[uid] = result
+                context[uid!!] = result
             }
         }
         provider.getAllProperties().forEach { prop ->
             val propValue = jsonObj[prop.id]
             if (propValue != null) {
-                val value =
-                        when (prop.type) {
-                            SerializablePropertyTypeJS.STRING -> propValue as String
-                            SerializablePropertyTypeJS.CLASS -> propValue as String
-                            SerializablePropertyTypeJS.ENUM -> ReflectionFactoryJS.get().getEnum(prop.className!!, propValue as String)
-                            SerializablePropertyTypeJS.ENTITY -> deserialize(prop.className!!, propValue, context)
-                            SerializablePropertyTypeJS.BIG_DECIMAL -> (propValue as Number).toDouble()
-                            SerializablePropertyTypeJS.INT -> (propValue as Number).toInt()
-                            SerializablePropertyTypeJS.LONG -> (propValue as Number).toLong()
-                            SerializablePropertyTypeJS.BOOLEAN -> propValue as Boolean
-                            SerializablePropertyTypeJS.BYTE_ARRAY -> propValue
-                            SerializablePropertyTypeJS.LOCAL_DATE_TIME -> dateTimeParser(propValue as String)
-                            SerializablePropertyTypeJS.LOCAL_DATE -> dateParser(propValue as String)
-                        }
+                val value = fromJsonValue(prop.type, prop.className, propValue, context)
                 provider.setPropertyValue(result, prop.id, value)
             }
         }
@@ -237,26 +236,39 @@ class JsonSerializerJS {
             if (jsonObj[coll.id] != null) {
                 val array = jsonObj[coll.id]
                 for(elm in array){
-                    val value = when (coll.elementType) {
-                        SerializablePropertyTypeJS.STRING -> elm as String
-                        SerializablePropertyTypeJS.CLASS -> elm as String
-                        SerializablePropertyTypeJS.ENUM -> ReflectionFactoryJS.get().getEnum(coll.elementClassName!!, elm)
-                        SerializablePropertyTypeJS.ENTITY -> deserialize(coll.elementClassName!!, elm, context)
-                        SerializablePropertyTypeJS.BIG_DECIMAL -> elm
-                        SerializablePropertyTypeJS.INT -> elm
-                        SerializablePropertyTypeJS.LONG -> elm
-                        SerializablePropertyTypeJS.BOOLEAN -> elm
-                        SerializablePropertyTypeJS.BYTE_ARRAY -> elm
-                        SerializablePropertyTypeJS.LOCAL_DATE_TIME -> dateTimeParser(elm as String)
-                        SerializablePropertyTypeJS.LOCAL_DATE -> dateParser(elm as String)
-                    }
-                    if (value != null) {
-                        provider.getCollection(result, coll.id).add(value)
-                    }
+                    val value = fromJsonValue(coll.elementType, coll.elementClassName, elm, context)
+                    provider.getCollection(result, coll.id).add(value)
+                }
+            }
+        }
+        provider.getAllMaps().forEach { mapDescription ->
+            if (jsonObj[mapDescription.id] != null) {
+                val array = jsonObj[mapDescription.id]
+                val map = provider.getMap(result, mapDescription.id)
+                for(elm in array){
+                    val keyValue = (elm["key"] as Any?)?.let { fromJsonValue(mapDescription.keyType, mapDescription.keyClassName, it, context)}
+                    val valueValue = (elm["value"] as Any?)?.let { fromJsonValue(mapDescription.valueType, mapDescription.valueCassName, it, context)}
+                    map[keyValue] = valueValue
                 }
             }
         }
         return result
+    }
+
+    private suspend fun fromJsonValue(type: SerializablePropertyTypeJS, className: String?, propValue:dynamic, context: MutableMap<String, Any>): dynamic {
+        return when (type) {
+            SerializablePropertyTypeJS.STRING -> propValue as String
+            SerializablePropertyTypeJS.CLASS -> propValue as String
+            SerializablePropertyTypeJS.ENUM -> ReflectionFactoryJS.get().getEnum(className!!, propValue as String)
+            SerializablePropertyTypeJS.ENTITY -> deserialize(className!!, propValue, context)
+            SerializablePropertyTypeJS.BIG_DECIMAL -> (propValue as Number).toDouble()
+            SerializablePropertyTypeJS.INT -> (propValue as Number).toInt()
+            SerializablePropertyTypeJS.LONG -> (propValue as Number).toLong()
+            SerializablePropertyTypeJS.BOOLEAN -> propValue as Boolean
+            SerializablePropertyTypeJS.BYTE_ARRAY -> propValue
+            SerializablePropertyTypeJS.LOCAL_DATE_TIME -> dateTimeParser(propValue as String)
+            SerializablePropertyTypeJS.LOCAL_DATE -> dateParser(propValue as String)
+        }
     }
 
     companion object {

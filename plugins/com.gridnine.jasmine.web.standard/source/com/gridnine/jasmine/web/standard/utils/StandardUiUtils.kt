@@ -33,6 +33,13 @@ object StandardUiUtils {
         return false
     }
 
+    fun showError(error: String){
+        val msg = MessageDTJS()
+        msg.type = MessageTypeDTJS.ERROR
+        msg.message = error
+        showMessage(msg)
+    }
+
     fun showMessage(message: MessageDTJS?){
         if(message == null){
             return

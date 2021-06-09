@@ -7,9 +7,7 @@
 package com.gridnine.jasmine.common.core.build
 
 import com.gridnine.jasmine.common.core.meta.*
-import com.gridnine.jasmine.common.core.model.BaseAsset
-import com.gridnine.jasmine.common.core.model.BaseIndex
-import com.gridnine.jasmine.common.core.model.ObjectReference
+import com.gridnine.jasmine.common.core.model.*
 import com.gridnine.jasmine.common.core.parser.DomainMetadataParser
 import java.io.File
 
@@ -37,6 +35,68 @@ class WebDomainGenerator : CodeGenerator {
         return result
     }
 
+    private fun <T : BaseDocumentDescription> toGenData(descr: T): GenClassData {
+
+        val extendsId = when {
+            descr.extendsId != null -> descr.extendsId+"JS"
+            descr is DocumentDescription -> "${BaseDocument::class.qualifiedName}JS"
+            else -> "${BaseIdentity::class.qualifiedName}JS"
+        }
+        val result = GenClassData(descr.id+"JS", extendsId, descr.isAbstract,  noEnumProperties = true, open = false)
+        descr.properties.values.forEach { prop ->
+            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.type, prop.className), nonNullable = isNonNullable(prop), lateinit = isLateInit(prop), openSetter = false))
+        }
+        descr.collections.values.forEach { coll ->
+            result.collections.add(GenCollectionDescription(coll.id, getPropertyType(coll.elementType), getClassName(coll.elementType, coll.elementClassName), openGetter = false))
+        }
+
+        return result
+    }
+
+    private fun isNonNullable(prop: DocumentPropertyDescription): Boolean {
+        return when(prop.type){
+            DocumentPropertyType.ENUM -> false
+            else -> prop.nonNullable
+        }
+    }
+    private fun isLateInit(prop: DocumentPropertyDescription): Boolean {
+        return when(prop.type){
+            DocumentPropertyType.ENUM -> prop.nonNullable
+            else -> false
+        }
+    }
+
+    private fun getClassName(type: DocumentPropertyType, className: String?): String? {
+        return when (type) {
+            DocumentPropertyType.STRING -> null
+            DocumentPropertyType.BIG_DECIMAL -> "Double"
+            DocumentPropertyType.BOOLEAN -> null
+            DocumentPropertyType.ENTITY_REFERENCE -> "${ObjectReference::class.qualifiedName}JS"
+            DocumentPropertyType.ENUM -> className + "JS"
+            DocumentPropertyType.INT -> null
+            DocumentPropertyType.LONG -> null
+            DocumentPropertyType.LOCAL_DATE -> "kotlin.js.Date"
+            DocumentPropertyType.LOCAL_DATE_TIME -> "kotlin.js.Date"
+            DocumentPropertyType.BYTE_ARRAY -> "kotlin.js.ByteArray"
+            DocumentPropertyType.NESTED_DOCUMENT -> "${className}JS"
+        }
+    }
+
+    private fun getPropertyType(type: DocumentPropertyType): GenPropertyType {
+        return when (type) {
+            DocumentPropertyType.STRING -> GenPropertyType.STRING
+            DocumentPropertyType.BIG_DECIMAL -> GenPropertyType.ENTITY
+            DocumentPropertyType.BOOLEAN -> GenPropertyType.BOOLEAN
+            DocumentPropertyType.ENTITY_REFERENCE -> GenPropertyType.ENTITY
+            DocumentPropertyType.ENUM -> GenPropertyType.ENUM
+            DocumentPropertyType.INT -> GenPropertyType.INT
+            DocumentPropertyType.LOCAL_DATE -> GenPropertyType.ENTITY
+            DocumentPropertyType.LOCAL_DATE_TIME -> GenPropertyType.ENTITY
+            DocumentPropertyType.LONG -> GenPropertyType.LONG
+            DocumentPropertyType.BYTE_ARRAY -> GenPropertyType.BYTE_ARRAY
+            DocumentPropertyType.NESTED_DOCUMENT -> GenPropertyType.ENTITY
+        }
+    }
 
     private fun getClassName(type: DatabasePropertyType, className: String?): String? {
         return when (type) {
@@ -83,6 +143,7 @@ class WebDomainGenerator : CodeGenerator {
         }
         val classesData = arrayListOf<BaseGenData>()
         val classes = arrayListOf<String>()
+        val factories = arrayListOf<String>()
         val enums = arrayListOf<String>()
         val pluginId = destPlugin.name
         val mapping = context[PluginAssociationsGenerator.WEB_MAP_KEY] as HashMap<String,String>
@@ -99,13 +160,37 @@ class WebDomainGenerator : CodeGenerator {
             val data = toGenData(it)
             classesData.add(data)
             classes.add(it.id + "JS")
+            factories.add(it.id + "JS")
             mapping[it.id+"JS"] = pluginId
         }
         registry.assets.values.forEach {
             val data = toGenData(it)
             classesData.add(data)
             classes.add(it.id + "JS")
+            factories.add(it.id + "JS")
             mapping[it.id+"JS"] = pluginId
+        }
+        registry.documents.values.forEach {
+            if(it.exposedAtRest) {
+                val data = toGenData(it)
+                classesData.add(data)
+                classes.add(it.id + "JS")
+                if(!it.isAbstract){
+                    factories.add(it.id + "JS")
+                }
+                mapping[it.id + "JS"] = pluginId
+            }
+        }
+        registry.nestedDocuments.values.forEach {
+            if(it.exposedAtRest) {
+                val data = toGenData(it)
+                classesData.add(data)
+                classes.add(it.id + "JS")
+                if(!it.isAbstract){
+                    factories.add(it.id + "JS")
+                }
+                mapping[it.id + "JS"] = pluginId
+            }
         }
         GenUtils.generateClasses(classesData, destPlugin, projectName,  generatedFiles)
 
@@ -117,7 +202,7 @@ class WebDomainGenerator : CodeGenerator {
                 enums.forEach {
                     "com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS.get().registerEnum(\"$it\", {$it.valueOf(it)})"()
                 }
-                classes.forEach {
+                factories.forEach {
                     "com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS.get().registerClass(\"$it\", {$it()})"()
                 }
                 classes.forEach {

@@ -89,117 +89,93 @@ class SerializationProvider : Disposable {
                     realClassName = parser.text
                     provider = providersCache.getOrPut(realClassName, { createProvider(realClassName) }) as ObjectMetadataProvider<T>
                 }
-                else ->{
-                    if(result == null) {
+                else -> {
+                    if (result == null) {
                         result = ReflectionFactory.get().newInstance<T>(realClassName)
-                        if(provider.hasUid()) {
+                        if (provider.hasUid()) {
                             provider.setPropertyValue(result, BaseIdentity.uid, uid)
-                            if(uid != null && result !is ObjectReference<*>) {
-                                ctx.putIfAbsent(uid, result)
+                            if (TextUtils.isNotBlank(uid) && result !is ObjectReference<*>) {
+                                ctx.putIfAbsent(uid!!, result)
                             }
-                        } else if (uid != null){
+                        } else if (TextUtils.isNotBlank(uid)) {
                             provider.setPropertyValue(result, BaseIdentity.uid, uid)
                         }
                     }
                     val propertyDescription = provider.getProperty(tagName)
-                    if(propertyDescription != null){
-                        val value = when(propertyDescription.type){
-                            SerializablePropertyType.STRING -> {
-                                parser.nextToken()
-                                parser.text
-                            }
-                            SerializablePropertyType.ENUM ->{
-                                parser.nextToken()
-                                ReflectionFactory.get().safeGetEnum(propertyDescription.className?:
-                                    throw IllegalStateException("no classname attribute in ${propertyDescription.id}"), parser.text)
-                            }
-                            SerializablePropertyType.ENTITY -> {
-                                parser.nextToken()
-                                deserialize(parser, propertyDescription.className?:throw Xeption.forDeveloper("no classname defined in property ${propertyDescription.id}"), ctx)
-                            }
-                            SerializablePropertyType.BIG_DECIMAL ->{
-                                parser.nextToken()
-                                parser.valueAsDouble.toBigDecimal()
-                            }
-                            SerializablePropertyType.INT ->{
-                                parser.nextToken()
-                                parser.valueAsInt
-                            }
-                            SerializablePropertyType.LONG ->{
-                                parser.nextToken()
-                                parser.valueAsLong
-                            }
-                            SerializablePropertyType.BYTE_ARRAY ->{
-                                parser.nextToken()
-                                parser.binaryValue
-                            }
-                            SerializablePropertyType.LOCAL_DATE_TIME ->{
-                                parser.nextToken()
-                                LocalDateTime.parse(parser.text, dateTimeFormatter)
-                            }
-                            SerializablePropertyType.LOCAL_DATE ->{
-                                parser.nextToken()
-                                LocalDate.parse(parser.text, dateFormatter)
-                            }
-                            SerializablePropertyType.CLASS ->{
-                                parser.nextToken()
-                                ReflectionFactory.get().getClass<Any>(parser.text)
-                            }
-                            SerializablePropertyType.BOOLEAN ->{
-                                parser.nextToken()
-                                parser.valueAsBoolean
-                            }
-                        }
+                    if (propertyDescription != null) {
+                        val value = readJsonValue(propertyDescription.type, propertyDescription.className, propertyDescription.id, parser, ctx)
                         provider.setPropertyValue(result, propertyDescription.id, value)
                         continue@outer
                     }
-                    val collectionDescription = provider.getCollection(tagName)?:throw Xeption.forDeveloper("object $realClassName has neither property nor collection with id $tagName")
-                    val collection = provider.getCollection(result, tagName)
-                    while(parser.nextToken() != JsonToken.END_ARRAY){
-                        if(parser.currentToken == JsonToken.START_ARRAY){
-                            parser.nextToken()
-                        }
-                        val value = when(collectionDescription.elementType){
-                            SerializablePropertyType.STRING -> {
-                                parser.text
+                    val collectionDescription = provider.getCollection(tagName)
+                    if (collectionDescription != null) {
+                        val collection = provider.getCollection(result, tagName)
+                        while (parser.nextToken() != JsonToken.END_ARRAY) {
+                            if (parser.currentToken == JsonToken.START_ARRAY) {
+                                parser.nextToken()
                             }
-                            SerializablePropertyType.ENUM ->{
-                                ReflectionFactory.get().safeGetEnum(collectionDescription.elementClassName?:
-                                throw IllegalStateException("no classname attribute in ${collectionDescription.id}"), parser.text)
+                            val value = when (collectionDescription.elementType) {
+                                SerializablePropertyType.STRING -> {
+                                    parser.text
+                                }
+                                SerializablePropertyType.ENUM -> {
+                                    ReflectionFactory.get().safeGetEnum(
+                                        collectionDescription.elementClassName
+                                            ?: throw IllegalStateException("no classname attribute in ${collectionDescription.id}"),
+                                        parser.text
+                                    )
+                                }
+                                SerializablePropertyType.ENTITY -> {
+                                    deserialize(parser,
+                                        collectionDescription.elementClassName
+                                            ?: throw Xeption.forDeveloper("no classname defined in collection ${collectionDescription.id}"),
+                                        ctx
+                                    )
+                                }
+                                SerializablePropertyType.BIG_DECIMAL -> {
+                                    parser.valueAsDouble.toBigDecimal()
+                                }
+                                SerializablePropertyType.INT -> {
+                                    parser.valueAsInt
+                                }
+                                SerializablePropertyType.LONG -> {
+                                    parser.valueAsLong
+                                }
+                                SerializablePropertyType.BYTE_ARRAY -> {
+                                    parser.binaryValue
+                                }
+                                SerializablePropertyType.LOCAL_DATE_TIME -> {
+                                    dateTimeFormatter.parse(parser.text)
+                                }
+                                SerializablePropertyType.LOCAL_DATE -> {
+                                    dateFormatter.parse(parser.text)
+                                }
+                                SerializablePropertyType.CLASS -> {
+                                    ReflectionFactory.get().getClass<Any>(parser.text)
+                                }
+                                SerializablePropertyType.BOOLEAN -> {
+                                    parser.valueAsBoolean
+                                }
                             }
-                            SerializablePropertyType.ENTITY -> {
-                                deserialize(parser, collectionDescription.elementClassName?:throw Xeption.forDeveloper("no classname defined in collection ${collectionDescription.id}"), ctx)
+                            if (value != null) {
+                                collection.add(value)
                             }
-                            SerializablePropertyType.BIG_DECIMAL ->{
-                                parser.valueAsDouble.toBigDecimal()
-                            }
-                            SerializablePropertyType.INT ->{
-                                parser.valueAsInt
-                            }
-                            SerializablePropertyType.LONG ->{
-                                parser.valueAsLong
-                            }
-                            SerializablePropertyType.BYTE_ARRAY ->{
-                                parser.binaryValue
-                            }
-                            SerializablePropertyType.LOCAL_DATE_TIME ->{
-                                dateTimeFormatter.parse(parser.text)
-                            }
-                            SerializablePropertyType.LOCAL_DATE ->{
-                                dateFormatter.parse(parser.text)
-                            }
-                            SerializablePropertyType.CLASS ->{
-                                ReflectionFactory.get().getClass<Any>(parser.text)
-                            }
-                            SerializablePropertyType.BOOLEAN ->{
-                                parser.valueAsBoolean
-                            }
-                        }
-                        if(value != null) {
-                            collection.add(value)
-                        }
 
+                        }
+                        continue@outer
                     }
+                    val  mapDescription = provider.getMap(tagName) ?:throw Xeption.forDeveloper("object $realClassName has neither property nor collection nor map with id $tagName")
+                    //start of map
+                    parser.nextToken()
+                    //key tag name
+                    parser.nextToken()
+                    val keyValue = readJsonValue(mapDescription.keyType, mapDescription.keyClassName, "key", parser, ctx)
+                    //value tag name
+                    parser.nextToken()
+                    val valueValue = readJsonValue(mapDescription.valueType, mapDescription.valueCassName, "value", parser, ctx)
+                    //end of map
+                    parser.nextToken()
+                    provider.getMap(result, tagName)[keyValue] = valueValue
                 }
             }
         }
@@ -212,6 +188,62 @@ class SerializationProvider : Disposable {
         return result
     }
 
+    private fun readJsonValue(type:SerializablePropertyType, className:String?, propertyId:String, parser:JsonParser, ctx: MutableMap<String, Any>):Any?{
+        return when (type) {
+            SerializablePropertyType.STRING -> {
+                parser.nextToken()
+                parser.text
+            }
+            SerializablePropertyType.ENUM -> {
+                parser.nextToken()
+                ReflectionFactory.get().safeGetEnum(
+                    className
+                        ?: throw IllegalStateException("no classname attribute in $propertyId"),
+                    parser.text
+                )
+            }
+            SerializablePropertyType.ENTITY -> {
+                parser.nextToken()
+                deserialize(parser,
+                    className
+                        ?: throw Xeption.forDeveloper("no classname defined in property $propertyId"),
+                    ctx
+                )
+            }
+            SerializablePropertyType.BIG_DECIMAL -> {
+                parser.nextToken()
+                parser.valueAsDouble.toBigDecimal()
+            }
+            SerializablePropertyType.INT -> {
+                parser.nextToken()
+                parser.valueAsInt
+            }
+            SerializablePropertyType.LONG -> {
+                parser.nextToken()
+                parser.valueAsLong
+            }
+            SerializablePropertyType.BYTE_ARRAY -> {
+                parser.nextToken()
+                parser.binaryValue
+            }
+            SerializablePropertyType.LOCAL_DATE_TIME -> {
+                parser.nextToken()
+                LocalDateTime.parse(parser.text, dateTimeFormatter)
+            }
+            SerializablePropertyType.LOCAL_DATE -> {
+                parser.nextToken()
+                LocalDate.parse(parser.text, dateFormatter)
+            }
+            SerializablePropertyType.CLASS -> {
+                parser.nextToken()
+                ReflectionFactory.get().getClass<Any>(parser.text)
+            }
+            SerializablePropertyType.BOOLEAN -> {
+                parser.nextToken()
+                parser.valueAsBoolean
+            }
+        }
+    }
     private fun <T : Any> serialize(generator: JsonGenerator, obj: T, isAbstract: Boolean, uids: MutableSet<String>) {
         var key = obj::class.java.name
         if(key.contains("_Cached")){
@@ -220,12 +252,12 @@ class SerializationProvider : Disposable {
         val provider = providersCache.getOrPut(key, { createProvider(key) }) as ObjectMetadataProvider<T>
         if (provider.hasUid()) {
             val uid = provider.getPropertyValue(obj, "uid") as String?
-            if (uid != null && obj !is ObjectReference<*>) {
+            if (TextUtils.isNotBlank(uid) && obj !is ObjectReference<*>) {
                 if (uids.contains(uid)) {
                     generator.writeStringField("uid", uid)
                     return
                 }
-                uids.add(uid)
+                uids.add(uid!!)
             }
         }
         generator.writeStartObject()
@@ -235,22 +267,7 @@ class SerializationProvider : Disposable {
         provider.getAllProperties().forEach { prop ->
             val value = provider.getPropertyValue(obj, prop.id)
             if (value != null) {
-                when (prop.type) {
-                    SerializablePropertyType.STRING -> generator.writeStringField(prop.id, value as String)
-                    SerializablePropertyType.CLASS -> generator.writeStringField(prop.id, (value as KClass<*>).qualifiedName)
-                    SerializablePropertyType.ENUM -> generator.writeStringField(prop.id, (value as Enum<*>).name)
-                    SerializablePropertyType.ENTITY -> {
-                        generator.writeFieldName(prop.id)
-                        serialize(generator, value, prop.isAbstract, uids)
-                    }
-                    SerializablePropertyType.BIG_DECIMAL -> generator.writeNumberField(prop.id, value as BigDecimal)
-                    SerializablePropertyType.INT -> generator.writeNumberField(prop.id, value as Int)
-                    SerializablePropertyType.LONG -> generator.writeNumberField(prop.id, value as Long)
-                    SerializablePropertyType.BOOLEAN -> generator.writeBooleanField(prop.id, value as Boolean)
-                    SerializablePropertyType.BYTE_ARRAY -> generator.writeBinaryField(prop.id, value as ByteArray)
-                    SerializablePropertyType.LOCAL_DATE_TIME -> generator.writeStringField(prop.id, (value as LocalDateTime).format(dateTimeFormatter))
-                    SerializablePropertyType.LOCAL_DATE -> generator.writeStringField(prop.id, (value as LocalDate).format(dateFormatter))
-                }
+                writeJsonProperty(prop.id, prop.type, prop.isAbstract, value, generator, uids)
             }
         }
         provider.getAllCollections().forEach { coll ->
@@ -278,7 +295,45 @@ class SerializationProvider : Disposable {
                 generator.writeEndArray()
             }
         }
+        provider.getAllMaps().forEach { mapDescription ->
+            val map = provider.getMap(obj, mapDescription.id)
+            if (map.isNotEmpty()) {
+                generator.writeFieldName(mapDescription.id)
+                generator.writeStartArray()
+                map.forEach { key, value ->
+                    generator.writeStartObject()
+                    if(key != null){
+                        writeJsonProperty("key", mapDescription.keyType, mapDescription.isKeyAbstract, key, generator, uids)
+                    }
+                    if(value != null){
+                        writeJsonProperty("value", mapDescription.valueType, mapDescription.isValueAbstract, value, generator, uids)
+                    }
+                    generator.writeEndObject()
+                }
+                generator.writeEndArray()
+            }
+        }
         generator.writeEndObject()
+    }
+
+    private fun writeJsonProperty(id: String, type: SerializablePropertyType, abstract: Boolean, value: Any, generator: JsonGenerator, uids: MutableSet<String>) {
+        when (type) {
+            SerializablePropertyType.STRING -> generator.writeStringField(id, value as String)
+            SerializablePropertyType.CLASS -> generator.writeStringField(id, (value as KClass<*>).qualifiedName)
+            SerializablePropertyType.ENUM -> generator.writeStringField(id, (value as Enum<*>).name)
+            SerializablePropertyType.ENTITY -> {
+                generator.writeFieldName(id)
+                serialize(generator, value, abstract, uids)
+            }
+            SerializablePropertyType.BIG_DECIMAL -> generator.writeNumberField(id, value as BigDecimal)
+            SerializablePropertyType.INT -> generator.writeNumberField(id, value as Int)
+            SerializablePropertyType.LONG -> generator.writeNumberField(id, value as Long)
+            SerializablePropertyType.BOOLEAN -> generator.writeBooleanField(id, value as Boolean)
+            SerializablePropertyType.BYTE_ARRAY -> generator.writeBinaryField(id, value as ByteArray)
+            SerializablePropertyType.LOCAL_DATE_TIME -> generator.writeStringField(id, (value as LocalDateTime).format(dateTimeFormatter))
+            SerializablePropertyType.LOCAL_DATE -> generator.writeStringField(id, (value as LocalDate).format(dateFormatter))
+        }
+
     }
 
 

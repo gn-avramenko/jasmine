@@ -1,5 +1,6 @@
 <code-gen xmlns="http://gridnine.com/jasmine/codegen">
     <generate source="reports-rest" targetPlugin="com.gridnine.jasmine.web.reports" generator="web-rest"/>
     <generate source="reports-model-domain" targetPlugin="com.gridnine.jasmine.web.reports" generator="web-domain"/>
+    <generate source="reports-model-misc" targetPlugin="com.gridnine.jasmine.web.reports" generator="web-misc"/>
     <generate source="reports-ui" targetPlugin="com.gridnine.jasmine.web.reports" generator="web-ui"/>
 </code-gen>

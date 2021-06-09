@@ -16,6 +16,7 @@ import com.gridnine.jasmine.common.reports.model.domain.ReportDescription
 import com.gridnine.jasmine.common.reports.model.domain.ReportDescriptionIndex
 import com.gridnine.jasmine.server.core.storage.StorageRegistry
 import com.gridnine.jasmine.server.reports.model.ServerReportHandler
+import com.gridnine.jasmine.server.reports.rest.WorkspaceReportsItemFromDTConverter
 import com.gridnine.jasmine.server.reports.rest.WorkspaceReportsItemToDTConverter
 import com.gridnine.jasmine.server.reports.storage.ReportDescriptionIndexHandler
 import java.util.*
@@ -25,7 +26,7 @@ class ServerReportsActivator : IPluginActivator{
         StorageRegistry.get().register(ReportDescriptionIndexHandler())
         MiscMetadataParser.updateMiscMetaRegistry(MiscMetaRegistry.get(), "com/gridnine/jasmine/server/reports/model/reports-server-model-misc.xml", javaClass.classLoader)
         Registry.get().register(WorkspaceReportsItemToDTConverter())
-//        Registry.get().register(ReportDescriptionUiListItemHandler())
+        Registry.get().register(WorkspaceReportsItemFromDTConverter())
     }
 
     override fun activate(config: Properties) {

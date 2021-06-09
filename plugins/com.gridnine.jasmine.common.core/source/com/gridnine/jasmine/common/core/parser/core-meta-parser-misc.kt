@@ -62,6 +62,7 @@ object MiscMetadataParser {
         node.children("enum").forEach { child ->
             val enumId = ParserUtils.getIdAttribute(child)
             val enumDescription = registry.enums.getOrPut(enumId) { MiscEnumDescription(enumId) }
+            enumDescription.exposedAtRest = child.attributes["exposed-at-rest"] == "true"
             child.children("enum-item").forEach { enumItemElm ->
                 val enumItemId = ParserUtils.getIdAttribute(enumItemElm)
                 val item = enumDescription.items.getOrPut(enumItemId){ MiscEnumItemDescription(enumItemId) }
@@ -71,6 +72,7 @@ object MiscMetadataParser {
         node.children("entity").forEach { child ->
             val id = ParserUtils.getIdAttribute(child)
             val entityDescr = registry.entities.getOrPut(id){ MiscEntityDescription(id) }
+            entityDescr.exposedAtRest = child.attributes["exposed-at-rest"] == "true"
             ParserUtils.updateLocalizations(entityDescr, null, localizations)
             fillMiscEntity(child, entityDescr, localizations)
         }

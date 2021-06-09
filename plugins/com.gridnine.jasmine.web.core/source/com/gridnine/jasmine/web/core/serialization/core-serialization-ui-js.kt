@@ -121,6 +121,10 @@ internal class VMEntityMetadataProviderJS(description: VMEntityDescriptionJS) : 
     override fun hasUid(): Boolean {
         return false
     }
+
+    override fun getMap(obj: BaseVMJS, id: String): MutableMap<Any?, Any?> {
+        return obj.getMap(id)
+    }
 }
 
 
@@ -236,6 +240,10 @@ internal class VSEntityMetadataProviderJS(description: VSEntityDescriptionJS) : 
     override fun hasUid(): Boolean {
         return false
     }
+
+    override fun getMap(obj: BaseVSJS, id: String): MutableMap<Any?, Any?> {
+        return obj.getMap(id)
+    }
 }
 
 internal class VVEntityMetadataProviderJS(description: VVEntityDescriptionJS) : ObjectMetadataProviderJS<BaseVVJS>() {
@@ -329,5 +337,9 @@ internal class VVEntityMetadataProviderJS(description: VVEntityDescriptionJS) : 
 
     override fun hasUid(): Boolean {
         return false
+    }
+
+    override fun getMap(obj: BaseVVJS, id: String): MutableMap<Any?, Any?> {
+        return obj.getMap(id)
     }
 }

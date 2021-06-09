@@ -8,9 +8,111 @@
 		<property type="STRING" id="name"/>
 		<property type="STRING" id="id"/>
 	</index>
-	<document id="com.gridnine.jasmine.common.reports.model.domain.SavedReportParameters">
-		<collection id="parameters" element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.common.reports.model.misc.BaseReportRequestedParameter"/>
+	<document id="com.gridnine.jasmine.common.reports.model.domain.SavedReportParameters" exposed-at-rest="true">
+		<collection id="parameters" element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.common.reports.model.domain.BaseReportRequestedParameter"/>
 	</document>
 	<nested-document id="com.gridnine.jasmine.common.reports.model.domain.ReportsWorkspaceItem" extends="com.gridnine.jasmine.common.standard.model.domain.BaseListWorkspaceItem"/>
+
+	<nested-document id="com.gridnine.jasmine.common.reports.model.domain.BaseReportRequestedParameter" abstract="true" exposed-at-rest="true">
+		<property id="id" type="STRING"/>
+	</nested-document>
+	<nested-document id="com.gridnine.jasmine.common.reports.model.domain.LocalDateReportRequestedParameter" extends="com.gridnine.jasmine.common.reports.model.domain.BaseReportRequestedParameter" exposed-at-rest="true">
+		<property id="value" type="LOCAL_DATE"/>
+	</nested-document>
+	<nested-document id="com.gridnine.jasmine.common.reports.model.domain.ObjectReferenceReportRequestedParameter" extends="com.gridnine.jasmine.common.reports.model.domain.BaseReportRequestedParameter" exposed-at-rest="true">
+		<property id="value" type="ENTITY_REFERENCE" class-name="com.gridnine.jasmine.common.core.model.BaseIdentity"/>
+	</nested-document>
+
+
+	<document id="com.gridnine.jasmine.common.reports.model.domain.GeneratedReport" exposed-at-rest="true">
+		<property id="fileName" type="STRING"/>
+		<property id="descriptionUid" type="STRING"/>
+		<collection id="lists" element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportList"/>
+		<collection id="styles" element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportCellStyle"/>
+	</document>
+
+	<nested-document id="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportList" exposed-at-rest="true">
+		<property id="title" type="STRING"/>
+		<collection id="mergedRegions" element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportMergeRegion"/>
+		<collection id="rows" element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportRow"/>
+		<collection id="columns" element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportColumn"/>
+	</nested-document>
+
+	<enum id="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportCellBorderWidth" >
+		<enum-item id="NONE"/>
+		<enum-item id="THIN"/>
+		<enum-item id="THICK"/>
+	</enum>
+	<enum id="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportCellHorizontalAlignment">
+		<enum-item id="LEFT"/>
+		<enum-item id="CENTER"/>
+		<enum-item id="RIGHT"/>
+	</enum>
+	<enum id="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportCellVerticalAlignment">
+		<enum-item id="TOP"/>
+		<enum-item id="CENTER"/>
+		<enum-item id="BOTTOM"/>
+	</enum>
+
+	<enum id="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportFontUnderline">
+		<enum-item id="SINGLE"/>
+		<enum-item id="DOUBLE"/>
+		<enum-item id="SINGLE_ACCOUNTING"/>
+		<enum-item id="DOUBLE_ACCOUNTING"/>
+		<enum-item id="NONE"/>
+	</enum>
+
+	<enum id="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportColor">
+		<enum-item id="BLACK"/>
+		<enum-item id="GREY_40_PERCENT"/>
+		<enum-item id="GREY_25_PERCENT"/>
+	</enum>
+
+	<nested-document id="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportCellStyle" exposed-at-rest="true">
+		<property id="id" type="STRING"/>
+		<property id="bottomBorderWidth" type="ENUM" class-name="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportCellBorderWidth"/>
+		<property id="leftBorderWidth" type="ENUM" class-name="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportCellBorderWidth"/>
+		<property id="rightBorderWidth" type="ENUM" class-name="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportCellBorderWidth"/>
+		<property id="topBorderWidth" type="ENUM" class-name="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportCellBorderWidth"/>
+		<property id="horizontalAlignment" type="ENUM" class-name="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportCellHorizontalAlignment"/>
+		<property id="verticalAlignment" type="ENUM" class-name="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportCellVerticalAlignment"/>
+		<property id="wrapText" type="BOOLEAN"/>
+		<property id="fontFamily" type="STRING"/>
+		<property id="fontHeight" type="INT"/>
+		<property id="fontBold" type="BOOLEAN"/>
+		<property id="fontItalic" type="BOOLEAN"/>
+		<property id="fontUnderline" type="ENUM" class-name="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportFontUnderline"/>
+		<property id="format" type="STRING"/>
+		<property id="locked" type="BOOLEAN"/>
+		<property id="fontColor" type="ENUM" class-name="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportColor"/>
+		<property id="foregroundColor" type="ENUM" class-name="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportColor"/>
+	</nested-document>
+	<enum id="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportCellValueType" >
+		<enum-item id="NONE"/>
+		<enum-item id="NUMBER"/>
+		<enum-item id="DATE"/>
+		<enum-item id="FORMULA"/>
+		<enum-item id="TEXT"/>
+	</enum>
+	<nested-document id="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportColumn" exposed-at-rest="true">
+		<property id="width" type="INT" non-nullable="true"/>
+	</nested-document>
+	<nested-document id="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportCell" exposed-at-rest="true">
+		<property id="styleId" type="STRING"/>
+		<property id="contentType" type="ENUM" class-name="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportCellValueType" non-nullable="true"/>
+		<property id="value" type="STRING"/>
+		<property id="formatedValue" type="STRING"/>
+		<property id="formula" type="STRING"/>
+	</nested-document>
+	<nested-document id="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportRow" exposed-at-rest="true">
+		<property id="height" type="INT"/>
+		<collection id="cells" element-type="NESTED_DOCUMENT" element-class-name="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportCell"/>
+	</nested-document>
+	<nested-document id="com.gridnine.jasmine.common.reports.model.domain.GeneratedReportMergeRegion" exposed-at-rest="true">
+		<property id="leftTopRow" type="INT" non-nullable="true"/>
+		<property id="leftTopColumn" type="INT"  non-nullable="true"/>
+		<property id="rightBottomRow" type="INT" non-nullable="true"/>
+		<property id="rightBottomColumn" type="INT" non-nullable="true"/>
+	</nested-document>
 
 </domain>

@@ -20,11 +20,20 @@ internal open class RestEntityMetadataProviderJS(description: RestEntityDescript
                     ?: throw IllegalStateException("no rest entity found for id $extendsId")
             fillProperties(parentDescr)
             fillCollections(parentDescr)
+            fillMaps(parentDescr)
             extendsId = parentDescr.extendsId
         }
         fillProperties(description)
         fillCollections(description)
+        fillMaps(description)
         isAbstract = description.isAbstract
+    }
+
+    private fun fillMaps(desc: RestEntityDescriptionJS) {
+        desc.maps.values.forEach {
+            addMap(SerializableMapDescriptionJS(it.id, toSerializableType(it.keyClassType), toClassName(it.keyClassType, it.keyClassName)
+                , toSerializableType(it.valueClassType), toClassName(it.keyClassType, it.valueClassName), CommonSerializationUtilsJS.isAbstractClass(it.valueClassName), CommonSerializationUtilsJS.isAbstractClass(it.valueClassName)))
+        }
     }
 
     private fun fillCollections(desc: RestEntityDescriptionJS) {
@@ -78,5 +87,9 @@ internal open class RestEntityMetadataProviderJS(description: RestEntityDescript
 
     override fun hasUid(): Boolean {
         return false
+    }
+
+    override fun getMap(obj: BaseRestEntityJS, id: String): MutableMap<Any?, Any?> {
+        return obj.getMap(id)
     }
 }

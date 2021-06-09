@@ -45,7 +45,46 @@
        <property id="keyClassName" type="STRING"/>
         <property id="valueClassName" type="STRING"/>
     </entity>
-
+    <enum id="com.gridnine.jasmine.common.standard.model.rest.MiscFieldTypeDT">
+        <enum-item id="STRING"/>
+        <enum-item id="ENUM"/>
+        <enum-item id="ENTITY"/>
+        <enum-item id="LONG"/>
+        <enum-item id="CLASS"/>
+        <enum-item id="INT"/>
+        <enum-item id="BIG_DECIMAL"/>
+        <enum-item id="ENTITY_REFERENCE"/>
+        <enum-item id="LOCAL_DATE_TIME"/>
+        <enum-item id="LOCAL_DATE"/>
+        <enum-item id="BOOLEAN"/>
+        <enum-item id="BYTE_ARRAY"/>
+    </enum>
+    <entity id="com.gridnine.jasmine.common.standard.model.rest.MiscPropertyDescriptionDT" extends="com.gridnine.jasmine.common.standard.model.rest.BaseModelElementDescriptionDT">
+        <property id="type" type="ENUM" class-name="com.gridnine.jasmine.common.standard.model.rest.MiscFieldTypeDT"/>
+        <property id="className" type="STRING"/>
+        <property id="nonNullable" type="BOOLEAN"/>
+        <property id="lateInit" type="BOOLEAN"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.common.standard.model.rest.MiscCollectionDescriptionDT"  extends="com.gridnine.jasmine.common.standard.model.rest.BaseModelElementDescriptionDT">
+        <property id="elementType" type="ENUM" class-name="com.gridnine.jasmine.common.standard.model.rest.MiscFieldTypeDT"/>
+        <property id="elementClassName" type="STRING"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.common.standard.model.rest.MiscMapDescriptionDT"  extends="com.gridnine.jasmine.common.standard.model.rest.BaseModelElementDescriptionDT">
+        <property id="keyClassType" type="ENUM" class-name="com.gridnine.jasmine.common.standard.model.rest.MiscFieldTypeDT"/>
+        <property id="valueClassType" type="ENUM" class-name="com.gridnine.jasmine.common.standard.model.rest.MiscFieldTypeDT"/>
+        <property id="keyClassName" type="STRING"/>
+        <property id="valueClassName" type="STRING"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.common.standard.model.rest.MiscEnumDescriptionDT"  extends="com.gridnine.jasmine.common.standard.model.rest.BaseModelElementDescriptionDT">
+        <collection id="items" element-type="STRING"/>
+    </entity>
+    <entity id="com.gridnine.jasmine.common.standard.model.rest.MiscEntityDescriptionDT"  extends="com.gridnine.jasmine.common.standard.model.rest.BaseModelElementDescriptionDT">
+        <property id="isAbstract" type="BOOLEAN"/>
+        <property id="extendsId" type="STRING"/>
+        <collection id="properties" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.MiscPropertyDescriptionDT"/>
+        <collection id="collections" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.MiscCollectionDescriptionDT"/>
+        <collection id="maps" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.MiscMapDescriptionDT"/>
+    </entity>
     <enum id="com.gridnine.jasmine.common.standard.model.rest.RestPropertyTypeDT">
         <enum-item id="STRING"/>
         <enum-item id="ENUM"/>
@@ -69,11 +108,18 @@
         <property id="elementType" type="ENUM" class-name="com.gridnine.jasmine.common.standard.model.rest.RestPropertyTypeDT"/>
         <property id="elementClassName" type="STRING"/>
     </entity>
+    <entity id="com.gridnine.jasmine.common.standard.model.rest.RestMapDescriptionDT"  extends="com.gridnine.jasmine.common.standard.model.rest.BaseModelElementDescriptionDT">
+        <property id="keyClassType" type="ENUM" class-name="com.gridnine.jasmine.common.standard.model.rest.RestPropertyTypeDT"/>
+        <property id="valueClassType" type="ENUM" class-name="com.gridnine.jasmine.common.standard.model.rest.RestPropertyTypeDT"/>
+        <property id="keyClassName" type="STRING"/>
+        <property id="valueClassName" type="STRING"/>
+    </entity>
     <entity id="com.gridnine.jasmine.common.standard.model.rest.RestEntityDescriptionDT"  extends="com.gridnine.jasmine.common.standard.model.rest.BaseModelElementDescriptionDT">
         <property id="abstract" type="BOOLEAN"/>
         <property id="extends" type="STRING"/>
         <collection id="properties" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.RestPropertyDescriptionDT"/>
         <collection id="collections" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.RestCollectionDescriptionDT"/>
+        <collection id="maps" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.RestMapDescriptionDT"/>
     </entity>
     <entity id="com.gridnine.jasmine.common.standard.model.rest.RestEnumDescriptionDT"  extends="com.gridnine.jasmine.common.standard.model.rest.BaseModelElementDescriptionDT">
         <collection id="items" element-type="STRING"/>
@@ -140,6 +186,15 @@
         <property id="elementType" type="ENUM" class-name="com.gridnine.jasmine.common.standard.model.rest.DocumentPropertyTypeDT"  lateinit="true"/>
         <property id="elementClassName" type="STRING"/>
     </entity>
+    <entity id="com.gridnine.jasmine.common.standard.model.rest.DocumentDescriptionDT">
+        <property id="id" type="STRING"/>
+        <property id="isAbstract" type="BOOLEAN" non-nullable="true"/>
+        <property id="extendsId" type="STRING"/>
+        <property id="root" type="BOOLEAN"/>
+        <collection id="properties" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.DocumentPropertyDescriptionDT"/>
+        <collection id="collections" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.DocumentCollectionDescriptionDT"/>
+    </entity>
+
     <entity id="com.gridnine.jasmine.common.standard.model.rest.RestOperationDescriptionDT"  extends="com.gridnine.jasmine.common.standard.model.rest.BaseModelElementDescriptionDT">
         <property id="request" type="STRING"/>
         <property id="response" type="STRING"/>
@@ -259,11 +314,14 @@
             <response id="com.gridnine.jasmine.common.standard.model.rest.GetMetadataResponse">
                 <collection id="customEnums" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.CustomEnumDescriptionDT"/>
                 <collection id="customEntities" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.CustomEntityDescriptionDT"/>
+                <collection id="miscEnums" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.MiscEnumDescriptionDT"/>
+                <collection id="miscEntities" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.MiscEntityDescriptionDT"/>
                 <collection id="restEnums" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.RestEnumDescriptionDT"/>
                 <collection id="restEntities" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.RestEntityDescriptionDT"/>
                 <collection id="domainEnums" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.DomainEnumDescriptionDT"/>
                 <collection id="domainIndexes" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.IndexDescriptionDT"/>
                 <collection id="domainAssets" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.AssetDescriptionDT"/>
+                <collection id="domainDocuments" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.DocumentDescriptionDT"/>
                 <collection id="uiEnums" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.UiEnumDescriptionDT"/>
                 <collection id="viewModels" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.VMEntityDescriptionDT"/>
                 <collection id="viewSettings" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.standard.model.rest.VSEntityDescriptionDT"/>

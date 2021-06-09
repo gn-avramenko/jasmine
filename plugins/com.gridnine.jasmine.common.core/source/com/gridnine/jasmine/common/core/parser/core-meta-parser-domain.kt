@@ -28,6 +28,7 @@ object DomainMetadataParser {
     private fun <T : BaseDocumentDescription> fillBaseDocument(elm: XmlNode , description: T, localizations: Map<String, Map<Locale, String>>) {
         description.extendsId = elm.attributes["extends"]
         description.isAbstract = "true" == elm.attributes["abstract"]
+        description.exposedAtRest = "true" == elm.attributes["exposed-at-rest"]
         ParserUtils.updateParameters(elm, description)
         ParserUtils.updateLocalizations(description, null, localizations)
         elm.children("code-injection").forEach {

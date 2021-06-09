@@ -18,7 +18,9 @@ import com.gridnine.jasmine.web.core.ui.components.WebBorderContainer
 import com.gridnine.jasmine.web.core.ui.components.WebDataGridResponse
 import com.gridnine.jasmine.web.core.ui.components.WebDataHorizontalAlignment
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
+import com.gridnine.jasmine.web.reports.editor.GenerateReportData
 import com.gridnine.jasmine.web.standard.StandardRestClient
+import com.gridnine.jasmine.web.standard.mainframe.MainFrame
 import com.gridnine.jasmine.web.standard.mainframe.MainFrameTabCallback
 import com.gridnine.jasmine.web.standard.mainframe.MainFrameTabData
 import com.gridnine.jasmine.web.standard.mainframe.MainFrameTabHandler
@@ -98,11 +100,15 @@ class WebReportsListPanel(obj: ReportsWorkspaceItemDTJS) : BaseWebNodeWrapper<We
             val resp = StandardRestClient.standard_standard_getList(req)
             WebDataGridResponse(resp.totalCount!!, resp.items as List<ReportDescriptionIndexJS> )
         }
+        searchBox.setSearcher {
+            dataGrid.reload()
+        }
         dataGrid.setRowDblClickListener {
-           console.log(it.name)
+            MainFrame.get().openTab(GenerateReportData(it.document!!))
         }
         _node.setCenterRegion {
             content = dataGrid
         }
     }
 }
+

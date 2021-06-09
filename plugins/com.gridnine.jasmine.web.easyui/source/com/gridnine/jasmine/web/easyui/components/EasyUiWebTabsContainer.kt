@@ -80,7 +80,7 @@ class EasyUiWebTabsContainer(configure: WebTabsContainerConfiguration.()->Unit) 
         jq!!.tabs("add", object{
             val id = panel.id
             val title = panel.title
-            val closable = true
+            val closable = panel.closable
             val content = uiComp.getHtml()
         })
         uiComp.decorate()
@@ -99,6 +99,10 @@ class EasyUiWebTabsContainer(configure: WebTabsContainerConfiguration.()->Unit) 
         jq.tabs(object{
             val fit = config.fit
             val toolPosition = "left"
+            val tabPosition = when(config.tabsPositions){
+                WebTabsPosition.TOP -> "top"
+                WebTabsPosition.BOTTOM -> "bottom"
+            }
             val onBeforeClose ={ _:String?, idx:Int ->
                 val element = tabs.removeAt(idx)
                 findEasyUiComponent(element.content).destroy()

@@ -5,10 +5,10 @@
 
 package com.gridnine.jasmine.server.reports.excel
 
-import com.gridnine.jasmine.common.reports.model.misc.GeneratedReport
-import com.gridnine.jasmine.common.reports.model.misc.GeneratedReportCellBorderWidth
-import com.gridnine.jasmine.common.reports.model.misc.GeneratedReportCellValueType
-import com.gridnine.jasmine.common.reports.model.misc.GeneratedReportColor
+import com.gridnine.jasmine.common.reports.model.domain.GeneratedReport
+import com.gridnine.jasmine.common.reports.model.domain.GeneratedReportCellBorderWidth
+import com.gridnine.jasmine.common.reports.model.domain.GeneratedReportCellValueType
+import com.gridnine.jasmine.common.reports.model.domain.GeneratedReportColor
 import com.gridnine.jasmine.server.reports.builders.DATE_STORE_FORMATTER
 import org.apache.poi.ss.usermodel.*
 import org.apache.poi.ss.util.CellRangeAddress

@@ -7,7 +7,7 @@ package com.gridnine.jasmine.server.reports.model
 
 import com.gridnine.jasmine.common.core.model.BaseIdentity
 import com.gridnine.jasmine.common.core.model.ObjectReference
-import com.gridnine.jasmine.common.reports.model.misc.BaseReportRequestedParameter
+import com.gridnine.jasmine.common.reports.model.domain.BaseReportRequestedParameter
 import com.gridnine.jasmine.common.reports.model.misc.ReportRequestedParameterDescription
 import com.gridnine.jasmine.common.reports.model.misc.ReportRequestedParameterType
 import java.time.LocalDate

@@ -6,10 +6,83 @@
 package com.gridnine.jasmine.web.core.serialization
 
 import com.gridnine.jasmine.common.core.meta.*
-import com.gridnine.jasmine.common.core.model.BaseIdentityJS
-import com.gridnine.jasmine.common.core.model.BaseIndexJS
-import com.gridnine.jasmine.common.core.model.ObjectReferenceJS
+import com.gridnine.jasmine.common.core.model.*
 
+internal open class DomainDocumentMetadataProvider(description: DocumentDescriptionJS) : ObjectMetadataProviderJS<BaseIdentityJS>() {
+
+    init {
+        addProperty(SerializablePropertyDescriptionJS(BaseIdentityJS.uid, SerializablePropertyTypeJS.STRING, null, false))
+        if(description.root) {
+            addProperty(SerializablePropertyDescriptionJS(BaseDocumentJS.revision, SerializablePropertyTypeJS.INT, null, false))
+        }
+        var extendsId = description.extendsId
+        while (extendsId != null) {
+            val parentDescr = DomainMetaRegistryJS.get().documents[extendsId]?: throw XeptionJS.forDeveloper("no document found for id $extendsId")
+            fillProperties(parentDescr)
+            fillCollections(parentDescr)
+            extendsId = parentDescr.extendsId
+        }
+        fillProperties(description)
+        fillCollections(description)
+        isAbstract = description.isAbstract
+    }
+
+    private fun fillCollections(desc: DocumentDescriptionJS) {
+        desc.collections.values.forEach {
+            addCollection(SerializableCollectionDescriptionJS(it.id, toSerializableType(it.elementType), toClassName(it.elementType, it.elementClassName), CommonSerializationUtilsJS.isAbstractClass(it.elementClassName)))
+        }
+    }
+
+    private fun fillProperties(desc: DocumentDescriptionJS) {
+        desc.properties.values.forEach {
+            addProperty(SerializablePropertyDescriptionJS(it.id, toSerializableType(it.type), toClassName(it.type, it.className), CommonSerializationUtilsJS.isAbstractClass(it.className)))
+        }
+    }
+
+
+    private fun toClassName(elementType: DocumentPropertyTypeJS, elementClassName: String?): String? {
+        if (elementType == DocumentPropertyTypeJS.ENTITY_REFERENCE) {
+            return ObjectReferenceJS.qualifiedClassName
+        }
+        return elementClassName
+    }
+
+    private fun toSerializableType(elementType: DocumentPropertyTypeJS): SerializablePropertyTypeJS {
+        return when (elementType) {
+            DocumentPropertyTypeJS.LONG -> SerializablePropertyTypeJS.LONG
+            DocumentPropertyTypeJS.LOCAL_DATE_TIME -> SerializablePropertyTypeJS.LOCAL_DATE_TIME
+            DocumentPropertyTypeJS.LOCAL_DATE -> SerializablePropertyTypeJS.LOCAL_DATE
+            DocumentPropertyTypeJS.INT -> SerializablePropertyTypeJS.INT
+            DocumentPropertyTypeJS.ENUM -> SerializablePropertyTypeJS.ENUM
+            DocumentPropertyTypeJS.ENTITY_REFERENCE -> SerializablePropertyTypeJS.ENTITY
+            DocumentPropertyTypeJS.NESTED_DOCUMENT -> SerializablePropertyTypeJS.ENTITY
+            DocumentPropertyTypeJS.BOOLEAN -> SerializablePropertyTypeJS.BOOLEAN
+            DocumentPropertyTypeJS.BIG_DECIMAL -> SerializablePropertyTypeJS.BIG_DECIMAL
+            DocumentPropertyTypeJS.BYTE_ARRAY -> SerializablePropertyTypeJS.BYTE_ARRAY
+            DocumentPropertyTypeJS.STRING -> SerializablePropertyTypeJS.STRING
+        }
+    }
+
+    override fun getPropertyValue(obj: BaseIdentityJS, id: String): Any? {
+        return obj.getValue(id)
+    }
+
+    override fun getCollection(obj: BaseIdentityJS, id: String): MutableCollection<Any> {
+        return obj.getCollection(id)
+    }
+
+    override fun setPropertyValue(obj: BaseIdentityJS, id: String, value: Any?) {
+        obj.setValue(id, value)
+    }
+
+    override fun hasUid(): Boolean {
+        return true
+    }
+
+    override fun getMap(obj: BaseIdentityJS, id: String): MutableMap<Any?, Any?> {
+        return obj.getMap(id)
+    }
+}
 
 internal open class BaseDomainIndexMetadataProviderJS(description: BaseIndexDescriptionJS) : ObjectMetadataProviderJS<BaseIdentityJS>() {
 
@@ -78,6 +151,10 @@ internal open class BaseDomainIndexMetadataProviderJS(description: BaseIndexDesc
 
     override fun hasUid(): Boolean {
         return true
+    }
+
+    override fun getMap(obj: BaseIdentityJS, id: String): MutableMap<Any?, Any?> {
+        return obj.getMap(id)
     }
 }
 

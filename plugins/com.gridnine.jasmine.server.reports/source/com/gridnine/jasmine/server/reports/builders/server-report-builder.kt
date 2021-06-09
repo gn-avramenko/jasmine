@@ -7,15 +7,14 @@
 
 package com.gridnine.jasmine.server.reports.builders
 
-import com.gridnine.jasmine.common.core.utils.TextUtils
-import com.gridnine.jasmine.common.reports.model.misc.*
+import com.gridnine.jasmine.common.reports.model.domain.*
 import java.math.BigDecimal
+import java.text.DecimalFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 val DATE_STORE_FORMATTER:DateTimeFormatter  = DateTimeFormatter.BASIC_ISO_DATE
-@Volatile
-var styleIndex:Long = 0
+
 
 @DslMarker
 annotation class ReportBuilder
@@ -32,15 +31,17 @@ fun report(build:Report.()->Unit):GeneratedReport{
 
 @ReportBuilder
 class Report {
-
+    private var styleIndex:Int = 0
     internal val lists = arrayListOf<GeneratedReportList>()
     internal val styles = arrayListOf<GeneratedReportCellStyle>()
+
 
     lateinit var fileName:String
     fun list(build:ReportList.()->Unit){
         val lst = ReportList()
         lst.build()
         val result = GeneratedReportList()
+        result.uid = ""
         result.title = lst.title
         result.columns.addAll(lst.colls)
         result.mergedRegions.addAll(lst.mergedRegions)
@@ -53,6 +54,7 @@ class Report {
         val hStyle = Style()
         hStyle.build()
         val result = GeneratedReportCellStyle()
+        result.uid = ""
         result.id = "reportStyle$styleIndex"
         hStyle.parentStyle?.let {
             result.bottomBorderWidth =it.bottomBorderWidth
@@ -89,6 +91,8 @@ class Report {
         styles.add(result)
         return result
     }
+
+
 }
 
 @ReportBuilder
@@ -148,11 +152,14 @@ class ReportList{
     private lateinit var currentRow:GeneratedReportRow
     private lateinit var currentCell: GeneratedReportCell
     var defaultRowHeight = 10
+    private val numberFormattersCache = hashMapOf<String?, DecimalFormat>()
+    private val dateFormattersCache = hashMapOf<String?, DateTimeFormatter>()
 
     fun columns(build:Columns.()->Unit){
         val hColumns = Columns()
         hColumns.build()
         colls.addAll(hColumns.columnsWidths.map { coll -> GeneratedReportColumn().let {
+            it.uid = ""
             it.width = coll
             it
         } })
@@ -164,6 +171,7 @@ class ReportList{
 
     fun row(rowHeight:Int? =null) {
         currentRow = GeneratedReportRow()
+        currentRow.uid = ""
         currentRow.height = rowHeight?:defaultRowHeight
         rows.add(currentRow)
         currentRowIndex++
@@ -173,6 +181,7 @@ class ReportList{
     fun emptyCell(style:GeneratedReportCellStyle? = null, hSpan:Int = 1, vSpan:Int = 1){
         currentColumnIndex++
         val cell = GeneratedReportCell()
+        cell.uid = ""
         currentRow.cells.add(cell)
         cell.contentType = GeneratedReportCellValueType.NONE
         cell.styleId = style?.id
@@ -186,10 +195,12 @@ class ReportList{
         }
         currentColumnIndex++
         val cell = GeneratedReportCell()
+        cell.uid = ""
         currentRow.cells.add(cell)
         cell.contentType = GeneratedReportCellValueType.NUMBER
         cell.styleId = style?.id
         cell.value = value.toPlainString()
+        cell.formatedValue = formatNumber(style, value)
         addMergedRegion(hSpan, vSpan)
     }
 
@@ -200,6 +211,7 @@ class ReportList{
         }
         currentColumnIndex++
         val cell = GeneratedReportCell()
+        cell.uid = ""
         currentRow.cells.add(cell)
         cell.contentType = GeneratedReportCellValueType.TEXT
         cell.styleId = style?.id
@@ -214,10 +226,12 @@ class ReportList{
         }
         currentColumnIndex++
         val cell = GeneratedReportCell()
+        cell.uid = ""
         currentRow.cells.add(cell)
         cell.contentType = GeneratedReportCellValueType.DATE
         cell.styleId = style?.id
         cell.value = DATE_STORE_FORMATTER.format(value)
+        cell.formatedValue = formatDate(style, value)
         addMergedRegion(hSpan, vSpan)
     }
 
@@ -228,10 +242,12 @@ class ReportList{
         }
         currentColumnIndex++
         val cell = GeneratedReportCell()
+        cell.uid = ""
         currentRow.cells.add(cell)
         cell.contentType = GeneratedReportCellValueType.FORMULA
         cell.styleId = style?.id
         cell.value =calculatedValue?.toPlainString()
+        cell.formatedValue = formatNumber(style, calculatedValue)
         cell.formula = value
         addMergedRegion(hSpan, vSpan)
     }
@@ -241,12 +257,34 @@ class ReportList{
             return
         }
         mergedRegions.add(GeneratedReportMergeRegion().let {
+            it.uid = ""
             it.leftTopRow = currentRowIndex
             it.leftTopColumn = currentColumnIndex
             it.rightBottomRow = currentRowIndex+vSpan-1
             it.rightBottomColumn = currentColumnIndex+hSpan-1
             it
         })
+    }
+
+    private fun formatDate(style: GeneratedReportCellStyle?, date: LocalDate?): String? {
+        if(date == null){
+            return null
+        }
+        val format = dateFormattersCache.getOrPut(style?.id?:""){
+            style?.format?.let {  DateTimeFormatter.ofPattern(it)}?:DateTimeFormatter.ofPattern("yyyy.MM.dd")
+        }
+        return format.format(date)
+    }
+
+
+    private fun formatNumber(style: GeneratedReportCellStyle?, value: Number?): String? {
+        if(value == null){
+            return null
+        }
+        val format = numberFormattersCache.getOrPut(style?.id?:""){
+            style?.format?.let {  DecimalFormat(it) }?: DecimalFormat("#")
+        }
+        return format.format(value)
     }
 
 

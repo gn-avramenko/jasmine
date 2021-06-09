@@ -7,7 +7,7 @@ package com.gridnine.jasmine.server.reports.model
 
 import com.gridnine.jasmine.common.core.app.RegistryItem
 import com.gridnine.jasmine.common.core.app.RegistryItemType
-import com.gridnine.jasmine.common.reports.model.misc.BaseReportRequestedParameter
+import com.gridnine.jasmine.common.reports.model.domain.BaseReportRequestedParameter
 import com.gridnine.jasmine.common.reports.model.misc.ReportGenerationResult
 import com.gridnine.jasmine.common.reports.model.misc.ReportRequestedParameterDescription
 

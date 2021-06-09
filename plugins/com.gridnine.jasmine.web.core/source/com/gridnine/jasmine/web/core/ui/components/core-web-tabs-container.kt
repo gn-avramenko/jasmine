@@ -18,15 +18,20 @@ class WebTabsContainerTool{
     lateinit var displayName:String
     lateinit var handler: suspend ()->Unit
 }
-
+enum class WebTabsPosition{
+    TOP,
+    BOTTOM
+}
 class WebTabsContainerConfiguration:BaseWebComponentConfiguration(){
     var fit:Boolean = true
     val tools = arrayListOf<WebTabsContainerTool>()
+    var tabsPositions = WebTabsPosition.TOP
 }
 
 class WebTabPanel {
     var id = MiscUtilsJS.createUUID()
     var title:String? = null
+    var closable = true
     lateinit var content:WebNode
 }
 

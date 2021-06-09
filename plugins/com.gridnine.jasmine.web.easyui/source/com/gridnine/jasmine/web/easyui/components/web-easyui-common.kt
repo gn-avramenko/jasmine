@@ -12,7 +12,7 @@ import com.gridnine.jasmine.web.core.ui.components.WebNode
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 
 interface EasyUiComponent: WebNode {
-    fun getId():String
+    fun getId():String?
     fun getHtml():String
     fun decorate()
     fun destroy()

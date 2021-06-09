@@ -76,6 +76,8 @@ abstract class BaseDocumentDescription(id:String) : BaseModelElementDescription(
 
     var extendsId: String? = null
 
+    var exposedAtRest = false
+
 }
 
 class IndexPropertyDescription(id:String) : BaseModelElementDescription(id) {

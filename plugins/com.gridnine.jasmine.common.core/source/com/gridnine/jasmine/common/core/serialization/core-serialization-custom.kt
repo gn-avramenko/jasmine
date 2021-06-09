@@ -8,6 +8,7 @@ package com.gridnine.jasmine.common.core.serialization
 import com.gridnine.jasmine.common.core.meta.CustomEntityDescription
 import com.gridnine.jasmine.common.core.meta.CustomMetaRegistry
 import com.gridnine.jasmine.common.core.meta.CustomType
+import com.gridnine.jasmine.common.core.meta.MiscEntityDescription
 import com.gridnine.jasmine.common.core.model.BaseIdentity
 import com.gridnine.jasmine.common.core.model.BaseIntrospectableObject
 import com.gridnine.jasmine.common.core.model.ObjectReference
@@ -22,12 +23,21 @@ internal open class CustomEntityMetadataProvider(description: CustomEntityDescri
                     ?: throw IllegalStateException("no rest entity found for id $extendsId")
             fillProperties(parentDescr)
             fillCollections(parentDescr)
+            fillMaps(parentDescr)
             extendsId = parentDescr.extendsId
         }
         fillProperties(description)
         fillCollections(description)
+        fillMaps(description)
         isAbstract = description.isAbstract
         hasUid= description.id != ObjectReference::class.qualifiedName &&  getAllProperties().find{ it.id == BaseIdentity.uid} != null
+    }
+
+    private fun fillMaps(desc: CustomEntityDescription) {
+        desc.maps.values.forEach {
+            addMap(SerializableMapDescription(it.id, toSerializableType(it.keyClassType), toClassName(it.keyClassType, it.keyClassName)
+                , toSerializableType(it.valueClassType), toClassName(it.keyClassType, it.valueClassName), CommonSerializationUtils.isAbstractClass(it.valueClassName), CommonSerializationUtils.isAbstractClass(it.valueClassName)))
+        }
     }
 
     private fun fillCollections(desc: CustomEntityDescription) {
@@ -80,5 +90,9 @@ internal open class CustomEntityMetadataProvider(description: CustomEntityDescri
 
     override fun hasUid(): Boolean {
         return hasUid
+    }
+
+    override fun getMap(obj: BaseIntrospectableObject, id: String): MutableMap<Any?, Any?> {
+        return obj.getMap(id)
     }
 }

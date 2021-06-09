@@ -164,7 +164,7 @@ object GenUtils {
                             blankLine()
                             "@Suppress(\"UNCHECKED_CAST\")"()
                             "override fun getMap(mapName: String): MutableMap<Any?,Any?>" {
-                                it.collections.forEach { prop ->
+                                it.maps.forEach { prop ->
                                     blankLine()
                                     "if(\"${prop.id}\" == mapName)"{
                                         "return this.${prop.id} as MutableMap<Any?,Any?>"()

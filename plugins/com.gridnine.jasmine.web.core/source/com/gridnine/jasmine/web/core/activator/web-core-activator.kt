@@ -32,6 +32,7 @@ class WebCoreActivator : ActivatorJS{
         EnvironmentJS.publish(DomainMetaRegistryJS())
         EnvironmentJS.publish(L10nMetaRegistryJS())
         EnvironmentJS.publish(RestMetaRegistryJS())
+        EnvironmentJS.publish(MiscMetaRegistryJS())
         EnvironmentJS.publish(UiMetaRegistryJS())
         EnvironmentJS.publish(ReflectionFactoryJS())
         EnvironmentJS.publish(JsonSerializerJS())

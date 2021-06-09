@@ -106,12 +106,22 @@ class IndexDescriptionJS(id:String) : BaseIndexDescriptionJS(id) {
     lateinit var document: String
 }
 
+class DocumentDescriptionJS(id:String, val isAbstract:Boolean, val extendsId:String?, val root:Boolean) : BaseModelElementDescriptionJS(id) {
+
+    val properties = linkedMapOf<String, DocumentPropertyDescriptionJS>()
+
+    val collections = linkedMapOf<String, DocumentCollectionDescriptionJS>()
+
+}
+
 class DomainMetaRegistryJS {
     val enums = linkedMapOf<String, DomainEnumDescriptionJS>()
 
     val indexes = linkedMapOf<String, IndexDescriptionJS>()
 
     val assets = linkedMapOf<String, AssetDescriptionJS>()
+
+    val documents = linkedMapOf<String,DocumentDescriptionJS>()
 
     companion object {
         fun get() = EnvironmentJS.getPublished(DomainMetaRegistryJS::class)

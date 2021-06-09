@@ -47,7 +47,10 @@ class RestDescription(id:String) : BaseRestElementDescription(id)
 class RestOperationDescription(id:String, val groupId:String, val requestEntity:String, val responseEntity:String, val handler:String) : BaseRestElementDescription(id)
 
 
-
+class RestMapDescription(id: String, val keyClassType: RestPropertyType, val valueClassType: RestPropertyType): BaseModelElementDescription(id){
+    var keyClassName: String? = null
+    var valueClassName: String? = null
+}
 
 class RestEntityDescription(id:String) : BaseRestElementDescription(id) {
 
@@ -58,6 +61,8 @@ class RestEntityDescription(id:String) : BaseRestElementDescription(id) {
     val properties = LinkedHashMap<String, RestPropertyDescription>()
 
     val collections = LinkedHashMap<String, RestCollectionDescription>()
+
+    val maps = LinkedHashMap<String, RestMapDescription>()
 
 }
 

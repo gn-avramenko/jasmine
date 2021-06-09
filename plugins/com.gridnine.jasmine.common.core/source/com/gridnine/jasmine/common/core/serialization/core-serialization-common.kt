@@ -17,11 +17,15 @@ abstract class ObjectMetadataProvider<T : Any> {
     private var collectionsMap = linkedMapOf<String, SerializableCollectionDescription>()
     private val properties = arrayListOf<SerializablePropertyDescription>()
     private var collections = arrayListOf<SerializableCollectionDescription>()
+    private var maps = arrayListOf<SerializableMapDescription>()
+    private val mapsMap = linkedMapOf<String, SerializableMapDescription>()
     var isAbstract:Boolean = false
     fun getProperty(id: String) = propertiesMap[id]
     fun getCollection(id: String) = collectionsMap[id]
     fun getAllProperties() = properties
     fun getAllCollections() = collections
+    fun getAllMaps() = maps
+    fun getMap(id:String) = mapsMap[id]
     fun addProperty(prop: SerializablePropertyDescription) {
         propertiesMap[prop.id] = prop
         properties.add(prop)
@@ -32,9 +36,15 @@ abstract class ObjectMetadataProvider<T : Any> {
         collections.add(coll)
     }
 
+    fun addMap(map: SerializableMapDescription) {
+        mapsMap[map.id] = map
+        maps.add(map)
+    }
+
     abstract fun getPropertyValue(obj: T, id: String): Any?
     abstract fun getCollection(obj: T, id: String): MutableCollection<Any>
     abstract fun setPropertyValue(obj: T, id: String, value: Any?)
+    abstract fun getMap(obj:T, id:String): MutableMap<Any?,Any?>
     abstract fun hasUid(): Boolean
 }
 
@@ -57,6 +67,8 @@ class SerializablePropertyDescription(val id: String, val type: SerializableProp
 
 
 class SerializableCollectionDescription(val id: String, val elementType: SerializablePropertyType, val elementClassName: String?, val isAbstract: Boolean)
+
+class SerializableMapDescription(val id: String, val keyType: SerializablePropertyType, val keyClassName: String?, val valueType: SerializablePropertyType, val valueCassName: String?, val isKeyAbstract: Boolean, val isValueAbstract: Boolean)
 
 internal object CommonSerializationUtils{
     fun isAbstractClass(className:String?):Boolean{

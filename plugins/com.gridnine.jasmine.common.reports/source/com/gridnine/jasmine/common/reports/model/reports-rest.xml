@@ -1,6 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rest xmlns="http://gridnine.com/jasmine/rest" id="reports">
     <entity id="com.gridnine.jasmine.common.reports.model.rest.ReportsWorkspaceItemDT" extends="com.gridnine.jasmine.common.standard.model.rest.BaseListWorkspaceItemDT"/>
+    <group id="reports">
+        <operation id="getParametersDescriptions" handler="com.gridnine.jasmine.server.reports.rest.GetReportParametersDescriptionsRestHandler">
+            <request id="com.gridnine.jasmine.common.reports.model.rest.GetParametersDescriptionsRequest">
+                <property id="reportUid" type="STRING" lateinit="true"/>
+            </request>
+            <response id="com.gridnine.jasmine.common.reports.model.rest.GetParametersDescriptionsResponse">
+                <property id="reportId" type="STRING" lateinit="true"/>
+                <property id="reportTitle" type="STRING" lateinit="true"/>
+                <collection id="parameters" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.reports.model.misc.ReportRequestedParameterDescription"/>
+            </response>
+        </operation>
+        <operation id="getLastReportParameters" handler="com.gridnine.jasmine.server.reports.rest.GetLastReportParametersRestHandler">
+            <request id="com.gridnine.jasmine.common.reports.model.rest.GetLastReportParametersRequest">
+                <property id="reportId" type="STRING" lateinit="true"/>
+            </request>
+            <response id="com.gridnine.jasmine.common.reports.model.rest.GetLastReportParametersResponse">
+                <property id="savedParameters" type="ENTITY" class-name="com.gridnine.jasmine.common.reports.model.domain.SavedReportParameters"/>
+            </response>
+        </operation>
+        <operation id="saveLastReportParameters" handler="com.gridnine.jasmine.server.reports.rest.SaveLastReportParametersRestHandler">
+            <request id="com.gridnine.jasmine.common.reports.model.rest.SaveLastReportParametersRequest">
+                <property id="reportId" type="STRING" lateinit="true"/>
+                <collection id="parameters" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.reports.model.domain.BaseReportRequestedParameter"/>
+            </request>
+            <response id="com.gridnine.jasmine.common.reports.model.rest.SaveLastReportParametersResponse"/>
+        </operation>
+        <operation id="generateReport" handler="com.gridnine.jasmine.server.reports.rest.GenerateReportRestHandler">
+            <request id="com.gridnine.jasmine.common.reports.model.rest.GenerateReportRequest">
+                <property id="reportId" type="STRING" lateinit="true"/>
+                <collection id="parameters" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.reports.model.domain.BaseReportRequestedParameter"/>
+            </request>
+            <response id="com.gridnine.jasmine.common.reports.model.rest.GenerateReportResponse">
+                <map id="validationErrors" key-type="STRING" value-type="STRING"/>
+                <property id="errorMessage" type="STRING"/>
+                <property id="report" type="ENTITY" class-name="com.gridnine.jasmine.common.reports.model.domain.GeneratedReport"/>
+            </response>
+        </operation>
+        <operation id="generateExcel" handler="com.gridnine.jasmine.server.reports.rest.GenerateExcelRestHandler">
+            <request id="com.gridnine.jasmine.common.reports.model.rest.GenerateExcelRequest">
+                <property id="report" type="ENTITY" class-name="com.gridnine.jasmine.common.reports.model.domain.GeneratedReport" lateinit="true"/>
+            </request>
+            <response id="com.gridnine.jasmine.common.reports.model.rest.GenerateExcelResponse">
+                <property id="content" type="STRING" lateinit="true"/>
+            </response>
+        </operation>
+    </group>
 </rest>
 
 

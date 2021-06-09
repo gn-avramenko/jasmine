@@ -162,6 +162,18 @@
 				<choice maxOccurs="unbounded" minOccurs="0">
 					<element name="property" type="tns:propertyType"/>
 					<element name="collection" type="tns:collectionType" />
+					<element name="map">
+						<complexType>
+							<complexContent>
+								<extension base="tns:baseMetaElement">
+									<attribute name="key-type" type="tns:valueType" use="required"/>
+									<attribute name="value-type" type="tns:valueType" use="required"/>
+									<attribute name="key-class-name" type="string"/>
+									<attribute name="value-class-name" type="string"/>
+								</extension>
+							</complexContent>
+						</complexType>
+					</element>
 				</choice>
 			</sequence>
 			<attribute  name="abstract" type="boolean"

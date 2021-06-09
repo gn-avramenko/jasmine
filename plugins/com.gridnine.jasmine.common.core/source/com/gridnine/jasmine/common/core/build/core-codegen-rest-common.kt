@@ -22,6 +22,9 @@ class CommonRestGenerator:CodeGenerator {
         descr.collections.values.forEach { coll ->
             result.collections.add(GenCollectionDescription(coll.id, getPropertyType(coll.elementType), getClassName(coll.elementClassName)))
         }
+        descr.maps.values.forEach {map ->
+            result.maps.add(GenMapDescription(map.id, getPropertyType(map.keyClassType), getClassName(map.keyClassName), getPropertyType(map.valueClassType), getClassName(map.valueClassName)))
+        }
         return result
     }
 

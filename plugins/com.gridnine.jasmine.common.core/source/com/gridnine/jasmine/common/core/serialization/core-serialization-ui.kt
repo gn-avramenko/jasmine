@@ -119,6 +119,10 @@ internal class VMEntityMetadataProvider(description: VMEntityDescription) : Obje
     override fun hasUid(): Boolean {
         return false
     }
+
+    override fun getMap(obj: BaseVM, id: String): MutableMap<Any?, Any?> {
+        return obj.getMap(id)
+    }
 }
 
 
@@ -240,6 +244,10 @@ internal class VSEntityMetadataProvider(description: VSEntityDescription) : Obje
     override fun hasUid(): Boolean {
         return false
     }
+
+    override fun getMap(obj: BaseVS, id: String): MutableMap<Any?, Any?> {
+        return obj.getMap(id)
+    }
 }
 
 internal class VVEntityMetadataProvider(description: VVEntityDescription) : ObjectMetadataProvider<BaseVV>() {
@@ -339,5 +347,9 @@ internal class VVEntityMetadataProvider(description: VVEntityDescription) : Obje
 
     override fun hasUid(): Boolean {
         return false
+    }
+
+    override fun getMap(obj: BaseVV, id: String): MutableMap<Any?, Any?> {
+        return obj.getMap(id)
     }
 }

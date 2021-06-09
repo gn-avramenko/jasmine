@@ -219,6 +219,10 @@ class EasyUiWebLibraryAdapter :WebUiLibraryAdapter{
         return EasyUiWebAccordionContainer(configure)
     }
 
+    override fun createTag(tagName:String, id: String?): WebTag {
+        return EasyUiWebTag(tagName, id)
+    }
+
     private fun fillItemsMap(itemsMap: HashMap<WebContextMenuItem, String>, items: List<WebContextMenuItem>) {
         items.forEach {
             itemsMap[it] = MiscUtilsJS.createUUID()

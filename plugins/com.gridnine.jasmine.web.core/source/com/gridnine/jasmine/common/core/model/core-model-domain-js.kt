@@ -33,6 +33,33 @@ abstract class BaseAssetJS : BaseIdentityJS() {
 
 }
 
+abstract class BaseDocumentJS : BaseIdentityJS() {
+
+    private var revision:Int =0
+
+    override fun setValue(propertyName: String, value: Any?) {
+
+        if (BaseDocumentJS.revision == propertyName) {
+            revision = value as Int
+            return
+        }
+        super.setValue(propertyName, value)
+    }
+
+    override fun getValue(propertyName: String): Any? {
+
+        if (BaseDocumentJS.revision == propertyName) {
+            return revision
+        }
+        return super.getValue(propertyName)
+    }
+
+    companion object{
+        const val revision = "revision"
+        const val qualifiedClassName = "com.gridnine.jasmine.server.core.model.domain.BaseDocumentJS"
+    }
+}
+
 open class ObjectReferenceJS():BaseIdentityJS() {
 
     open var caption: String? = null

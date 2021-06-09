@@ -31,6 +31,19 @@ object RestMetadataParser {
                     getPropertyType(it.attributes["element-type"]?:throw Xeption.forDeveloper("$it has no element-type attribute"))) }
             collDescr.elementClassName = it.attributes["element-class-name"]
         }
+        elm.children("map").forEach {
+            val id = ParserUtils.getIdAttribute(it)
+            val mapDescr = description.maps.getOrPut(id){ RestMapDescription(id,
+                getPropertyType(
+                    it.attributes["key-type"] ?: throw Xeption.forDeveloper("$it has no element-type attribute")
+                ),
+                getPropertyType(
+                    it.attributes["value-type"] ?: throw Xeption.forDeveloper("$it has no element-type attribute")
+                )
+            )}
+            mapDescr.keyClassName = it.attributes["key-class-name"]
+            mapDescr.valueClassName = it.attributes["value-class-name"]
+        }
     }
 
     fun updateRestMetaRegistry(registry: RestMetaRegistry, meta: File) {

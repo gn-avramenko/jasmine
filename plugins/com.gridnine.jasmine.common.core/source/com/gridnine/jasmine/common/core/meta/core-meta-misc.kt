@@ -46,6 +46,7 @@ class MiscEnumItemDescription(id:String) : BaseModelElementDescription(id)
 
 class MiscEnumDescription(id:String) : BaseModelElementDescription(id){
     val items = linkedMapOf<String, MiscEnumItemDescription>()
+    var exposedAtRest = false
 }
 
 
@@ -60,6 +61,8 @@ class MiscEntityDescription(id:String) : BaseModelElementDescription(id) {
     val collections = linkedMapOf<String, MiscCollectionDescription>()
 
     val maps = linkedMapOf<String, MiscMapDescription>()
+
+    var exposedAtRest = false
 }
 
 

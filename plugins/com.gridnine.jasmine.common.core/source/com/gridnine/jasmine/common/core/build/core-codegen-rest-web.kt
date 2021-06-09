@@ -23,6 +23,9 @@ class WebRestGenerator : CodeGenerator {
         descr.collections.values.forEach { coll ->
             result.collections.add(GenCollectionDescription(coll.id, getPropertyType(coll.elementType), getClassName(coll.elementType, coll.elementClassName)))
         }
+        descr.maps.values.forEach { map ->
+            result.maps.add(GenMapDescription(map.id, getPropertyType(map.keyClassType), getClassName(map.keyClassType, map.keyClassName),getPropertyType(map.valueClassType), getClassName(map.valueClassType, map.valueClassName) ))
+        }
         return result
     }
 

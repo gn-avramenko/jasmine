@@ -63,6 +63,8 @@ interface WebUiLibraryAdapter{
 
     fun createAccordionContainer(configure:WebAccordionContainerConfiguration.()->Unit):WebAccordionContainer
 
+    fun createTag(tagName:String, id:String?=null):WebTag
+
     companion object{
         fun get() = EnvironmentJS.getPublished(WebUiLibraryAdapter::class)
     }

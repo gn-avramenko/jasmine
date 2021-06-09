@@ -182,6 +182,8 @@
 				</attribute>
 				<attribute name="extends" type="string">
 				</attribute>
+				<attribute name="exposed-at-rest" type="boolean">
+				</attribute>
 			</extension>
 		</complexContent>
 	</complexType>
