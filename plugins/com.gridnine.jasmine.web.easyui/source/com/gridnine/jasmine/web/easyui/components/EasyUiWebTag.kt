@@ -31,6 +31,8 @@ class EasyUiWebTag(private val tagName:String, private val id:String?) :EasyUiCo
 
     private val classes = EasyUiTagClass(this)
 
+    private var visible = true
+
     override fun getId(): String? {
         return id
     }
@@ -55,10 +57,12 @@ class EasyUiWebTag(private val tagName:String, private val id:String?) :EasyUiCo
                 }
             }
         }
+
+        initialized = true
+        setVisible(visible)
         if(postRenderAction != null){
             postRenderAction!!.invoke()
         }
-        initialized = true
     }
 
     override fun destroy() {
@@ -95,6 +99,19 @@ class EasyUiWebTag(private val tagName:String, private val id:String?) :EasyUiCo
 
     override fun getStyle(): TagStyle {
         return style
+    }
+
+    override fun setVisible(value: Boolean) {
+        visible = value
+        if(initialized){
+            if(getId() != null) {
+                if (visible) {
+                    getJQ().show()
+                } else {
+                    getJQ().hide()
+                }
+            }
+        }
     }
 
     override fun getClass(): TagClass {
@@ -141,13 +158,25 @@ class EasyUiTagChildren(private val parent:EasyUiWebTag) : ArrayList<WebNode>(),
         }
     }
 
+    override fun addChild(position: Int, child: WebNode) {
+        super.add(position, child)
+        if(parent.initialized){
+            if (position == 0) {
+                parent.getJQ().prepend(findEasyUiComponent(child).getHtml())
+            } else {
+                parent.getJQ().children("tr").eq(position - 1).after(findEasyUiComponent(child).getHtml())
+            }
+            findEasyUiComponent(child).decorate()
+        }
+    }
+
     override fun removeChild(child: WebNode) {
+        val idx = indexOf(child)
         super.remove(child)
         if(parent.initialized){
             val comp = findEasyUiComponent(child)
-            val id = comp.getId()?:throw XeptionJS.forDeveloper("unable to perform operation on element without id")
             comp.destroy()
-            jQuery("#$id").remove()
+            parent.getJQ().children().eq(idx).remove()
         }
     }
 
@@ -161,6 +190,18 @@ class EasyUiTagChildren(private val parent:EasyUiWebTag) : ArrayList<WebNode>(),
         }
     }
 
+    override fun moveChild(fromPosition: Int, toPosition: Int) {
+        val elm = super.removeAt(fromPosition)
+        super.add(toPosition, elm)
+        if(parent.initialized){
+            val jq = parent.getJQ()
+            if (toPosition > fromPosition) {
+                jq.children().eq(fromPosition).insertAfter(jq.children().eq(toPosition))
+            } else {
+                jq.children().eq(fromPosition).insertBefore(jq.children().eq(toPosition))
+            }
+        }
+    }
 }
 
 class EasyUiTagStyle(private val parent:EasyUiWebTag) : LinkedHashMap<String, String>(),TagStyle{

@@ -13,11 +13,15 @@ import com.gridnine.jasmine.common.standard.model.rest.SortOrderDTJS
 import com.gridnine.jasmine.common.standard.model.workspace.*
 import com.gridnine.jasmine.web.core.remote.launch
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
-import com.gridnine.jasmine.web.core.ui.components.*
+import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
+import com.gridnine.jasmine.web.core.ui.components.DefaultUIParameters
+import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutContainer
 import com.gridnine.jasmine.web.standard.OptionsIds
 import com.gridnine.jasmine.web.standard.WebMessages
 import com.gridnine.jasmine.web.standard.mainframe.WebOptionsHandler
 import com.gridnine.jasmine.web.standard.widgets.GeneralSelectWidget
+import com.gridnine.jasmine.web.standard.widgets.GeneralTableBoxWidget
+import com.gridnine.jasmine.web.standard.widgets.WebGeneralTableBoxWidgetColumnWidth
 import com.gridnine.jasmine.web.standard.widgets.WebGridCellWidget
 import kotlin.reflect.KClass
 
@@ -196,20 +200,20 @@ class WorkspaceListItemVariantEditor: BaseWebNodeWrapper<WebGridLayoutContainer>
 
 class WorkspaceListCriterionsEditor: BaseWebNodeWrapper<WebGridLayoutContainer>() {
 
-    private val tableBox: WebTableBox
+    private val tableBox: GeneralTableBoxWidget
 
     private val criterionsListEditor:WebWorkspaceCriterionsListEditor
 
     init {
-        tableBox = WebUiLibraryAdapter.get().createTableBox {
+        tableBox = GeneralTableBoxWidget {
             width = "100%"
             headerComponents.add(WebUiLibraryAdapter.get().createLabel {  }.apply { setText("Поле") })
             headerComponents.add(WebUiLibraryAdapter.get().createLabel {  }.apply { setText("Условие") })
             headerComponents.add(WebUiLibraryAdapter.get().createLabel {  }.apply { setText("Значение") })
-            columnWidths.add(WebTableBoxColumnWidth(300,300,300))
-            columnWidths.add(WebTableBoxColumnWidth(180,180,180))
-            columnWidths.add(WebTableBoxColumnWidth(500,500,null))
-            columnWidths.add(WebTableBoxColumnWidth(140,140,140))
+            columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(300,300,300))
+            columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(180,180,180))
+            columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(500,500,null))
+            columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(140,140,140))
         }
         criterionsListEditor = WebWorkspaceCriterionsListEditor(tableBox, 0)
         _node = WebUiLibraryAdapter.get().createGridContainer{

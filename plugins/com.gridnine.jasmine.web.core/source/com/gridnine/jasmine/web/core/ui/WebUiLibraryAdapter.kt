@@ -53,12 +53,6 @@ interface WebUiLibraryAdapter{
 
     fun createBooleanBox(configure:WebBooleanBoxConfiguration.()->Unit):WebBooleanBox
 
-    fun createTableBox(configure:WebTableBoxConfiguration.()->Unit):WebTableBox
-
-    fun createDivsContainer(configure: WebDivsContainerConfiguration.() -> Unit):WebDivsContainer
-
-    fun createTilesContainer(configure: WebTilesContainerConfiguration.() -> Unit):WebTilesContainer
-
     fun createPanel(configure: WebPanelConfiguration.() -> Unit):WebPanel
 
     fun showContextMenu(items:List<WebContextMenuItem>, pageX:Int, pageY:Int)

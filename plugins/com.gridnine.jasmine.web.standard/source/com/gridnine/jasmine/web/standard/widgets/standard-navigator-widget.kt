@@ -10,7 +10,6 @@ package com.gridnine.jasmine.web.standard.widgets
 import com.gridnine.jasmine.common.core.model.*
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
-import com.gridnine.jasmine.web.core.ui.components.WebDivsContainer
 import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutContainer
 import com.gridnine.jasmine.web.core.ui.components.WebLinkButton
 import com.gridnine.jasmine.web.standard.editor.WebEditor
@@ -23,7 +22,7 @@ abstract class NavigatorWidget<VM: BaseVMJS, VS: BaseVSJS, VV: BaseVVJS> : WebEd
     private val config = NavigatorWidgetConfiguration<VM>()
     private val addButton:WebLinkButton
     private val removeButton:WebLinkButton
-    private val divsContainer:WebDivsContainer
+    private val nodeProjector:WebNodeProjectorWidget
     private val select: GeneralSelectWidget
     private val possibleValues = arrayListOf<SelectItemJS>()
     private var addHandler:(() ->Unit)? = null
@@ -41,20 +40,20 @@ abstract class NavigatorWidget<VM: BaseVMJS, VS: BaseVSJS, VV: BaseVVJS> : WebEd
         removeButton= WebUiLibraryAdapter.get().createLinkButton{
             icon = "core:minus"
         }
-        divsContainer = WebUiLibraryAdapter.get().createDivsContainer{
+        nodeProjector = WebNodeProjectorWidget{
             width = "100%"
             height = "100%"
         }
         removeButton.setHandler {
             removeHandler?.let {handler ->
                 select.getValue()?.id?.let{
-                    handler.invoke(divsContainer.getDiv(it) as WebEditor<*, *, *>)
+                    handler.invoke(nodeProjector.getNode(it) as WebEditor<*, *, *>)
                 }
             }
         }
         select.setChangeListener {selectItem ->
             selectItem?.let {
-                divsContainer.show(it.id)
+                nodeProjector.showNode(it.id)
             }
         }
         _node = WebUiLibraryAdapter.get().createGridContainer{
@@ -69,7 +68,7 @@ abstract class NavigatorWidget<VM: BaseVMJS, VS: BaseVSJS, VV: BaseVVJS> : WebEd
                 cell(removeButton)
             }
             row ("100%"){
-                cell(divsContainer, 3)
+                cell(nodeProjector, 3)
             }
         }
         WebEditorInterceptorsRegistry.get().getInterceptors(this)?.forEach {
@@ -82,11 +81,11 @@ abstract class NavigatorWidget<VM: BaseVMJS, VS: BaseVSJS, VV: BaseVVJS> : WebEd
     fun removeTab(id:String){
         possibleValues.find { it.id == id }?.let{
             possibleValues.remove(it)
-            divsContainer.removeDiv(id)
+            nodeProjector.removeNode(id)
             select.setPossibleValues(possibleValues)
             if(possibleValues.isNotEmpty()){
                 val pv = possibleValues[0]
-                divsContainer.show(pv.id)
+                nodeProjector.showNode(pv.id)
                 select.setValue(pv)
             }
         }
@@ -94,11 +93,11 @@ abstract class NavigatorWidget<VM: BaseVMJS, VS: BaseVSJS, VV: BaseVVJS> : WebEd
 
     fun<VM:BaseNavigatorVariantVMJS, VS:BaseNavigatorVariantVSJS> addTab(vm:VM, vs:VS?){
         val itemEditor = config.factories[vm::class]!!.invoke() as WebEditor<VM,VS,VV>
-        divsContainer.addDiv(vm.uid, itemEditor)
+        nodeProjector.addNode(vm.uid, itemEditor)
         itemEditor.readData(vm, vs)
         val newValue = SelectItemJS(vm.uid, vm.title)
         possibleValues.add(newValue)
-        divsContainer.show(vm.uid)
+        nodeProjector.showNode(vm.uid)
         select.setPossibleValues(possibleValues)
         select.setValue(newValue)
     }
@@ -106,7 +105,7 @@ abstract class NavigatorWidget<VM: BaseVMJS, VS: BaseVSJS, VV: BaseVVJS> : WebEd
     override fun getData(): VM {
         val result = config.vmFactory.invoke()
         possibleValues.forEach {
-            val model = (divsContainer.getDiv(it.id) as WebEditor<*,*,*>).getData()
+            val model = (nodeProjector.getNode(it.id) as WebEditor<*,*,*>).getData()
             result.getCollection("values").add(model)
         }
         return result
@@ -127,9 +126,9 @@ abstract class NavigatorWidget<VM: BaseVMJS, VS: BaseVSJS, VV: BaseVVJS> : WebEd
         vm.getCollection("values").forEach { item ->
             val itemVM = item as BaseNavigatorVariantVMJS
             val itemVS = vsColls?.find { it.uid == itemVM.uid}
-            val itemEditor = (divsContainer.getDiv(itemVM.uid)?: run{
+            val itemEditor = (nodeProjector.getNode(itemVM.uid)?: run{
                 val editor = config.factories[itemVM::class]!!.invoke()
-                divsContainer.addDiv(itemVM.uid, editor)
+                nodeProjector.addNode(itemVM.uid, editor)
                 editor
             }) as WebEditor<BaseNavigatorVariantVMJS,BaseNavigatorVariantVSJS,BaseNavigatorVariantVVJS>
             itemEditor.readData(itemVM, itemVS)
@@ -139,7 +138,7 @@ abstract class NavigatorWidget<VM: BaseVMJS, VS: BaseVSJS, VV: BaseVVJS> : WebEd
         val possibleUids = possibleValues.map { it.id }
         possibleUids.forEach {
             if(!actualUids.contains(it)){
-                divsContainer.removeDiv(it)
+                nodeProjector.removeNode(it)
             }
         }
         possibleValues.clear()
@@ -148,7 +147,7 @@ abstract class NavigatorWidget<VM: BaseVMJS, VS: BaseVSJS, VV: BaseVVJS> : WebEd
         val navigateValue = if(previouslySelectedValue != null && possibleValues.contains(previouslySelectedValue)) previouslySelectedValue
         else if(possibleValues.isNotEmpty()) possibleValues[0]
         else null
-        navigateValue?.let { divsContainer.show(it.id) }
+        navigateValue?.let { nodeProjector.showNode(it.id) }
         select.setPossibleValues(possibleValues)
         select.setValue(navigateValue)
     }
@@ -157,20 +156,20 @@ abstract class NavigatorWidget<VM: BaseVMJS, VS: BaseVSJS, VV: BaseVVJS> : WebEd
         addButton.setEnabled(!value)
         removeButton.setEnabled(!value)
         possibleValues.forEach {
-            (divsContainer.getDiv(it.id) as WebEditor<BaseNavigatorVariantVMJS,BaseNavigatorVariantVSJS,BaseNavigatorVariantVVJS>).setReadonly(value)
+            (nodeProjector.getNode(it.id) as WebEditor<BaseNavigatorVariantVMJS,BaseNavigatorVariantVSJS,BaseNavigatorVariantVVJS>).setReadonly(value)
         }
     }
 
     override fun showValidation(vv: VV?) {
         val vsColls = vv?.getCollection("values") as List<BaseNavigatorVariantVVJS>?
         possibleValues.withIndex().forEach { (index, item) ->
-            (divsContainer.getDiv(item.id)  as WebEditor<BaseNavigatorVariantVMJS,BaseNavigatorVariantVSJS,BaseNavigatorVariantVVJS>).showValidation(vsColls?.get(index))
+            (nodeProjector.getNode(item.id)  as WebEditor<BaseNavigatorVariantVMJS,BaseNavigatorVariantVSJS,BaseNavigatorVariantVVJS>).showValidation(vsColls?.get(index))
         }
     }
 
     override fun navigate(id: String): Boolean {
         return possibleValues.find { it.id == id }?.let {
-            divsContainer.show(id)
+            nodeProjector.showNode(id)
             select.setValue(it)
             it
         } != null

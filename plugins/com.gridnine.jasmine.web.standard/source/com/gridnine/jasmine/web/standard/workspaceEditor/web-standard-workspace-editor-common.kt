@@ -10,11 +10,10 @@ import com.gridnine.jasmine.common.core.meta.DatabasePropertyTypeJS
 import com.gridnine.jasmine.common.standard.model.rest.BaseDynamicCriterionValueDTJS
 import com.gridnine.jasmine.common.standard.model.rest.BaseWorkspaceCriterionDTJS
 import com.gridnine.jasmine.common.standard.model.rest.BaseWorkspaceSimpleCriterionValueDTJS
-import com.gridnine.jasmine.web.core.common.ActivatorJS
 import com.gridnine.jasmine.web.core.common.RegistryItemJS
 import com.gridnine.jasmine.web.core.common.RegistryItemTypeJS
 import com.gridnine.jasmine.web.core.ui.components.WebNode
-import com.gridnine.jasmine.web.core.ui.components.WebTableBoxCell
+import com.gridnine.jasmine.web.standard.widgets.WebGeneralTableBoxWidgetCell
 
 class WebCriterionPropertyWrapper(val id: String, val text: String, val collection: Boolean, val propertyType: DatabasePropertyTypeJS?, val collectionType: DatabaseCollectionTypeJS?, val className: String?)
 
@@ -36,7 +35,7 @@ interface WebDynamicCriterionValueEditorHandler<T:BaseDynamicCriterionValueDTJS,
 }
 
 interface WebCriterionHandler<T:BaseWorkspaceCriterionDTJS>{
-    fun getComponents(): MutableList<WebTableBoxCell>
+    fun getComponents(): MutableList<WebGeneralTableBoxWidgetCell>
     fun getId(): String
     fun getData(): T?
 }

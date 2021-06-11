@@ -14,11 +14,10 @@ import com.gridnine.jasmine.common.standard.model.domain.WorkspaceSimpleCriterio
 import com.gridnine.jasmine.common.standard.model.rest.BaseWorkspaceSimpleCriterionValueDTJS
 import com.gridnine.jasmine.common.standard.model.rest.SimpleWorkspaceCriterionDTJS
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
-import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
-import com.gridnine.jasmine.web.core.ui.components.WebDivsContainer
-import com.gridnine.jasmine.web.core.ui.components.WebTableBoxCell
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import com.gridnine.jasmine.web.standard.widgets.GeneralSelectWidget
+import com.gridnine.jasmine.web.standard.widgets.WebGeneralTableBoxWidgetCell
+import com.gridnine.jasmine.web.standard.widgets.WebNodeProjectorWidget
 
 @Suppress("UNCHECKED_CAST", "UNREACHABLE_CODE")
 class WebSimpleCriterionHandler(listId: String, private val initData: SimpleWorkspaceCriterionDTJS?) : WebCriterionHandler<SimpleWorkspaceCriterionDTJS> {
@@ -29,7 +28,7 @@ class WebSimpleCriterionHandler(listId: String, private val initData: SimpleWork
     private var lastEditor: WebSimpleCriterionValueEditor<*>? = null
 
     private val valueDivId= "valueDiv$uuid"
-    private lateinit var valueControl:WebDivsContainer
+    private lateinit var valueControl:WebNodeProjectorWidget
     private lateinit var  propertySelect:GeneralSelectWidget
     private lateinit var  conditionSelect:GeneralSelectWidget
 
@@ -45,24 +44,24 @@ class WebSimpleCriterionHandler(listId: String, private val initData: SimpleWork
         properties.sortBy { it.text }
     }
 
-    override fun getComponents(): MutableList<WebTableBoxCell> {
+    override fun getComponents(): MutableList<WebGeneralTableBoxWidgetCell> {
 
-        val result = arrayListOf<WebTableBoxCell>()
+        val result = arrayListOf<WebGeneralTableBoxWidgetCell>()
         propertySelect = GeneralSelectWidget {
             width = "100%"
             showClearIcon = false
         }
         propertySelect.setPossibleValues(properties.map { SelectItemJS(it.id, it.text) })
-        result.add(WebTableBoxCell(propertySelect))
+        result.add(WebGeneralTableBoxWidgetCell(propertySelect))
         conditionSelect = GeneralSelectWidget {
             width = "100%"
             showClearIcon = false
         }
-        result.add(WebTableBoxCell(conditionSelect))
-        valueControl = WebUiLibraryAdapter.get().createDivsContainer{
+        result.add(WebGeneralTableBoxWidgetCell(conditionSelect))
+        valueControl = WebNodeProjectorWidget{
             width = "100%"
         }
-        result.add(WebTableBoxCell(valueControl))
+        result.add(WebGeneralTableBoxWidgetCell(valueControl))
         initData?.property?.let { property ->
             val propWrapper = properties.find { it.id == property }
             propWrapper?.let {
@@ -98,9 +97,9 @@ class WebSimpleCriterionHandler(listId: String, private val initData: SimpleWork
         val editorType = getEditorType(property, condition)
         if(lastEditor == null || lastEditor!!.getType() != editorType){
             if(lastEditor != null) {
-                val div = valueControl.getDiv(valueDivId)
+                val div = valueControl.getNode(valueDivId)
                 if (div != null) {
-                    valueControl.removeDiv(valueDivId)
+                    valueControl.removeNode(valueDivId)
                 }
             }
             lastEditor = when(editorType){
@@ -116,8 +115,8 @@ class WebSimpleCriterionHandler(listId: String, private val initData: SimpleWork
                 WebSimpleCriterionValueType.DATE_TIME_VALUE -> WebDateTimeValueEditor()
                 WebSimpleCriterionValueType.DATE_TIME_INTERVAL -> WebDateTimeIntervalEditor()
             }
-            valueControl.addDiv(valueDivId, lastEditor!!)
-            valueControl.show(valueDivId)
+            valueControl.addNode(valueDivId, lastEditor!!)
+            valueControl.showNode(valueDivId)
         }
         (lastEditor as WebSimpleCriterionValueEditor<BaseWorkspaceSimpleCriterionValueDTJS>).setValue(value)
     }

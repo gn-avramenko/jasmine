@@ -13,7 +13,7 @@ import com.gridnine.jasmine.web.core.ui.components.*
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import kotlin.js.Date
 
-class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJS>(configure:TableBoxWidgetConfiguration<VM,VS>.()->Unit):BaseWebNodeWrapper<WebTableBox>(){
+class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJS>(configure:TableBoxWidgetConfiguration<VM,VS>.()->Unit):BaseWebNodeWrapper<GeneralTableBoxWidget>(){
     internal val rowsAdditionalData = arrayListOf<TableBoxWidgetRowAdditionalData>()
     private val config = TableBoxWidgetConfiguration<VM,VS>()
     private lateinit var createButton:WebLinkButton
@@ -22,7 +22,7 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
     init {
         config.configure()
         vsFactory = config.vsFactory
-        _node = WebUiLibraryAdapter.get().createTableBox{
+        _node = GeneralTableBoxWidget{
             width = config.width
             height = config.height
             config.columns.forEach {
@@ -31,7 +31,7 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
                 }
                 label.setText(it.title)
                 headerComponents.add(label)
-                columnWidths.add(WebTableBoxColumnWidth(null,it.width?:100, null))
+                columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(null,it.width?:100, null))
             }
             createButton = WebUiLibraryAdapter.get().createLinkButton{
                 icon="core:plus"
@@ -40,7 +40,7 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
                 addRow(0)
             }
             headerComponents.add(createButton)
-            columnWidths.add(WebTableBoxColumnWidth(130,130, 130))
+            columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(130,130, 130))
         }
     }
 
@@ -52,14 +52,14 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
         val rowId = MiscUtilsJS.createUUID()
         val vm = config.vmFactory.invoke()
         vm.uid = uuid
-        val components = arrayListOf<WebTableBoxCell>()
+        val components = arrayListOf<WebGeneralTableBoxWidgetCell>()
         val configuration = vsFactory?.invoke()
         config.columns.withIndex().forEach {(collIdx, coll) ->
             val comp = createWebComponent(coll.widgetDescription)
             configure(comp, collIdx, configuration)
-            components.add(WebTableBoxCell(comp))
+            components.add(WebGeneralTableBoxWidgetCell(comp))
         }
-        components.add(WebTableBoxCell(TableBoxWidgetToolsPanel( this@TableBoxWidget, rowId)))
+        components.add(WebGeneralTableBoxWidgetCell(TableBoxWidgetToolsPanel( this@TableBoxWidget, rowId)))
         _node.addRow(idx, components)
         rowsAdditionalData.add(idx, TableBoxWidgetRowAdditionalData(uuid, rowId))
         updateToolsVisibility()
@@ -115,15 +115,15 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
                     }
                 }
             } else {
-                val components = arrayListOf<WebTableBoxCell>()
+                val components = arrayListOf<WebGeneralTableBoxWidgetCell>()
                 config.columns.withIndex().forEach {(collIdx, coll) ->
                     val comp = createWebComponent(coll.widgetDescription)
                     setValue(comp, collIdx, value)
                     configure(comp, collIdx, vs?.get(idx))
-                    components.add(WebTableBoxCell(comp))
+                    components.add(WebGeneralTableBoxWidgetCell(comp))
                 }
                 val rowId = MiscUtilsJS.createUUID()
-                components.add(WebTableBoxCell(TableBoxWidgetToolsPanel( this@TableBoxWidget, rowId)))
+                components.add(WebGeneralTableBoxWidgetCell(TableBoxWidgetToolsPanel( this@TableBoxWidget, rowId)))
                 _node.addRow(null, components)
                 rowsAdditionalData.add(TableBoxWidgetRowAdditionalData(value.uid, rowId))
             }

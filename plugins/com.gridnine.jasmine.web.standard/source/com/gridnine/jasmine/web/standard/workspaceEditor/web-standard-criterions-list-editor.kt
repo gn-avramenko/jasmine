@@ -9,6 +9,8 @@ import com.gridnine.jasmine.common.core.model.XeptionJS
 import com.gridnine.jasmine.common.standard.model.rest.*
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.*
+import com.gridnine.jasmine.web.standard.widgets.GeneralTableBoxWidget
+import com.gridnine.jasmine.web.standard.widgets.WebGeneralTableBoxWidgetCell
 
 private const val SIMPLE_CRITERION_ID = "SIMPLE_CRITERION_ID"
 
@@ -20,7 +22,7 @@ private const val NOT_CRITERION_ID = "NOT_CRITERION_ID"
 
 private const val DYNAMIC_CRITERION_ID = "DYNAMIC_CRITERION_ID"
 
-class WebWorkspaceCriterionsListEditor(internal val tableBox: WebTableBox, private val indent:Int) {
+class WebWorkspaceCriterionsListEditor(internal val tableBox: GeneralTableBoxWidget, private val indent:Int) {
 
     lateinit var listId:String
     internal val handlers = arrayListOf<WebCriterionHandler<*>>()
@@ -76,13 +78,13 @@ class WebWorkspaceCriterionsListEditor(internal val tableBox: WebTableBox, priva
             tableBox.removeRow(0)
             addRow(0, WebDynamicCriterionHandler(listId, null))
         }
-        tableBox.addRow(0, arrayListOf(WebTableBoxCell(null, 3), WebTableBoxCell(createMenuButton, 1)))
+        tableBox.addRow(0, arrayListOf(WebGeneralTableBoxWidgetCell(null, 3), WebGeneralTableBoxWidgetCell(createMenuButton, 1)))
     }
 
     internal fun addRow(i: Int, handler: WebCriterionHandler<*>) {
         handlers.add(i, handler)
         val components = handler.getComponents()
-        components.add(WebTableBoxCell(CriterionsListToolsPanel(this, indent, listId, handler.getId())))
+        components.add(WebGeneralTableBoxWidgetCell(CriterionsListToolsPanel(this, indent, listId, handler.getId())))
         tableBox.addRow(i, components)
     }
 

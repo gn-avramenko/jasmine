@@ -15,7 +15,7 @@ import com.gridnine.jasmine.web.standard.editor.WebEditor
 import com.gridnine.jasmine.web.standard.editor.WebEditorInterceptorsRegistry
 
 @Suppress("LeakingThis")
-abstract class TileSpaceWidget<VM:BaseVMJS, VS:BaseVSJS, VV:BaseVVJS> :WebEditor<VM,VS,VV>,BaseWebNodeWrapper<WebDivsContainer>(){
+abstract class TileSpaceWidget<VM:BaseVMJS, VS:BaseVSJS, VV:BaseVVJS> :WebEditor<VM,VS,VV>,BaseWebNodeWrapper<WebNodeProjectorWidget>(){
 
     private val configuration= TileSpaceWidgetConfiguration<VM>()
     private val mainPanelId = "mainPanel${MiscUtilsJS.createUUID()}"
@@ -23,22 +23,22 @@ abstract class TileSpaceWidget<VM:BaseVMJS, VS:BaseVSJS, VV:BaseVVJS> :WebEditor
     private val tilesEditors = hashMapOf<String, TileWidgetPanel>()
     init {
         configuration.apply(createInitializer())
-        _node = WebUiLibraryAdapter.get().createDivsContainer{
+        _node = WebNodeProjectorWidget{
             width = configuration.width
             height = configuration.height
         }
         mainPanel = TilesSpaceMainPanel({
-            _node.show(it)
+            _node.showNode(it)
         }, configuration)
         configuration.tiles.forEach {tile ->
             val editor = TileWidgetPanel({
-                _node.show(mainPanelId)
+                _node.showNode(mainPanelId)
             }, tile)
             tilesEditors[tile.id] = editor
-            _node.addDiv(tile.id, editor)
+            _node.addNode(tile.id, editor)
         }
-        _node.addDiv(mainPanelId, mainPanel)
-        _node.show(mainPanelId)
+        _node.addNode(mainPanelId, mainPanel)
+        _node.showNode(mainPanelId)
         WebEditorInterceptorsRegistry.get().getInterceptors(this)?.forEach {
             it.onInit(this)
         }
@@ -76,11 +76,11 @@ abstract class TileSpaceWidget<VM:BaseVMJS, VS:BaseVSJS, VV:BaseVVJS> :WebEditor
     }
 
     override fun navigate(id: String): Boolean {
-        val result = tilesEditors.entries.find { it.value.navigate(id) }?.let { _node.show(it.key) } != null
+        val result = tilesEditors.entries.find { it.value.navigate(id) }?.let { _node.showNode(it.key) } != null
         if(result){
             return true
         }
-        return tilesEditors.entries.find { it.key == id }?.let { _node.show(it.key) } != null
+        return tilesEditors.entries.find { it.key == id }?.let { _node.showNode(it.key) } != null
     }
 }
 
@@ -116,7 +116,7 @@ class TileWidgetConfiguration{
     lateinit var editor:WebEditor<*,*,*>
 }
 
-class TilesSpaceMainPanel<VM:BaseVMJS, VS:BaseVSJS, VV:BaseVVJS>(expandHadler:(String)->Unit, private val configuration: TileSpaceWidgetConfiguration<VM>): WebEditor<VM,VS,VV>, BaseWebNodeWrapper<WebGridLayoutContainer>(){
+class TilesSpaceMainPanel<VM:BaseVMJS, VS:BaseVSJS, VV:BaseVVJS>(expandHandler:(String)->Unit, private val configuration: TileSpaceWidgetConfiguration<VM>): WebEditor<VM,VS,VV>, BaseWebNodeWrapper<WebGridLayoutContainer>(){
 
     init {
         _node = WebUiLibraryAdapter.get().createGridContainer{
@@ -135,16 +135,7 @@ class TilesSpaceMainPanel<VM:BaseVMJS, VS:BaseVSJS, VV:BaseVVJS>(expandHadler:(S
                 }
             }
             row("100%"){
-                val tilesContainer = WebUiLibraryAdapter.get().createTilesContainer{
-                    height = "100%"
-                    width = "100%"
-                    tileWidth = 200
-                    configuration.tiles.forEach {
-                        tile(it.id,it.title)
-                    }
-                }
-                tilesContainer.setExpandHandler(expandHadler)
-                cell(tilesContainer)
+                cell(TilesContainer(configuration.tiles, expandHandler))
             }
         }
 
@@ -208,5 +199,34 @@ class TileWidgetPanel(collapseHandler:suspend ()->Unit, private val tileConfig: 
         return  (tileConfig.editor  as WebEditor<BaseVMJS,BaseVSJS,BaseVVJS>).navigate(id)
     }
 
+}
+
+class TilesContainer(tiles:List<TileWidgetConfiguration>, expandHandler: (String) -> Unit) : BaseWebNodeWrapper<WebTag>(){
+    private val uuid = MiscUtilsJS.createUUID()
+    private val tileWidth = 200
+
+    init {
+        _node = WebUiLibraryAdapter.get().createTag("div", )
+        _node.getStyle().setParameters("height" to "100%", "width" to "100%")
+        tiles.forEach {wtc ->
+            val tileDiv = WebUiLibraryAdapter.get().createTag("div", "tile${wtc.id}${uuid}").also {
+                it.getClass().addClasses("jasmine-web-tile")
+                it.getStyle().setParameters("width" to "${tileWidth}px")
+            }
+            _node.getChildren().addChild(tileDiv)
+            val captionDiv = WebUiLibraryAdapter.get().createTag("div").also {
+                it.getClass().addClasses("jasmine-tile-caption")
+                it.setText(wtc.title)
+            }
+            tileDiv.getChildren().addChild(captionDiv)
+            val linkDiv = WebUiLibraryAdapter.get().createTag("div","expand${wtc.id}${uuid}").also {
+                it.getClass().addClasses("jasmine-tile-expand")
+                it.setEventHandler("click"){
+                    expandHandler.invoke(wtc.id)
+                }
+            }
+            tileDiv.getChildren().addChild(linkDiv)
+        }
+    }
 
 }

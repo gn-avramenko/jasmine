@@ -16,11 +16,11 @@ import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
 import com.gridnine.jasmine.web.core.ui.components.WebBorderContainer
-import com.gridnine.jasmine.web.core.ui.components.WebDivsContainer
 import com.gridnine.jasmine.web.core.ui.components.WebNode
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import com.gridnine.jasmine.web.standard.OptionsIds
 import com.gridnine.jasmine.web.standard.mainframe.WebOptionsHandler
+import com.gridnine.jasmine.web.standard.widgets.WebNodeProjectorWidget
 import kotlin.reflect.KClass
 
 class WorkspaceItemEditorHandler(private val itemsTypes:List<SelectItemJS>) : WorkspaceElementEditorHandler<WorkspaceItemEditor,BaseWorkspaceItemDTJS>{
@@ -63,7 +63,7 @@ class WorkspaceItemEditor(private val itemsTypes:List<SelectItemJS>):BaseWebNode
 
     private val editorsCache = hashMapOf<String, WebNode>()
 
-    private val divsContainer:WebDivsContainer
+    private val divsContainer:WebNodeProjectorWidget
 
     init {
         _node = WebUiLibraryAdapter.get().createBorderContainer {
@@ -75,7 +75,7 @@ class WorkspaceItemEditor(private val itemsTypes:List<SelectItemJS>):BaseWebNode
         generalEditor.typeWidget.configure(GeneralSelectBoxConfigurationJS().apply {
             possibleValues.addAll(itemsTypes)
         })
-        divsContainer = WebUiLibraryAdapter.get().createDivsContainer {
+        divsContainer = WebNodeProjectorWidget {
             width ="100%"
             height = "100%"
         }
@@ -86,8 +86,8 @@ class WorkspaceItemEditor(private val itemsTypes:List<SelectItemJS>):BaseWebNode
                     generalEditor.uidValue = MiscUtilsJS.createUUID()
                     val handler = RegistryJS.get().get(WorkspaceItemVariantHandler.TYPE, it.id)!!
                     val editor  = handler.createEditor()
-                    divsContainer.addDiv(it.id, editor)
-                    divsContainer.show(it.id)
+                    divsContainer.addNode(it.id, editor)
+                    divsContainer.showNode(it.id)
                     editor
                 }
             }
@@ -106,15 +106,15 @@ class WorkspaceItemEditor(private val itemsTypes:List<SelectItemJS>):BaseWebNode
         val handler = RegistryJS.get().get(WorkspaceItemVariantHandler.TYPE, qualifiedName)!!
         val edt = editorsCache.getOrPut(qualifiedName){
             val editor  = handler.createEditor()
-            divsContainer.addDiv(qualifiedName, editor)
+            divsContainer.addNode(qualifiedName, editor)
             editor
         }
-        divsContainer.show(qualifiedName)
+        divsContainer.showNode(qualifiedName)
         handler.setData(edt, item)
     }
 
     internal fun getData():BaseWorkspaceItemDTJS{
-        val activeId = divsContainer.getActiveDivId()!!
+        val activeId = divsContainer.getActiveNodeId()!!
         val handler = RegistryJS.get().get(WorkspaceItemVariantHandler.TYPE, activeId)!!
         val result = handler.getData(editorsCache[activeId]!!)
         result.uid = generalEditor.uidValue

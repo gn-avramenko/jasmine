@@ -15,12 +15,12 @@ import com.gridnine.jasmine.web.core.common.RegistryJS
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.remote.WebPluginsHandler
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
-import com.gridnine.jasmine.web.core.ui.components.WebDivsContainer
 import com.gridnine.jasmine.web.core.ui.components.WebNode
-import com.gridnine.jasmine.web.core.ui.components.WebTableBoxCell
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import com.gridnine.jasmine.web.standard.StandardRestClient
 import com.gridnine.jasmine.web.standard.widgets.RemoteGeneralSelectWidget
+import com.gridnine.jasmine.web.standard.widgets.WebGeneralTableBoxWidgetCell
+import com.gridnine.jasmine.web.standard.widgets.WebNodeProjectorWidget
 
 @Suppress("UNCHECKED_CAST", "UNREACHABLE_CODE")
 class WebDynamicCriterionHandler(private val listId: String, private val initData: DynamicWorkspaceCriterionDTJS?) : WebCriterionHandler<DynamicWorkspaceCriterionDTJS> {
@@ -28,14 +28,14 @@ class WebDynamicCriterionHandler(private val listId: String, private val initDat
 
     private var lastEditor: WebNode? = null
 
-    private lateinit var valueControl:WebDivsContainer
+    private lateinit var valueControl:WebNodeProjectorWidget
     private lateinit var  propertySelect:RemoteGeneralSelectWidget
     private lateinit var  conditionSelect:RemoteGeneralSelectWidget
     private lateinit var  handlerSelect:RemoteGeneralSelectWidget
 
-    override fun getComponents(): MutableList<WebTableBoxCell> {
+    override fun getComponents(): MutableList<WebGeneralTableBoxWidgetCell> {
 
-        val result = arrayListOf<WebTableBoxCell>()
+        val result = arrayListOf<WebGeneralTableBoxWidgetCell>()
         propertySelect = RemoteGeneralSelectWidget {
             width = "100%"
             showClearIcon = false
@@ -49,7 +49,7 @@ class WebDynamicCriterionHandler(private val listId: String, private val initDat
         initData?.property?.let {
             propertySelect.setValue(it)
         }
-        result.add(WebTableBoxCell(propertySelect))
+        result.add(WebGeneralTableBoxWidgetCell(propertySelect))
         conditionSelect = RemoteGeneralSelectWidget {
             width = "100%"
             showClearIcon = false
@@ -65,7 +65,7 @@ class WebDynamicCriterionHandler(private val listId: String, private val initDat
         initData?.condition?.let {
             conditionSelect.setValue(it)
         }
-        result.add(WebTableBoxCell(conditionSelect))
+        result.add(WebGeneralTableBoxWidgetCell(conditionSelect))
         handlerSelect = RemoteGeneralSelectWidget {
             width = "100%"
             showClearIcon = false
@@ -83,7 +83,7 @@ class WebDynamicCriterionHandler(private val listId: String, private val initDat
         initData?.handler?.let {
             handlerSelect.setValue(it)
         }
-        valueControl = WebUiLibraryAdapter.get().createDivsContainer{
+        valueControl = WebNodeProjectorWidget{
             width = "100%"
         }
         initData?.value?.let {
@@ -92,8 +92,8 @@ class WebDynamicCriterionHandler(private val listId: String, private val initDat
             if(handler != null){
                 lastEditor = handler.createEditor()
                 handler.setValue(lastEditor!!, it)
-                valueControl.addDiv(className, lastEditor!!)
-                valueControl.show(className)
+                valueControl.addNode(className, lastEditor!!)
+                valueControl.showNode(className)
             }
         }
         val valueGrid = WebUiLibraryAdapter.get().createGridContainer {
@@ -106,7 +106,7 @@ class WebDynamicCriterionHandler(private val listId: String, private val initDat
                 cell(valueControl)
             }
         }
-        result.add(WebTableBoxCell(valueGrid))
+        result.add(WebGeneralTableBoxWidgetCell(valueGrid))
         propertySelect.setChangeListener {
             conditionSelect.setValue(null)
             handlerSelect.setValue(null)
@@ -127,8 +127,8 @@ class WebDynamicCriterionHandler(private val listId: String, private val initDat
             val handler = RegistryJS.get().get(WebDynamicCriterionValueEditorHandler.TYPE, rendererId)
             if(handler != null){
                 lastEditor = handler.createEditor()
-                valueControl.addDiv(rendererId, lastEditor!!)
-                valueControl.show(rendererId)
+                valueControl.addNode(rendererId, lastEditor!!)
+                valueControl.showNode(rendererId)
             }
         }
         return result

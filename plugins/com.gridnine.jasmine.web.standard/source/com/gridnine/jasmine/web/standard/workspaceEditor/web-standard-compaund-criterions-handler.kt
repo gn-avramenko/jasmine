@@ -10,38 +10,38 @@ import com.gridnine.jasmine.common.standard.model.rest.BaseComplexWorkspaceCrite
 import com.gridnine.jasmine.common.standard.model.rest.NotWorkspaceCriterionDTJS
 import com.gridnine.jasmine.common.standard.model.rest.OrWorkspaceCriterionDTJS
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
-import com.gridnine.jasmine.web.core.ui.components.WebTableBox
-import com.gridnine.jasmine.web.core.ui.components.WebTableBoxCell
-import com.gridnine.jasmine.web.core.ui.components.WebTableBoxColumnWidth
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
+import com.gridnine.jasmine.web.standard.widgets.GeneralTableBoxWidget
+import com.gridnine.jasmine.web.standard.widgets.WebGeneralTableBoxWidgetCell
+import com.gridnine.jasmine.web.standard.widgets.WebGeneralTableBoxWidgetColumnWidth
 
-abstract class BaseWebCompoundCriterionHandler<C:BaseComplexWorkspaceCriterionDTJS>(private val tableBox: WebTableBox, private val indent:Int, private val listId:String, private val initData:C?) :WebCriterionHandler<C>{
+abstract class BaseWebCompoundCriterionHandler<C:BaseComplexWorkspaceCriterionDTJS>(private val tableBox: GeneralTableBoxWidget, private val indent:Int, private val listId:String, private val initData:C?) :WebCriterionHandler<C>{
     private val uuid = MiscUtilsJS.createUUID()
     private  lateinit var criterionsList:WebWorkspaceCriterionsListEditor
 
-    override fun getComponents(): MutableList<WebTableBoxCell> {
-        val result = arrayListOf<WebTableBoxCell>()
-        val table = WebUiLibraryAdapter.get().createTableBox{
+    override fun getComponents(): MutableList<WebGeneralTableBoxWidgetCell> {
+        val result = arrayListOf<WebGeneralTableBoxWidgetCell>()
+        val table = GeneralTableBoxWidget{
             width ="100%"
-            columnWidths.add(WebTableBoxColumnWidth(50,50,50))
-            columnWidths.add(WebTableBoxColumnWidth(null, 100, null))
+            columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(50,50,50))
+            columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(null, 100, null))
         }
-        val components = arrayListOf<WebTableBoxCell>()
+        val components = arrayListOf<WebGeneralTableBoxWidgetCell>()
         val opLabel = WebUiLibraryAdapter.get().createLabel { }
         opLabel.setText(getOperationName())
-        components.add(WebTableBoxCell(opLabel))
-        val valueTableBox = WebUiLibraryAdapter.get().createTableBox{
+        components.add(WebGeneralTableBoxWidgetCell(opLabel))
+        val valueTableBox = GeneralTableBoxWidget{
             width = "100%"
-            columnWidths.add(WebTableBoxColumnWidth(300-(indent+1)*51, 300-(indent+1)*51, 300-(indent+1)*51))
-            columnWidths.add(WebTableBoxColumnWidth(200, 200, 200))
-            columnWidths.add(WebTableBoxColumnWidth(null, 300, null))
-            columnWidths.add(WebTableBoxColumnWidth(140, 140, 140))
+            columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(300-(indent+1)*51, 300-(indent+1)*51, 300-(indent+1)*51))
+            columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(200, 200, 200))
+            columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(null, 300, null))
+            columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(140, 140, 140))
         }
         criterionsList = WebWorkspaceCriterionsListEditor(valueTableBox, indent+1)
         criterionsList.setData(listId, initData?.criterions?: emptyList())
-        components.add(WebTableBoxCell(valueTableBox))
+        components.add(WebGeneralTableBoxWidgetCell(valueTableBox))
         table.addRow(0, components)
-        result.add(WebTableBoxCell(table, 3))
+        result.add(WebGeneralTableBoxWidgetCell(table, 3))
         return result
     }
 
@@ -65,7 +65,7 @@ abstract class BaseWebCompoundCriterionHandler<C:BaseComplexWorkspaceCriterionDT
 
 }
 
-class WebAndCriterionHandler(tableBox: WebTableBox, indent:Int, listId: String, initData:AndWorkspaceCriterionDTJS?):BaseWebCompoundCriterionHandler<AndWorkspaceCriterionDTJS>(tableBox,indent,listId,initData){
+class WebAndCriterionHandler(tableBox: GeneralTableBoxWidget, indent:Int, listId: String, initData:AndWorkspaceCriterionDTJS?):BaseWebCompoundCriterionHandler<AndWorkspaceCriterionDTJS>(tableBox,indent,listId,initData){
     override fun getOperationName(): String {
         return "И"
     }
@@ -75,7 +75,7 @@ class WebAndCriterionHandler(tableBox: WebTableBox, indent:Int, listId: String, 
     }
 }
 
-class WebOrCriterionHandler(tableBox: WebTableBox, indent:Int,  listId: String,initData:OrWorkspaceCriterionDTJS?):BaseWebCompoundCriterionHandler<OrWorkspaceCriterionDTJS>(tableBox,indent,listId,initData){
+class WebOrCriterionHandler(tableBox: GeneralTableBoxWidget, indent:Int,  listId: String,initData:OrWorkspaceCriterionDTJS?):BaseWebCompoundCriterionHandler<OrWorkspaceCriterionDTJS>(tableBox,indent,listId,initData){
     override fun getOperationName(): String {
         return "ИЛИ"
     }
@@ -85,7 +85,7 @@ class WebOrCriterionHandler(tableBox: WebTableBox, indent:Int,  listId: String,i
     }
 }
 
-class WebNotCriterionHandler(tableBox: WebTableBox, indent:Int, listId: String, initData:NotWorkspaceCriterionDTJS?):BaseWebCompoundCriterionHandler<NotWorkspaceCriterionDTJS>(tableBox,indent,listId, initData){
+class WebNotCriterionHandler(tableBox: GeneralTableBoxWidget, indent:Int, listId: String, initData:NotWorkspaceCriterionDTJS?):BaseWebCompoundCriterionHandler<NotWorkspaceCriterionDTJS>(tableBox,indent,listId, initData){
     override fun getOperationName(): String {
         return "НЕ"
     }

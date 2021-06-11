@@ -11,6 +11,7 @@ interface WebTag : WebNode{
     fun setText(value:String?)
     fun getChildren():TagChildren
     fun getStyle():TagStyle
+    fun setVisible(value:Boolean)
     fun getClass():TagClass
     fun getAttributes():TagAttributes
     fun setEventHandler(event:String, handler: (suspend (dynamic) ->Unit)?)
@@ -19,8 +20,10 @@ interface WebTag : WebNode{
 
 interface TagChildren : List<WebNode>{
     fun addChild(child:WebNode)
+    fun addChild(position:Int, child:WebNode)
     fun removeChild(child:WebNode)
     fun clear()
+    fun moveChild(fromPosition: Int, toPosition: Int)
 }
 
 interface TagStyle : Map<String, String>{

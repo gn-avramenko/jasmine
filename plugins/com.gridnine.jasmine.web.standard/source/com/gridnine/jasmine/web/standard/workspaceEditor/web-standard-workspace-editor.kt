@@ -19,6 +19,7 @@ import com.gridnine.jasmine.web.standard.StandardRestClient
 import com.gridnine.jasmine.web.standard.WebMessages
 import com.gridnine.jasmine.web.standard.mainframe.*
 import com.gridnine.jasmine.web.standard.utils.StandardUiUtils
+import com.gridnine.jasmine.web.standard.widgets.WebNodeProjectorWidget
 
 
 class WorkspaceEditorActionHandler : SimpleActionHandler{
@@ -44,7 +45,7 @@ class WorkspaceEditorTabHandler: MainFrameTabHandler<WorkspaceDTJS> {
 
 class WorkspaceEditor(workspace:WorkspaceDTJS): BaseWebNodeWrapper<WebBorderContainer>() {
 
-    private val centerContent:WebDivsContainer
+    private val centerContent:WebNodeProjectorWidget
     private var lastNodeId:String? = null
     private val tree:WebTree
     private var lastEditor: WorkspaceElementEditorHandler<*,*>? = null
@@ -54,7 +55,7 @@ class WorkspaceEditor(workspace:WorkspaceDTJS): BaseWebNodeWrapper<WebBorderCont
         _node = WebUiLibraryAdapter.get().createBorderContainer {
             fit=true
         }
-        centerContent = WebUiLibraryAdapter.get().createDivsContainer{
+        centerContent = WebNodeProjectorWidget{
             width = "100%"
             height = "100%"
         }
@@ -231,12 +232,12 @@ class WorkspaceEditor(workspace:WorkspaceDTJS): BaseWebNodeWrapper<WebBorderCont
                 itemHandler!!
             }
         }.unsafeCast<WorkspaceElementEditorHandler<WebNode,Any>>()
-        val comp = centerContent.getDiv(handler.getId())?:run{
+        val comp = centerContent.getNode(handler.getId())?:run{
             val editor = handler.createEditor()
-            centerContent.addDiv(handler.getId(), editor)
+            centerContent.addNode(handler.getId(), editor)
             editor
         }
-        centerContent.show(handler.getId())
+        centerContent.showNode(handler.getId())
         val userData =  node.userData?:getElementData(node.id)
         handler.setData(comp,  userData)
         lastEditor = handler
@@ -244,7 +245,7 @@ class WorkspaceEditor(workspace:WorkspaceDTJS): BaseWebNodeWrapper<WebBorderCont
 
     private fun saveData(): Boolean {
         val ed = lastEditor.unsafeCast<WorkspaceElementEditorHandler<WebNode,Any>>()
-        val comp = centerContent.getDiv(ed.getId())!!
+        val comp = centerContent.getNode(ed.getId())!!
         if(!ed.validate(comp)){
             tree.select(lastNodeId!!)
             StandardUiUtils.showMessage("Есть ошибки валидации")
