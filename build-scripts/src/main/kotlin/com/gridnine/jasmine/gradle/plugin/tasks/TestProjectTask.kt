@@ -19,7 +19,7 @@ open class TestProjectTask() :DefaultTask(){
         group = "jenkins"
         registry.plugins.forEach {
             when(KotlinUtils.getType(it)){
-                SpfPluginType.SERVER_TEST ->{
+                 SpfPluginType.COMMON_TEST,SpfPluginType.SERVER_TEST ->{
                     dependsOn(TestJvmPluginTask.getTaskName(it.id))
                 }
                 SpfPluginType.WEB_TEST ->{

@@ -8,6 +8,7 @@ package com.gridnine.jasmine.web.easyui.components
 import com.gridnine.jasmine.web.core.ui.components.*
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 
+@Suppress("unused")
 class EasyUiWebTextBox(configure: WebTextBoxConfiguration.()->Unit) :WebTextBox,EasyUiComponent{
 
     private var initialized = false
@@ -60,6 +61,9 @@ class EasyUiWebTextBox(configure: WebTextBoxConfiguration.()->Unit) :WebTextBox,
     }
 
     override fun showValidation(value: String?) {
+        if(!initialized){
+            return
+        }
         val tb =jq.textbox("textbox")
         val spanElm = tb.parent()
         if(MiscUtilsJS.isBlank(value)){
@@ -85,7 +89,7 @@ class EasyUiWebTextBox(configure: WebTextBoxConfiguration.()->Unit) :WebTextBox,
 
     override fun decorate() {
         jq = jQuery("#textBox$uid")
-        var icons = arrayListOf<Any>()
+        val icons = arrayListOf<Any>()
         if(config.showClearIcon){
             icons.add(object{
                 val iconCls = "icon-clear"

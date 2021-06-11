@@ -41,6 +41,8 @@ interface WebUiLibraryAdapter{
 
     fun createTextBox(configure:WebTextBoxConfiguration.()->Unit):WebTextBox
 
+    fun createPasswordBox(configure:WebPasswordBoxConfiguration.()->Unit):WebPasswordBox
+
     fun showWindow(component: WebNode)
 
     fun showNotification(message:String, timeout:Int)

@@ -32,6 +32,15 @@ fun launch(block: suspend () -> Unit){
         }
     }
 }
+fun launchAndHandleException(block: suspend () -> Unit, exceptionHandler:(Throwable)->Unit){
+    launchInternal{
+        try {
+            block()
+        } catch (error:Throwable){
+            exceptionHandler.invoke(error)
+        }
+    }
+}
 private fun launchInternal(block: suspend () -> Unit) {
     block.startCoroutine(object : Continuation<Unit> {
         override val context: CoroutineContext get() = EmptyCoroutineContext

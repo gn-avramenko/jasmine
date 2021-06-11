@@ -4,6 +4,7 @@
         <plugin-dependency plugin-id="com.gridnine.jasmine.common.core"/>
         <plugin-dependency plugin-id="com.gridnine.jasmine.common.core.test"/>
         <plugin-dependency plugin-id="com.gridnine.jasmine.server.core"/>
+        <plugin-dependency plugin-id="com.gridnine.jasmine.common.spf"/>
         <plugin-dependency plugin-id="com.gridnine.jasmine.server.db.h2"/>
     </dependencies>
 </plugin>

@@ -12,7 +12,7 @@ open class StartIndividualJSTestInIDETask() :DefaultTask(){
         group = "individual-js-tests"
         val individualLauncher = plugin.parameters.find{ param -> param.id == "individual-test-launcher" }!!.value
         //dependsOn(StartTestServerInIDETask.getTaskName(plugin.id),StopTestServerInIDETask.getTaskName(plugin.id), NodeJsCopyJsFilesTask.taskName, NodeJsStartTestInIDETask.getTaskName(individualLauncher, plugin.id, debug))
-        dependsOn(NodeJsCopyJsFilesTask.taskName, NodeJsStartTestInIDETask.getTaskName(individualLauncher, plugin.id, debug))
+        dependsOn(StartTestServerInIDETask.getTaskName(plugin.id),StopTestServerInIDETask.getTaskName(plugin.id),NodeJsCopyJsFilesTask.taskName, NodeJsStartTestInIDETask.getTaskName(individualLauncher, plugin.id, debug))
     }
 
     companion object{

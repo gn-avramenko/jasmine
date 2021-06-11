@@ -39,7 +39,7 @@ class WebListMainFrameTabHandler : MainFrameTabHandler<ListWorkspaceItemDTJS>{
 
 }
 
-class ListPanel(we: ListWorkspaceItemDTJS, actions: ActionsGroupWrapper) : BaseWebNodeWrapper<WebBorderContainer>(), EventsSubscriber {
+class ListPanel(we: ListWorkspaceItemDTJS, actions: ActionsGroupWrapper) : BaseWebNodeWrapper<WebBorderContainer>(), EventsSubscriber , ListWrapper<BaseIdentityJS>{
 
     private lateinit var grid :WebDataGrid<BaseIdentityJS>
     private val objectTypes = arrayListOf<String>()
@@ -162,6 +162,10 @@ class ListPanel(we: ListWorkspaceItemDTJS, actions: ActionsGroupWrapper) : BaseW
                     grid.reload()
                 }
             }
+    }
+
+    override fun getSelectedItems(): List<BaseIdentityJS> {
+        return getSelectedItems()
     }
 }
 

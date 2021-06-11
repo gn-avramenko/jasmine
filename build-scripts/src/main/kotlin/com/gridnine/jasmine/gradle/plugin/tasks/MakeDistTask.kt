@@ -40,7 +40,7 @@ open class MakeDistTask() :DefaultTask(){
             file.parentFile.ensureDirExists()
             file.writeText("""
                     cd ..
-                    java -Xms128M -Xmx256M -Dspf.mode=shell -Dlogback.configurationFile=config/logback.xml -Dspf.applicationClass=com.gridnine.jasmine.server.spf.SpfApplicationImpl -jar lib/spf.jar > logs/init.log 2>&1 &
+                    java -Xms128M -Xmx256M -Dspf.mode=shell -Dlogback.configurationFile=config/logback.xml -Dspf.applicationClass=com.gridnine.jasmine.common.spf.SpfApplicationImpl -jar lib/spf.jar > logs/init.log 2>&1 &
                 """.trimIndent())
 //            file.writeText("""
 //                    cd ..
@@ -57,79 +57,79 @@ open class MakeDistTask() :DefaultTask(){
             project.file("config").copyRecursively(project.file("build/dist/config"))
             project.file("build/dist/logs").mkdirs()
 
-            val sources = registry.plugins.filter {
-                val type = KotlinUtils.getType(it)
-                type == SpfPluginType.WEB || type == SpfPluginType.WEB_CORE
-            }.flatMap {
-                val pluginDir = filesMap[it.id]!!
-                val result = arrayListOf<String>()
-                val sourceFile = File(pluginDir, "source")
-                if(sourceFile.exists()){
-                    result.add(sourceFile.toRelativeString(project.file(".")))
-                }
-                val sourceGenFile = File(pluginDir, "source-gen")
-                if(sourceGenFile.exists()){
-                    result.add(sourceGenFile.toRelativeString(project.file(".")))
-                }
-                result
-            }.joinToString ("\r\n                            "){
-             "kotlin.srcDir(\"${it}\")"
-            }
-            project.file("js-build.gradle.kts").writeIfDiffers("""
-                import org.gradle.jvm.tasks.*
-
-                plugins {
-                    kotlin("js") version "${config.kotlinVersion}"
-                }
-
-
-                repositories{
-                    mavenCentral()
-                }
-
-                kotlin {
-                    js {
-                        sourceSets["main"].apply {
-                            $sources
-                        }
-                        browser{
-                            distribution {
-                                directory = File("temp/js/output/")
-                            }
-                        }
-                    }
-                }
-
-                task("_unzip_war", Copy::class) {
-                    doFirst{
-                        println("deleting directory")
-                        val file = project.file("temp/war/input")
-                        if(file.exists()){
-                            file.deleteRecursively()
-                        }
-                    }
-                    shouldRunAfter("build")
-                    from(zipTree(file("build/dist/lib/${config.indexWar}")))
-                    into(project.file("temp/war/input"))
-                }
-
-                task("update-index-war", Jar::class){
-                    dependsOn("_unzip_war")
-                    destinationDirectory.set(project.file("temp/war/output"))
-                    from(project.file("temp/war/input"))
-                    archiveFileName.set("${config.indexWar}")
-                    doFirst{
-                        project.file("temp/js/output/${project.name}.js").copyTo(project.file("temp/war/input/${project.name}.js"))
-                        project.file("temp/js/output/${project.name}.js.map").copyTo(project.file("temp/war/input/${project.name}.js.map"))
-                        project.file("temp/war/input/index.html").delete()
-                        project.file("temp/war/input/index-prod.html").renameTo(project.file("temp/war/input/index.html"))
-                    }
-                    doLast{
-                        project.file("build/dist/lib/${config.indexWar}").delete()
-                        project.file("temp/war/output/${config.indexWar}").renameTo(project.file("build/dist/lib/${config.indexWar}"))
-                    }
-                }
-            """.trimIndent())
+//            val sources = registry.plugins.filter {
+//                val type = KotlinUtils.getType(it)
+//                type == SpfPluginType.WEB || type == SpfPluginType.WEB_CORE
+//            }.flatMap {
+//                val pluginDir = filesMap[it.id]!!
+//                val result = arrayListOf<String>()
+//                val sourceFile = File(pluginDir, "source")
+//                if(sourceFile.exists()){
+//                    result.add(sourceFile.toRelativeString(project.file(".")))
+//                }
+//                val sourceGenFile = File(pluginDir, "source-gen")
+//                if(sourceGenFile.exists()){
+//                    result.add(sourceGenFile.toRelativeString(project.file(".")))
+//                }
+//                result
+//            }.joinToString ("\r\n                            "){
+//             "kotlin.srcDir(\"${it}\")"
+//            }
+//            project.file("js-build.gradle.kts").writeIfDiffers("""
+//                import org.gradle.jvm.tasks.*
+//
+//                plugins {
+//                    kotlin("js") version "${config.kotlinVersion}"
+//                }
+//
+//
+//                repositories{
+//                    mavenCentral()
+//                }
+//
+//                kotlin {
+//                    js {
+//                        sourceSets["main"].apply {
+//                            $sources
+//                        }
+//                        browser{
+//                            distribution {
+//                                directory = File("temp/js/output/")
+//                            }
+//                        }
+//                    }
+//                }
+//
+//                task("_unzip_war", Copy::class) {
+//                    doFirst{
+//                        println("deleting directory")
+//                        val file = project.file("temp/war/input")
+//                        if(file.exists()){
+//                            file.deleteRecursively()
+//                        }
+//                    }
+//                    shouldRunAfter("build")
+//                    from(zipTree(file("build/dist/lib/${config.indexWar}")))
+//                    into(project.file("temp/war/input"))
+//                }
+//
+//                task("update-index-war", Jar::class){
+//                    dependsOn("_unzip_war")
+//                    destinationDirectory.set(project.file("temp/war/output"))
+//                    from(project.file("temp/war/input"))
+//                    archiveFileName.set("${config.indexWar}")
+//                    doFirst{
+//                        project.file("temp/js/output/${project.name}.js").copyTo(project.file("temp/war/input/${project.name}.js"))
+//                        project.file("temp/js/output/${project.name}.js.map").copyTo(project.file("temp/war/input/${project.name}.js.map"))
+//                        project.file("temp/war/input/index.html").delete()
+//                        project.file("temp/war/input/index-prod.html").renameTo(project.file("temp/war/input/index.html"))
+//                    }
+//                    doLast{
+//                        project.file("build/dist/lib/${config.indexWar}").delete()
+//                        project.file("temp/war/output/${config.indexWar}").renameTo(project.file("build/dist/lib/${config.indexWar}"))
+//                    }
+//                }
+//            """.trimIndent())
 
         }
     }

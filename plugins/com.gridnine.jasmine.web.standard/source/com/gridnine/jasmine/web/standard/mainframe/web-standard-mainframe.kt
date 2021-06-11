@@ -84,13 +84,12 @@ open class MainFrame(configure: MainFrameConfiguration.()->Unit):BaseWebNodeWrap
         tabs.getTabs().filter { it.content is EventsSubscriber }.forEach { (it.content as EventsSubscriber).receiveEvent(event) }
     }
 
-    suspend fun openTab(obj:Any){
+    suspend fun openTab(obj:Any):TabPanelContainer{
         val handler = RegistryJS.get().get(MainFrameTabHandler.TYPE, obj::class.simpleName!!)!!
         val tabId = "$uid|${handler.getTabId(obj)}"
         val existingTab = tabs.getTabs().find { it.id == tabId }
         if(existingTab != null){
-            tabs.select(tabId)
-            return
+            return TabPanelContainer(tabId, tabs.select(tabId)!!)
         }
         val callback = object:MainFrameTabCallback {
             private var currentTitle:String? = null
@@ -118,6 +117,7 @@ open class MainFrame(configure: MainFrameConfiguration.()->Unit):BaseWebNodeWrap
             content = tabData.content
         }
         callback.setTitle(tabData.title)
+        return TabPanelContainer(tabId, tabData.content)
     }
 
     fun setWorkspace(value:WorkspaceDTJS){
@@ -159,6 +159,8 @@ data class ObjectModificationEvent(val objectType: String, val objectUid:String)
 
 data class ObjectDeleteEvent(val objectType: String, val objectUid:String)
 
+data class TabPanelContainer(val tabId: String, val content:WebNode)
+
 data class MainFrameTabData(var title:String, var content:WebNode)
 
 interface MainFrameTabHandler<T:Any>:RegistryItemJS<MainFrameTabHandler<Any>>{
@@ -171,4 +173,6 @@ interface MainFrameTabHandler<T:Any>:RegistryItemJS<MainFrameTabHandler<Any>>{
         val TYPE = RegistryItemTypeJS<MainFrameTabHandler<Any>>("mainframe-tab-handlers")
     }
 }
+
+
 

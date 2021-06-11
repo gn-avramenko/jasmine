@@ -138,7 +138,7 @@ class StorageImpl : Storage {
         val oldDocument = Database.get().loadDocumentWrapper(doc::class as KClass<D>, doc.uid)
         var docRevision = doc.getValue(BaseDocument.revision) as Int
         if (docRevision == -1) {
-            docRevision = oldDocument!!.revision
+            docRevision = oldDocument?.revision?:0
         }
         if (oldDocument != null && docRevision != oldDocument.revision) {
             throw Xeption.forDeveloper("revision conflict with document ${doc::class} ${doc.uid}, " +

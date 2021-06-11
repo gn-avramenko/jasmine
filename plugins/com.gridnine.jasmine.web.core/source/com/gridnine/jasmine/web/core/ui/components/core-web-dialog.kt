@@ -11,12 +11,13 @@ package com.gridnine.jasmine.web.core.ui.components
 interface Dialog<W> where W: WebNode {
     fun close()
     fun getContent():W
+    suspend fun simulateClick(buttonIdx:Int):Any?
 }
 
 
 class DialogButtonConfiguration<W> where W: WebNode {
     lateinit var displayName:String
-    lateinit var handler:(Dialog<W>)  ->Unit
+    lateinit var handler:suspend (Dialog<W>)  ->Any?
 }
 
 class DialogConfiguration<W>  where W: WebNode {

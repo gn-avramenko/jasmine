@@ -26,7 +26,7 @@ open class TestJvmPluginTask() : Test() {
                     dependsOn(CompileKotlinJVMPluginTask.getTaskName(dp.id))
                     dependsOn(CopyJvmResourcesTask.getTaskName(dp.id))
                 }
-                SpfPluginType.SERVER_TEST ->{
+                SpfPluginType.SERVER_TEST,SpfPluginType.COMMON_TEST ->{
                     dependsOn(CompileKotlinJVMPluginTask.getTaskName(dp.id))
                     dependsOn(CopyJvmResourcesTask.getTaskName(dp.id))
                     shouldRunAfter(getTaskName(dp.id))

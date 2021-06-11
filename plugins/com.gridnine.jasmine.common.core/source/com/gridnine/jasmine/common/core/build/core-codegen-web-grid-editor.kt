@@ -247,7 +247,7 @@ object GridWebEditorGenerator {
     private fun getWidgetClassName(widget: BaseWidgetDescription): String {
         return when (widget.widgetType) {
             WidgetType.TEXT_BOX -> "com.gridnine.jasmine.web.standard.widgets.TextBoxWidget"
-            WidgetType.PASSWORD_BOX -> "com.gridnine.jasmine.common.core.meta.PasswordBoxWidgetDescription"
+            WidgetType.PASSWORD_BOX -> "com.gridnine.jasmine.web.standard.widgets.PasswordBoxWidget"
             WidgetType.BIG_DECIMAL_NUMBER_BOX -> "com.gridnine.jasmine.web.standard.widgets.FloatNumberBoxWidget"
             WidgetType.INTEGER_NUMBER_BOX -> "com.gridnine.jasmine.web.standard.widgets.IntegerNumberBoxWidget"
             WidgetType.BOOLEAN_BOX -> "com.gridnine.jasmine.web.standard.widgets.BooleanBoxWidget"

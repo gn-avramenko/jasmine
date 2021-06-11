@@ -16,7 +16,7 @@ abstract class NodeJsStartTestInIDETask : NodeTask {
         group="other"
         setIgnoreExitValue(true)
         dependsOn(NodeJsCopyJsFilesTask.taskName)
-        //shouldRunAfter(StartTestServerInIDETask.getTaskName(pluginId))
+        shouldRunAfter(StartTestServerInIDETask.getTaskName(pluginId))
         script = File(project.projectDir, "node_modules/mocha/bin/mocha")
         if(debug){
             setArgs(arrayListOf("--inspect-brk", "--timeout", "10000", "node_modules/$launcherName"))

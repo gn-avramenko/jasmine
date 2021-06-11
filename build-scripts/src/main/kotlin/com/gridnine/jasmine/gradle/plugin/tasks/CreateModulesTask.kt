@@ -72,7 +72,7 @@ open class CreateModulesTask() : DefaultTask() {
                         externals.add("${resourcesDir.absolutePath}/")
                     }
                 }
-                SpfPluginType.SERVER_TEST -> {
+                SpfPluginType.SERVER_TEST, SpfPluginType.COMMON_TEST -> {
                     externalsTest.add("${baseDir.absolutePath}/")
                     val classesDir = File(baseDir, "classes")
                     if (classesDir.exists()) {

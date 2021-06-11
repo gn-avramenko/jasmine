@@ -76,6 +76,10 @@ class EasyUiWebLibraryAdapter :WebUiLibraryAdapter{
         return EasyUiWebTextBox(configure)
     }
 
+    override fun createPasswordBox(configure: WebPasswordBoxConfiguration.() -> Unit): WebPasswordBox {
+        return EasyUiWebPasswordBox(configure)
+    }
+
     override fun showWindow(component: WebNode) {
         if(EnvironmentJS.test){
             return
@@ -98,10 +102,29 @@ class EasyUiWebLibraryAdapter :WebUiLibraryAdapter{
     override fun <W : WebNode> showDialog(dialogContent: W, configure: DialogConfiguration<W>.() -> Unit): Dialog<W> {
         val conf = DialogConfiguration<W>()
         conf.configure()
+        if(EnvironmentJS.test){
+            val holder = arrayListOf<Dialog<W>>()
+            val result = object:Dialog<W>{
+                override fun close() {
+                    //noops
+                }
+
+                override fun getContent(): W {
+                    return dialogContent
+                }
+
+                override suspend fun simulateClick(buttonIdx: Int): Any? {
+                    return conf.buttons[buttonIdx].handler.invoke(holder[0])
+                }
+            }
+            holder.add(result)
+            return result
+        }
         val compJq = jQuery("body")
         val zkComp = findEasyUiComponent(dialogContent)
         compJq.append(zkComp.getHtml())
         val jq = jQuery("#${zkComp.getId()}")
+        val holder = arrayListOf<Dialog<W>>()
         val result = object:Dialog<W>{
             override fun close() {
                 zkComp.destroy()
@@ -114,12 +137,19 @@ class EasyUiWebLibraryAdapter :WebUiLibraryAdapter{
                 return dialogContent
             }
 
+            override suspend fun simulateClick(buttonIdx: Int): Any? {
+                return conf.buttons[buttonIdx].handler.invoke(holder[0])
+            }
+
         }
+        holder.add(result)
         val buttons = conf.buttons.map { db->
             object {
                 val text = db.displayName
                 val handler = {
-                    db.handler.invoke(result)
+                    launch {
+                        db.handler.invoke(result)
+                    }
                 }
             }
         }.toTypedArray()
@@ -137,7 +167,7 @@ class EasyUiWebLibraryAdapter :WebUiLibraryAdapter{
         jq.dialog(dialogConfig)
         if(!conf.expandToMainFrame){
             jq.dialog("resize",object{
-                val width = jq.width()+20
+                val width = jq.width()+30
 //                val width = "auto"
                 val height = "auto"
             })
