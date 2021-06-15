@@ -23,6 +23,8 @@ import com.gridnine.jasmine.web.standard.StandardRestClient
 import com.gridnine.jasmine.web.standard.WebMessages
 import com.gridnine.jasmine.web.standard.mainframe.*
 import com.gridnine.jasmine.web.standard.utils.StandardUiUtils
+import com.gridnine.jasmine.web.standard.widgets.WebGridLayoutWidget
+import com.gridnine.jasmine.web.standard.widgets.WebGridLayoutWidgetCell
 import kotlin.js.Date
 
 
@@ -41,7 +43,7 @@ class ShowVersionsEditorObjectButtonHandler: ObjectEditorTool<WebEditor<*,*,*>> 
     }
 }
 
-class VersionsSelectDialogPanel(objectType:String, objectUid:String,  aTitle:String, versions:List<ObjectVersionMetaDataJS>):BaseWebNodeWrapper<WebGridLayoutContainer>() {
+class VersionsSelectDialogPanel(objectType:String, objectUid:String,  aTitle:String, versions:List<ObjectVersionMetaDataJS>):BaseWebNodeWrapper<WebGridLayoutWidget>() {
     private val dataGrid: WebDataGrid<ObjectVersionMetaDataJS>
     lateinit var closeCallbalck:()->Unit
     init {
@@ -83,13 +85,12 @@ class VersionsSelectDialogPanel(objectType:String, objectUid:String,  aTitle:Str
             closeCallbalck.invoke()
             MainFrame.get().openTab(OpenObjectVersionData(objectType, objectUid, aTitle, it.version))
         }
-        _node = WebUiLibraryAdapter.get().createGridContainer {
+        _node = WebGridLayoutWidget {
             height = "500px"
             width = "500px"
-            column("100%")
-            row ("100%"){
-                cell(dataGrid)
-            }
+        }.also {
+            it.setColumnsWidths("100%")
+            it.addRow("100%", arrayListOf(WebGridLayoutWidgetCell(dataGrid)))
         }
     }
 
@@ -146,14 +147,11 @@ class ObjectVersionViewer(obj: OpenObjectVersionData, data: GetVersionEditorData
             MainFrame.get().publishEvent(ObjectModificationEvent(obj.type, obj.uid))
             StandardUiUtils.showMessage(WebMessages.versionRestored.replace("{0}", "${request.version+1}"))
         }
-        val toolBar = WebUiLibraryAdapter.get().createGridContainer {
+        val toolBar = WebGridLayoutWidget {
             width = "100%"
-            column("auto")
-            column("100%")
-            row {
-                cell(restoreButton)
-                cell()
-            }
+        }.also {
+            it.setColumnsWidths("auto", "100%")
+            it.addRow(restoreButton, null)
         }
         _node.setNorthRegion {
             content = toolBar

@@ -18,7 +18,6 @@ import com.gridnine.jasmine.common.reports.model.rest.*
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
 import com.gridnine.jasmine.web.core.ui.components.WebBorderContainer
-import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutContainer
 import com.gridnine.jasmine.web.core.ui.components.WebNode
 import com.gridnine.jasmine.web.core.utils.ContentTypeJS
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
@@ -28,6 +27,8 @@ import com.gridnine.jasmine.web.standard.mainframe.MainFrameTabCallback
 import com.gridnine.jasmine.web.standard.mainframe.MainFrameTabData
 import com.gridnine.jasmine.web.standard.mainframe.MainFrameTabHandler
 import com.gridnine.jasmine.web.standard.utils.StandardUiUtils
+import com.gridnine.jasmine.web.standard.widgets.WebGridLayoutWidget
+import com.gridnine.jasmine.web.standard.widgets.WebLabelWidget
 
 internal class ReportParameterUiWrapper(
     val parameterId: String,
@@ -97,7 +98,7 @@ class PrepareReportParametersPanel(
     reportParametersDescriptions: List<ReportRequestedParameterDescriptionJS>,
     savedParameters: SavedReportParametersJS?,
     updateReport: suspend (GeneratedReportJS) -> Unit
-) : BaseWebNodeWrapper<WebGridLayoutContainer>() {
+) : BaseWebNodeWrapper<WebGridLayoutWidget>() {
 
     private val parameters = arrayListOf<ReportParameterUiWrapper>()
 
@@ -107,9 +108,10 @@ class PrepareReportParametersPanel(
             width = "100%"
             title = WebMessages.apply
         }
-        _node = WebUiLibraryAdapter.get().createGridContainer {
+        _node = WebGridLayoutWidget {
             width = "100%"
-            column("100%")
+        }.also {widget ->
+            widget.setColumnsWidths("100%")
             reportParametersDescriptions.forEach { paramDescr ->
                 val uiHandler = when (paramDescr.type) {
                     ReportRequestedParameterTypeJS.LOCAL_DATE -> LocalDateRequestedParameterWebHandler()
@@ -121,19 +123,11 @@ class PrepareReportParametersPanel(
                 savedParameters?.parameters?.find { it.id == paramDescr.id }?.let {
                     uiHandler.setValue(editor, it)
                 }
-                row {
-                    val label = WebUiLibraryAdapter.get().createLabel { }
-                    label.setText(paramDescr.name)
-                    cell(label)
-                }
-                row {
-                    cell(editor)
-                }
+                widget.addRow(WebLabelWidget(paramDescr.name))
+                widget.addRow(editor)
                 parameters.add(ReportParameterUiWrapper(paramDescr.id, uiHandler, editor))
             }
-            row {
-                cell(applyButton)
-            }
+            widget.addRow(applyButton)
         }
         applyButton.setHandler {
             val params = arrayListOf<BaseReportRequestedParameterJS>()
@@ -181,19 +175,16 @@ class PrepareReportContentPanel(reportTitle: String, private val reportId:String
         val downloadButton = WebUiLibraryAdapter.get().createLinkButton {
             title = "Экспорт"
         }
-        val northPanel = WebUiLibraryAdapter.get().createGridContainer {
+        val northPanel = WebGridLayoutWidget {
             className = "jasmine-report-title"
             noPadding = true
-            column("100%")
-            column("auto")
-            row {
-                cell(WebUiLibraryAdapter.get().createLabel {
-                    className = "jasmine-report-title"
-                    width = "100%"
-                    height = "100%"
-                }.also { it.setText(reportTitle) })
-                cell(downloadButton)
-            }
+        }.also {
+            it.setColumnsWidths("100%","auto")
+            it.addRow(WebLabelWidget(reportTitle){
+                className = "jasmine-report-title"
+                width = "100%"
+                height = "100%"
+            }, downloadButton)
         }
        _node.setNorthRegion {
             content = northPanel

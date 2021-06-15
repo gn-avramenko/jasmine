@@ -15,6 +15,8 @@ import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.DefaultUIParameters
 import com.gridnine.jasmine.web.standard.widgets.EnumValueWidget
+import com.gridnine.jasmine.web.standard.widgets.WebGridLayoutWidget
+import com.gridnine.jasmine.web.standard.widgets.WebLabelWidget
 import kotlin.reflect.KClass
 
 object StandardUiUtils {
@@ -68,14 +70,11 @@ object StandardUiUtils {
     }
 
     fun confirm(question:String, aTitle:String = "Вопрос", action:()->Unit){
-        val layout = WebUiLibraryAdapter.get().createGridContainer {
+        val layout = WebGridLayoutWidget {
             uid = "confirmDialog"
-            column("auto")
-            row {
-                val label = WebUiLibraryAdapter.get().createLabel {}
-                label.setText(question)
-                cell(label)
-            }
+        }.also {
+            it.setColumnsWidths("auto")
+            it.addRow(WebLabelWidget(question))
         }
 
         WebUiLibraryAdapter.get().showDialog(layout){
@@ -92,18 +91,16 @@ object StandardUiUtils {
     }
 
     fun<E:Enum<E>> choseVariant(cls:KClass<E>, aTitle:String = "Выберите вариант", action: (E)->Unit){
-        lateinit var widget :EnumValueWidget<E>
-        val layout = WebUiLibraryAdapter.get().createGridContainer {
+        val widget  = EnumValueWidget<E>{
+            width = DefaultUIParameters.controlWidthAsString
+            allowNull = false
+            enumClass = cls
+        }
+        val layout = WebGridLayoutWidget {
             uid = "choseDialog"
-            column("auto")
-            row {
-                widget = EnumValueWidget{
-                    width = DefaultUIParameters.controlWidthAsString
-                    allowNull = false
-                    enumClass = cls
-                }
-                cell(widget)
-            }
+        }.also {it ->
+            it.setColumnsWidths("auto")
+            it.addRow(widget)
         }
         WebUiLibraryAdapter.get().showDialog(layout){
             title = aTitle

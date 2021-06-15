@@ -10,13 +10,12 @@ import com.gridnine.jasmine.common.standard.model.rest.*
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
-import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutContainer
 import com.gridnine.jasmine.web.standard.widgets.*
 
 
-class WebNullValueEditor:WebSimpleCriterionValueEditor<BaseWorkspaceSimpleCriterionValueDTJS>,BaseWebNodeWrapper<WebGridLayoutContainer>(){
+class WebNullValueEditor:WebSimpleCriterionValueEditor<BaseWorkspaceSimpleCriterionValueDTJS>,BaseWebNodeWrapper<WebGridLayoutWidget>(){
     init {
-        _node = WebUiLibraryAdapter.get().createGridContainer{
+        _node = WebGridLayoutWidget{
             width = "100%"
         }
     }
@@ -243,33 +242,25 @@ class WebDateTimeValueEditor:WebSimpleCriterionValueEditor<WorkspaceSimpleCriter
 }
 
 
-class WebDateIntervalEditor:WebSimpleCriterionValueEditor<WorkspaceSimpleCriterionDateIntervalValueDTJS>,BaseWebNodeWrapper<WebGridLayoutContainer>(){
+class WebDateIntervalEditor:WebSimpleCriterionValueEditor<WorkspaceSimpleCriterionDateIntervalValueDTJS>,BaseWebNodeWrapper<WebGridLayoutWidget>(){
     private val startDate:DateBoxWidget
     private val endDate:DateBoxWidget
     init {
-        val startLabel = WebUiLibraryAdapter.get().createLabel{}
-        startLabel.setText("с")
+        val startLabel = WebLabelWidget("с")
         startDate = DateBoxWidget {
             width="100%"
         }
-        val endLabel = WebUiLibraryAdapter.get().createLabel{}
-        endLabel.setText("по")
+        val endLabel = WebLabelWidget("по")
         endDate = DateBoxWidget {
             width="100%"
         }
-        _node = WebUiLibraryAdapter.get().createGridContainer{
+        _node = WebGridLayoutWidget{
             width="100%"
             noPadding = true
-            column("auto")
-            column("100%")
-            row{
-                cell(startLabel)
-                cell(startDate)
-            }
-            row{
-                cell(endLabel)
-                cell(endDate)
-            }
+        }.also {
+            it.setColumnsWidths("auto", "100%")
+            it.addRow(startLabel, startDate)
+            it.addRow(endLabel,endDate)
         }
     }
     override fun getType(): WebSimpleCriterionValueType {
@@ -300,33 +291,25 @@ class WebDateIntervalEditor:WebSimpleCriterionValueEditor<WorkspaceSimpleCriteri
 
 }
 
-class WebDateTimeIntervalEditor:WebSimpleCriterionValueEditor<WorkspaceSimpleCriterionDateTimeIntervalValueDTJS>,BaseWebNodeWrapper<WebGridLayoutContainer>(){
+class WebDateTimeIntervalEditor:WebSimpleCriterionValueEditor<WorkspaceSimpleCriterionDateTimeIntervalValueDTJS>,BaseWebNodeWrapper<WebGridLayoutWidget>(){
     private val startDate:DateTimeBoxWidget
     private val endDate:DateTimeBoxWidget
     init {
-        val startLabel = WebUiLibraryAdapter.get().createLabel{}
-        startLabel.setText("с")
+        val startLabel = WebLabelWidget("с")
         startDate = DateTimeBoxWidget {
             width="100%"
         }
-        val endLabel = WebUiLibraryAdapter.get().createLabel{}
-        endLabel.setText("по")
+        val endLabel = WebLabelWidget("по")
         endDate = DateTimeBoxWidget {
             width="100%"
         }
-        _node = WebUiLibraryAdapter.get().createGridContainer{
+        _node = WebGridLayoutWidget {
             width="100%"
             noPadding = true
-            column("auto")
-            column("100%")
-            row{
-                cell(startLabel)
-                cell(startDate)
-            }
-            row{
-                cell(endLabel)
-                cell(endDate)
-            }
+        }.also {
+            it.setColumnsWidths("auto", "100%")
+            it.addRow(startLabel, startDate)
+            it.addRow(endLabel,endDate)
         }
     }
     override fun getType(): WebSimpleCriterionValueType {

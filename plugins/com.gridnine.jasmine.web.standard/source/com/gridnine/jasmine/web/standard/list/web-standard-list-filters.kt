@@ -10,9 +10,7 @@ package com.gridnine.jasmine.web.standard.list
 import com.gridnine.jasmine.common.core.model.FakeEnumJS
 import com.gridnine.jasmine.common.standard.model.rest.*
 import com.gridnine.jasmine.common.standard.model.ui.YesNoEnumJS
-import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
-import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutContainer
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import com.gridnine.jasmine.web.standard.widgets.*
 
@@ -77,30 +75,23 @@ internal class BooleanFilterHandler : ListFilterHandler<ListFilterBooleanValuesD
 
 }
 
-internal class DateIntervalEditor:BaseWebNodeWrapper<WebGridLayoutContainer>(){
+internal class DateIntervalEditor:BaseWebNodeWrapper<WebGridLayoutWidget>(){
 
-    lateinit var fromDateBox:DateBoxWidget
-    lateinit var toDateBox:DateBoxWidget
+    val fromDateBox:DateBoxWidget
+    val toDateBox:DateBoxWidget
     init {
-        _node = WebUiLibraryAdapter.get().createGridContainer {
+        _node = WebGridLayoutWidget {
             width = "100%"
-            column("auto")
-            column("100%")
-            row {
-                cell(WebUiLibraryAdapter.get().createLabel {  }.apply { setText("с") })
-                fromDateBox = DateBoxWidget{
-                    width = "100%"
-                }
-                cell(fromDateBox)
-            }
-            row {
-                cell(WebUiLibraryAdapter.get().createLabel {  }.apply { setText("по") })
-                toDateBox = DateBoxWidget{
-                    width = "100%"
-                }
-                cell(toDateBox)
-            }
         }
+        _node.setColumnsWidths("auto", "100%")
+        fromDateBox = DateBoxWidget{
+            width = "100%"
+        }
+        _node.addRow(WebGridLayoutWidgetCell(WebLabelWidget("с")), WebGridLayoutWidgetCell(fromDateBox))
+        toDateBox = DateBoxWidget{
+            width = "100%"
+        }
+        _node.addRow(WebGridLayoutWidgetCell(WebLabelWidget("по")), WebGridLayoutWidgetCell(toDateBox))
     }
 }
 internal class DateFilterHandler : ListFilterHandler<ListFilterDateIntervalValueDTJS, DateIntervalEditor> {
@@ -133,30 +124,23 @@ internal class DateFilterHandler : ListFilterHandler<ListFilterDateIntervalValue
 
 }
 
-internal class DateTimeIntervalEditor:BaseWebNodeWrapper<WebGridLayoutContainer>(){
+internal class DateTimeIntervalEditor:BaseWebNodeWrapper<WebGridLayoutWidget>(){
 
-    lateinit var fromDateTimeBox:DateTimeBoxWidget
-    lateinit var toDateTimeBox:DateTimeBoxWidget
+    val fromDateTimeBox:DateTimeBoxWidget
+    val toDateTimeBox:DateTimeBoxWidget
     init {
-        _node = WebUiLibraryAdapter.get().createGridContainer {
-            width = "100px"
-            column("auto")
-            column("100%")
-            row {
-                cell(WebUiLibraryAdapter.get().createLabel {  }.apply { setText("с") })
-                fromDateTimeBox = DateTimeBoxWidget{
-                    width = "100%"
-                }
-                cell(fromDateTimeBox)
-            }
-            row {
-                cell(WebUiLibraryAdapter.get().createLabel {  }.apply { setText("по") })
-                toDateTimeBox = DateTimeBoxWidget{
-                    width = "100%"
-                }
-                cell(toDateTimeBox)
-            }
+        _node = WebGridLayoutWidget {
+            width = "100%"
         }
+        _node.setColumnsWidths("auto", "100%")
+        fromDateTimeBox = DateTimeBoxWidget{
+            width = "100%"
+        }
+        _node.addRow(WebGridLayoutWidgetCell(WebLabelWidget("с")), WebGridLayoutWidgetCell(fromDateTimeBox))
+        toDateTimeBox = DateTimeBoxWidget{
+            width = "100%"
+        }
+        _node.addRow(WebGridLayoutWidgetCell(WebLabelWidget("по")), WebGridLayoutWidgetCell(toDateTimeBox))
     }
 }
 
@@ -191,30 +175,23 @@ internal class DateTimeFilterHandler : ListFilterHandler<ListFilterDateTimeInter
 
 }
 
-internal class FloatNumberIntervalEditor:BaseWebNodeWrapper<WebGridLayoutContainer>(){
+internal class FloatNumberIntervalEditor:BaseWebNodeWrapper<WebGridLayoutWidget>(){
 
-    lateinit var fromNumberBox:FloatNumberBoxWidget
-    lateinit var toNumberBox:FloatNumberBoxWidget
+    val fromNumberBox:FloatNumberBoxWidget
+    val toNumberBox:FloatNumberBoxWidget
     init {
-        _node = WebUiLibraryAdapter.get().createGridContainer {
+        _node = WebGridLayoutWidget {
             width = "100%"
-            column("auto")
-            column("100%")
-            row {
-                cell(WebUiLibraryAdapter.get().createLabel {  }.apply { setText("с") })
-                fromNumberBox = FloatNumberBoxWidget{
-                    width = "100%"
-                }
-                cell(fromNumberBox)
-            }
-            row {
-                cell(WebUiLibraryAdapter.get().createLabel {  }.apply { setText("по") })
-                toNumberBox = FloatNumberBoxWidget{
-                    width = "100%"
-                }
-                cell(toNumberBox)
-            }
         }
+        _node.setColumnsWidths("auto", "100%")
+        fromNumberBox = FloatNumberBoxWidget{
+            width = "100%"
+        }
+        _node.addRow(WebGridLayoutWidgetCell(WebLabelWidget("с")), WebGridLayoutWidgetCell(fromNumberBox))
+        toNumberBox = FloatNumberBoxWidget{
+            width = "100%"
+        }
+        _node.addRow(WebGridLayoutWidgetCell(WebLabelWidget("по")), WebGridLayoutWidgetCell(toNumberBox))
     }
 }
 

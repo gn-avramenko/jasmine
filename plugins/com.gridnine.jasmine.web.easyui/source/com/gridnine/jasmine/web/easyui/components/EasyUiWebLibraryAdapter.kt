@@ -36,20 +36,12 @@ class EasyUiWebLibraryAdapter :WebUiLibraryAdapter{
         return EasyUiWebTree(configure)
     }
 
-    override fun createLabel(configure: WebLabelConfiguration.() -> Unit): WebLabel {
-        return EasyUiWebLabel(configure)
-    }
-
     override fun createSearchBox(configure: WebSearchBoxConfiguration.() -> Unit):WebSearchBox {
         return EasyUiWebSearchBox(configure)
     }
 
     override fun <E : BaseIntrospectableObjectJS> createDataGrid(configure: WebDataGridConfiguration<E>.()->Unit): WebDataGrid<E> {
         return EasyUiWebDataGrid(configure)
-    }
-
-    override fun createGridContainer(configure: WebGridContainerConfiguration.() -> Unit): WebGridLayoutContainer {
-        return EasyUiWebGridContainer(configure)
     }
 
     override fun createDateBox(configure: WebDateBoxConfiguration.() -> Unit): WebDateBox {

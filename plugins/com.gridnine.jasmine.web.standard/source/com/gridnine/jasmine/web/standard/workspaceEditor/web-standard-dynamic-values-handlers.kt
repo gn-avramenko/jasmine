@@ -8,14 +8,14 @@ package com.gridnine.jasmine.web.standard.workspaceEditor
 import com.gridnine.jasmine.common.standard.model.domain.DynamicCriterionDateValueTypeJS
 import com.gridnine.jasmine.common.standard.model.rest.DynamicCriterionDateValueDTJS
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
-import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
-import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutContainer
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import com.gridnine.jasmine.web.standard.widgets.EnumValueWidget
 import com.gridnine.jasmine.web.standard.widgets.IntegerNumberBoxWidget
+import com.gridnine.jasmine.web.standard.widgets.WebGridLayoutWidget
+import com.gridnine.jasmine.web.standard.widgets.WebLabelWidget
 
-class DateDynamicValueEditor : BaseWebNodeWrapper<WebGridLayoutContainer>(){
+class DateDynamicValueEditor : BaseWebNodeWrapper<WebGridLayoutWidget>(){
     private val correctionValue:IntegerNumberBoxWidget
 
     private val correctionType: EnumValueWidget<DynamicCriterionDateValueTypeJS>
@@ -31,22 +31,15 @@ class DateDynamicValueEditor : BaseWebNodeWrapper<WebGridLayoutContainer>(){
             allowNull = false
             enumClass = DynamicCriterionDateValueTypeJS::class
         }
-        _node = WebUiLibraryAdapter.get().createGridContainer {
+        _node = WebGridLayoutWidget {
             width = "100%"
             noPadding = true
-            column("auto")
-            column("50px")
-            column("100%")
-            row {
-                cell(WebUiLibraryAdapter.get().createLabel {
-                    width = "100%"
-                    height = "100%"
-                }.apply {
-                    setText("<nobr>&nbspс коррекцией:&nbsp</nobr>")
-                })
-                cell(correctionValue)
-                cell(correctionType)
-            }
+        }.also {
+            it.setColumnsWidths("auto", "50px", "100%")
+            it.addRow(WebLabelWidget("<nobr>&nbspс коррекцией:&nbsp</nobr>"){
+                width = "100%"
+                height = "100%"
+            }, correctionValue, correctionType)
         }
     }
 

@@ -19,6 +19,7 @@ import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.*
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import com.gridnine.jasmine.web.standard.StandardRestClient
+import com.gridnine.jasmine.web.standard.widgets.WebLabelWidget
 
 
 open class MainFrame(configure: MainFrameConfiguration.()->Unit):BaseWebNodeWrapper<WebBorderContainer>(){
@@ -41,11 +42,9 @@ open class MainFrame(configure: MainFrameConfiguration.()->Unit):BaseWebNodeWrap
             fit = true
         }
         westContent.setNorthRegion {
-            content = WebUiLibraryAdapter.get().createLabel {
+            content = WebLabelWidget(config.title){
                 width = "100%"
                 className = "jasmine-logo"
-            }.apply {
-                setText(config.title)
             }
         }
         navigationTree = WebUiLibraryAdapter.get().createTree {

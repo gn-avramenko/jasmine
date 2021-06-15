@@ -5,8 +5,7 @@
 
 package com.gridnine.jasmine.web.core.ui.components
 
-interface WebTag : WebNode{
-    fun getId():String?
+interface WebTag : WebNode,HasId{
     fun getName():String
     fun setText(value:String?)
     fun getChildren():TagChildren

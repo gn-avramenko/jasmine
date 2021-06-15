@@ -24,6 +24,7 @@ import com.gridnine.jasmine.web.standard.mainframe.MainFrame
 import com.gridnine.jasmine.web.standard.mainframe.MainFrameTabCallback
 import com.gridnine.jasmine.web.standard.mainframe.MainFrameTabData
 import com.gridnine.jasmine.web.standard.mainframe.MainFrameTabHandler
+import com.gridnine.jasmine.web.standard.widgets.WebGridLayoutWidget
 
 class WebReportsListMainFrameTabHandler : MainFrameTabHandler<ReportsWorkspaceItemDTJS>{
     override fun getTabId(obj: ReportsWorkspaceItemDTJS): String {
@@ -48,14 +49,11 @@ class WebReportsListPanel(obj: ReportsWorkspaceItemDTJS) : BaseWebNodeWrapper<We
         val searchBox = WebUiLibraryAdapter.get().createSearchBox {
             width = "100%"
         }
-        val toolsPanel = WebUiLibraryAdapter.get().createGridContainer {
+        val toolsPanel = WebGridLayoutWidget {
             width = "100%"
-            column("100%")
-            column("200px")
-            row{
-                cell()
-                cell(searchBox)
-            }
+        }.also {
+            it.setColumnsWidths("100%", "200px")
+            it.addRow(null, searchBox)
         }
         _node.setNorthRegion {
             content = toolsPanel

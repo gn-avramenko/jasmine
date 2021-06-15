@@ -15,14 +15,10 @@ import com.gridnine.jasmine.web.core.remote.launch
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
 import com.gridnine.jasmine.web.core.ui.components.DefaultUIParameters
-import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutContainer
 import com.gridnine.jasmine.web.standard.OptionsIds
 import com.gridnine.jasmine.web.standard.WebMessages
 import com.gridnine.jasmine.web.standard.mainframe.WebOptionsHandler
-import com.gridnine.jasmine.web.standard.widgets.GeneralSelectWidget
-import com.gridnine.jasmine.web.standard.widgets.GeneralTableBoxWidget
-import com.gridnine.jasmine.web.standard.widgets.WebGeneralTableBoxWidgetColumnWidth
-import com.gridnine.jasmine.web.standard.widgets.WebGridCellWidget
+import com.gridnine.jasmine.web.standard.widgets.*
 import kotlin.reflect.KClass
 
 class WorkspaceListItemVariantHandler:WorkspaceItemVariantHandler<ListWorkspaceItemDTJS,WorkspaceListItemVariantEditor>{
@@ -44,7 +40,7 @@ class WorkspaceListItemVariantHandler:WorkspaceItemVariantHandler<ListWorkspaceI
     }
 }
 
-class WorkspaceListItemVariantEditor: BaseWebNodeWrapper<WebGridLayoutContainer>(){
+class WorkspaceListItemVariantEditor: BaseWebNodeWrapper<WebGridLayoutWidget>(){
 
     private val listTypeWidget:GeneralSelectWidget
     private val filtersEditor: WorkspaceListFiltersEditor
@@ -83,16 +79,13 @@ class WorkspaceListItemVariantEditor: BaseWebNodeWrapper<WebGridLayoutContainer>
             title = "Критерии"
             content = criterionsEditor
         }
-        _node = WebUiLibraryAdapter.get().createGridContainer {
+        _node = WebGridLayoutWidget {
             width = "100%"
             height = "100%"
-            column("100%")
-            row {
-                cell(WebGridCellWidget("Тип объекта", listTypeWidget))
-            }
-            row("100%"){
-                cell(accordion)
-            }
+        }.also {
+            it.setColumnsWidths("100%")
+            it.addRow(WebGridCellWidget("Тип объекта", listTypeWidget))
+            it.addRow("100%", arrayListOf(WebGridLayoutWidgetCell(accordion)))
         }
         listTypeWidget.setChangeListener {
             if(it != null) {
@@ -198,7 +191,7 @@ class WorkspaceListItemVariantEditor: BaseWebNodeWrapper<WebGridLayoutContainer>
     }
 }
 
-class WorkspaceListCriterionsEditor: BaseWebNodeWrapper<WebGridLayoutContainer>() {
+class WorkspaceListCriterionsEditor: BaseWebNodeWrapper<WebGridLayoutWidget>() {
 
     private val tableBox: GeneralTableBoxWidget
 
@@ -207,21 +200,20 @@ class WorkspaceListCriterionsEditor: BaseWebNodeWrapper<WebGridLayoutContainer>(
     init {
         tableBox = GeneralTableBoxWidget {
             width = "100%"
-            headerComponents.add(WebUiLibraryAdapter.get().createLabel {  }.apply { setText("Поле") })
-            headerComponents.add(WebUiLibraryAdapter.get().createLabel {  }.apply { setText("Условие") })
-            headerComponents.add(WebUiLibraryAdapter.get().createLabel {  }.apply { setText("Значение") })
+            headerComponents.add(WebLabelWidget("Поле"))
+            headerComponents.add(WebLabelWidget("Условие"))
+            headerComponents.add(WebLabelWidget("Значение"))
             columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(300,300,300))
             columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(180,180,180))
             columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(500,500,null))
             columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(140,140,140))
         }
         criterionsListEditor = WebWorkspaceCriterionsListEditor(tableBox, 0)
-        _node = WebUiLibraryAdapter.get().createGridContainer{
+        _node = WebGridLayoutWidget{
             width = "100%"
-            column("100%")
-            row {
-                cell(tableBox)
-            }
+        }.also {
+            it.setColumnsWidths("100%")
+            it.addRow(tableBox)
         }
     }
 

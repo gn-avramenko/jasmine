@@ -10,7 +10,6 @@ package com.gridnine.jasmine.web.standard.widgets
 import com.gridnine.jasmine.common.core.model.*
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
-import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutContainer
 import com.gridnine.jasmine.web.core.ui.components.WebLinkButton
 import com.gridnine.jasmine.web.standard.editor.WebEditor
 import com.gridnine.jasmine.web.standard.editor.WebEditorInterceptorsRegistry
@@ -18,7 +17,7 @@ import kotlin.reflect.KClass
 
 
 @Suppress("UNCHECKED_CAST")
-abstract class NavigatorWidget<VM: BaseVMJS, VS: BaseVSJS, VV: BaseVVJS> : WebEditor<VM, VS, VV>,BaseWebNodeWrapper<WebGridLayoutContainer>() {
+abstract class NavigatorWidget<VM: BaseVMJS, VS: BaseVSJS, VV: BaseVVJS> : WebEditor<VM, VS, VV>,BaseWebNodeWrapper<WebGridLayoutWidget>() {
     private val config = NavigatorWidgetConfiguration<VM>()
     private val addButton:WebLinkButton
     private val removeButton:WebLinkButton
@@ -56,20 +55,13 @@ abstract class NavigatorWidget<VM: BaseVMJS, VS: BaseVSJS, VV: BaseVVJS> : WebEd
                 nodeProjector.showNode(it.id)
             }
         }
-        _node = WebUiLibraryAdapter.get().createGridContainer{
+        _node = WebGridLayoutWidget{
             width = config.width
             height = config.height
-            column("100%")
-            column("auto")
-            column("auto")
-            row{
-                cell(select)
-                cell(addButton)
-                cell(removeButton)
-            }
-            row ("100%"){
-                cell(nodeProjector, 3)
-            }
+        }.also {
+            it.setColumnsWidths("100%","auto","auto")
+            it.addRow(select,addButton,removeButton)
+            it.addRow("100%", arrayListOf(WebGridLayoutWidgetCell(nodeProjector, 3)))
         }
         WebEditorInterceptorsRegistry.get().getInterceptors(this)?.forEach {
             it.onInit(this)

@@ -7,9 +7,14 @@
 
 package com.gridnine.jasmine.web.standard.widgets
 
-import com.gridnine.jasmine.common.core.model.*
+import com.gridnine.jasmine.common.core.model.BaseVMJS
+import com.gridnine.jasmine.common.core.model.BaseVSJS
+import com.gridnine.jasmine.common.core.model.BaseVVJS
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
-import com.gridnine.jasmine.web.core.ui.components.*
+import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
+import com.gridnine.jasmine.web.core.ui.components.PanelToolConfiguration
+import com.gridnine.jasmine.web.core.ui.components.WebPanel
+import com.gridnine.jasmine.web.core.ui.components.WebTag
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import com.gridnine.jasmine.web.standard.editor.WebEditor
 import com.gridnine.jasmine.web.standard.editor.WebEditorInterceptorsRegistry
@@ -116,29 +121,25 @@ class TileWidgetConfiguration{
     lateinit var editor:WebEditor<*,*,*>
 }
 
-class TilesSpaceMainPanel<VM:BaseVMJS, VS:BaseVSJS, VV:BaseVVJS>(expandHandler:(String)->Unit, private val configuration: TileSpaceWidgetConfiguration<VM>): WebEditor<VM,VS,VV>, BaseWebNodeWrapper<WebGridLayoutContainer>(){
+class TilesSpaceMainPanel<VM:BaseVMJS, VS:BaseVSJS, VV:BaseVVJS>(expandHandler:(String)->Unit, private val configuration: TileSpaceWidgetConfiguration<VM>): WebEditor<VM,VS,VV>, BaseWebNodeWrapper<WebGridLayoutWidget>(){
 
     init {
-        _node = WebUiLibraryAdapter.get().createGridContainer{
+        _node = WebGridLayoutWidget{
             width = "100%"
             height = "100%"
-            column("100%")
+        }.also { widget ->
+            widget.setColumnsWidths("100%")
             configuration.overviewConfig?.let {
-                row("auto") {
-                    val overviewPanel = WebUiLibraryAdapter.get().createPanel{
-                        width = "100%"
-                        content = it.editor
-                    }
-                    it.editor.setReadonly(true)
-                    overviewPanel.setTitle(it.title)
-                    cell(overviewPanel)
+                val overviewPanel = WebUiLibraryAdapter.get().createPanel{
+                    width = "100%"
+                    content = it.editor
                 }
+                it.editor.setReadonly(true)
+                overviewPanel.setTitle(it.title)
+                widget.addRow("auto", arrayListOf(WebGridLayoutWidgetCell(overviewPanel)))
             }
-            row("100%"){
-                cell(TilesContainer(configuration.tiles, expandHandler))
-            }
+            widget.addRow("100%", arrayListOf(WebGridLayoutWidgetCell(TilesContainer(configuration.tiles, expandHandler))))
         }
-
     }
 
     override fun readData(vm: VM, vs: VS?) {

@@ -8,8 +8,10 @@
 package com.gridnine.jasmine.web.standard.widgets
 
 import com.gridnine.jasmine.common.core.model.*
-import com.gridnine.jasmine.web.core.ui.*
-import com.gridnine.jasmine.web.core.ui.components.*
+import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
+import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
+import com.gridnine.jasmine.web.core.ui.components.WebLinkButton
+import com.gridnine.jasmine.web.core.ui.components.WebNode
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import kotlin.js.Date
 
@@ -26,10 +28,9 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
             width = config.width
             height = config.height
             config.columns.forEach {
-                val label = WebUiLibraryAdapter.get().createLabel{
+                val label = WebLabelWidget(it.title) {
                     width = "100%"
                 }
-                label.setText(it.title)
                 headerComponents.add(label)
                 columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(null,it.width?:100, null))
             }
@@ -302,7 +303,7 @@ class TableBoxWidgetColumnDescription{
     lateinit var id:String
 }
 
-class TableBoxWidgetToolsPanel( private val tableBox:TableBoxWidget<*,*,*>, private val rowId:String): BaseWebNodeWrapper<WebGridLayoutContainer>(){
+class TableBoxWidgetToolsPanel( private val tableBox:TableBoxWidget<*,*,*>, private val rowId:String): BaseWebNodeWrapper<WebGridLayoutWidget>(){
     internal val upButton:WebLinkButton
     internal val downButton:WebLinkButton
     internal val plusButton:WebLinkButton
@@ -344,18 +345,11 @@ class TableBoxWidgetToolsPanel( private val tableBox:TableBoxWidget<*,*,*>, priv
             tableBox.getNode().removeRow(idx)
             tableBox.updateToolsVisibility()
         }
-        _node = WebUiLibraryAdapter.get().createGridContainer {
+        _node = WebGridLayoutWidget {
             noPadding = true
-            column("auto")
-            column("auto")
-            column("auto")
-            column("auto")
-            row {
-                cell(upButton)
-                cell(downButton)
-                cell(plusButton)
-                cell(minusButton)
-            }
+        }.also {
+            it.setColumnsWidths("auto","auto","auto","auto")
+            it.addRow(upButton,downButton,plusButton,minusButton)
         }
     }
 }

@@ -10,7 +10,7 @@ package com.gridnine.jasmine.web.core.ui.components
 interface  WebNode
 
 interface HasId {
-    fun getId():String
+    fun getId():String?
 }
 
 interface WebNodeWrapper<T: WebNode>: WebNode {

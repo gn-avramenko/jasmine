@@ -14,13 +14,12 @@ import com.gridnine.jasmine.common.standard.model.rest.AutocompleteRequestJS
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
 import com.gridnine.jasmine.web.core.ui.components.SelectDataType
-import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutContainer
 import com.gridnine.jasmine.web.core.ui.components.WebSelect
 import com.gridnine.jasmine.web.standard.StandardRestClient
 import com.gridnine.jasmine.web.standard.editor.OpenObjectData
 import com.gridnine.jasmine.web.standard.mainframe.MainFrame
 
-class EntitySelectWidget(configure:EntitySelectWidgetConfiguration.()->Unit):BaseWebNodeWrapper<WebGridLayoutContainer>() {
+class EntitySelectWidget(configure:EntitySelectWidgetConfiguration.()->Unit):BaseWebNodeWrapper<WebGridLayoutWidget>() {
     private val webSelect:WebSelect
 
     private val conf = EntitySelectWidgetConfiguration()
@@ -38,16 +37,13 @@ class EntitySelectWidget(configure:EntitySelectWidgetConfiguration.()->Unit):Bas
         val button = WebUiLibraryAdapter.get().createLinkButton{
             icon = "core:link"
         }
-        _node = WebUiLibraryAdapter.get().createGridContainer{
+        _node = WebGridLayoutWidget{
             width = conf.width
             height = conf.height
             noPadding = true
-            column("100%")
-            column("auto")
-            row {
-                cell(webSelect)
-                cell(button)
-            }
+        }.also {
+            it.setColumnsWidths("100%", "auto")
+            it.addRow(webSelect, button)
         }
         webSelect.setLoader { value ->
             val request = AutocompleteRequestJS()

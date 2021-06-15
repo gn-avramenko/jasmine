@@ -9,11 +9,11 @@ import com.gridnine.jasmine.common.standard.model.rest.AndWorkspaceCriterionDTJS
 import com.gridnine.jasmine.common.standard.model.rest.BaseComplexWorkspaceCriterionDTJS
 import com.gridnine.jasmine.common.standard.model.rest.NotWorkspaceCriterionDTJS
 import com.gridnine.jasmine.common.standard.model.rest.OrWorkspaceCriterionDTJS
-import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import com.gridnine.jasmine.web.standard.widgets.GeneralTableBoxWidget
 import com.gridnine.jasmine.web.standard.widgets.WebGeneralTableBoxWidgetCell
 import com.gridnine.jasmine.web.standard.widgets.WebGeneralTableBoxWidgetColumnWidth
+import com.gridnine.jasmine.web.standard.widgets.WebLabelWidget
 
 abstract class BaseWebCompoundCriterionHandler<C:BaseComplexWorkspaceCriterionDTJS>(private val tableBox: GeneralTableBoxWidget, private val indent:Int, private val listId:String, private val initData:C?) :WebCriterionHandler<C>{
     private val uuid = MiscUtilsJS.createUUID()
@@ -27,8 +27,7 @@ abstract class BaseWebCompoundCriterionHandler<C:BaseComplexWorkspaceCriterionDT
             columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(null, 100, null))
         }
         val components = arrayListOf<WebGeneralTableBoxWidgetCell>()
-        val opLabel = WebUiLibraryAdapter.get().createLabel { }
-        opLabel.setText(getOperationName())
+        val opLabel = WebLabelWidget(getOperationName())
         components.add(WebGeneralTableBoxWidgetCell(opLabel))
         val valueTableBox = GeneralTableBoxWidget{
             width = "100%"

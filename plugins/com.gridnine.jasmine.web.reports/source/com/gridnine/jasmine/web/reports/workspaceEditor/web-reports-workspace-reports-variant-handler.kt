@@ -6,9 +6,8 @@
 package com.gridnine.jasmine.web.reports.workspaceEditor
 
 import com.gridnine.jasmine.common.reports.model.rest.ReportsWorkspaceItemDTJS
-import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
-import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutContainer
+import com.gridnine.jasmine.web.standard.widgets.WebGridLayoutWidget
 import com.gridnine.jasmine.web.standard.workspaceEditor.WorkspaceItemVariantHandler
 import kotlin.reflect.KClass
 
@@ -29,9 +28,9 @@ class WorkspaceReportsItemVariantHandler:WorkspaceItemVariantHandler<ReportsWork
     }
 }
 
-class WorkspaceReportsItemVariantEditor: BaseWebNodeWrapper<WebGridLayoutContainer>(){
+class WorkspaceReportsItemVariantEditor: BaseWebNodeWrapper<WebGridLayoutWidget>(){
     lateinit var value :ReportsWorkspaceItemDTJS
     init {
-        _node = WebUiLibraryAdapter.get().createGridContainer {}
+        _node = WebGridLayoutWidget{}
     }
 }

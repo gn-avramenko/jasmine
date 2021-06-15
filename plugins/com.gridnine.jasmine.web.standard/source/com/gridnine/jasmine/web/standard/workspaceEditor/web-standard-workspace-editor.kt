@@ -19,6 +19,7 @@ import com.gridnine.jasmine.web.standard.StandardRestClient
 import com.gridnine.jasmine.web.standard.WebMessages
 import com.gridnine.jasmine.web.standard.mainframe.*
 import com.gridnine.jasmine.web.standard.utils.StandardUiUtils
+import com.gridnine.jasmine.web.standard.widgets.WebGridLayoutWidget
 import com.gridnine.jasmine.web.standard.widgets.WebNodeProjectorWidget
 
 
@@ -66,14 +67,11 @@ class WorkspaceEditor(workspace:WorkspaceDTJS): BaseWebNodeWrapper<WebBorderCont
         val saveButton = WebUiLibraryAdapter.get().createLinkButton{
             title = WebMessages.save
         }
-        val toolBar = WebUiLibraryAdapter.get().createGridContainer{
+        val toolBar = WebGridLayoutWidget{
             width = "100%"
-            column("auto")
-            column("100%")
-            row {
-               cell(saveButton)
-                cell()
-            }
+        }.also {
+            it.setColumnsWidths("auto", "100%")
+            it.addRow(saveButton, null)
         }
         _node.setNorthRegion{
             content = toolBar

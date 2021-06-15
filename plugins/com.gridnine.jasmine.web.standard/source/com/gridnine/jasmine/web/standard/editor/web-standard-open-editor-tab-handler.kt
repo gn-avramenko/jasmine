@@ -18,6 +18,7 @@ import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.*
 import com.gridnine.jasmine.web.standard.StandardRestClient
 import com.gridnine.jasmine.web.standard.mainframe.*
+import com.gridnine.jasmine.web.standard.widgets.WebGridLayoutWidget
 
 data class OpenObjectData(val type: String, var uid: String, val navigationKey: String?)
 
@@ -99,60 +100,62 @@ class ObjectEditorImpl<W : WebEditor<*, *, *>>(private val obj: OpenObjectData, 
             readOnly = true
             updateButtonsState()
         }
-        val toolBar = WebUiLibraryAdapter.get().createGridContainer {
+        val toolBar = WebGridLayoutWidget {
             width = "100%"
-            actions.actions.forEach {_->
-                column("auto")
+        }.also {
+            val widths = actions.actions.map { "auto" }.toMutableList().also { lst ->
+                lst.add("100%")
+                lst.add("auto")
+                lst.add("auto")
             }
-            column("100%")
-            column("auto")
-            column("auto")
-            row {
-                actions.actions.forEach {
-                    when (it) {
-                        is ActionWrapper -> {
-                            val toolButton = WebUiLibraryAdapter.get().createLinkButton {
-                                title = it.displayName
-                            }
-                            toolButton.setHandler {
-                                it.getActionHandler<ObjectEditorTool<W>>().invoke(this@ObjectEditorImpl)
-                            }
-                            displayHandlers[it.id]?.let {handler ->
-                                editorButtonsMap[toolButton] = handler
-                            }
-                            cell(toolButton)
+            it.setColumnsWidths(widths)
+            val cells = actions.actions.map { wrapper ->
+                when (wrapper) {
+                    is ActionWrapper -> {
+                        val toolButton = WebUiLibraryAdapter.get().createLinkButton {
+                            title = wrapper.displayName
                         }
-                        is ActionsGroupWrapper -> {
-                            val menuButton = WebUiLibraryAdapter.get().createMenuButton {
-                                title = it.displayName
-                                it.actions.forEach { action ->
-                                    if (action is ActionWrapper) {
-                                        elements.add(StandardMenuItem().apply {
-                                            id = action.id
-                                            title = action.displayName
-                                        })
-                                    }
-                                }
-                            }
-                            menuItemsMap[menuButton] = hashMapOf()
-                            cell(menuButton)
-                            it.actions.forEach { action ->
-                                if (action is ActionWrapper) {
-                                    menuButton.setHandler(action.id) {
-                                        action.getActionHandler<ObjectEditorTool<W>>().invoke(this@ObjectEditorImpl)
-                                    }
-                                    displayHandlers[action.id]?.let { displayHandler ->
-                                        menuItemsMap[menuButton]!!.put(action.id, displayHandler)
-                                    }
-                                }
-                            }
+                        toolButton.setHandler {
+                            wrapper.getActionHandler<ObjectEditorTool<W>>().invoke(this@ObjectEditorImpl)
                         }
+                        displayHandlers[wrapper.id]?.let {handler ->
+                            editorButtonsMap[toolButton] = handler
+                        }
+                        toolButton
                     }
+                    is ActionsGroupWrapper -> {
+                        val menuButton = WebUiLibraryAdapter.get().createMenuButton {
+                            title = wrapper.displayName
+                            wrapper.actions.forEach { action ->
+                                if (action is ActionWrapper) {
+                                    elements.add(StandardMenuItem().apply {
+                                        id = action.id
+                                        title = action.displayName
+                                    })
+                                }
+                            }
+                        }
+                        menuItemsMap[menuButton] = hashMapOf()
+                        wrapper.actions.forEach { action ->
+                            if (action is ActionWrapper) {
+                                menuButton.setHandler(action.id) {
+                                    action.getActionHandler<ObjectEditorTool<W>>().invoke(this@ObjectEditorImpl)
+                                }
+                                displayHandlers[action.id]?.let { displayHandler ->
+                                    menuItemsMap[menuButton]!!.put(action.id, displayHandler)
+                                }
+                            }
+                        }
+                        menuButton
+                    }
+                    else -> null
                 }
-                cell()
-                cell(viewButton)
-                cell(editButton)
+            }.toMutableList().also { lst ->
+                lst.add(null)
+                lst.add(viewButton)
+                lst.add(editButton)
             }
+            it.addRow(cells)
         }
         _node.setNorthRegion {
             content = toolBar

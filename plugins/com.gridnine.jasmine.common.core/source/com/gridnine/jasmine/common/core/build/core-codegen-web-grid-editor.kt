@@ -17,7 +17,7 @@ object GridWebEditorGenerator {
         val webMapping = context[PluginAssociationsGenerator.WEB_MAP_KEY] as HashMap<String, String>
         val sb = StringBuilder()
         GenUtils.generateHeader(sb, description.id, projectName)
-        GenUtils.classBuilder(sb, "class ${GenUtils.getSimpleClassName(description.id)}:com.gridnine.jasmine.web.standard.editor.WebEditor<${description.id}VMJS,${description.id}VSJS,${description.id}VVJS>, com.gridnine.jasmine.web.core.ui.components.HasId, com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper<com.gridnine.jasmine.web.core.ui.components.WebGridLayoutContainer>()") {
+        GenUtils.classBuilder(sb, "class ${GenUtils.getSimpleClassName(description.id)}:com.gridnine.jasmine.web.standard.editor.WebEditor<${description.id}VMJS,${description.id}VSJS,${description.id}VVJS>, com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper<com.gridnine.jasmine.web.standard.widgets.WebGridLayoutWidget>()") {
             blankLine()
             blankLine()
             description.rows.forEach { row ->
@@ -137,36 +137,33 @@ object GridWebEditorGenerator {
                         PredefinedColumnWidth.CUSTOM -> if (it.customWidth?.contains("px") == true) it.customWidth.substringBeforeLast("px").toInt() else null
                     }
                 }.reduce { c1, c2 -> if (c1 == null || c2 == null) null else c1 + c2 }
-                "_node = com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter.get().createGridContainer"{
+                "_node = com.gridnine.jasmine.web.standard.widgets.WebGridLayoutWidget"{
                     if (fixedWidth != null) {
                         """width="${fixedWidth}px""""()
                     }
-                    columns.forEach { column ->
-                        when (column.predefinedWidth) {
-                            PredefinedColumnWidth.STANDARD -> "column(com.gridnine.jasmine.web.core.ui.components.DefaultUIParameters.controlWidthAsString)"()
-                            PredefinedColumnWidth.REMAINING -> """column("100%")"""()
-                            PredefinedColumnWidth.CUSTOM -> """column("${column.customWidth}")"""()
-                        }
+                }
+                "_node.setColumnsWidths(${columns.joinToString (","){
+                    when (it.predefinedWidth) {
+                        PredefinedColumnWidth.STANDARD -> "com.gridnine.jasmine.web.core.ui.components.DefaultUIParameters.controlWidthAsString"
+                        PredefinedColumnWidth.REMAINING -> "\"100%\""
+                        PredefinedColumnWidth.CUSTOM -> """"${it.customWidth}""""
                     }
-                    description.rows.forEach { row ->
-                        val height = when (row.predefinedHeight) {
-                            PredefinedRowHeight.AUTO -> null
-                            PredefinedRowHeight.REMAINING -> "100%"
-                            PredefinedRowHeight.CUSTOM -> row.customHeight
-                        }
-                        (if (height != null) "row(\"$height\")" else "row"){
-                            row.cells.forEach cell@{ cell ->
-                                if (cell.widget.widgetType == WidgetType.HIDDEN) {
-                                    return@cell
-                                }
-                                if (cell.caption != null) {
-                                    """cell(com.gridnine.jasmine.web.standard.widgets.WebGridCellWidget(com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${description.id}"]?.get("${cell.id}")?:"${cell.id}", ${cell.id}Widget),${cell.colSpan})"""()
-                                } else {
-                                    """cell(${cell.id}Widget,${cell.colSpan})"""()
-                                }
-                            }
-                        }
+                }})"()
+                description.rows.forEach { row ->
+                    val height = when (row.predefinedHeight) {
+                        PredefinedRowHeight.AUTO -> null
+                        PredefinedRowHeight.REMAINING -> "100%"
+                        PredefinedRowHeight.CUSTOM -> row.customHeight
                     }
+                    """_node.addRow(${if(height != null) """$height""" else "null"}, 
+                        ${row.cells.filter { cell ->cell.widget.widgetType != WidgetType.HIDDEN }.joinToString(",\r\n") {cell ->
+                        if (cell.caption != null) {
+                            """com.gridnine.jasmine.web.standard.widgets.WebGridLayoutWidgetCell(com.gridnine.jasmine.web.standard.widgets.WebGridCellWidget(com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${description.id}"]?.get("${cell.id}")?:"${cell.id}", ${cell.id}Widget),${cell.colSpan})"""
+                        } else {
+                            """com.gridnine.jasmine.web.standard.widgets.WebGridLayoutWidgetCell(${cell.id}Widget,${cell.colSpan})"""
+                        } 
+                    }}
+                        )""".trimMargin()()
                 }
             }
             blankLine()
@@ -233,10 +230,6 @@ object GridWebEditorGenerator {
                         "vv?.${cell.id}?.let{${cell.id}Widget.showValidation(it)}"()
                     }
                 }
-            }
-            blankLine()
-            "override fun getId(): String" {
-                "return _node.getId()"()
             }
         }
         val file = File(baseDir, "source-gen/${GenUtils.getPackageName(description.id).replace(".", File.separator)}/${GenUtils.getSimpleClassName(description.id)}.kt")

@@ -21,13 +21,9 @@ interface WebUiLibraryAdapter{
 
     fun createTree(configure:WebTreeConfiguration.()->Unit):WebTree
 
-    fun createLabel(configure:WebLabelConfiguration.()->Unit) : WebLabel
-
     fun createSearchBox(configure:WebSearchBoxConfiguration.()->Unit):WebSearchBox
 
     fun <E : BaseIntrospectableObjectJS> createDataGrid(configure: WebDataGridConfiguration<E>.()->Unit): WebDataGrid<E>
-
-    fun createGridContainer(configure:WebGridContainerConfiguration.()->Unit):WebGridLayoutContainer
 
     fun createDateBox(configure:WebDateBoxConfiguration.()->Unit):WebDateBox
 

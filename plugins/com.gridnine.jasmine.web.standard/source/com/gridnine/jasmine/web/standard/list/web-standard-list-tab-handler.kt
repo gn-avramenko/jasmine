@@ -23,6 +23,9 @@ import com.gridnine.jasmine.web.standard.StandardRestClient
 import com.gridnine.jasmine.web.standard.WebMessages
 import com.gridnine.jasmine.web.standard.editor.OpenObjectData
 import com.gridnine.jasmine.web.standard.mainframe.*
+import com.gridnine.jasmine.web.standard.widgets.WebGridLayoutWidget
+import com.gridnine.jasmine.web.standard.widgets.WebGridLayoutWidgetCell
+import com.gridnine.jasmine.web.standard.widgets.WebLabelWidget
 
 class WebListMainFrameTabHandler : MainFrameTabHandler<ListWorkspaceItemDTJS>{
     override fun getTabId(obj: ListWorkspaceItemDTJS): String {
@@ -68,29 +71,31 @@ class ListPanel(we: ListWorkspaceItemDTJS, actions: ActionsGroupWrapper) : BaseW
         _node.setCenterRegion{
             content = grid
         }
-        val container = WebUiLibraryAdapter.get().createGridContainer {
+        val container = WebGridLayoutWidget{
             width = "100%"
-            actions.actions.forEach { _ ->
-                column("auto")
+        }.also {
+            val widths = actions.actions.map { "auto" }.toMutableList().also{ lst ->
+                lst.add("100%")
+                lst.add("auto")
             }
-            column("100%")
-            column("auto")
-            row {
-                actions.actions.forEach {action ->
-                    val button = WebUiLibraryAdapter.get().createLinkButton{
-                        title = action.displayName
-                    }
-                    if(action is ActionWrapper){
-                        button.setHandler {
-                            action.getActionHandler<ListLinkButtonHandler<BaseIdentityJS>>().invoke(grid.getSelected())
-                        }
-                    }
-                    cell(button)
+            it.setColumnsWidths(widths)
+            val cells = actions.actions.map {action ->
+                val button = WebUiLibraryAdapter.get().createLinkButton{
+                    title = action.displayName
                 }
-                cell(null)
-                cell(searchBox)
+                if(action is ActionWrapper){
+                    button.setHandler {
+                        action.getActionHandler<ListLinkButtonHandler<BaseIdentityJS>>().invoke(grid.getSelected())
+                    }
+                }
+                button
+            }.toMutableList<WebNode?>().also {lst ->
+                lst.add(null)
+                lst.add(searchBox)
             }
+            it.addRow(cells)
         }
+
         _node.setNorthRegion {
             content = container
         }
@@ -185,20 +190,19 @@ internal class FilterPanel(private val listItem:ListWorkspaceItemDTJS, private v
         }
     }
 
-    private fun createFilters(): WebGridLayoutContainer {
-        return WebUiLibraryAdapter.get().createGridContainer {
+    private fun createFilters(): WebGridLayoutWidget {
+        return WebGridLayoutWidget{
             width = "100%"
+        }.also { widget ->
+            widget.setColumnsWidths("100%")
             val listId = "${listItem.listId}JS"
             val domainDescr: BaseIndexDescriptionJS =
-                    DomainMetaRegistryJS.get().indexes[listId] ?: DomainMetaRegistryJS.get().assets[listId]
-                    ?: throw IllegalArgumentException("no description found for $listId")
-            column("100%")
+                DomainMetaRegistryJS.get().indexes[listId] ?: DomainMetaRegistryJS.get().assets[listId]
+                ?: throw IllegalArgumentException("no description found for $listId")
             listItem.filters.forEach {
-                row {
-                    val label = WebUiLibraryAdapter.get().createLabel{}
-                    label.setText(domainDescr.properties[it]?.displayName ?: domainDescr.collections[it]!!.displayName)
-                    cell(label)
-                }
+                val label = WebLabelWidget(domainDescr.properties[it]?.displayName ?: domainDescr.collections[it]!!.displayName)
+                widget.addRow(label)
+
                 val handler:ListFilterHandler<*,*>? = when(domainDescr.properties[it]?.type){
                     DatabasePropertyTypeJS.STRING, DatabasePropertyTypeJS.TEXT ->
                         StringFilterHandler()
@@ -221,40 +225,38 @@ internal class FilterPanel(private val listItem:ListWorkspaceItemDTJS, private v
                 if(handler != null){
                     handler as ListFilterHandler<BaseListFilterValueDTJS, WebNode>
                     val component = handler.createEditor()
-                    row {
-                        cell(component)
-                    }
+                    widget.addRow(component)
                     filters.add(FilterData(it, component, handler))
                 }
             }
         }
+
     }
 
-    private fun createButtons(): WebGridLayoutContainer {
-        return WebUiLibraryAdapter.get().createGridContainer {
+    private fun createButtons(): WebGridLayoutWidget {
+        return WebGridLayoutWidget{
             width = "100%"
-            column("50%")
-            column("50%")
-            row {
-                cell(WebUiLibraryAdapter.get().createLinkButton {
-                    width = "100%"
-                    title = WebMessages.apply
-                }.apply {
-                    setHandler {
-                        applyCallback.invoke()
-                    }
-                })
-                cell(WebUiLibraryAdapter.get().createLinkButton {
-                    width = "100%"
-                    title =  WebMessages.reset
-                }.apply {
-                    setHandler {
-                        filters.forEach {
-                            it.handler.reset(it.comp)
-                        }
-                    }
-                })
+        }.also {
+            it.setColumnsWidths("50%","50%")
+            val applyCell = WebUiLibraryAdapter.get().createLinkButton {
+                width = "100%"
+                title = WebMessages.apply
+            }.apply {
+                setHandler {
+                    applyCallback.invoke()
+                }
             }
+            val resetCell = WebUiLibraryAdapter.get().createLinkButton {
+                width = "100%"
+                title =  WebMessages.reset
+            }.apply {
+                setHandler {
+                    filters.forEach { fd ->
+                        fd.handler.reset(fd.comp)
+                    }
+                }
+            }
+            it.addRow(WebGridLayoutWidgetCell(applyCell), WebGridLayoutWidgetCell(resetCell))
         }
     }
 

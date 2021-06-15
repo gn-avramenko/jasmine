@@ -5,28 +5,22 @@
 
 package com.gridnine.jasmine.web.standard.widgets
 
-import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
-import com.gridnine.jasmine.web.core.ui.components.WebGridLayoutContainer
 import com.gridnine.jasmine.web.core.ui.components.WebNode
 
 
-class WebGridCellWidget(caption:String?, comp: WebNode): BaseWebNodeWrapper<WebGridLayoutContainer>(){
+class WebGridCellWidget(caption:String?, comp: WebNode): BaseWebNodeWrapper<WebGridLayoutWidget>(){
 
     init{
-        _node = WebUiLibraryAdapter.get().createGridContainer {
+        _node = WebGridLayoutWidget {
             width = "100%"
-            column("100%")
+        }.also {
+            it.setColumnsWidths("100%")
             if(caption != null){
-                row {
-                    val label = WebUiLibraryAdapter.get().createLabel{}
-                    label.setText(caption)
-                    cell(label, sClass = "jasmine-grid-container-only-bottom-padding")
-                }
+                val label = WebLabelWidget(caption)
+                it.addRow(null, arrayListOf(WebGridLayoutWidgetCell(label, sClass = "jasmine-grid-container-only-bottom-padding")))
             }
-            row{
-                cell(comp, sClass = "jasmine-grid-container-no-padding")
-            }
+            it.addRow(null, arrayListOf(WebGridLayoutWidgetCell(comp, sClass ="jasmine-grid-container-no-padding")))
         }
     }
 }

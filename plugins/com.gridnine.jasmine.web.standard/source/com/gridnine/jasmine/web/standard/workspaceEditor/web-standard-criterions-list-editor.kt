@@ -11,6 +11,7 @@ import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.*
 import com.gridnine.jasmine.web.standard.widgets.GeneralTableBoxWidget
 import com.gridnine.jasmine.web.standard.widgets.WebGeneralTableBoxWidgetCell
+import com.gridnine.jasmine.web.standard.widgets.WebGridLayoutWidget
 
 private const val SIMPLE_CRITERION_ID = "SIMPLE_CRITERION_ID"
 
@@ -129,7 +130,7 @@ class WebWorkspaceCriterionsListEditor(internal val tableBox: GeneralTableBoxWid
     }
 }
 
-class CriterionsListToolsPanel(private val listEditor: WebWorkspaceCriterionsListEditor, private val indent:Int, private val listId: String, private val rowId:String): BaseWebNodeWrapper<WebGridLayoutContainer>(){
+class CriterionsListToolsPanel(private val listEditor: WebWorkspaceCriterionsListEditor, private val indent:Int, private val listId: String, private val rowId:String): BaseWebNodeWrapper<WebGridLayoutWidget>(){
     internal val upButton: WebLinkButton
     internal val downButton: WebLinkButton
     private val plusButton: WebMenuButton
@@ -210,18 +211,11 @@ class CriterionsListToolsPanel(private val listEditor: WebWorkspaceCriterionsLis
                 listEditor.addEmptyRow()
             }
         }
-        _node = WebUiLibraryAdapter.get().createGridContainer{
+        _node = WebGridLayoutWidget {
             noPadding = true
-            column("auto")
-            column("auto")
-            column("auto")
-            column("auto")
-            row {
-                cell(upButton)
-                cell(downButton)
-                cell(plusButton)
-                cell(minusButton)
-            }
+        }.also {
+            it.setColumnsWidths("auto","auto","auto","auto")
+            it.addRow(upButton, downButton, plusButton,minusButton)
         }
     }
 }

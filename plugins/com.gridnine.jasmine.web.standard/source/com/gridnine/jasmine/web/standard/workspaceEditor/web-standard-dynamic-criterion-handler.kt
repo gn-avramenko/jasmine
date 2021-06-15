@@ -14,12 +14,12 @@ import com.gridnine.jasmine.common.standard.model.rest.GetDynamicQueryProperties
 import com.gridnine.jasmine.web.core.common.RegistryJS
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.remote.WebPluginsHandler
-import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.WebNode
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import com.gridnine.jasmine.web.standard.StandardRestClient
 import com.gridnine.jasmine.web.standard.widgets.RemoteGeneralSelectWidget
 import com.gridnine.jasmine.web.standard.widgets.WebGeneralTableBoxWidgetCell
+import com.gridnine.jasmine.web.standard.widgets.WebGridLayoutWidget
 import com.gridnine.jasmine.web.standard.widgets.WebNodeProjectorWidget
 
 @Suppress("UNCHECKED_CAST", "UNREACHABLE_CODE")
@@ -96,15 +96,12 @@ class WebDynamicCriterionHandler(private val listId: String, private val initDat
                 valueControl.showNode(className)
             }
         }
-        val valueGrid = WebUiLibraryAdapter.get().createGridContainer {
+        val valueGrid = WebGridLayoutWidget {
             width = "100%"
             noPadding = true
-            column("200px")
-            column("100%")
-            row{
-                cell(handlerSelect)
-                cell(valueControl)
-            }
+        }.also {
+            it.setColumnsWidths("200px", "100%")
+            it.addRow(handlerSelect,valueControl)
         }
         result.add(WebGeneralTableBoxWidgetCell(valueGrid))
         propertySelect.setChangeListener {
