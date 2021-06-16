@@ -6,6 +6,8 @@
 package com.gridnine.jasmine.web.core.remote
 
 import com.gridnine.jasmine.common.core.meta.RestMetaRegistryJS
+import com.gridnine.jasmine.common.core.model.XeptionJS
+import com.gridnine.jasmine.common.core.model.XeptionTypeJS
 import com.gridnine.jasmine.web.core.common.EnvironmentJS
 import com.gridnine.jasmine.web.core.l10n.WebCoreL10nMessages
 import com.gridnine.jasmine.web.core.serialization.JsonSerializerJS

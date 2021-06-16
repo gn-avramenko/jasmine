@@ -8,6 +8,7 @@ package com.gridnine.jasmine.web.standard.activator
 import com.gridnine.jasmine.web.core.common.ActivatorJS
 import com.gridnine.jasmine.web.core.common.EnvironmentJS
 import com.gridnine.jasmine.web.core.common.RegistryJS
+import com.gridnine.jasmine.web.core.remote.CoroutineExceptionHandler
 import com.gridnine.jasmine.web.core.remote.WebCoreMetaRegistriesUpdater
 import com.gridnine.jasmine.web.standard.DomainReflectionUtilsJS
 import com.gridnine.jasmine.web.standard.RestReflectionUtilsJS
@@ -32,6 +33,7 @@ fun main(){
 
 class WebStandardActivator : ActivatorJS{
     override suspend fun activate() {
+        EnvironmentJS.publish(CoroutineExceptionHandler::class, StandardCoroutineExceptionHandler())
         EnvironmentJS.publish(WebActionsHandler())
         EnvironmentJS.publish(WebOptionsHandler())
         EnvironmentJS.publish(WebEditorInterceptorsRegistry())

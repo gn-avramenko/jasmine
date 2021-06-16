@@ -8,6 +8,8 @@
 package com.gridnine.jasmine.web.easyui.components
 
 import com.gridnine.jasmine.common.core.model.BaseIntrospectableObjectJS
+import com.gridnine.jasmine.common.core.model.XeptionJS
+import com.gridnine.jasmine.common.core.model.XeptionTypeJS
 import com.gridnine.jasmine.web.core.common.EnvironmentJS
 import com.gridnine.jasmine.web.core.remote.launch
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
@@ -114,6 +116,9 @@ class EasyUiWebLibraryAdapter :WebUiLibraryAdapter{
         }
         val compJq = jQuery("body")
         val zkComp = findEasyUiComponent(dialogContent)
+        if(zkComp.getId() == null){
+            throw XeptionJS.forDeveloper("dialog component must have and id")
+        }
         compJq.append(zkComp.getHtml())
         val jq = jQuery("#${zkComp.getId()}")
         val holder = arrayListOf<Dialog<W>>()

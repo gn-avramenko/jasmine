@@ -24,6 +24,7 @@ class TextBoxWidget(configure:TextBoxWidgetConfiguration.()->Unit):BaseWebNodeWr
             width = config.width
             height = config.height
             showClearIcon = config.showClearIcon
+            multiline = config.multiline
         }
     }
 
@@ -55,4 +56,5 @@ class TextBoxWidget(configure:TextBoxWidgetConfiguration.()->Unit):BaseWebNodeWr
 
 class TextBoxWidgetConfiguration:BaseWidgetConfiguration(){
     var showClearIcon = true
+    var multiline = false
 }

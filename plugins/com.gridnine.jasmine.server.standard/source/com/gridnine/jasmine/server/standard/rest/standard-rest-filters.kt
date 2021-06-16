@@ -9,6 +9,8 @@ package com.gridnine.jasmine.server.standard.rest
 import com.fasterxml.jackson.core.JsonEncoding
 import com.fasterxml.jackson.core.JsonFactory
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
+import com.gridnine.jasmine.common.core.model.Xeption
+import com.gridnine.jasmine.common.core.model.XeptionType
 import com.gridnine.jasmine.common.core.utils.TextUtils
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -92,14 +94,41 @@ class ExceptionFilter : Filter {
             httpResponse.status = 500
             run {
                 val generator = jsonFactory.createGenerator(httpResponse.outputStream, JsonEncoding.UTF8)
-                generator.prettyPrinter = printer
-                generator.writeStartObject()
-                generator.writeStringField("message", e.cause?.message?:e.message )
-                generator.writeStringField("stacktrace", TextUtils.getExceptionStackTrace(e.cause?:e) )
-                generator.writeEndObject()
+                try {
+                    generator.prettyPrinter = printer
+                    generator.writeStartObject()
+                    val xeption = findXeption(e)
+                    if (xeption != null) {
+                        generator.writeStringField("type", xeption.type.name)
+                        generator.writeStringField(
+                            "message", when (xeption.type) {
+                                XeptionType.FOR_ADMIN -> xeption.adminMessage!!.toString()
+                                XeptionType.FOR_END_USER -> xeption.userMessage!!.toString()
+                                XeptionType.FOR_DEVELOPER -> xeption.developerMessage
+                            }
+                        )
+                    } else {
+                        generator.writeStringField("message", e.cause?.message ?: e.message)
+                    }
+                    generator.writeStringField("stacktrace", TextUtils.getExceptionStackTrace(e.cause ?: e))
+                    generator.writeEndObject()
+                    generator.flush()
+                } finally {
+                    generator.close()
+                }
             }
         }
 
+    }
+
+    private fun findXeption(e: Throwable): Xeption? {
+        if(e is Xeption){
+            return e
+        }
+        if(e.cause != null){
+         return findXeption(e.cause!!)
+        }
+        return null
     }
 
     override fun destroy() {

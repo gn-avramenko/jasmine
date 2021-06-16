@@ -16,4 +16,5 @@ interface  WebTextBox:WebNode{
 
 class WebTextBoxConfiguration:BaseWebComponentConfiguration(){
     var showClearIcon = false
+    var multiline = false
 }

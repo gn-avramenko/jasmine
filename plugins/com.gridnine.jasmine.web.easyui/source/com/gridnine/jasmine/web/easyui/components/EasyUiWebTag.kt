@@ -40,7 +40,7 @@ class EasyUiWebTag(private val tagName:String, private val id:String?) :EasyUiCo
     override fun getHtml(): String {
         return """
             <${tagName} ${if(MiscUtilsJS.isNotBlank(id)) "id=\"$id\"" else ""} ${if(style.isNotEmpty()) "style =\"${style.getStyleAttribute()}\""  else ""}  ${if(attributes.isNotEmpty()) attributes.entries.joinToString(" ") { "${it.key} = \"${it.value}\"" } else ""} ${if(classes.isNotEmpty()) "class=\"${classes.getClassValue()}\"" else ""}>
-                ${if(MiscUtilsJS.isNotBlank(text)) text else children.joinToString("\r\n") { findEasyUiComponent(it).getHtml() }}
+${if(MiscUtilsJS.isNotBlank(text)) text else children.joinToString("\r\n") { findEasyUiComponent(it).getHtml() }}
             </${tagName}>
         """.trimIndent()
 
@@ -79,7 +79,7 @@ class EasyUiWebTag(private val tagName:String, private val id:String?) :EasyUiCo
         text = value
         if(initialized){
             destroy()
-            getJQ().html(value)
+            getJQ().`val`(value)
         }
     }
 

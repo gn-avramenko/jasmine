@@ -102,6 +102,7 @@ class EasyUiWebTextBox(configure: WebTextBoxConfiguration.()->Unit) :WebTextBox,
             val value = this@EasyUiWebTextBox.value
             val icons = icons.toTypedArray()
             val disabled = this@EasyUiWebTextBox.disabled
+            val multiline = config.multiline
             val onChange = {newValue:String?,_:String? ->
                 this@EasyUiWebTextBox.value = newValue
                 updateShowClearIconVisibility()
