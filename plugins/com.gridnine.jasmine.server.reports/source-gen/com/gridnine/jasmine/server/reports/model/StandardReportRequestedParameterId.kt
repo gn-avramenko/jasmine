@@ -1,6 +1,6 @@
 /*****************************************************************
  * Gridnine AB http://www.gridnine.com
- * Project: jasmine-demo-master
+ * Project: jtasks
  * This file is auto generated, don't modify it manually
  *****************************************************************/
 

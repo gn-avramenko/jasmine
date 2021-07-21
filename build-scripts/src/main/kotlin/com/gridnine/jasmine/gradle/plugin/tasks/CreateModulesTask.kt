@@ -52,9 +52,7 @@ open class CreateModulesTask() : DefaultTask() {
                 SpfPluginType.COMMON_CORE,SpfPluginType.SERVER_CORE, SpfPluginType.SERVER, SpfPluginType.COMMON, SpfPluginType.SPF -> {
                     externals.add("${baseDir.absolutePath}/")
                     val classesDir = File(baseDir, "classes")
-                    if (classesDir.exists()) {
-                        externals.add("${classesDir.absolutePath}/")
-                    }
+                    externals.add("${classesDir.absolutePath}/")
                     val resourcesDir = File(baseDir, "resources")
                     if (resourcesDir.exists()) {
                         externals.add("${resourcesDir.absolutePath}/")
@@ -75,9 +73,7 @@ open class CreateModulesTask() : DefaultTask() {
                 SpfPluginType.SERVER_TEST, SpfPluginType.COMMON_TEST -> {
                     externalsTest.add("${baseDir.absolutePath}/")
                     val classesDir = File(baseDir, "classes")
-                    if (classesDir.exists()) {
-                        externalsTest.add("${classesDir.absolutePath}/")
-                    }
+                    externalsTest.add("${classesDir.absolutePath}/")
                     val resourcesDir = File(baseDir, "resources")
                     if (resourcesDir.exists()) {
                         externalsTest.add("${resourcesDir.absolutePath}/")
@@ -106,6 +102,52 @@ open class CreateModulesTask() : DefaultTask() {
             val pluginRelativePath = baseDir.toRelativeString(project.projectDir)
             val pluginType = KotlinUtils.getType(pluginDescr)
             val content = xml("module", "version" to "4") {
+                when (pluginType) {
+                    SpfPluginType.WEB,SpfPluginType.WEB_CORE,SpfPluginType.WEB_TEST ->{
+                        var purePath = ""
+                        if (File(project.projectDir, "$pluginRelativePath/source").exists()) {
+                            purePath += "\$MODULE_DIR\$/../../$pluginRelativePath/source"
+                        }
+                        if (File(project.projectDir, "$pluginRelativePath/source-gen").exists()) {
+                            purePath += ";\$MODULE_DIR\$/../../$pluginRelativePath/source-gen"
+                        }
+                        "component"("name" to "FacetManager"){
+                           "facet"("type" to "kotlin-language", "name" to "Kotlin") {
+                               "configuration"("version" to "4", "platform" to "JavaScript ",
+                                    "allPlatforms" to "JS []", "useProjectSettings" to "false",
+                                   "isTestModule" to if(pluginType == SpfPluginType.WEB_TEST) "true" else "false",
+                                    "pureKotlinSourceFolders" to purePath){
+                                   "newMppModelJpsModuleKind"{
+                                       "COMPILATION_AND_SOURCE_SET_HOLDER"()
+                                   }
+                               }
+                           }
+                        }
+                        emptyTag("compilerSettings")
+                        "compilerArguments"{
+                            emptyTag("option", "name" to "outputFile", "value" to "\$MODULE_DIR\$/../../$pluginRelativePath/${pluginDescr.parameters.find { param -> param.id == "kotlin-output-dir" }?.value}/${pluginDescr.id}.js")
+                            emptyTag("option", "name" to "noStdlib", "value" to "true")
+                            emptyTag("option", "name" to "sourceMap", "value" to "true")
+                            emptyTag("option", "name" to "metaInfo", "value" to "true")
+                            emptyTag("option", "name" to "target", "value" to "v5")
+                            emptyTag("option", "name" to "moduleKind", "value" to "umd")
+                            emptyTag("option", "name" to "main", "value" to "call")
+                            emptyTag("option", "name" to "languageVersion", "value" to "1.4")
+                            emptyTag("option", "name" to "apiVersion", "value" to "1.4")
+                            "pluginOptions"{
+                                emptyTag("array")
+                            }
+                            "pluginClasspaths"{
+                                emptyTag("array")
+                            }
+                            emptyTag("option", "name" to "multiPlatform", "value" to "true")
+                            "errors"{
+                                emptyTag("ArgumentParseErrors")
+                            }
+                        }
+                    }
+                    else ->{}
+                }
                 "component"("name" to "NewModuleRootManager") {
                     when (pluginType) {
                         SpfPluginType.COMMON_CORE,SpfPluginType.COMMON_TEST,SpfPluginType.SERVER_CORE, SpfPluginType.SERVER, SpfPluginType.COMMON, SpfPluginType.SERVER_TEST, SpfPluginType.SPF -> {
@@ -120,9 +162,7 @@ open class CreateModulesTask() : DefaultTask() {
                                     emptyTag("sourceFolder", "url" to "file://\$MODULE_DIR\$/../../$pluginRelativePath/source-gen",
                                             "isTestSource" to "false", "generated" to "true")
                                 }
-                                if (File(project.projectDir, "$pluginRelativePath/classes").exists()) {
-                                    emptyTag("excludeFolder", "url" to "file://\$MODULE_DIR\$/../../$pluginRelativePath/classes")
-                                }
+                                emptyTag("excludeFolder", "url" to "file://\$MODULE_DIR\$/../../$pluginRelativePath/classes")
                             }
                         }
                         SpfPluginType.WEB,SpfPluginType.WEB_CORE, SpfPluginType.WEB_TEST -> {
