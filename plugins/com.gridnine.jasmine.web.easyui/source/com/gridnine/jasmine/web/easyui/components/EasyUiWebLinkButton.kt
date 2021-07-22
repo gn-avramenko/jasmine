@@ -75,6 +75,9 @@ class EasyUiWebLinkButton(configure: WebLinkButtonConfiguration.()->Unit) :WebLi
     }
 
     override fun setEnabled(value: Boolean) {
+        if(value == enabled){
+            return
+        }
         enabled = value
         if(initialized){
             updateState()
@@ -82,6 +85,9 @@ class EasyUiWebLinkButton(configure: WebLinkButtonConfiguration.()->Unit) :WebLi
     }
 
     override fun setVisible(value: Boolean) {
+        if(visible == value){
+            return
+        }
         visible = value
         if(initialized){
             updateVisibility()

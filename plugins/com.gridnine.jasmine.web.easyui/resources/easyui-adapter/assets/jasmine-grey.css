@@ -1,8 +1,10 @@
 .jasmine-logo {
-    font-size:300%;
+    font-size:200%;
     background-color: #f3f3f3;
     color: #0092DC;
     text-align: center;
+    height:35px;
+    border: 1px solid #D3D3D3;
 }
 
 .icon_core_settings{

@@ -59,7 +59,7 @@ ${if(MiscUtilsJS.isNotBlank(text)) text else children.joinToString("\r\n") { fin
         }
 
         initialized = true
-        setVisible(visible)
+        setVisibleInternal()
         if(postRenderAction != null){
             postRenderAction!!.invoke()
         }
@@ -76,10 +76,13 @@ ${if(MiscUtilsJS.isNotBlank(text)) text else children.joinToString("\r\n") { fin
     }
 
     override fun setText(value: String?) {
+        if(text == value){
+            return
+        }
         text = value
         if(initialized){
             destroy()
-            getJQ().`val`(value)
+            getJQ().text(value)
         }
     }
 
@@ -102,14 +105,20 @@ ${if(MiscUtilsJS.isNotBlank(text)) text else children.joinToString("\r\n") { fin
     }
 
     override fun setVisible(value: Boolean) {
+        if(value ==visible){
+            return
+        }
         visible = value
         if(initialized){
-            if(getId() != null) {
-                if (visible) {
-                    getJQ().show()
-                } else {
-                    getJQ().hide()
-                }
+           setVisibleInternal()
+        }
+    }
+    private fun setVisibleInternal(){
+        if(getId() != null) {
+            if (visible) {
+                getJQ().show()
+            } else {
+                getJQ().hide()
             }
         }
     }
