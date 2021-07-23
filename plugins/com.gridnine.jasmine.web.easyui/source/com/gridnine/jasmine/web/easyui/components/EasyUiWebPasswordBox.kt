@@ -37,7 +37,7 @@ class EasyUiWebPasswordBox(configure: WebPasswordBoxConfiguration.()->Unit) :Web
         if(!initialized){
             return value
         }
-        return jq.passwordbox("getText")
+        return jq.passwordbox("getValue")
     }
 
     override fun setValue(value: String?){
