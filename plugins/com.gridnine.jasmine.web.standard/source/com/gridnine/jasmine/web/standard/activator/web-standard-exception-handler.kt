@@ -16,6 +16,7 @@ import kotlinx.browser.window
 
 class StandardCoroutineExceptionHandler:CoroutineExceptionHandler{
     override fun handleException(e: Throwable) {
+        console.log(e)
         val exceptionText = getExceptionText(e)
         try {
             WebUiLibraryAdapter.get().showDialog(ExceptionDialogPanel(exceptionText)) {
@@ -44,14 +45,14 @@ class StandardCoroutineExceptionHandler:CoroutineExceptionHandler{
     private fun getExceptionText(e: Throwable): String {
         if(e is XeptionJS){
             return when(e.type){
-                XeptionTypeJS.FOR_END_USER -> e.userMessage!!
+                XeptionTypeJS.FOR_END_USER -> e.userMessage?:""
                 XeptionTypeJS.FOR_ADMIN -> """
-Для администратора: ${e.adminMessage}
+Для администратора: ${e.adminMessage?:""}
 Детали:
 ${e.stackTraceToString()}
 """.trimMargin()
                 XeptionTypeJS.FOR_DEVELOPER -> """
-Для разработчика: ${e.developerMessage}
+Для разработчика: ${e.developerMessage?:""}
 Детали:
 ${e.stackTraceToString()}
 """.trimMargin()
@@ -62,26 +63,23 @@ ${e.stackTraceToString()}
             if(reason.type != null){
                 val type = XeptionTypeJS.valueOf(reason.type)
                 return when(type){
-                    XeptionTypeJS.FOR_END_USER -> """${reason.message}.
-Детали: 
-${reason.stacktrace}
-""".trimIndent()
+                    XeptionTypeJS.FOR_END_USER -> reason.message?:""
                     XeptionTypeJS.FOR_ADMIN -> """
-Для администратора: ${reason.message}.
+Для администратора: ${reason.message?:""}.
 Детали: 
-${reason.stacktrace}
+${reason.stacktrace?:""}
 """.trimIndent()
                     XeptionTypeJS.FOR_DEVELOPER -> """
-Для разработчика: ${reason.message}.
+Для разработчика: ${reason.message?:""}.
 Детали: 
-${reason.stacktrace}
+${reason.stacktrace?:""}
 """.trimIndent()
                 }
             } else {
                 return """
-Для разработчика: ${reason.message}.
+Для разработчика: ${reason.message?:""}.
 Детали: 
-${reason.stacktrace}
+${reason.stacktrace?:""}
 """.trimIndent()
             }
         }

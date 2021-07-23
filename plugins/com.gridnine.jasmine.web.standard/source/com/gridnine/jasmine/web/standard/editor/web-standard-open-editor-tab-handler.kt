@@ -20,7 +20,7 @@ import com.gridnine.jasmine.web.standard.StandardRestClient
 import com.gridnine.jasmine.web.standard.mainframe.*
 import com.gridnine.jasmine.web.standard.widgets.WebGridLayoutWidget
 
-data class OpenObjectData(val type: String, var uid: String, val navigationKey: String?)
+data class OpenObjectData(val type: String, var uid: String, val navigationKey: String?, val forEdit:Boolean = false)
 
 class ObjectEditorMainFrameTabHandler:MainFrameTabHandler<OpenObjectData>{
     override fun getTabId(obj: OpenObjectData): String {
@@ -64,7 +64,7 @@ class ObjectEditorImpl<W : WebEditor<*, *, *>>(private val obj: OpenObjectData, 
     private val rootWebEditor: W
     private val editorButtonsMap = hashMapOf<WebLinkButton, ObjectEditorActionDisplayHandler<W>>()
     private val menuItemsMap = hashMapOf<WebMenuButton, MutableMap<String, ObjectEditorActionDisplayHandler<W>>>()
-    private var readOnly: Boolean = true
+    private var readOnly: Boolean = !obj.forEdit
     var title = "???"
 
     init {
@@ -81,11 +81,11 @@ class ObjectEditorImpl<W : WebEditor<*, *, *>>(private val obj: OpenObjectData, 
         viewButton = WebUiLibraryAdapter.get().createLinkButton {
             title = "Просмотр"
         }
-        viewButton.setVisible(false)
+        viewButton.setVisible(!readOnly)
         editButton = WebUiLibraryAdapter.get().createLinkButton {
             title = "Редактировать"
         }
-        editButton.setVisible(true)
+        editButton.setVisible(readOnly)
         editButton.setHandler {
             rootWebEditor.setReadonly(false)
             viewButton.setVisible(true)
@@ -161,7 +161,7 @@ class ObjectEditorImpl<W : WebEditor<*, *, *>>(private val obj: OpenObjectData, 
             content = toolBar
         }
         (rootWebEditor as WebEditor<BaseVMJS,BaseVSJS,BaseVVJS>).readData(initData.viewModel, initData.viewSettings)
-        rootWebEditor.setReadonly(true)
+        rootWebEditor.setReadonly(readOnly)
         obj.navigationKey?.let {rootWebEditor.navigate(it)}
         updateButtonsState()
     }

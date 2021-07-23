@@ -50,12 +50,15 @@ abstract class BaseIdentity : BaseIntrospectableObject(){
 class L10nMessage: BaseIntrospectableObject {
     lateinit var key: String
 
-    lateinit var bundle: String
+    var bundle: String? = null
 
     val parameters = arrayListOf<Any>()
 
     constructor()
-
+    constructor(key: String, vararg parameters: Any) {
+        this.key = key
+        parameters.forEach { this.parameters.add(it) }
+    }
     constructor(bundle: String, key: String, vararg parameters: Any) {
         this.key = key
         this.bundle = bundle
