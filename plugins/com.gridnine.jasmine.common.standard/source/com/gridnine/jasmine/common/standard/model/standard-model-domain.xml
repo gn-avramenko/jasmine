@@ -157,4 +157,9 @@
         <property id="fieldId" type="STRING"/>
         <property id="value" type="NESTED_DOCUMENT" class-name="com.gridnine.jasmine.common.standard.model.BaseListFilterValue"/>
     </nested-document>
+    <asset id="com.gridnine.jasmine.common.standard.model.SequenceNumber">
+        <param name="exclude-from-standard.list-ids" value="true"/>
+        <property id="key" type="STRING" x-cache-find-handler="com.gridnine.jasmine.server.standard.storage.SequenceNumberKeyPropertyFindHandler"/>
+        <property id="lastNumber" type="INT"/>
+    </asset>
 </domain>

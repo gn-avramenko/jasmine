@@ -38,7 +38,7 @@ class TextBoxWidget(configure:TextBoxWidgetConfiguration.()->Unit):BaseWebNodeWr
     }
 
     private fun updateDisabledMode() {
-        _node.setDisabled(conf?.notEditable == true || readonly)
+        _node.setDisabled((config.notEditable && conf?.notEditable != false) || conf?.notEditable == true || readonly)
     }
 
 

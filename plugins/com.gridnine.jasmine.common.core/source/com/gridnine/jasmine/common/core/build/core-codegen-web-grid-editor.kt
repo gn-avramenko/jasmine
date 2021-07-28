@@ -9,7 +9,6 @@ package com.gridnine.jasmine.common.core.build
 import com.gridnine.jasmine.common.core.meta.*
 import com.gridnine.jasmine.common.core.model.Xeption
 import java.io.File
-import java.lang.StringBuilder
 
 
 object GridWebEditorGenerator {
@@ -50,6 +49,7 @@ object GridWebEditorGenerator {
                                 "${cell.id}Widget = ${getWidgetClassName(widget)}"{
                                     """width = "100%""""()
                                     """handler = com.gridnine.jasmine.web.standard.widgets.AutocompleteHandler.createMetadataBasedAutocompleteHandler("${widget.objectId}JS")"""()
+                                    "notEditable = ${widget.notEditable}"()
                                 }
                             }
                             WidgetType.ENUM_SELECT_BOX -> {
@@ -57,6 +57,31 @@ object GridWebEditorGenerator {
                                 "${cell.id}Widget =  ${getWidgetClassName(widget)}"{
                                     """width = "100%""""()
                                     "enumClass = ${widget.enumId}JS::class"()
+                                    "notEditable = ${widget.notEditable}"()
+                                }
+                            }
+                            WidgetType.TEXT_BOX -> {
+                                widget as TextBoxWidgetDescription
+                                "${cell.id}Widget =  ${getWidgetClassName(widget)}"{
+                                    """width = "100%""""()
+                                    "multiline = ${widget.multiline}"()
+                                    "notEditable = ${widget.notEditable}"()
+                                }
+                            }
+                            WidgetType.CUSTOM_VALUE -> {
+                                widget as CustomValueWidgetRef
+                                if(widget.params.isNotEmpty()){
+                                    "${cell.id}Widget =  ${getWidgetClassName(widget)}(mapOf(${widget.params.entries.joinToString { """"${it.key}" to "${it.value}""""}}))"()
+                                } else {
+                                    "${cell.id}Widget =  ${getWidgetClassName(widget)}()"()
+                                }
+                            }
+                            WidgetType.RICH_TEXT_EDITOR -> {
+                                widget as RichTextBoxEditorDescription
+                                "${cell.id}Widget =  ${getWidgetClassName(widget)}"{
+                                    """width = "100%""""()
+                                    """height="${widget.height?:"300px"}""""()
+                                    "notEditable = ${widget.notEditable}"()
                                 }
                             }
                             WidgetType.TABLE_BOX -> {
@@ -118,6 +143,7 @@ object GridWebEditorGenerator {
                             else -> {
                                 "${cell.id}Widget =  ${getWidgetClassName(widget)}"{
                                     """width = "100%""""()
+                                    "notEditable = ${widget.notEditable}"()
                                 }
                             }
                         }
@@ -155,7 +181,7 @@ object GridWebEditorGenerator {
                         PredefinedRowHeight.REMAINING -> "100%"
                         PredefinedRowHeight.CUSTOM -> row.customHeight
                     }
-                    """_node.addRow(${if(height != null) """$height""" else "null"}, 
+                    """_node.addRow(${if(height != null) """"$height"""" else "null"}, 
                         ${row.cells.filter { cell ->cell.widget.widgetType != WidgetType.HIDDEN }.joinToString(",\r\n") {cell ->
                         if (cell.caption != null) {
                             """com.gridnine.jasmine.web.standard.widgets.WebGridLayoutWidgetCell(com.gridnine.jasmine.web.standard.widgets.WebGridCellWidget(com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${description.id}"]?.get("${cell.id}")?:"${cell.id}", ${cell.id}Widget),${cell.colSpan})"""
@@ -173,6 +199,9 @@ object GridWebEditorGenerator {
                         when (cell.widget) {
                             is HiddenWidgetDescription -> {
                                 "${cell.id}Value = vm.${cell.id}"()
+                            }
+                            is CustomValueWidgetRef -> {
+                                "${cell.id}Widget.readData(vm.${cell.id}, vs?.${cell.id})"()
                             }
                             is TableBoxWidgetDescription -> {
                                 "${cell.id}Widget.readData(vm.${cell.id}, vs?.${cell.id})"()
@@ -207,6 +236,9 @@ object GridWebEditorGenerator {
                             }
                             is IntegerNumberBoxWidgetDescription -> {
                                 "result.${cell.id} = ${cell.id}Widget.getValue()${if (widget.nonNullable) "!!" else ""}"()
+                            }
+                            is CustomValueWidgetRef -> {
+                                "result.${cell.id} = ${cell.id}Widget.getData()"()
                             }
                             is TableBoxWidgetDescription -> {
                                 "result.${cell.id}.addAll(${cell.id}Widget.getData())"()
@@ -254,6 +286,11 @@ object GridWebEditorGenerator {
                 "com.gridnine.jasmine.web.standard.widgets.TableBoxWidget<${widget.id}VMJS,${widget.id}VSJS,${widget.id}VVJS>"
             }
             WidgetType.HIDDEN -> throw  Xeption.forDeveloper("unsupported widget type ${widget.widgetType}")
+            WidgetType.RICH_TEXT_EDITOR -> "com.gridnine.jasmine.web.standard.widgets.RichTextEditorWidget"
+            WidgetType.CUSTOM_VALUE -> {
+                widget as CustomValueWidgetRef
+                widget.ref
+            }
         }
     }
 

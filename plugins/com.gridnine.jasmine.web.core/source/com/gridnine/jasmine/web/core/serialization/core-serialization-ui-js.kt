@@ -205,6 +205,7 @@ internal class VSEntityMetadataProviderJS(description: VSEntityDescriptionJS) : 
             VSPropertyTypeJS.DATE_TIME_BOX_SETTINGS -> DateTimeBoxConfigurationJS.qualifiedClassName
             VSPropertyTypeJS.STRING -> null
             VSPropertyTypeJS.GENERAL_SELECT_BOX_SETTINGS -> GeneralSelectBoxConfigurationJS.qualifiedClassName
+            VSPropertyTypeJS.RICH_TEXT_EDITOR_SETTINGS -> RichTextEditorConfigurationJS.qualifiedClassName
         }
     }
 
@@ -222,6 +223,7 @@ internal class VSEntityMetadataProviderJS(description: VSEntityDescriptionJS) : 
             VSPropertyTypeJS.DATE_TIME_BOX_SETTINGS -> SerializablePropertyTypeJS.ENTITY
             VSPropertyTypeJS.STRING -> SerializablePropertyTypeJS.STRING
             VSPropertyTypeJS.GENERAL_SELECT_BOX_SETTINGS -> SerializablePropertyTypeJS.ENTITY
+            VSPropertyTypeJS.RICH_TEXT_EDITOR_SETTINGS -> SerializablePropertyTypeJS.ENTITY
         }
     }
 

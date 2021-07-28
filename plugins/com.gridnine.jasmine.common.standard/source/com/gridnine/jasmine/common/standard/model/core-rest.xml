@@ -245,6 +245,7 @@
         <enum-item id="ENUM_SELECT_BOX_SETTINGS"/>
         <enum-item id="DATE_BOX_SETTINGS"/>
         <enum-item id="DATE_TIME_BOX_SETTINGS"/>
+        <enum-item id="RICH_TEXT_EDITOR_SETTINGS"/>
     </enum>
     <enum id="com.gridnine.jasmine.common.standard.model.rest.VSCollectionTypeDT">
         <enum-item id="ENTITY"/>

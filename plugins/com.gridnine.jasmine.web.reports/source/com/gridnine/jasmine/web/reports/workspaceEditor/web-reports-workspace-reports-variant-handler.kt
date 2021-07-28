@@ -5,6 +5,7 @@
 
 package com.gridnine.jasmine.web.reports.workspaceEditor
 
+import com.gridnine.jasmine.common.reports.model.domain.ReportDescriptionIndexJS
 import com.gridnine.jasmine.common.reports.model.rest.ReportsWorkspaceItemDTJS
 import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
 import com.gridnine.jasmine.web.standard.widgets.WebGridLayoutWidget
@@ -29,8 +30,11 @@ class WorkspaceReportsItemVariantHandler:WorkspaceItemVariantHandler<ReportsWork
 }
 
 class WorkspaceReportsItemVariantEditor: BaseWebNodeWrapper<WebGridLayoutWidget>(){
-    lateinit var value :ReportsWorkspaceItemDTJS
+    var value :ReportsWorkspaceItemDTJS
     init {
         _node = WebGridLayoutWidget{}
+        value = ReportsWorkspaceItemDTJS().apply {
+            listId = ReportDescriptionIndexJS.indexId.substringBeforeLast("JS")
+        }
     }
 }

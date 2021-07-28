@@ -194,7 +194,7 @@ class WorkspaceEditor(workspace:WorkspaceDTJS): BaseWebNodeWrapper<WebBorderCont
                 result.groups.add(group)
                 group.items.clear()
                 tn.children.forEach { child ->
-                    group.items.add(SelectItemJS(child.id, child.text))
+                    group.items.add(SelectItemJS((child.userData as BaseWorkspaceItemDTJS?)?.uid?:child.id, child.text))
                     child.userData?.let {
                         request.updatedItems.add(it as BaseWorkspaceItemDTJS)
                     }

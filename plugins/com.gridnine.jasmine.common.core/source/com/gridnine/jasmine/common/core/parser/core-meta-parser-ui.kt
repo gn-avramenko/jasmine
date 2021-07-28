@@ -71,6 +71,13 @@ object UiMetadataParser {
     }
 
     private fun updateRegistry(registry: UiMetaRegistry, node: XmlNode, localizations: Map<String, Map<Locale, String>>) {
+        node.children("custom-value-widget").forEach { child ->
+            val id = ParserUtils.getIdAttribute(child)
+            val viewModelId = parseViewModel(child.children("view-model")[0], "${id}VM", registry)
+            val viewSettingsId = parseViewSettings(child.children("view-settings")[0], "${id}VS", registry)
+            val viewValidationId = parseViewValidation(child.children("view-validation")[0], "${id}VV", registry)
+            registry.customValueWidgets[id] = CustomValueWidgetDescription(viewModelId, viewSettingsId,viewValidationId)
+        }
         node.children("enum").forEach { child ->
             val enumId = child.attributes["id"] ?: throw Xeption.forDeveloper("id attribute is absent in enum $child")
             val enumDescription = registry.enums.getOrPut(enumId) { UiEnumDescription(enumId) }
@@ -103,6 +110,49 @@ object UiMetadataParser {
         processContainers(registry, node, null, localizations)
 
 
+    }
+
+    private fun parseViewModel(xmlNode: XmlNode, defaultId: String, registry: UiMetaRegistry): String {
+        val id = xmlNode.attributes["id"]?:defaultId
+        val entity = registry.viewModels.getOrPut(id){ VMEntityDescription(id)}
+        xmlNode.children("property").forEach {child ->
+            val childId = ParserUtils.getIdAttribute(child)
+            when(VMPropertyType.valueOf(child.attributes["type"]!!)){
+                VMPropertyType.STRING -> {
+                    entity.properties[childId] = VMPropertyDescription(childId,VMPropertyType.STRING,  null, false, false)
+                }
+                else-> TODO()
+            }
+        }
+        return id
+    }
+    private fun parseViewSettings(xmlNode: XmlNode, defaultId: String, registry: UiMetaRegistry): String {
+        val id = xmlNode.attributes["id"]?:defaultId
+        val entity = registry.viewSettings.getOrPut(id){ VSEntityDescription(id)}
+        xmlNode.children("property").forEach {child ->
+            val childId = ParserUtils.getIdAttribute(child)
+            when(VMPropertyType.valueOf(child.attributes["type"]!!)){
+                VMPropertyType.STRING -> {
+                    entity.properties[childId] = VSPropertyDescription(childId,VSPropertyType.STRING,  null, false)
+                }
+                else-> TODO()
+            }
+        }
+        return id
+    }
+    private fun parseViewValidation(xmlNode: XmlNode, defaultId: String, registry: UiMetaRegistry): String {
+        val id = xmlNode.attributes["id"]?:defaultId
+        val entity = registry.viewValidations.getOrPut(id){ VVEntityDescription(id)}
+        xmlNode.children("property").forEach {child ->
+            val childId = ParserUtils.getIdAttribute(child)
+            when(VMPropertyType.valueOf(child.attributes["type"]!!)){
+                VMPropertyType.STRING -> {
+                    entity.properties[childId] = VVPropertyDescription(childId,VVPropertyType.STRING,  null, false)
+                }
+                else-> TODO()
+            }
+        }
+        return id
     }
 
     private fun updateActionsGroup(elm: XmlNode, registry: UiMetaRegistry, localizations: Map<String, Map<Locale, String>>):ActionsGroupDescription {
@@ -275,9 +325,16 @@ object UiMetadataParser {
     private fun parseWidgetData(xmlNode: XmlNode, id: String, registry: UiMetaRegistry, localizations: Map<String, Map<Locale, String>>): WidgetParsingData {
         return when (xmlNode.name) {
             "text-box" -> {
-                val widget = TextBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable") ?: false)
+                val widget = TextBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable") ?: false,ParserUtils.getBooleanAttribute(xmlNode, "multiline") ?: false)
                 val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.STRING, null, false, false)
                 val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.TEXT_BOX_SETTINGS, null, false)
+                val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
+                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription, null, null, null)
+            }
+            "rich-text-editor" -> {
+                val widget = RichTextBoxEditorDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable") ?: false, xmlNode.attributes["height"])
+                val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.STRING, null, false, false)
+                val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.RICH_TEXT_EDITOR_SETTINGS, null, false)
                 val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
                 WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription, null, null, null)
             }
@@ -351,6 +408,19 @@ object UiMetadataParser {
                 val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.LOCAL_DATE_TIME, null, false,false)
                 val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.DATE_TIME_BOX_SETTINGS, null, false)
                 val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)
+                WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription, null, null, null)
+            }
+            "custom-value-widget" -> {
+                val widgetId = xmlNode.attributes["ref"]!!
+                val widgetDescr = registry.customValueWidgets[widgetId]
+                val viewModel = widgetDescr?.viewModel?:"${widgetId}VM"
+                val viewSettings = widgetDescr?.viewSettings?:"${widgetId}VS"
+                val viewValidation = widgetDescr?.viewValidation?:"${widgetId}VV"
+                val params = linkedMapOf(*xmlNode.children("param").map { it.name to it.value!! }.toTypedArray())
+                val widget = CustomValueWidgetRef(widgetId, params)
+                val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.ENTITY, viewModel, false,true)
+                val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.ENTITY, viewSettings, false)
+                val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.ENTITY, viewValidation, false)
                 WidgetParsingData(widget, vmPropertyDescription, vsPropertyDescription, vvPropertyDescription, null, null, null)
             }
             "hidden" -> {

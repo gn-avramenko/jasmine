@@ -42,7 +42,7 @@ class EasyUiWebSelect(configure: WebSelectConfiguration.() -> Unit) : WebSelect,
         return "<input  id=\"select${uid}\" style=\"${getSizeAttributes(config)}\"/>"
     }
 
-    override fun setLoader(loader: suspend (String) -> List<SelectItemJS>) {
+    override fun setLoader(loader: suspend (String?) -> List<SelectItemJS>) {
         this.loader = loader
     }
 

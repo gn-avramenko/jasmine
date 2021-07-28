@@ -7,6 +7,7 @@
 
 package com.gridnine.jasmine.web.standard.widgets
 
+import com.gridnine.jasmine.common.core.model.DateBoxConfigurationJS
 import com.gridnine.jasmine.common.core.model.DateTimeBoxConfigurationJS
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
@@ -16,6 +17,11 @@ import kotlin.js.Date
 class DateTimeBoxWidget(configure:DateTimeBoxWidgetConfiguration.()->Unit):BaseWebNodeWrapper<WebDateTimeBox>(){
 
     private val config = DateTimeBoxWidgetConfiguration()
+
+    private var conf: DateTimeBoxConfigurationJS? = null
+
+    private var readonly =false
+
     init {
         config.configure()
         _node = WebUiLibraryAdapter.get().createDateTimeBox {
@@ -30,13 +36,17 @@ class DateTimeBoxWidget(configure:DateTimeBoxWidgetConfiguration.()->Unit):BaseW
     fun getValue() = _node.getValue()
 
     fun setReadonly(value:Boolean) {
-        _node.setEnabled(!value)
+        readonly =value
+        updateEnabledMode()
     }
 
     fun configure(config: DateTimeBoxConfigurationJS?){
-        config?.let {
-            _node.setEnabled(!config.notEditable)
-        }
+        conf = config
+        updateEnabledMode()
+    }
+
+    private fun updateEnabledMode() {
+        _node.setEnabled(!((config.notEditable && conf?.notEditable != false) || conf?.notEditable == true || readonly))
     }
 
     fun showValidation(value:String?){

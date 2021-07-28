@@ -61,7 +61,8 @@ enum class VSPropertyType {
     GENERAL_SELECT_BOX_SETTINGS,
     ENUM_SELECT_BOX_SETTINGS,
     DATE_BOX_SETTINGS,
-    DATE_TIME_BOX_SETTINGS
+    DATE_TIME_BOX_SETTINGS,
+    RICH_TEXT_EDITOR_SETTINGS
 
 }
 
@@ -115,11 +116,17 @@ enum class PredefinedRowHeight{
 
 class PasswordBoxWidgetDescription(notEditable:Boolean):BaseWidgetDescription(notEditable, WidgetType.PASSWORD_BOX)
 
-class TextBoxWidgetDescription(notEditable:Boolean):BaseWidgetDescription(notEditable, WidgetType.TEXT_BOX)
+class TextBoxWidgetDescription(notEditable:Boolean, val multiline:Boolean):BaseWidgetDescription(notEditable, WidgetType.TEXT_BOX)
+
+class RichTextBoxEditorDescription(notEditable:Boolean, val height:String?):BaseWidgetDescription(notEditable, WidgetType.RICH_TEXT_EDITOR)
 
 class BigDecimalNumberBoxWidgetDescription(notEditable:Boolean):BaseWidgetDescription(notEditable, WidgetType.BIG_DECIMAL_NUMBER_BOX)
 
 class IntegerNumberBoxWidgetDescription(notEditable:Boolean, val nonNullable: Boolean):BaseWidgetDescription(notEditable, WidgetType.INTEGER_NUMBER_BOX)
+
+class CustomValueWidgetDescription(val viewModel:String, val viewSettings:String, val viewValidation:String)
+
+class CustomValueWidgetRef(val ref:String, val params:Map<String,String>):BaseWidgetDescription(false, WidgetType.CUSTOM_VALUE)
 
 class BooleanBoxWidgetDescription(notEditable:Boolean):BaseWidgetDescription(notEditable, WidgetType.BOOLEAN_BOX)
 
@@ -153,7 +160,9 @@ enum class WidgetType{
     DATE_BOX,
     DATE_TIME_BOX,
     HIDDEN,
-    TABLE_BOX
+    TABLE_BOX,
+    RICH_TEXT_EDITOR,
+    CUSTOM_VALUE
 }
 abstract class BaseWidgetDescription(val notEditable:Boolean, val widgetType:WidgetType)
 
@@ -229,6 +238,9 @@ class UiMetaRegistry: Disposable {
     val optionsGroups = linkedMapOf<String, OptionsGroupDescription>()
 
     val displayHandlers = linkedMapOf<String, DisplayHandlerDescription>()
+
+    val customValueWidgets = linkedMapOf<String,CustomValueWidgetDescription>()
+
     override fun dispose() {
         wrapper.dispose()
     }

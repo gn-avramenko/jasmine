@@ -5,6 +5,7 @@
 		<property type="STRING" id="id"/>
 	</document>
 	<index document="com.gridnine.jasmine.common.reports.model.domain.ReportDescription" id="com.gridnine.jasmine.common.reports.model.domain.ReportDescriptionIndex">
+		<param name="exclude-from-standard.list-ids" value="true"/>
 		<property type="STRING" id="name"/>
 		<property type="STRING" id="id"/>
 	</index>

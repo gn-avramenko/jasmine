@@ -10,12 +10,14 @@ package com.gridnine.jasmine.web.standard.list
 import com.gridnine.jasmine.common.core.meta.BaseIndexDescriptionJS
 import com.gridnine.jasmine.common.core.meta.DatabasePropertyTypeJS
 import com.gridnine.jasmine.common.core.meta.DomainMetaRegistryJS
+import com.gridnine.jasmine.common.core.model.BaseAssetJS
 import com.gridnine.jasmine.common.core.model.BaseIdentityJS
 import com.gridnine.jasmine.common.core.model.BaseIndexJS
 import com.gridnine.jasmine.common.standard.model.rest.BaseListFilterValueDTJS
 import com.gridnine.jasmine.common.standard.model.rest.GetListRequestJS
 import com.gridnine.jasmine.common.standard.model.rest.ListFilterDTJS
 import com.gridnine.jasmine.common.standard.model.rest.ListWorkspaceItemDTJS
+import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.*
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
@@ -33,7 +35,8 @@ class WebListMainFrameTabHandler : MainFrameTabHandler<ListWorkspaceItemDTJS>{
     }
 
     override suspend fun createTabData(obj: ListWorkspaceItemDTJS, callback: MainFrameTabCallback): MainFrameTabData {
-        return MainFrameTabData(obj.displayName!!, ListPanel(obj,WebActionsHandler.get().getActionsFor(obj.listId!!)))
+        val asset = DomainMetaRegistryJS.get().assets[obj.listId+"JS"] != null
+        return MainFrameTabData(obj.displayName!!, ListPanel(obj,WebActionsHandler.get().getActionsFor(if(asset) "${obj.listId}-list" else obj.listId!!)))
     }
 
     override fun getId(): String {
@@ -150,7 +153,10 @@ class ListPanel(we: ListWorkspaceItemDTJS, actions: ActionsGroupWrapper) : BaseW
         }
         dataGrid.setRowDblClickListener {
             if(it is BaseIndexJS){
-                MainFrame.get().openTab(OpenObjectData(it.document!!.type, it.document!!.uid, it.uid))
+                MainFrame.get().openTab(OpenObjectData(it.document!!.type, it.document!!.uid, it.uid, false))
+            }
+            if(it is BaseAssetJS){
+                MainFrame.get().openTab(OpenObjectData(ReflectionFactoryJS.get().getQualifiedClassName(it::class), it.uid, it.uid, false))
             }
         }
         return dataGrid

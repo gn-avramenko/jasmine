@@ -66,6 +66,7 @@ interface ObjectEditorHandler:RegistryItemJS<ObjectEditorHandler>{
 
 interface ObjectEditorActionDisplayHandler<E:WebEditor<*,*,*>>{
     fun isEnabled(editor:ObjectEditor<E>):Boolean
+    fun isVisible(editor:ObjectEditor<E>):Boolean
 }
 
 interface ObjectEditor<E:WebEditor<*,*,*>>{

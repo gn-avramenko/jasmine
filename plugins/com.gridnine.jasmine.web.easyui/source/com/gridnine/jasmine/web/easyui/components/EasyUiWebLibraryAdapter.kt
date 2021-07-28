@@ -63,7 +63,12 @@ class EasyUiWebLibraryAdapter :WebUiLibraryAdapter{
     }
 
     override fun createSelect(configure: WebSelectConfiguration.() -> Unit): WebSelect {
-        return EasyUiWebSelect(configure)
+        val config = WebSelectConfiguration()
+        config.configure()
+        if(config.multiple){
+            return EasyUiWebTagbox(config)
+        }
+        return EasyUiWebCombobox(config)
     }
 
     override fun createTextBox(configure: WebTextBoxConfiguration.() -> Unit): WebTextBox {
@@ -236,6 +241,10 @@ class EasyUiWebLibraryAdapter :WebUiLibraryAdapter{
 
     override fun createTag(tagName:String, id: String?): WebTag {
         return EasyUiWebTag(tagName, id)
+    }
+
+    override fun createRichTextEditor(configure: WebRichTextEditorConfiguration.() -> Unit): WebRichTextEditor {
+        return EasyUiWebRTEditor(configure)
     }
 
     private fun fillItemsMap(itemsMap: HashMap<WebContextMenuItem, String>, items: List<WebContextMenuItem>) {

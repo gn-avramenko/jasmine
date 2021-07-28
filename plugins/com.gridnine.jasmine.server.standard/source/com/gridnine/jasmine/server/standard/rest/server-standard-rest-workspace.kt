@@ -99,7 +99,13 @@ class StandardGetWorkspaceRestHandler:RestHandler<GetWorkspaceRequest, GetWorksp
 
 class StandardGetWorkspaceItemRestHandler:RestHandler<GetWorkspaceItemRequest, GetWorkspaceItemResponse>{
     override fun service(request: GetWorkspaceItemRequest, ctx:RestOperationContext): GetWorkspaceItemResponse {
-        val item = WorkspaceProvider.get().getWorkspace().groups.flatMap { it.items }.find { it.uid == request.uid }!!
+        val item = WorkspaceProvider.get().getWorkspace().groups.flatMap { it.items }.find { it.uid == request.uid }?:return GetWorkspaceItemResponse().also {
+            it.workspaceItem = ListWorkspaceItemDT().also {wi ->
+                wi.uid = request.uid
+                wi.displayName = "Новый список"
+                wi.listId = DomainMetaRegistry.get().indexes.values.find { it.parameters["exclude-from-standard.list-ids"] != "true" }!!.id
+            }
+        }
         val result = GetWorkspaceItemResponse()
         result.workspaceItem = Registry.get().get(WorkspaceItemToDtConverter.TYPE, item::class.qualifiedName!!)!!.convert(item)
         return result

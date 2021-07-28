@@ -22,14 +22,18 @@ import com.gridnine.jasmine.web.standard.mainframe.MainFrame
 class EntitySelectWidget(configure:EntitySelectWidgetConfiguration.()->Unit):BaseWebNodeWrapper<WebGridLayoutWidget>() {
     private val webSelect:WebSelect
 
-    private val conf = EntitySelectWidgetConfiguration()
+    private val config = EntitySelectWidgetConfiguration()
+
+    private var conf: EntitySelectBoxConfigurationJS? = null
+
+    private var readonly = false
     init {
-        conf.configure()
+        config.configure()
         webSelect =WebUiLibraryAdapter.get().createSelect{
             width = "100%"
             height = "100%"
             mode = SelectDataType.REMOTE
-            showClearIcon = conf.showClearIcon
+            showClearIcon = config.showClearIcon
             editable = true
             multiple = false
             hasDownArrow = false
@@ -38,8 +42,8 @@ class EntitySelectWidget(configure:EntitySelectWidgetConfiguration.()->Unit):Bas
             icon = "core:link"
         }
         _node = WebGridLayoutWidget{
-            width = conf.width
-            height = conf.height
+            width = config.width
+            height = config.height
             noPadding = true
         }.also {
             it.setColumnsWidths("100%", "auto")
@@ -47,8 +51,8 @@ class EntitySelectWidget(configure:EntitySelectWidgetConfiguration.()->Unit):Bas
         }
         webSelect.setLoader { value ->
             val request = AutocompleteRequestJS()
-            request.autocompleteFieldName = conf.handler.getAutocompleteFieldName()
-            request.listId = conf.handler.getIndexClassName()
+            request.autocompleteFieldName = config.handler.getAutocompleteFieldName()
+            request.listId = config.handler.getIndexClassName()
             request.limit = 10
             request.pattern = value
             StandardRestClient.standard_standard_autocomplete(request).items.map {
@@ -72,9 +76,8 @@ class EntitySelectWidget(configure:EntitySelectWidgetConfiguration.()->Unit):Bas
 
 
     fun configure(config: EntitySelectBoxConfigurationJS?){
-        config?.let {
-            webSelect.setEnabled(!config.notEditable)
-        }
+        conf = config
+        updateEnabledMode()
     }
 
     fun showValidation(value:String?){
@@ -82,8 +85,14 @@ class EntitySelectWidget(configure:EntitySelectWidgetConfiguration.()->Unit):Bas
     }
 
     fun setReadonly(value:Boolean){
-        webSelect.setEnabled(!value)
+        readonly =value
+        updateEnabledMode()
     }
+
+    private fun updateEnabledMode() {
+        webSelect.setEnabled(!((config.notEditable && conf?.notEditable != false) || conf?.notEditable == true || readonly))
+    }
+
     private fun toSelectItem(ref:ObjectReferenceJS): SelectItemJS {
         return SelectItemJS("${ref.type}||${ref.uid}", ref.caption?:"???")
     }

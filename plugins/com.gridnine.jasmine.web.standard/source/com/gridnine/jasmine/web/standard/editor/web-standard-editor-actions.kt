@@ -23,6 +23,10 @@ class ObjectEditorEditStateActionDisplayHandler : ObjectEditorActionDisplayHandl
     override fun isEnabled(editor: ObjectEditor<WebEditor<*, *, *>>): Boolean {
         return !editor.isReadonly()
     }
+
+    override fun isVisible(editor: ObjectEditor<WebEditor<*, *, *>>): Boolean {
+        return true
+    }
 }
 
 class SaveObjectEditorObjectButtonHandler : ObjectEditorTool<WebEditor<BaseVMJS, BaseVSJS, BaseVVJS>> {

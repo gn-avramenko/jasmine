@@ -50,7 +50,9 @@ class EasyUiWebLinkButton(configure: WebLinkButtonConfiguration.()->Unit) :WebLi
     }
 
     override fun destroy() {
-        //noops
+//        if(initialized){
+//            jq.remove()
+//        }
     }
 
     private fun updateState() {

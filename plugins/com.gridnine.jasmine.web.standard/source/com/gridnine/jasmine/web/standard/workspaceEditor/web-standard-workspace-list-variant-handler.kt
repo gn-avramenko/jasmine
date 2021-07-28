@@ -90,9 +90,29 @@ class WorkspaceListItemVariantEditor: BaseWebNodeWrapper<WebGridLayoutWidget>(){
         listTypeWidget.setChangeListener {
             if(it != null) {
                 WebOptionsHandler.get().ensureOptionLoaded(OptionsIds.standard_list_ids, it.id)
+                val listId = it.id+"JS"
+                val indexDescription = DomainMetaRegistryJS.get().indexes[listId]?:DomainMetaRegistryJS.get().assets[listId]!!
+                val columns = indexDescription.properties.values.map {  SelectItemJS(it.id, it.displayName!!)}.toMutableList()
+                columns.addAll(indexDescription.collections.values.map {  SelectItemJS(it.id, it.displayName!!)})
+                columns.sortBy { it.text }
                 columnsEditor.readData(WorkspaceListColumnsEditorVMJS(), null)
+                columnsEditor.columnsWidget.setNewRowVSFactory {
+                    WorkspaceListColumnsTableVSJS().apply {
+                        setColumnName { possibleValues.addAll(columns)}
+                    }
+                }
                 filtersEditor.readData( WorkspaceListFiltersEditorVMJS(),  null)
+                filtersEditor.filtersWidget.setNewRowVSFactory {
+                    WorkspaceListFiltersTableVSJS().apply {
+                        setFilterName { possibleValues.addAll(columns)}
+                    }
+                }
                 sortOrdersEditor.readData(WorkspaceListSortOrdersEditorVMJS(), null)
+                sortOrdersEditor.sortOrdersWidget.setNewRowVSFactory {
+                    WorkspaceListSortOrdersTableVSJS().apply {
+                        setColumnName { possibleValues.addAll(columns)}
+                    }
+                }
                 criterionsEditor.setData(it.id, arrayListOf())
             }
         }

@@ -80,6 +80,12 @@ class TextBoxConfiguration() : BaseWidgetConfiguration(){
     }
 }
 
+class RichTextEditorConfiguration() : BaseWidgetConfiguration(){
+    constructor(configure:RichTextEditorConfiguration.()->Unit):this(){
+        configure.invoke(this)
+    }
+}
+
 class PasswordBoxConfiguration() : BaseWidgetConfiguration(){
     constructor(configure:PasswordBoxConfiguration.()->Unit):this(){
         configure.invoke(this)

@@ -15,6 +15,7 @@
         <property id="notEditable" type="BOOLEAN"/>
     </entity>
     <entity id="com.gridnine.jasmine.common.core.model.TextBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>
+    <entity id="com.gridnine.jasmine.common.core.model.RichTextEditorConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>
     <entity id="com.gridnine.jasmine.common.core.model.PasswordBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>
     <entity id="com.gridnine.jasmine.common.core.model.BigDecimalBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>
     <entity id="com.gridnine.jasmine.common.core.model.IntegerNumberBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>

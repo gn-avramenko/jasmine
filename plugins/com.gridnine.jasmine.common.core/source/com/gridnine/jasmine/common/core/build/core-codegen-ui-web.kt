@@ -143,6 +143,7 @@ class UiWebGenerator: CodeGenerator {
             VSPropertyType.DATE_TIME_BOX_SETTINGS -> "${DateTimeBoxConfiguration::class.qualifiedName}JS"
             VSPropertyType.STRING -> null
             VSPropertyType.GENERAL_SELECT_BOX_SETTINGS -> "${GeneralSelectBoxConfiguration::class.qualifiedName}JS"
+            VSPropertyType.RICH_TEXT_EDITOR_SETTINGS ->  "${RichTextEditorConfiguration::class.qualifiedName}JS"
         }
     }
 
@@ -160,6 +161,7 @@ class UiWebGenerator: CodeGenerator {
             VSPropertyType.DATE_TIME_BOX_SETTINGS -> GenPropertyType.ENTITY
             VSPropertyType.STRING -> GenPropertyType.STRING
             VSPropertyType.GENERAL_SELECT_BOX_SETTINGS -> GenPropertyType.ENTITY
+            VSPropertyType.RICH_TEXT_EDITOR_SETTINGS -> GenPropertyType.ENTITY
         }
     }
 

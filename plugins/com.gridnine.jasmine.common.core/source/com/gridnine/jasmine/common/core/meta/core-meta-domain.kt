@@ -98,6 +98,7 @@ abstract class BaseIndexDescription(id:String) : BaseModelElementDescription(id)
     val properties = linkedMapOf<String, IndexPropertyDescription>()
     val collections = linkedMapOf<String, IndexCollectionDescription>()
     val codeInjections = arrayListOf<String>()
+
 }
 
 class AssetDescription(id:String) : BaseIndexDescription(id)

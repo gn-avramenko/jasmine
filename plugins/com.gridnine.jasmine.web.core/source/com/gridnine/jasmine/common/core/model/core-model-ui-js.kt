@@ -6,9 +6,7 @@
 
 package com.gridnine.jasmine.common.core.model
 
-import com.gridnine.jasmine.web.core.common.EnvironmentJS
 import com.gridnine.jasmine.web.core.ui.components.WebNode
-import kotlin.reflect.KClass
 
 
 abstract class BaseVMJS:BaseIntrospectableObjectJS()
@@ -89,6 +87,15 @@ class TextBoxConfigurationJS() : BaseWidgetConfigurationJS(){
     }
     companion object{
         const val qualifiedClassName = "com.gridnine.jasmine.common.core.model.TextBoxConfigurationJS"
+    }
+}
+
+class RichTextEditorConfigurationJS() : BaseWidgetConfigurationJS(){
+    constructor(configure:RichTextEditorConfigurationJS.()->Unit):this(){
+        configure.invoke(this)
+    }
+    companion object{
+        const val qualifiedClassName = "com.gridnine.jasmine.common.core.model.RichTextEditorConfigurationJS"
     }
 }
 
@@ -308,3 +315,9 @@ abstract class BaseTableBoxVVJS:BaseVVJS(){
     }
 }
 
+interface CustomValueWidget<VM:BaseVMJS, VS:BaseVSJS, VV:BaseVVJS>:WebNode{
+    fun getData():VM
+    fun readData(vm:VM, vs:VS?)
+    fun setReadonly(value:Boolean)
+    fun showValidation(vv: VV?)
+}

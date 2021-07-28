@@ -36,7 +36,7 @@ class RemoteGeneralSelectWidget(configure:RemoteGeneralSelectWidgetConfiguration
         }
     }
 
-    fun setProvider(provider:suspend (String)->List<SelectItemJS> ){
+    fun setProvider(provider:suspend (String?)->List<SelectItemJS> ){
         this.provider = provider
         _node.setLoader {
             provider.invoke(it)

@@ -11,6 +11,7 @@ import com.gridnine.jasmine.common.core.meta.DomainMetaRegistryJS
 import com.gridnine.jasmine.common.core.model.BaseIndexJS
 
 abstract class BaseWidgetConfiguration{
+    var notEditable = false
     var width:String? = null
     var height:String? = null
 }

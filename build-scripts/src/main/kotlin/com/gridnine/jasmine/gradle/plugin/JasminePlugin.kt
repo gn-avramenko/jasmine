@@ -40,17 +40,21 @@ class JasminePlugin: Plugin<Project>{
                 it.download = true
             }
             KotlinUtils.createConfiguration(KotlinUtils.WEB_CONFIGURATION_NAME, registry, target, pluginsToFileMap, SpfPluginType.WEB, SpfPluginType.WEB_CORE)
-            target.dependencies.add(KotlinUtils.WEB_CONFIGURATION_NAME, "org.jetbrains.kotlin:kotlin-stdlib-js:${extension.kotlinVersion}")
-            target.dependencies.add(KotlinUtils.WEB_CONFIGURATION_NAME, "org.jetbrains.kotlinx:kotlinx-coroutines-core-js:${extension.kotlinCoroutinesJSVersion}")
-            val jsCompilerAttr = Attribute.of("org.jetbrains.kotlin.js.compiler", String::class.java)
-            val jsUsageAttr = Attribute.of("org.gradle.usage", String::class.java)
-
-            target.dependencies.attributesSchema.attribute(jsCompilerAttr) {
-                it.disambiguationRules.add(KotlinJsCompilerDisambiguationRule::class.java)
+            val corePluginId = registry.plugins.find { KotlinUtils.getType(it) == SpfPluginType.WEB_CORE }!!.id
+            File(pluginsToFileMap[corePluginId], "lib").listFiles().forEach { file ->
+                target.dependencies.add(KotlinUtils.WEB_CONFIGURATION_NAME, target.files(file.absolutePath))
             }
-            target.dependencies.attributesSchema.attribute(jsUsageAttr) {
-                it.disambiguationRules.add(KotlinJsUsageDisambiguationRule::class.java)
-            }
+//            target.dependencies.add(KotlinUtils.WEB_CONFIGURATION_NAME, "org.jetbrains.kotlin:kotlin-stdlib-js:${extension.kotlinVersion}")
+//            target.dependencies.add(KotlinUtils.WEB_CONFIGURATION_NAME, "org.jetbrains.kotlinx:kotlinx-coroutines-core-js:${extension.kotlinCoroutinesJSVersion}")
+//            val jsCompilerAttr = Attribute.of("org.jetbrains.kotlin.js.compiler", String::class.java)
+//            val jsUsageAttr = Attribute.of("org.gradle.usage", String::class.java)
+//
+//            target.dependencies.attributesSchema.attribute(jsCompilerAttr) {
+//                it.disambiguationRules.add(KotlinJsCompilerDisambiguationRule::class.java)
+//            }
+//            target.dependencies.attributesSchema.attribute(jsUsageAttr) {
+//                it.disambiguationRules.add(KotlinJsUsageDisambiguationRule::class.java)
+//            }
         }
 
         target.tasks.create(CreateArtifactsTask.TASK_NAME, CreateArtifactsTask::class.java, extension)

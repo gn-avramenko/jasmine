@@ -167,6 +167,7 @@ class ObjectEditorImpl<W : WebEditor<*, *, *>>(private val obj: OpenObjectData, 
     }
 
     override fun updateButtonsState() {
+        editorButtonsMap.entries.forEach { it.key.setVisible(it.value.isVisible(this@ObjectEditorImpl )) }
         editorButtonsMap.entries.forEach { it.key.setEnabled(it.value.isEnabled(this@ObjectEditorImpl )) }
         menuItemsMap.entries.forEach { mbEntry ->
             mbEntry.value.entries.forEach { miEntry ->
@@ -190,6 +191,7 @@ class ObjectEditorImpl<W : WebEditor<*, *, *>>(private val obj: OpenObjectData, 
                 launch {
                     val response = StandardRestClient.standard_standard_getEditorData(request)
                     (rootWebEditor as WebEditor<BaseVMJS, BaseVSJS, BaseVVJS>).readData(response.viewModel, response.viewSettings)
+                    updateButtonsState()
                     callback.setTitle(response.title)
                 }
             }

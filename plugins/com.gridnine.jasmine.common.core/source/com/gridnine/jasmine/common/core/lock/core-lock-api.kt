@@ -72,27 +72,32 @@ class StandardLockManager: LockManager {
 }
 
 object LockUtils{
-    fun withLock(obj:Any, tryTime:Long, timeUnit:TimeUnit, function:()->Unit){
+    fun<T:Any> withLock(obj:Any, tryTime:Long, timeUnit:TimeUnit, function:()->T):T{
         val lockName = getLockName(obj)
+        lateinit var result:T
         LockManager.get().getLock(lockName).use {
             if(!it.tryLock(tryTime, timeUnit)){
                 throw Xeption.forDeveloper("unable to get lock $lockName during $tryTime $timeUnit")
             }
             try{
-                function.invoke()
+                result = function.invoke()
             } finally {
                 it.unlock()
             }
         }
+        return result
     }
 
-    fun withLock(obj:Any, function:()->Unit){
-        withLock(obj, 1, TimeUnit.MINUTES, function)
+    fun<T:Any> withLock(obj:Any, function:()->T):T{
+        return withLock(obj, 1, TimeUnit.MINUTES, function)
     }
 
     private fun getLockName(obj:Any):String{
         if(obj is BaseIdentity){
             return "${obj::class.qualifiedName}-${obj.uid}"
+        }
+        if(obj is String){
+            return obj
         }
         return "${obj::class.qualifiedName}-${obj.hashCode()}"
     }

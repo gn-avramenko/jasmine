@@ -11,6 +11,7 @@
                     <element name="actions-group" type="tns:actionsGroup"/>
                     <element name="display-handler" type="tns:displayHandlerElement"/>
                     <element name="options-group" type="tns:optionsGroup"/>
+                    <element name = "custom-value-widget" type="tns:customValueWidget"/>
                 </choice>
             </sequence>
         </complexType>
@@ -200,6 +201,16 @@
                 <complexType>
                     <complexContent>
                         <extension base="tns:baseWidget">
+                            <attribute type="boolean" name="multiline" default="false"/>
+                        </extension>
+                    </complexContent>
+                </complexType>
+            </element>
+            <element name="rich-text-editor">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:baseWidget">
+                            <attribute name="height" type="string" />
                         </extension>
                     </complexContent>
                 </complexType>
@@ -208,6 +219,20 @@
                 <complexType>
                     <complexContent>
                         <extension base="tns:baseWidget">
+                        </extension>
+                    </complexContent>
+                </complexType>
+            </element>
+            <element name="custom-value-widget">
+                <complexType>
+                    <complexContent>
+                        <extension base="tns:emptyType">
+                            <sequence minOccurs="0" maxOccurs="unbounded">
+                                <element name="param" type="tns:paramType"
+                                         maxOccurs="unbounded" minOccurs="0">
+                                </element>
+                            </sequence>
+                            <attribute name="ref" type="string"/>
                         </extension>
                     </complexContent>
                 </complexType>
@@ -322,7 +347,95 @@
     <complexType name="baseMetaElement">
         <attribute name="id" type="string" use="required"/>
     </complexType>
+    <complexType name="baseInternalMetaElement">
+        <attribute name="id" type="string"/>
+    </complexType>
     <complexType name="baseWidget">
         <attribute name="not-editable" type="boolean" default="false"/>
+    </complexType>
+    <simpleType name="vmPropertyType">
+        <restriction base="string">
+            <enumeration value="STRING" />
+        </restriction>
+    </simpleType>
+    <simpleType name="vsPropertyType">
+        <restriction base="string">
+            <enumeration value="STRING" />
+        </restriction>
+    </simpleType>
+    <simpleType name="vvPropertyType">
+        <restriction base="string">
+            <enumeration value="STRING" />
+        </restriction>
+    </simpleType>
+    <complexType name="vmProperty">
+        <complexContent>
+            <extension base="tns:baseMetaElement">
+                <attribute name="type" type="tns:vmPropertyType" use="required" />
+                <attribute name="non-nullable" type="boolean"/>
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType name="vsProperty">
+        <complexContent>
+            <extension base="tns:baseMetaElement">
+                <attribute name="type" type="tns:vsPropertyType" use="required" />
+                <attribute name="non-nullable" type="boolean"/>
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType name="vvProperty">
+        <complexContent>
+            <extension base="tns:baseMetaElement">
+                <attribute name="type" type="tns:vvPropertyType" use="required" />
+                <attribute name="non-nullable" type="boolean"/>
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType name="vmEntity">
+        <complexContent>
+            <extension base="tns:baseInternalMetaElement">
+                <sequence>
+                    <choice maxOccurs="unbounded" minOccurs="0">
+                        <element name="property" type="tns:vmProperty"/>
+                    </choice>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType name="vsEntity">
+        <complexContent>
+            <extension base="tns:baseInternalMetaElement">
+                <sequence>
+                    <choice maxOccurs="unbounded" minOccurs="0">
+                        <element name="property" type="tns:vsProperty"/>
+                    </choice>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType name="vvEntity">
+        <complexContent>
+            <extension base="tns:baseInternalMetaElement">
+                <sequence>
+                    <choice maxOccurs="unbounded" minOccurs="0">
+                        <element name="property" type="tns:vvProperty"/>
+                    </choice>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType name="customValueWidget">
+        <complexContent>
+            <extension base="tns:baseMetaElement">
+                <sequence>
+                   <element name="view-model" type="tns:vmEntity"/>
+                    <element name="view-settings" type="tns:vsEntity"/>
+                    <element name="view-validation" type="tns:vvEntity"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType name="emptyType">
     </complexType>
 </schema>

@@ -16,7 +16,8 @@ class StandardOptionsRestHandler :RestHandler<GetOptionsRequest,GetOptionsRespon
     override fun service(request: GetOptionsRequest, ctx: RestOperationContext): GetOptionsResponse {
         val result = GetOptionsResponse()
         UiMetaRegistry.get().optionsGroups[request.groupId]!!.options.forEach {
-            result.options.add(SelectItem(it.id, it.getDisplayName()!!))
+            val displayName = it.getDisplayName()
+            result.options.add(SelectItem(it.id, displayName!!))
         }
         return result
     }

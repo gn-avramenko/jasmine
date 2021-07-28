@@ -17,19 +17,21 @@ import com.gridnine.jasmine.web.core.ui.components.*
 import kotlin.reflect.KClass
 
 class EnumValueWidget<E:Enum<E>>(configure:EnumValueWidgetConfiguration<E>.()->Unit):BaseWebNodeWrapper<WebSelect>(){
-    private val conf =  EnumValueWidgetConfiguration<E>()
+    private val config =  EnumValueWidgetConfiguration<E>()
     private val className:String
+    private var conf:EnumSelectBoxConfigurationJS? = null
+    private var readonly = false
     init {
 
-        conf.configure()
-        className = conf.enumClassName?:ReflectionFactoryJS.get().getQualifiedClassName(conf.enumClass)
+        config.configure()
+        className = config.enumClassName?:ReflectionFactoryJS.get().getQualifiedClassName(config.enumClass)
         _node = WebUiLibraryAdapter.get().createSelect{
-            width = conf.width
-            height = conf.height
+            width = config.width
+            height = config.height
             mode = SelectDataType.LOCAL
             editable = false
             multiple = false
-            showClearIcon = conf.allowNull
+            showClearIcon = config.allowNull
         }
         val possibleValues = arrayListOf<SelectItemJS>()
         val domainDescription = DomainMetaRegistryJS.get().enums[className]
@@ -69,16 +71,20 @@ class EnumValueWidget<E:Enum<E>>(configure:EnumValueWidgetConfiguration<E>.()->U
 
 
     fun setReadonly(value:Boolean){
-        _node.setEnabled(!value)
+        readonly = value
+        updateEnabledMode()
     }
     fun configure(config: EnumSelectBoxConfigurationJS?){
-        config?.let {
-            _node.setEnabled(!config.notEditable)
-        }
+        conf = config
+        updateEnabledMode()
     }
 
     fun showValidation(value:String?){
         _node.showValidation(value)
+    }
+
+    private fun updateEnabledMode() {
+        _node.setEnabled(!((config.notEditable && conf?.notEditable != false) || conf?.notEditable == true || readonly))
     }
 
 }

@@ -57,6 +57,7 @@ interface WebUiLibraryAdapter{
 
     fun createTag(tagName:String, id:String?=null):WebTag
 
+    fun createRichTextEditor(configure:WebRichTextEditorConfiguration.()->Unit):WebRichTextEditor
     companion object{
         fun get() = EnvironmentJS.getPublished(WebUiLibraryAdapter::class)
     }

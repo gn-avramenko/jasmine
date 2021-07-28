@@ -10,6 +10,7 @@ import com.gridnine.jasmine.common.core.app.IPluginActivator
 import com.gridnine.jasmine.common.core.app.Registry
 import com.gridnine.jasmine.common.core.meta.*
 import com.gridnine.jasmine.server.standard.helpers.ObjectEditorsRegistry
+import com.gridnine.jasmine.server.standard.model.SequenceNumberGenerator
 import com.gridnine.jasmine.server.standard.rest.DateWorkspaceFromDtConverter
 import com.gridnine.jasmine.server.standard.rest.DateWorkspaceToDtConverter
 import com.gridnine.jasmine.server.standard.rest.WorkspaceListItemFromDTConverter
@@ -23,6 +24,7 @@ class StandardServerActivator : IPluginActivator{
         Registry.get().register(WorkspaceListItemFromDTConverter())
         Registry.get().register(DateWorkspaceFromDtConverter())
         Environment.publish(ObjectEditorsRegistry())
+        Environment.publish(SequenceNumberGenerator())
     }
 
     override fun activate(config: Properties) {
@@ -37,6 +39,9 @@ class StandardServerActivator : IPluginActivator{
     }
 
     private fun updateOptions(it: BaseIndexDescription) {
+        if(it.parameters["exclude-from-standard.list-ids"] == "true"){
+            return
+        }
         val group = UiMetaRegistry.get().optionsGroups["standard.list-ids"]!!
         val option = OptionDescription(it.id)
         option.displayNames.putAll(it.displayNames)

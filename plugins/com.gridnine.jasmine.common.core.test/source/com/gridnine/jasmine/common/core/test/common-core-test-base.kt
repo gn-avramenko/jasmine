@@ -142,7 +142,7 @@ abstract class CommonCoreTestBase : TestBase() {
     protected fun registerMiscMetadata(result: MiscMetaRegistry) {
     }
 
-    protected fun registerDomainMetadata(result: DomainMetaRegistry) {
+    protected open fun registerDomainMetadata(result: DomainMetaRegistry) {
         DomainMetadataParser.updateDomainMetaRegistry(result, "com/gridnine/jasmine/common/core/test/model/core-test-model-domain.xml", this::class.java.classLoader)
     }
 

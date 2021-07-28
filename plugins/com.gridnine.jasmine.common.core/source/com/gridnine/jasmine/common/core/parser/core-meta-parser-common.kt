@@ -88,7 +88,9 @@ object ParserUtils {
     }
 
     fun updateParameters(node: XmlNode, elm: BaseModelElementDescription) {
-
+        node.children("param").forEach {
+            elm.parameters[it.attributes["name"]!!] = it.attributes["value"]!!
+        }
         node.attributes.entries.forEach {
             val key = it.key
             if (key.startsWith("x-")) {

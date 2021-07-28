@@ -8,6 +8,7 @@
         <lib-dependency group="com.nothome" name="javaxdelta" version="2.0.1"/>
         <lib-dependency group="org.ehcache" name="ehcache" version="3.8.1"/>
         <lib-dependency group="org.slf4j" name="jul-to-slf4j" version="1.7.30"/>
+        <lib-dependency group="org.jetbrains.kotlinx" name="kotlinx-coroutines-core" version="1.4.3"/>
     </dependencies>
     <extension point-id="l10n-metadata">
         <parameter id="url" value="com/gridnine/jasmine/server/core/l10n/core-server-l10n-messages.xml"/>

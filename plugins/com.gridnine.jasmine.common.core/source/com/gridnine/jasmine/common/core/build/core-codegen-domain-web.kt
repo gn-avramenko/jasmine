@@ -32,6 +32,13 @@ class WebDomainGenerator : CodeGenerator {
             }
         """.trimIndent())
         }
+        if (descr is AssetDescription) {
+            result.codeInjections.add("""
+            companion object{
+                val objectId = "${descr.id}JS"
+            }
+        """.trimIndent())
+        }
         return result
     }
 

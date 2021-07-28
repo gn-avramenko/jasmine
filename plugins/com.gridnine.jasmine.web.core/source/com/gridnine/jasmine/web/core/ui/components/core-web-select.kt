@@ -11,7 +11,7 @@ import com.gridnine.jasmine.common.core.model.SelectItemJS
 
 
 interface WebSelect:WebNode{
-    fun setLoader(loader: suspend (String) ->List<SelectItemJS>)
+    fun setLoader(loader: suspend (String?) ->List<SelectItemJS>)
     fun getValues():List<SelectItemJS>
     fun setValues(values: List<SelectItemJS>)
     fun setPossibleValues(values: List<SelectItemJS>)

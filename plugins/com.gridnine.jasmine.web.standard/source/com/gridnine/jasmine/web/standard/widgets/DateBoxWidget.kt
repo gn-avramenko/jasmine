@@ -16,6 +16,10 @@ import kotlin.js.Date
 class DateBoxWidget(configure:DateBoxWidgetConfiguration.()->Unit):BaseWebNodeWrapper<WebDateBox>(){
 
     private val config = DateBoxWidgetConfiguration()
+
+    private var conf:DateBoxConfigurationJS? = null
+
+    private var readonly =false
     init {
         config.configure()
         _node = WebUiLibraryAdapter.get().createDateBox {
@@ -30,13 +34,17 @@ class DateBoxWidget(configure:DateBoxWidgetConfiguration.()->Unit):BaseWebNodeWr
     fun getValue() = _node.getValue()
 
     fun setReadonly(value:Boolean) {
-        _node.setEnabled(!value)
+        readonly = value
+        updateEnabledMode()
     }
 
     fun configure(config: DateBoxConfigurationJS?){
-        config?.let {
-            _node.setEnabled(!config.notEditable)
-        }
+        conf = config
+        updateEnabledMode()
+    }
+
+    private fun updateEnabledMode() {
+        _node.setEnabled(!((config.notEditable && conf?.notEditable != false) || conf?.notEditable == true || readonly))
     }
 
     fun showValidation(value:String?){
