@@ -21,6 +21,7 @@ abstract class BaseReportRequestedParameterHandler<T:Any>(private val id:Enum<*>
             it.id = id.name
             it.name = id.toString()
             it.type = getReportRequestedParameterType()
+            it.multiple = false
             it
         }
     }
@@ -38,6 +39,29 @@ abstract class BaseReportRequestedParameterHandler<T:Any>(private val id:Enum<*>
     }
 }
 
+abstract class BaseReportRequestedListParameterHandler<T:Any>(private val id:Enum<*>):ReportRequestedParameterHandler<List<T>>{
+    override fun createParameterDescription(): ReportRequestedParameterDescription {
+        return ReportRequestedParameterDescription().let{
+            it.objectClassName = getObjectClassName()
+            it.id = id.name
+            it.name = id.toString()
+            it.type = getReportRequestedParameterType()
+            it.multiple = true
+            it
+        }
+    }
+
+    fun getValues(params:List<BaseReportRequestedParameter>):List<T>{
+        return (params.find { it.id == id.name }?.getCollection("values") as List<T>?)?: emptyList()
+    }
+
+    fun getId() = id.name
+
+    abstract fun getReportRequestedParameterType(): ReportRequestedParameterType
+
+    abstract fun getObjectClassName(): String?
+}
+
 abstract class BaseDateReportRequestedParameterHandler(id:Enum<*>):BaseReportRequestedParameterHandler<LocalDate>(id){
     override fun getReportRequestedParameterType(): ReportRequestedParameterType {
         return ReportRequestedParameterType.LOCAL_DATE
@@ -49,6 +73,16 @@ object StartDateReportRequestedParameterHandler:BaseDateReportRequestedParameter
 object EndDateReportRequestedParameterHandler:BaseDateReportRequestedParameterHandler(StandardReportRequestedParameterId.END_DATE)
 
 abstract class BaseObjectReferenceReportRequestedParameterHandler<T:BaseIdentity>(id:Enum<*>, private val cls:KClass<T>):BaseReportRequestedParameterHandler<ObjectReference<T>>(id){
+    override fun getReportRequestedParameterType(): ReportRequestedParameterType {
+        return ReportRequestedParameterType.OBJECT_REFERENCE
+    }
+
+    override fun getObjectClassName(): String? {
+        return cls.qualifiedName
+    }
+}
+
+abstract class BaseObjectReferencesReportRequestedParameterHandler<T:BaseIdentity>(id:Enum<*>, private val cls:KClass<T>):BaseReportRequestedListParameterHandler<ObjectReference<T>>(id){
     override fun getReportRequestedParameterType(): ReportRequestedParameterType {
         return ReportRequestedParameterType.OBJECT_REFERENCE
     }

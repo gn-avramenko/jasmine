@@ -48,6 +48,9 @@ class EntityMultiValuesWidget(configure:EntityMultiValuesWidgetConfiguration.()-
         _node.setValues(list.map { toSelectItem(it) })
     }
 
+    fun showValidation(message:String?){
+        _node.showValidation(message)
+    }
 
     private fun toSelectItem(ref:ObjectReferenceJS): SelectItemJS {
         return SelectItemJS("${ref.type}||${ref.uid}", ref.caption?:"???")

@@ -9,6 +9,7 @@
 		<property id="name" type="STRING" lateinit="true"/>
 		<property id="type" type="ENUM" class-name="com.gridnine.jasmine.common.reports.model.misc.ReportRequestedParameterType" lateinit="true"/>
 		<property id="objectClassName" type="STRING"/>
+		<property id="multiple" type="BOOLEAN" non-nullable="true"/>
 	</entity>
 	<entity id="com.gridnine.jasmine.common.reports.model.misc.ReportGenerationResult"  exposed-at-rest="true">
 		<property id="errorMessage" type="STRING"/>

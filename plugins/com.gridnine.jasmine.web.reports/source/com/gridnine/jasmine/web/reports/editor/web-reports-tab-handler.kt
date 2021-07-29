@@ -115,9 +115,16 @@ class PrepareReportParametersPanel(
             reportParametersDescriptions.forEach { paramDescr ->
                 val uiHandler = when (paramDescr.type) {
                     ReportRequestedParameterTypeJS.LOCAL_DATE -> LocalDateRequestedParameterWebHandler()
-                    ReportRequestedParameterTypeJS.OBJECT_REFERENCE -> ObjectReferenceRequestedParameterWebHandler(
-                        paramDescr.objectClassName!!+"JS"
-                    )
+                    ReportRequestedParameterTypeJS.OBJECT_REFERENCE -> {
+                        if(paramDescr.multiple){
+                            ObjectReferencesRequestedParameterWebHandler(
+                                paramDescr.objectClassName!!+"JS")
+                        } else{
+                            ObjectReferenceRequestedParameterWebHandler(
+                                paramDescr.objectClassName!!+"JS" )
+                        }
+                    }
+
                 } as RequestedParameterWebHandler<BaseReportRequestedParameterJS, WebNode>
                 val editor = uiHandler.createEditor()
                 savedParameters?.parameters?.find { it.id == paramDescr.id }?.let {

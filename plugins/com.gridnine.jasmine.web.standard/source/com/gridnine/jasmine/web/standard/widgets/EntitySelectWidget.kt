@@ -38,30 +38,51 @@ class EntitySelectWidget(configure:EntitySelectWidgetConfiguration.()->Unit):Bas
             multiple = false
             hasDownArrow = false
         }
-        val button = WebUiLibraryAdapter.get().createLinkButton{
-            icon = "core:link"
-        }
-        _node = WebGridLayoutWidget{
-            width = config.width
-            height = config.height
-            noPadding = true
-        }.also {
-            it.setColumnsWidths("100%", "auto")
-            it.addRow(webSelect, button)
-        }
-        webSelect.setLoader { value ->
-            val request = AutocompleteRequestJS()
-            request.autocompleteFieldName = config.handler.getAutocompleteFieldName()
-            request.listId = config.handler.getIndexClassName()
-            request.limit = 10
-            request.pattern = value
-            StandardRestClient.standard_standard_autocomplete(request).items.map {
-                toSelectItem(it.document)
+        if(config.showLinkButton) {
+            val button = WebUiLibraryAdapter.get().createLinkButton {
+                icon = "core:link"
             }
-        }
-        button.setHandler {
-            getValue()?.let {
-                MainFrame.get().openTab(OpenObjectData(it.type, it.uid, null))
+            _node = WebGridLayoutWidget {
+                width = config.width
+                height = config.height
+                noPadding = true
+            }.also {
+                it.setColumnsWidths("100%", "auto")
+                it.addRow(webSelect, button)
+            }
+            webSelect.setLoader { value ->
+                val request = AutocompleteRequestJS()
+                request.autocompleteFieldName = config.handler.getAutocompleteFieldName()
+                request.listId = config.handler.getIndexClassName()
+                request.limit = 10
+                request.pattern = value
+                StandardRestClient.standard_standard_autocomplete(request).items.map {
+                    toSelectItem(it.document)
+                }
+            }
+            button.setHandler {
+                getValue()?.let {
+                    MainFrame.get().openTab(OpenObjectData(it.type, it.uid, null))
+                }
+            }
+        } else {
+            _node = WebGridLayoutWidget {
+                width = config.width
+                height = config.height
+                noPadding = true
+            }.also {
+                it.setColumnsWidths("100%")
+                it.addRow(webSelect)
+            }
+            webSelect.setLoader { value ->
+                val request = AutocompleteRequestJS()
+                request.autocompleteFieldName = config.handler.getAutocompleteFieldName()
+                request.listId = config.handler.getIndexClassName()
+                request.limit = 10
+                request.pattern = value
+                StandardRestClient.standard_standard_autocomplete(request).items.map {
+                    toSelectItem(it.document)
+                }
             }
         }
     }
@@ -106,4 +127,5 @@ class EntitySelectWidget(configure:EntitySelectWidgetConfiguration.()->Unit):Bas
 class EntitySelectWidgetConfiguration:BaseWidgetConfiguration(){
     var showClearIcon = true
     lateinit var handler: AutocompleteHandler
+    var showLinkButton = true
 }

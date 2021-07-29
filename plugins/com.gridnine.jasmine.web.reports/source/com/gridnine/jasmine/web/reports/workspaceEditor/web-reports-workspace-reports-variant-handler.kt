@@ -35,6 +35,7 @@ class WorkspaceReportsItemVariantEditor: BaseWebNodeWrapper<WebGridLayoutWidget>
         _node = WebGridLayoutWidget{}
         value = ReportsWorkspaceItemDTJS().apply {
             listId = ReportDescriptionIndexJS.indexId.substringBeforeLast("JS")
+            columns.add("name")
         }
     }
 }

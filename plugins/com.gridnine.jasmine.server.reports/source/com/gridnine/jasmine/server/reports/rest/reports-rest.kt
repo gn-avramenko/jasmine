@@ -30,6 +30,7 @@ class GetReportParametersDescriptionsRestHandler:RestHandler<GetParametersDescri
                 id = it.id
                 name = it.name
                 type = it.type
+                multiple = it.multiple
                 objectClassName = it.objectClassName
             }
         }

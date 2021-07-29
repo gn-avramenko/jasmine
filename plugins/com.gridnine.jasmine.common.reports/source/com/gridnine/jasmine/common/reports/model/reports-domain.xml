@@ -24,6 +24,9 @@
 		<property id="value" type="ENTITY_REFERENCE" class-name="com.gridnine.jasmine.common.core.model.BaseIdentity"/>
 	</nested-document>
 
+	<nested-document id="com.gridnine.jasmine.common.reports.model.domain.ObjectReferencesReportRequestedParameter" extends="com.gridnine.jasmine.common.reports.model.domain.BaseReportRequestedParameter" exposed-at-rest="true">
+		<collection id="values" element-type="ENTITY_REFERENCE" element-class-name="com.gridnine.jasmine.common.core.model.BaseIdentity"/>
+	</nested-document>
 
 	<document id="com.gridnine.jasmine.common.reports.model.domain.GeneratedReport" exposed-at-rest="true">
 		<property id="fileName" type="STRING"/>

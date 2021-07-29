@@ -126,6 +126,7 @@ class EasyUiWebTagbox(private val config: WebSelectConfiguration) : WebSelect,Ea
             val mode = "remote"
             val panelHeight ="auto"
             val limitToList = true
+            val hasDownArrow = true
             val tagFormatter ={ value:String?, _:dynamic ->
                 value?.substringAfterLast("||") ?: value
             }
