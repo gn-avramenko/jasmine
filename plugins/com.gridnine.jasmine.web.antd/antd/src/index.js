@@ -3,7 +3,7 @@ import 'antd/dist/antd.less'
 import "@ant-design/aliyun-theme/index.less"
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Spin , Layout,Input,Menu,Tabs } from 'antd';
+import { Spin , Layout,Input,Menu,Tabs, Dropdown,Button } from 'antd';
 const { Header, Footer, Sider, Content } = Layout;
 const { SubMenu } = Menu;
 const { TabPane } = Tabs;
@@ -76,6 +76,8 @@ class JasmineReactComponentProxy extends React.Component{
      MenuItem:Menu.Item,
      Tabs:Tabs,
      TabPane:TabPane,
+     Dropdown:Dropdown,
+     Button:Button,
      createProxy:function(callback){
          let index = callbackIndex++
          callbackRegistry.set(index, callback)

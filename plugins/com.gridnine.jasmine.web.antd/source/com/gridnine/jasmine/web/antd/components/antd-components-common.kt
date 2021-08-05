@@ -35,6 +35,8 @@ interface AntdReactFacade {
     val MenuItem:Any
     val Tabs:Any
     val TabPane:Any
+    val Dropdown:Any
+    val Button:Any
     val createProxy: (createCallback:()->ReactElement)->ReactElementWrapper
 }
 

@@ -4,6 +4,7 @@
  *****************************************************************/
 package com.gridnine.jasmine.web.antd.components
 
+import com.gridnine.jasmine.web.core.remote.launch
 import com.gridnine.jasmine.web.core.ui.components.WebNode
 import com.gridnine.jasmine.web.core.ui.components.WebTabPanel
 import com.gridnine.jasmine.web.core.ui.components.WebTabsContainer
@@ -34,7 +35,7 @@ class AntdWebTabsContainer(configure:WebTabsContainerConfiguration.()->Unit):Web
                     style.height = config.height
                 }
             }
-            ReactFacade.createElementWithChildren(ReactFacade.Tabs, object{
+            val props = object{
                 val hideAdd = true
                 val onChange = { key:String ->
                     activeTabId = key
@@ -48,7 +49,30 @@ class AntdWebTabsContainer(configure:WebTabsContainerConfiguration.()->Unit):Web
                     }
                 }
                 val style = style
-            }, tabs.map {
+            }.asDynamic()
+            if(config.tools.isNotEmpty()){
+                val menu = ReactFacade.createElementWithChildren(ReactFacade.Menu,object {
+                    val onClick = {event:dynamic ->
+                        val key = event.key as String
+                        launch {
+                            config.tools[key.toInt()].handler.invoke()
+                        }
+                    }
+                }, config.tools.withIndex().map {
+                    ReactFacade.createElementWithChildren(ReactFacade.MenuItem, object{
+                        val key = it.index.toString()
+                    },it.value.displayName)}.toTypedArray())
+                val dropdown = ReactFacade.createElementWithChildren(ReactFacade.Dropdown, object {
+                   val overlay = menu
+                   val placement = "bottomLeft"
+                }, ReactFacade.createElementWithChildren(ReactFacade.Button,object{
+                                                                                  val size ="large"
+                                                                                  }, "Настройки"))
+                props.tabBarExtraContent = object{
+                    val left =dropdown
+                }
+            }
+            ReactFacade.createElementWithChildren(ReactFacade.Tabs, props, tabs.map {
                 ReactFacade.createElementWithChildren(ReactFacade.TabPane,object{
                     val tab= it.title
                     val key= it.id
