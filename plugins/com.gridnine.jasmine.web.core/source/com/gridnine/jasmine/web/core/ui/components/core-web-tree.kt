@@ -32,6 +32,12 @@ class WebTreeNode(val id:String, var text:String, var userData:Any?, val childre
 class WebTreeConfiguration:BaseWebComponentConfiguration(){
     var fit = true
     var enableDnd = false
+    var mold = WebTreeMold.STANDARD
+}
+
+enum class WebTreeMold{
+    STANDARD,
+    NAVIGATION
 }
 
 enum class WebTreeInsertNodePoint{

@@ -21,7 +21,7 @@ fun main(){
 class WebEasyUiActivator : ActivatorJS{
     override suspend fun activate() {
         EnvironmentJS.publish(WebUiLibraryAdapter::class, EasyUiWebLibraryAdapter())
-        console.log("web easyyui activated")
+        console.log("web easyui activated")
     }
 
     override fun getId(): String {
