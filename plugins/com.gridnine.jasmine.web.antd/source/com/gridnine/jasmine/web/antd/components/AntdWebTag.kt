@@ -27,7 +27,7 @@ class AntdWebTag(private val tagName: String, private val id: String?) : WebTag,
     private var visible = true
 
     override fun createReactElementWrapper(): ReactElementWrapper {
-        return ReactFacade.createProxy {
+        return ReactFacade.createProxyAdvanced({
             if (text != null) {
                 ReactFacade.createElementWithChildren(tagName, createProps(), text!!.asDynamic())
             } else {
@@ -38,8 +38,11 @@ class AntdWebTag(private val tagName: String, private val id: String?) : WebTag,
                 }
                 ReactFacade.createElementWithChildren(tagName, createProps(), ch.toTypedArray())
             }
-        }
-//        return ReactFacade.createElementWrapperWithChildren("div",object{}, text?:"Test")
+        }, if(postRenderAction == null) null else object {
+            val componentDidMount = {
+                postRenderAction!!.invoke()
+            }
+        })
     }
 
     private fun createProps(): dynamic {
@@ -58,6 +61,9 @@ class AntdWebTag(private val tagName: String, private val id: String?) : WebTag,
                     }
                 }
             }
+        }
+        if(classes.isNotEmpty()){
+            result.className = classes.joinToString(" ") { it }
         }
         if (style.isNotEmpty()) {
             val styleParam = js("{}")
@@ -110,6 +116,7 @@ class AntdWebTag(private val tagName: String, private val id: String?) : WebTag,
 
     override fun setPostRenderAction(action: (() -> Unit)?) {
         postRenderAction = action
+        maybeRedraw()
     }
 
     override fun getId(): String? {

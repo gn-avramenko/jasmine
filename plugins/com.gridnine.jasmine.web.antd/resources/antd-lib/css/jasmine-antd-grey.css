@@ -20,8 +20,10 @@ body.loading .loader {
 }
 
 .jasmine-layout-common{
-    background-color: transparent
+    background-color: white !important;
+    padding: 0px !important
 }
+
 .jasmine-layout-left-border{
     border-left: 1px solid black !important
 }
@@ -35,4 +37,34 @@ body.loading .loader {
 
 .jasmine-layout-top-border{
     border-top: 1px solid black !important
+}
+
+.jasmine-grid-container-no-padding{
+    padding: 0px !important;
+}
+
+.jasmine-grid-container-first-row{
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+
+.jasmine-grid-container-other-row{
+    padding-top: 0px !important;
+    padding-bottom: 5px !important;
+}
+
+.jasmine-grid-container-left-column{
+     padding-left: 5px !important;
+     padding-right: 5px !important;
+}
+.jasmine-grid-container-other-column{
+     padding-left: 0px !important;
+     padding-right: 5px !important;
+}
+
+.jasmine-grid-container-only-bottom-padding{
+     padding-left: 0px !important;
+     padding-right: 0px !important;
+     padding-top: 0px !important;
+     padding-bottom: 5px !important;
 }

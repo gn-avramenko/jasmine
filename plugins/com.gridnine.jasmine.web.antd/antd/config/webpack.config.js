@@ -161,7 +161,10 @@ module.exports = function (webpackEnv) {
         loader: require.resolve('less-loader'),
         options: {
          importLoaders: 1,
-          javascriptEnabled: true
+          javascriptEnabled: true,
+          modifyVars: {
+                  'layout-header-height': 'auto',
+          }
         },
        }
     )

@@ -51,31 +51,37 @@ class AntdWebTabsContainer(configure:WebTabsContainerConfiguration.()->Unit):Web
                 val style = style
             }.asDynamic()
             if(config.tools.isNotEmpty()){
-                val menu = ReactFacade.createElementWithChildren(ReactFacade.Menu,object {
-                    val onClick = {event:dynamic ->
-                        val key = event.key as String
-                        launch {
-                            config.tools[key.toInt()].handler.invoke()
+                val proxy = ReactFacade.createProxy{
+                    val menu = ReactFacade.createElementWithChildren(ReactFacade.Menu,object {
+                        val onClick = {event:dynamic ->
+                            val key = event.key as String
+                            launch {
+                                config.tools[key.toInt()].handler.invoke()
+                            }
                         }
-                    }
-                }, config.tools.withIndex().map {
-                    ReactFacade.createElementWithChildren(ReactFacade.MenuItem, object{
-                        val key = it.index.toString()
-                    },it.value.displayName)}.toTypedArray())
-                val dropdown = ReactFacade.createElementWithChildren(ReactFacade.Dropdown, object {
-                   val overlay = menu
-                   val placement = "bottomLeft"
-                }, ReactFacade.createElementWithChildren(ReactFacade.Button,object{
-                                                                                  val size ="large"
-                                                                                  }, "Настройки"))
+                    }, config.tools.withIndex().map {
+                        ReactFacade.createElementWithChildren(ReactFacade.MenuItem, object{
+                            val key = it.index.toString()
+                        },it.value.displayName)}.toTypedArray())
+                    val dropdown = ReactFacade.createElementWithChildren(ReactFacade.Dropdown, object {
+                        val overlay = menu
+                        val placement = "bottomLeft"
+                    }, ReactFacade.createElementWithChildren(ReactFacade.Button,object{
+                        val size ="large"
+                    }, "Настройки"))
+                    dropdown
+                }
                 props.tabBarExtraContent = object{
-                    val left =dropdown
+                    val left =proxy.element
                 }
             }
             ReactFacade.createElementWithChildren(ReactFacade.Tabs, props, tabs.map {
                 ReactFacade.createElementWithChildren(ReactFacade.TabPane,object{
                     val tab= it.title
                     val key= it.id
+                    val style = object{
+                        val minHeight = "100vh"
+                    }
                 }, findAntdComponent(it.content).getReactElement())
             }.toTypedArray() )
         }

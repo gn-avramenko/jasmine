@@ -1,12 +1,12 @@
-import './index.less'
-import 'antd/dist/antd.less'
-import "@ant-design/aliyun-theme/index.less"
+import 'antd/dist/antd.compact.less'
+//import "@ant-design/aliyun-theme/index.less"
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Spin , Layout,Input,Menu,Tabs, Dropdown,Button } from 'antd';
+import { Spin , Layout,Input,Menu,Tabs, Dropdown,Button,Table} from 'antd';
 const { Header, Footer, Sider, Content } = Layout;
 const { SubMenu } = Menu;
 const { TabPane } = Tabs;
+const { Search } = Input;
 
 let callbackRegistry = new Map()
 let callbackIndex = 0
@@ -16,7 +16,6 @@ class JasmineReactComponentProxy extends React.Component{
     constructor(props){
        super(props)
        this.state = {
-           renderCallback: null,
            version: 0
        }
        this.forceRedraw = this.forceRedraw.bind(this)
@@ -29,13 +28,24 @@ class JasmineReactComponentProxy extends React.Component{
         })
     }
 
+    componentDidMount(){
+        let callbacks = callbackRegistry.get(this.props.callbackIndex)
+        if(callbacks.componentDidMount){
+            callbacks.componentDidMount(this)
+        }
+    }
+
     componentWillUnmount(){
+        let callbacks = callbackRegistry.get(this.props.callbackIndex)
+        if(callbacks.componentWillUnmount){
+            callbacks.componentWillUnmount(this)
+        }
         callbackRegistry.delete(this.props.callbackIndex)
         this.forceRedraw  = null
     }
 
     render() {
-        return callbackRegistry.get(this.props.callbackIndex)()
+        return callbackRegistry.get(this.props.callbackIndex).renderCallback()
     }
     
 }
@@ -78,9 +88,14 @@ class JasmineReactComponentProxy extends React.Component{
      TabPane:TabPane,
      Dropdown:Dropdown,
      Button:Button,
-     createProxy:function(callback){
+     Fragment:React.Fragment,
+     Search:Search,
+     Table:Table,
+     createProxyAdvanced:function(renderCallback, otherCallbacks){
+         let allCallbacks = otherCallbacks || {}
+         allCallbacks.renderCallback = renderCallback
          let index = callbackIndex++
-         callbackRegistry.set(index, callback)
+         callbackRegistry.set(index, allCallbacks)
          let compRef = React.createRef()
          let props ={
             ref: compRef,
@@ -88,7 +103,10 @@ class JasmineReactComponentProxy extends React.Component{
          }
          let elm = React.createElement(JasmineReactComponentProxy,props)
          return {element: elm,ref: compRef}
-     }
+     },
+     createProxy:function(renderCallback){
+        return this.createProxyAdvanced(renderCallback, null)        
+    }
  }
 
 //let compRef = React.createRef()

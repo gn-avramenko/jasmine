@@ -65,6 +65,7 @@ class AntdWebBorderContainer(configure: WebBorderContainerConfiguration.()->Unit
                     props.style = style
                     if(northRegion.config.height != null){
                         style.height  = "${northRegion.config.height}px"
+                        style["line-height"]  = "${northRegion.config.height}px"
                     }
                     northRegion.element = ReactFacade.createElementWithChildren(ReactFacade.LayoutHeader, props, arrayOf(
                         findAntdComponent(northRegion.config.content).getReactElement()))
@@ -92,7 +93,9 @@ class AntdWebBorderContainer(configure: WebBorderContainerConfiguration.()->Unit
             val centerRegion = regions[WebBorderRegionType.CENTER]
             if(centerRegion != null){
                 if(centerRegion.element == null){
-                    centerRegion.element = ReactFacade.createElementWithChildren(ReactFacade.LayoutContent, object{}, arrayOf(
+                    val props = js("{}")
+                    props.className = "jasmine-layout-common"
+                    centerRegion.element = ReactFacade.createElementWithChildren(ReactFacade.LayoutContent, props, arrayOf(
                         findAntdComponent(centerRegion.config.content).getReactElement()))
                 }
                 children.add(centerRegion.element!!)
