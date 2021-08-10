@@ -54,6 +54,10 @@ class EnumMultiValuesWidget<E:Enum<E>>(configure:EnumMultiValuesWidgetConfigurat
         })
     }
 
+    fun showValidation(validation: String) {
+        _node.showValidation(validation)
+    }
+
 }
 
 class EnumMultiValuesWidgetConfiguration:BaseWidgetConfiguration(){

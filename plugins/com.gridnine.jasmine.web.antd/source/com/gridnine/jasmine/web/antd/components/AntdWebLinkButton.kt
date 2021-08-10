@@ -22,7 +22,7 @@ class AntdWebLinkButton(configure:WebLinkButtonConfiguration.()->Unit) : WebLink
     }
     override fun createReactElementWrapper(): ReactElementWrapper {
 
-        return ReactFacade.createProxy{
+        return ReactFacade.createProxy{callbackIndex ->
             if(!visible){
                 ReactFacade.createElement(ReactFacade.Fragment, object{})
             } else {
@@ -31,20 +31,29 @@ class AntdWebLinkButton(configure:WebLinkButtonConfiguration.()->Unit) : WebLink
                 props.style = object {
                     val display = if (visible) "inline-block" else "none"
                 }.asDynamic()
+                when(config.icon){
+                    "core:link" -> {props.icon = ReactFacade.createElement(ReactFacade.IconLinkOutlined, object{})}
+                }
                 if (config.height != null) {
                     props.style.height = config.height
                 }
                 if (config.width != null) {
                     props.style.width = config.width
                 }
-                props.onClick = {
+                ReactFacade.callbackRegistry.get(callbackIndex).onClick = {
                     if (this.handler != null) {
                         launch {
                             this.handler!!.invoke()
                         }
                     }
                 }
-                ReactFacade.createElementWithChildren(ReactFacade.Button, props, config.title!!)
+                props.onClick = {ReactFacade.callbackRegistry.get(callbackIndex).onClick()}
+                if(config.title != null){
+                    ReactFacade.createElementWithChildren(ReactFacade.Button, props, config.title!!)
+                } else {
+                    ReactFacade.createElement(ReactFacade.Button, props)
+                }
+
             }
         }
 

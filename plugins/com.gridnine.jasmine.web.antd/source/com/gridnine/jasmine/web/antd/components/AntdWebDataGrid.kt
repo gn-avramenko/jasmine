@@ -35,15 +35,17 @@ class AntdWebDataGrid<E:BaseIntrospectableObjectJS>(configure:WebDataGridConfigu
     init {
         config.configure()
         columns = config.columns.map {conf ->
+            val fieldId = conf.fieldId
+            val formatter = conf.formatter
             val res = object{
                 val title = conf.title
                 val dataIndex = conf.fieldId
                 val sorter = conf.sortable
                 val render = { _:dynamic, record:E, index:Int ->
-                    if(conf.formatter != null){
-                        ReactFacade.createElementWithChildren(ReactFacade.Fragment, object{}, conf.formatter!!.invoke(record.getValue(conf.fieldId), record, index)?:"")
+                    if(formatter != null){
+                        ReactFacade.createElementWithChildren(ReactFacade.Fragment, object{}, formatter.invoke(record.getValue(fieldId), record, index)?:"")
                     } else {
-                        ReactFacade.createElementWithChildren(ReactFacade.Fragment, object{},record.getValue(conf.fieldId).toString())
+                        ReactFacade.createElementWithChildren(ReactFacade.Fragment, object{},record.getValue(fieldId).toString())
                     }
                 }
                 val align = when(conf.horizontalAlignment){
@@ -63,7 +65,7 @@ class AntdWebDataGrid<E:BaseIntrospectableObjectJS>(configure:WebDataGridConfigu
     private var loader: (suspend (WebDataGridRequest) -> WebDataGridResponse<E>)? = null
 
     override fun createReactElementWrapper(): ReactElementWrapper {
-        return ReactFacade.createProxyAdvanced({
+        return ReactFacade.createProxyAdvanced({ callbacks ->
              val props = object {}.asDynamic()
              props.style = object {}.asDynamic()
              if(config.fit){

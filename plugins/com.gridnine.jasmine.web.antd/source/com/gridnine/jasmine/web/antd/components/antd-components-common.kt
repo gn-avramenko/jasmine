@@ -8,6 +8,7 @@ import com.gridnine.jasmine.common.core.model.XeptionJS
 import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
 import com.gridnine.jasmine.web.core.ui.components.WebNode
 import org.w3c.dom.Element
+import kotlin.js.Date
 
 interface ReactElement
 
@@ -40,8 +41,21 @@ interface AntdReactFacade {
     val Fragment:Any
     val Search:Any
     val Table:Any
-    val createProxyAdvanced: (createCallback:()->ReactElement, otherCallbacks:Any?)->ReactElementWrapper
-    val createProxy: (createCallback:()->ReactElement)->ReactElementWrapper
+    val DebounceSelect:Any
+    val Select:Any
+    val Tooltip:Any
+    val IconLinkOutlined:Any
+    val SelectOption:Any
+    val DatePicker:Any
+    val dateToMoment: (Date?) ->Any?
+    val momentToDate: (Any?) ->Date?
+    val momentToDateTime: (Any?) ->Date?
+    val IconEyeTwoTone:Any
+    val IconEyeInvisibleOutlined:Any
+    val PasswordBox:Any
+    val callbackRegistry:dynamic
+    val createProxyAdvanced: (createCallback:(Int)->ReactElement, otherCallbacks:Any?)->ReactElementWrapper
+    val createProxy: (createCallback:(Int)->ReactElement)->ReactElementWrapper
 }
 
 external val ReactFacade: AntdReactFacade = definedExternally

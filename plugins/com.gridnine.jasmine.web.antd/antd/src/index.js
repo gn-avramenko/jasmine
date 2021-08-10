@@ -2,11 +2,17 @@ import 'antd/dist/antd.compact.less'
 //import "@ant-design/aliyun-theme/index.less"
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Spin , Layout,Input,Menu,Tabs, Dropdown,Button,Table} from 'antd';
+import { Spin , Layout,Input,Menu,Tabs, Dropdown,Button,Table,Select,Tooltip,DatePicker} from 'antd';
+import debounce from "lodash/debounce";
+import {LinkOutlined,EyeInvisibleOutlined, EyeTwoTone} from '@ant-design/icons';
+import moment from 'moment';
 const { Header, Footer, Sider, Content } = Layout;
 const { SubMenu } = Menu;
 const { TabPane } = Tabs;
 const { Search } = Input;
+const { Option } = Select;
+
+
 
 let callbackRegistry = new Map()
 let callbackIndex = 0
@@ -45,10 +51,70 @@ class JasmineReactComponentProxy extends React.Component{
     }
 
     render() {
-        return callbackRegistry.get(this.props.callbackIndex).renderCallback()
+        return callbackRegistry.get(this.props.callbackIndex).renderCallback(this.props.callbackIndex)
     }
     
 }
+
+function DebounceSelect({ fetchOptions, debounceTimeout = 800, ...props }) {
+  const [fetching, setFetching] = React.useState(false);
+  const [initialized, setInitialized] = React.useState(false);
+  const [options, setOptions] = React.useState([]);
+  const fetchRef = React.useRef(0);
+  const debounceFetcher = React.useMemo(() => {
+    const loadOptions = (value) => {
+      fetchRef.current += 1;
+      const fetchId = fetchRef.current;
+      setOptions([]);
+      setFetching(true);
+      fetchOptions(value, (newOptions) => {
+        if (fetchId !== fetchRef.current) {
+          // for fetch callback order
+          return;
+        }
+
+        setOptions(newOptions);
+        setFetching(false);
+        setInitialized(true);
+      });
+    };
+
+    return debounce(loadOptions, debounceTimeout);
+  }, [fetchOptions, debounceTimeout]);
+  const handleOnDropdownVisibleChange = (open) => {
+    if (!open) {
+      setInitialized(false);
+      return;
+    }
+    if (fetching || initialized) {
+      return;
+    }
+    fetchRef.current += 1;
+    const fetchId = fetchRef.current;
+    setOptions([]);
+    setFetching(true);
+    fetchOptions("", (newOptions) => {
+      if (fetchId !== fetchRef.current) {
+        // for fetch callback order
+        return;
+      }
+
+      setOptions(newOptions);
+      setFetching(false);
+      setInitialized(true);
+    });
+  };
+  return (
+    <Select
+      labelInValue
+      onSearch={debounceFetcher}
+      onDropdownVisibleChange={handleOnDropdownVisibleChange}
+      notFoundContent={fetching ? <Spin size="small" /> : null}
+      {...props}
+      options={options}
+    />
+  );
+} 
 
  window.ReactFacade ={
      render:ReactDOM.render,
@@ -74,6 +140,7 @@ class JasmineReactComponentProxy extends React.Component{
                ref: compRef
             }
      },
+     callbackRegistry:callbackRegistry,
      Layout: Layout,
      LayoutHeader:Header,
      LayoutFooter: Footer,
@@ -91,6 +158,15 @@ class JasmineReactComponentProxy extends React.Component{
      Fragment:React.Fragment,
      Search:Search,
      Table:Table,
+     DebounceSelect:DebounceSelect,
+     Select:Select,
+     SelectOption:Option,
+     Tooltip:Tooltip,
+     IconLinkOutlined:LinkOutlined,
+     DatePicker:DatePicker,
+     IconEyeInvisibleOutlined: EyeInvisibleOutlined, 
+     IconEyeTwoTone:EyeTwoTone,
+     PasswordBox:Input.Password,
      createProxyAdvanced:function(renderCallback, otherCallbacks){
          let allCallbacks = otherCallbacks || {}
          allCallbacks.renderCallback = renderCallback
@@ -106,101 +182,21 @@ class JasmineReactComponentProxy extends React.Component{
      },
      createProxy:function(renderCallback){
         return this.createProxyAdvanced(renderCallback, null)        
+    },
+    dateToMoment:function(date){
+        return date? moment(date): null
+    }, 
+    momentToDate:function(moment){
+        if(!moment){
+            return null
+        }
+        return new Date(moment.year(), moment.month(), moment.date())
+    },
+    momentToDateTime:function(moment){
+        if(!moment){
+            return null
+        }
+        return new Date(moment.year(), moment.month(), moment.date(), moment.hour(), moment.minute(), moment.second())
     }
  }
-
-//let compRef = React.createRef()
-//let elm = React.createElement(Input,{
-//    ref: compRef
-//})
-//ReactDOM.render(elm, document.getElementById("root"))
-//compRef.current.setState({
-//    value : "test2"
-//})
-
-// class JasmineReactComponentProxy extends React.Component{
-
-//     constructor(props){
-//        super(props)
-//        this.nestedComponentRef = React.createRef()
-//        props.componentSetter(this)
-//        props.nestedComponentSetter(this.nestedComponentRef)
-//        this.renderCallback = props.renderCallback
-//        this.state = {
-//            jasmineVersion: 0
-//        }
-//        this.jasmineRedraw = this.jasmineRedraw.bind(this)
-//     }
-
-//     render() {
-//         // return this.renderCallback()
-//         return React.createElement(Input, {
-//             value: "test",
-//             ref: this.nestedComponentRef
-//         })
-//     }
-
-//     jasmineRedraw(){
-//         // let currentVersion = this.state.jasmineVersion
-//         // this.setState({
-//         //     jasmineVersion : currentVersion+1
-//         //     }
-//         // )
-//         this.nestedComponentRef.current.setState({
-//             value : "test2"
-//         })
-
-//     }
-
-// }
-
-
-
-// //ReactDOM.render(
-// // <Layout>
-// //     <Header>Header</Header>
-// //     <Content>Content</Content>
-// //     <Footer>Footer</Footer>
-// //   </Layout>
-// //   ,
-// //   document.getElementById('root')
-// //   )
-
-// // let elm = React.createElement(Input, {
-// //     value: "test"
-// // })
-// let textValue = "test"
-// let component = undefined
-// let inputRef = undefined
-// let props = {
-//     componentSetter: function(value){
-//        component = value     
-//     },
-//     nestedComponentSetter: function(value){
-//         inputRef = value     
-//      },
-//     renderCallback:function(){
-//         return React.createElement(Input, {
-//                 value: textValue,
-//                 ref: inputRef
-//             })
-//     }
-// }
-// let elm = React.createElement(JasmineReactComponentProxy, props)
-// ReactDOM.render(elm, document.getElementById('root'))
-// console.log(elm)
-// setTimeout(function(){
-//  textValue = "test2"
-//  component.jasmineRedraw()
-// }, 2000)
-// // console.log(inputRef)
-// // setTimeout(function(){
-// //     inputRef.current.setState({
-// //         value: "test2"
-// //     })
-    
-// //    }, 2000)
-// //    setTimeout(function(){
-// //     console.log(inputRef)   
-// //    }, 2000)
 

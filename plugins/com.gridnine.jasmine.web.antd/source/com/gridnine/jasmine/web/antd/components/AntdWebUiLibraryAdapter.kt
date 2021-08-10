@@ -57,11 +57,11 @@ class AntdWebUiLibraryAdapter:WebUiLibraryAdapter {
     }
 
     override fun createDateBox(configure: WebDateBoxConfiguration.() -> Unit): WebDateBox {
-        TODO("Not yet implemented")
+        return AntdWebDateBox(configure)
     }
 
     override fun createDateTimeBox(configure: WebDateTimeBoxConfiguration.() -> Unit): WebDateTimeBox {
-        TODO("Not yet implemented")
+        return AntdWebDateTimeBox(configure)
     }
 
     override fun createLinkButton(configure: WebLinkButtonConfiguration.() -> Unit): WebLinkButton {
@@ -73,15 +73,20 @@ class AntdWebUiLibraryAdapter:WebUiLibraryAdapter {
     }
 
     override fun createSelect(configure: WebSelectConfiguration.() -> Unit): WebSelect {
-        TODO("Not yet implemented")
+        val config = WebSelectConfiguration()
+        config.configure()
+        if(config.mode == SelectDataType.LOCAL){
+            return AntdWebLocalSelect(config)
+        }
+        return AntdWebRemoteSelect(config)
     }
 
     override fun createTextBox(configure: WebTextBoxConfiguration.() -> Unit): WebTextBox {
-        TODO("Not yet implemented")
+       return AntdWebTextBox(configure)
     }
 
     override fun createPasswordBox(configure: WebPasswordBoxConfiguration.() -> Unit): WebPasswordBox {
-        TODO("Not yet implemented")
+        return AntdWebPasswordBox(configure)
     }
 
     override fun showWindow(component: WebNode) {
