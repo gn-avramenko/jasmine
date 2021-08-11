@@ -4,17 +4,14 @@
  *****************************************************************/
 package com.gridnine.jasmine.web.antd.components
 
-import com.gridnine.jasmine.web.core.ui.components.WebDateBox
-import com.gridnine.jasmine.web.core.ui.components.WebDateBoxConfiguration
-import com.gridnine.jasmine.web.core.ui.components.WebTextBox
-import com.gridnine.jasmine.web.core.ui.components.WebTextBoxConfiguration
+import com.gridnine.jasmine.web.core.ui.components.*
 import kotlin.js.Date
 
-class AntdWebTextBox(private val configure: WebTextBoxConfiguration.()->Unit) : WebTextBox, BaseAntdWebUiComponent() {
+class AntdWebNumberBox(private val configure: WebNumberBoxConfiguration.()->Unit) : WebNumberBox, BaseAntdWebUiComponent() {
 
-    private val config = WebTextBoxConfiguration()
+    private val config = WebNumberBoxConfiguration()
 
-    private var value:String? = null
+    private var value:Double? = null
 
     private var enabled = true
 
@@ -26,48 +23,53 @@ class AntdWebTextBox(private val configure: WebTextBoxConfiguration.()->Unit) : 
     override fun createReactElementWrapper(): ReactElementWrapper {
         return ReactFacade.createProxy{callbackIndex:Int ->
             val props = js("{}")
-            props.allowClear = true
             props.disabled = !enabled
             props.value = value
-            props.style = js("{}")
+            props.style =  js("{}")
+            props.precision = config.precision
             config.width?.let { props.style.width = it }
             config.height?.let { props.style.height = it }
             if (validationMessage != null) {
                 props.className = "jasmine-input-error"
             }
-            ReactFacade.callbackRegistry.get(callbackIndex).onChange =  { e:dynamic ->
-                value = e.target.value
+            ReactFacade.callbackRegistry.get(callbackIndex).onChange =  { number:Any? ->
+                if(number is Number){
+                    value = number.toDouble()
+                } else if(number is String){
+                    value = number.toDouble()
+                } else {
+                    value = null
+                }
                 maybeRedraw()
             }
             props.onChange = {e:dynamic -> ReactFacade.callbackRegistry.get(callbackIndex).onChange(e)}
             if (validationMessage != null) {
                 ReactFacade.createElementWithChildren(ReactFacade.Tooltip, object {
                     val title = validationMessage
-                }, ReactFacade.createElement(ReactFacade.Input, props))
+                }, ReactFacade.createElement(ReactFacade.InputNumber, props))
             } else {
-                ReactFacade.createElement(ReactFacade.Input, props)
+                ReactFacade.createElement(ReactFacade.InputNumber, props)
             }
         }
     }
 
-    override fun getValue(): String? {
+    override fun getValue(): Double? {
         return value
     }
 
-    override fun setValue(value: String?) {
+    override fun setValue(value: Double?) {
         if(value != this.value){
             this.value = value
             maybeRedraw()
         }
     }
 
-    override fun setDisabled(value: Boolean) {
-        if(enabled != !value){
-            enabled = !value
+    override fun setEnabled(value: Boolean) {
+        if(enabled != value){
+            enabled = value
             maybeRedraw()
         }
     }
-
     override fun showValidation(value: String?) {
         if(value != validationMessage){
             validationMessage = value

@@ -14,6 +14,7 @@ import com.gridnine.jasmine.common.standard.rest.MessageTypeDTJS
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.DefaultUIParameters
+import com.gridnine.jasmine.web.core.ui.components.NotificationTypeJS
 import com.gridnine.jasmine.web.standard.widgets.EnumValueWidget
 import com.gridnine.jasmine.web.standard.widgets.WebGridLayoutWidget
 import com.gridnine.jasmine.web.standard.widgets.WebLabelWidget
@@ -46,12 +47,11 @@ object StandardUiUtils {
         if(message == null){
             return
         }
-        val formatedMessage = when (message.type){
-            MessageTypeDTJS.MESSAGE -> "<div class=\"notification-message\">${message.message}</div>"
-            MessageTypeDTJS.WARNING -> "<div class=\"notification-warning\">${message.message}</div>"
-            MessageTypeDTJS.ERROR -> "<div class=\"notification-error\">${message.message}</div>"
-        }
-        WebUiLibraryAdapter.get().showNotification(formatedMessage, 3000)
+        WebUiLibraryAdapter.get().showNotification(message.message, when (message.type){
+            MessageTypeDTJS.MESSAGE -> NotificationTypeJS.INFO
+            MessageTypeDTJS.WARNING -> NotificationTypeJS.WARNING
+            MessageTypeDTJS.ERROR -> NotificationTypeJS.ERROR
+        },   3000)
     }
 
     fun showMessage(message: String){

@@ -53,7 +53,11 @@ interface AntdReactFacade {
     val IconEyeTwoTone:Any
     val IconEyeInvisibleOutlined:Any
     val PasswordBox:Any
+    val InputNumber:Any
+    val notification:dynamic
     val callbackRegistry:dynamic
+    val Modal:Any
+    val Switch:Any
     val createProxyAdvanced: (createCallback:(Int)->ReactElement, otherCallbacks:Any?)->ReactElementWrapper
     val createProxy: (createCallback:(Int)->ReactElement)->ReactElementWrapper
 }

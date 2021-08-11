@@ -25,11 +25,11 @@ class AntdWebDateTimeBox(private val configure: WebDateTimeBoxConfiguration.()->
 
     override fun createReactElementWrapper(): ReactElementWrapper {
         return ReactFacade.createProxy{callbackIndex->
-            val props = object {}.asDynamic()
+            val props = js("{}")
             props.allowClear = true
             props.disabled = !enabled
             props.value = ReactFacade.dateToMoment(value)
-            props.style = object {}.asDynamic()
+            props.style = js("{}")
             props.format = "yyyy-MM-DD HH:mm"
             config.width?.let { props.style.width = it }
             config.height?.let { props.style.height = it }
@@ -42,10 +42,10 @@ class AntdWebDateTimeBox(private val configure: WebDateTimeBoxConfiguration.()->
             }
             props.onChange = {e:dynamic -> ReactFacade.callbackRegistry.get(callbackIndex).onChange(e)}
 
-            props.showTime = object{
-                val showNow = true
-                val hideDisabledOptions = true
-            }
+            val showTime = js("{}")
+            showTime.showNow = true
+            showTime.hideDisabledOptions = true
+            props.showTime = showTime
             if (validationMessage != null) {
                 ReactFacade.createElementWithChildren(ReactFacade.Tooltip, object {
                     val title = validationMessage

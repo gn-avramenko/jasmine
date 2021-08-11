@@ -45,3 +45,9 @@ object DefaultUIParameters{
     var controlWidth = 200
     var controlWidthAsString = "200px"
 }
+
+enum class NotificationTypeJS{
+    INFO,
+    WARNING,
+    ERROR
+}

@@ -66,8 +66,8 @@ class AntdWebDataGrid<E:BaseIntrospectableObjectJS>(configure:WebDataGridConfigu
 
     override fun createReactElementWrapper(): ReactElementWrapper {
         return ReactFacade.createProxyAdvanced({ callbacks ->
-             val props = object {}.asDynamic()
-             props.style = object {}.asDynamic()
+             val props = js("{}")
+             props.style = js("{}")
              if(config.fit){
                  props.style.width  = "100%"
                  props.style.height  = "100%"

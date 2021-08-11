@@ -2,7 +2,7 @@ import 'antd/dist/antd.compact.less'
 //import "@ant-design/aliyun-theme/index.less"
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Spin , Layout,Input,Menu,Tabs, Dropdown,Button,Table,Select,Tooltip,DatePicker} from 'antd';
+import { Spin , Layout,Input,Menu,Tabs, Dropdown,Button,Table,Select,Tooltip,DatePicker,InputNumber,notification,Modal,Switch} from 'antd';
 import debounce from "lodash/debounce";
 import {LinkOutlined,EyeInvisibleOutlined, EyeTwoTone} from '@ant-design/icons';
 import moment from 'moment';
@@ -32,6 +32,13 @@ class JasmineReactComponentProxy extends React.Component{
         this.setState({
             version: newVersion
         })
+    }
+
+    componentDidUpdate(prevProps) {
+      let callbacks = callbackRegistry.get(this.props.callbackIndex)
+      if(callbacks.componentDidUpdate){
+          callbacks.componentDidUpdate(prevProps)
+      }
     }
 
     componentDidMount(){
@@ -167,6 +174,10 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 800, ...props }) {
      IconEyeInvisibleOutlined: EyeInvisibleOutlined, 
      IconEyeTwoTone:EyeTwoTone,
      PasswordBox:Input.Password,
+     InputNumber:InputNumber,
+     notification:notification,
+     Modal:Modal,
+     Switch:Switch,
      createProxyAdvanced:function(renderCallback, otherCallbacks){
          let allCallbacks = otherCallbacks || {}
          allCallbacks.renderCallback = renderCallback

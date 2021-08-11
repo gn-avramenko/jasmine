@@ -26,14 +26,14 @@ class AntdWebRemoteSelect(private val config: WebSelectConfiguration) : WebSelec
 
     override fun createReactElementWrapper(): ReactElementWrapper {
         return ReactFacade.createProxy {callbackIndex ->
-            val props = object {}.asDynamic()
+            val props = js("{}")
             if(config.multiple){
                 props.mode = "multiple"
             } else {
                 props.showSearch = "true"
             }
             props.allowClear = config.showClearIcon
-            props.style = object {}.asDynamic()
+            props.style = js("{}")
             config.width?.let { props.style.width = it }
             config.height?.let { props.style.height = it }
             if (validationMessage != null) {

@@ -69,7 +69,7 @@ class AntdWebUiLibraryAdapter:WebUiLibraryAdapter {
     }
 
     override fun createNumberBox(configure: WebNumberBoxConfiguration.() -> Unit): WebNumberBox {
-        TODO("Not yet implemented")
+        return AntdWebNumberBox(configure)
     }
 
     override fun createSelect(configure: WebSelectConfiguration.() -> Unit): WebSelect {
@@ -93,12 +93,38 @@ class AntdWebUiLibraryAdapter:WebUiLibraryAdapter {
         ReactFacade.render(findAntdComponent(component).getReactElement(), document.getElementsByTagName("body").item(0) as Element)
     }
 
-    override fun showNotification(message: String, timeout: Int) {
-        TODO("Not yet implemented")
+    override fun showNotification(message: String, notificationType: NotificationTypeJS, timeout: Int) {
+        when (notificationType){
+            NotificationTypeJS.WARNING -> {
+                ReactFacade.notification.warning(object{
+                    val message = "Предупреждение"
+                    val description = message
+                    val duration = timeout/1000
+                    val placement = "bottomRight"
+                })
+            }
+            NotificationTypeJS.ERROR -> {
+                ReactFacade.notification.error(object{
+                    val message = "Ошибка"
+                    val description = message
+                    val duration = timeout/1000
+                    val placement = "bottomRight"
+                })
+            }
+            else -> {
+                ReactFacade.notification.info(object{
+                    val message = "Сообщение"
+                    val description = message
+                    val duration = timeout/1000
+                    val placement = "bottomRight"
+                })
+            }
+        }
+
     }
 
     override fun <W : WebNode> showDialog(dialogContent: W, configure: DialogConfiguration<W>.() -> Unit): Dialog<W> {
-        TODO("Not yet implemented")
+        return AntdWebDialogFactory.showDialog(dialogContent, configure)
     }
 
     override fun createMenuButton(configure: WebMenuButtonConfiguration.() -> Unit): WebMenuButton {
@@ -106,11 +132,11 @@ class AntdWebUiLibraryAdapter:WebUiLibraryAdapter {
     }
 
     override fun createBooleanBox(configure: WebBooleanBoxConfiguration.() -> Unit): WebBooleanBox {
-        TODO("Not yet implemented")
+        return AntdWebBooleanBox(configure)
     }
 
     override fun createPanel(configure: WebPanelConfiguration.() -> Unit): WebPanel {
-        TODO("Not yet implemented")
+        return AntdWebPanel(configure)
     }
 
     override fun showContextMenu(items: List<WebContextMenuItem>, pageX: Int, pageY: Int) {

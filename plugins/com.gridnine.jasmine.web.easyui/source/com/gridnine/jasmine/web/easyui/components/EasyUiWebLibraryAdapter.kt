@@ -89,12 +89,17 @@ class EasyUiWebLibraryAdapter :WebUiLibraryAdapter{
         }
     }
 
-    override fun showNotification(message: String, timeout: Int) {
-            jQuery.messager.show(object{
-                val msg = message
-                val timeout = timeout
-                val showType = "show"
-            })
+    override fun showNotification(message: String, notificationType:NotificationTypeJS, timeout: Int) {
+        val formatedMessage = when (notificationType){
+            NotificationTypeJS.INFO -> "<div class=\"notification-message\">${message}</div>"
+            NotificationTypeJS.WARNING -> "<div class=\"notification-warning\">${message}</div>"
+            NotificationTypeJS.ERROR -> "<div class=\"notification-error\">${message}</div>"
+        }
+        jQuery.messager.show(object{
+            val msg = message
+            val timeout = timeout
+            val showType = "show"
+        })
     }
 
 

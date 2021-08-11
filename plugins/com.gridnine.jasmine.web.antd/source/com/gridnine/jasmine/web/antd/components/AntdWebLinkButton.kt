@@ -4,6 +4,7 @@
  *****************************************************************/
 package com.gridnine.jasmine.web.antd.components
 
+import com.gridnine.jasmine.common.core.model.XeptionJS
 import com.gridnine.jasmine.web.core.remote.launch
 import com.gridnine.jasmine.web.core.ui.components.WebLinkButton
 import com.gridnine.jasmine.web.core.ui.components.WebLinkButtonConfiguration
@@ -28,11 +29,10 @@ class AntdWebLinkButton(configure:WebLinkButtonConfiguration.()->Unit) : WebLink
             } else {
                 val props = js("{}")
                 props.disabled = !this.enabled
-                props.style = object {
-                    val display = if (visible) "inline-block" else "none"
-                }.asDynamic()
-                when(config.icon){
-                    "core:link" -> {props.icon = ReactFacade.createElement(ReactFacade.IconLinkOutlined, object{})}
+                props.style = js("{}")
+                props.style.display = if (visible) "inline-block" else "none"
+                config.icon?.let{
+                    props.icon = getElementForIcon(it)
                 }
                 if (config.height != null) {
                     props.style.height = config.height
@@ -75,6 +75,15 @@ class AntdWebLinkButton(configure:WebLinkButtonConfiguration.()->Unit) : WebLink
         if(visible != value){
             visible = value
             maybeRedraw()
+        }
+    }
+
+    companion object {
+        fun getElementForIcon(icon:String):ReactElement{
+            return when(icon){
+                "core:link" -> ReactFacade.createElement(ReactFacade.IconLinkOutlined, js("{}"))
+                else ->throw XeptionJS.forDeveloper("unsupported icon $icon")
+            }
         }
     }
 }

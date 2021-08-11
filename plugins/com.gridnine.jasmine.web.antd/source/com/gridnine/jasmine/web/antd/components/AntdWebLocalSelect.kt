@@ -24,22 +24,22 @@ class AntdWebLocalSelect(private val config: WebSelectConfiguration) : WebSelect
 
     override fun createReactElementWrapper(): ReactElementWrapper {
         return ReactFacade.createProxy {callbackIndex:Int ->
-            val props = object {}.asDynamic()
+            val props = js("{}")
             if(config.multiple){
                 props.mode = "multiple"
             }
             props.allowClear = config.showClearIcon
-            props.style = object {}.asDynamic()
+            props.style = js("{}")
             config.width?.let { props.style.width = it }
             config.height?.let { props.style.height = it }
             if (validationMessage != null) {
                 props.className = "jasmine-input-error"
             }
             props.options = options.map {
-                object {
-                    val value = it.id
-                    val label = it.text
-                }
+                val item = js("{}")
+                item.value = it.id
+                item.label = it.text
+                item
             }.toTypedArray()
             props.value =  values.map { it.id}.toTypedArray()
             props.showArrow = config.hasDownArrow

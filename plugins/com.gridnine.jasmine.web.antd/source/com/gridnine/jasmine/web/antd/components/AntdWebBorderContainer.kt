@@ -95,6 +95,11 @@ class AntdWebBorderContainer(configure: WebBorderContainerConfiguration.()->Unit
                 if(centerRegion.element == null){
                     val props = js("{}")
                     props.className = "jasmine-layout-common"
+                    val style = js("{}")
+                    props.style = style
+                    style.overflowY = "auto"
+                    style.overflowX = "auto"
+                    style.minHeight="0px"
                     centerRegion.element = ReactFacade.createElementWithChildren(ReactFacade.LayoutContent, props, arrayOf(
                         findAntdComponent(centerRegion.config.content).getReactElement()))
                 }

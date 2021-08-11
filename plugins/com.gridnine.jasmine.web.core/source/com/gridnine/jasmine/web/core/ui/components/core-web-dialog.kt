@@ -23,6 +23,7 @@ class DialogButtonConfiguration<W> where W: WebNode {
 class DialogConfiguration<W>  where W: WebNode {
     var expandToMainFrame = false
     lateinit var title:String
+    var width = 300
     val buttons = arrayListOf<DialogButtonConfiguration<W>>()
     fun button(conf: DialogButtonConfiguration<W>.()->Unit){
         val button = DialogButtonConfiguration<W>()

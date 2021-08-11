@@ -23,11 +23,11 @@ class AntdWebDateBox(private val configure: WebDateBoxConfiguration.()->Unit) : 
 
     override fun createReactElementWrapper(): ReactElementWrapper {
         return ReactFacade.createProxy{callbackIndex ->
-            val props = object {}.asDynamic()
+            val props = js("{}")
             props.allowClear = true
             props.disabled = !enabled
             props.value = ReactFacade.dateToMoment(value)
-            props.style = object {}.asDynamic()
+            props.style = js("{}")
             config.width?.let { props.style.width = it }
             config.height?.let { props.style.height = it }
             if (validationMessage != null) {

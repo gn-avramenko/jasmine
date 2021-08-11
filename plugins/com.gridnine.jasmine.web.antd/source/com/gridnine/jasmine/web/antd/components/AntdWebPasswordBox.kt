@@ -22,11 +22,11 @@ class AntdWebPasswordBox(private val configure: WebPasswordBoxConfiguration.()->
 
     override fun createReactElementWrapper(): ReactElementWrapper {
         return ReactFacade.createProxy{callbackIndex:Int ->
-            val props = object {}.asDynamic()
+            val props = js("{}")
             props.allowClear = true
             props.disabled = !enabled
             props.value = value
-            props.style = object {}.asDynamic()
+            props.style = js("{}")
             config.width?.let { props.style.width = it }
             config.height?.let { props.style.height = it }
             if (validationMessage != null) {
@@ -67,6 +67,7 @@ class AntdWebPasswordBox(private val configure: WebPasswordBoxConfiguration.()->
 
     override fun setDisabled(value: Boolean) {
         if(enabled != !value){
+            enabled = !value
             maybeRedraw()
         }
     }

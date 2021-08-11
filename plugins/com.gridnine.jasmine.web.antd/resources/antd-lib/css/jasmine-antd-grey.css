@@ -73,3 +73,19 @@ body.loading .loader {
 .jasmine-input-error{
     border: 1px solid red !important;
 }
+
+.jasmine-panel-container{
+    border:1px solid rgba(240,240,240);
+}
+
+.jasmine-panel-header{
+    border-bottom:1px solid rgb(240,240,240);
+    background-color: rgba(0,0,0,0.02);
+    color:rgb(92,107,119);
+    height: 25px;
+}
+
+.jasmine-panel-header-title{
+    margin: 3px;
+    display:inline-block;
+}
