@@ -2,16 +2,19 @@ import 'antd/dist/antd.compact.less'
 //import "@ant-design/aliyun-theme/index.less"
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Spin , Layout,Input,Menu,Tabs, Dropdown,Button,Table,Select,Tooltip,DatePicker,InputNumber,notification,Modal,Switch} from 'antd';
+import { Spin , Layout,Input,Menu,Tabs, Dropdown,Button,Table,Select,Tooltip,DatePicker,InputNumber,notification,Modal,Switch,Collapse,Tree} from 'antd';
 import debounce from "lodash/debounce";
 import {LinkOutlined,EyeInvisibleOutlined, EyeTwoTone} from '@ant-design/icons';
 import moment from 'moment';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 const { Header, Footer, Sider, Content } = Layout;
 const { SubMenu } = Menu;
 const { TabPane } = Tabs;
 const { Search } = Input;
 const { Option } = Select;
-
+const {Panel} = Collapse;
+const { TreeNode } = Tree;
 
 
 let callbackRegistry = new Map()
@@ -178,6 +181,11 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 800, ...props }) {
      notification:notification,
      Modal:Modal,
      Switch:Switch,
+     Collapse:Collapse,
+     Panel:Panel,
+     ReactQuill:ReactQuill,
+     Tree:Tree,
+     TreeNode: TreeNode,
      createProxyAdvanced:function(renderCallback, otherCallbacks){
          let allCallbacks = otherCallbacks || {}
          allCallbacks.renderCallback = renderCallback

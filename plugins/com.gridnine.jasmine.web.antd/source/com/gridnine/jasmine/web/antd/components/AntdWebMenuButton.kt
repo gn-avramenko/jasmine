@@ -9,13 +9,13 @@ import com.gridnine.jasmine.web.core.ui.components.StandardMenuItem
 import com.gridnine.jasmine.web.core.ui.components.WebMenuButton
 import com.gridnine.jasmine.web.core.ui.components.WebMenuButtonConfiguration
 
-class AntdWebMenuButton(configure:WebMenuButtonConfiguration.()->Unit):WebMenuButton, BaseAntdWebUiComponent() {
+class AntdWebMenuButton(configure: WebMenuButtonConfiguration.() -> Unit) : WebMenuButton, BaseAntdWebUiComponent() {
 
     private val config = WebMenuButtonConfiguration()
 
     private var visible = true
 
-    private var handlers = hashMapOf<String, suspend ()-> Unit>()
+    private var handlers = hashMapOf<String, suspend () -> Unit>()
 
     private var enabledItemsMap = hashMapOf<String, Boolean>()
 
@@ -26,36 +26,45 @@ class AntdWebMenuButton(configure:WebMenuButtonConfiguration.()->Unit):WebMenuBu
     }
 
     override fun createReactElementWrapper(): ReactElementWrapper {
-        return ReactFacade.createProxy{
-            if(!visible){
-                ReactFacade.createElement(ReactFacade.Fragment, object{})
-            }  else {
-                val menu = ReactFacade.createElementWithChildren(ReactFacade.Menu,object {
-                    val disabled = !menuEnabled
-                    val onClick = {event:dynamic ->
-                        val key = event.key as String
-                        handlers[key]?.let {
-                            launch {
-                                it.invoke()
-                            }
+        return ReactFacade.createProxy { callbackIndex ->
+            if (!visible) {
+                ReactFacade.createElement(ReactFacade.Fragment, object {})
+            } else {
+                val menuProps = js("{}")
+                menuProps.disabled = !menuEnabled
+                ReactFacade.callbackRegistry.get(callbackIndex).onClick = { event: dynamic ->
+                    val key = event.key as String
+                    handlers[key]?.let {
+                        launch {
+                            it.invoke()
                         }
                     }
-                }, config.elements.filter { it is StandardMenuItem }.map {
-                    it as StandardMenuItem
-                    ReactFacade.createElementWithChildren(ReactFacade.MenuItem, object{
-                        val key = it.id
-                    },it.title!!)}.toTypedArray())
-                val dropdown = ReactFacade.createElementWithChildren(ReactFacade.Dropdown, object {
-                    val overlay = menu
-                    val placement = "bottomLeft"
-                }, ReactFacade.createElementWithChildren(ReactFacade.Button,object{}, config.title!!))
+                }
+                menuProps.onClick = { event: dynamic ->
+                    ReactFacade.callbackRegistry.get(callbackIndex).onClick(event)
+                }
+                val menu = ReactFacade.createElementWithChildren(ReactFacade.Menu, menuProps,
+                    config.elements.filter { it is StandardMenuItem }.map {
+                        it as StandardMenuItem
+                        val menuItemProps = js("{}")
+                        menuItemProps.key = it.id
+                        ReactFacade.createElementWithChildren(ReactFacade.MenuItem, menuItemProps, it.title!!)
+                    }.toTypedArray()
+                )
+                val dropdownProps = js("{}")
+                dropdownProps.overlay = menu
+                dropdownProps.placement = "bottomLeft"
+                val dropdown = ReactFacade.createElementWithChildren(
+                    ReactFacade.Dropdown, dropdownProps,
+                    ReactFacade.createElementWithChildren(ReactFacade.Button, js("{}"), config.title!!)
+                )
                 dropdown
             }
         }
     }
 
     override fun setVisible(value: Boolean) {
-        if(visible != value){
+        if (visible != value) {
             visible = value
             maybeRedraw()
         }
@@ -66,14 +75,14 @@ class AntdWebMenuButton(configure:WebMenuButtonConfiguration.()->Unit):WebMenuBu
     }
 
     override fun setEnabled(id: String, value: Boolean) {
-        if(enabledItemsMap[id] !=  value){
-            enabledItemsMap[id] =  value
+        if (enabledItemsMap[id] != value) {
+            enabledItemsMap[id] = value
             maybeRedraw()
         }
     }
 
     override fun setEnabled(value: Boolean) {
-        if(menuEnabled != value){
+        if (menuEnabled != value) {
             menuEnabled = value
             maybeRedraw()
         }

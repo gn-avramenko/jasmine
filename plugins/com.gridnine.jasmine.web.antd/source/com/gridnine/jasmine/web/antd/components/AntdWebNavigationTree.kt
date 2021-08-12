@@ -84,7 +84,7 @@ class AntdWebNavigationTree (private val config:WebTreeConfiguration): WebTree,B
         throw XeptionJS.forDeveloper("not implemented for NAVIGATION mold")
     }
 
-    override fun setOnContextMenuListener(listener: ((node: WebTreeNode, event: WebTreeContextMenuEvent) -> Unit)?) {
+    override fun setContextMenuBuilder(builder: (WebTreeNode) -> List<WebContextMenuItem>?) {
         throw XeptionJS.forDeveloper("not implemented for NAVIGATION mold")
     }
 

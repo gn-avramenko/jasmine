@@ -58,6 +58,11 @@ interface AntdReactFacade {
     val callbackRegistry:dynamic
     val Modal:Any
     val Switch:Any
+    val Panel:Any
+    val Collapse:Any
+    val ReactQuill:Any
+    val Tree:Any
+    val TreeNode:Any
     val createProxyAdvanced: (createCallback:(Int)->ReactElement, otherCallbacks:Any?)->ReactElementWrapper
     val createProxy: (createCallback:(Int)->ReactElement)->ReactElementWrapper
 }

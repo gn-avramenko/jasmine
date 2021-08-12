@@ -22,7 +22,7 @@ class EasyUiWebTree(configure: WebTreeConfiguration.() -> Unit) : WebTree,EasyUi
     private var onBeforeDropListener: ((target: WebTreeNode, source: WebTreeNode, point: WebTreeInsertNodePoint) -> Boolean)? = null
     private var onDropListener: ((target: WebTreeNode, source: WebTreeNode, point: WebTreeInsertNodePoint) -> Unit)? = null
     private var onDragEnterListener: ((target: WebTreeNode, source: WebTreeNode) -> Boolean)? = null
-    private var onContextMenuListener:((node: WebTreeNode, event: WebTreeContextMenuEvent) -> Unit)? = null
+    private var contextMenuBuilder: ((WebTreeNode) -> List<WebContextMenuItem>?)? = null
     init {
         config.configure()
     }
@@ -55,9 +55,11 @@ class EasyUiWebTree(configure: WebTreeConfiguration.() -> Unit) : WebTree,EasyUi
         onDropListener = listener
     }
 
-    override fun setOnContextMenuListener(listener: ((node: WebTreeNode, event: WebTreeContextMenuEvent) -> Unit)?) {
-        onContextMenuListener = listener
+    override fun setContextMenuBuilder(builder: (WebTreeNode) -> List<WebContextMenuItem>?) {
+        contextMenuBuilder = builder
     }
+
+
 
     override fun findNode(id: String): WebTreeNode? {
         return findNodeInternal(id)?.first
@@ -240,9 +242,12 @@ class EasyUiWebTree(configure: WebTreeConfiguration.() -> Unit) : WebTree,EasyUi
                 )
             }
             val onContextMenu = { e: dynamic, node: dynamic ->
-                onContextMenuListener?.let {
-                    e.preventDefault()
-                    it.invoke(toWebTreeNode(node), WebTreeContextMenuEvent(e.pageX, e.pageY))
+                val treeNode = toWebTreeNode(node)
+                contextMenuBuilder?.let{ builder ->
+                    val menuItems = builder.invoke(treeNode)
+                    if(menuItems != null){
+                        showContextMenu(menuItems, e.pageX, e.pageY)
+                    }
                 }
             }
         })

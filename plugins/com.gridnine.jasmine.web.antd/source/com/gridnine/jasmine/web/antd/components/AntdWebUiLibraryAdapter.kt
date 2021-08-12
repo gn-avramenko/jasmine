@@ -45,7 +45,7 @@ class AntdWebUiLibraryAdapter:WebUiLibraryAdapter {
         if(config.mold == WebTreeMold.NAVIGATION){
             return AntdWebNavigationTree(config)
         }
-        TODO("Not yet implemented")
+        return AntdWebStandardTree(config)
     }
 
     override fun createSearchBox(configure: WebSearchBoxConfiguration.() -> Unit): WebSearchBox {
@@ -139,12 +139,8 @@ class AntdWebUiLibraryAdapter:WebUiLibraryAdapter {
         return AntdWebPanel(configure)
     }
 
-    override fun showContextMenu(items: List<WebContextMenuItem>, pageX: Int, pageY: Int) {
-        TODO("Not yet implemented")
-    }
-
     override fun createAccordionContainer(configure: WebAccordionContainerConfiguration.() -> Unit): WebAccordionContainer {
-        TODO("Not yet implemented")
+        return AntdWebAccordionContainer(configure)
     }
 
     override fun createTag(tagName: String, id: String?): WebTag {
@@ -152,6 +148,6 @@ class AntdWebUiLibraryAdapter:WebUiLibraryAdapter {
     }
 
     override fun createRichTextEditor(configure: WebRichTextEditorConfiguration.() -> Unit): WebRichTextEditor {
-        TODO("Not yet implemented")
+        return AntdWebRichTextEditor(configure)
     }
 }

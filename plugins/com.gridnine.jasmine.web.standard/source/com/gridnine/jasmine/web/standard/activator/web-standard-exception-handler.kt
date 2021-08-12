@@ -21,6 +21,7 @@ class StandardCoroutineExceptionHandler:CoroutineExceptionHandler{
         try {
             WebUiLibraryAdapter.get().showDialog(ExceptionDialogPanel(exceptionText)) {
                 title = "Произошла ошибка"
+                width = 720
                 button {
                     displayName = "Копировать"
                     handler = {dialog->
@@ -97,7 +98,7 @@ internal class ExceptionDialogPanel(errorText:String) : BaseWebNodeWrapper<WebTa
     internal  val textArea:WebTag
     init {
         _node = WebUiLibraryAdapter.get().createTag("div","exception-dialog").also {
-            it.getStyle().setParameters("width" to "700px", "height" to "500px", "overflow-x" to "auto", "overflow-y" to "auto")
+            it.getStyle().setParameters("width" to "700px", "height" to "520px", "overflow-x" to "auto", "overflow-y" to "auto")
         }
         textArea= WebUiLibraryAdapter.get().createTag("textarea","exception-dialog-textarea").also {
             it.getStyle().setParameters("width" to "100%", "height" to "500px","resize" to "none", "border" to "none")

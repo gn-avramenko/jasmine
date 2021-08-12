@@ -14,7 +14,7 @@ interface WebTree: WebNode{
     fun setOnBeforeDropListener(listener:((target:WebTreeNode, source:WebTreeNode, point:WebTreeInsertNodePoint) ->Boolean)?)
     fun setOnDragEnterListener(listener:((target:WebTreeNode, source:WebTreeNode) ->Boolean)?)
     fun setOnDropListener(listener:((target:WebTreeNode, source:WebTreeNode, point:WebTreeInsertNodePoint) ->Unit)?)
-    fun setOnContextMenuListener(listener:((node:WebTreeNode, event:WebTreeContextMenuEvent) ->Unit)?)
+    fun setContextMenuBuilder(builder:(WebTreeNode) ->List<WebContextMenuItem>?)
     fun findNode(id:String):WebTreeNode?
     fun select(id:String)
     fun updateText(id:String, text:String)

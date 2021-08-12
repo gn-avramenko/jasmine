@@ -23,30 +23,42 @@ object AntdWebDialogFactory {
             elm
         }
         val props = js("{}")
+
+        props.destroyOnClose = true
+        props.title = config.title
+        props.visible = true
+        props.closable = true
+        if(config.width != null) {
+            props.width = config.width
+        }
         if(config.expandToMainFrame){
-            val dialogWidth = bodyElm.offsetWidth as Int - 200
+            val dialogWidth = bodyElm.offsetWidth as Int - 100
             val dialogHeight = bodyElm.offsetHeight as Int - 200
             props.style = js("{}")
             props.style.width = dialogWidth
             props.style.height = dialogHeight
+            props.width = dialogWidth
         }
-        props.destroyOnClose = true
-        props.title = config.title
-        props.visible = true
-        props.closable = false
-        props.width = config.width
+
         lateinit var dialog: Dialog<W>
         val reactElement = ReactFacade.createProxy{ idx ->
             val calbacks= ReactFacade.callbackRegistry.get(idx)
+            calbacks.onCancelIcon = {
+                ReactFacade.render(ReactFacade.createElement(ReactFacade.Fragment, object{}), dialogElm)
+            }
+            props.onCancel = {
+                ReactFacade.callbackRegistry.get(idx).onCancelIcon()
+            }
             props.footer = config.buttons.withIndex().map{(buttonIdx, button) ->
                 val buttonProps = js("{}")
-                calbacks["onButton$buttonIdx"] = {
+                val functionName = "onButton$buttonIdx"
+                calbacks[functionName] = {
                     launch {
                         button.handler.invoke(dialog)
                     }
                 }
                 buttonProps.onClick = {
-                    ReactFacade.callbackRegistry.get(idx)["onButton$buttonIdx"]()
+                    ReactFacade.callbackRegistry.get(idx)[functionName]()
                 }
                 ReactFacade.createElementWithChildren(ReactFacade.Button,buttonProps, button.displayName)
             }.toTypedArray()

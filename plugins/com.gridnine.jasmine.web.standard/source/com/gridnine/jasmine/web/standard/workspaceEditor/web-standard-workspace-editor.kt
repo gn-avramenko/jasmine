@@ -125,7 +125,7 @@ class WorkspaceEditor(workspace:WorkspaceDTJS): BaseWebNodeWrapper<WebBorderCont
                 tree.insertBefore(node, target.id)
             }
         }
-        tree.setOnContextMenuListener { node, event ->
+        tree.setContextMenuBuilder { node ->
             node.userData.let { userData ->
                 if(userData is WorkspaceGroupDTJS){
                     val items = arrayListOf<WebContextMenuItem>()
@@ -154,25 +154,33 @@ class WorkspaceEditor(workspace:WorkspaceDTJS): BaseWebNodeWrapper<WebBorderCont
                         tree.remove(node.id)
                         tree.select(tree.getData()[0].id)
                     })
-                    WebUiLibraryAdapter.get().showContextMenu(items, event.pageX, event.pageY)
-                    return@let
-                }
+                    items
+                } else {
                     val items = arrayListOf<WebContextMenuItem>()
-                    items.add(WebContextMenuStandardItem("Добавить элемент", null, false ){
-                        val uid  = MiscUtilsJS.createUUID()
+                    items.add(WebContextMenuStandardItem("Добавить элемент", null, false) {
+                        val uid = MiscUtilsJS.createUUID()
                         tree.insertAfter(WebTreeNode(uid, "Новый элемент", null), node.id)
                         tree.select(uid)
                     })
-                    items.add(WebContextMenuStandardItem("Копировать список", null, false ){
-                        val uid  = MiscUtilsJS.createUUID()
-                        tree.insertAfter(WebTreeNode(uid, "Новый элемент", CloneHelperJS.clone((node.userData?:getElementData(node.id)) as BaseIntrospectableObjectJS, true)), node.id)
+                    items.add(WebContextMenuStandardItem("Копировать список", null, false) {
+                        val uid = MiscUtilsJS.createUUID()
+                        tree.insertAfter(
+                            WebTreeNode(
+                                uid,
+                                "Новый элемент",
+                                CloneHelperJS.clone(
+                                    (node.userData ?: getElementData(node.id)) as BaseIntrospectableObjectJS, true
+                                )
+                            ), node.id
+                        )
                         tree.select(uid)
                     })
-                    items.add(WebContextMenuStandardItem("Удалить список", null, false ){
+                    items.add(WebContextMenuStandardItem("Удалить список", null, false) {
                         tree.remove(node.id)
                         tree.select(tree.getData()[0].id)
                     })
-                    WebUiLibraryAdapter.get().showContextMenu(items, event.pageX, event.pageY)
+                    items
+                }
             }
         }
         tree.setData(workspace.groups.map {wg ->
