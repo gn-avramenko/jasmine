@@ -67,12 +67,18 @@ class AntdWebTag(private val tagName: String, private val id: String?) : WebTag,
         if(classes.isNotEmpty()){
             result.className = classes.joinToString(" ") { it }
         }
+        val styleParam = js("{}")
+        result.style = styleParam
         if (style.isNotEmpty()) {
-            val styleParam = js("{}")
             style.entries.forEach {
                 styleParam[it.key] = it.value
             }
-            result.style = styleParam
+        }
+        val currentDisplay = style["display"]
+        if(!visible){
+            styleParam["display"] = "none"
+        } else if (currentDisplay == "hidden") {
+            styleParam["display"] = undefined
         }
         return result
     }

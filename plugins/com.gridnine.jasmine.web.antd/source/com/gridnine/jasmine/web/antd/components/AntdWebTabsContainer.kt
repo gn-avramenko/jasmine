@@ -142,7 +142,7 @@ class AntdWebTabsContainer(configure: WebTabsContainerConfiguration.() -> Unit) 
 
     override fun removeTab(id: String) {
         tabs.removeAll { it.id == id }
-        activeTabId == if (tabs.isNotEmpty()) tabs[0].id else null
+        activeTabId = if (tabs.isNotEmpty()) tabs[0].id else null
         maybeRedraw()
     }
 

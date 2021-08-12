@@ -21,22 +21,7 @@ class AntdWebBorderContainer(configure: WebBorderContainerConfiguration.()->Unit
     override fun createReactElementWrapper(): ReactElementWrapper {
         return ReactFacade.createProxy{
             val children = arrayListOf<ReactElement>()
-            val eastRegion = regions[WebBorderRegionType.EAST]
-            if(eastRegion != null){
-                if(eastRegion.element == null){
-                    val props = js("{}")
-                    props.className = "jasmine-layout-common"
-                    if(eastRegion.config.showBorder || eastRegion.config.showSplitLine){
-                        props.className+= " jasmine-layout-left-border"
-                    }
-                    if(eastRegion.config.width != null){
-                        props.width =eastRegion.config.width
-                    }
-                    eastRegion.element = ReactFacade.createElementWithChildren(ReactFacade.LayoutSider, props, arrayOf(
-                        findAntdComponent(eastRegion.config.content).getReactElement()))
-                }
-                children.add(eastRegion.element!!)
-            }
+
             val westRegion = regions[WebBorderRegionType.WEST]
             if(westRegion != null){
                 if(westRegion.element == null){
@@ -48,10 +33,15 @@ class AntdWebBorderContainer(configure: WebBorderContainerConfiguration.()->Unit
                     if(westRegion.config.width != null){
                         props.width =westRegion.config.width
                     }
+//                    if(westRegion.config.collapsible){
+//                        props.collapsible = true
+//                    }
+//                    if(westRegion.config.collapsed){
+//                        props.defaultCollapsed = true
+//                    }
                     westRegion.element = ReactFacade.createElementWithChildren(ReactFacade.LayoutSider, props, arrayOf(
                         findAntdComponent(westRegion.config.content).getReactElement()))
                 }
-                children.add(westRegion.element!!)
             }
              val northRegion = regions[WebBorderRegionType.NORTH]
              if(northRegion != null){
@@ -70,8 +60,22 @@ class AntdWebBorderContainer(configure: WebBorderContainerConfiguration.()->Unit
                     northRegion.element = ReactFacade.createElementWithChildren(ReactFacade.LayoutHeader, props, arrayOf(
                         findAntdComponent(northRegion.config.content).getReactElement()))
                 }
-                 children.add(northRegion.element!!)
              }
+
+            val centerRegion = regions[WebBorderRegionType.CENTER]
+            if(centerRegion != null){
+                if(centerRegion.element == null){
+                    val props = js("{}")
+                    props.className = "jasmine-layout-common"
+                    val style = js("{}")
+                    props.style = style
+                    style.overflowY = "auto"
+                    style.overflowX = "auto"
+                    style.minHeight="0px"
+                    centerRegion.element = ReactFacade.createElementWithChildren(ReactFacade.LayoutContent, props, arrayOf(
+                        findAntdComponent(centerRegion.config.content).getReactElement()))
+                }
+            }
             val southRegion = regions[WebBorderRegionType.SOUTH]
             if(southRegion != null){
                 if(southRegion.element == null){
@@ -88,24 +92,59 @@ class AntdWebBorderContainer(configure: WebBorderContainerConfiguration.()->Unit
                     southRegion.element = ReactFacade.createElementWithChildren(ReactFacade.LayoutFooter,props, arrayOf(
                         findAntdComponent(southRegion.config.content).getReactElement()))
                 }
-                children.add(southRegion.element!!)
             }
-            val centerRegion = regions[WebBorderRegionType.CENTER]
-            if(centerRegion != null){
-                if(centerRegion.element == null){
+            val eastRegion = regions[WebBorderRegionType.EAST]
+            if(eastRegion != null){
+                if(eastRegion.element == null){
                     val props = js("{}")
                     props.className = "jasmine-layout-common"
-                    val style = js("{}")
-                    props.style = style
-                    style.overflowY = "auto"
-                    style.overflowX = "auto"
-                    style.minHeight="0px"
-                    centerRegion.element = ReactFacade.createElementWithChildren(ReactFacade.LayoutContent, props, arrayOf(
-                        findAntdComponent(centerRegion.config.content).getReactElement()))
+                    if(eastRegion.config.showBorder || eastRegion.config.showSplitLine){
+                        props.className+= " jasmine-layout-left-border"
+                    }
+                    if(eastRegion.config.width != null){
+                        props.width =eastRegion.config.width
+                    }
+                    if(eastRegion.config.collapsible){
+                        props.collapsible = true
+                        props.reverseArrow = true
+                        props.collapsedWidth = 10
+                    }
+                    if(eastRegion.config.collapsed){
+                        props.defaultCollapsed = true
+                    }
+                    eastRegion.element = ReactFacade.createElementWithChildren(ReactFacade.LayoutSider, props, arrayOf(
+                        findAntdComponent(eastRegion.config.content).getReactElement()))
                 }
-                children.add(centerRegion.element!!)
             }
-
+            if(eastRegion == null && westRegion == null){
+                if(northRegion != null) {
+                    children.add(northRegion.element!!)
+                }
+                if(centerRegion != null) {
+                    children.add(centerRegion.element!!)
+                }
+                if(southRegion != null) {
+                    children.add(southRegion.element!!)
+                }
+            } else if (eastRegion != null){
+                if(northRegion != null) {
+                    children.add(northRegion.element!!)
+                }
+                children.add(ReactFacade.createElementWithChildren(ReactFacade.Layout, js("{}"), arrayOf(
+                    centerRegion!!.element, eastRegion.element)))
+                if(southRegion != null) {
+                    children.add(southRegion.element!!)
+                }
+            }else{
+                if(northRegion != null) {
+                    children.add(northRegion.element!!)
+                }
+                children.add( ReactFacade.createElementWithChildren(ReactFacade.Layout, js("{}"), arrayOf(
+                    westRegion!!.element, centerRegion!!.element)))
+                if(southRegion != null) {
+                    children.add(southRegion.element!!)
+                }
+            }
             val props = js("{}")
             val style = js("{}")
             props.style = style

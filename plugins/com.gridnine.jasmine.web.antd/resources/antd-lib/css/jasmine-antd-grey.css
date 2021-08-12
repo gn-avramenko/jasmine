@@ -25,18 +25,18 @@ body.loading .loader {
 }
 
 .jasmine-layout-left-border{
-    border-left: 1px solid black !important
+    border-left: 1px solid rgba(240,240,240) !important
 }
 .jasmine-layout-right-border{
-    border-right: 1px solid black !important
+    border-right: 1px solid rgba(240,240,240) !important
 }
 
 .jasmine-layout-bottom-border{
-    border-bottom: 1px solid black !important
+    border-bottom: 1px solid rgba(240,240,240) !important
 }
 
 .jasmine-layout-top-border{
-    border-top: 1px solid black !important
+    border-top: 1px solid rgba(240,240,240) !important
 }
 
 .jasmine-grid-container-no-padding{

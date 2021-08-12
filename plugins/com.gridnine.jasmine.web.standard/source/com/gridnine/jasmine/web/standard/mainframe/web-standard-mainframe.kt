@@ -41,16 +41,17 @@ open class MainFrame(configure: MainFrameConfiguration.()->Unit):BaseWebNodeWrap
         val westContent = WebUiLibraryAdapter.get().createBorderContainer {
             fit = true
         }
-        westContent.setNorthRegion {
-            content = WebLabelWidget(config.title){
-                width = "100%"
-                className = "jasmine-logo"
+            westContent.setNorthRegion {
+                content = WebLabelWidget(config.title) {
+                    width = "100%"
+                    className = "jasmine-logo"
+                }
             }
-        }
         navigationTree = WebUiLibraryAdapter.get().createTree {
             width = "100%"
             height = "100%"
             fit = true
+            mold = WebTreeMold.NAVIGATION
         }
         westContent.setCenterRegion {
             content = navigationTree
@@ -140,7 +141,7 @@ open class MainFrame(configure: MainFrameConfiguration.()->Unit):BaseWebNodeWrap
 
 
 class MainFrameConfiguration{
-    lateinit var title:String
+    var title:String? = null
     var navigationWidth:Int =200
     val tools = arrayListOf<WebTabsContainerTool>()
 }

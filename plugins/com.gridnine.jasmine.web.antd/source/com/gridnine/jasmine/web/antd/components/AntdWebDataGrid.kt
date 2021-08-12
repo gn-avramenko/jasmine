@@ -65,7 +65,7 @@ class AntdWebDataGrid<E:BaseIntrospectableObjectJS>(configure:WebDataGridConfigu
     private var loader: (suspend (WebDataGridRequest) -> WebDataGridResponse<E>)? = null
 
     override fun createReactElementWrapper(): ReactElementWrapper {
-        return ReactFacade.createProxyAdvanced({ callbacks ->
+        return ReactFacade.createProxyAdvanced({ callbackIndex ->
              val props = js("{}")
              props.style = js("{}")
              if(config.fit){
@@ -101,6 +101,7 @@ class AntdWebDataGrid<E:BaseIntrospectableObjectJS>(configure:WebDataGridConfigu
             props.scroll = object{
                 val  x = "max-content"
                 val  y = "calc(100vh - 200px)"
+//                val  y = "600px"
             }
             props.rowKey = { record:dynamic ->
                 currentPageData.indexOf(record).toString()
@@ -126,19 +127,27 @@ class AntdWebDataGrid<E:BaseIntrospectableObjectJS>(configure:WebDataGridConfigu
                     }
                 }
             }
-            props.onRow={ record:dynamic, rowIndex:Int ->
-                object {
-                    val onDoubleClick = { event:dynamic ->
-                        console.log(event)
+
+            ReactFacade.callbackRegistry.get(callbackIndex).onDoubleClick = { index:Int ->
+                val value = currentPageData[index]
+                clickListener?.let {
+                    launch {
+                        it.invoke(value)
                     }
-                };
+                }
             }
-             ReactFacade.createElement(ReactFacade.Table, props)
+
+            props.onRow={ record:dynamic, rowIndex:Int ->
+                val onRowProps= js("{}")
+                onRowProps.onDoubleClick = {event:dynamic ->
+                    ReactFacade.callbackRegistry.get(callbackIndex).onDoubleClick(rowIndex)
+                }
+                onRowProps
+            }
+            ReactFacade.createElement(ReactFacade.Table, props)
         }, object {
             val componentDidMount = {
-                window.setTimeout({
-                    reload()
-                }, 100)
+                reload()
             }
         })
     }
@@ -191,6 +200,9 @@ class AntdWebDataGrid<E:BaseIntrospectableObjectJS>(configure:WebDataGridConfigu
             val sublist = localData.subList(startIndex, endIndex)
             currentPageData.clear()
             currentPageData.addAll(sublist)
+            window.setTimeout({
+                maybeRedraw()
+            }, 20)
         } else {
             launch {
                 var remoteData = loader!!.invoke(WebDataGridRequest().also {
@@ -211,9 +223,10 @@ class AntdWebDataGrid<E:BaseIntrospectableObjectJS>(configure:WebDataGridConfigu
                 }
                 currentPageData.clear()
                 currentPageData.addAll(remoteData.data)
+                maybeRedraw()
             }
         }
-        maybeRedraw()
+
     }
     private val defaultFormatter = {value: Any?, row: E, index: Int ->
         value.toString()
