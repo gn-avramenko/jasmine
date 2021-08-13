@@ -24,21 +24,26 @@ class AntdWebSeachBox(configure:WebSearchBoxConfiguration.()->Unit):WebSearchBox
 
     override fun createReactElementWrapper(): ReactElementWrapper {
         return ReactFacade.createProxy{
-            val props = object{
-                val placeholder = config.prompt
-                val allowClear = "true"
-                val onChange = { event:dynamic ->
-                    searchValue = event.target.value
-                }
-                val onSearch = {value:String? ->
-                    if(searcher != null){
-                        launch {
-                            searcher!!.invoke(value)
-                        }
+            val props = js("{}")
+            props.placeholder = config.prompt
+            props.allowClear = "true"
+            props.style = js("{}")
+            ReactFacade.callbackRegistry.get(it).onChange = { event:dynamic ->
+                searchValue = event.target.value
+            }
+            props.onChange = {event:dynamic ->
+                ReactFacade.callbackRegistry.get(it).onChange(event)
+            }
+            ReactFacade.callbackRegistry.get(it).onSearch = { value:String? ->
+                if(searcher != null){
+                    launch {
+                        searcher!!.invoke(value)
                     }
                 }
-                val style = object {}
-            }.asDynamic()
+            }
+            props.onSearch = {value:String? ->
+                ReactFacade.callbackRegistry.get(it).onSearch(value)
+            }
             if(config.className != null){
                 props.className = config.className
             }

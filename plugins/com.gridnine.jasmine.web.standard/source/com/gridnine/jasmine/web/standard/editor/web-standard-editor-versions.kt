@@ -86,8 +86,8 @@ class VersionsSelectDialogPanel(objectType:String, objectUid:String,  aTitle:Str
             MainFrame.get().openTab(OpenObjectVersionData(objectType, objectUid, aTitle, it.version))
         }
         _node = WebGridLayoutWidget {
-            height = "500px"
-            width = "500px"
+            height = "600px"
+            width = "600px"
         }.also {
             it.setColumnsWidths("100%")
             it.addRow("100%", arrayListOf(WebGridLayoutWidgetCell(dataGrid)))

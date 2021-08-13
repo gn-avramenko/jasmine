@@ -5,10 +5,7 @@
 package com.gridnine.jasmine.web.antd.components
 
 import com.gridnine.jasmine.web.core.remote.launch
-import com.gridnine.jasmine.web.core.ui.components.WebNode
-import com.gridnine.jasmine.web.core.ui.components.WebTabPanel
-import com.gridnine.jasmine.web.core.ui.components.WebTabsContainer
-import com.gridnine.jasmine.web.core.ui.components.WebTabsContainerConfiguration
+import com.gridnine.jasmine.web.core.ui.components.*
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import kotlinx.browser.document
 import kotlinx.browser.window
@@ -46,6 +43,10 @@ class AntdWebTabsContainer(configure: WebTabsContainerConfiguration.() -> Unit) 
             val props = js("{}")
             props.id = uuid
             props.hideAdd = true
+            props.tabPosition = when(config.tabsPositions){
+                WebTabsPosition.TOP -> "top"
+                WebTabsPosition.BOTTOM -> "bottom"
+            }
             ReactFacade.callbackRegistry.get(callbackIndex).onChange = { key: String ->
                 activeTabId = key
                 maybeRedraw()
@@ -107,6 +108,7 @@ class AntdWebTabsContainer(configure: WebTabsContainerConfiguration.() -> Unit) 
                 val paneProps = js("{}")
                 paneProps.tab = it.title
                 paneProps.key = it.id
+                paneProps.closable = it.closable
                 val paneStyle = js("{}")
                 paneStyle.minHeight = "0px"
                 paneProps.style = paneStyle
@@ -118,6 +120,7 @@ class AntdWebTabsContainer(configure: WebTabsContainerConfiguration.() -> Unit) 
             }.toTypedArray())
 
         }, object {
+
             val componentDidMount = {
                 updateHeight()
             }
@@ -127,9 +130,11 @@ class AntdWebTabsContainer(configure: WebTabsContainerConfiguration.() -> Unit) 
 
     private fun updateHeight() {
         val tabsComp = document.getElementById(uuid).asDynamic()
-        val tabPanelContainer = tabsComp.querySelector(".ant-tabs-content-top")
+        val tabPanelContainer = tabsComp.querySelector(".ant-tabs-content-top")?:tabsComp.querySelector(".ant-tabs-content-bottom")
         tabPanelContainer.style.widht = "100%"
         tabPanelContainer.style.height = "100%"
+        tabPanelContainer.style.overflowX ="auto"
+        tabPanelContainer.style.overflowY ="auto"
     }
 
     override fun addTab(configure: WebTabPanel.() -> Unit) {

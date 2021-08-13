@@ -27,10 +27,32 @@ class AntdWebTag(private val tagName: String, private val id: String?) : WebTag,
     private var visible = true
 
     override fun createReactElementWrapper(): ReactElementWrapper {
+        val callbacks = js("{}")
+        if(postRenderAction != null){
+            callbacks.componentDidMount = {
+                postRenderAction!!.invoke()
+            }
+        }
+        callbacks.componentWillUnmount = {
+            elementRef = null
+            reactElement = null
+        }
+
         return ReactFacade.createProxyAdvanced({
             if (text != null) {
-                ReactFacade.createElementWithChildren(tagName, createProps(it), text!!.asDynamic())
-            } else {
+                val props = createProps(it)
+                if(tagName == "textarea"){
+                    ReactFacade.createElementWithChildren(tagName, props, text!!)
+                } else{
+                    val innerHtml = js("{}")
+                    innerHtml["__html"] = text
+                    props.dangerouslySetInnerHTML = innerHtml
+                    ReactFacade.createElement(tagName, props)
+                }
+
+            } else if(getChildren().isEmpty()){
+                ReactFacade.createElement(tagName, createProps(it))
+            }else {
                 val ch = children.map {
                     children.elementCache.getOrPut(it) {
                         findAntdComponent(it).getReactElement()
@@ -38,11 +60,7 @@ class AntdWebTag(private val tagName: String, private val id: String?) : WebTag,
                 }
                 ReactFacade.createElementWithChildren(tagName, createProps(it), ch.toTypedArray())
             }
-        }, if(postRenderAction == null) null else object {
-            val componentDidMount = {
-                postRenderAction!!.invoke()
-            }
-        })
+        }, callbacks)
     }
 
     private fun createProps(callbackIndex:Int): dynamic {

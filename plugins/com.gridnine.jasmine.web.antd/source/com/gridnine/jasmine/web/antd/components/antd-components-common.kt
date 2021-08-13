@@ -63,6 +63,11 @@ interface AntdReactFacade {
     val ReactQuill:Any
     val Tree:Any
     val TreeNode:Any
+    val IconCloseOutlined:Any
+    val IconPlusOutlined:Any
+    val IconUpOutlined:Any
+    val IconDownOutlined:Any
+    val IconMinusOutlined:Any
     val createProxyAdvanced: (createCallback:(Int)->ReactElement, otherCallbacks:Any?)->ReactElementWrapper
     val createProxy: (createCallback:(Int)->ReactElement)->ReactElementWrapper
 }
@@ -71,9 +76,9 @@ external val ReactFacade: AntdReactFacade = definedExternally
 
 
 abstract class BaseAntdWebUiComponent:WebNode{
-    private var reactElement:ReactElement? = null
+    protected var reactElement:ReactElement? = null
 
-    private var elementRef:dynamic = null
+    protected var elementRef:dynamic = null
 
     fun getReactElement():ReactElement{
         if(reactElement == null){

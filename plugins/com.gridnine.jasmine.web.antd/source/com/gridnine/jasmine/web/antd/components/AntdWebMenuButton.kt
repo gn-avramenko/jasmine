@@ -32,6 +32,7 @@ class AntdWebMenuButton(configure: WebMenuButtonConfiguration.() -> Unit) : WebM
             } else {
                 val menuProps = js("{}")
                 menuProps.disabled = !menuEnabled
+
                 ReactFacade.callbackRegistry.get(callbackIndex).onClick = { event: dynamic ->
                     val key = event.key as String
                     handlers[key]?.let {
@@ -48,15 +49,23 @@ class AntdWebMenuButton(configure: WebMenuButtonConfiguration.() -> Unit) : WebM
                         it as StandardMenuItem
                         val menuItemProps = js("{}")
                         menuItemProps.key = it.id
-                        ReactFacade.createElementWithChildren(ReactFacade.MenuItem, menuItemProps, it.title!!)
+                        ReactFacade.createElementWithChildren(ReactFacade.MenuItem, menuItemProps, it.title?:"")
                     }.toTypedArray()
                 )
                 val dropdownProps = js("{}")
                 dropdownProps.overlay = menu
                 dropdownProps.placement = "bottomLeft"
+                val buttonProps =  js("{}")
+                if(config.icon != null){
+                    buttonProps.icon = AntdWebLinkButton.getElementForIcon(config.icon!!)
+                }
                 val dropdown = ReactFacade.createElementWithChildren(
                     ReactFacade.Dropdown, dropdownProps,
-                    ReactFacade.createElementWithChildren(ReactFacade.Button, js("{}"), config.title!!)
+                    if(config.title != null) {
+                        ReactFacade.createElementWithChildren(ReactFacade.Button, buttonProps, config.title!!)
+                    } else {
+                        ReactFacade.createElement(ReactFacade.Button, buttonProps)
+                    }
                 )
                 dropdown
             }

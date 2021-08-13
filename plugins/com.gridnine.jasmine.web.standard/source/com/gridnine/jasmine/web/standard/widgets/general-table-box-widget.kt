@@ -33,7 +33,8 @@ class GeneralTableBoxWidget(configure:GeneralTableBoxWidgetConfiguration.()->Uni
             config.height?.let { height -> it.getStyle().setParameters("height" to height) }
         }
         _node.setPostRenderAction {
-            render(config)
+            window.setTimeout({render(config)}, 20)
+
         }
     }
 

@@ -82,6 +82,11 @@ class AntdWebLinkButton(configure:WebLinkButtonConfiguration.()->Unit) : WebLink
         fun getElementForIcon(icon:String):ReactElement{
             return when(icon){
                 "core:link" -> ReactFacade.createElement(ReactFacade.IconLinkOutlined, js("{}"))
+                "core:close" -> ReactFacade.createElement(ReactFacade.IconCloseOutlined, js("{}"))
+                "core:minus" -> ReactFacade.createElement(ReactFacade.IconMinusOutlined, js("{}"))
+                "core:plus" -> ReactFacade.createElement(ReactFacade.IconPlusOutlined, js("{}"))
+                "core:down" -> ReactFacade.createElement(ReactFacade.IconDownOutlined, js("{}"))
+                "core:up" -> ReactFacade.createElement(ReactFacade.IconUpOutlined, js("{}"))
                 else ->throw XeptionJS.forDeveloper("unsupported icon $icon")
             }
         }

@@ -59,23 +59,26 @@ class ListPanel(we: ListWorkspaceItemDTJS, actions: ActionsGroupWrapper) : BaseW
         val searchBox = WebUiLibraryAdapter.get().createSearchBox {
             width ="200px"
         }
-        val filterPanel = FilterPanel(we) {
+        val filterPanel = if(we.filters.isNotEmpty()) FilterPanel(we) {
             grid.reload()
-        }
+        } else null
         grid = createGrid(we, searchBox, filterPanel)
-        _node.setEastRegion{
-            width = DefaultUIParameters.controlWidth + 10
-            showSplitLine = true
-            collapsible = true
-            collapsed = true
-            title = WebMessages.Filters
-            content = filterPanel
+        if(filterPanel != null) {
+            _node.setEastRegion {
+                width = DefaultUIParameters.controlWidth + 10
+                showSplitLine = true
+                collapsible = true
+                collapsed = true
+                title = WebMessages.Filters
+                content = filterPanel
+            }
         }
         _node.setCenterRegion{
             content = grid
         }
         val container = WebGridLayoutWidget{
             width = "100%"
+
         }.also {
             val widths = actions.actions.map { "auto" }.toMutableList().also{ lst ->
                 lst.add("100%")
@@ -107,7 +110,7 @@ class ListPanel(we: ListWorkspaceItemDTJS, actions: ActionsGroupWrapper) : BaseW
         }
     }
 
-    private fun createGrid(we: ListWorkspaceItemDTJS,  searchBox: WebSearchBox, filterPanel: FilterPanel): WebDataGrid<BaseIdentityJS> {
+    private fun createGrid(we: ListWorkspaceItemDTJS,  searchBox: WebSearchBox, filterPanel: FilterPanel?): WebDataGrid<BaseIdentityJS> {
         val listId = "${we.listId}JS"
         val domainDescr: BaseIndexDescriptionJS =
                 DomainMetaRegistryJS.get().indexes[listId] ?: DomainMetaRegistryJS.get().assets[listId]
@@ -117,6 +120,7 @@ class ListPanel(we: ListWorkspaceItemDTJS, actions: ActionsGroupWrapper) : BaseW
         val dataGrid = WebUiLibraryAdapter.get().createDataGrid<BaseIdentityJS> {
             fit = true
             showPagination = true
+            selectionType = DataGridSelectionType.MULTIPLE
             we.columns.forEach { col ->
                 val propertyDescr = domainDescr.properties[col]
                 val collectionDescr = domainDescr.collections[col]
@@ -146,7 +150,9 @@ class ListPanel(we: ListWorkspaceItemDTJS, actions: ActionsGroupWrapper) : BaseW
             req.rows = request.rows
             req.sortColumn = request.sortColumn
             req.freeText = searchBox.getValue()
-            req.filters.addAll(filterPanel.getFiltersValues())
+            if(filterPanel != null) {
+                req.filters.addAll(filterPanel.getFiltersValues())
+            }
             StandardRestClient.standard_standard_getList(req).let {
                 WebDataGridResponse(it.totalCount!!, it.items)
             }

@@ -11,6 +11,45 @@
     padding-top:50vh;
 }
 
+.jasmine-table-box th{
+  height:31px;
+  font-size: 14px;
+  padding:5px;
+  background-color: #fafafa;
+  background: -webkit-linear-gradient(top,#fdfdfd 0,#f5f5f5 100%);
+  background: -moz-linear-gradient(top,#fdfdfd 0,#f5f5f5 100%);
+  background: -o-linear-gradient(top,#fdfdfd 0,#f5f5f5 100%);
+  background: linear-gradient(to bottom,#fdfdfd 0,#f5f5f5 100%);
+  background-repeat: repeat-x;
+  border-width: 1px 1px 1px 1px;
+  border-style: dotted;
+  margin: 0;
+  border-color: #ccc;
+  font-weight: 100
+}
+.jasmine-table-box{
+table-layout:fixed;
+}
+
+
+
+.jasmine-table-box td{
+  font-size: 14px;
+  padding:0px;
+  border-width: 1px 1px 1px 1px;
+  border-style: dotted;
+  margin: 0;
+  border-color: #ccc;
+  font-weight: 100
+}
+
+.jasmine-table-box .jasmine-grid-layout-td{
+  padding:0px;
+  border-width: 0px 0px 0px 0px;
+  border-style: none;
+  margin: 0;
+  font-weight: 100
+}
 
 body.loading {
     overflow: hidden;
@@ -88,4 +127,39 @@ body.loading .loader {
 .jasmine-panel-header-title{
     margin: 3px;
     display:inline-block;
+}
+
+.jasmine-web-tile{
+    display: inline-block;
+    padding: 5px;
+    margin:5px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #575765;
+    line-height: 20px;
+    background: url('images/blank.gif') no-repeat;
+    vertical-align:top;
+    border-color: #D3D3D3;
+    border-width: 1px;
+    border-style: solid;
+    background-color: #f3f3f3;
+    background: -webkit-linear-gradient(top,#F8F8F8 0,#eeeeee 100%);
+    background: -moz-linear-gradient(top,#F8F8F8 0,#eeeeee 100%);
+    background: -o-linear-gradient(top,#F8F8F8 0,#eeeeee 100%);
+    background: linear-gradient(to bottom,#F8F8F8 0,#eeeeee 100%);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#F8F8F8,endColorstr=#eeeeee,GradientType=0);
+}
+.jasmine-tile-caption{
+    display: inline-block;
+    vertical-align: center;
+}
+.jasmine-tile-expand{
+    display: inline-block;
+    float: right;
+    vertical-align: center;
+    cursor: pointer;
+    width: 20px;
+    height: 15px;
+    background: url('images/panel_tools.png') no-repeat -32px 0px;
 }

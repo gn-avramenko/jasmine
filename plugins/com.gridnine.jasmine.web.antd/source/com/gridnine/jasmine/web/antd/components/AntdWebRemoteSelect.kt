@@ -33,6 +33,7 @@ class AntdWebRemoteSelect(private val config: WebSelectConfiguration) : WebSelec
                 props.showSearch = "true"
             }
             props.allowClear = config.showClearIcon
+            props.disabled = !enabled
             props.style = js("{}")
             config.width?.let { props.style.width = it }
             config.height?.let { props.style.height = it }
@@ -40,11 +41,12 @@ class AntdWebRemoteSelect(private val config: WebSelectConfiguration) : WebSelec
                 props.className = "jasmine-input-error"
             }
             props.value =  values.map {
-                object {
-                    val key = it.id
-                    val label = it.text
-                    val value = it.id
-                }}.toTypedArray()
+                val res = js("{}")
+                res.key = it.id
+                res.label = it.text
+                res.value = it.id
+                res
+            }.toTypedArray()
             props.showArrow = config.hasDownArrow
             ReactFacade.callbackRegistry.get(callbackIndex).fetchOptions = {value:String?, success:dynamic ->
                 loader?.let {

@@ -21,7 +21,6 @@ class StandardCoroutineExceptionHandler:CoroutineExceptionHandler{
         try {
             WebUiLibraryAdapter.get().showDialog(ExceptionDialogPanel(exceptionText)) {
                 title = "Произошла ошибка"
-                width = 720
                 button {
                     displayName = "Копировать"
                     handler = {dialog->

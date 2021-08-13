@@ -10,16 +10,17 @@ import com.gridnine.jasmine.web.core.ui.components.*
 import kotlinx.browser.document
 import kotlinx.browser.window
 
-class AntdWebDataGrid<E:BaseIntrospectableObjectJS>(configure:WebDataGridConfiguration<E>.()->Unit) :WebDataGrid<E>,BaseAntdWebUiComponent(){
+class AntdWebDataGrid<E : BaseIntrospectableObjectJS>(configure: WebDataGridConfiguration<E>.() -> Unit) :
+    WebDataGrid<E>, BaseAntdWebUiComponent() {
 
     private val config = WebDataGridConfiguration<E>()
-    private val columns:Array<dynamic>
+    private val columns: Array<dynamic>
 
     private var currentPage = 1
     private var pageSizeValue = 50
     private var totalItemsCount = 0L
 
-    private var sortingColumn:String? = null
+    private var sortingColumn: String? = null
     private var sortAsc = true
 
     private val currentPageData = arrayListOf<E>()
@@ -34,28 +35,35 @@ class AntdWebDataGrid<E:BaseIntrospectableObjectJS>(configure:WebDataGridConfigu
 
     init {
         config.configure()
-        columns = config.columns.map {conf ->
+        columns = config.columns.map { conf ->
             val fieldId = conf.fieldId
             val formatter = conf.formatter
-            val res = object{
-                val title = conf.title
-                val dataIndex = conf.fieldId
-                val sorter = conf.sortable
-                val render = { _:dynamic, record:E, index:Int ->
-                    if(formatter != null){
-                        ReactFacade.createElementWithChildren(ReactFacade.Fragment, object{}, formatter.invoke(record.getValue(fieldId), record, index)?:"")
-                    } else {
-                        ReactFacade.createElementWithChildren(ReactFacade.Fragment, object{},record.getValue(fieldId).toString())
-                    }
+            val res = js("{}")
+            res.title = conf.title
+            res.dataIndex = conf.fieldId
+            res.sorter = conf.sortable
+            res.render =  { _: dynamic, record: E, index: Int ->
+                if (formatter != null) {
+                    ReactFacade.createElementWithChildren(
+                        ReactFacade.Fragment,
+                        object {},
+                        formatter.invoke(record.getValue(fieldId), record, index) ?: ""
+                    )
+                } else {
+                    ReactFacade.createElementWithChildren(
+                        ReactFacade.Fragment,
+                        object {},
+                        record.getValue(fieldId).toString()
+                    )
                 }
-                val align = when(conf.horizontalAlignment){
-                    WebDataHorizontalAlignment.LEFT -> "left"
-                    WebDataHorizontalAlignment.RIGHT -> "right"
-                    WebDataHorizontalAlignment.CENTER -> "center"
-                    null -> "center"
-                }
-            }.asDynamic()
-            if(conf.width != null && !config.fitColumns){
+            }
+            res.align = when (conf.horizontalAlignment) {
+                WebDataHorizontalAlignment.LEFT -> "left"
+                WebDataHorizontalAlignment.RIGHT -> "right"
+                WebDataHorizontalAlignment.CENTER -> "center"
+                null -> "center"
+            }
+            if (conf.width != null && !config.fitColumns) {
                 res.width = conf.width
             }
             res
@@ -66,69 +74,67 @@ class AntdWebDataGrid<E:BaseIntrospectableObjectJS>(configure:WebDataGridConfigu
 
     override fun createReactElementWrapper(): ReactElementWrapper {
         return ReactFacade.createProxyAdvanced({ callbackIndex ->
-             val props = js("{}")
-             props.style = js("{}")
-             if(config.fit){
-                 props.style.width  = "100%"
-                 props.style.height  = "100%"
-             } else{
-                 if(config.width != null){
-                     props.style.width  = config.width
-                 }
-                 if(config.height != null){
-                     props.style.height  = config.height
-                 }
-             }
-             if(!config.showPagination){
-                props.pagination = false
-             } else{
-                 props.pagination = object {
-                     val current = currentPage
-                     val pageSize = pageSizeValue
-                     val total = totalItemsCount
-                 }
-             }
-             props.columns = columns
-             props.dataSource = currentPageData.toTypedArray()
-             props.onChange = { pagination:dynamic, filters:dynamic, sorter:dynamic ->
-                 pageSizeValue = pagination.pageSize
-                 currentPage = pagination.current
-                 sortingColumn = sorter.field
-                 sortAsc = sorter.order =="ascend"
-                 selectedKeys.clear()
-                 reload()
-             }
-            props.scroll = object{
-                val  x = "max-content"
-                val  y = "calc(100vh - 200px)"
-//                val  y = "600px"
+            val props = js("{}")
+            props.style = js("{}")
+            if (config.fit) {
+                props.style.width = "100%"
+                props.style.height = "100%"
+            } else {
+                if (config.width != null) {
+                    props.style.width = config.width
+                }
+                if (config.height != null) {
+                    props.style.height = config.height
+                }
             }
-            props.rowKey = { record:dynamic ->
+            if (!config.showPagination) {
+                props.pagination = false
+            } else {
+                props.pagination = js("{}")
+                props.pagination.current = currentPage
+                props.pagination.pageSize = pageSizeValue
+                props.pagination.total = totalItemsCount
+            }
+            props.columns = columns
+            props.dataSource = currentPageData.toTypedArray()
+            ReactFacade.callbackRegistry.get(callbackIndex).onChange =
+                { pagination: dynamic, filters: dynamic, sorter: dynamic ->
+                    pageSizeValue = pagination.pageSize
+                    currentPage = pagination.current
+                    sortingColumn = sorter.field
+                    sortAsc = sorter.order == "ascend"
+                    selectedKeys.clear()
+                    reload()
+                }
+            props.onChange = { pagination: dynamic, filters: dynamic, sorter: dynamic ->
+                ReactFacade.callbackRegistry.get(callbackIndex).onChange(pagination, filters, sorter)
+            }
+            props.scroll = js("{}")
+            props.scroll.x = "max-content"
+            props.scroll.y = "calc(100vh - 200px)"
+
+            ReactFacade.callbackRegistry.get(callbackIndex).rowKey = { record: dynamic ->
                 currentPageData.indexOf(record).toString()
             }
-            when(config.selectionType){
-                DataGridSelectionType.SINGLE ->{
-                    props.rowSelection = object{
-                        val type = "radio"
-                        val onChange = {selectedRowKeys:Array<String>, selectedRows:dynamic ->
-                            selectedKeys.clear()
-                            selectedKeys.addAll(selectedRowKeys.map { it.toInt() })
-                            selectionChangeListener?.invoke()
-                        }
-                    }
-                }
-                DataGridSelectionType.MULTIPLE ->{
-                    props.rowSelection = object{
-                        val type = "checkbox"
-                        val onChange = {selectedRowKeys:Array<String>, selectedRows:dynamic ->
-                            selectedKeys.clear()
-                            selectedKeys.addAll(selectedRowKeys.map { it.toInt() })
-                        }
-                    }
-                }
+            props.rowKey = { record: dynamic ->
+                ReactFacade.callbackRegistry.get(callbackIndex).rowKey(record)
             }
-
-            ReactFacade.callbackRegistry.get(callbackIndex).onDoubleClick = { index:Int ->
+            ReactFacade.callbackRegistry.get(callbackIndex).rowSelectionOnChange =
+                { selectedRowKeys: Array<String>, selectedRows: dynamic ->
+                    selectedKeys.clear()
+                    selectedKeys.addAll(selectedRowKeys.map { it.toInt() })
+                    selectionChangeListener?.invoke()
+                }
+            props.rowSelection = js("{}")
+            props.rowSelection.onChange = { selectedRowKeys: Array<String>, selectedRows: dynamic ->
+                ReactFacade.callbackRegistry.get(callbackIndex).rowSelectionOnChange(selectedRowKeys, selectedRows)
+            }
+            props.rowSelection.type = when(config.selectionType){
+                DataGridSelectionType.NONE -> "radio"
+                DataGridSelectionType.SINGLE -> "radio"
+                DataGridSelectionType.MULTIPLE -> "checkbox"
+            }
+            ReactFacade.callbackRegistry.get(callbackIndex).onDoubleClick = { index: Int ->
                 val value = currentPageData[index]
                 clickListener?.let {
                     launch {
@@ -137,9 +143,9 @@ class AntdWebDataGrid<E:BaseIntrospectableObjectJS>(configure:WebDataGridConfigu
                 }
             }
 
-            props.onRow={ record:dynamic, rowIndex:Int ->
-                val onRowProps= js("{}")
-                onRowProps.onDoubleClick = {event:dynamic ->
+            props.onRow = { record: dynamic, rowIndex: Int ->
+                val onRowProps = js("{}")
+                onRowProps.onDoubleClick = { event: dynamic ->
                     ReactFacade.callbackRegistry.get(callbackIndex).onDoubleClick(rowIndex)
                 }
                 onRowProps
@@ -159,7 +165,7 @@ class AntdWebDataGrid<E:BaseIntrospectableObjectJS>(configure:WebDataGridConfigu
     override fun setLocalData(data: List<E>) {
         localData.clear()
         localData.addAll(data)
-        if(isInitialized()){
+        if (isInitialized()) {
             reload()
         }
     }
@@ -178,23 +184,23 @@ class AntdWebDataGrid<E:BaseIntrospectableObjectJS>(configure:WebDataGridConfigu
 
     override fun reload() {
         selectedKeys.clear()
-        if(config.dataType == DataGridDataType.LOCAL){
-            if(sortingColumn != null){
-                val formatter = config.columns.find { it.fieldId == sortingColumn }?.formatter?:defaultFormatter
-                if(sortAsc){
-                    localData.sortBy { formatter.invoke(it.getValue(sortingColumn!!), it, 0 ) }
+        if (config.dataType == DataGridDataType.LOCAL) {
+            if (sortingColumn != null) {
+                val formatter = config.columns.find { it.fieldId == sortingColumn }?.formatter ?: defaultFormatter
+                if (sortAsc) {
+                    localData.sortBy { formatter.invoke(it.getValue(sortingColumn!!), it, 0) }
                 } else {
-                    localData.sortByDescending { formatter.invoke(it.getValue(sortingColumn!!), it, 0 ) }
+                    localData.sortByDescending { formatter.invoke(it.getValue(sortingColumn!!), it, 0) }
                 }
             }
             totalItemsCount = localData.size.toLong()
-            var startIndex = pageSizeValue*(currentPage-1)
-            if(startIndex>= localData.size){
+            var startIndex = pageSizeValue * (currentPage - 1)
+            if (startIndex >= localData.size) {
                 startIndex = 0
                 currentPage = 1
             }
-            var endIndex = startIndex+pageSizeValue
-            if(endIndex >= localData.size){
+            var endIndex = startIndex + pageSizeValue
+            if (endIndex >= localData.size) {
                 endIndex = localData.size
             }
             val sublist = localData.subList(startIndex, endIndex)
@@ -208,16 +214,16 @@ class AntdWebDataGrid<E:BaseIntrospectableObjectJS>(configure:WebDataGridConfigu
                 var remoteData = loader!!.invoke(WebDataGridRequest().also {
                     it.desc = !sortAsc
                     it.sortColumn = sortingColumn
-                    it.page = currentPage-1
+                    it.page = currentPage - 1
                     it.rows = pageSizeValue
                 })
                 totalItemsCount = remoteData.count
-                if((currentPage-1)*pageSizeValue > totalItemsCount){
+                if ((currentPage - 1) * pageSizeValue > totalItemsCount) {
                     currentPage = 1
                     remoteData = loader!!.invoke(WebDataGridRequest().also {
                         it.desc = !sortAsc
                         it.sortColumn = sortingColumn
-                        it.page = currentPage-1
+                        it.page = currentPage - 1
                         it.rows = pageSizeValue
                     })
                 }
@@ -228,7 +234,8 @@ class AntdWebDataGrid<E:BaseIntrospectableObjectJS>(configure:WebDataGridConfigu
         }
 
     }
-    private val defaultFormatter = {value: Any?, row: E, index: Int ->
+
+    private val defaultFormatter = { value: Any?, row: E, index: Int ->
         value.toString()
     }
 }

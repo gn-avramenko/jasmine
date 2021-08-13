@@ -30,6 +30,7 @@ class AntdWebLocalSelect(private val config: WebSelectConfiguration) : WebSelect
             }
             props.allowClear = config.showClearIcon
             props.style = js("{}")
+            props.disabled = !enabled
             config.width?.let { props.style.width = it }
             config.height?.let { props.style.height = it }
             if (validationMessage != null) {

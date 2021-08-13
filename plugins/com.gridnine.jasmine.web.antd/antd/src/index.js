@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Spin , Layout,Input,Menu,Tabs, Dropdown,Button,Table,Select,Tooltip,DatePicker,InputNumber,notification,Modal,Switch,Collapse,Tree} from 'antd';
 import debounce from "lodash/debounce";
-import {LinkOutlined,EyeInvisibleOutlined, EyeTwoTone} from '@ant-design/icons';
+import {LinkOutlined,EyeInvisibleOutlined, EyeTwoTone, CloseOutlined,PlusOutlined,UpOutlined,DownOutlined,MinusOutlined} from '@ant-design/icons';
 import moment from 'moment';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -61,9 +61,9 @@ class JasmineReactComponentProxy extends React.Component{
     }
 
     render() {
-        return callbackRegistry.get(this.props.callbackIndex).renderCallback(this.props.callbackIndex)
+      let callbacks = callbackRegistry.get(this.props.callbackIndex)
+      callbacks.renderCallback(this.props.callbackIndex)
     }
-    
 }
 
 function DebounceSelect({ fetchOptions, debounceTimeout = 800, ...props }) {
@@ -186,6 +186,11 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 800, ...props }) {
      ReactQuill:ReactQuill,
      Tree:Tree,
      TreeNode: TreeNode,
+     IconCloseOutlined:CloseOutlined,
+     IconPlusOutlined:PlusOutlined,
+     IconUpOutlined:UpOutlined,
+     IconDownOutlined:DownOutlined,
+     IconMinusOutlined:MinusOutlined,
      createProxyAdvanced:function(renderCallback, otherCallbacks){
          let allCallbacks = otherCallbacks || {}
          allCallbacks.renderCallback = renderCallback

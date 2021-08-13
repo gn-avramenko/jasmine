@@ -11,6 +11,7 @@ import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
 import com.gridnine.jasmine.web.core.ui.components.WebNode
 import com.gridnine.jasmine.web.core.ui.components.WebTag
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
+import kotlinx.browser.window
 
 class WebNodeProjectorWidget(configure:WebNodeProjectorWidgetConfiguration.()->Unit) : BaseWebNodeWrapper<WebTag>() {
     private val uuid = MiscUtilsJS.createUUID()
@@ -27,7 +28,7 @@ class WebNodeProjectorWidget(configure:WebNodeProjectorWidgetConfiguration.()->U
         _node.setPostRenderAction {
             initialized = true
             activeComponentId?.let {
-                showInternal(it)
+                window.setTimeout({showInternal(it)}, 10)
             }
         }
     }
@@ -80,8 +81,8 @@ class WebNodeProjectorWidget(configure:WebNodeProjectorWidgetConfiguration.()->U
     }
 
     fun clear() {
-        nodes.clear()
         _node.getChildren().clear()
+        nodes.clear()
     }
 
     fun getActiveNodeId(): String? {

@@ -18,7 +18,8 @@ object AntdWebDialogFactory {
         val config = DialogConfiguration<W>()
         config.configure()
         val dialogElm = document.getElementById(dialogElmId)?: kotlin.run {
-            val elm= document.createElement(dialogElmId)
+            val elm= document.createElement("div")
+            elm.setAttribute("id", dialogElmId)
             bodyElm.appendChild(elm)
             elm
         }
@@ -28,9 +29,6 @@ object AntdWebDialogFactory {
         props.title = config.title
         props.visible = true
         props.closable = true
-        if(config.width != null) {
-            props.width = config.width
-        }
         if(config.expandToMainFrame){
             val dialogWidth = bodyElm.offsetWidth as Int - 100
             val dialogHeight = bodyElm.offsetHeight as Int - 200
@@ -41,7 +39,7 @@ object AntdWebDialogFactory {
         }
 
         lateinit var dialog: Dialog<W>
-        val reactElement = ReactFacade.createProxy{ idx ->
+        val reactElement = ReactFacade.createProxyAdvanced({ idx ->
             val calbacks= ReactFacade.callbackRegistry.get(idx)
             calbacks.onCancelIcon = {
                 ReactFacade.render(ReactFacade.createElement(ReactFacade.Fragment, object{}), dialogElm)
@@ -63,7 +61,16 @@ object AntdWebDialogFactory {
                 ReactFacade.createElementWithChildren(ReactFacade.Button,buttonProps, button.displayName)
             }.toTypedArray()
             ReactFacade.createElementWithChildren(ReactFacade.Modal, props, arrayOf(findAntdComponent(dialogContent).getReactElement()))
-        }
+        }, object{
+            val componentDidMount = {
+                if(!config.expandToMainFrame){
+                    val containerElm = document.asDynamic().querySelector(".ant-modal")
+                    val dialogBodyElm = document.asDynamic().querySelector(".ant-modal-body")
+                    val contentElm = dialogBodyElm.querySelector("div")
+                    containerElm.style.width = "${contentElm.offsetWidth+40}px"
+                }
+            }
+        })
         ReactFacade.render(reactElement.element, dialogElm)
         dialog = object :Dialog<W>{
             override fun close() {
