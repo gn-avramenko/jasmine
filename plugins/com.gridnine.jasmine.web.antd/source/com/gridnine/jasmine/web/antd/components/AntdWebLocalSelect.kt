@@ -22,8 +22,8 @@ class AntdWebLocalSelect(private val config: WebSelectConfiguration) : WebSelect
 
     private var changeListener: (suspend (List<SelectItemJS>) -> Unit)? = null
 
-    override fun createReactElementWrapper(): ReactElementWrapper {
-        return ReactFacade.createProxy {callbackIndex:Int ->
+    override fun createReactElementWrapper(parentIndex:Int?): ReactElementWrapper {
+        return ReactFacade.createProxy(parentIndex) {parentIndexValue:Int?, childIndex:Int ->
             val props = js("{}")
             if(config.multiple){
                 props.mode = "multiple"
@@ -44,7 +44,7 @@ class AntdWebLocalSelect(private val config: WebSelectConfiguration) : WebSelect
             }.toTypedArray()
             props.value =  values.map { it.id}.toTypedArray()
             props.showArrow = config.hasDownArrow
-            ReactFacade.callbackRegistry.get(callbackIndex).onChange = { newValues:Any? ->
+            ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange = { newValues:Any? ->
                 values.clear()
                 if(newValues is String){
                     options.find { it.id == newValues }?.let { values.add(it) }
@@ -61,7 +61,7 @@ class AntdWebLocalSelect(private val config: WebSelectConfiguration) : WebSelect
                     }
                 }
             }
-            props.onChange = {newValues:Any? -> ReactFacade.callbackRegistry.get(callbackIndex).onChange(newValues)}
+            props.onChange = {newValues:Any? -> ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange(newValues)}
             if (validationMessage != null) {
                 ReactFacade.createElementWithChildren(ReactFacade.Tooltip, object {
                     val title = validationMessage

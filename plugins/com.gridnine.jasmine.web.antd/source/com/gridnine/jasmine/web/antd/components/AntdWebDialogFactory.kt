@@ -39,28 +39,27 @@ object AntdWebDialogFactory {
         }
 
         lateinit var dialog: Dialog<W>
-        val reactElement = ReactFacade.createProxyAdvanced({ idx ->
-            val calbacks= ReactFacade.callbackRegistry.get(idx)
-            calbacks.onCancelIcon = {
+        val reactElement = ReactFacade.createProxyAdvanced(null, {parentIndexValue:Int?, childIndex:Int ->
+            ReactFacade.getCallbacks(parentIndexValue, childIndex).onCancelIcon = {
                 ReactFacade.render(ReactFacade.createElement(ReactFacade.Fragment, object{}), dialogElm)
             }
             props.onCancel = {
-                ReactFacade.callbackRegistry.get(idx).onCancelIcon()
+                ReactFacade.getCallbacks(parentIndexValue, childIndex).onCancelIcon()
             }
             props.footer = config.buttons.withIndex().map{(buttonIdx, button) ->
                 val buttonProps = js("{}")
                 val functionName = "onButton$buttonIdx"
-                calbacks[functionName] = {
+                ReactFacade.getCallbacks(parentIndexValue, childIndex)[functionName] = {
                     launch {
                         button.handler.invoke(dialog)
                     }
                 }
                 buttonProps.onClick = {
-                    ReactFacade.callbackRegistry.get(idx)[functionName]()
+                    ReactFacade.getCallbacks(parentIndexValue, childIndex)[functionName]()
                 }
                 ReactFacade.createElementWithChildren(ReactFacade.Button,buttonProps, button.displayName)
             }.toTypedArray()
-            ReactFacade.createElementWithChildren(ReactFacade.Modal, props, arrayOf(findAntdComponent(dialogContent).getReactElement()))
+            ReactFacade.createElementWithChildren(ReactFacade.Modal, props, arrayOf(findAntdComponent(dialogContent).getReactElement(null)))
         }, object{
             val componentDidMount = {
                 if(!config.expandToMainFrame){

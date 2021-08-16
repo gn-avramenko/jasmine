@@ -72,8 +72,8 @@ class AntdWebDataGrid<E : BaseIntrospectableObjectJS>(configure: WebDataGridConf
 
     private var loader: (suspend (WebDataGridRequest) -> WebDataGridResponse<E>)? = null
 
-    override fun createReactElementWrapper(): ReactElementWrapper {
-        return ReactFacade.createProxyAdvanced({ callbackIndex ->
+    override fun createReactElementWrapper(parentIndex:Int?): ReactElementWrapper {
+        return ReactFacade.createProxyAdvanced(parentIndex, {parentIndexValue:Int?, childIndex:Int ->
             val props = js("{}")
             props.style = js("{}")
             if (config.fit) {
@@ -97,7 +97,7 @@ class AntdWebDataGrid<E : BaseIntrospectableObjectJS>(configure: WebDataGridConf
             }
             props.columns = columns
             props.dataSource = currentPageData.toTypedArray()
-            ReactFacade.callbackRegistry.get(callbackIndex).onChange =
+            ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange =
                 { pagination: dynamic, filters: dynamic, sorter: dynamic ->
                     pageSizeValue = pagination.pageSize
                     currentPage = pagination.current
@@ -107,19 +107,19 @@ class AntdWebDataGrid<E : BaseIntrospectableObjectJS>(configure: WebDataGridConf
                     reload()
                 }
             props.onChange = { pagination: dynamic, filters: dynamic, sorter: dynamic ->
-                ReactFacade.callbackRegistry.get(callbackIndex).onChange(pagination, filters, sorter)
+                ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange(pagination, filters, sorter)
             }
             props.scroll = js("{}")
             props.scroll.x = "max-content"
             props.scroll.y = "calc(100vh - 200px)"
 
-            ReactFacade.callbackRegistry.get(callbackIndex).rowKey = { record: dynamic ->
+            ReactFacade.getCallbacks(parentIndexValue, childIndex).rowKey = { record: dynamic ->
                 currentPageData.indexOf(record).toString()
             }
             props.rowKey = { record: dynamic ->
-                ReactFacade.callbackRegistry.get(callbackIndex).rowKey(record)
+                ReactFacade.getCallbacks(parentIndexValue, childIndex).rowKey(record)
             }
-            ReactFacade.callbackRegistry.get(callbackIndex).rowSelectionOnChange =
+            ReactFacade.getCallbacks(parentIndexValue, childIndex).rowSelectionOnChange =
                 { selectedRowKeys: Array<String>, selectedRows: dynamic ->
                     selectedKeys.clear()
                     selectedKeys.addAll(selectedRowKeys.map { it.toInt() })
@@ -127,14 +127,14 @@ class AntdWebDataGrid<E : BaseIntrospectableObjectJS>(configure: WebDataGridConf
                 }
             props.rowSelection = js("{}")
             props.rowSelection.onChange = { selectedRowKeys: Array<String>, selectedRows: dynamic ->
-                ReactFacade.callbackRegistry.get(callbackIndex).rowSelectionOnChange(selectedRowKeys, selectedRows)
+                ReactFacade.getCallbacks(parentIndexValue, childIndex).rowSelectionOnChange(selectedRowKeys, selectedRows)
             }
             props.rowSelection.type = when(config.selectionType){
                 DataGridSelectionType.NONE -> "radio"
                 DataGridSelectionType.SINGLE -> "radio"
                 DataGridSelectionType.MULTIPLE -> "checkbox"
             }
-            ReactFacade.callbackRegistry.get(callbackIndex).onDoubleClick = { index: Int ->
+            ReactFacade.getCallbacks(parentIndexValue, childIndex).onDoubleClick = { index: Int ->
                 val value = currentPageData[index]
                 clickListener?.let {
                     launch {
@@ -146,7 +146,7 @@ class AntdWebDataGrid<E : BaseIntrospectableObjectJS>(configure: WebDataGridConf
             props.onRow = { record: dynamic, rowIndex: Int ->
                 val onRowProps = js("{}")
                 onRowProps.onDoubleClick = { event: dynamic ->
-                    ReactFacade.callbackRegistry.get(callbackIndex).onDoubleClick(rowIndex)
+                    ReactFacade.getCallbacks(parentIndexValue, childIndex).onDoubleClick(rowIndex)
                 }
                 onRowProps
             }

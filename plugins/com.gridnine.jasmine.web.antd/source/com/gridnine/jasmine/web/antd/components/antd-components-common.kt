@@ -19,6 +19,7 @@ interface ReactElementWrapper{
 
 
 interface AntdReactFacade {
+    val getCallbacks: (Int?, Int) ->dynamic
     val render: (Any,Element) ->Unit
     val createElement: (Any,Any) ->ReactElement
     val createElementWithChildren: (Any,Any,Any) ->ReactElement
@@ -29,6 +30,7 @@ interface AntdReactFacade {
     val LayoutFooter: Any
     val LayoutSider: Any
     val LayoutContent: Any
+    val incrementAndGetCallbackIndex: ()->Int
     val Spin:Any
     val Input:Any
     val Menu:Any
@@ -68,8 +70,8 @@ interface AntdReactFacade {
     val IconUpOutlined:Any
     val IconDownOutlined:Any
     val IconMinusOutlined:Any
-    val createProxyAdvanced: (createCallback:(Int)->ReactElement, otherCallbacks:Any?)->ReactElementWrapper
-    val createProxy: (createCallback:(Int)->ReactElement)->ReactElementWrapper
+    val createProxyAdvanced: (parentIndex:Int?, createCallback:(Int?, Int)->ReactElement, otherCallbacks:Any?)->ReactElementWrapper
+    val createProxy: (parentIndex:Int?, createCallback:(Int?, Int)->ReactElement)->ReactElementWrapper
 }
 
 external val ReactFacade: AntdReactFacade = definedExternally
@@ -80,9 +82,12 @@ abstract class BaseAntdWebUiComponent:WebNode{
 
     protected var elementRef:dynamic = null
 
-    fun getReactElement():ReactElement{
+    private var parentIndex:Int? = null
+
+    fun getReactElement(parentIndex:Int?):ReactElement{
         if(reactElement == null){
-            val wrapper  = createReactElementWrapper()
+            this.parentIndex = parentIndex
+            val wrapper  = createReactElementWrapper(parentIndex)
             reactElement = wrapper.element
             elementRef = wrapper.ref
         }
@@ -93,19 +98,20 @@ abstract class BaseAntdWebUiComponent:WebNode{
         return reactElement != null
     }
 
-    fun getElementRef():dynamic{
+    fun getElementRef(parentIndex: Int?):dynamic{
         if(reactElement == null){
-            val wrapper  = createReactElementWrapper()
+            this.parentIndex = parentIndex
+            val wrapper  = createReactElementWrapper(parentIndex)
             reactElement = wrapper.element
             elementRef = wrapper.ref
         }
         return  elementRef!!
     }
-    abstract fun createReactElementWrapper(): ReactElementWrapper
+    abstract fun createReactElementWrapper(parentIndex: Int?): ReactElementWrapper
 
     fun maybeRedraw(){
         if(isInitialized()){
-            getElementRef().current.forceRedraw()
+            getElementRef(parentIndex).current.forceRedraw()
         }
     }
 }

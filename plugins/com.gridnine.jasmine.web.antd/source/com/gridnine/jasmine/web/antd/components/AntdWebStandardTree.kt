@@ -21,8 +21,8 @@ class AntdWebStandardTree(private val config: WebTreeConfiguration) : WebTree, B
 
     private val expandedNodesIds = arrayListOf<String>()
 
-    override fun createReactElementWrapper(): ReactElementWrapper {
-        return ReactFacade.createProxy { callbackIndex ->
+    override fun createReactElementWrapper(parentIndex:Int?): ReactElementWrapper {
+        return ReactFacade.createProxy(parentIndex) { parentIndexValue:Int?, childIndex:Int ->
             val props = js("{}")
             props.className = "draggable-tree"
             props.style = js("{}")
@@ -36,7 +36,7 @@ class AntdWebStandardTree(private val config: WebTreeConfiguration) : WebTree, B
             props.draggable =config.enableDnd
             props.defaultSelectedKeys = if(selectedNodeId == null) js("[]") else arrayOf(selectedNodeId)
             props.defaultExpandedKeys = expandedNodesIds.toTypedArray()
-            ReactFacade.callbackRegistry.get(callbackIndex).onSelect = { selectedKeys: Array<String> ->
+            ReactFacade.getCallbacks(parentIndexValue, childIndex).onSelect = { selectedKeys: Array<String> ->
                 if (selectedKeys.isNotEmpty()) {
                     selectionListener?.let { lst ->
                         findNode(selectedKeys[0], null, data)?.first?.let { node ->
@@ -48,17 +48,17 @@ class AntdWebStandardTree(private val config: WebTreeConfiguration) : WebTree, B
                 }
             }
             props.onSelect = { selectedKeys: Array<String> ->
-                ReactFacade.callbackRegistry.get(callbackIndex).onSelect(selectedKeys)
+                ReactFacade.getCallbacks(parentIndexValue, childIndex).onSelect(selectedKeys)
             }
-            ReactFacade.callbackRegistry.get(callbackIndex).onExpand = { expandedKeys: Array<String> ->
+            ReactFacade.getCallbacks(parentIndexValue, childIndex).onExpand = { expandedKeys: Array<String> ->
                 this.expandedNodesIds.clear()
                 this.expandedNodesIds.addAll(expandedKeys)
             }
             props.onExpand = { expandedKeys: Array<String> ->
-                ReactFacade.callbackRegistry.get(callbackIndex).onExpand(expandedKeys)
+                ReactFacade.getCallbacks(parentIndexValue, childIndex).onExpand(expandedKeys)
             }
             if(config.enableDnd) {
-                ReactFacade.callbackRegistry.get(callbackIndex).onDrop =
+                ReactFacade.getCallbacks(parentIndexValue, childIndex).onDrop =
                     { event:dynamic ->
                         dropListener?.let{
                             val dragKey = event.dragNode.key as String
@@ -72,18 +72,18 @@ class AntdWebStandardTree(private val config: WebTreeConfiguration) : WebTree, B
 
                     }
                 props.onDrop = { event: dynamic ->
-                    ReactFacade.callbackRegistry.get(callbackIndex).onDrop(event)
+                    ReactFacade.getCallbacks(parentIndexValue, childIndex).onDrop(event)
                 }
             }
             ReactFacade.createElementWithChildren(
                 ReactFacade.Tree,
                 props,
-                generateChildren(data, callbackIndex).toTypedArray()
+                generateChildren(data, parentIndexValue, childIndex).toTypedArray()
             )
         }
     }
 
-    private fun generateChildren(data: List<WebTreeNode>, callbackIndex: Int): List<ReactElement> {
+    private fun generateChildren(data: List<WebTreeNode>, parentIndexValue:Int?, childIndex:Int): List<ReactElement> {
         return data.map { node ->
             val nodeProps = js("{}")
             nodeProps.key = node.id
@@ -91,7 +91,7 @@ class AntdWebStandardTree(private val config: WebTreeConfiguration) : WebTree, B
             if (items != null) {
                 val menuProps = js("{}")
                 val functionName = "onClick${node.id}"
-                ReactFacade.callbackRegistry.get(callbackIndex)[functionName] = { event: dynamic ->
+                ReactFacade.getCallbacks(parentIndexValue, childIndex)[functionName] = { event: dynamic ->
                     val key = (event.key as String).substringAfterLast("key").toInt()
                     val item = items[key]
                     launch {
@@ -99,7 +99,7 @@ class AntdWebStandardTree(private val config: WebTreeConfiguration) : WebTree, B
                     }
                 }
                 menuProps.onClick = { event: dynamic ->
-                    ReactFacade.callbackRegistry.get(callbackIndex)[functionName](event)
+                    ReactFacade.getCallbacks(parentIndexValue, childIndex)[functionName](event)
                 }
                 val contextMenu = ReactFacade.createElementWithChildren(
                     ReactFacade.Menu,
@@ -127,7 +127,7 @@ class AntdWebStandardTree(private val config: WebTreeConfiguration) : WebTree, B
                 ReactFacade.createElementWithChildren(
                     ReactFacade.TreeNode,
                     nodeProps,
-                    generateChildren(node.children, callbackIndex).toTypedArray()
+                    generateChildren(node.children, parentIndexValue,childIndex).toTypedArray()
                 )
             } else {
                 ReactFacade.createElement(ReactFacade.TreeNode, nodeProps)

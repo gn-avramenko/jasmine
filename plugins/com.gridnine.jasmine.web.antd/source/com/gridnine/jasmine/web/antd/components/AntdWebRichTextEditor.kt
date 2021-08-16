@@ -24,8 +24,8 @@ class AntdWebRichTextEditor(private val configure: WebRichTextEditorConfiguratio
         config.configure()
     }
 
-    override fun createReactElementWrapper(): ReactElementWrapper {
-        return ReactFacade.createProxy { callbackIndex ->
+    override fun createReactElementWrapper(parentIndex:Int?): ReactElementWrapper {
+        return ReactFacade.createProxy(parentIndex) { parentIndexValue:Int?, childIndex:Int ->
             val props = js("{}")
             props.id = id
             props.theme="snow"
@@ -33,11 +33,11 @@ class AntdWebRichTextEditor(private val configure: WebRichTextEditorConfiguratio
             props.style = js("{}")
             config.width?.let { props.style.width = it }
             config.height?.let { props.style.height = it }
-            ReactFacade.callbackRegistry.get(callbackIndex).onChange = {value:String? ->
+            ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange = {value:String? ->
                 content = value
             }
             props.onChange = {value:String? ->
-                ReactFacade.callbackRegistry.get(callbackIndex).onChange(value)
+                ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange(value)
             }
             ReactFacade.createElement(ReactFacade.ReactQuill, props)
         }

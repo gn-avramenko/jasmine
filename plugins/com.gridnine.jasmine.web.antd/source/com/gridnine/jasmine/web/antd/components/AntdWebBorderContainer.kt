@@ -21,14 +21,14 @@ class AntdWebBorderContainer(configure: WebBorderContainerConfiguration.() -> Un
         config.configure()
     }
 
-    override fun createReactElementWrapper(): ReactElementWrapper {
-        return ReactFacade.createProxy {
+    override fun createReactElementWrapper(parentIndex:Int?): ReactElementWrapper {
+        return ReactFacade.createProxy(parentIndex) {parentIndexValue:Int?, childIndex:Int ->
             val children = arrayListOf<ReactElement>()
 
             val westRegion = regions[WebBorderRegionType.WEST]
             if (westRegion != null) {
                 if (westRegion.element == null) {
-                    westRegion.element = createSider(WebBorderRegionType.WEST, it)
+                    westRegion.element = createSider(WebBorderRegionType.WEST, parentIndexValue, childIndex)
                 }
             }
             val northRegion = regions[WebBorderRegionType.NORTH]
@@ -47,7 +47,7 @@ class AntdWebBorderContainer(configure: WebBorderContainerConfiguration.() -> Un
                     }
                     northRegion.element = ReactFacade.createElementWithChildren(
                         ReactFacade.LayoutHeader, props, arrayOf(
-                            findAntdComponent(northRegion.config.content).getReactElement()
+                            findAntdComponent(northRegion.config.content).getReactElement(parentIndex)
                         )
                     )
                 }
@@ -65,7 +65,7 @@ class AntdWebBorderContainer(configure: WebBorderContainerConfiguration.() -> Un
                     style.minHeight = "0px"
                     centerRegion.element = ReactFacade.createElementWithChildren(
                         ReactFacade.LayoutContent, props, arrayOf(
-                            findAntdComponent(centerRegion.config.content).getReactElement()
+                            findAntdComponent(centerRegion.config.content).getReactElement(parentIndex)
                         )
                     )
                 }
@@ -85,7 +85,7 @@ class AntdWebBorderContainer(configure: WebBorderContainerConfiguration.() -> Un
                     }
                     southRegion.element = ReactFacade.createElementWithChildren(
                         ReactFacade.LayoutFooter, props, arrayOf(
-                            findAntdComponent(southRegion.config.content).getReactElement()
+                            findAntdComponent(southRegion.config.content).getReactElement(parentIndex)
                         )
                     )
                 }
@@ -93,7 +93,7 @@ class AntdWebBorderContainer(configure: WebBorderContainerConfiguration.() -> Un
             val eastRegion = regions[WebBorderRegionType.EAST]
             if (eastRegion != null) {
                 if (eastRegion.element == null) {
-                    eastRegion.element = createSider(WebBorderRegionType.EAST,it)
+                    eastRegion.element = createSider(WebBorderRegionType.EAST,  parentIndexValue, childIndex)
                 }
             }
             if (eastRegion == null && westRegion == null) {
@@ -153,18 +153,18 @@ class AntdWebBorderContainer(configure: WebBorderContainerConfiguration.() -> Un
         }
     }
 
-    private fun createSider(type: WebBorderRegionType, callbackIndex:Int): ReactElement {
+    private fun createSider(type: WebBorderRegionType, parentIndexValue: Int?, childIndex:Int): ReactElement {
         val region = regions[type]!!
         if (!region.config.collapsible) {
             val props = createSiderProps(type)
             return ReactFacade.createElementWithChildren(
                 ReactFacade.LayoutSider, props, arrayOf(
-                    findAntdComponent(region.config.content).getReactElement()
+                    findAntdComponent(region.config.content).getReactElement(parentIndexValue)
                 )
             )
         }
         var ref: dynamic = null
-        val wrapper = ReactFacade.createProxy { _: Int ->
+        val wrapper = ReactFacade.createProxy(parentIndexValue) { _:Int?, _:Int ->
             val regionData = siderData.getOrPut(type) {
                 WebBorderSiderData(region.config.collapsed)
             }
@@ -176,13 +176,13 @@ class AntdWebBorderContainer(configure: WebBorderContainerConfiguration.() -> Un
             val expandFunctionName = "on${if (type == WebBorderRegionType.EAST) "East" else "West"}Expand"
             val expandButtonTitle = if (type == WebBorderRegionType.EAST) "<<" else ">>"
 
-            ReactFacade.callbackRegistry.get(callbackIndex)[expandFunctionName] = {
+            ReactFacade.getCallbacks(parentIndexValue, childIndex)[expandFunctionName] = {
 
                 regionData.collapsed = false
                 ref.current.forceRedraw()
             }
             expandButtonProps.onClick = {
-                ReactFacade.callbackRegistry.get(callbackIndex)[expandFunctionName]()
+                ReactFacade.getCallbacks(parentIndexValue, childIndex)[expandFunctionName]()
             }
 
             val collapseButtonProps = js("{}")
@@ -190,12 +190,12 @@ class AntdWebBorderContainer(configure: WebBorderContainerConfiguration.() -> Un
             collapseButtonProps.style.width = "100%"
             val collapseFunctionName = "on${if (type == WebBorderRegionType.EAST) "East" else "West"}Collapse"
             val collapseButtonTitle = if (type == WebBorderRegionType.EAST) ">>" else "<<"
-            ReactFacade.callbackRegistry.get(callbackIndex)[collapseFunctionName] = {
+            ReactFacade.getCallbacks(parentIndexValue, childIndex)[collapseFunctionName] = {
                 regionData.collapsed = true
                 ref.current.forceRedraw()
             }
             collapseButtonProps.onClick = {
-                ReactFacade.callbackRegistry.get(callbackIndex)[collapseFunctionName]()
+                ReactFacade.getCallbacks(parentIndexValue, childIndex)[collapseFunctionName]()
             }
             val fullPanelProps = js("{}")
             fullPanelProps.style = js("{}")
@@ -219,7 +219,7 @@ class AntdWebBorderContainer(configure: WebBorderContainerConfiguration.() -> Un
             val centerContent = ReactFacade.createElementWithChildren(
                 ReactFacade.LayoutContent,
                 centerPanelProps,
-                findAntdComponent(region.config.content).getReactElement()
+                findAntdComponent(region.config.content).getReactElement(parentIndexValue)
             )
             ReactFacade.createElementWithChildren(
                 ReactFacade.LayoutSider, props, arrayOf(

@@ -16,8 +16,8 @@ class AntdWebNavigationTree (private val config:WebTreeConfiguration): WebTree,B
 
     private var listener: (suspend (item: WebTreeNode) -> Unit)? = null
 
-    override fun createReactElementWrapper(): ReactElementWrapper {
-        return ReactFacade.createProxy{
+    override fun createReactElementWrapper(parentIndex:Int?): ReactElementWrapper {
+        return ReactFacade.createProxy(parentIndex){parentIndexValue:Int?, childIndex:Int ->
             val menuProps = js("{}")
             menuProps.mode = "inline"
             val menuStyle = js("{}")

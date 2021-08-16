@@ -25,15 +25,15 @@ class AntdWebMenuButton(configure: WebMenuButtonConfiguration.() -> Unit) : WebM
         config.configure()
     }
 
-    override fun createReactElementWrapper(): ReactElementWrapper {
-        return ReactFacade.createProxy { callbackIndex ->
+    override fun createReactElementWrapper(parentIndex:Int?): ReactElementWrapper {
+        return ReactFacade.createProxy(parentIndex) { parentIndexValue:Int?, childIndex:Int ->
             if (!visible) {
                 ReactFacade.createElement(ReactFacade.Fragment, object {})
             } else {
                 val menuProps = js("{}")
                 menuProps.disabled = !menuEnabled
 
-                ReactFacade.callbackRegistry.get(callbackIndex).onClick = { event: dynamic ->
+                ReactFacade.getCallbacks(parentIndexValue, childIndex).onClick = { event: dynamic ->
                     val key = event.key as String
                     handlers[key]?.let {
                         launch {
@@ -42,7 +42,7 @@ class AntdWebMenuButton(configure: WebMenuButtonConfiguration.() -> Unit) : WebM
                     }
                 }
                 menuProps.onClick = { event: dynamic ->
-                    ReactFacade.callbackRegistry.get(callbackIndex).onClick(event)
+                    ReactFacade.getCallbacks(parentIndexValue, childIndex).onClick(event)
                 }
                 val menu = ReactFacade.createElementWithChildren(ReactFacade.Menu, menuProps,
                     config.elements.filter { it is StandardMenuItem }.map {

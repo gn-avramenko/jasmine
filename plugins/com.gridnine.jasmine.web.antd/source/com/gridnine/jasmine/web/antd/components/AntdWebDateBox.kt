@@ -21,8 +21,8 @@ class AntdWebDateBox(private val configure: WebDateBoxConfiguration.()->Unit) : 
         config.configure()
     }
 
-    override fun createReactElementWrapper(): ReactElementWrapper {
-        return ReactFacade.createProxy{callbackIndex ->
+    override fun createReactElementWrapper(parentIndex:Int?): ReactElementWrapper {
+        return ReactFacade.createProxy(parentIndex){parentIndexValue:Int?, childIndex:Int ->
             val props = js("{}")
             props.allowClear = true
             props.disabled = !enabled
@@ -33,11 +33,11 @@ class AntdWebDateBox(private val configure: WebDateBoxConfiguration.()->Unit) : 
             if (validationMessage != null) {
                 props.className = "jasmine-input-error"
             }
-            ReactFacade.callbackRegistry.get(callbackIndex).onChange = { newValue:dynamic ->
+            ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange = { newValue:dynamic ->
                 value = ReactFacade.momentToDate(newValue)
                 maybeRedraw()
             }
-            props.onChange = {e:dynamic -> ReactFacade.callbackRegistry.get(callbackIndex).onChange(e)}
+            props.onChange = {e:dynamic -> ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange(e)}
 
             if (validationMessage != null) {
                 ReactFacade.createElementWithChildren(ReactFacade.Tooltip, object {

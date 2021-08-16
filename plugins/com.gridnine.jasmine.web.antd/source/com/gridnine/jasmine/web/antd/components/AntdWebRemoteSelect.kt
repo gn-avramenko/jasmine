@@ -24,8 +24,8 @@ class AntdWebRemoteSelect(private val config: WebSelectConfiguration) : WebSelec
 
     private  var loader: (suspend (String?) -> List<SelectItemJS>)? = null
 
-    override fun createReactElementWrapper(): ReactElementWrapper {
-        return ReactFacade.createProxy {callbackIndex ->
+    override fun createReactElementWrapper(parentIndex:Int?): ReactElementWrapper {
+        return ReactFacade.createProxy(parentIndex) {parentIndexValue:Int?, childIndex:Int ->
             val props = js("{}")
             if(config.multiple){
                 props.mode = "multiple"
@@ -48,7 +48,7 @@ class AntdWebRemoteSelect(private val config: WebSelectConfiguration) : WebSelec
                 res
             }.toTypedArray()
             props.showArrow = config.hasDownArrow
-            ReactFacade.callbackRegistry.get(callbackIndex).fetchOptions = {value:String?, success:dynamic ->
+            ReactFacade.getCallbacks(parentIndexValue, childIndex).fetchOptions = {value:String?, success:dynamic ->
                 loader?.let {
                     launch {
                         val opts = it.invoke(value)
@@ -62,9 +62,9 @@ class AntdWebRemoteSelect(private val config: WebSelectConfiguration) : WebSelec
                 }
             }
             props.fetchOptions = {value:String?, success:dynamic ->
-                ReactFacade.callbackRegistry.get(callbackIndex).fetchOptions(value, success)
+                ReactFacade.getCallbacks(parentIndexValue, childIndex).fetchOptions(value, success)
             }
-            ReactFacade.callbackRegistry.get(callbackIndex).onChange = { newValues:Any? ->
+            ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange = { newValues:Any? ->
                 values.clear()
                 if(newValues is Array<*>){
                     newValues as Array<dynamic>
@@ -82,7 +82,7 @@ class AntdWebRemoteSelect(private val config: WebSelectConfiguration) : WebSelec
                 }
             }
             props.onChange = { newValues:Any? ->
-                ReactFacade.callbackRegistry.get(callbackIndex).onChange(newValues)
+                ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange(newValues)
             }
             if (validationMessage != null) {
                 ReactFacade.createElementWithChildren(ReactFacade.Tooltip, object {

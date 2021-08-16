@@ -21,9 +21,9 @@ class AntdWebLinkButton(configure:WebLinkButtonConfiguration.()->Unit) : WebLink
     init {
         config.configure()
     }
-    override fun createReactElementWrapper(): ReactElementWrapper {
+    override fun createReactElementWrapper(parentIndex:Int?): ReactElementWrapper {
 
-        return ReactFacade.createProxy{callbackIndex ->
+        return ReactFacade.createProxy(parentIndex){parentIndexValue:Int?, childIndex:Int ->
             if(!visible){
                 ReactFacade.createElement(ReactFacade.Fragment, object{})
             } else {
@@ -40,14 +40,14 @@ class AntdWebLinkButton(configure:WebLinkButtonConfiguration.()->Unit) : WebLink
                 if (config.width != null) {
                     props.style.width = config.width
                 }
-                ReactFacade.callbackRegistry.get(callbackIndex).onClick = {
+                ReactFacade.getCallbacks(parentIndexValue, childIndex).onClick = {
                     if (this.handler != null) {
                         launch {
                             this.handler!!.invoke()
                         }
                     }
                 }
-                props.onClick = {ReactFacade.callbackRegistry.get(callbackIndex).onClick()}
+                props.onClick = {ReactFacade.getCallbacks(parentIndexValue, childIndex).onClick()}
                 if(config.title != null){
                     ReactFacade.createElementWithChildren(ReactFacade.Button, props, config.title!!)
                 } else {

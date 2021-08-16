@@ -90,7 +90,7 @@ class AntdWebUiLibraryAdapter:WebUiLibraryAdapter {
     }
 
     override fun showWindow(component: WebNode) {
-        ReactFacade.render(findAntdComponent(component).getReactElement(), document.getElementsByTagName("body").item(0) as Element)
+        ReactFacade.render(findAntdComponent(component).getReactElement(null), document.getElementsByTagName("body").item(0) as Element)
     }
 
     override fun showNotification(message: String, notificationType: NotificationTypeJS, timeout: Int) {

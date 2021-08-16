@@ -22,19 +22,19 @@ class AntdWebSeachBox(configure:WebSearchBoxConfiguration.()->Unit):WebSearchBox
         config.configure()
     }
 
-    override fun createReactElementWrapper(): ReactElementWrapper {
-        return ReactFacade.createProxy{
+    override fun createReactElementWrapper(parentIndex:Int?): ReactElementWrapper {
+        return ReactFacade.createProxy(parentIndex){parentIndexValue:Int?, childIndex:Int ->
             val props = js("{}")
             props.placeholder = config.prompt
             props.allowClear = "true"
             props.style = js("{}")
-            ReactFacade.callbackRegistry.get(it).onChange = { event:dynamic ->
+            ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange = { event:dynamic ->
                 searchValue = event.target.value
             }
             props.onChange = {event:dynamic ->
-                ReactFacade.callbackRegistry.get(it).onChange(event)
+                ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange(event)
             }
-            ReactFacade.callbackRegistry.get(it).onSearch = { value:String? ->
+            ReactFacade.getCallbacks(parentIndexValue, childIndex).onSearch = { value:String? ->
                 if(searcher != null){
                     launch {
                         searcher!!.invoke(value)
@@ -42,7 +42,7 @@ class AntdWebSeachBox(configure:WebSearchBoxConfiguration.()->Unit):WebSearchBox
                 }
             }
             props.onSearch = {value:String? ->
-                ReactFacade.callbackRegistry.get(it).onSearch(value)
+                ReactFacade.getCallbacks(parentIndexValue, childIndex).onSearch(value)
             }
             if(config.className != null){
                 props.className = config.className

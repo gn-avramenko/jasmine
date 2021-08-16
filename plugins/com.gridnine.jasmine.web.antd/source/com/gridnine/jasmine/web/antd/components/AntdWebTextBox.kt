@@ -23,8 +23,8 @@ class AntdWebTextBox(private val configure: WebTextBoxConfiguration.()->Unit) : 
         config.configure()
     }
 
-    override fun createReactElementWrapper(): ReactElementWrapper {
-        return ReactFacade.createProxy{callbackIndex:Int ->
+    override fun createReactElementWrapper(parentIndex:Int?): ReactElementWrapper {
+        return ReactFacade.createProxy(parentIndex){parentIndexValue:Int?, childIndex:Int ->
             val props = js("{}")
             props.allowClear = true
             props.disabled = !enabled
@@ -35,11 +35,11 @@ class AntdWebTextBox(private val configure: WebTextBoxConfiguration.()->Unit) : 
             if (validationMessage != null) {
                 props.className = "jasmine-input-error"
             }
-            ReactFacade.callbackRegistry.get(callbackIndex).onChange =  { e:dynamic ->
+            ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange =  { e:dynamic ->
                 value = e.target.value
                 maybeRedraw()
             }
-            props.onChange = {e:dynamic -> ReactFacade.callbackRegistry.get(callbackIndex).onChange(e)}
+            props.onChange = {e:dynamic -> ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange(e)}
             if (validationMessage != null) {
                 ReactFacade.createElementWithChildren(ReactFacade.Tooltip, object {
                     val title = validationMessage

@@ -20,8 +20,8 @@ class AntdWebAccordionContainer(configure:WebAccordionContainerConfiguration.()-
         config.configure()
     }
 
-    override fun createReactElementWrapper(): ReactElementWrapper {
-        return ReactFacade.createProxy{callbackIndex:Int ->
+    override fun createReactElementWrapper(parentIndex:Int?): ReactElementWrapper {
+        return ReactFacade.createProxy(parentIndex){parentIndexValue:Int?, childIndex:Int ->
             val props = js("{}")
             props.style = js("{}")
             if(config.fit){
@@ -36,19 +36,20 @@ class AntdWebAccordionContainer(configure:WebAccordionContainerConfiguration.()-
             } else if(panels.isNotEmpty()){
                 props.defaultActiveKey = arrayOf(panels[0].id)
             }
-            ReactFacade.callbackRegistry.get(callbackIndex).onChange = { keys:Array<String> ->
+
+            ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange = { keys:Array<String> ->
                 if(keys.isNotEmpty()){
                     selectedKey = keys[0]
                 }
             }
             props.onChange = { keys:Array<String> ->
-                ReactFacade.callbackRegistry.get(callbackIndex).onChange(keys)
+                ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange(keys)
             }
             ReactFacade.createElementWithChildren(ReactFacade.Collapse, props, panels.map {
                 val panelProps = js("{}")
                 panelProps.header = it.title
                 panelProps.key = it.id
-                ReactFacade.createElementWithChildren(ReactFacade.Panel, panelProps, findAntdComponent(it.content).getReactElement())
+                ReactFacade.createElementWithChildren(ReactFacade.Panel, panelProps, findAntdComponent(it.content).getReactElement(parentIndex))
             }.toTypedArray())
         }
     }

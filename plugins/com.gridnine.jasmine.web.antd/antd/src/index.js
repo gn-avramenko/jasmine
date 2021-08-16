@@ -28,6 +28,7 @@ class JasmineReactComponentProxy extends React.Component{
            version: 0
        }
        this.forceRedraw = this.forceRedraw.bind(this)
+       this.getCallbacks = this.getCallbacks.bind(this)
     }
 
     forceRedraw(){
@@ -37,32 +38,41 @@ class JasmineReactComponentProxy extends React.Component{
         })
     }
 
+    getCallbacks(){
+      if(this.props.parentIndex != null){
+         return callbackRegistry.get(this.props.parentIndex).get(this.props.callbackIndex) 
+      }
+      return callbackRegistry.get(this.props.callbackIndex)
+    }
+
     componentDidUpdate(prevProps) {
-      let callbacks = callbackRegistry.get(this.props.callbackIndex)
+      let callbacks = this.getCallbacks()
       if(callbacks.componentDidUpdate){
           callbacks.componentDidUpdate(prevProps)
       }
     }
 
     componentDidMount(){
-        let callbacks = callbackRegistry.get(this.props.callbackIndex)
+        let callbacks = this.getCallbacks()
         if(callbacks.componentDidMount){
             callbacks.componentDidMount(this)
         }
     }
 
     componentWillUnmount(){
-        let callbacks = callbackRegistry.get(this.props.callbackIndex)
+        let callbacks = this.getCallbacks()
         if(callbacks.componentWillUnmount){
             callbacks.componentWillUnmount(this)
+        }
+        if(this.props.parentIndex != null){
+          return
         }
         callbackRegistry.delete(this.props.callbackIndex)
         this.forceRedraw  = null
     }
 
     render() {
-      let callbacks = callbackRegistry.get(this.props.callbackIndex)
-      callbacks.renderCallback(this.props.callbackIndex)
+      return this.getCallbacks().renderCallback(this.props.parentIndex, this.props.callbackIndex)
     }
 }
 
@@ -127,6 +137,16 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 800, ...props }) {
 } 
 
  window.ReactFacade ={
+     incrementAndGetCallbackIndex: function(){
+       callbackIndex++;
+       return callbackIndex
+     },
+     getCallbacks: function(parentIndex, childIndex){
+      if(parentIndex != null){
+        return callbackRegistry.get(parentIndex).get(childIndex) 
+     }
+     return callbackRegistry.get(childIndex)
+    },
      render:ReactDOM.render,
      createElementWrapper: function(elm, props){
        let compRef = React.createRef()
@@ -191,21 +211,33 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 800, ...props }) {
      IconUpOutlined:UpOutlined,
      IconDownOutlined:DownOutlined,
      IconMinusOutlined:MinusOutlined,
-     createProxyAdvanced:function(renderCallback, otherCallbacks){
+     createProxyAdvanced:function(parentIndex, renderCallback, otherCallbacks){
          let allCallbacks = otherCallbacks || {}
-         allCallbacks.renderCallback = renderCallback
-         let index = callbackIndex++
-         callbackRegistry.set(index, allCallbacks)
+         allCallbacks.renderCallback = renderCallback;
+         let map = null;
+         if(parentIndex != null){
+           map = callbackRegistry.get(parentIndex);
+           if(map == null){
+              map =  new Map();
+              callbackRegistry.set(parentIndex, map);
+           }
+         } else {
+           map = callbackRegistry;
+         }
+         callbackIndex++;
+         let index = callbackIndex
+         map.set(index, allCallbacks)
          let compRef = React.createRef()
          let props ={
             ref: compRef,
-            callbackIndex: index
+            callbackIndex: index,
+            parentIndex: parentIndex,
          }
          let elm = React.createElement(JasmineReactComponentProxy,props)
          return {element: elm,ref: compRef}
      },
-     createProxy:function(renderCallback){
-        return this.createProxyAdvanced(renderCallback, null)        
+     createProxy:function(parentIndex, renderCallback){
+        return this.createProxyAdvanced(parentIndex, renderCallback, null)        
     },
     dateToMoment:function(date){
         return date? moment(date): null

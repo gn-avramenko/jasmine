@@ -27,8 +27,8 @@ class AntdWebPanel(private val configure: WebPanelConfiguration.()->Unit) : WebP
         config.configure()
     }
 
-    override fun createReactElementWrapper(): ReactElementWrapper {
-        return ReactFacade.createProxy{callbackIndex:Int ->
+    override fun createReactElementWrapper(parentIndex:Int?): ReactElementWrapper {
+        return ReactFacade.createProxy(parentIndex){parentIndexValue:Int?, childIndex:Int ->
             val headerProps = js("{}")
             headerProps.className = "jasmine-panel-header"
             val toolsDivProps = js("{}")
@@ -44,7 +44,7 @@ class AntdWebPanel(private val configure: WebPanelConfiguration.()->Unit) : WebP
                         buttonProps.icon = AntdWebLinkButton.getElementForIcon(config.icon)
                         buttonProps.size = "small"
                         val method = "onTool${config.id}"
-                        ReactFacade.callbackRegistry.get(callbackIndex)[method] = {
+                        ReactFacade.getCallbacks(parentIndexValue, childIndex)[method] = {
                             handler?.let {
                                 launch {
                                     it.invoke(config.id, AntdWebPanel@this)
@@ -52,7 +52,7 @@ class AntdWebPanel(private val configure: WebPanelConfiguration.()->Unit) : WebP
                             }
                         }
                         buttonProps.onClick = {
-                            ReactFacade.callbackRegistry.get(callbackIndex)[method]()
+                            ReactFacade.getCallbacks(parentIndexValue, childIndex)[method]()
                         }
                         ReactFacade.createElement(ReactFacade.Button, buttonProps)
                     }.toTypedArray() )))
@@ -67,7 +67,7 @@ class AntdWebPanel(private val configure: WebPanelConfiguration.()->Unit) : WebP
                 config.height?.let { containerStyle.height = it }
             }
             containerProps.className = "jasmine-panel-container"
-            ReactFacade.createElementWithChildren("div", containerProps, arrayOf(headerDiv, findAntdComponent(config.content).getReactElement()))
+            ReactFacade.createElementWithChildren("div", containerProps, arrayOf(headerDiv, findAntdComponent(config.content).getReactElement(parentIndex)))
         }
     }
 

@@ -18,6 +18,8 @@ class AntdWebTabsContainer(configure: WebTabsContainerConfiguration.() -> Unit) 
 
     private val tabs = arrayListOf<WebTabPanel>()
 
+    private val parentIndexes = hashMapOf<WebTabPanel, Int>()
+
     private var activeTabId: String? = null
 
     private val uuid = MiscUtilsJS.createUUID()
@@ -25,9 +27,45 @@ class AntdWebTabsContainer(configure: WebTabsContainerConfiguration.() -> Unit) 
     init {
         config.configure()
     }
+    private var tabExtraContent: ReactElement? = null
 
-    override fun createReactElementWrapper(): ReactElementWrapper {
-        return ReactFacade.createProxyAdvanced({ callbackIndex ->
+    override fun createReactElementWrapper(parentIndex:Int?): ReactElementWrapper {
+        if(config.tools.isNotEmpty() && tabExtraContent == null){
+           tabExtraContent = ReactFacade.createProxy(parentIndex){ parentIndexValue:Int?, childIndex:Int ->
+                val menuProps = js("{}")
+               ReactFacade.getCallbacks(parentIndexValue, childIndex).onClick = { event: dynamic ->
+                    val key = event.key as String
+                    launch {
+                        config.tools[key.toInt()].handler.invoke()
+                    }
+                }
+                menuProps.onClick = { event: dynamic ->
+                    ReactFacade.getCallbacks(parentIndexValue, childIndex).onClick(event)
+                }
+                val menu = ReactFacade.createElementWithChildren(
+                    ReactFacade.Menu,
+                    menuProps,
+                    config.tools.withIndex().map {
+                        val menuItemProps = js("{}")
+                        menuItemProps.key = it.index.toString()
+                        ReactFacade.createElementWithChildren(
+                            ReactFacade.MenuItem,
+                            menuItemProps,
+                            it.value.displayName
+                        )
+                    }.toTypedArray()
+                )
+                val dropDownProps = js("{}")
+                dropDownProps.overlay = menu
+                dropDownProps.placement = "bottomLeft"
+                val buttonProps = js("{}")
+                buttonProps.size = "large"
+                val dropdown = ReactFacade.createElementWithChildren(ReactFacade.Dropdown, dropDownProps,
+                    ReactFacade.createElementWithChildren(ReactFacade.Button, buttonProps, "Настройки"))
+                dropdown
+            }.element
+        }
+        return ReactFacade.createProxyAdvanced(parentIndex, { parentIndexValue:Int?, childIndex:Int ->
             val style = js("{}")
             if (config.fit) {
                 style.width = "100%"
@@ -47,61 +85,28 @@ class AntdWebTabsContainer(configure: WebTabsContainerConfiguration.() -> Unit) 
                 WebTabsPosition.TOP -> "top"
                 WebTabsPosition.BOTTOM -> "bottom"
             }
-            ReactFacade.callbackRegistry.get(callbackIndex).onChange = { key: String ->
+            ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange = { key: String ->
                 activeTabId = key
                 maybeRedraw()
             }
             props.onChange = { key: String ->
-                ReactFacade.callbackRegistry.get(callbackIndex).onChange(key)
+                ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange(key)
             }
             props.type = "editable-card"
             props.activeKey = activeTabId
-            ReactFacade.callbackRegistry.get(callbackIndex).onEdit = { targetKey: String, action: String ->
+            ReactFacade.getCallbacks(parentIndexValue, childIndex).onEdit = { targetKey: String, action: String ->
                 if (action == "remove") {
                     removeTab(targetKey)
                 }
             }
             props.onEdit = { targetKey: String, action: String ->
-                ReactFacade.callbackRegistry.get(callbackIndex).onEdit(targetKey, action)
+                ReactFacade.getCallbacks(parentIndexValue, childIndex).onEdit(targetKey, action)
             }
             props.style = style
 
             if (config.tools.isNotEmpty()) {
-                val proxy = ReactFacade.createProxy { toolsCalbackIndex ->
-                    val menuProps = js("{}")
-                    ReactFacade.callbackRegistry.get(toolsCalbackIndex).onClick = { event: dynamic ->
-                        val key = event.key as String
-                        launch {
-                            config.tools[key.toInt()].handler.invoke()
-                        }
-                    }
-                    menuProps.onClick = { event: dynamic ->
-                        ReactFacade.callbackRegistry.get(toolsCalbackIndex).onClick(event)
-                    }
-                    val menu = ReactFacade.createElementWithChildren(
-                        ReactFacade.Menu,
-                        menuProps,
-                        config.tools.withIndex().map {
-                            val menuItemProps = js("{}")
-                            menuItemProps.key = it.index.toString()
-                            ReactFacade.createElementWithChildren(
-                                ReactFacade.MenuItem,
-                                menuItemProps,
-                                it.value.displayName
-                            )
-                        }.toTypedArray()
-                    )
-                    val dropDownProps = js("{}")
-                    dropDownProps.overlay = menu
-                    dropDownProps.placement = "bottomLeft"
-                    val buttonProps = js("{}")
-                    buttonProps.size = "large"
-                    val dropdown = ReactFacade.createElementWithChildren(ReactFacade.Dropdown, dropDownProps,
-                        ReactFacade.createElementWithChildren(ReactFacade.Button, buttonProps, "Настройки"))
-                    dropdown
-                }
                 val extraContentProps = js("{}")
-                extraContentProps.left = proxy.element
+                extraContentProps.left = tabExtraContent
                 props.tabBarExtraContent = extraContentProps
             }
             ReactFacade.createElementWithChildren(ReactFacade.Tabs, props, tabs.map {
@@ -115,7 +120,7 @@ class AntdWebTabsContainer(configure: WebTabsContainerConfiguration.() -> Unit) 
                 ReactFacade.createElementWithChildren(
                     ReactFacade.TabPane,
                     paneProps,
-                    findAntdComponent(it.content).getReactElement()
+                    findAntdComponent(it.content).getReactElement(if(parentIndex == null) parentIndexes[it] else parentIndex)
                 )
             }.toTypedArray())
 
@@ -142,13 +147,20 @@ class AntdWebTabsContainer(configure: WebTabsContainerConfiguration.() -> Unit) 
         panel.configure()
         tabs.add(panel)
         activeTabId = panel.id
+        parentIndexes[panel] = ReactFacade.incrementAndGetCallbackIndex()
         maybeRedraw()
     }
 
     override fun removeTab(id: String) {
-        tabs.removeAll { it.id == id }
+        val tab = tabs.find { it.id == id }
+        tabs.remove(tab)
         activeTabId = if (tabs.isNotEmpty()) tabs[0].id else null
         maybeRedraw()
+        val index = parentIndexes[tab]
+        parentIndexes.remove(tab)
+        window.setTimeout({
+            ReactFacade.callbackRegistry.delete(index)
+        }, 1000)
     }
 
     override fun select(id: String): WebNode? {

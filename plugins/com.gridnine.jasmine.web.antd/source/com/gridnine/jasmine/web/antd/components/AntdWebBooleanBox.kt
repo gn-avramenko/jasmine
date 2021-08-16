@@ -19,8 +19,8 @@ class AntdWebBooleanBox(private val configure: WebBooleanBoxConfiguration.()->Un
         config.configure()
     }
 
-    override fun createReactElementWrapper(): ReactElementWrapper {
-        return ReactFacade.createProxy{callbackIndex:Int ->
+    override fun createReactElementWrapper(parentIndex:Int?): ReactElementWrapper {
+        return ReactFacade.createProxy(parentIndex){parentIndexValue:Int?, childIndex:Int ->
             val props = js("{}")
             props.disabled = !enabled
             props.checked = value
@@ -29,11 +29,11 @@ class AntdWebBooleanBox(private val configure: WebBooleanBoxConfiguration.()->Un
             props.unCheckedChildren = config.offText
             config.width?.let { props.style.width = it }
             config.height?.let { props.style.height = it }
-            ReactFacade.callbackRegistry.get(callbackIndex).onChange =  { checked:Boolean ->
+            ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange =  { checked:Boolean ->
                 value = checked
                 maybeRedraw()
             }
-            props.onChange = {checked:Boolean -> ReactFacade.callbackRegistry.get(callbackIndex).onChange(checked)}
+            props.onChange = {checked:Boolean -> ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange(checked)}
             ReactFacade.createElement(ReactFacade.Switch, props)
         }
     }

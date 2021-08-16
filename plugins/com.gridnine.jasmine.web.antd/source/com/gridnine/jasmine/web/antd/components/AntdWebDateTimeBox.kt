@@ -23,8 +23,8 @@ class AntdWebDateTimeBox(private val configure: WebDateTimeBoxConfiguration.()->
         config.configure()
     }
 
-    override fun createReactElementWrapper(): ReactElementWrapper {
-        return ReactFacade.createProxy{callbackIndex->
+    override fun createReactElementWrapper(parentIndex:Int?): ReactElementWrapper {
+        return ReactFacade.createProxy(parentIndex){parentIndexValue:Int?, childIndex:Int->
             val props = js("{}")
             props.allowClear = true
             props.disabled = !enabled
@@ -36,11 +36,11 @@ class AntdWebDateTimeBox(private val configure: WebDateTimeBoxConfiguration.()->
             if (validationMessage != null) {
                 props.className = "jasmine-input-error"
             }
-            ReactFacade.callbackRegistry.get(callbackIndex).onChange = { newValue:dynamic ->
+            ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange = { newValue:dynamic ->
                 value = ReactFacade.momentToDateTime(newValue)
                 maybeRedraw()
             }
-            props.onChange = {e:dynamic -> ReactFacade.callbackRegistry.get(callbackIndex).onChange(e)}
+            props.onChange = {e:dynamic -> ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange(e)}
 
             val showTime = js("{}")
             showTime.showNow = true

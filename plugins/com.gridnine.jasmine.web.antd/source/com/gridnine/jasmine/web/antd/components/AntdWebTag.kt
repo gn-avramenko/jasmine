@@ -26,7 +26,7 @@ class AntdWebTag(private val tagName: String, private val id: String?) : WebTag,
 
     private var visible = true
 
-    override fun createReactElementWrapper(): ReactElementWrapper {
+    override fun createReactElementWrapper(parentIndex:Int?): ReactElementWrapper {
         val callbacks = js("{}")
         if(postRenderAction != null){
             callbacks.componentDidMount = {
@@ -38,9 +38,10 @@ class AntdWebTag(private val tagName: String, private val id: String?) : WebTag,
             reactElement = null
         }
 
-        return ReactFacade.createProxyAdvanced({
+        return ReactFacade.createProxyAdvanced(parentIndex, { parentIndexValue:Int?, childIndex:Int->
+
             if (text != null) {
-                val props = createProps(it)
+                val props = createProps(parentIndexValue, childIndex)
                 if(tagName == "textarea"){
                     ReactFacade.createElementWithChildren(tagName, props, text!!)
                 } else{
@@ -51,19 +52,19 @@ class AntdWebTag(private val tagName: String, private val id: String?) : WebTag,
                 }
 
             } else if(getChildren().isEmpty()){
-                ReactFacade.createElement(tagName, createProps(it))
+                ReactFacade.createElement(tagName, createProps(parentIndexValue, childIndex))
             }else {
                 val ch = children.map {
                     children.elementCache.getOrPut(it) {
-                        findAntdComponent(it).getReactElement()
+                        findAntdComponent(it).getReactElement(parentIndex)
                     }
                 }
-                ReactFacade.createElementWithChildren(tagName, createProps(it), ch.toTypedArray())
+                ReactFacade.createElementWithChildren(tagName, createProps(parentIndexValue, childIndex), ch.toTypedArray())
             }
         }, callbacks)
     }
 
-    private fun createProps(callbackIndex:Int): dynamic {
+    private fun createProps(parentIndexValue:Int?, childIndex:Int): dynamic {
         val result = js("{}")
         if (id != null) {
             result.id = id
@@ -74,12 +75,12 @@ class AntdWebTag(private val tagName: String, private val id: String?) : WebTag,
         handlers.forEach {
             if (it.value != null) {
                 val functionName ="on${it.key.capitalize()}"
-                ReactFacade.callbackRegistry.get(callbackIndex)[functionName] = { event: dynamic ->
+                ReactFacade.getCallbacks(parentIndexValue, childIndex)[functionName] = { event: dynamic ->
                     launch {
                         it.value!!.invoke(event)
                     }
                 }
-                result[functionName] = { event: dynamic ->ReactFacade.callbackRegistry.get(callbackIndex)[functionName](event)}
+                result[functionName] = { event: dynamic ->ReactFacade.getCallbacks(parentIndexValue, childIndex)[functionName](event)}
             }
         }
         if(classes.isNotEmpty()){
