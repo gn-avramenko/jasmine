@@ -49,4 +49,5 @@ class BooleanBoxWidget(configure:BooleanBoxWidgetConfiguration.()->Unit):BaseWeb
 class BooleanBoxWidgetConfiguration{
     var width:String? = null
     var height:String? = null
+    var notEditable = false
 }

@@ -308,7 +308,7 @@ class JdbcDatabase : Database {
     }
 
     override fun <D : BaseIdentity> getVersionsMetadata(cls: KClass<D>, uid: String): List<VersionMetadata> {
-        val versionProps = hashSetOf(JdbcVersionMetadata.version, JdbcVersionMetadata.modified, JdbcVersionMetadata.modifiedBy, JdbcVersionMetadata.comment)
+        val versionProps = hashSetOf(JdbcVersionMetadata.versionProperty, JdbcVersionMetadata.modifiedProperty, JdbcVersionMetadata.modifiedByProperty, JdbcVersionMetadata.commentProperty)
         val versionsTableDescr = JdbcUtils.getTableDescription("${JdbcUtils.getTableName(cls)}Versions")
         val versionsQuery = "select ${getColumnNames(versionsTableDescr, versionProps, emptySet())} from ${versionsTableDescr.name} where objectUid = ?"
         val result = JdbcUtils.query(versionsQuery, { ps, _ ->
@@ -582,7 +582,7 @@ class JdbcDatabase : Database {
     private fun <E : BaseIdentity> loadVersion(cls: KClass<E>, uid: String, versionNumber: Int, ctx: JdbcContext): JdbcVersionData {
         val descr = JdbcUtils.getTableDescription("${JdbcUtils.getTableName(cls)}Versions")
         val query = "select ${getColumnNames(descr, emptySet(), emptySet())} " +
-                "from ${descr.name} where ${JdbcVersionData.objectUid}=? and  ${JdbcVersionData.version}= ?"
+                "from ${descr.name} where ${JdbcVersionData.objectUidProperty}=? and  ${JdbcVersionData.versionProperty}= ?"
         return JdbcUtils.loadEntityWithBlob(query, ctx, { ps, _ ->
             ps.setString(1, uid)
             ps.setInt(2, versionNumber)

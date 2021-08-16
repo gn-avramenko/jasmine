@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.gradle.plugin.tasks
 
-import com.moowork.gradle.node.npm.NpmTask
+import com.github.gradle.node.npm.task.NpmTask
 import javax.inject.Inject
 
 @Suppress("ConvertSecondaryConstructorToPrimary", "unused", "LeakingThis")
@@ -13,7 +13,7 @@ abstract class NodeJsInstallXmlHttpRequestTask :NpmTask{
     @Inject
     constructor(){
         group="other"
-        setArgs(arrayListOf("install", "xmlhttprequest"))
+        args.set(arrayListOf("install", "xmlhttprequest"))
     }
     companion object{
         const val taskName = "_NodeJsInstallXmlHttpRequestTask"

@@ -52,6 +52,8 @@ open class NodeJsCopyJsFilesInBuildTask :DefaultTask{
         val baseDir = pluginsToFileMap[coreTestPluginId]?:throw IllegalArgumentException("no file mapping found for plugin $coreTestPluginId")
         files.add(File(baseDir, "resources/js/core-test-initializer.js"))
         files.add(File(baseDir.parentFile.parentFile, "lib/js/kotlin.js"))
+        files.add(File(baseDir.parentFile.parentFile, "lib/js/kotlinx-atomicfu.js"))
+        files.add(File(baseDir.parentFile.parentFile, "lib/js/kotlinx-coroutines-core.js"))
         files.forEach {
             val actualContent = it.readBytes()
             val targetFile = File("node_modules/${it.name}")

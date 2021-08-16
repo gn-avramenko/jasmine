@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.gradle.plugin.tasks
 
-import com.moowork.gradle.node.task.NodeTask
+import com.github.gradle.node.task.NodeTask
 import java.io.File
 import javax.inject.Inject
 
@@ -14,14 +14,14 @@ abstract class NodeJsStartTestInIDETask : NodeTask {
     @Inject
     constructor(launcherName:String, pluginId:String,debug:Boolean){
         group="other"
-        setIgnoreExitValue(true)
+        ignoreExitValue.set(true)
         dependsOn(NodeJsCopyJsFilesTask.taskName)
         shouldRunAfter(StartTestServerInIDETask.getTaskName(pluginId))
-        script = File(project.projectDir, "node_modules/mocha/bin/mocha")
+        script.set(File(project.projectDir, "node_modules/mocha/bin/mocha"))
         if(debug){
-            setArgs(arrayListOf("--inspect-brk", "--timeout", "10000", "node_modules/$launcherName"))
+            args.set(arrayListOf("--inspect-brk", "--timeout", "10000", "node_modules/$launcherName"))
         } else {
-            setArgs(arrayListOf("--timeout", "10000", "node_modules/$launcherName"))
+            args.set(arrayListOf("--timeout", "10000", "node_modules/$launcherName"))
         }
     }
     companion object{

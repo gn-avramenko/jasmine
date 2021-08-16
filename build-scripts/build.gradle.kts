@@ -12,6 +12,6 @@ repositories {
 dependencies{
     "compile"(gradleApi())
     "compile"(files("../lib/spf-1.0.jar"))
-    "compile"("com.github.node-gradle:gradle-node-plugin:2.2.3")
+    "compile"("com.github.node-gradle:gradle-node-plugin:3.1.0")
     "compile"("junit:junit:4.12")
 }

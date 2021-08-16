@@ -5,6 +5,7 @@
 package com.gridnine.jasmine.web.antd.components
 
 import com.gridnine.jasmine.common.core.model.BaseIntrospectableObjectJS
+import com.gridnine.jasmine.web.core.common.EnvironmentJS
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.*
 import kotlinx.browser.document
@@ -14,6 +15,9 @@ import org.w3c.dom.Element
 class AntdWebUiLibraryAdapter:WebUiLibraryAdapter {
 
     override fun showLoader() {
+        if(EnvironmentJS.test){
+            return
+        }
         val bodyElm = document.getElementsByTagName("body").item(0)!!
         document.getElementById("loader")?: kotlin.run {
             val divElement = document.createElement("div")
@@ -27,6 +31,9 @@ class AntdWebUiLibraryAdapter:WebUiLibraryAdapter {
     }
 
     override fun hideLoader() {
+        if(EnvironmentJS.test){
+            return
+        }
         val bodyElm = document.getElementsByTagName("body").item(0)!!
         bodyElm.asDynamic().classList.remove("loading")
     }
@@ -90,10 +97,16 @@ class AntdWebUiLibraryAdapter:WebUiLibraryAdapter {
     }
 
     override fun showWindow(component: WebNode) {
+        if(EnvironmentJS.test){
+            return
+        }
         ReactFacade.render(findAntdComponent(component).getReactElement(null), document.getElementsByTagName("body").item(0) as Element)
     }
 
     override fun showNotification(message: String, notificationType: NotificationTypeJS, timeout: Int) {
+        if(EnvironmentJS.test){
+            return
+        }
         when (notificationType){
             NotificationTypeJS.WARNING -> {
                 ReactFacade.notification.warning(object{
@@ -124,6 +137,26 @@ class AntdWebUiLibraryAdapter:WebUiLibraryAdapter {
     }
 
     override fun <W : WebNode> showDialog(dialogContent: W, configure: DialogConfiguration<W>.() -> Unit): Dialog<W> {
+        if(EnvironmentJS.test){
+            val config = DialogConfiguration<W>()
+            config.configure()
+            lateinit var dialog : Dialog<W>
+            dialog = object:Dialog<W>{
+                override fun close() {
+                    //noops
+                }
+
+                override fun getContent(): W {
+                    return dialogContent
+                }
+
+                override suspend fun simulateClick(buttonIdx: Int): Any? {
+                    return config.buttons[buttonIdx].handler.invoke(dialog)
+                }
+
+            }
+            return dialog
+        }
         return AntdWebDialogFactory.showDialog(dialogContent, configure)
     }
 

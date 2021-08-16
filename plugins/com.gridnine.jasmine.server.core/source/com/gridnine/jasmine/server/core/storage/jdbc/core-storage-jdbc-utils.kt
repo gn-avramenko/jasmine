@@ -44,19 +44,19 @@ class JdbcVersionMetadata :BaseIdentity(){
     var version:Int =0
     override fun setValue(propertyName: String, value: Any?) {
 
-        if (JdbcVersionMetadata.modified == propertyName) {
+        if (JdbcVersionMetadata.modifiedProperty == propertyName) {
             modified = value as LocalDateTime
             return
         }
-        if (JdbcVersionMetadata.modifiedBy == propertyName) {
+        if (JdbcVersionMetadata.modifiedByProperty == propertyName) {
             modifiedBy = value as String
             return
         }
-        if (JdbcVersionMetadata.comment == propertyName) {
+        if (JdbcVersionMetadata.commentProperty == propertyName) {
             comment = value as String?
             return
         }
-        if (JdbcVersionMetadata.version == propertyName) {
+        if (JdbcVersionMetadata.versionProperty == propertyName) {
             version = value as Int
             return
         }
@@ -65,25 +65,25 @@ class JdbcVersionMetadata :BaseIdentity(){
 
     override fun getValue(propertyName: String): Any? {
 
-        if (JdbcVersionMetadata.modified == propertyName) {
+        if (JdbcVersionMetadata.modifiedProperty == propertyName) {
             return modified
         }
-        if (JdbcVersionMetadata.modifiedBy == propertyName) {
+        if (JdbcVersionMetadata.modifiedByProperty == propertyName) {
             return modifiedBy
         }
-        if (JdbcVersionMetadata.comment == propertyName) {
+        if (JdbcVersionMetadata.commentProperty == propertyName) {
             return comment
         }
-        if (JdbcVersionMetadata.version == propertyName) {
+        if (JdbcVersionMetadata.versionProperty == propertyName) {
            return  version
         }
         return super.getValue(propertyName)
     }
     companion object{
-        const val modifiedBy = "modifiedBy"
-        const val modified = "modified"
-        const val comment = "comment"
-        const val version = "version"
+        const val modifiedByProperty = "modifiedBy"
+        const val modifiedProperty = "modified"
+        const val commentProperty = "comment"
+        const val versionProperty = "version"
     }
 }
 
@@ -102,27 +102,27 @@ class JdbcDocumentData:BaseIdentity(){
 
     override fun setValue(propertyName: String, value: Any?) {
 
-        if (JdbcDocumentData.revision == propertyName) {
+        if (JdbcDocumentData.revisionProperty == propertyName) {
             revision = value as Int
             return
         }
-        if (JdbcDocumentData.data == propertyName) {
+        if (JdbcDocumentData.dataProperty == propertyName) {
             data = value as JdbcBlobWrapper
             return
         }
-        if (JdbcDocumentData.version == propertyName) {
+        if (JdbcDocumentData.versionProperty == propertyName) {
             version = value as Int
             return
         }
-        if (JdbcDocumentData.modified == propertyName) {
+        if (JdbcDocumentData.modifiedProperty == propertyName) {
             modified = value as LocalDateTime
             return
         }
-        if (JdbcDocumentData.modifiedBy == propertyName) {
+        if (JdbcDocumentData.modifiedByProperty == propertyName) {
             modifiedBy = value as String
             return
         }
-        if (JdbcDocumentData.comment == propertyName) {
+        if (JdbcDocumentData.commentProperty == propertyName) {
             comment = value as String?
             return
         }
@@ -131,34 +131,34 @@ class JdbcDocumentData:BaseIdentity(){
 
     override fun getValue(propertyName: String): Any? {
 
-        if (JdbcDocumentData.revision == propertyName) {
+        if (JdbcDocumentData.revisionProperty == propertyName) {
             return revision
         }
-        if (JdbcDocumentData.data == propertyName) {
+        if (JdbcDocumentData.dataProperty == propertyName) {
             return data
         }
-        if (JdbcDocumentData.version == propertyName) {
+        if (JdbcDocumentData.versionProperty == propertyName) {
             return version
         }
-        if (JdbcDocumentData.modified == propertyName) {
+        if (JdbcDocumentData.modifiedProperty == propertyName) {
             return modified
         }
-        if (JdbcDocumentData.modifiedBy == propertyName) {
+        if (JdbcDocumentData.modifiedByProperty == propertyName) {
             return modifiedBy
         }
-        if (JdbcDocumentData.comment == propertyName) {
+        if (JdbcDocumentData.commentProperty == propertyName) {
             return comment
         }
         return super.getValue(propertyName)
     }
 
     companion object{
-        const val revision = "revision"
-        const val version = "version"
-        const val data = "data"
-        const val modified = "modified"
-        const val modifiedBy = "modifiedBy"
-        const val comment = "comment"
+        const val revisionProperty = "revision"
+        const val versionProperty = "version"
+        const val dataProperty = "data"
+        const val modifiedProperty = "modified"
+        const val modifiedByProperty = "modifiedBy"
+        const val commentProperty = "comment"
     }
 }
 
@@ -173,27 +173,27 @@ class JdbcVersionData:BaseIntrospectableObject(){
 
     override fun setValue(propertyName: String, value: Any?) {
 
-        if (JdbcVersionData.version == propertyName) {
+        if (JdbcVersionData.versionProperty == propertyName) {
             version = value as Int
             return
         }
-        if (JdbcVersionData.data == propertyName) {
+        if (JdbcVersionData.dataProperty == propertyName) {
             data = value as JdbcBlobWrapper
             return
         }
-        if (JdbcVersionData.objectUid == propertyName) {
+        if (JdbcVersionData.objectUidProperty == propertyName) {
             objectUid = value as String
             return
         }
-        if (JdbcVersionData.modifiedBy == propertyName) {
+        if (JdbcVersionData.modifiedByProperty == propertyName) {
             modifiedBy = value as String
             return
         }
-        if (JdbcVersionData.modified == propertyName) {
+        if (JdbcVersionData.modifiedProperty == propertyName) {
             modified = value as LocalDateTime
             return
         }
-        if (JdbcVersionData.comment == propertyName) {
+        if (JdbcVersionData.commentProperty == propertyName) {
             comment = value as String?
             return
         }
@@ -202,34 +202,34 @@ class JdbcVersionData:BaseIntrospectableObject(){
 
     override fun getValue(propertyName: String): Any? {
 
-        if (JdbcVersionData.version == propertyName) {
+        if (JdbcVersionData.versionProperty == propertyName) {
             return version
         }
-        if (JdbcVersionData.data == propertyName) {
+        if (JdbcVersionData.dataProperty == propertyName) {
             return data
         }
-        if (JdbcVersionData.objectUid == propertyName) {
+        if (JdbcVersionData.objectUidProperty == propertyName) {
             return objectUid
         }
-        if (JdbcVersionData.modifiedBy == propertyName) {
+        if (JdbcVersionData.modifiedByProperty == propertyName) {
             return modifiedBy
         }
-        if (JdbcVersionData.modified == propertyName) {
+        if (JdbcVersionData.modifiedProperty == propertyName) {
             return modified
         }
-        if (JdbcVersionData.comment == propertyName) {
+        if (JdbcVersionData.commentProperty == propertyName) {
             return comment
         }
         return super.getValue(propertyName)
     }
 
     companion object{
-        const val version = "version"
-        const val objectUid = "objectUid"
-        const val  data= "data"
-        const val modifiedBy ="modifiedBy"
-        const val modified ="modified"
-        const val comment ="comment"
+        const val versionProperty = "version"
+        const val objectUidProperty = "objectUid"
+        const val  dataProperty= "data"
+        const val modifiedByProperty ="modifiedBy"
+        const val modifiedProperty ="modified"
+        const val commentProperty ="comment"
     }
 }
 object JdbcUtils {
@@ -365,10 +365,10 @@ object JdbcUtils {
             properties[BaseIdentity.uid] = DatabasePropertyDescription(BaseIdentity.uid, JdbcPropertyType.STRING, false, null)
             properties[BaseAsset.revision] = DatabasePropertyDescription(BaseAsset.revision,
                     JdbcPropertyType.INT, false, null)
-            properties[JdbcVersionMetadata.modified] = DatabasePropertyDescription(JdbcVersionMetadata.modified, JdbcPropertyType.LOCAL_DATE_TIME, false, null)
-            properties[JdbcVersionMetadata.modifiedBy] = DatabasePropertyDescription(JdbcVersionMetadata.modifiedBy, JdbcPropertyType.STRING, false, null)
-            properties[JdbcVersionMetadata.comment] = DatabasePropertyDescription(JdbcVersionMetadata.comment, JdbcPropertyType.STRING, false, null)
-            properties[JdbcVersionMetadata.version] = DatabasePropertyDescription(JdbcVersionMetadata.version, JdbcPropertyType.INT, false, null)
+            properties[JdbcVersionMetadata.modifiedProperty] = DatabasePropertyDescription(JdbcVersionMetadata.modifiedProperty, JdbcPropertyType.LOCAL_DATE_TIME, false, null)
+            properties[JdbcVersionMetadata.modifiedByProperty] = DatabasePropertyDescription(JdbcVersionMetadata.modifiedByProperty, JdbcPropertyType.STRING, false, null)
+            properties[JdbcVersionMetadata.commentProperty] = DatabasePropertyDescription(JdbcVersionMetadata.commentProperty, JdbcPropertyType.STRING, false, null)
+            properties[JdbcVersionMetadata.versionProperty] = DatabasePropertyDescription(JdbcVersionMetadata.versionProperty, JdbcPropertyType.INT, false, null)
             properties[AGGREGATED_DATA_COLUMN_NAME] = DatabasePropertyDescription(AGGREGATED_DATA_COLUMN_NAME,
                     JdbcPropertyType.TEXT, true, null)
             val tableName = getTableName(item.id)
@@ -392,11 +392,11 @@ object JdbcUtils {
             val collections = linkedMapOf<String, DatabaseCollectionDescription>()
             properties[BaseIdentity.uid] = DatabasePropertyDescription(BaseIdentity.uid, JdbcPropertyType.STRING, true, null)
             properties[BaseDocument.revision] = DatabasePropertyDescription(BaseDocument.revision, JdbcPropertyType.INT, false, null)
-            properties[JdbcVersionMetadata.modified] = DatabasePropertyDescription(JdbcVersionMetadata.modified, JdbcPropertyType.LOCAL_DATE_TIME, false, null)
-            properties[JdbcVersionMetadata.modifiedBy] = DatabasePropertyDescription(JdbcVersionMetadata.modifiedBy, JdbcPropertyType.STRING, false, null)
-            properties[JdbcVersionMetadata.comment] = DatabasePropertyDescription(JdbcVersionMetadata.comment, JdbcPropertyType.STRING, false, null)
-            properties[JdbcVersionMetadata.version] = DatabasePropertyDescription(JdbcVersionMetadata.version, JdbcPropertyType.INT, false, null)
-            properties[JdbcDocumentData.data] = DatabasePropertyDescription(JdbcDocumentData.data, JdbcPropertyType.BLOB, false, null)
+            properties[JdbcVersionMetadata.modifiedProperty] = DatabasePropertyDescription(JdbcVersionMetadata.modifiedProperty, JdbcPropertyType.LOCAL_DATE_TIME, false, null)
+            properties[JdbcVersionMetadata.modifiedByProperty] = DatabasePropertyDescription(JdbcVersionMetadata.modifiedByProperty, JdbcPropertyType.STRING, false, null)
+            properties[JdbcVersionMetadata.commentProperty] = DatabasePropertyDescription(JdbcVersionMetadata.commentProperty, JdbcPropertyType.STRING, false, null)
+            properties[JdbcVersionMetadata.versionProperty] = DatabasePropertyDescription(JdbcVersionMetadata.versionProperty, JdbcPropertyType.INT, false, null)
+            properties[JdbcDocumentData.dataProperty] = DatabasePropertyDescription(JdbcDocumentData.dataProperty, JdbcPropertyType.BLOB, false, null)
             val tableName = getTableName(item.id)
             descriptions[tableName] = DatabaseTableDescription(tableName, properties, collections)
             descriptions["${tableName}Versions"] = createVersionsTableDescription(tableName)
@@ -407,12 +407,12 @@ object JdbcUtils {
     private fun createVersionsTableDescription(tableName: String): DatabaseTableDescription {
         val properties = linkedMapOf<String, DatabasePropertyDescription>()
         val collections = linkedMapOf<String, DatabaseCollectionDescription>()
-        properties[JdbcVersionData.objectUid] = DatabasePropertyDescription(JdbcVersionData.objectUid, JdbcPropertyType.STRING, true, null)
-        properties[JdbcVersionData.version] = DatabasePropertyDescription(JdbcVersionData.version, JdbcPropertyType.INT, false, null)
-        properties[JdbcVersionData.modified] = DatabasePropertyDescription(JdbcVersionData.modified, JdbcPropertyType.LOCAL_DATE_TIME, false, null)
-        properties[JdbcVersionData.modifiedBy] = DatabasePropertyDescription(JdbcVersionData.modifiedBy, JdbcPropertyType.STRING, false, null)
-        properties[JdbcVersionData.comment] = DatabasePropertyDescription(JdbcVersionData.comment, JdbcPropertyType.STRING, false, null)
-        properties[JdbcVersionData.data] = DatabasePropertyDescription(JdbcVersionData.data, JdbcPropertyType.BLOB, false, null)
+        properties[JdbcVersionData.objectUidProperty] = DatabasePropertyDescription(JdbcVersionData.objectUidProperty, JdbcPropertyType.STRING, true, null)
+        properties[JdbcVersionData.versionProperty] = DatabasePropertyDescription(JdbcVersionData.versionProperty, JdbcPropertyType.INT, false, null)
+        properties[JdbcVersionData.modifiedProperty] = DatabasePropertyDescription(JdbcVersionData.modifiedProperty, JdbcPropertyType.LOCAL_DATE_TIME, false, null)
+        properties[JdbcVersionData.modifiedByProperty] = DatabasePropertyDescription(JdbcVersionData.modifiedByProperty, JdbcPropertyType.STRING, false, null)
+        properties[JdbcVersionData.commentProperty] = DatabasePropertyDescription(JdbcVersionData.commentProperty, JdbcPropertyType.STRING, false, null)
+        properties[JdbcVersionData.dataProperty] = DatabasePropertyDescription(JdbcVersionData.dataProperty, JdbcPropertyType.BLOB, false, null)
         return DatabaseTableDescription("${tableName}Versions", properties, collections)
     }
 

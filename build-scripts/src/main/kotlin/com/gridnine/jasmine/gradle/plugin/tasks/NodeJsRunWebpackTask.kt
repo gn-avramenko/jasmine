@@ -5,8 +5,7 @@
 
 package com.gridnine.jasmine.gradle.plugin.tasks
 
-import com.moowork.gradle.node.npm.NpmTask
-import com.moowork.gradle.node.task.NodeTask
+import com.github.gradle.node.task.NodeTask
 import java.io.File
 import javax.inject.Inject
 
@@ -16,7 +15,7 @@ abstract class NodeJsRunWebpackTask :NodeTask{
     constructor(){
         group="webpack"
         dependsOn(NodeJsInstallWebpackTask.taskName,NodeJsInstallWebpackCliTask.taskName,)
-        script = File(project.projectDir, "node_modules/.bin/webpack")
+        script.set(File(project.projectDir, "node_modules/.bin/webpack"))
     }
     companion object{
         const val taskName = "_NodeJsRunWebpackTask"

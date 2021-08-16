@@ -4,11 +4,11 @@
  *****************************************************************/
 package com.gridnine.jasmine.gradle.plugin
 
+import com.github.gradle.node.NodeExtension
 import com.gridnine.jasmine.gradle.plugin.tasks.*
 import com.gridnine.spf.meta.SpfPluginsRegistry
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.attributes.Attribute
 import org.gradle.api.attributes.AttributeDisambiguationRule
 import org.gradle.api.attributes.MultipleCandidatesDetails
 import java.io.File
@@ -36,8 +36,8 @@ class JasminePlugin: Plugin<Project>{
             it.add(target.dependencies.create("${KotlinUtils.KOTLIN_MODULE_GROUP}:${KotlinUtils.KOTLIN_COMPILER_EMBEDDABLE}:${extension.kotlinVersion}"))
         }
         if(extension.enableWebTasks) {
-            target.extensions.configure("node") { it: com.moowork.gradle.node.NodeExtension ->
-                it.download = true
+            target.extensions.configure("node") { it: NodeExtension ->
+                it.download.set(true)
             }
             KotlinUtils.createConfiguration(KotlinUtils.WEB_CONFIGURATION_NAME, registry, target, pluginsToFileMap, SpfPluginType.WEB, SpfPluginType.WEB_CORE)
             val corePluginId = registry.plugins.find { KotlinUtils.getType(it) == SpfPluginType.WEB_CORE }!!.id

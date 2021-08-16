@@ -31,6 +31,9 @@ class AntdWebPanel(private val configure: WebPanelConfiguration.()->Unit) : WebP
         return ReactFacade.createProxy(parentIndex){parentIndexValue:Int?, childIndex:Int ->
             val headerProps = js("{}")
             headerProps.className = "jasmine-panel-header"
+            headerProps.style = js("{}")
+            headerProps.style.gridColumn = "1"
+            headerProps.style.gridRow = "1"
             val toolsDivProps = js("{}")
             val toolsDivStyle = js("{}")
             toolsDivProps.style = toolsDivStyle
@@ -67,7 +70,16 @@ class AntdWebPanel(private val configure: WebPanelConfiguration.()->Unit) : WebP
                 config.height?.let { containerStyle.height = it }
             }
             containerProps.className = "jasmine-panel-container"
-            ReactFacade.createElementWithChildren("div", containerProps, arrayOf(headerDiv, findAntdComponent(config.content).getReactElement(parentIndex)))
+            containerStyle.style = js("{}")
+            containerStyle.style.display = "grid"
+            containerStyle.style.gridTemplateColumns = "1fr"
+            containerStyle.style.gridTemplateRows = "auto 1fr"
+
+            val elementWrapperProps = js("{}")
+            elementWrapperProps.style = js("{}")
+            elementWrapperProps.style.gridColumn = "1"
+            elementWrapperProps.style.gridRow = "2"
+            ReactFacade.createElementWithChildren("div", containerProps, arrayOf(headerDiv, ReactFacade.createElementWithChildren("div", elementWrapperProps, findAntdComponent(config.content).getReactElement(parentIndex))))
         }
     }
 

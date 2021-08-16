@@ -5,7 +5,7 @@
 
 package com.gridnine.jasmine.gradle.plugin.tasks
 
-import com.moowork.gradle.node.npm.NpmTask
+import com.github.gradle.node.npm.task.NpmTask
 import javax.inject.Inject
 
 @Suppress("ConvertSecondaryConstructorToPrimary", "unused", "LeakingThis")
@@ -14,7 +14,7 @@ abstract class NodeJsInstallWebpackCliTask :NpmTask{
     constructor(){
         group="webpack"
         dependsOn(NodeJsInstallWebpackTask.taskName)
-        setArgs(arrayListOf("install", "webpack-cli"))
+        args.set(arrayListOf("install", "webpack-cli"))
     }
     companion object{
         const val taskName = "_NodeJsInstallWebpackCliTask"

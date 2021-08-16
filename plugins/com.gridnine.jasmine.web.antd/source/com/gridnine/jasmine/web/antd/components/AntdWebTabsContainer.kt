@@ -4,6 +4,7 @@
  *****************************************************************/
 package com.gridnine.jasmine.web.antd.components
 
+import com.gridnine.jasmine.web.core.common.EnvironmentJS
 import com.gridnine.jasmine.web.core.remote.launch
 import com.gridnine.jasmine.web.core.ui.components.*
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
@@ -147,6 +148,9 @@ class AntdWebTabsContainer(configure: WebTabsContainerConfiguration.() -> Unit) 
         panel.configure()
         tabs.add(panel)
         activeTabId = panel.id
+        if(EnvironmentJS.test){
+            return
+        }
         parentIndexes[panel] = ReactFacade.incrementAndGetCallbackIndex()
         maybeRedraw()
     }
@@ -155,6 +159,9 @@ class AntdWebTabsContainer(configure: WebTabsContainerConfiguration.() -> Unit) 
         val tab = tabs.find { it.id == id }
         tabs.remove(tab)
         activeTabId = if (tabs.isNotEmpty()) tabs[0].id else null
+        if(EnvironmentJS.test){
+            return
+        }
         maybeRedraw()
         val index = parentIndexes[tab]
         parentIndexes.remove(tab)

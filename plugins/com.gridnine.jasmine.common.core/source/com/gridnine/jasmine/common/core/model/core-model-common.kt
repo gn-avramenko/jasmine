@@ -7,7 +7,6 @@ package com.gridnine.jasmine.common.core.model
 
 import com.gridnine.jasmine.common.core.meta.L10nMetaRegistry
 import com.gridnine.jasmine.common.core.utils.TextUtils
-import java.util.*
 
 
 abstract class BaseIdentity : BaseIntrospectableObject(){
@@ -66,17 +65,17 @@ class L10nMessage: BaseIntrospectableObject {
     }
 
     override fun getCollection(collectionName: String): MutableList<Any> {
-        if (Companion.parameters == collectionName) {
+        if (Companion.parametersProperty == collectionName) {
             return parameters
         }
         return super.getCollection(collectionName)
     }
 
     override fun getValue(propertyName: String): Any? {
-        if (Companion.key == propertyName) {
+        if (Companion.keyProperty == propertyName) {
             return key
         }
-        if (Companion.bundle == propertyName) {
+        if (Companion.bundleProperty == propertyName) {
             return bundle
         }
 
@@ -84,11 +83,11 @@ class L10nMessage: BaseIntrospectableObject {
     }
 
     override fun setValue(propertyName: String, value: Any?) {
-        if (Companion.key == propertyName) {
+        if (Companion.keyProperty == propertyName) {
             key = value as String
             return
         }
-        if (Companion.bundle == propertyName) {
+        if (Companion.bundleProperty == propertyName) {
             bundle = value as String
             return
         }
@@ -96,9 +95,9 @@ class L10nMessage: BaseIntrospectableObject {
     }
 
     companion object {
-        const val key = "key"
-        const val bundle = "bundle"
-        const val parameters = "parameters"
+        const val keyProperty = "key"
+        const val bundleProperty = "bundle"
+        const val parametersProperty = "parameters"
     }
 
     override fun toString(): String {
