@@ -29,6 +29,7 @@ abstract class BaseWebComponentConfiguration{
     var className:String? = null
     var width:String? = null
     var height:String? = null
+    val specificProperties = hashMapOf<String,Any?>()
 }
 
 enum class WebDataHorizontalAlignment {

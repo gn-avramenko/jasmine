@@ -137,6 +137,9 @@ class AntdWebBorderContainer(configure: WebBorderContainerConfiguration.() -> Un
             }
             val props = js("{}")
             val style = js("{}")
+            config.className?.let {
+                props.className = it
+            }
             props.style = style
             if (config.fit) {
                 style.width = "100%"
@@ -170,12 +173,13 @@ class AntdWebBorderContainer(configure: WebBorderContainerConfiguration.() -> Un
             }
             var props = createSiderProps(type)
             val expandButtonProps = js("{}")
+            expandButtonProps.type = "text"
             expandButtonProps.style = js("{}")
             expandButtonProps.style.width = "100%"
             expandButtonProps.style.display = if (regionData.collapsed) "block" else "none"
             val expandFunctionName = "on${if (type == WebBorderRegionType.EAST) "East" else "West"}Expand"
-            val expandButtonTitle = if (type == WebBorderRegionType.EAST) "<<" else ">>"
-
+            val expandButtonIcon = if (type == WebBorderRegionType.EAST) ReactFacade.createElement(ReactFacade.IconDoubleLeftOutlined, js("{}")) else ReactFacade.createElement(ReactFacade.IconDoubleRightOutlined, js("{}"))
+            expandButtonProps.icon = expandButtonIcon
             ReactFacade.getCallbacks(parentIndexValue, childIndex)[expandFunctionName] = {
 
                 regionData.collapsed = false
@@ -188,8 +192,11 @@ class AntdWebBorderContainer(configure: WebBorderContainerConfiguration.() -> Un
             val collapseButtonProps = js("{}")
             collapseButtonProps.style = js("{}")
             collapseButtonProps.style.width = "100%"
+
             val collapseFunctionName = "on${if (type == WebBorderRegionType.EAST) "East" else "West"}Collapse"
-            val collapseButtonTitle = if (type == WebBorderRegionType.EAST) ">>" else "<<"
+            val collapseButtonIcon = if (type == WebBorderRegionType.EAST) ReactFacade.createElement(ReactFacade.IconDoubleRightOutlined, js("{}")) else ReactFacade.createElement(ReactFacade.IconDoubleLeftOutlined, js("{}"))
+            collapseButtonProps.icon = collapseButtonIcon
+            collapseButtonProps.type = "text"
             ReactFacade.getCallbacks(parentIndexValue, childIndex)[collapseFunctionName] = {
                 regionData.collapsed = true
                 ref.current.forceRedraw()
@@ -214,7 +221,7 @@ class AntdWebBorderContainer(configure: WebBorderContainerConfiguration.() -> Un
             centerPanelStyle.minHeight = "0px"
             val headerContent = ReactFacade.createElementWithChildren(
                 ReactFacade.LayoutHeader, northPanelProps,
-                ReactFacade.createElementWithChildren(ReactFacade.Button, collapseButtonProps, collapseButtonTitle)
+                ReactFacade.createElement(ReactFacade.Button, collapseButtonProps)
             )
             val centerContent = ReactFacade.createElementWithChildren(
                 ReactFacade.LayoutContent,
@@ -226,7 +233,7 @@ class AntdWebBorderContainer(configure: WebBorderContainerConfiguration.() -> Un
                     ReactFacade.createElementWithChildren(
                         ReactFacade.Layout, fullPanelProps,
                         arrayOf(headerContent, centerContent)
-                    ), ReactFacade.createElementWithChildren(ReactFacade.Button, expandButtonProps, expandButtonTitle)
+                    ), ReactFacade.createElement(ReactFacade.Button, expandButtonProps)
                 )
             )
         }
@@ -249,7 +256,7 @@ class AntdWebBorderContainer(configure: WebBorderContainerConfiguration.() -> Un
         }
         props.collapsible = true
         props.reverseArrow = true
-        props.collapsedWidth = 50
+        props.collapsedWidth = 30
         props.collapsed = regionData.collapsed
         props.trigger = null
         return props

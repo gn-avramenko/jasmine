@@ -59,6 +59,14 @@ class AntdWebMenuButton(configure: WebMenuButtonConfiguration.() -> Unit) : WebM
                 if(config.icon != null){
                     buttonProps.icon = AntdWebLinkButton.getElementForIcon(config.icon!!)
                 }
+                val size = config.specificProperties["size"] as String?
+                if(size!= null){
+                    buttonProps.size = size
+                }
+                val type = config.specificProperties["type"] as String?
+                if(type!= null){
+                    buttonProps.type = type
+                }
                 val dropdown = ReactFacade.createElementWithChildren(
                     ReactFacade.Dropdown, dropdownProps,
                     if(config.title != null) {
@@ -67,7 +75,13 @@ class AntdWebMenuButton(configure: WebMenuButtonConfiguration.() -> Unit) : WebM
                         ReactFacade.createElement(ReactFacade.Button, buttonProps)
                     }
                 )
-                dropdown
+                if(config.toolTip != null){
+                    val tooltipProps = js("{}")
+                    tooltipProps.title = config.toolTip
+                    ReactFacade.createElementWithChildren(ReactFacade.Tooltip, tooltipProps, dropdown)
+                } else {
+                    dropdown
+                }
             }
         }
     }

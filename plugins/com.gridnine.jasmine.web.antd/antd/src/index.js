@@ -4,7 +4,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Spin , Layout,Input,Menu,Tabs, Dropdown,Button,Table,Select,Tooltip,DatePicker,InputNumber,notification,Modal,Switch,Collapse,Tree} from 'antd';
 import debounce from "lodash/debounce";
-import {LinkOutlined,EyeInvisibleOutlined, EyeTwoTone, CloseOutlined,PlusOutlined,UpOutlined,DownOutlined,MinusOutlined} from '@ant-design/icons';
+import {LinkOutlined,EyeInvisibleOutlined, EyeTwoTone, CloseOutlined,PlusOutlined,UpOutlined,DownOutlined,MinusOutlined,FolderOutlined,MenuOutlined,
+  DoubleRightOutlined,DoubleLeftOutlined,EditOutlined,DeleteOutlined,SaveOutlined,OrderedListOutlined,FolderViewOutlined,ExportOutlined} from '@ant-design/icons';
 import moment from 'moment';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -211,6 +212,16 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 800, ...props }) {
      IconUpOutlined:UpOutlined,
      IconDownOutlined:DownOutlined,
      IconMinusOutlined:MinusOutlined,
+     IconFolderOutlined:FolderOutlined,
+     IconMenuOutlined:MenuOutlined,
+     IconDoubleRightOutlined: DoubleRightOutlined,
+     IconDoubleLeftOutlined: DoubleLeftOutlined,
+     IconEditOutlined:EditOutlined,
+     IconDeleteOutlined:DeleteOutlined,
+     IconSaveOutlined:SaveOutlined,
+     IconOrderedListOutlined:OrderedListOutlined,
+     IconFolderViewOutlined:FolderViewOutlined,
+     IconExportOutlined:ExportOutlined,
      createProxyAdvanced:function(parentIndex, renderCallback, otherCallbacks){
          let allCallbacks = otherCallbacks || {}
          allCallbacks.renderCallback = renderCallback;

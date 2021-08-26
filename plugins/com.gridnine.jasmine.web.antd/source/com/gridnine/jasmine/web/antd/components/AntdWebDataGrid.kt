@@ -94,6 +94,7 @@ class AntdWebDataGrid<E : BaseIntrospectableObjectJS>(configure: WebDataGridConf
                 props.pagination.current = currentPage
                 props.pagination.pageSize = pageSizeValue
                 props.pagination.total = totalItemsCount
+                props.pagination.position = arrayOf("bottomRight")
             }
             props.columns = columns
             props.dataSource = currentPageData.toTypedArray()
@@ -109,9 +110,9 @@ class AntdWebDataGrid<E : BaseIntrospectableObjectJS>(configure: WebDataGridConf
             props.onChange = { pagination: dynamic, filters: dynamic, sorter: dynamic ->
                 ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange(pagination, filters, sorter)
             }
-            props.scroll = js("{}")
-            props.scroll.x = "max-content"
-            props.scroll.y = "calc(100vh - 200px)"
+//            props.scroll = js("{}")
+//            props.scroll.x = "max-content"
+//            props.scroll.y = "calc(100vh - 200px)"
 
             ReactFacade.getCallbacks(parentIndexValue, childIndex).rowKey = { record: dynamic ->
                 currentPageData.indexOf(record).toString()
@@ -125,14 +126,17 @@ class AntdWebDataGrid<E : BaseIntrospectableObjectJS>(configure: WebDataGridConf
                     selectedKeys.addAll(selectedRowKeys.map { it.toInt() })
                     selectionChangeListener?.invoke()
                 }
-            props.rowSelection = js("{}")
-            props.rowSelection.onChange = { selectedRowKeys: Array<String>, selectedRows: dynamic ->
-                ReactFacade.getCallbacks(parentIndexValue, childIndex).rowSelectionOnChange(selectedRowKeys, selectedRows)
-            }
-            props.rowSelection.type = when(config.selectionType){
-                DataGridSelectionType.NONE -> "radio"
-                DataGridSelectionType.SINGLE -> "radio"
-                DataGridSelectionType.MULTIPLE -> "checkbox"
+            if(config.selectionType != DataGridSelectionType.NONE) {
+                props.rowSelection = js("{}")
+                props.rowSelection.onChange = { selectedRowKeys: Array<String>, selectedRows: dynamic ->
+                    ReactFacade.getCallbacks(parentIndexValue, childIndex)
+                        .rowSelectionOnChange(selectedRowKeys, selectedRows)
+                }
+                props.rowSelection.type = when (config.selectionType) {
+                    DataGridSelectionType.SINGLE -> "radio"
+                    DataGridSelectionType.MULTIPLE -> "checkbox"
+                    DataGridSelectionType.NONE -> ""
+                }
             }
             ReactFacade.getCallbacks(parentIndexValue, childIndex).onDoubleClick = { index: Int ->
                 val value = currentPageData[index]

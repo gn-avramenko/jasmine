@@ -205,4 +205,6 @@ table-layout:fixed;
     padding-left: 0px !important;
     padding-right: 0px !important;
     background-color: #f3f3f3;
+    vertical-align: middle;
 }
+

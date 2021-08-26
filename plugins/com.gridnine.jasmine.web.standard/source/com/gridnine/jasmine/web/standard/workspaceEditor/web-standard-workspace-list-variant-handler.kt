@@ -223,6 +223,7 @@ class WorkspaceListCriterionsEditor: BaseWebNodeWrapper<WebGridLayoutWidget>() {
             headerComponents.add(WebLabelWidget("Поле"))
             headerComponents.add(WebLabelWidget("Условие"))
             headerComponents.add(WebLabelWidget("Значение"))
+            headerComponents.add(null)
             columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(300,300,300))
             columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(180,180,180))
             columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(500,500,null))

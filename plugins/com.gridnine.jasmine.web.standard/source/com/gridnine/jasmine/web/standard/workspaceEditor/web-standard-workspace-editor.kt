@@ -65,7 +65,8 @@ class WorkspaceEditor(workspace:WorkspaceDTJS): BaseWebNodeWrapper<WebBorderCont
             showBorder = true
         }
         val saveButton = WebUiLibraryAdapter.get().createLinkButton{
-            title = WebMessages.save
+            toolTip = WebMessages.save
+            icon = "core:save"
         }
         val toolBar = WebGridLayoutWidget{
             width = "100%"
@@ -116,11 +117,11 @@ class WorkspaceEditor(workspace:WorkspaceDTJS): BaseWebNodeWrapper<WebBorderCont
                     tree.insertBefore(node, target.children[0].id)
                 }
             } else if (point == WebTreeInsertNodePoint.APPEND || point == WebTreeInsertNodePoint.BOTTOM) {
-                val node = WebTreeNode(MiscUtilsJS.createUUID(), source.text, source.userData)
+                val node = WebTreeNode(source.id, source.text, source.userData)
                 node.children.addAll(source.children)
                 tree.insertAfter(node, target.id)
             } else {
-                val node = WebTreeNode(MiscUtilsJS.createUUID(), source.text, source.userData)
+                val node = WebTreeNode(source.id, source.text, source.userData)
                 node.children.addAll(source.children)
                 tree.insertBefore(node, target.id)
             }
@@ -245,6 +246,7 @@ class WorkspaceEditor(workspace:WorkspaceDTJS): BaseWebNodeWrapper<WebBorderCont
         }
         centerContent.showNode(handler.getId())
         val userData =  node.userData?:getElementData(node.id)
+        node.userData = userData
         handler.setData(comp,  userData)
         lastEditor = handler
     }

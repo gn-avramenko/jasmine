@@ -87,7 +87,12 @@ class ListPanel(we: ListWorkspaceItemDTJS, actions: ActionsGroupWrapper) : BaseW
             it.setColumnsWidths(widths)
             val cells = actions.actions.map {action ->
                 val button = WebUiLibraryAdapter.get().createLinkButton{
-                    title = action.displayName
+                    if(action.icon != null){
+                        icon = action.icon
+                        toolTip = action.displayName
+                    } else {
+                        title = action.displayName
+                    }
                 }
                 if(action is ActionWrapper){
                     button.setHandler {
@@ -194,7 +199,7 @@ internal class FilterPanel(private val listItem:ListWorkspaceItemDTJS, private v
         _node = WebUiLibraryAdapter.get().createBorderContainer {
             fit = true
         }
-        _node.setSouthRegion {
+        _node.setNorthRegion {
             content = createButtons()
         }
         _node.setCenterRegion {
@@ -265,6 +270,7 @@ internal class FilterPanel(private val listItem:ListWorkspaceItemDTJS, private v
                 setHandler {
                     filters.forEach { fd ->
                         fd.handler.reset(fd.comp)
+                        applyCallback.invoke()
                     }
                 }
             }

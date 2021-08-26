@@ -37,6 +37,16 @@ class ShowVersionsEditorObjectButtonHandler: ObjectEditorTool<WebEditor<*,*,*>> 
         })
         val dialog = WebUiLibraryAdapter.get().showDialog(VersionsSelectDialogPanel(editor.objectType, editor.objectUid, editor.getTitle(), response.versions)){
             title = WebMessages.showVersions
+            button {
+                displayName = "Загрузить"
+                handler = {
+                    val version = it.getContent().getSelectedItemVersion()
+                    if(version != null){
+                        MainFrame.get().openTab(OpenObjectVersionData(editor.objectType, editor.objectUid, editor.getTitle(), version))
+                    }
+                    it.close()
+                }
+            }
             cancelButton()
         }
         dialog.getContent().closeCallbalck = dialog::close
@@ -92,6 +102,10 @@ class VersionsSelectDialogPanel(objectType:String, objectUid:String,  aTitle:Str
             it.setColumnsWidths("100%")
             it.addRow("100%", arrayListOf(WebGridLayoutWidgetCell(dataGrid)))
         }
+    }
+    fun getSelectedItemVersion():Int?{
+        val selected = dataGrid.getSelected()
+        return if(selected.isNotEmpty()) selected[0].version else null
     }
 
 }

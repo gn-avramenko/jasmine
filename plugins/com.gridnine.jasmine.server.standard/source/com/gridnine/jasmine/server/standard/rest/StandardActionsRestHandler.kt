@@ -28,6 +28,7 @@ class StandardActionsRestHandler :RestHandler<GetActionsRequest,GetActionsRespon
                     ad.id = action.id
                     ad.displayName = action.getDisplayName()!!
                     ad.actionHandler = action.actionHandler
+                    ad.icon = action.icon
                     if(action.displayHandlerRef != null) {
                         ad.displayHandler = UiMetaRegistry.get().displayHandlers[action.displayHandlerRef]!!.className
                     }
@@ -37,6 +38,7 @@ class StandardActionsRestHandler :RestHandler<GetActionsRequest,GetActionsRespon
                     val ad = ActionsGroupDescriptionDT()
                     ad.id = action.id
                     ad.displayName = action.getDisplayName()!!
+                    ad.icon = action.icon
                     actions.add(ad)
                     processGroupDescription(ad.actions, ad.id)
                 }

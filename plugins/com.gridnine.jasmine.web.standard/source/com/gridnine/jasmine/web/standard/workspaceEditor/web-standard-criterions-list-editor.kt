@@ -38,6 +38,7 @@ class WebWorkspaceCriterionsListEditor(internal val tableBox: GeneralTableBoxWid
     fun addEmptyRow(){
         val createMenuButton = WebUiLibraryAdapter.get().createMenuButton{
             icon = "core:plus"
+            specificProperties["type"] = "link"
             elements.add(StandardMenuItem().apply {
                 id = SIMPLE_CRITERION_ID
                 title= "Простое условие"
@@ -138,6 +139,7 @@ class CriterionsListToolsPanel(private val listEditor: WebWorkspaceCriterionsLis
     init {
         upButton = WebUiLibraryAdapter.get().createLinkButton{
             icon = "core:up"
+            specificProperties["type"] = "link"
         }
         upButton.setHandler {
             val idx = listEditor.handlers.indexOfFirst { rowId == it.getId() }
@@ -148,6 +150,7 @@ class CriterionsListToolsPanel(private val listEditor: WebWorkspaceCriterionsLis
         }
         downButton = WebUiLibraryAdapter.get().createLinkButton{
             icon = "core:down"
+            specificProperties["type"] = "link"
         }
         downButton.setHandler {
             val idx = listEditor.handlers.indexOfFirst { rowId == it.getId() }
@@ -158,6 +161,7 @@ class CriterionsListToolsPanel(private val listEditor: WebWorkspaceCriterionsLis
         }
         plusButton = WebUiLibraryAdapter.get().createMenuButton{
             icon = "core:plus"
+            specificProperties["type"] = "link"
             elements.add(StandardMenuItem().apply {
                 id = SIMPLE_CRITERION_ID
                 title= "Простое условие"
@@ -201,6 +205,7 @@ class CriterionsListToolsPanel(private val listEditor: WebWorkspaceCriterionsLis
         }
         minusButton = WebUiLibraryAdapter.get().createLinkButton{
             icon = "core:minus"
+            specificProperties["type"] = "link"
         }
         minusButton.setHandler {
             val idx = listEditor.handlers.indexOfFirst { rowId == it.getId() }
@@ -214,8 +219,8 @@ class CriterionsListToolsPanel(private val listEditor: WebWorkspaceCriterionsLis
         _node = WebGridLayoutWidget {
             noPadding = true
         }.also {
-            it.setColumnsWidths("auto","auto","auto","auto")
-            it.addRow(upButton, downButton, plusButton,minusButton)
+            it.setColumnsWidths("auto","auto","auto","auto","1fr")
+            it.addRow(upButton, downButton, plusButton,minusButton, null)
         }
     }
 }

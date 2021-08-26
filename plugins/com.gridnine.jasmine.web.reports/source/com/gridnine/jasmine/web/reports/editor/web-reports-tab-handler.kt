@@ -180,7 +180,8 @@ class PrepareReportContentPanel(reportTitle: String, private val reportId:String
             height = "100%"
         }
         val downloadButton = WebUiLibraryAdapter.get().createLinkButton {
-            title = "Экспорт"
+            toolTip = "Экспорт"
+            icon = "core:export"
         }
         val northPanel = WebGridLayoutWidget {
             className = "jasmine-report-title"

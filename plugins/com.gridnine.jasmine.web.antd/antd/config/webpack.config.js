@@ -164,6 +164,7 @@ module.exports = function (webpackEnv) {
           javascriptEnabled: true,
           modifyVars: {
                   'layout-header-height': 'auto',
+                  'disabled-color':'rgb(0, 0, 0)'
           }
         },
        }

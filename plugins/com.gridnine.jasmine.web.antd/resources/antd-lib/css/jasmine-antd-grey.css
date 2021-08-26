@@ -28,10 +28,22 @@
   font-weight: 100
 }
 .jasmine-table-box{
-table-layout:fixed;
+    table-layout:fixed;
 }
 
+.jasmine-report-title{
+    font-size: 16px !important;
+    font-weight: bold !important;
+    padding-bottom: 5px !important;
+    padding-top: 5px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    background: #fafafa;
+}
 
+.jasmine-report-title button{
+    margin-top:4px;
+}
 
 .jasmine-table-box td{
   font-size: 14px;
@@ -132,12 +144,12 @@ body.loading .loader {
 .jasmine-web-tile{
     display: inline-block;
     padding: 5px;
-    margin:5px;
+    margin-left:5px;
+    margin-right:5px;
     font-size: 14px;
-    font-weight: bold;
-    color: #575765;
+    font-weight: normal;
+    color:rgb(92,107,119);
     line-height: 20px;
-    background: url('images/blank.gif') no-repeat;
     vertical-align:top;
     border-color: #D3D3D3;
     border-width: 1px;
@@ -162,4 +174,46 @@ body.loading .loader {
     width: 20px;
     height: 15px;
     background: url('images/panel_tools.png') no-repeat -32px 0px;
+}
+
+.jasmine-navigation-panel main ul{
+    background: #0F1A34 !important;
+    color: #fff;
+    font-size: 14px;
+}
+.jasmine-navigation-panel .ant-menu-submenu-title{
+    font-weight: bold;
+}
+.jasmine-navigation-panel .ant-menu-submenu-arrow {
+    color: #fff;
+}
+
+.jasmine-navigation-panel .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background-color:  #0F1A34;
+  }
+
+.ant-modal-footer{
+    padding-right:28px;
+}
+
+.ant-btn[disabled],
+.ant-btn[disabled]:hover,
+.ant-btn[disabled]:focus,
+.ant-btn[disabled]:active {
+  color: rgba(0,0,0,0.45);
+  background: #f5f5f5;
+  text-shadow: none;
+  box-shadow: none;
+}
+
+.ant-btn .ant-btn-link {
+  color: #1890ff;
+}
+
+.ant-btn .ant-btn-link {
+  color: #1890ff;
+}
+
+.jasmine-table-right-div-disabled{
+    background: #f5f5f5;
 }

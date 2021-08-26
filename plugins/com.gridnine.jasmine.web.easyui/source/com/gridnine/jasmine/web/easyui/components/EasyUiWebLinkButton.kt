@@ -37,8 +37,9 @@ class EasyUiWebLinkButton(configure: WebLinkButtonConfiguration.()->Unit) :WebLi
 
     override fun decorate() {
        jq = jQuery("#linkButton${uid}")
+        val title = config.title?:config.toolTip
         jq.linkbutton(object{
-            val text   = if(config.title?.contains(" ") == true) "<nobr>${config.title}</nobr>" else config.title
+            val text   = if(title?.contains(" ") == true) "<nobr>${title}</nobr>" else title
             val iconCls = getIconClass(config.icon)
             val onClick = {
                 launch(handler)

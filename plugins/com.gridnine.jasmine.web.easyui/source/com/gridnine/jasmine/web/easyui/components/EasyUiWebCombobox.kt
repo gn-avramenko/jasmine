@@ -115,12 +115,15 @@ class EasyUiWebCombobox(private val config: WebSelectConfiguration) : WebSelect,
     }
 
     override fun getHtml(): String {
+//        if(config.width == "100%"){
+//            return "<input id=\"${getId()}\" style = \"100%-100px\">"
+//        }
         return "<input id=\"${getId()}\">"
     }
 
     override fun decorate() {
         jq = jQuery("#${getId()}")
-        jq.combobox(object{
+        val options = object{
             val valueField ="id"
             val textField = "text"
             val mode = "remote"
@@ -152,7 +155,8 @@ class EasyUiWebCombobox(private val config: WebSelectConfiguration) : WebSelect,
                     }
                 }
             }
-        })
+        }.asDynamic()
+        jq.combobox(options)
         initialized = true
         setValuesInternal()
         setEnabledInternal()

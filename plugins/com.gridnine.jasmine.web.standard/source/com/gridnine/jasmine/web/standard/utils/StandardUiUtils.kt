@@ -92,14 +92,15 @@ object StandardUiUtils {
 
     fun<E:Enum<E>> choseVariant(cls:KClass<E>, aTitle:String = "Выберите вариант", action: (E)->Unit){
         val widget  = EnumValueWidget<E>{
-            width = DefaultUIParameters.controlWidthAsString
+            width = "100%"
             allowNull = false
             enumClass = cls
         }
         val layout = WebGridLayoutWidget {
             uid = "choseDialog"
+            width = DefaultUIParameters.controlWidthAsString
         }.also {it ->
-            it.setColumnsWidths("auto")
+            it.setColumnsWidths(DefaultUIParameters.controlWidthAsString)
             it.addRow(widget)
         }
         WebUiLibraryAdapter.get().showDialog(layout){
@@ -107,9 +108,11 @@ object StandardUiUtils {
             button {
                 displayName =  "Да"
                 handler = {
-                    val selectedValue = widget.getValue()!!
-                    it.close()
-                    action.invoke(selectedValue)
+                    val selectedValue = widget.getValue()
+                    if(selectedValue != null) {
+                        it.close()
+                        action.invoke(selectedValue)
+                    }
                 }
             }
             cancelButton()

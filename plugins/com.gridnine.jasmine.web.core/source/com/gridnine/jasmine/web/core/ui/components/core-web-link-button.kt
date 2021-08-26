@@ -6,15 +6,14 @@
 package com.gridnine.jasmine.web.core.ui.components
 
 
-abstract class BaseButtonConfiguration{
+abstract class BaseButtonConfiguration:BaseWebComponentConfiguration(){
     var title:String? = null
     var icon:String? = null
+    var toolTip:String? = null
 }
 
-class WebLinkButtonConfiguration:BaseButtonConfiguration(){
-    var width:String?=null
-    var height:String?=null
-}
+class WebLinkButtonConfiguration:BaseButtonConfiguration()
+
 interface WebLinkButton: WebNode {
     fun setHandler(handler:suspend ()-> Unit)
     fun setEnabled(value:Boolean)

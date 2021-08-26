@@ -79,11 +79,13 @@ class ObjectEditorImpl<W : WebEditor<*, *, *>>(private val obj: OpenObjectData, 
             content = rootWebEditor
         }
         viewButton = WebUiLibraryAdapter.get().createLinkButton {
-            title = "Просмотр"
+            toolTip = "Просмотр"
+            icon = "core:view"
         }
         viewButton.setVisible(!readOnly)
         editButton = WebUiLibraryAdapter.get().createLinkButton {
-            title = "Редактировать"
+            toolTip = "Редактировать"
+            icon = "core:edit"
         }
         editButton.setVisible(readOnly)
         editButton.setHandler {
@@ -113,7 +115,12 @@ class ObjectEditorImpl<W : WebEditor<*, *, *>>(private val obj: OpenObjectData, 
                 when (wrapper) {
                     is ActionWrapper -> {
                         val toolButton = WebUiLibraryAdapter.get().createLinkButton {
-                            title = wrapper.displayName
+                            if(wrapper.icon != null){
+                                icon = wrapper.icon
+                                toolTip = wrapper.displayName
+                            } else {
+                                title = wrapper.displayName
+                            }
                         }
                         toolButton.setHandler {
                             wrapper.getActionHandler<ObjectEditorTool<W>>().invoke(this@ObjectEditorImpl)
@@ -125,7 +132,12 @@ class ObjectEditorImpl<W : WebEditor<*, *, *>>(private val obj: OpenObjectData, 
                     }
                     is ActionsGroupWrapper -> {
                         val menuButton = WebUiLibraryAdapter.get().createMenuButton {
-                            title = wrapper.displayName
+                            if(wrapper.icon != null){
+                                icon = wrapper.icon
+                                toolTip = wrapper.displayName
+                            } else {
+                                title = wrapper.displayName
+                            }
                             wrapper.actions.forEach { action ->
                                 if (action is ActionWrapper) {
                                     elements.add(StandardMenuItem().apply {

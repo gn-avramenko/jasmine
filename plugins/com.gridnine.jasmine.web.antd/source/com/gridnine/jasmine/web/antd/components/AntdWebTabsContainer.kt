@@ -23,6 +23,7 @@ class AntdWebTabsContainer(configure: WebTabsContainerConfiguration.() -> Unit) 
 
     private var activeTabId: String? = null
 
+    private var previousActiveTabId:String? = null
     private val uuid = MiscUtilsJS.createUUID()
 
     init {
@@ -61,8 +62,10 @@ class AntdWebTabsContainer(configure: WebTabsContainerConfiguration.() -> Unit) 
                 dropDownProps.placement = "bottomLeft"
                 val buttonProps = js("{}")
                 buttonProps.size = "large"
+                buttonProps.type = "text"
+                buttonProps.icon = ReactFacade.createElement(ReactFacade.IconMenuOutlined,  js("{}"))
                 val dropdown = ReactFacade.createElementWithChildren(ReactFacade.Dropdown, dropDownProps,
-                    ReactFacade.createElementWithChildren(ReactFacade.Button, buttonProps, "Настройки"))
+                    ReactFacade.createElement(ReactFacade.Button, buttonProps))
                 dropdown
             }.element
         }
@@ -87,6 +90,7 @@ class AntdWebTabsContainer(configure: WebTabsContainerConfiguration.() -> Unit) 
                 WebTabsPosition.BOTTOM -> "bottom"
             }
             ReactFacade.getCallbacks(parentIndexValue, childIndex).onChange = { key: String ->
+                previousActiveTabId = activeTabId
                 activeTabId = key
                 maybeRedraw()
             }
@@ -147,6 +151,7 @@ class AntdWebTabsContainer(configure: WebTabsContainerConfiguration.() -> Unit) 
         val panel = WebTabPanel()
         panel.configure()
         tabs.add(panel)
+        previousActiveTabId = activeTabId
         activeTabId = panel.id
         if(EnvironmentJS.test){
             return
@@ -158,7 +163,12 @@ class AntdWebTabsContainer(configure: WebTabsContainerConfiguration.() -> Unit) 
     override fun removeTab(id: String) {
         val tab = tabs.find { it.id == id }
         tabs.remove(tab)
-        activeTabId = if (tabs.isNotEmpty()) tabs[0].id else null
+
+        activeTabId = when{
+            tabs.any { it.id == previousActiveTabId } -> previousActiveTabId
+            tabs.isNotEmpty() -> tabs[0].id
+            else -> null
+        }
         if(EnvironmentJS.test){
             return
         }
@@ -175,6 +185,7 @@ class AntdWebTabsContainer(configure: WebTabsContainerConfiguration.() -> Unit) 
         if (activeTabId == id) {
             return node?.content
         }
+        previousActiveTabId = activeTabId
         activeTabId = id
         maybeRedraw()
         return node?.content

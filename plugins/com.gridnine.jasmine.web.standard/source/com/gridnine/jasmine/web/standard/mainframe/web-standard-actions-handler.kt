@@ -19,6 +19,7 @@ import com.gridnine.jasmine.web.standard.StandardRestClient
 abstract class BaseActionWrapper{
     lateinit var id:String
     lateinit var displayName:String
+    var icon:String?=null
 }
 
 class ActionWrapper:BaseActionWrapper(){
@@ -77,6 +78,7 @@ class WebActionsHandler{
                 action.actionHandlerClassName = it.actionHandler
                 action.displayHandlerClassName = it.displayHandler
                 action.displayName = it.displayName
+                action.icon = it.icon
                 result.actions.add(action)
                 return@forEach
             }
@@ -84,6 +86,7 @@ class WebActionsHandler{
             val groupWrapper = ActionsGroupWrapper()
             groupWrapper.id = it.id
             groupWrapper.displayName = it.displayName
+            groupWrapper.icon = it.icon
             result.actions.add(groupWrapper)
             processGroup(groupWrapper, it.actions)
         }

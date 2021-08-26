@@ -13,10 +13,7 @@ import com.gridnine.jasmine.common.reports.model.domain.ReportDescriptionIndexJS
 import com.gridnine.jasmine.common.reports.model.rest.ReportsWorkspaceItemDTJS
 import com.gridnine.jasmine.common.standard.model.rest.GetListRequestJS
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
-import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
-import com.gridnine.jasmine.web.core.ui.components.WebBorderContainer
-import com.gridnine.jasmine.web.core.ui.components.WebDataGridResponse
-import com.gridnine.jasmine.web.core.ui.components.WebDataHorizontalAlignment
+import com.gridnine.jasmine.web.core.ui.components.*
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import com.gridnine.jasmine.web.reports.editor.GenerateReportData
 import com.gridnine.jasmine.web.standard.StandardRestClient
@@ -65,6 +62,7 @@ class WebReportsListPanel(obj: ReportsWorkspaceItemDTJS) : BaseWebNodeWrapper<We
             fit = true
             fitColumns = true
             showPagination = true
+            selectionType = DataGridSelectionType.NONE
             obj.columns.forEach { col ->
                 val propertyDescr = domainDescr.properties[col]
                 val collectionDescr = domainDescr.collections[col]
@@ -104,6 +102,7 @@ class WebReportsListPanel(obj: ReportsWorkspaceItemDTJS) : BaseWebNodeWrapper<We
         dataGrid.setRowDblClickListener {
             MainFrame.get().openTab(GenerateReportData(it.document!!))
         }
+
         _node.setCenterRegion {
             content = dataGrid
         }

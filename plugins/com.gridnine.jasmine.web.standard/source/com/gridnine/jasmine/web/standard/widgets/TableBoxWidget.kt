@@ -12,6 +12,7 @@ import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
 import com.gridnine.jasmine.web.core.ui.components.WebLinkButton
 import com.gridnine.jasmine.web.core.ui.components.WebNode
+import com.gridnine.jasmine.web.core.ui.components.WebTag
 import com.gridnine.jasmine.web.core.utils.MiscUtilsJS
 import kotlin.js.Date
 
@@ -36,6 +37,7 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
             }
             createButton = WebUiLibraryAdapter.get().createLinkButton{
                 icon="core:plus"
+                specificProperties["type"] = "link"
             }
             createButton.setHandler {
                 addRow(0)
@@ -143,6 +145,11 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
                 comp.upButton.setEnabled(!readonly && idx>0)
                 comp.plusButton.setEnabled(!readonly)
                 comp.minusButton.setEnabled(!readonly)
+                if(readonly) {
+                    comp.rightDiv.getClass().addClasses("jasmine-table-right-div-disabled")
+                } else {
+                    comp.rightDiv.getClass().removeClasses("jasmine-table-right-div-disabled")
+                }
             }
         }
     }
@@ -308,9 +315,11 @@ class TableBoxWidgetToolsPanel( private val tableBox:TableBoxWidget<*,*,*>, priv
     internal val downButton:WebLinkButton
     internal val plusButton:WebLinkButton
     internal val minusButton:WebLinkButton
-    init {
+    internal val rightDiv:WebTag
+        init {
         upButton = WebUiLibraryAdapter.get().createLinkButton{
             icon = "core:up"
+            specificProperties["type"] = "link"
         }
         upButton.setHandler {
             val idx = tableBox.rowsAdditionalData.indexOfFirst { rowId == it.id }
@@ -321,6 +330,7 @@ class TableBoxWidgetToolsPanel( private val tableBox:TableBoxWidget<*,*,*>, priv
         }
         downButton = WebUiLibraryAdapter.get().createLinkButton{
             icon = "core:down"
+            specificProperties["type"] = "link"
         }
         downButton.setHandler {
             val idx = tableBox.rowsAdditionalData.indexOfFirst { rowId == it.id }
@@ -331,6 +341,7 @@ class TableBoxWidgetToolsPanel( private val tableBox:TableBoxWidget<*,*,*>, priv
         }
         plusButton = WebUiLibraryAdapter.get().createLinkButton{
             icon = "core:plus"
+            specificProperties["type"] = "link"
         }
         plusButton.setHandler {
             val idx = tableBox.rowsAdditionalData.indexOfFirst { rowId == it.id }
@@ -338,6 +349,7 @@ class TableBoxWidgetToolsPanel( private val tableBox:TableBoxWidget<*,*,*>, priv
         }
         minusButton = WebUiLibraryAdapter.get().createLinkButton{
             icon = "core:minus"
+            specificProperties["type"] = "link"
         }
         minusButton.setHandler {
             val idx = tableBox.rowsAdditionalData.indexOfFirst { rowId == it.id }
@@ -345,11 +357,15 @@ class TableBoxWidgetToolsPanel( private val tableBox:TableBoxWidget<*,*,*>, priv
             tableBox.getNode().removeRow(idx)
             tableBox.updateToolsVisibility()
         }
+        rightDiv = WebUiLibraryAdapter.get().createTag("div",MiscUtilsJS.createUUID())
+            rightDiv.getStyle().setParameters("width" to "100%", "height" to "100%")
+        rightDiv.getClass().addClasses("jasmine-table-right-div")
+
         _node = WebGridLayoutWidget {
             noPadding = true
         }.also {
-            it.setColumnsWidths("auto","auto","auto","auto")
-            it.addRow(upButton,downButton,plusButton,minusButton)
+            it.setColumnsWidths("auto","auto","auto","auto","1fr")
+            it.addRow(upButton,downButton,plusButton,minusButton, rightDiv)
         }
     }
 }

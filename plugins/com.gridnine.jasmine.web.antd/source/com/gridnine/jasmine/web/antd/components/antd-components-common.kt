@@ -70,6 +70,16 @@ interface AntdReactFacade {
     val IconUpOutlined:Any
     val IconDownOutlined:Any
     val IconMinusOutlined:Any
+    val IconFolderOutlined:Any
+    val IconMenuOutlined:Any
+    val IconDoubleRightOutlined:Any
+    val IconDoubleLeftOutlined:Any
+    val IconEditOutlined:Any
+    val IconDeleteOutlined:Any
+    val IconSaveOutlined:Any
+    val IconOrderedListOutlined:Any
+    val IconFolderViewOutlined:Any
+    val IconExportOutlined:Any
     val createProxyAdvanced: (parentIndex:Int?, createCallback:(Int?, Int)->ReactElement, otherCallbacks:Any?)->ReactElementWrapper
     val createProxy: (parentIndex:Int?, createCallback:(Int?, Int)->ReactElement)->ReactElementWrapper
 }

@@ -159,6 +159,7 @@ object UiMetadataParser {
         val groupId = ParserUtils.getIdAttribute(elm)
         val groupDescription = registry.actions.getOrPut(groupId) { ActionsGroupDescription(groupId) } as ActionsGroupDescription
         ParserUtils.updateLocalizationsForId(groupDescription, groupDescription.id, localizations)
+        groupDescription.icon = groupDescription.icon?:elm.attributes["icon"]
         elm.children.forEach {child ->
             when(child.name){
                 "action" ->{
@@ -166,6 +167,7 @@ object UiMetadataParser {
                     val action = registry.actions.getOrPut(actionId) { ActionDescription(actionId) } as ActionDescription
                     action.actionHandler = child.attributes["action-handler"]!!
                     action.displayHandlerRef = child.attributes["display-handler-ref"]
+                    action.icon = child.attributes["icon"]
                     ParserUtils.updateLocalizationsForId(action, actionId, localizations)
                     groupDescription.actionsIds.add(actionId)
                 }

@@ -40,6 +40,7 @@ open class MainFrame(configure: MainFrameConfiguration.()->Unit):BaseWebNodeWrap
         }
         val westContent = WebUiLibraryAdapter.get().createBorderContainer {
             fit = true
+            className = "jasmine-navigation-panel"
         }
             westContent.setNorthRegion {
                 content = WebLabelWidget(config.title) {
@@ -47,6 +48,7 @@ open class MainFrame(configure: MainFrameConfiguration.()->Unit):BaseWebNodeWrap
                     className = "jasmine-logo"
                 }
             }
+
         navigationTree = WebUiLibraryAdapter.get().createTree {
             width = "100%"
             height = "100%"

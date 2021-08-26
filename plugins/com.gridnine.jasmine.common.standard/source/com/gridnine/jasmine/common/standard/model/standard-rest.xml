@@ -136,6 +136,7 @@
     <entity id="com.gridnine.jasmine.common.standard.model.rest.BaseActionDescriptionDT" abstract="true">
         <property id="id" type="STRING" lateinit="true"/>
         <property id="displayName" type="STRING" lateinit="true"/>
+        <property id="icon" type="STRING"/>
     </entity>
 
     <entity id ="com.gridnine.jasmine.common.standard.model.rest.ActionDescriptionDT" extends="com.gridnine.jasmine.common.standard.model.rest.BaseActionDescriptionDT">

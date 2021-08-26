@@ -8,8 +8,6 @@ package com.gridnine.jasmine.web.core.ui.components
 interface MenuElement
 
 class WebMenuButtonConfiguration():BaseButtonConfiguration(){
-    var width:String? = null
-    var height:String? = null
     val elements = arrayListOf<MenuElement>()
 }
 

@@ -49,9 +49,12 @@ class AntdWebNavigationTree (private val config:WebTreeConfiguration): WebTree,B
     }
 
     private fun createSubMenu(node:WebTreeNode): ReactElement {
+        val iconProps = js("{}")
+        iconProps.className = "jasmine-submenu"
         return ReactFacade.createElementWithChildren(ReactFacade.SubMenu, object{
             val key = node.id
             val title = node.text
+            val icon = ReactFacade.createElement(ReactFacade.IconFolderOutlined, iconProps)
         }, node.children.map { createMenuItem(it) }.toTypedArray())
     }
 

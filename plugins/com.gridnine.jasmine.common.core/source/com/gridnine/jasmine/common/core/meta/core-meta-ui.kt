@@ -206,7 +206,9 @@ class OptionsGroupDescription(id:String) :BaseModelElementDescription(id){
     val options = arrayListOf<OptionDescription>()
 }
 
-open class BaseActionDescription(id:String) :BaseModelElementDescription(id)
+open class BaseActionDescription(id:String) :BaseModelElementDescription(id){
+    var icon:String? = null
+}
 
 class ActionDescription(id:String) :BaseActionDescription(id){
     lateinit var actionHandler:String

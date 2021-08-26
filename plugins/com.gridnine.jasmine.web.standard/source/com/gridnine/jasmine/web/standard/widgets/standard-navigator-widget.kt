@@ -58,10 +58,16 @@ abstract class NavigatorWidget<VM: BaseVMJS, VS: BaseVSJS, VV: BaseVVJS> : WebEd
         _node = WebGridLayoutWidget{
             width = config.width
             height = config.height
+            noPadding = true
         }.also {
-            it.setColumnsWidths("100%","auto","auto")
+            it.setColumnsWidths("1fr","auto","auto")
             it.addRow(select,addButton,removeButton)
             it.addRow("100%", arrayListOf(WebGridLayoutWidgetCell(nodeProjector, 3)))
+        }
+        addButton.setHandler {
+            addHandler?.let {handler ->
+                handler.invoke()
+            }
         }
         WebEditorInterceptorsRegistry.get().getInterceptors(this)?.forEach {
             it.onInit(this)
