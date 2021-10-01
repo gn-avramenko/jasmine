@@ -32,7 +32,7 @@ abstract class BaseWebCompoundCriterionHandler<C:BaseComplexWorkspaceCriterionDT
         val valueTableBox = GeneralTableBoxWidget{
             width = "100%"
             columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(300-(indent+1)*51, 300-(indent+1)*51, 300-(indent+1)*51))
-            columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(200, 200, 200))
+            columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(180, 180, 180))
             columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(null, 300, null))
             columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(140, 140, 140))
         }

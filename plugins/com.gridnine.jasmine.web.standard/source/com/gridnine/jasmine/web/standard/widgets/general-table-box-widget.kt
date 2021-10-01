@@ -33,7 +33,7 @@ class GeneralTableBoxWidget(configure:GeneralTableBoxWidgetConfiguration.()->Uni
             config.height?.let { height -> it.getStyle().setParameters("height" to height) }
         }
         _node.setPostRenderAction {
-            window.setTimeout({render(config)}, 20)
+            window.setTimeout({render(config)}, 50)
 
         }
     }
@@ -68,12 +68,13 @@ class GeneralTableBoxWidget(configure:GeneralTableBoxWidgetConfiguration.()->Uni
 
     private fun render(config: GeneralTableBoxWidgetConfiguration) {
         val tableElement = window.document.getElementById("table${uid}")
-        val totalWidth = tableElement.asDynamic().offsetWidth as Int
+        val totalWidth = tableElement.asDynamic().offsetWidth as Int -2
         val calculatedWidths = config.columnWidths.map { ColumnWidthData(null, it) }
         calculateWidth(calculatedWidths, totalWidth)
         val width = calculatedWidths.map { it.calculatedWidth!! }.reduce { a,b -> a+b}
         if(width < totalWidth-5){
             tableElement.asDynamic().width = width
+            console.log("expand table width from $totalWidth to $width")
         }
         val colgroup = WebUiLibraryAdapter.get().createTag("colgroup")
         calculatedWidths.forEach { cw ->
