@@ -1,6 +1,6 @@
 /*****************************************************************
  * Gridnine AB http://www.gridnine.com
- * Project: jasmine-demo
+ * Project: coralina-docs-flow
  * This file is auto generated, don't modify it manually
  *****************************************************************/
 
