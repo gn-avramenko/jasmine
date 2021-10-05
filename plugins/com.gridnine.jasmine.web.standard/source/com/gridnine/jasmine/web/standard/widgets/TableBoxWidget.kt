@@ -114,7 +114,7 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
                 components.withIndex().forEach { (compIdx, comp) ->
                     if(compIdx < aSize -1) {
                         setValue(comp!!, compIdx, value)
-                        configure(comp, compIdx, vs?.get(idx))
+                        configure(comp, compIdx, if(vs != null && vs.isNotEmpty()) vs[idx] else null)
                     }
                 }
             } else {
@@ -122,7 +122,7 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
                 config.columns.withIndex().forEach {(collIdx, coll) ->
                     val comp = createWebComponent(coll.widgetDescription)
                     setValue(comp, collIdx, value)
-                    configure(comp, collIdx, vs?.get(idx))
+                    configure(comp, collIdx, if(vs != null && vs.isNotEmpty()) vs[idx] else null)
                     components.add(WebGeneralTableBoxWidgetCell(comp))
                 }
                 val rowId = MiscUtilsJS.createUUID()

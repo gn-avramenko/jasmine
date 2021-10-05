@@ -50,6 +50,7 @@ abstract class BaseWorkspaceItemListToDTConverter<M: BaseListWorkspaceItem, DT: 
                         values.addAll(cValue.values)
                     }
                     is WorkspaceSimpleCriterionEnumValues -> WorkspaceSimpleCriterionEnumValuesDT().apply {
+                        enumClassName = cValue.enumClassName
                         values.addAll(cValue.values)
                     }
                     is WorkspaceSimpleCriterionIntValue -> WorkspaceSimpleCriterionIntValueDT().apply {

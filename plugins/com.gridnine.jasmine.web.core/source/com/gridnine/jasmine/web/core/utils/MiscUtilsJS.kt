@@ -11,7 +11,9 @@ import com.gridnine.jasmine.common.core.meta.DomainMetaRegistryJS
 import com.gridnine.jasmine.common.core.model.BaseIntrospectableObjectJS
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import kotlinx.browser.window
+import kotlinx.coroutines.await
 import kotlin.js.Date
+import kotlin.js.Promise
 import kotlin.math.round
 import kotlin.random.Random
 
@@ -104,7 +106,37 @@ object MiscUtilsJS {
         a.download = suggestedFileName;
         a.click();
     }
+    suspend fun uploadFile(accept:String? = null) : FileData?{
+        return Promise<FileData?>{resolve, _ ->
+            var input = window.document.createElement("input").asDynamic();
+            input.accept == accept
+            input.type = "file"
+            input.click()
+            input.addEventListener("change") {
+                if(input.files.length == 0){
+                    resolve(null)
+                } else {
+                    val file= input.files[0]
+                    val reader = eval("new FileReader()")
+                    reader.readAsDataURL(file)
+                    reader.onloadend = {
+                        resolve(FileData(file.name, (reader.result as String).substringAfter("base64,"), file.type))
+                    }
+                    reader.onabort ={
+                        resolve(null)
+                    }
+                    reader.onerror ={
+                        resolve(null)
+                    }
+                }
+
+            }
+        }.await()
+
+    }
 }
+
+data class FileData(val fileName:String, val content:String, val contentType:String)
 
 enum class ContentTypeJS{
     EXCEL

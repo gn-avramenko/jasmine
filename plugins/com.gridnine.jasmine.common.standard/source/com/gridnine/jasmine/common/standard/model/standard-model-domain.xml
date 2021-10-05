@@ -162,4 +162,12 @@
         <property id="key" type="STRING" x-cache-find-handler="com.gridnine.jasmine.server.standard.storage.SequenceNumberKeyPropertyFindHandler"/>
         <property id="lastNumber" type="INT"/>
     </asset>
+    <enum id="com.gridnine.jasmine.common.standard.model.ContentType">
+        <enum-item id="EXCEL_2007"/>
+    </enum>
+    <nested-document id="com.gridnine.jasmine.common.standard.model.FileData">
+        <property id="fileName" type="STRING" non-nullable="true"/>
+        <property id="contentType" type="ENUM" class-name="com.gridnine.jasmine.common.standard.model.ContentType" non-nullable="true"/>
+        <property id="content" type="BYTE_ARRAY" non-nullable="true"/>
+    </nested-document>
 </domain>
