@@ -254,6 +254,7 @@
                                 </element>
                             </sequence>
                             <attribute name="id" use="required"/>
+                            <attribute name="hide-tools-column" type="boolean"/>
                         </extension>
                     </complexContent>
                 </complexType>

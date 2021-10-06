@@ -88,7 +88,7 @@ object GridWebEditorGenerator {
                                 widget as TableBoxWidgetDescription
                                 "${cell.id}Widget = ${getWidgetClassName(widget)}"{
                                     """width = "100%""""()
-                                    "showToolsColumn = true"()
+                                    "showToolsColumn = ${!widget.hideToolsColumn}"()
                                     "vmFactory = {${widget.id}VMJS()}"()
                                     webMapping["web-messages-${widget.id}"] = baseDir.name
                                     widget.columns.forEach { column ->

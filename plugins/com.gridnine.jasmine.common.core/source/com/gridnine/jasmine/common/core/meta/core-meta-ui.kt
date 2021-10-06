@@ -144,7 +144,7 @@ class DateTimeBoxWidgetDescription(notEditable:Boolean):BaseWidgetDescription(no
 
 class TableColumnDescription(id:String, val prefWidth:String?, val widget:BaseWidgetDescription ):BaseModelElementDescription(id)
 
-class TableBoxWidgetDescription(val id:String, notEditable: Boolean):BaseWidgetDescription(notEditable, WidgetType.TABLE_BOX){
+class TableBoxWidgetDescription(val id:String, notEditable: Boolean, var hideToolsColumn:Boolean = false):BaseWidgetDescription(notEditable, WidgetType.TABLE_BOX){
     val columns = arrayListOf<TableColumnDescription>()
 }
 

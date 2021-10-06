@@ -11,10 +11,7 @@ import com.gridnine.jasmine.common.core.app.ConfigurationProvider
 import com.gridnine.jasmine.common.core.app.Environment
 import com.gridnine.jasmine.common.core.lock.LockManager
 import com.gridnine.jasmine.common.core.lock.StandardLockManager
-import com.gridnine.jasmine.common.core.meta.CustomMetaRegistry
-import com.gridnine.jasmine.common.core.meta.DomainMetaRegistry
-import com.gridnine.jasmine.common.core.meta.MiscMetaRegistry
-import com.gridnine.jasmine.common.core.meta.RestMetaRegistry
+import com.gridnine.jasmine.common.core.meta.*
 import com.gridnine.jasmine.common.core.parser.CustomMetadataParser
 import com.gridnine.jasmine.common.core.parser.DomainMetadataParser
 import com.gridnine.jasmine.common.core.parser.RestMetadataParser
@@ -31,7 +28,7 @@ import java.io.File
 abstract class TestBase {
 
 
-    private val log = LoggerFactory.getLogger(TestBase::class.java)
+    val log = LoggerFactory.getLogger(this::class.java)
 
     private val appHome = File(
             String.format("./test/app-home/%s/", TextUtils.generateUid()))
@@ -60,6 +57,13 @@ abstract class TestBase {
         Environment.configure(appHome)
         Environment.test = true
     }
+
+    protected fun getContent(relativePath:String):ByteArray?{
+        val url = javaClass.getResource(relativePath)?: return null
+        return url.openStream().use{
+            it.readAllBytes()
+        }
+    }
 }
 
 
@@ -77,6 +81,11 @@ abstract class CommonCoreTestBase : TestBase() {
         publishSerializer()
         publishCachedObjectsConverter()
         publishLockManager()
+        publishL10nRegistry()
+    }
+
+    protected fun publishL10nRegistry() {
+        Environment.publish(L10nMetaRegistry())
     }
 
     protected fun publishConfigurationProvider() {

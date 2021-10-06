@@ -1,4 +1,4 @@
-package com.gridnine.jasmine.common.core.test.cipher
+package com.gridnine.jasmine.server.core.test.cipher
 
 import com.gridnine.jasmine.common.core.test.TestBase
 import com.gridnine.jasmine.server.core.utils.DESUtils

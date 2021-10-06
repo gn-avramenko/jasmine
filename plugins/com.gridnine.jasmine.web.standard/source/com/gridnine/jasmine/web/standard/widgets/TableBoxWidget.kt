@@ -19,7 +19,7 @@ import kotlin.js.Date
 class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJS>(configure:TableBoxWidgetConfiguration<VM,VS>.()->Unit):BaseWebNodeWrapper<GeneralTableBoxWidget>(){
     internal val rowsAdditionalData = arrayListOf<TableBoxWidgetRowAdditionalData>()
     private val config = TableBoxWidgetConfiguration<VM,VS>()
-    private lateinit var createButton:WebLinkButton
+    private  var createButton:WebLinkButton? = null
     private var readonly = false
     private var vsFactory:(()->VS)? = null
     init {
@@ -35,15 +35,17 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
                 headerComponents.add(label)
                 columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(null,it.width?:100, null))
             }
-            createButton = WebUiLibraryAdapter.get().createLinkButton{
-                icon="core:plus"
-                specificProperties["type"] = "link"
+            if(config.showToolsColumn) {
+                createButton = WebUiLibraryAdapter.get().createLinkButton {
+                    icon = "core:plus"
+                    specificProperties["type"] = "link"
+                }
+                createButton!!.setHandler {
+                    addRow(0)
+                }
+                headerComponents.add(createButton)
+                columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(130, 130, 130))
             }
-            createButton.setHandler {
-                addRow(0)
-            }
-            headerComponents.add(createButton)
-            columnWidths.add(WebGeneralTableBoxWidgetColumnWidth(130,130, 130))
         }
     }
 
@@ -62,7 +64,9 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
             configure(comp, collIdx, configuration)
             components.add(WebGeneralTableBoxWidgetCell(comp))
         }
-        components.add(WebGeneralTableBoxWidgetCell(TableBoxWidgetToolsPanel( this@TableBoxWidget, rowId)))
+        if(config.showToolsColumn) {
+            components.add(WebGeneralTableBoxWidgetCell(TableBoxWidgetToolsPanel(this@TableBoxWidget, rowId)))
+        }
         _node.addRow(idx, components)
         rowsAdditionalData.add(idx, TableBoxWidgetRowAdditionalData(uuid, rowId))
         updateToolsVisibility()
@@ -126,7 +130,9 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
                     components.add(WebGeneralTableBoxWidgetCell(comp))
                 }
                 val rowId = MiscUtilsJS.createUUID()
-                components.add(WebGeneralTableBoxWidgetCell(TableBoxWidgetToolsPanel( this@TableBoxWidget, rowId)))
+                if(config.showToolsColumn) {
+                    components.add(WebGeneralTableBoxWidgetCell(TableBoxWidgetToolsPanel(this@TableBoxWidget, rowId)))
+                }
                 _node.addRow(null, components)
                 rowsAdditionalData.add(TableBoxWidgetRowAdditionalData(value.uid, rowId))
             }
@@ -135,20 +141,22 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
     }
 
     internal fun updateToolsVisibility(){
-        createButton.setEnabled(!readonly)
-        val rows = _node.getRows()
-        val size = rows.size
-        rows.withIndex().forEach { (idx, row) ->
-            val comp = row.last()
-            if(comp is TableBoxWidgetToolsPanel){
-                comp.downButton.setEnabled(!readonly && idx<size-1)
-                comp.upButton.setEnabled(!readonly && idx>0)
-                comp.plusButton.setEnabled(!readonly)
-                comp.minusButton.setEnabled(!readonly)
-                if(readonly) {
-                    comp.rightDiv.getClass().addClasses("jasmine-table-right-div-disabled")
-                } else {
-                    comp.rightDiv.getClass().removeClasses("jasmine-table-right-div-disabled")
+        if(config.showToolsColumn) {
+            createButton!!.setEnabled(!readonly)
+            val rows = _node.getRows()
+            val size = rows.size
+            rows.withIndex().forEach { (idx, row) ->
+                val comp = row.last()
+                if (comp is TableBoxWidgetToolsPanel) {
+                    comp.downButton.setEnabled(!readonly && idx < size - 1)
+                    comp.upButton.setEnabled(!readonly && idx > 0)
+                    comp.plusButton.setEnabled(!readonly)
+                    comp.minusButton.setEnabled(!readonly)
+                    if (readonly) {
+                        comp.rightDiv.getClass().addClasses("jasmine-table-right-div-disabled")
+                    } else {
+                        comp.rightDiv.getClass().removeClasses("jasmine-table-right-div-disabled")
+                    }
                 }
             }
         }

@@ -435,7 +435,8 @@ object UiMetadataParser {
             }
             "table-box" -> {
                 val widget = TableBoxWidgetDescription(ParserUtils.getIdAttribute(xmlNode), ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
-                        ?: false)
+                        ?: false, ParserUtils.getBooleanAttribute(xmlNode, "hide-tools-column")
+                    ?: false)
                 val viewModelId = "${widget.id}VM"
                 val viewModelEntity = registry.viewModels.getOrPut(viewModelId, {
                     val ett = VMEntityDescription(viewModelId)

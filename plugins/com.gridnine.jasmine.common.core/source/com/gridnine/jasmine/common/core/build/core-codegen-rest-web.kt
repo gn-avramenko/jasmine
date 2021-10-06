@@ -41,7 +41,7 @@ class WebRestGenerator : CodeGenerator {
             RestPropertyType.LOCAL_DATE -> "kotlin.js.Date"
             RestPropertyType.LOCAL_DATE_TIME -> "kotlin.js.Date"
             RestPropertyType.ENTITY -> "${className}JS"
-            RestPropertyType.BYTE_ARRAY -> "kotlin.js.ByteArray"
+            RestPropertyType.BYTE_ARRAY -> "ByteArray"
         }
     }
 

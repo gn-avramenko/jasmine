@@ -13,6 +13,7 @@ import com.gridnine.jasmine.common.core.meta.DomainMetaRegistryJS
 import com.gridnine.jasmine.common.core.model.BaseAssetJS
 import com.gridnine.jasmine.common.core.model.BaseIdentityJS
 import com.gridnine.jasmine.common.core.model.BaseIndexJS
+import com.gridnine.jasmine.common.core.model.XeptionJS
 import com.gridnine.jasmine.common.standard.model.rest.BaseListFilterValueDTJS
 import com.gridnine.jasmine.common.standard.model.rest.GetListRequestJS
 import com.gridnine.jasmine.common.standard.model.rest.ListFilterDTJS
@@ -85,21 +86,54 @@ class ListPanel(we: ListWorkspaceItemDTJS, actions: ActionsGroupWrapper) : BaseW
                 lst.add("auto")
             }
             it.setColumnsWidths(widths)
-            val cells = actions.actions.map {action ->
-                val button = WebUiLibraryAdapter.get().createLinkButton{
-                    if(action.icon != null){
-                        icon = action.icon
-                        toolTip = action.displayName
-                    } else {
-                        title = action.displayName
+            val cells = actions.actions.map {wrapper ->
+                when(wrapper){
+                     is ActionWrapper -> {
+                         val button = WebUiLibraryAdapter.get().createLinkButton{
+                             if(wrapper.icon != null){
+                                 icon = wrapper.icon
+                                 toolTip = wrapper.displayName
+                             } else {
+                                 title = wrapper.displayName
+                             }
+                         }
+                         button.setHandler {
+                                 wrapper.getActionHandler<ListLinkButtonHandler<BaseIdentityJS>>().invoke(grid.getSelected())
+                         }
+                         button
+                     }
+                    is ActionsGroupWrapper -> {
+                        val menuButton = WebUiLibraryAdapter.get().createMenuButton {
+                            if (wrapper.icon != null) {
+                                icon = wrapper.icon
+                                toolTip = wrapper.displayName
+                            } else {
+                                title = wrapper.displayName
+                            }
+                            wrapper.actions.forEach { action ->
+                                if (action is ActionWrapper) {
+                                    elements.add(StandardMenuItem().apply {
+                                        id = action.id
+                                        title = action.displayName
+                                    })
+                                }
+                            }
+
+                        }
+                        wrapper.actions.forEach { action ->
+                            if (action is ActionWrapper) {
+                                menuButton.setHandler(action.id) {
+                                    action.getActionHandler<ListLinkButtonHandler<BaseIdentityJS>>().invoke(grid.getSelected())
+                                }
+                            }
+                        }
+                        menuButton
                     }
+                    else -> throw XeptionJS.forDeveloper("unsupported wrapper type $wrapper")
                 }
-                if(action is ActionWrapper){
-                    button.setHandler {
-                        action.getActionHandler<ListLinkButtonHandler<BaseIdentityJS>>().invoke(grid.getSelected())
-                    }
-                }
-                button
+
+
+
             }.toMutableList<WebNode?>().also {lst ->
                 lst.add(null)
                 lst.add(searchBox)
