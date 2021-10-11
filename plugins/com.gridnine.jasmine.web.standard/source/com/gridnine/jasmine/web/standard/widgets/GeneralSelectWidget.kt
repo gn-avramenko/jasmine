@@ -9,6 +9,7 @@ package com.gridnine.jasmine.web.standard.widgets
 
 import com.gridnine.jasmine.common.core.model.GeneralSelectBoxConfigurationJS
 import com.gridnine.jasmine.common.core.model.SelectItemJS
+import com.gridnine.jasmine.common.core.model.TextBoxConfigurationJS
 import com.gridnine.jasmine.web.core.ui.components.SelectDataType
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
@@ -17,6 +18,8 @@ import com.gridnine.jasmine.web.core.ui.components.WebSelect
 class GeneralSelectWidget(configure:GeneralSelectWidgetConfiguration.()->Unit):BaseWebNodeWrapper<WebSelect>(){
     private var changeListener:(suspend (SelectItemJS?) ->Unit)? = null
     private val config = GeneralSelectWidgetConfiguration()
+    private var conf: GeneralSelectBoxConfigurationJS? = null
+    var readonly = false
     init {
         config.configure()
         _node = WebUiLibraryAdapter.get().createSelect{
@@ -53,6 +56,7 @@ class GeneralSelectWidget(configure:GeneralSelectWidgetConfiguration.()->Unit):B
 
 
     fun configure(config: GeneralSelectBoxConfigurationJS?){
+        conf = config
         config?.let {
             _node.setEnabled(!config.notEditable)
             _node.setPossibleValues(config.possibleValues)
@@ -60,8 +64,14 @@ class GeneralSelectWidget(configure:GeneralSelectWidgetConfiguration.()->Unit):B
     }
 
     fun setReadonly(value:Boolean){
-        _node.setEnabled(!value)
+        readonly = value
+        updateDisabledMode()
     }
+
+    private fun updateDisabledMode() {
+        _node.setEnabled(!((config.notEditable && conf?.notEditable != false) || conf?.notEditable == true || readonly))
+    }
+
     fun showValidation(value:String?){
         _node.showValidation(value)
     }

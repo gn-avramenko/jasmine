@@ -124,6 +124,7 @@ class AntdWebDataGrid<E : BaseIntrospectableObjectJS>(configure: WebDataGridConf
                 { selectedRowKeys: Array<String>, selectedRows: dynamic ->
                     selectedKeys.clear()
                     selectedKeys.addAll(selectedRowKeys.map { it.toInt() })
+                    maybeRedraw()
                     selectionChangeListener?.invoke()
                 }
             if(config.selectionType != DataGridSelectionType.NONE) {
@@ -137,6 +138,8 @@ class AntdWebDataGrid<E : BaseIntrospectableObjectJS>(configure: WebDataGridConf
                     DataGridSelectionType.MULTIPLE -> "checkbox"
                     DataGridSelectionType.NONE -> ""
                 }
+                props.rowSelection.selectedRowKeys = selectedKeys.map { it.toString() }.toTypedArray()
+
             }
             ReactFacade.getCallbacks(parentIndexValue, childIndex).onDoubleClick = { index: Int ->
                 val value = currentPageData[index]
@@ -198,16 +201,18 @@ class AntdWebDataGrid<E : BaseIntrospectableObjectJS>(configure: WebDataGridConf
                 }
             }
             totalItemsCount = localData.size.toLong()
-            var startIndex = pageSizeValue * (currentPage - 1)
-            if (startIndex >= localData.size) {
-                startIndex = 0
-                currentPage = 1
-            }
-            var endIndex = startIndex + pageSizeValue
-            if (endIndex >= localData.size) {
-                endIndex = localData.size
-            }
-            val sublist = localData.subList(startIndex, endIndex)
+
+            val sublist = if(config.showPagination) {var startIndex = pageSizeValue * (currentPage - 1)
+                if (startIndex >= localData.size) {
+                    startIndex = 0
+                    currentPage = 1
+                }
+                var endIndex = startIndex + pageSizeValue
+                if (endIndex >= localData.size) {
+                    endIndex = localData.size
+                }
+                localData.subList(startIndex, endIndex)
+            }else localData
             currentPageData.clear()
             currentPageData.addAll(sublist)
             window.setTimeout({

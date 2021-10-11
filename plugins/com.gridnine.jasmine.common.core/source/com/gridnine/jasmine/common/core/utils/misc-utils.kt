@@ -5,6 +5,10 @@
 
 package com.gridnine.jasmine.common.core.utils
 
+import com.gridnine.jasmine.common.core.model.BaseIdentity
+import com.gridnine.jasmine.common.core.model.ObjectReference
+import com.gridnine.jasmine.common.core.model.SelectItem
+import com.gridnine.jasmine.common.core.reflection.ReflectionFactory
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.lang.reflect.InvocationTargetException
@@ -118,4 +122,18 @@ object AuthUtils {
     }
 
     fun getCurrentUser():String = users.get()
+}
+
+object CommonUiUtils{
+    fun toSelectItem(ref:ObjectReference<*>?) :SelectItem?{
+        return ref?.let {
+            SelectItem("${it.type.qualifiedName}|${it.uid}", it.caption!!)
+        }
+    }
+
+    fun<D:BaseIdentity> toObjectReference(item:SelectItem?):ObjectReference<D>?{
+        return item?.let {
+            ObjectReference(ReflectionFactory.get().getClass<D>(it.id.substringBefore("|")), it.id.substringAfter("|"), it.text)
+        }
+    }
 }

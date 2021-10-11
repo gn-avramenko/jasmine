@@ -6,10 +6,7 @@
 package com.gridnine.jasmine.web.core.activator
 
 import com.gridnine.jasmine.common.core.meta.*
-import com.gridnine.jasmine.common.core.model.ObjectReferenceJS
-import com.gridnine.jasmine.common.core.model.PasswordBoxConfigurationJS
-import com.gridnine.jasmine.common.core.model.SelectItemJS
-import com.gridnine.jasmine.common.core.model.TextBoxConfigurationJS
+import com.gridnine.jasmine.common.core.model.*
 import com.gridnine.jasmine.web.core.common.ActivatorJS
 import com.gridnine.jasmine.web.core.common.EnvironmentJS
 import com.gridnine.jasmine.web.core.common.RegistryJS
@@ -45,6 +42,8 @@ class WebCoreActivator : ActivatorJS{
         ReflectionFactoryJS.get().registerQualifiedName(PasswordBoxConfigurationJS::class, PasswordBoxConfigurationJS.qualifiedClassName)
         ReflectionFactoryJS.get().registerClass(SelectItemJS.qualifiedClassName){SelectItemJS()}
         ReflectionFactoryJS.get().registerQualifiedName(SelectItemJS::class, SelectItemJS.qualifiedClassName)
+        ReflectionFactoryJS.get().registerClass(GeneralSelectBoxConfigurationJS.qualifiedClassName){GeneralSelectBoxConfigurationJS()}
+        ReflectionFactoryJS.get().registerQualifiedName(GeneralSelectBoxConfigurationJS::class, GeneralSelectBoxConfigurationJS.qualifiedClassName)
 
         if(!EnvironmentJS.isPublished(RpcManager::class)){
             EnvironmentJS.publish(RpcManager::class, StandardRpcManager())

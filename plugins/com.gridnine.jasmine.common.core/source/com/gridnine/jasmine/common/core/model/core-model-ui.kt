@@ -146,6 +146,13 @@ class GeneralSelectBoxConfiguration() : BaseWidgetConfiguration(){
     constructor(configure:GeneralSelectBoxConfiguration.()->Unit):this(){
         configure.invoke(this)
     }
+
+    override fun getCollection(collectionName: String): MutableList<Any> {
+        if("possibleValues" == collectionName){
+            return possibleValues as MutableList<Any>
+        }
+        return super.getCollection(collectionName)
+    }
 }
 
 abstract class BaseNavigatorVariantVM:BaseVM(){

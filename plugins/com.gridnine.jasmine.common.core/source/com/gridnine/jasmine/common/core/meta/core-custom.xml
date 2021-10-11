@@ -25,7 +25,7 @@
     <entity id="com.gridnine.jasmine.common.core.model.DateBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>
     <entity id="com.gridnine.jasmine.common.core.model.DateTimeBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration"/>
     <entity id="com.gridnine.jasmine.common.core.model.GeneralSelectBoxConfiguration" extends="com.gridnine.jasmine.common.core.model.BaseWidgetConfiguration">
-        <collection id="possibleValues" element-type="ENTITY" element-class-name="com.gridnine.jasmine.server.core.model.common.SelectItem"/>
+        <collection id="possibleValues" element-type="ENTITY" element-class-name="com.gridnine.jasmine.common.core.model.SelectItem"/>
     </entity>
     <entity id="com.gridnine.jasmine.common.core.model.BaseVM" abstract="true"/>
     <entity id="com.gridnine.jasmine.common.core.model.BaseVS" abstract="true"/>

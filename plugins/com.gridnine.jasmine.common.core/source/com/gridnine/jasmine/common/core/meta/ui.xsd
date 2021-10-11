@@ -8,6 +8,7 @@
                 <choice maxOccurs="unbounded" minOccurs="0">
                     <element name="enum" type="tns:enumType"/>
                     <group ref="tns:container"/>
+                    <element name="vm-entity" type="tns:vmEntity"/>
                     <element name="actions-group" type="tns:actionsGroup"/>
                     <element name="display-handler" type="tns:displayHandlerElement"/>
                     <element name="options-group" type="tns:optionsGroup"/>
@@ -193,6 +194,7 @@
                 <complexType>
                     <complexContent>
                         <extension base="tns:baseWidget">
+                            <attribute name="precision" type="int"/>
                         </extension>
                     </complexContent>
                 </complexType>
@@ -359,6 +361,14 @@
     <simpleType name="vmPropertyType">
         <restriction base="string">
             <enumeration value="STRING" />
+            <enumeration value="ENTITY_REFERENCE"/>
+            <enumeration value="BIG_DECIMAL"/>
+            <enumeration value="ENUM"/>
+        </restriction>
+    </simpleType>
+    <simpleType name="vmCollectionType">
+        <restriction base="string">
+            <enumeration value="ENTITY"/>
         </restriction>
     </simpleType>
     <simpleType name="vsPropertyType">
@@ -375,7 +385,16 @@
         <complexContent>
             <extension base="tns:baseMetaElement">
                 <attribute name="type" type="tns:vmPropertyType" use="required" />
+                <attribute name="object-id" type="string" />
                 <attribute name="non-nullable" type="boolean"/>
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType name="vmCollection">
+        <complexContent>
+            <extension base="tns:baseMetaElement">
+                <attribute name="element-type" type="tns:vmCollectionType" use="required" />
+                <attribute name="object-id" type="string" />
             </extension>
         </complexContent>
     </complexType>
@@ -401,6 +420,7 @@
                 <sequence>
                     <choice maxOccurs="unbounded" minOccurs="0">
                         <element name="property" type="tns:vmProperty"/>
+                        <element name="collection" type="tns:vmCollection"/>
                     </choice>
                 </sequence>
             </extension>

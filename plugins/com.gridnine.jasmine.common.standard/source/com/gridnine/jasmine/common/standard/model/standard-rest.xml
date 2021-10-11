@@ -170,7 +170,10 @@
         <property id="type" type="ENUM" class-name="com.gridnine.jasmine.common.standard.rest.MessageTypeDT" lateinit="true"/>
         <property id="message" type="STRING" lateinit="true"/>
     </entity>
-
+    <entity id="com.gridnine.jasmine.common.standard.rest.FileDataDT">
+        <property id="encodedContent" type="STRING" lateinit="true"/>
+        <property id="fileName" type="STRING" lateinit="true"/>
+    </entity>
     <group id="standard">
         <operation id="getWorkspace" handler="com.gridnine.jasmine.server.standard.rest.StandardGetWorkspaceRestHandler">
             <request id="com.gridnine.jasmine.common.standard.model.rest.GetWorkspaceRequest"/>

@@ -20,6 +20,12 @@ object ValidationUtils {
             }
             return true
         }
+        for (property in description.collections.values) {
+            val value = vv.getCollection(property.id)
+            if(value.any { hasValidationErrors(it as BaseVV) }){
+                return true
+            }
+        }
         return false
     }
 }

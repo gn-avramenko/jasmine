@@ -120,7 +120,7 @@ class TextBoxWidgetDescription(notEditable:Boolean, val multiline:Boolean):BaseW
 
 class RichTextBoxEditorDescription(notEditable:Boolean, val height:String?):BaseWidgetDescription(notEditable, WidgetType.RICH_TEXT_EDITOR)
 
-class BigDecimalNumberBoxWidgetDescription(notEditable:Boolean):BaseWidgetDescription(notEditable, WidgetType.BIG_DECIMAL_NUMBER_BOX)
+class BigDecimalNumberBoxWidgetDescription(notEditable:Boolean, val precision:Int = 2):BaseWidgetDescription(notEditable, WidgetType.BIG_DECIMAL_NUMBER_BOX)
 
 class IntegerNumberBoxWidgetDescription(notEditable:Boolean, val nonNullable: Boolean):BaseWidgetDescription(notEditable, WidgetType.INTEGER_NUMBER_BOX)
 

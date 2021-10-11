@@ -60,11 +60,11 @@ object GridWebEditorGenerator {
                                     "notEditable = ${widget.notEditable}"()
                                 }
                             }
-                            WidgetType.TEXT_BOX -> {
-                                widget as TextBoxWidgetDescription
+                            WidgetType.BIG_DECIMAL_NUMBER_BOX -> {
+                                widget as BigDecimalNumberBoxWidgetDescription
                                 "${cell.id}Widget =  ${getWidgetClassName(widget)}"{
                                     """width = "100%""""()
-                                    "multiline = ${widget.multiline}"()
+                                    "precision = ${widget.precision}"()
                                     "notEditable = ${widget.notEditable}"()
                                 }
                             }
@@ -81,6 +81,14 @@ object GridWebEditorGenerator {
                                 "${cell.id}Widget =  ${getWidgetClassName(widget)}"{
                                     """width = "100%""""()
                                     """height="${widget.height?:"300px"}""""()
+                                    "notEditable = ${widget.notEditable}"()
+                                }
+                            }
+                            WidgetType.TEXT_BOX -> {
+                                widget as TextBoxWidgetDescription
+                                "${cell.id}Widget =  ${getWidgetClassName(widget)}"{
+                                    """width = "100%""""()
+                                    "multiline = ${widget.multiline}"()
                                     "notEditable = ${widget.notEditable}"()
                                 }
                             }

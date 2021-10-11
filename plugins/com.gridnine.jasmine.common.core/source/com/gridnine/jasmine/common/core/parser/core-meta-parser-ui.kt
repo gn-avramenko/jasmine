@@ -119,7 +119,25 @@ object UiMetadataParser {
             val childId = ParserUtils.getIdAttribute(child)
             when(VMPropertyType.valueOf(child.attributes["type"]!!)){
                 VMPropertyType.STRING -> {
-                    entity.properties[childId] = VMPropertyDescription(childId,VMPropertyType.STRING,  null, false, false)
+                    entity.properties[childId] = VMPropertyDescription(childId,VMPropertyType.STRING,  null, false, ParserUtils.getBooleanAttribute(child, "non-nullable")?: false)
+                }
+                VMPropertyType.ENTITY_REFERENCE -> {
+                    entity.properties[childId] = VMPropertyDescription(childId,VMPropertyType.ENTITY_REFERENCE,  child.attributes["object-id"], false, ParserUtils.getBooleanAttribute(child, "non-nullable")?: false)
+                }
+                VMPropertyType.BIG_DECIMAL -> {
+                    entity.properties[childId] = VMPropertyDescription(childId,VMPropertyType.BIG_DECIMAL,  null, false, ParserUtils.getBooleanAttribute(child, "non-nullable")?: false)
+                }
+                VMPropertyType.ENUM -> {
+                    entity.properties[childId] = VMPropertyDescription(childId,VMPropertyType.ENUM,  child.attributes["object-id"], false, ParserUtils.getBooleanAttribute(child, "non-nullable")?: false)
+                }
+                else-> TODO()
+            }
+        }
+        xmlNode.children("collection").forEach {child ->
+            val childId = ParserUtils.getIdAttribute(child)
+            when(VMCollectionType.valueOf(child.attributes["element-type"]!!)){
+                VMCollectionType.ENTITY -> {
+                    entity.collections[childId] = VMCollectionDescription(childId,VMCollectionType.ENTITY,  child.attributes["object-id"])
                 }
                 else-> TODO()
             }
@@ -320,6 +338,9 @@ object UiMetadataParser {
                 res.variants.add(descr)
             }
         }
+        node.children("vm-entity").forEach { child ->
+            parseViewModel(child, "",registry)
+        }
         return result
     }
 
@@ -350,7 +371,8 @@ object UiMetadataParser {
             }
             "big-decimal-number-box" -> {
                 val widget = BigDecimalNumberBoxWidgetDescription(ParserUtils.getBooleanAttribute(xmlNode, "not-editable")
-                        ?: false)
+                        ?: false,ParserUtils.getIntegerAttribute(xmlNode, "precision")
+                    ?: 2)
                 val vmPropertyDescription = VMPropertyDescription(id, VMPropertyType.BIG_DECIMAL, null, false,false)
                 val vsPropertyDescription = VSPropertyDescription(id, VSPropertyType.FLOAT_NUMBER_BOX_SETTINGS, null, false)
                 val vvPropertyDescription = VVPropertyDescription(id, VVPropertyType.STRING, null, false)

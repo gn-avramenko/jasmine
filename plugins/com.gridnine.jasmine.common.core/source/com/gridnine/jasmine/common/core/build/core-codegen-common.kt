@@ -84,11 +84,12 @@ object GenUtils {
                         it.properties.forEach { prop ->
                             blankLine()
                             when {
-                                prop.lateinit -> "${if(prop.override) "override " else ""}lateinit var ${prop.id}:${getPropertyType(prop.type, prop.className)}"()
-                                prop.nonNullable -> "${if(prop.override) "override " else ""} var ${prop.id}:${getPropertyType(prop.type, prop.className)}=${
+                                prop.lateinit -> "${if(prop.override) "override " else ""}lateinit ${if(prop.openSetter) "open " else ""}var ${prop.id}:${getPropertyType(prop.type, prop.className)}"()
+                                prop.nonNullable -> "${if(prop.override) "override " else ""} ${if(prop.openSetter) "open " else ""}var ${prop.id}:${getPropertyType(prop.type, prop.className)}=${
                                 when(getPropertyType(prop.type, prop.className)){
                                     "Boolean" ->"false"
                                     "String" ->"\"\""
+                                    "Double" -> "0.0"
                                     else ->"0"
                                 }}"()
                                 else -> "${if(prop.override) "override " else ""}${if(prop.openSetter) "open " else ""}var ${prop.id}:${getPropertyType(prop.type, prop.className)}?=null"()
@@ -193,8 +194,9 @@ object GenUtils {
                                     GenPropertyType.LOCAL_DATE -> sb2.append(",${EqualitySupport::class.qualifiedName},${ComparisonSupport::class.qualifiedName},${SortSupport::class.qualifiedName}")
                                     GenPropertyType.ENTITY_REFERENCE -> sb2.append(",${EqualitySupport::class.qualifiedName},${StringOperationsSupport::class.qualifiedName}")
                                     GenPropertyType.BIG_DECIMAL -> sb2.append(",${ComparisonSupport::class.qualifiedName},${NumberOperationsSupport::class.qualifiedName},${SortSupport::class.qualifiedName}")
-                                    GenPropertyType.STRING -> sb2.append(",${EqualitySupport::class.qualifiedName},${StringOperationsSupport::class.qualifiedName}")
+                                    GenPropertyType.STRING -> sb2.append(",${EqualitySupport::class.qualifiedName},${StringOperationsSupport::class.qualifiedName},${SortSupport::class.qualifiedName}")
                                     GenPropertyType.ENUM -> sb2.append(",${EqualitySupport::class.qualifiedName}")
+                                    GenPropertyType.BOOLEAN -> sb2.append(",${EqualitySupport::class.qualifiedName}")
                                     else -> {
                                     }
                                 }

@@ -33,6 +33,12 @@ object StandardUiUtils {
                 return true
             }
         }
+        for (collection in description.collections.values) {
+            val value = vv.getCollection(collection.id)
+            if(value.any { hasValidationErrors(it as BaseVVJS) }){
+                return true
+            }
+        }
         return false
     }
 

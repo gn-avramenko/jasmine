@@ -10,6 +10,7 @@ import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.ss.usermodel.Sheet
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.text.DecimalFormat
 
 
@@ -70,12 +71,12 @@ object ExcelUtils {
             """значение в ячейке ${getCellName(row,column)}  в листе $sheetName не является ни строкой ни числом"""))
     }
 
-    fun getNumberValue(sheet: Sheet, row: Int, column: Int, dontRiseException: Boolean): BigDecimal? {
+    fun getNumberValue(sheet: Sheet, row: Int, column: Int, precision:Int?, dontRiseException: Boolean): BigDecimal? {
         val sheetName = sheet.sheetName
         val cell = getCell(sheet, row, column, false)?: return null
         if (cell.cellType === CellType.STRING) {
             return try {
-                BigDecimal(cell.stringCellValue)
+                if(precision != null) BigDecimal(cell.stringCellValue).setScale(precision, RoundingMode.HALF_EVEN) else BigDecimal(cell.stringCellValue)
             } catch (e: Exception) {
                 if (dontRiseException) {
                     return null
@@ -86,7 +87,7 @@ object ExcelUtils {
             }
         }
         if (cell.cellType === CellType.NUMERIC) {
-            return cell.numericCellValue.toBigDecimal()
+            return                 if(precision != null) cell.numericCellValue.toBigDecimal().setScale(precision, RoundingMode.HALF_EVEN) else cell.numericCellValue.toBigDecimal()
         }
         throw Xeption.forEndUser(
             L10nMessage(

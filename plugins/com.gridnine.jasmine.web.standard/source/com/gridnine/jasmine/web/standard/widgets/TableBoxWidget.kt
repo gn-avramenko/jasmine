@@ -270,7 +270,7 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
             val validation = vv[rowIdx]
             val size = row.size
             row.withIndex().forEach { (colIdx, comp) ->
-                if (colIdx < size - 1) {
+                if (colIdx < size - (if(config.showToolsColumn) 1 else 0)) {
                     val column = config.columns[colIdx]
                     when (column.widgetDescription.widgetType) {
                         WidgetTypeJS.TEXT_BOX -> (comp as TextBoxWidget).showValidation(validation.getValue(column.id) as String?)

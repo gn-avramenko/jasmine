@@ -186,6 +186,13 @@ class GeneralSelectBoxConfigurationJS() : BaseWidgetConfigurationJS(){
     constructor(configure:GeneralSelectBoxConfigurationJS.()->Unit):this(){
         configure.invoke(this)
     }
+
+    override fun getCollection(collectionName: String): MutableList<Any> {
+        if("possibleValues" == collectionName){
+            return possibleValues as MutableList<Any>
+        }
+        return super.getCollection(collectionName)
+    }
     companion object{
         const val qualifiedClassName = "com.gridnine.jasmine.common.core.model.GeneralSelectBoxConfigurationJS"
     }
