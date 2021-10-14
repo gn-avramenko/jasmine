@@ -8,12 +8,15 @@
 package com.gridnine.jasmine.web.standard.widgets
 
 import com.gridnine.jasmine.common.core.model.BigDecimalBoxConfigurationJS
+import com.gridnine.jasmine.common.core.model.EnumSelectBoxConfigurationJS
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.core.ui.components.BaseWebNodeWrapper
 import com.gridnine.jasmine.web.core.ui.components.WebNumberBox
 
 class FloatNumberBoxWidget(configure:FloatNumberBoxWidgetConfiguration.()->Unit):BaseWebNodeWrapper<WebNumberBox>(){
     private val config = FloatNumberBoxWidgetConfiguration()
+    private var readOnly = false
+    private var conf: BigDecimalBoxConfigurationJS? = null
     init {
         config.configure()
         _node = WebUiLibraryAdapter.get().createNumberBox{
@@ -29,13 +32,17 @@ class FloatNumberBoxWidget(configure:FloatNumberBoxWidgetConfiguration.()->Unit)
 
 
     fun setReadonly(value:Boolean) {
-        _node.setEnabled(!value)
+        readOnly = value
+        updateReadonlyMode()
+    }
+
+    private fun updateReadonlyMode() {
+        _node.setEnabled(!((config.notEditable && conf?.notEditable != false) || conf?.notEditable == true || readOnly))
     }
 
     fun configure(config: BigDecimalBoxConfigurationJS?){
-        config?.let {
-            _node.setEnabled(!config.notEditable)
-        }
+        conf = config
+        updateReadonlyMode()
     }
 
     fun showValidation(value:String?){

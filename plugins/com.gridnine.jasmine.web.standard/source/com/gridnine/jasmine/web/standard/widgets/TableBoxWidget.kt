@@ -242,9 +242,9 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
         readonly = value
         val rows = _node.getRows()
         rows.forEach { row ->
-            val size = row.size
+            val limit = if(config.showToolsColumn) row.size-1 else row.size
             row.withIndex().forEach {(idx, comp) ->
-                if(idx < size -1) {
+                if(idx < limit) {
                     when (config.columns[idx].widgetDescription.widgetType) {
                         WidgetTypeJS.TEXT_BOX -> (comp as TextBoxWidget).setReadonly(value)
                         WidgetTypeJS.PASSWORD_BOX -> TODO()

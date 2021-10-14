@@ -104,43 +104,43 @@ object GridWebEditorGenerator {
                                         when (colWidget.widgetType) {
                                             WidgetType.TEXT_BOX -> {
                                                 colWidget as TextBoxWidgetDescription
-                                                """column("${column.id}", com.gridnine.jasmine.web.standard.widgets.TextBoxWidgetDescriptionJS(false), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
+                                                """column("${column.id}", com.gridnine.jasmine.web.standard.widgets.TextBoxWidgetDescriptionJS(${colWidget.notEditable}), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
                                             }
                                             WidgetType.PASSWORD_BOX -> {
                                                 colWidget as PasswordBoxWidgetDescription
-                                                """column("${column.id}", com.gridnine.jasmine.web.standard.widgets.PasswordBoxWidgetDescriptionJS(false), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
+                                                """column("${column.id}", com.gridnine.jasmine.web.standard.widgets.PasswordBoxWidgetDescriptionJS(${colWidget.notEditable}), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
                                             }
                                             WidgetType.BIG_DECIMAL_NUMBER_BOX -> {
                                                 colWidget as BigDecimalNumberBoxWidgetDescription
-                                                """column("${column.id}",  com.gridnine.jasmine.web.standard.widgets.BigDecimalNumberBoxWidgetDescriptionJS(false), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
+                                                """column("${column.id}",  com.gridnine.jasmine.web.standard.widgets.BigDecimalNumberBoxWidgetDescriptionJS(${colWidget.notEditable}), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
                                             }
                                             WidgetType.INTEGER_NUMBER_BOX -> {
                                                 colWidget as IntegerNumberBoxWidgetDescription
-                                                """column("${column.id}", com.gridnine.jasmine.web.standard.widgets.IntegerNumberBoxWidgetDescriptionJS(false,false), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
+                                                """column("${column.id}", com.gridnine.jasmine.web.standard.widgets.IntegerNumberBoxWidgetDescriptionJS(${colWidget.notEditable},false), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
                                             }
                                             WidgetType.BOOLEAN_BOX -> {
                                                 colWidget as BooleanBoxWidgetDescription
-                                                """column("${column.id}", com.gridnine.jasmine.web.standard.widgets.BooleanBoxWidgetDescriptionJS(false), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
+                                                """column("${column.id}", com.gridnine.jasmine.web.standard.widgets.BooleanBoxWidgetDescriptionJS(${colWidget.notEditable}), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
                                             }
                                             WidgetType.ENTITY_SELECT_BOX -> {
                                                 colWidget as EntitySelectBoxWidgetDescription
-                                                """column("${column.id}", com.gridnine.jasmine.web.standard.widgets.EntitySelectBoxWidgetDescriptionJS(false, "${colWidget.objectId}JS"), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
+                                                """column("${column.id}", com.gridnine.jasmine.web.standard.widgets.EntitySelectBoxWidgetDescriptionJS(${colWidget.notEditable}, "${colWidget.objectId}JS"), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
                                             }
                                             WidgetType.GENERAL_SELECT_BOX -> {
                                                 colWidget as GeneralSelectBoxWidgetDescription
-                                                """column("${column.id}", com.gridnine.jasmine.web.standard.widgets.GeneralSelectBoxWidgetDescriptionJS(false), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
+                                                """column("${column.id}", com.gridnine.jasmine.web.standard.widgets.GeneralSelectBoxWidgetDescriptionJS(${colWidget.notEditable}), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
                                             }
                                             WidgetType.ENUM_SELECT_BOX -> {
                                                 colWidget as EnumSelectBoxWidgetDescription
-                                                """column("${column.id}", com.gridnine.jasmine.web.standard.widgets.EnumSelectBoxWidgetDescriptionJS(false, "${colWidget.enumId}JS"), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
+                                                """column("${column.id}", com.gridnine.jasmine.web.standard.widgets.EnumSelectBoxWidgetDescriptionJS(${colWidget.notEditable}, "${colWidget.enumId}JS"), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
                                             }
                                             WidgetType.DATE_BOX -> {
                                                 colWidget as DateBoxWidgetDescription
-                                                """column("${column.id}", com.gridnine.jasmine.web.standard.widgets.DateBoxWidgetDescriptionJS(false), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
+                                                """column("${column.id}", com.gridnine.jasmine.web.standard.widgets.DateBoxWidgetDescriptionJS(fa${colWidget.notEditable}lse), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
                                             }
                                             WidgetType.DATE_TIME_BOX -> {
                                                 colWidget as DateTimeBoxWidgetDescription
-                                                """column("${column.id}", com.gridnine.jasmine.web.standard.widgets.DateTimeBoxWidgetDescriptionJS(false), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
+                                                """column("${column.id}", com.gridnine.jasmine.web.standard.widgets.DateTimeBoxWidgetDescriptionJS(${colWidget.notEditable}), com.gridnine.jasmine.common.core.meta.L10nMetaRegistryJS.get().messages["${widget.id}"]?.get("${column.id}")?:"${column.id}", ${column.prefWidth ?: "100"})"""()
                                             }
                                             WidgetType.HIDDEN -> throw  Xeption.forDeveloper("unsupported widget type ${widget.widgetType}")
                                             WidgetType.TABLE_BOX -> throw Xeption.forDeveloper("table inside table is not supported")

@@ -18,7 +18,7 @@ class WebRestGenerator : CodeGenerator {
 
         val result = GenClassData(descr.id + "JS", (if (descr.extendsId != null) descr.extendsId else BaseRestEntity::class.qualifiedName) + "JS", descr.isAbstract, true)
         descr.properties.values.forEach { prop ->
-            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.type, prop.className), lateinit = prop.lateinit, nonNullable = prop.nonNullable))
+            result.properties.add(GenPropertyDescription(prop.id, getPropertyType(prop.type), getClassName(prop.type, prop.className), isLateInit(prop) , isNonNullable(prop)))
         }
         descr.collections.values.forEach { coll ->
             result.collections.add(GenCollectionDescription(coll.id, getPropertyType(coll.elementType), getClassName(coll.elementType, coll.elementClassName)))
@@ -27,6 +27,20 @@ class WebRestGenerator : CodeGenerator {
             result.maps.add(GenMapDescription(map.id, getPropertyType(map.keyClassType), getClassName(map.keyClassType, map.keyClassName),getPropertyType(map.valueClassType), getClassName(map.valueClassType, map.valueClassName) ))
         }
         return result
+    }
+
+    private fun isNonNullable(prop: RestPropertyDescription): Boolean {
+        if(prop.type == RestPropertyType.BIG_DECIMAL){
+            return prop.lateinit || prop.nonNullable
+        }
+        return prop.nonNullable
+    }
+
+    private fun isLateInit(prop: RestPropertyDescription): Boolean {
+        if(prop.type == RestPropertyType.BIG_DECIMAL){
+            return false
+        }
+        return prop.lateinit
     }
 
     private fun getClassName(type: RestPropertyType, className: String?): String? {

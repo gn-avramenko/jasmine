@@ -8,6 +8,7 @@ package com.gridnine.jasmine.server.core.test.storage
 import com.gridnine.jasmine.common.core.app.Environment
 import com.gridnine.jasmine.common.core.storage.Storage
 import com.gridnine.jasmine.common.core.test.CommonCoreTestBase
+import com.gridnine.jasmine.common.core.utils.AuthUtils
 import com.gridnine.jasmine.server.core.storage.Database
 import com.gridnine.jasmine.server.core.storage.StorageImpl
 import com.gridnine.jasmine.server.core.storage.StorageRegistry
@@ -31,6 +32,7 @@ abstract class StorageTestBase:CommonCoreTestBase(){
         publishStorage()
         configureStorageRegistry()
         publishCache();
+        AuthUtils.setCurrentUser("system")
     }
 
     protected fun publishCache() {

@@ -65,7 +65,7 @@ object ExcelGenerator {
             val sheet = workbook.createSheet(list.title)
             list.rows.withIndex().forEach { (ri, row) ->
                 val poiRow = sheet.createRow(ri)
-                row.height?.let { poiRow.heightInPoints = it.toFloat() }
+                row.height?.let { poiRow.heightInPoints = it.toFloat() }?:run{poiRow.height = -1}
                 row.cells.withIndex().forEach{ (ci, cell) ->
                     val poiCell = poiRow.createCell(ci)
                     poiCell.cellStyle = stylesMap[cell.styleId]

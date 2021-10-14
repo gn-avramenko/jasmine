@@ -5,6 +5,7 @@
 @file:Suppress("unused")
 package com.gridnine.jasmine.server.core.web
 
+import com.gridnine.jasmine.common.core.app.ConfigurationProvider
 import com.gridnine.jasmine.common.core.app.Environment
 import org.apache.catalina.Lifecycle
 import org.apache.catalina.LifecycleException
@@ -19,12 +20,13 @@ import java.io.File
 import java.io.InputStream
 import java.net.URL
 import java.net.URLDecoder
+import java.nio.file.Path
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 import kotlin.collections.LinkedHashSet
 
-class TomcatWebServer constructor(port: Int) : WebServer {
+class TomcatWebServer : WebServer {
 
     private val tomcat: Tomcat = Tomcat()
 
@@ -34,10 +36,28 @@ class TomcatWebServer constructor(port: Int) : WebServer {
         tomcat
                 .setBaseDir(File(Environment.tempFolder, "tomcat-workdir").canonicalPath)
 
+        val portStr = ConfigurationProvider.get().getProperty("tomcat.port")
+        var port = 8080
+        if (portStr != null && portStr.isNotBlank()) {
+            port = Integer.parseInt(portStr.trim())
+        }
+        tomcat.setPort(port)
+        tomcat.setHostname("localhost")
+
         tomcat.setPort(port)
         tomcat.setHostname("localhost")
         tomcat.connector
-
+        val keystoreFile = ConfigurationProvider.get().getProperty("tomcat.keystore.file")
+        val keystorePassword = ConfigurationProvider.get().getProperty("tomcat.keystore.password")
+        if(keystoreFile != null && keystorePassword != null){
+            tomcat.connector.scheme = "https"
+            tomcat.connector.secure = true
+            tomcat.connector.setAttribute("SSLEnabled", "true")
+            tomcat.connector.setAttribute("keystoreFile", File(keystoreFile).absolutePath)
+            tomcat.connector.setAttribute("keystorePass", keystorePassword)
+            tomcat.connector.setAttribute("clientAuth", false)
+            tomcat.connector.setAttribute("sslProtocol", "TLS")
+        }
         val classLoader = TomcatParentClassLoader()
         tomcat.server.parentClassLoader = classLoader
         classLoader.addDelegate(javaClass.classLoader)

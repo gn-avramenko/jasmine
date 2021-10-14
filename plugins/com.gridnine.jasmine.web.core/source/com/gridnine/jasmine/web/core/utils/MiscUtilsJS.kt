@@ -19,6 +19,8 @@ import kotlin.random.Random
 
 object MiscUtilsJS {
     private val random = Random(100)
+
+
     fun createUUID(): String {
         // http://www.ietf.org/rfc/rfc4122.txt
         val s = ArrayList<String>(37)
@@ -91,9 +93,9 @@ object MiscUtilsJS {
                 } else {
                     value?.toString() ?: ""
                 }
-                if (displayName.length > 100) {
-                    displayName = "<span title=\"$displayName\" class=\"easyui-tooltip\">${displayName.substring(0, 50)} ...</span>"
-                }
+//                if (displayName.length > 100) {
+//                    displayName = "<span title=\"$displayName\" class=\"easyui-tooltip\">${displayName.substring(0, 50)} ...</span>"
+//                }
                 displayName
             }
 
@@ -106,10 +108,11 @@ object MiscUtilsJS {
         a.download = suggestedFileName;
         a.click();
     }
+
     suspend fun uploadFile(accept:String? = null) : FileData?{
         return Promise<FileData?>{resolve, _ ->
             var input = window.document.createElement("input").asDynamic();
-            input.accept == accept
+            input.accept = accept
             input.type = "file"
             input.click()
             input.addEventListener("change") {

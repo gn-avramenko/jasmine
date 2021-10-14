@@ -49,6 +49,7 @@ class AntdWebMenuButton(configure: WebMenuButtonConfiguration.() -> Unit) : WebM
                         it as StandardMenuItem
                         val menuItemProps = js("{}")
                         menuItemProps.key = it.id
+                        menuItemProps.disabled = enabledItemsMap[it.id] == false
                         ReactFacade.createElementWithChildren(ReactFacade.MenuItem, menuItemProps, it.title?:"")
                     }.toTypedArray()
                 )

@@ -20,9 +20,11 @@ import com.gridnine.jasmine.common.core.serialization.SerializationProvider
 import com.gridnine.jasmine.common.core.storage.CachedObjectsConverter
 import com.gridnine.jasmine.common.core.utils.TextUtils
 import org.junit.After
+import org.junit.Assert
 import org.junit.Before
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.math.BigDecimal
 
 
 abstract class TestBase {
@@ -63,6 +65,10 @@ abstract class TestBase {
         return url.openStream().use{
             it.readAllBytes()
         }
+    }
+
+    protected fun assertEquals(expected:Number, actual:BigDecimal){
+        Assert.assertEquals(expected.toDouble(), actual.toDouble(), 0.00000001)
     }
 }
 

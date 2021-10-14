@@ -172,7 +172,7 @@ class ReportList{
     fun row(rowHeight:Int? =null) {
         currentRow = GeneratedReportRow()
         currentRow.uid = ""
-        currentRow.height = rowHeight?:defaultRowHeight
+        currentRow.height = rowHeight
         rows.add(currentRow)
         currentRowIndex++
         currentColumnIndex = -1

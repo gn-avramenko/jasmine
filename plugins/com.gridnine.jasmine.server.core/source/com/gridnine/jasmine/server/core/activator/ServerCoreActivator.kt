@@ -60,12 +60,8 @@ class ServerCoreActivator:IPluginActivator{
     private fun publishTomcat() {
         SLF4JBridgeHandler.removeHandlersForRootLogger()
         SLF4JBridgeHandler.install()
-        val portStr = ConfigurationProvider.get().getProperty("tomcat.port")
-        var port = 8080
-        if (portStr != null && portStr.isNotBlank()) {
-            port = Integer.parseInt(portStr.trim())
-        }
-        Environment.publish(WebServer::class, TomcatWebServer(port))
+
+        Environment.publish(WebServer::class, TomcatWebServer())
     }
 
 
