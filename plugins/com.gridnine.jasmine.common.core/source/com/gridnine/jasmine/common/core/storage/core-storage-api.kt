@@ -43,7 +43,7 @@ interface Storage: Disposable {
     fun <D : BaseDocument, I : BaseIndex<D>,E> findUniqueDocument(
             index: KClass<I>, property: E, propertyValue: Any?, ignoreCache:Boolean=false): D? where E: PropertyNameSupport, E: EqualitySupport
 
-    fun <D : BaseDocument> saveDocument(doc: D, createNewVersion:Boolean = true, comment:String?=null)
+    fun <D : BaseDocument> saveDocument(doc: D, createNewVersion:Boolean = true, comment:String?=null, skipInterceptors:Boolean = false)
 
     fun <D : BaseDocument> deleteDocument(doc: D)
 

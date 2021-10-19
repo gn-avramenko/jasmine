@@ -26,6 +26,7 @@ class TextBoxWidget(configure:TextBoxWidgetConfiguration.()->Unit):BaseWebNodeWr
             showClearIcon = config.showClearIcon
             multiline = config.multiline
         }
+        updateDisabledMode()
     }
 
     fun setValue(value:String?) = _node.setValue(value)

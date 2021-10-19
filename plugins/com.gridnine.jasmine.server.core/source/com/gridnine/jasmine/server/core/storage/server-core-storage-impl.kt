@@ -124,10 +124,10 @@ class StorageImpl : Storage {
         return findUniqueDocumentReference(index, property, propertyValue)?.let { loadDocument(it, ignoreCache) }
     }
 
-    override fun <D : BaseDocument> saveDocument(doc: D, createNewVersion: Boolean, comment: String?) {
+    override fun <D : BaseDocument> saveDocument(doc: D, createNewVersion: Boolean, comment: String?, skipInterceptors: Boolean) {
         wrapWithLock(doc) {
             wrapWithTransaction { ctx ->
-                saveDocument(doc, createNewVersion, comment, StorageRegistry.get().getAdvices(), ctx, 0)
+                saveDocument(doc, createNewVersion, comment, skipInterceptors, StorageRegistry.get().getAdvices(), ctx, 0)
             }
         }
     }
@@ -178,7 +178,7 @@ class StorageImpl : Storage {
     }
 
 
-    private fun <D : BaseDocument> saveDocument(doc: D, createNewVersion: Boolean, comment: String?, advices: List<StorageAdvice>, ctx: TransactionContext, idx: Int) {
+    private fun <D : BaseDocument> saveDocument(doc: D, createNewVersion: Boolean, comment: String?, skipInterceptors:Boolean, advices: List<StorageAdvice>, ctx: TransactionContext, idx: Int) {
         if (idx == advices.size) {
             val (oldDocument, factory, context) = getUpdateDocumentContext(doc, ctx)
             val updatePreviousVersion = !createNewVersion && oldDocument?.metadata?.version ?: 0 > 0
@@ -191,8 +191,10 @@ class StorageImpl : Storage {
             } else {
                 null
             }
-            StorageRegistry.get().getInterceptors().forEach {
-                it.onSave(doc, context)
+            if(!skipInterceptors) {
+                StorageRegistry.get().getInterceptors().forEach {
+                    it.onSave(doc, context)
+                }
             }
             doc.setValue(BaseDocument.revision, if (oldDocument == null) 0 else oldDocument.revision + 1)
             val baos = ByteArrayOutputStream()
@@ -259,7 +261,7 @@ class StorageImpl : Storage {
             return
         }
         advices[idx].onSaveDocument(doc) { doc2 ->
-            saveDocument(doc2, createNewVersion, comment, advices, ctx, idx + 1)
+            saveDocument(doc2, createNewVersion, comment, skipInterceptors,advices, ctx, idx + 1)
         }
     }
 

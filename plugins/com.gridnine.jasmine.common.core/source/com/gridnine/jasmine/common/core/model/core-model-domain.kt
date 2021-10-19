@@ -153,11 +153,8 @@ abstract class BaseIndex<D : BaseDocument> : BaseIdentity() {
         super.setValue(propertyName, value)
     }
 
-    class _TestDomainDocumentIndexProperty0(name:String):PropertyNameSupport(name),EqualitySupport,StringOperationsSupport
-
     companion object{
         const val documentField= "document"
-        val referenceCaptionField = _TestDomainDocumentIndexProperty0("documentCaption")
     }
 }
 abstract class BaseNestedDocument : BaseIdentity()

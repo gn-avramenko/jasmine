@@ -117,6 +117,9 @@ open class CriterionsBuilder(private val criterions: MutableList<SearchCriterion
     fun<T> ne(property:T, value:Any) where T: PropertyNameSupport, T: EqualitySupport {
         criterions.add(SimpleCriterion(property.name, SimpleCriterion.Operation.NE, value))
     }
+    fun ne(property:String, value:Any)  {
+        criterions.add(SimpleCriterion(property, SimpleCriterion.Operation.NE, value))
+    }
 
     fun<T> like(property:T, value:Any) where T: PropertyNameSupport, T: StringOperationsSupport {
         criterions.add(SimpleCriterion(property.name, SimpleCriterion.Operation.LIKE, value))
