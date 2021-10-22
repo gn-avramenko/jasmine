@@ -29,7 +29,10 @@ class TextBoxWidget(configure:TextBoxWidgetConfiguration.()->Unit):BaseWebNodeWr
         updateDisabledMode()
     }
 
-    fun setValue(value:String?) = _node.setValue(value)
+    fun setValue(value:String?){
+        _node.setValue(value)
+        _node.showValidation(null)
+    }
 
     fun getValue() = _node.getValue()
 

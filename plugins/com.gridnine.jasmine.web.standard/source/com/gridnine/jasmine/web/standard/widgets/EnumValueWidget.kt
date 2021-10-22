@@ -67,6 +67,7 @@ class EnumValueWidget<E:Enum<E>>(configure:EnumValueWidgetConfiguration<E>.()->U
             })
         }
         _node.setValues(values)
+        _node.showValidation(null)
     }
 
 

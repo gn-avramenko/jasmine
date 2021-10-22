@@ -93,6 +93,7 @@ class EntitySelectWidget(configure:EntitySelectWidgetConfiguration.()->Unit):Bas
 
     fun setValue(value: ObjectReferenceJS?) {
         webSelect.setValues(if (value == null) emptyList() else arrayListOf(toSelectItem(value)))
+        webSelect.showValidation(null)
     }
 
 

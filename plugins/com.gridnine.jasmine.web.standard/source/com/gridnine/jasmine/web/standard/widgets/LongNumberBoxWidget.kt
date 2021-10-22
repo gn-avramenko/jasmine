@@ -23,7 +23,10 @@ class LongNumberBoxWidget(configure:LongNumberBoxWidgetConfiguration.()->Unit):B
             precision = 0
         }
     }
-    fun setValue(value:Long?) = _node.setValue(value?.toDouble())
+    fun setValue(value:Long?){
+        _node.setValue(value?.toDouble())
+        _node.showValidation(null)
+    }
 
     fun getValue() = _node.getValue()?.toLong()?:(if(config.nullable) null else 0) as Long?
 

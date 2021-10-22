@@ -23,7 +23,10 @@ class IntegerNumberBoxWidget(configure:IntegerNumberBoxWidgetConfiguration.()->U
             precision = 0
         }
     }
-    fun setValue(value:Int?) = _node.setValue(value?.toDouble())
+    fun setValue(value:Int?) {
+        _node.setValue(value?.toDouble())
+        _node.showValidation(null)
+    }
 
     fun getValue() = _node.getValue()?.toInt()?:(if(config.nullable) null else 0)
 

@@ -26,7 +26,10 @@ class FloatNumberBoxWidget(configure:FloatNumberBoxWidgetConfiguration.()->Unit)
             precision = config.precision
         }
     }
-    fun setValue(value:Double?) = _node.setValue(value)
+    fun setValue(value:Double?) {
+        _node.setValue(value)
+        _node.showValidation(null)
+    }
 
     fun getValue() = _node.getValue()
 

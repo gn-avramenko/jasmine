@@ -164,40 +164,67 @@ class TableBoxWidget<VM:BaseTableBoxVMJS,VS:BaseTableBoxVSJS, VV:BaseTableBoxVVJ
 
     private fun createWebComponent(widgetDescription: BaseWidgetDescriptionJS): WebNode {
         return when(widgetDescription.widgetType){
-            WidgetTypeJS.TEXT_BOX -> TextBoxWidget {
-                width = "100%"
+            WidgetTypeJS.TEXT_BOX -> {
+                widgetDescription as TextBoxWidgetDescriptionJS
+                TextBoxWidget {
+                    width = "100%"
+                    notEditable = widgetDescription.notEditable
+                }
             }
             WidgetTypeJS.PASSWORD_BOX ->  TODO()
-            WidgetTypeJS.FLOAT_NUMBER_BOX ->  FloatNumberBoxWidget {
-                width = "100%"
+            WidgetTypeJS.FLOAT_NUMBER_BOX -> {
+                widgetDescription as BigDecimalNumberBoxWidgetDescriptionJS
+                FloatNumberBoxWidget {
+                    width = "100%"
+                    notEditable = widgetDescription.notEditable
+                }
             }
             WidgetTypeJS.INTEGER_NUMBER_BOX ->  IntegerNumberBoxWidget {
                 widgetDescription as IntegerNumberBoxWidgetDescriptionJS
                 width = "100%"
                 nullable = !widgetDescription.nonNullable
+                notEditable = widgetDescription.notEditable
             }
-            WidgetTypeJS.BOOLEAN_BOX  ->  BooleanBoxWidget {
-                width = "100%"
+            WidgetTypeJS.BOOLEAN_BOX  -> {
+                widgetDescription as BooleanBoxWidgetDescriptionJS
+                BooleanBoxWidget {
+                    width = "100%"
+                    notEditable = widgetDescription.notEditable
+                }
             }
             WidgetTypeJS.ENTITY_SELECT_BOX ->  EntitySelectWidget {
                 widgetDescription as EntitySelectBoxWidgetDescriptionJS
                 width = "100%"
                 handler = AutocompleteHandler.createMetadataBasedAutocompleteHandler(widgetDescription.objectId)
                 showClearIcon = true
+                notEditable = widgetDescription.notEditable
             }
             WidgetTypeJS.ENUM_SELECT_BOX ->  EnumValueWidget<FakeEnumJS> {
                 widgetDescription as EnumSelectBoxWidgetDescriptionJS
                 width = "100%"
                 enumClassName = widgetDescription.enumId
+                notEditable = widgetDescription.notEditable
             }
-            WidgetTypeJS.DATE_BOX ->  DateBoxWidget {
-                width = "100%"
+            WidgetTypeJS.DATE_BOX -> {
+                widgetDescription as DateBoxWidgetDescriptionJS
+                DateBoxWidget {
+                    width = "100%"
+                    notEditable = widgetDescription.notEditable
+                }
             }
-            WidgetTypeJS.DATE_TIME_BOX ->  DateTimeBoxWidget {
-                width = "100%"
+            WidgetTypeJS.DATE_TIME_BOX -> {
+                widgetDescription as DateTimeBoxWidgetDescriptionJS
+                DateTimeBoxWidget {
+                    width = "100%"
+                    notEditable = widgetDescription.notEditable
+                }
             }
-            WidgetTypeJS.GENERAL_SELECT_BOX ->  GeneralSelectWidget {
-                width = "100%"
+            WidgetTypeJS.GENERAL_SELECT_BOX -> {
+                widgetDescription as GeneralSelectBoxWidgetDescriptionJS
+                GeneralSelectWidget {
+                    width = "100%"
+                    notEditable = widgetDescription.notEditable
+                }
             }
             WidgetTypeJS.TABLE_BOX -> throw XeptionJS.forDeveloper("unsupported type : TABLE_BOX")
         }

@@ -31,7 +31,10 @@ class DateTimeBoxWidget(configure:DateTimeBoxWidgetConfiguration.()->Unit):BaseW
         }
     }
 
-    fun setValue(value:Date?) = _node.setValue(value)
+    fun setValue(value:Date?) {
+        _node.setValue(value)
+        _node.showValidation(null)
+    }
 
     fun getValue() = _node.getValue()
 
