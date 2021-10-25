@@ -15,11 +15,18 @@ import com.gridnine.jasmine.web.reports.UiReflectionUtilsJS
 import com.gridnine.jasmine.web.reports.editor.ReportDescriptionMainFrameTabHandler
 import com.gridnine.jasmine.web.reports.list.WebReportsListMainFrameTabHandler
 import com.gridnine.jasmine.web.reports.workspaceEditor.WorkspaceReportsItemVariantHandler
+import kotlinx.browser.window
 
 
 const val pluginId = "com.gridnine.jasmine.web.reports"
 
 fun main(){
+    if(window.asDynamic().builtByWebpack != true){
+        reportsMain()
+    }
+}
+
+fun reportsMain(){
     RegistryJS.get().register(WebReportsActivator())
 }
 

@@ -23,11 +23,18 @@ import com.gridnine.jasmine.web.standard.mainframe.WebOptionsHandler
 import com.gridnine.jasmine.web.standard.workspaceEditor.DateDynamicValueEditorHandler
 import com.gridnine.jasmine.web.standard.workspaceEditor.WorkspaceEditorTabHandler
 import com.gridnine.jasmine.web.standard.workspaceEditor.WorkspaceListItemVariantHandler
+import kotlinx.browser.window
 
 
 const val pluginId = "com.gridnine.jasmine.web.standard"
 
 fun main(){
+    if(window.asDynamic().builtByWebpack != true){
+        standardMain()
+    }
+}
+
+fun standardMain(){
     RegistryJS.get().register(WebStandardActivator())
 }
 

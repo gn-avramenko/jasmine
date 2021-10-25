@@ -10,11 +10,19 @@ import com.gridnine.jasmine.web.core.common.EnvironmentJS
 import com.gridnine.jasmine.web.core.common.RegistryJS
 import com.gridnine.jasmine.web.core.ui.WebUiLibraryAdapter
 import com.gridnine.jasmine.web.easyui.components.EasyUiWebLibraryAdapter
+import kotlinx.browser.window
 
 
 const val pluginId = "com.gridnine.jasmine.web.easyui"
 
+
 fun main(){
+    if(window.asDynamic().builtByWebpack != true){
+        easyUiMain()
+    }
+}
+
+fun easyUiMain(){
     RegistryJS.get().register(WebEasyUiActivator())
 }
 

@@ -58,6 +58,11 @@ class TomcatWebServer : WebServer {
             tomcat.connector.setAttribute("clientAuth", false)
             tomcat.connector.setAttribute("sslProtocol", "TLS")
         }
+        val compression  = "on" == ConfigurationProvider.get().getProperty("tomcat.compression")
+        if(compression) {
+            tomcat.connector.setAttribute("compression", "force")
+            tomcat.connector.setAttribute("useSendfile", "false")
+        }
         val classLoader = TomcatParentClassLoader()
         tomcat.server.parentClassLoader = classLoader
         classLoader.addDelegate(javaClass.classLoader)

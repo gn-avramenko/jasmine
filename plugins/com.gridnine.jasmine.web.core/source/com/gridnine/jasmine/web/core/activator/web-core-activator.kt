@@ -14,11 +14,18 @@ import com.gridnine.jasmine.web.core.l10n.WebCoreL10nMessagesInitializer
 import com.gridnine.jasmine.web.core.reflection.ReflectionFactoryJS
 import com.gridnine.jasmine.web.core.remote.*
 import com.gridnine.jasmine.web.core.serialization.JsonSerializerJS
+import kotlinx.browser.window
 
 
 const val pluginId = "com.gridnine.jasmine.web.core"
 
 fun main(){
+    if(window.asDynamic().builtByWebpack != true){
+        coreMain()
+    }
+}
+
+fun coreMain(){
     EnvironmentJS.publish(RegistryJS())
     RegistryJS.get().register(WebCoreActivator())
 }
