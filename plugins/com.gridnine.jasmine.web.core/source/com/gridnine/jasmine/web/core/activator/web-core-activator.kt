@@ -19,12 +19,6 @@ import kotlinx.browser.window
 
 const val pluginId = "com.gridnine.jasmine.web.core"
 
-fun main(){
-    if(window.asDynamic().builtByWebpack != true){
-        coreMain()
-    }
-}
-
 fun coreMain(){
     EnvironmentJS.publish(RegistryJS())
     RegistryJS.get().register(WebCoreActivator())

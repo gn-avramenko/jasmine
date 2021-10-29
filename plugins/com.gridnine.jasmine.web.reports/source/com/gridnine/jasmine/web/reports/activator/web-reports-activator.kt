@@ -20,12 +20,6 @@ import kotlinx.browser.window
 
 const val pluginId = "com.gridnine.jasmine.web.reports"
 
-fun main(){
-    if(window.asDynamic().builtByWebpack != true){
-        reportsMain()
-    }
-}
-
 fun reportsMain(){
     RegistryJS.get().register(WebReportsActivator())
 }

@@ -28,12 +28,6 @@ import kotlinx.browser.window
 
 const val pluginId = "com.gridnine.jasmine.web.standard"
 
-fun main(){
-    if(window.asDynamic().builtByWebpack != true){
-        standardMain()
-    }
-}
-
 fun standardMain(){
     RegistryJS.get().register(WebStandardActivator())
 }

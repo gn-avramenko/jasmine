@@ -15,13 +15,6 @@ import kotlinx.browser.window
 
 const val pluginId = "com.gridnine.jasmine.web.easyui"
 
-
-fun main(){
-    if(window.asDynamic().builtByWebpack != true){
-        easyUiMain()
-    }
-}
-
 fun easyUiMain(){
     RegistryJS.get().register(WebEasyUiActivator())
 }

@@ -16,12 +16,6 @@ const val pluginId = "com.gridnine.jasmine.web.antd"
 
 
 
-fun main(){
-    if(window.asDynamic().builtByWebpack != true){
-        antdMain()
-    }
-}
-
 fun antdMain(){
     RegistryJS.get().register(AntdWebActivator())
 }

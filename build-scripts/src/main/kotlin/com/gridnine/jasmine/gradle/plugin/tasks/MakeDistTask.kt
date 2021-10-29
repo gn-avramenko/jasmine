@@ -96,6 +96,9 @@ open class MakeDistTask() :DefaultTask(){
                             $sources
                         }
                         browser{
+                            dceTask {
+                                dceOptions.devMode = true
+                            }
                             distribution {
                                 directory = File(project.rootDir, "temp/js/output/")
                             }
@@ -104,6 +107,7 @@ open class MakeDistTask() :DefaultTask(){
                 }
 
                 task("_unzip_war", Copy::class) {
+                    dependsOn("browserProductionWebpack")
                     doFirst{
                         println("deleting directory")
                         val file = project.file("temp/war/input")
