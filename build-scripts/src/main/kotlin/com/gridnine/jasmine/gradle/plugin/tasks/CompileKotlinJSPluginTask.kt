@@ -79,7 +79,7 @@ open class CompileKotlinJSPluginTask():DefaultTask(){
                 "-no-stdlib", "-source-map", "-source-map-embed-sources", "always", "-meta-info", "-module-kind", "umd"))
 
         if(cpFiles.isNotEmpty()){
-            argsLst.addAll(arrayListOf("-libraries", cpFiles.joinToString(separator = ":"){it.absolutePath}))
+            argsLst.addAll(arrayListOf("-libraries", cpFiles.joinToString(separator = ";"){it.absolutePath}))
         }
         val res = exec.invoke(compiler.getConstructor().newInstance(), out, emptyServices, argsLst.toArray(arrayOfNulls<String>(0)))
         val exitCode = ExitCode.valueOf(res.toString())

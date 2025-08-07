@@ -73,7 +73,7 @@ open class MakeDistTask() :DefaultTask(){
                 }
                 result
             }.joinToString ("\r\n                            "){
-             "kotlin.srcDir(\"${it}\")"
+             "kotlin.srcDir(\"${it.replace("\\","/")}\")"
             }
             project.file("js-build.gradle.kts").writeIfDiffers("""
                 import org.gradle.jvm.tasks.*

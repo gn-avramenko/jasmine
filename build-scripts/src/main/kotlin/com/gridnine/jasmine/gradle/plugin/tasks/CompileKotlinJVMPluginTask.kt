@@ -97,7 +97,7 @@ open class CompileKotlinJVMPluginTask() :DefaultTask(){
             argsLst.add("${filesMap[plugin.id]}/source-gen")
         }
         argsLst.addAll(arrayListOf("-d", "${project.projectDir.absolutePath}/build/plugins/${plugin.id}/classes",
-                "-no-stdlib", "-no-reflect", "-jvm-target", "1.8","-cp",cp))
+            "-no-stdlib", "-no-reflect", "-jvm-target", "1.8","-cp",cp))
 
         val res = exec.invoke(compiler.getConstructor().newInstance(), out, emptyServices, argsLst.toArray(arrayOfNulls<String>(0)))
         val exitCode = ExitCode.valueOf(res.toString())
