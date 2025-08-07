@@ -90,7 +90,7 @@ open class CompileKotlinJVMPluginTask() :DefaultTask(){
         plugin.pluginsDependencies.forEach {
             cpFiles.add(File(project.projectDir, "build/plugins/${it.pluginId}/classes"))
         }
-        val cp = cpFiles.joinToString(separator = ":"){it.absolutePath}
+        val cp = cpFiles.joinToString(separator = ";"){it.absolutePath}
 
         val argsLst = arrayListOf("${filesMap[plugin.id]}/source")
         if(File("${filesMap[plugin.id]}/source-gen").exists()){

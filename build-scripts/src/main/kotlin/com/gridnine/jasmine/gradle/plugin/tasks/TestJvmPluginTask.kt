@@ -48,8 +48,8 @@ open class TestJvmPluginTask() : Test() {
         //println("classpath of ${getTaskName(plugin.id)} is ${fileNames.joinToString("\r\n")}")
         binaryResultsDirectory.set(project.file("build/test-results"))
         reports { rp ->
-            rp.html.isEnabled = false
-            rp.junitXml.destination = project.file("build/junit-reports/${plugin.id}")
+//            rp.html.isEnabled = false
+//            rp.junitXml.destination = project.file("build/junit-reports/${plugin.id}")
         }
     }
 

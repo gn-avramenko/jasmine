@@ -144,6 +144,7 @@ object GridWebEditorGenerator {
                                             }
                                             WidgetType.HIDDEN -> throw  Xeption.forDeveloper("unsupported widget type ${widget.widgetType}")
                                             WidgetType.TABLE_BOX -> throw Xeption.forDeveloper("table inside table is not supported")
+                                            else -> throw Xeption.forDeveloper("table inside table is not supported")
                                         }
                                     }
                                 }
