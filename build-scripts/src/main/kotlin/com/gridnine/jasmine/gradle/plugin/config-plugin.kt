@@ -19,8 +19,8 @@ class JasmineConfigPlugin :Plugin<Project> {
 }
 
 open class JasmineConfigExtension(private val project:Project){
-    var kotlinVersion = "1.4.10"
-    var kotlinCoroutinesJSVersion = "1.4.3"
+    var kotlinVersion = "1.7.22"
+    var kotlinCoroutinesJSVersion = "1.7.22"
     var targetByteCodeLevel = "1.8"
     var languageLevel = "JDK_1_8"
     var libRelativePath = "lib"
